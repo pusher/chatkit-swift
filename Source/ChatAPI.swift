@@ -22,6 +22,9 @@ import PusherPlatform
         delegate: PCDelegate? = nil,
         authorizer: Authorizer? = nil,
         baseClient: BaseClient? = nil
+
+        // TODO: Make this possible by fixing init in pusher-platform-swift for App
+//        logger: PPLogger? = nil
     ) {
         self.app = App(id: id, authorizer: authorizer, client: baseClient)
         self.options = options
@@ -44,14 +47,11 @@ import PusherPlatform
         self.userId = userId
         let path = "/\(ChatAPI.namespace)/users/\(userId)"
 
+        let subscribeRequest = PPRequestOptions(method: "SUBSCRIBE", path: path)
+
         var resumableSub = ResumableSubscription(
             app: self.app,
-            path: path
-            //            onOpening: onUserSubscriptionStateChange(),
-            //            onOpen: onOpen,
-            //            onResuming: onResuming,
-            //            onEnd: onEnd,
-            //            onError: onError
+            requestOptions: subscribeRequest
         )
 
         self.userSubscription = PCUserSubscription(
@@ -64,13 +64,11 @@ import PusherPlatform
                 }
 
                 completionHandler(user, error)
-        }
+            }
         )
 
-        let subscribeRequest = SubscribeRequest(path: path)
-
         self.app.subscribeWithResume(
-            resumableSubscription: &resumableSub,
+            with: &resumableSub,
             using: subscribeRequest,
             //            onOpening: onOpening,
             //            onOpen: onOpen,
@@ -99,42 +97,43 @@ extension ChatAPI {
         let userObject: [String: Any] = ["name": name, "id": randomString]
 
         guard JSONSerialization.isValidJSONObject(userObject) else {
-            completionHandler(nil, ServiceError.invalidJSONObjectAsData(userObject))
+            completionHandler(nil, PCError.invalidJSONObjectAsData(userObject))
             return
         }
 
         guard let data = try? JSONSerialization.data(withJSONObject: userObject, options: []) else {
-            completionHandler(nil, ServiceError.failedToJSONSerializeData(userObject))
+            completionHandler(nil, PCError.failedToJSONSerializeData(userObject))
             return
         }
 
         let path = "/\(ChatAPI.namespace)/users"
 
-        let generalRequest = GeneralRequest(method: HttpMethod.POST.rawValue, path: path, body: data)
+        let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
-        self.app.request(using: generalRequest) { result in
-            guard let data = result.value else {
-                completionHandler(nil, result.error!)
-                return
-            }
+        self.app.requestWithRetry(
+            using: generalRequest,
+            onSuccess: { data in
+                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
+                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
+                    return
+                }
 
-            guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                completionHandler(nil, PCError.failedToDeserializeJSON(data))
-                return
-            }
+                guard let json = jsonObject as? [String: Any] else {
+                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
+                    return
+                }
 
-            guard let json = jsonObject as? [String: Any] else {
-                completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
-                return
-            }
+                guard let id = json["id"] as? Int else {
+                    completionHandler(nil, PCError.userIdNotFoundInResponseJSON(json))
+                    return
+                }
 
-            guard let id = json["id"] as? Int else {
-                completionHandler(nil, PCError.userIdNotFoundInResponseJSON(json))
-                return
+                completionHandler(id, nil)
+            },
+            onError: { error in
+                completionHandler(nil, error)
             }
-            
-            completionHandler(id, nil)
-        }
+        )
     }
 }
 

@@ -10,8 +10,18 @@ public class PCCurrentUser {
     public internal(set) var rooms: [PCRoom]
 
     fileprivate let app: App
+    public let logger: PPLogger
 
-    public init(id: Int, createdAt: String, updatedAt: String, name: String? = nil, customId: String? = nil, customData: [String: Any]?, rooms: [PCRoom] = [], app: App) {
+    public init(
+        id: Int,
+        createdAt: String,
+        updatedAt: String,
+        name: String? = nil,
+        customId: String? = nil,
+        customData: [String: Any]?,
+        rooms: [PCRoom] = [],
+        app: App
+    ) {
         self.id = id
         self.createdAt = createdAt
         self.updatedAt = updatedAt
@@ -20,6 +30,7 @@ public class PCCurrentUser {
         self.customData = customData
         self.rooms = rooms
         self.app = app
+        self.logger = app.logger
     }
 
     public func createRoom(name: String, delegate: PCRoomDelegate? = nil, addUserIds userIds: [Int]? = nil, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
@@ -35,55 +46,56 @@ public class PCCurrentUser {
         }
 
         guard JSONSerialization.isValidJSONObject(roomObject) else {
-            completionHandler(nil, ServiceError.invalidJSONObjectAsData(roomObject))
+            completionHandler(nil, PCError.invalidJSONObjectAsData(roomObject))
             return
         }
 
         guard let data = try? JSONSerialization.data(withJSONObject: roomObject, options: []) else {
-            completionHandler(nil, ServiceError.failedToJSONSerializeData(roomObject))
+            completionHandler(nil, PCError.failedToJSONSerializeData(roomObject))
             return
         }
 
         let path = "/\(ChatAPI.namespace)/rooms"
-        let generalRequest = GeneralRequest(method: HttpMethod.POST.rawValue, path: path, body: data)
+        let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
-        self.app.request(using: generalRequest) { result in
-            guard let data = result.value else {
-                completionHandler(nil, result.error!)
-                return
+        self.app.requestWithRetry(
+            using: generalRequest,
+            onSuccess: { data in
+                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
+                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
+                    return
+                }
+
+                guard let roomPayload = jsonObject as? [String: Any] else {
+                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
+                    return
+                }
+
+                guard let roomId = roomPayload["id"] as? Int,
+                    let roomName = roomPayload["name"] as? String,
+                    let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
+                    let roomCreatedAt = roomPayload["created_at"] as? String,
+                    let roomUpdatedAt = roomPayload["updated_at"] as? String
+                    else {
+                        completionHandler(nil, PCError.roomCreationResponsePayloadIncomplete(roomPayload))
+                        return
+                }
+
+                let room = PCRoom(
+                    id: roomId,
+                    name: roomName,
+                    createdByUserId: roomCreatorUserId,
+                    createdAt: roomCreatedAt,
+                    updatedAt: roomUpdatedAt
+                )
+
+                self.rooms.append(room)
+                completionHandler(room, nil)
+            },
+            onError: { error in
+                completionHandler(nil, error)
             }
-
-            guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                completionHandler(nil, PCError.failedToDeserializeJSON(data))
-                return
-            }
-
-            guard let roomPayload = jsonObject as? [String: Any] else {
-                completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
-                return
-            }
-
-            guard let roomId = roomPayload["id"] as? Int,
-                  let roomName = roomPayload["name"] as? String,
-                  let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
-                  let roomCreatedAt = roomPayload["created_at"] as? String,
-                  let roomUpdatedAt = roomPayload["updated_at"] as? String
-            else {
-                completionHandler(nil, PCError.roomCreationResponsePayloadIncomplete(roomPayload))
-                return
-            }
-
-            let room = PCRoom(
-                id: roomId,
-                name: roomName,
-                createdByUserId: roomCreatorUserId,
-                createdAt: roomCreatedAt,
-                updatedAt: roomUpdatedAt
-            )
-
-            self.rooms.append(room)
-            completionHandler(room, nil)
-        }
+        )
     }
 
     public func createRoom(name: String, delegate: PCRoomDelegate? = nil, addUsers users: [PCUser]? = nil, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
@@ -126,29 +138,29 @@ public class PCCurrentUser {
         let userPayload = ["\(membershipChange.rawValue)_user_ids": userIds]
 
         guard JSONSerialization.isValidJSONObject(userPayload) else {
-            completionHandler(ServiceError.invalidJSONObjectAsData(userPayload))
+            completionHandler(PCError.invalidJSONObjectAsData(userPayload))
             return
         }
 
         guard let data = try? JSONSerialization.data(withJSONObject: userPayload, options: []) else {
-            completionHandler(ServiceError.failedToJSONSerializeData(userPayload))
+            completionHandler(PCError.failedToJSONSerializeData(userPayload))
             return
         }
 
         let path = "/\(ChatAPI.namespace)/rooms/\(room.id)/users"
-        let generalRequest = GeneralRequest(method: HttpMethod.PUT.rawValue, path: path, body: data)
+        let generalRequest = PPRequestOptions(method: HTTPMethod.PUT.rawValue, path: path, body: data)
 
-        self.app.request(using: generalRequest) { result in
+        self.app.requestWithRetry(
+            using: generalRequest,
+            onSuccess: { data in
+                // TODO: What is data here?
 
-            // TODO: What is data here?
-
-            guard let data = result.value else {
-                completionHandler(result.error!)
-                return
+                completionHandler(nil)
+            },
+            onError: { error in
+                completionHandler(error)
             }
-
-            completionHandler(nil)
-        }
+        )
     }
 
     fileprivate enum PCUserMembershipChange: String {
@@ -166,158 +178,155 @@ public class PCCurrentUser {
 
     public func getRooms(completionHandler: @escaping ([PCRoom]?, Error?) -> Void) {
         let path = "/\(ChatAPI.namespace)/rooms"
-        let generalRequest = GeneralRequest(method: HttpMethod.GET.rawValue, path: path)
+        let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
-        self.app.request(using: generalRequest) { result in
-            guard let data = result.value else {
-                completionHandler(nil, result.error!)
-                return
-            }
-
-            guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                completionHandler(nil, PCError.failedToDeserializeJSON(data))
-                return
-            }
-
-            guard let roomsPayload = jsonObject as? [[String: Any]] else {
-                completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
-                return
-            }
-
-            let rooms = roomsPayload.flatMap { roomPayload -> PCRoom? in
-                guard let roomId = roomPayload["id"] as? Int,
-                      let roomName = roomPayload["name"] as? String,
-                      let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
-                      let roomCreatedAt = roomPayload["created_at"] as? String,
-                      let roomUpdatedAt = roomPayload["updated_at"] as? String
-                else {
-                    DefaultLogger.Logger.log(message: "Incomplete room payload in getRooms response: \(roomPayload)")
-                    return nil
+        self.app.requestWithRetry(
+            using: generalRequest,
+            onSuccess: { data in
+                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
+                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
+                    return
                 }
 
-                return PCRoom(
+                guard let roomsPayload = jsonObject as? [[String: Any]] else {
+                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
+                    return
+                }
+
+                let rooms = roomsPayload.flatMap { roomPayload -> PCRoom? in
+                    guard let roomId = roomPayload["id"] as? Int,
+                        let roomName = roomPayload["name"] as? String,
+                        let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
+                        let roomCreatedAt = roomPayload["created_at"] as? String,
+                        let roomUpdatedAt = roomPayload["updated_at"] as? String
+                        else {
+                            self.logger.log("Incomplete room payload in getRooms response: \(roomPayload)", logLevel: .debug)
+                            return nil
+                    }
+
+                    return PCRoom(
+                        id: roomId,
+                        name: roomName,
+                        createdByUserId: roomCreatorUserId,
+                        createdAt: roomCreatedAt,
+                        updatedAt: roomUpdatedAt
+                    )
+                }
+
+                completionHandler(rooms, nil)
+            },
+            onError: { error in
+                completionHandler(nil, error)
+            }
+        )
+    }
+
+
+    public func getRoom(id: Int, withMessages: Int? = nil, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
+        let path = "/\(ChatAPI.namespace)/rooms/\(id)"
+        let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
+
+        if withMessages != nil {
+            let withMessagesQueryItem = URLQueryItem(name: "with_messages", value: String(withMessages!))
+            generalRequest.addQueryItems([withMessagesQueryItem])
+        }
+
+        self.app.requestWithRetry(
+            using: generalRequest,
+            onSuccess: { data in
+                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
+                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
+                    return
+                }
+
+                guard let roomPayload = jsonObject as? [String: Any] else {
+                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
+                    return
+                }
+
+                guard let roomId = roomPayload["id"] as? Int,
+                    let roomName = roomPayload["name"] as? String,
+                    let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
+                    let roomCreatedAt = roomPayload["created_at"] as? String,
+                    let roomUpdatedAt = roomPayload["updated_at"] as? String,
+                    let memberships = roomPayload["memberships"] as? [[String: Any]]
+                    else {
+                        completionHandler(nil, PCError.incompleteRoomPayloadInGetRoomResponse(roomPayload))
+                        return
+                }
+
+                let room = PCRoom(
                     id: roomId,
                     name: roomName,
                     createdByUserId: roomCreatorUserId,
                     createdAt: roomCreatedAt,
                     updatedAt: roomUpdatedAt
                 )
-            }
 
-            completionHandler(rooms, nil)
-        }
-    }
+                if withMessages != nil {
+                    guard let messagesPayload = roomPayload["messages"] as? [[String: Any]] else {
+                        completionHandler(nil, PCError.incompleteRoomPayloadInGetRoomResponse(roomPayload))
+                        return
+                    }
 
+                    let messages = messagesPayload.flatMap { messagePayload -> PCMessage? in
+                        guard let messageId = messagePayload["id"] as? Int,
+                            let messageSenderId = messagePayload["user_id"] as? Int,
+                            let messageRoomId = messagePayload["room_id"] as? Int,
+                            let messageText = messagePayload["text"] as? String,
+                            let messageCreatedAt = messagePayload["created_at"] as? String,
+                            let messageUpdatedAt = messagePayload["updated_at"] as? String
+                            else {
+                                self.logger.log("Incomplete message payload in getRoom call: \(messagePayload)", logLevel: .debug)
+                                return nil
+                        }
 
-    public func getRoom(id: Int, withMessages: Int? = nil, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
-        let path = "/\(ChatAPI.namespace)/rooms/\(id)"
-        let generalRequest = GeneralRequest(method: HttpMethod.GET.rawValue, path: path)
+                        return PCMessage(
+                            id: messageId,
+                            senderId: messageSenderId,
+                            roomId: messageRoomId,
+                            text: messageText,
+                            createdAt: messageCreatedAt,
+                            updatedAt: messageUpdatedAt
+                        )
+                    }
 
-        if withMessages != nil {
-            let withMessagesQueryItem = URLQueryItem(name: "with_messages", value: String(withMessages!))
-
-            if let queryItems = generalRequest.queryItems {
-                generalRequest.queryItems = queryItems + [withMessagesQueryItem]
-            } else {
-                generalRequest.queryItems = [withMessagesQueryItem]
-            }
-        }
-
-        self.app.request(using: generalRequest) { result in
-            guard let data = result.value else {
-                completionHandler(nil, result.error!)
-                return
-            }
-
-            guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                completionHandler(nil, PCError.failedToDeserializeJSON(data))
-                return
-            }
-
-            guard let roomPayload = jsonObject as? [String: Any] else {
-                completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
-                return
-            }
-
-            guard let roomId = roomPayload["id"] as? Int,
-                  let roomName = roomPayload["name"] as? String,
-                  let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
-                  let roomCreatedAt = roomPayload["created_at"] as? String,
-                  let roomUpdatedAt = roomPayload["updated_at"] as? String,
-                  let memberships = roomPayload["memberships"] as? [[String: Any]]
-            else {
-                completionHandler(nil, PCError.incompleteRoomPayloadInGetRoomResponse(roomPayload))
-                return
-            }
-
-            let room = PCRoom(
-                id: roomId,
-                name: roomName,
-                createdByUserId: roomCreatorUserId,
-                createdAt: roomCreatedAt,
-                updatedAt: roomUpdatedAt
-            )
-
-            if withMessages != nil {
-                guard let messagesPayload = roomPayload["messages"] as? [[String: Any]] else {
-                    completionHandler(nil, PCError.incompleteRoomPayloadInGetRoomResponse(roomPayload))
-                    return
+                    room.messages = messages
                 }
 
-                let messages = messagesPayload.flatMap { messagePayload -> PCMessage? in
-                    guard let messageId = messagePayload["id"] as? Int,
-                          let messageSenderId = messagePayload["user_id"] as? Int,
-                          let messageRoomId = messagePayload["room_id"] as? Int,
-                          let messageText = messagePayload["text"] as? String,
-                          let messageCreatedAt = messagePayload["created_at"] as? String,
-                          let messageUpdatedAt = messagePayload["updated_at"] as? String
-                    else {
-                        DefaultLogger.Logger.log(message: "Incomplete message payload in getRoom call: \(messagePayload)")
+                let users = memberships.flatMap { membership -> PCUser? in
+                    guard let membershipUserPayload = membership["user"] as? [String: Any] else {
+                        self.logger.log("Incomplete membership payload in initial_state event for room: \(roomName)", logLevel: .debug)
                         return nil
                     }
 
-                    return PCMessage(
-                        id: messageId,
-                        senderId: messageSenderId,
-                        roomId: messageRoomId,
-                        text: messageText,
-                        createdAt: messageCreatedAt,
-                        updatedAt: messageUpdatedAt
+                    guard let userId = membershipUserPayload["id"] as? Int,
+                        let createdAt = membershipUserPayload["created_at"] as? String,
+                        let updatedAt = membershipUserPayload["updated_at"] as? String
+                        else {
+                            // TODO: Log or complete with error here?
+                            self.logger.log("Incomplete user payload in initial_state event for room: \(roomName)", logLevel: .debug)
+                            return nil
+                    }
+
+                    return PCUser(
+                        id: userId,
+                        createdAt: createdAt,
+                        updatedAt: updatedAt,
+                        name: membershipUserPayload["name"] as? String,
+                        customId: membershipUserPayload["custom_id"] as? String,
+                        customData: membershipUserPayload["custom_data"] as? [String: Any]
                     )
                 }
 
-                room.messages = messages
+                room.users = users
+
+                completionHandler(room, nil)
+            },
+            onError: { error in
+                completionHandler(nil, error)
             }
-
-            let users = memberships.flatMap { membership -> PCUser? in
-                guard let membershipUserPayload = membership["user"] as? [String: Any] else {
-                    DefaultLogger.Logger.log(message: "Incomplete membership payload in initial_state event for room: \(roomName)")
-                    return nil
-                }
-
-                guard let userId = membershipUserPayload["id"] as? Int,
-                      let createdAt = membershipUserPayload["created_at"] as? String,
-                      let updatedAt = membershipUserPayload["updated_at"] as? String
-                else {
-                    // TODO: Log or complete with error here?
-                    DefaultLogger.Logger.log(message: "Incomplete user payload in initial_state event for room: \(roomName)")
-                    return nil
-                }
-
-                return PCUser(
-                    id: userId,
-                    createdAt: createdAt,
-                    updatedAt: updatedAt,
-                    name: membershipUserPayload["name"] as? String,
-                    customId: membershipUserPayload["custom_id"] as? String,
-                    customData: membershipUserPayload["custom_data"] as? [String: Any]
-                )
-            }
-
-            room.users = users
-
-            completionHandler(room, nil)
-        }
+        )
     }
 
 
@@ -331,29 +340,28 @@ public class PCCurrentUser {
         ]
 
         guard JSONSerialization.isValidJSONObject(messageObject) else {
-            completionHandler(ServiceError.invalidJSONObjectAsData(messageObject))
+            completionHandler(PCError.invalidJSONObjectAsData(messageObject))
             return
         }
 
         guard let data = try? JSONSerialization.data(withJSONObject: messageObject, options: []) else {
-            completionHandler(ServiceError.failedToJSONSerializeData(messageObject))
+            completionHandler(PCError.failedToJSONSerializeData(messageObject))
             return
         }
 
         let path = "/\(ChatAPI.namespace)/rooms/\(room.id)/messages"
-        let generalRequest = GeneralRequest(method: HttpMethod.POST.rawValue, path: path, body: data)
+        let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
-        self.app.request(using: generalRequest) { result in
-
-            // TODO: What is data here if we just get a 201 back and no body?
-
-            guard let data = result.value else {
-                completionHandler(result.error!)
-                return
+        self.app.requestWithRetry(
+            using: generalRequest,
+            onSuccess: { data in
+                // TODO: What is data here if we just get a 201 back and no body?
+                completionHandler(nil)
+            },
+            onError: { error in
+                completionHandler(error)
             }
-
-            completionHandler(nil)
-        }
+        )
     }
 
 
@@ -362,14 +370,11 @@ public class PCCurrentUser {
     public func subscribeToRoom(room: PCRoom, roomDelegate: PCRoomDelegate? = nil, completionHandler: @escaping (Error?) -> Void) {
         let path = "/\(ChatAPI.namespace)/room/\(room.id)"
 
+        let subscribeRequest = PPRequestOptions(method: "SUBSCRIBE", path: path)
+
         var resumableSub = ResumableSubscription(
             app: self.app,
-            path: path
-            //            onOpening: onUserSubscriptionStateChange(),
-            //            onOpen: onOpen,
-            //            onResuming: onResuming,
-            //            onEnd: onEnd,
-            //            onError: onError
+            requestOptions: subscribeRequest
         )
 
         room.subscription = PCRoomSubscription(
@@ -377,11 +382,9 @@ public class PCCurrentUser {
             resumableSubscription: resumableSub,
             completionHandler: completionHandler
         )
-        
-        let subscribeRequest = SubscribeRequest(path: path)
-        
+
         self.app.subscribeWithResume(
-            resumableSubscription: &resumableSub,
+            with: &resumableSub,
             using: subscribeRequest,
             //            onOpening: onOpening,
             //            onOpen: completionHandler,
@@ -389,10 +392,10 @@ public class PCCurrentUser {
             onEvent: room.subscription?.handleEvent,
             onEnd: { statusCode, headers, info in
                 print("ENDED")
-        },
+            },
             onError: { error in
                 completionHandler(error)
-        }
+            }
         )
     }
 }

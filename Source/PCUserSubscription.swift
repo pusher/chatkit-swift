@@ -28,12 +28,12 @@ public class PCUserSubscription {
 
     public func handleEvent(eventId: String, headers: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
-            DefaultLogger.Logger.log(message: "Failed to cast JSON object to Dictionary: \(data)")
+            self.app.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
             return
         }
 
         guard let eventTypeName = json["event_name"] as? String else {
-            DefaultLogger.Logger.log(message: "Event type name missing for API event: \(json)")
+            self.app.logger.log("Event type name missing for API event: \(json)", logLevel: .debug)
             return
         }
 
@@ -44,12 +44,12 @@ public class PCUserSubscription {
         //        }
 
         guard let apiEventData = json["data"] as? [String: Any] else {
-            DefaultLogger.Logger.log(message: "Missing data for API event: \(json)")
+            self.app.logger.log("Missing data for API event: \(json)", logLevel: .debug)
             return
         }
 
         guard let eventType = PCAPIEventType(rawValue: eventTypeName) else {
-            DefaultLogger.Logger.log(message: "Unsupported API event type received: \(eventTypeName)")
+            self.app.logger.log("Unsupported API event type received: \(eventTypeName)", logLevel: .debug)
             return
         }
 
@@ -74,7 +74,8 @@ public class PCUserSubscription {
 
         //        let event = PCAPIEvent(eventType: eventType, data: apiEventData, timestamp: timestamp)
 
-        DefaultLogger.Logger.log(message: "Got some data: \(apiEventData) for event type: \(eventTypeName)")
+        // TODO: Remove this
+        self.app.logger.log("Got some data: \(apiEventData) for event type: \(eventTypeName)", logLevel: .info)
     }
 
     fileprivate func callConnectCompletionHandlers(currentUser: PCCurrentUser?, error: Error?) {
@@ -123,13 +124,13 @@ extension PCUserSubscription {
                   let roomUpdatedAt = roomPayload["updated_at"] as? String,
                   let memberships = roomPayload["memberships"] as? [[String: Any]]
             else {
-                DefaultLogger.Logger.log(message: "Incomplete room payload in initial_state event: \(roomPayload)")
+                self.app.logger.log("Incomplete room payload in initial_state event: \(roomPayload)", logLevel: .debug)
                 return nil
             }
 
             let users = memberships.flatMap { membership -> PCUser? in
                 guard let membershipUserPayload = membership["user"] as? [String: Any] else {
-                    DefaultLogger.Logger.log(message: "Incomplete membership payload in initial_state event for room: \(roomName)")
+                    self.app.logger.log("Incomplete membership payload in initial_state event for room: \(roomName)", logLevel: .debug)
                     return nil
                 }
 
@@ -138,7 +139,7 @@ extension PCUserSubscription {
                       let updatedAt = membershipUserPayload["updated_at"] as? String
                 else {
                     // TODO: Log or complete with error here?
-                    DefaultLogger.Logger.log(message: "Incomplete user payload in initial_state event for room: \(roomName)")
+                    self.app.logger.log("Incomplete user payload in initial_state event for room: \(roomName)", logLevel: .debug)
                     return nil
                 }
 
@@ -339,6 +340,9 @@ extension PCAPIEventError: LocalizedError {
 }
 
 public enum PCError: Error {
+    case invalidJSONObjectAsData(Any)
+    case failedToJSONSerializeData(Any)
+
     case failedToDeserializeJSON(Data)
     case failedToCastJSONObjectToDictionary(Any)
     
