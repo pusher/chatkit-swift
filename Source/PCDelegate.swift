@@ -5,17 +5,16 @@ public protocol PCDelegate {
 
     func messageReceived(roomId: Int, message: PCMessage)
 
-    // TODO: Add user who did the adding
+    func addedToRoom(_ room: PCRoom)
+    func removedFromRoom(_ room: PCRoom)
+    func roomUpdated(_ room: PCRoom)
+    func roomDeleted(_ room: PCRoom)
 
-    func addedTo(room: PCRoom)
-    //    func removedFromRoom(room: PCRoom, by: PCUser)
+    func userJoinedRoom(_ room: PCRoom, user: PCUser)
+    func userLeftRoom(_ room: PCRoom, user: PCUser)
 
-    //    func userSubscriptionStateChanged(from: PCUserSubscriptionState, to: PCUserSubscriptionState)
+    func error(_ error: Error)
 
-    func userJoined(room: PCRoom, user: PCUser)
-    func userLeft(room: PCRoom, user: PCUser)
 
-    //    func roomDeleted(room: PCRoom, deletedBy: PCUser)
-
-    func error(eventType: PCAPIEventType, error: Error)
+//    func userSubscriptionStateChanged(from: PCUserSubscriptionState, to: PCUserSubscriptionState)
 }

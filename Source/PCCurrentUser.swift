@@ -72,13 +72,13 @@ public class PCCurrentUser {
                 }
 
                 guard let roomId = roomPayload["id"] as? Int,
-                    let roomName = roomPayload["name"] as? String,
-                    let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
-                    let roomCreatedAt = roomPayload["created_at"] as? String,
-                    let roomUpdatedAt = roomPayload["updated_at"] as? String
-                    else {
-                        completionHandler(nil, PCError.roomCreationResponsePayloadIncomplete(roomPayload))
-                        return
+                      let roomName = roomPayload["name"] as? String,
+                      let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
+                      let roomCreatedAt = roomPayload["created_at"] as? String,
+                      let roomUpdatedAt = roomPayload["updated_at"] as? String
+                else {
+                    completionHandler(nil, PCError.roomCreationResponsePayloadIncomplete(roomPayload))
+                    return
                 }
 
                 let room = PCRoom(
@@ -195,13 +195,13 @@ public class PCCurrentUser {
 
                 let rooms = roomsPayload.flatMap { roomPayload -> PCRoom? in
                     guard let roomId = roomPayload["id"] as? Int,
-                        let roomName = roomPayload["name"] as? String,
-                        let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
-                        let roomCreatedAt = roomPayload["created_at"] as? String,
-                        let roomUpdatedAt = roomPayload["updated_at"] as? String
-                        else {
-                            self.logger.log("Incomplete room payload in getRooms response: \(roomPayload)", logLevel: .debug)
-                            return nil
+                         let roomName = roomPayload["name"] as? String,
+                         let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
+                         let roomCreatedAt = roomPayload["created_at"] as? String,
+                         let roomUpdatedAt = roomPayload["updated_at"] as? String
+                    else {
+                        self.logger.log("Incomplete room payload in getRooms response: \(roomPayload)", logLevel: .debug)
+                        return nil
                     }
 
                     return PCRoom(
@@ -271,14 +271,14 @@ public class PCCurrentUser {
 
                     let messages = messagesPayload.flatMap { messagePayload -> PCMessage? in
                         guard let messageId = messagePayload["id"] as? Int,
-                            let messageSenderId = messagePayload["user_id"] as? Int,
-                            let messageRoomId = messagePayload["room_id"] as? Int,
-                            let messageText = messagePayload["text"] as? String,
-                            let messageCreatedAt = messagePayload["created_at"] as? String,
-                            let messageUpdatedAt = messagePayload["updated_at"] as? String
-                            else {
-                                self.logger.log("Incomplete message payload in getRoom call: \(messagePayload)", logLevel: .debug)
-                                return nil
+                              let messageSenderId = messagePayload["user_id"] as? Int,
+                              let messageRoomId = messagePayload["room_id"] as? Int,
+                              let messageText = messagePayload["text"] as? String,
+                              let messageCreatedAt = messagePayload["created_at"] as? String,
+                              let messageUpdatedAt = messagePayload["updated_at"] as? String
+                        else {
+                            self.logger.log("Incomplete message payload in getRoom call: \(messagePayload)", logLevel: .debug)
+                            return nil
                         }
 
                         return PCMessage(
@@ -300,13 +300,15 @@ public class PCCurrentUser {
                         return nil
                     }
 
+
+
                     guard let userId = membershipUserPayload["id"] as? Int,
-                        let createdAt = membershipUserPayload["created_at"] as? String,
-                        let updatedAt = membershipUserPayload["updated_at"] as? String
-                        else {
-                            // TODO: Log or complete with error here?
-                            self.logger.log("Incomplete user payload in initial_state event for room: \(roomName)", logLevel: .debug)
-                            return nil
+                          let createdAt = membershipUserPayload["created_at"] as? String,
+                          let updatedAt = membershipUserPayload["updated_at"] as? String
+                    else {
+                        // TODO: Log or complete with error here?
+                        self.logger.log("Incomplete user payload in initial_state event for room: \(roomName)", logLevel: .debug)
+                        return nil
                     }
 
                     return PCUser(
@@ -372,7 +374,7 @@ public class PCCurrentUser {
 
         let subscribeRequest = PPRequestOptions(method: "SUBSCRIBE", path: path)
 
-        var resumableSub = ResumableSubscription(
+        var resumableSub = PPResumableSubscription(
             app: self.app,
             requestOptions: subscribeRequest
         )

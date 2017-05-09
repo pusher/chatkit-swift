@@ -4,10 +4,14 @@ import PusherPlatform
 
 public class PCRoomSubscription {
     public var delegate: PCRoomDelegate?
-    let resumableSubscription: ResumableSubscription
+    let resumableSubscription: PPResumableSubscription
     public let completionHandler: (Error?) -> Void
 
-    public init(delegate: PCRoomDelegate? = nil, resumableSubscription: ResumableSubscription, completionHandler: @escaping (Error?) -> Void) {
+    public init(
+        delegate: PCRoomDelegate? = nil,
+        resumableSubscription: PPResumableSubscription,
+        completionHandler: @escaping (Error?) -> Void
+    ) {
         self.delegate = delegate
         self.resumableSubscription = resumableSubscription
         self.completionHandler = completionHandler

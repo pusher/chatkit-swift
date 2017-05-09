@@ -7,33 +7,32 @@ import PusherPlatform
     public var options: PCOptions?
     public var delegate: PCDelegate?
 
-    // TODO: _remove_ userId should probs just be inferred from user token
+    // TODO: _remove_ userId should just be inferred from user token
     public var userId: Int? = nil
 
     public internal(set) var userSubscription: PCUserSubscription? = nil
-
-    // TODO: Do we need to should store the PCCurrentUser as a property here?
 
     public var currentUser: PCCurrentUser? = nil
 
     public init(
         id: String,
         options: PCOptions? = nil,
-        delegate: PCDelegate? = nil,
-        authorizer: Authorizer? = nil,
-        baseClient: BaseClient? = nil
-
-        // TODO: Make this possible by fixing init in pusher-platform-swift for App
-//        logger: PPLogger? = nil
+        app: App? = nil,
+        authorizer: PPAuthorizer? = nil,
+        logger: PPLogger? = nil,
+        baseClient: PPBaseClient? = nil
     ) {
-        self.app = App(id: id, authorizer: authorizer, client: baseClient)
+        self.app = app ?? App(id: id, authorizer: authorizer, client: baseClient)
+
+        // TODO: Use me instead
+
+//        self.app = app ?? App(id: id, authorizer: authorizer, client: baseClient, logger: logger)
         self.options = options
-        self.delegate = delegate
     }
 
     public func addConnectCompletionHandler(completionHandler: @escaping (PCCurrentUser?, Error?) -> Void) {
         guard let userSub = userSubscription else {
-            print("No userSubscription so couldn't add connectCompletionHandler")
+            self.app.logger.log("userSubscription is nil so unable to add a connectCompletionHandler", logLevel: .debug)
             return
         }
 
@@ -43,27 +42,31 @@ import PusherPlatform
     // TODO: Maybe move PCDelegate to connect callsite
     // TODO: Maybe rename PCDelegate to PCUserSubscriptionDelegate
 
-    public func connect(userId: Int, completionHandler: @escaping (PCCurrentUser?, Error?) -> Void) {
+    public func connect(userId: Int, delegate: PCDelegate, completionHandler: @escaping (PCCurrentUser?, Error?) -> Void) {
+        self.delegate = delegate
+
         self.userId = userId
         let path = "/\(ChatAPI.namespace)/users/\(userId)"
 
         let subscribeRequest = PPRequestOptions(method: "SUBSCRIBE", path: path)
 
-        var resumableSub = ResumableSubscription(
+        var resumableSub = PPResumableSubscription(
             app: self.app,
             requestOptions: subscribeRequest
         )
 
         self.userSubscription = PCUserSubscription(
             app: self.app,
-            delegate: self.delegate,
             resumableSubscription: resumableSub,
+            delegate: self.delegate,
             connectCompletionHandler: { user, error in
-                if user != nil {
-                    self.currentUser = user
+                guard let cUser = user else {
+                    completionHandler(nil, error)
+                    return
                 }
 
-                completionHandler(user, error)
+                self.currentUser = cUser
+                completionHandler(cUser, nil)
             }
         )
 
@@ -76,10 +79,10 @@ import PusherPlatform
             onEvent: self.userSubscription!.handleEvent,
             onEnd: { statusCode, headers, info in
                 print("ENDED")
-        },
+            },
             onError: { error in
                 completionHandler(nil, error)
-        }
+            }
         )
     }
 

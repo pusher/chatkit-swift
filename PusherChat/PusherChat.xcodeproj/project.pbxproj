@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		331F9BD91EBC80FA00C3F678 /* PCPayloadDeserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331F9BD81EBC80FA00C3F678 /* PCPayloadDeserializer.swift */; };
 		3388D5EF1EAE4DA90072A742 /* ChatAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3388D5EE1EAE4DA90072A742 /* ChatAPI.swift */; };
 		3388D5F11EAE4DD40072A742 /* PCDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3388D5F01EAE4DD40072A742 /* PCDelegate.swift */; };
 		3388D5F31EAE4DFB0072A742 /* PCRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3388D5F21EAE4DFB0072A742 /* PCRoom.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		331F9BD81EBC80FA00C3F678 /* PCPayloadDeserializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCPayloadDeserializer.swift; sourceTree = "<group>"; };
 		33346ABF1EAE1887002C58B8 /* PusherChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PusherChat.h; sourceTree = "<group>"; };
 		33831C891A9CF61600B124F1 /* PusherChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		33831C8D1A9CF61600B124F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				3388D5F81EAE4E4A0072A742 /* PCUser.swift */,
 				3388D5FA1EAE4E640072A742 /* PCRoomSubscription.swift */,
 				3388D5FC1EAE4EAC0072A742 /* PCUserSubscription.swift */,
+				331F9BD81EBC80FA00C3F678 /* PCPayloadDeserializer.swift */,
 				33831C8C1A9CF61600B124F1 /* Supporting Files */,
 				33346ABF1EAE1887002C58B8 /* PusherChat.h */,
 			);
@@ -248,6 +251,7 @@
 				3388D5FB1EAE4E640072A742 /* PCRoomSubscription.swift in Sources */,
 				3388D5EF1EAE4DA90072A742 /* ChatAPI.swift in Sources */,
 				3388D5F91EAE4E4A0072A742 /* PCUser.swift in Sources */,
+				331F9BD91EBC80FA00C3F678 /* PCPayloadDeserializer.swift in Sources */,
 				3388D5FD1EAE4EAC0072A742 /* PCUserSubscription.swift in Sources */,
 				3388D5F51EAE4E100072A742 /* PCMessage.swift in Sources */,
 				3388D5F71EAE4E330072A742 /* PCCurrentUser.swift in Sources */,
