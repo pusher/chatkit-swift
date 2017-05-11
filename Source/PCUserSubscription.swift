@@ -7,14 +7,16 @@ public class PCUserSubscription {
     public let app: App
     public let resumableSubscription: PPResumableSubscription
 
-    public internal(set) var delegate: PCDelegate?
+    public internal(set) var delegate: PCUserSubscriptionDelegate?
 
     public var connectCompletionHandlers: [(PCCurrentUser?, Error?) -> Void]
+
+    public var currentUser: PCCurrentUser? = nil
 
     public init(
         app: App,
         resumableSubscription: PPResumableSubscription,
-        delegate: PCDelegate? = nil,
+        delegate: PCUserSubscriptionDelegate? = nil,
         connectCompletionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
         self.app = app
@@ -105,33 +107,19 @@ extension PCUserSubscription {
             return
         }
 
-        guard let userId = userPayload["id"] as? Int,
-              let createdAt = userPayload["created_at"] as? String,
-              let updatedAt = userPayload["updated_at"] as? String
-        else {
+        let receivedCurrentUser: PCCurrentUser
+
+        do {
+            receivedCurrentUser = try PCPayloadDeserializer.createCurrentUserFromPayload(userPayload, app: self.app)
+        } catch let err {
             callConnectCompletionHandlers(
                 currentUser: nil,
-                error: PCAPIEventError.incompleteDataForKeyInPCAPIEventPayload(
-                    key: "user",
-                    apiEventType: eventType,
-                    payload: userPayload
-                )
+                error: err
             )
             return
         }
 
-        let currentUser = PCCurrentUser(
-            id: userId,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
-            name: userPayload["name"] as? String,
-            customId: userPayload["custom_id"] as? String,
-            customData: userPayload["custom_data"] as? [String: Any],
-            rooms: [],
-            app: self.app
-        )
-
-        let rooms = roomsPayload.flatMap { roomPayload -> PCRoom? in
+        roomsPayload.forEach { roomPayload in
             guard let roomId = roomPayload["id"] as? Int,
                   let roomName = roomPayload["name"] as? String,
                   let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
@@ -140,39 +128,40 @@ extension PCUserSubscription {
                   let memberships = roomPayload["memberships"] as? [[String: Any]]
             else {
                 self.app.logger.log("Incomplete room payload in initial_state event: \(roomPayload)", logLevel: .debug)
-                return nil
+                return
             }
 
-            let users = memberships.flatMap { membership -> PCUser? in
+            let room = PCRoom(
+                id: roomId,
+                name: roomName,
+                createdByUserId: roomCreatorUserId,
+                createdAt: roomCreatedAt,
+                updatedAt: roomUpdatedAt
+            )
+
+            memberships.forEach { membership in
                 guard let membershipUserPayload = membership["user"] as? [String: Any] else {
                     self.app.logger.log(
                         "Incomplete membership payload in initial_state event for room: \(roomName)",
                         logLevel: .debug
                     )
-                    return nil
+                    return
                 }
 
                 do {
-                    return try PCPayloadDeserializer.createUserFromPayload(membershipUserPayload)
+                    let user = try PCPayloadDeserializer.createUserFromPayload(membershipUserPayload)
+                    room.users.append(user)
                 } catch let err {
                     self.app.logger.log(err.localizedDescription, logLevel: .debug)
-                    return nil
+                    return
                 }
             }
 
-            return PCRoom(
-                id: roomId,
-                name: roomName,
-                createdByUserId: roomCreatorUserId,
-                createdAt: roomCreatedAt,
-                updatedAt: roomUpdatedAt,
-                users: users
-            )
+            receivedCurrentUser.rooms.append(room)
         }
 
-        currentUser.rooms = rooms
-
-        callConnectCompletionHandlers(currentUser: currentUser, error: nil)
+        self.currentUser = receivedCurrentUser
+        callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
     }
 
     fileprivate func parseAddedToRoomPayload(_ eventType: PCAPIEventType, data: [String: Any]) {
@@ -189,16 +178,11 @@ extension PCUserSubscription {
 
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
+            self.currentUser?.rooms.append(room)
             self.delegate?.addedToRoom(room)
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(
-                PCAPIEventError.incompleteDataForKeyInPCAPIEventPayload(
-                    key: "room",
-                    apiEventType: eventType,
-                    payload: roomPayload
-                )
-            )
+            self.delegate?.error(err)
         }
     }
 
@@ -216,16 +200,17 @@ extension PCUserSubscription {
 
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-            self.delegate?.removedFromRoom(room)
+
+            guard let removedRoom = self.currentUser?.rooms.remove(where: { $0.id == room.id }) else {
+                // TODO: Log and call delelgate?.error() ?
+                return
+            }
+
+            // TODO: Should this always be called?
+            self.delegate?.removedFromRoom(removedRoom)
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(
-                PCAPIEventError.incompleteDataForKeyInPCAPIEventPayload(
-                    key: "room",
-                    apiEventType: eventType,
-                    payload: roomPayload
-                )
-            )
+            self.delegate?.error(err)
         }
     }
 
@@ -243,16 +228,19 @@ extension PCUserSubscription {
 
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-            self.delegate?.roomUpdated(room)
+
+            guard let roomToUpdate = self.currentUser?.rooms.first(where: { $0.id == room.id }) else {
+                // TODO: Log and call delelgate?.error() ?
+                return
+            }
+
+            roomToUpdate.updateWithPropertiesOfRoom(room)
+
+            // TODO: Should this always be called?
+            self.delegate?.roomUpdated(roomToUpdate)
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(
-                PCAPIEventError.incompleteDataForKeyInPCAPIEventPayload(
-                    key: "room",
-                    apiEventType: eventType,
-                    payload: roomPayload
-                )
-            )
+            self.delegate?.error(err)
         }
     }
 
@@ -270,16 +258,17 @@ extension PCUserSubscription {
 
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-            self.delegate?.roomDeleted(room)
+
+            guard let deletedRoom = self.currentUser?.rooms.remove(where: { $0.id == room.id }) else {
+                // TODO: Log and call delelgate?.error() ?
+                return
+            }
+
+            // TODO: Should this always be called?
+            self.delegate?.roomDeleted(deletedRoom)
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(
-                PCAPIEventError.incompleteDataForKeyInPCAPIEventPayload(
-                    key: "room",
-                    apiEventType: eventType,
-                    payload: roomPayload
-                )
-            )
+            self.delegate?.error(err)
         }
     }
 
@@ -312,13 +301,7 @@ extension PCUserSubscription {
             user = try PCPayloadDeserializer.createUserFromPayload(userPayload)
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(
-                PCAPIEventError.incompleteDataForKeyInPCAPIEventPayload(
-                    key: "user",
-                    apiEventType: eventType,
-                    payload: userPayload
-                )
-            )
+            self.delegate?.error(err)
             return
         }
 
@@ -328,17 +311,17 @@ extension PCUserSubscription {
             room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(
-                PCAPIEventError.incompleteDataForKeyInPCAPIEventPayload(
-                    key: "room",
-                    apiEventType: eventType,
-                    payload: roomPayload
-                )
-            )
+            self.delegate?.error(err)
             return
         }
 
-        self.delegate?.userJoinedRoom(room, user: user)
+        guard let roomUserJoined = self.currentUser?.rooms.first(where: { $0.id == room.id }) else {
+            // TODO: Log and call delelgate?.error() ?
+            return
+        }
+
+        roomUserJoined.users.append(user)
+        self.delegate?.userJoinedRoom(roomUserJoined, user: user)
     }
 
     fileprivate func parseUserLeftPayload(_ eventType: PCAPIEventType, data: [String: Any]) {
@@ -370,13 +353,7 @@ extension PCUserSubscription {
             user = try PCPayloadDeserializer.createUserFromPayload(userPayload)
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(
-                PCAPIEventError.incompleteDataForKeyInPCAPIEventPayload(
-                    key: "user",
-                    apiEventType: eventType,
-                    payload: userPayload
-                )
-            )
+            self.delegate?.error(err)
             return
         }
 
@@ -386,17 +363,21 @@ extension PCUserSubscription {
             room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(
-                PCAPIEventError.incompleteDataForKeyInPCAPIEventPayload(
-                    key: "room",
-                    apiEventType: eventType,
-                    payload: roomPayload
-                )
-            )
+            self.delegate?.error(err)
             return
         }
 
-        self.delegate?.userLeftRoom(room, user: user)
+        guard let roomUserLeft = self.currentUser?.rooms.first(where: { $0.id == room.id }) else {
+            // TODO: Log and call delelgate?.error() ?
+            return
+        }
+
+        guard let userThatLeft = roomUserLeft.users.remove(where: { $0.id == user.id }) else {
+            // TODO: Log and call delelgate?.error() ?
+            return
+        }
+
+        self.delegate?.userLeftRoom(roomUserLeft, user: userThatLeft)
     }
 
     fileprivate func parseNewRoomMessagePayload(_ eventType: PCAPIEventType, data: [String: Any]) {
@@ -414,19 +395,16 @@ extension PCUserSubscription {
         do {
             let message = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
 
-            // TODO: This is what should actually be being called
-//            self.delegate?.messageReceived(room: room, message: message)
+            guard let roomWithNewMessage = self.currentUser?.rooms.first(where: { $0.id == message.roomId }) else {
+                // TODO: Log and call delelgate?.error() ?
+                return
+            }
 
-            self.delegate?.messageReceived(roomId: message.roomId, message: message)
+            roomWithNewMessage.messages.append(message)
+            self.delegate?.messageReceived(room: roomWithNewMessage, message: message)
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(
-                PCAPIEventError.incompleteDataForKeyInPCAPIEventPayload(
-                    key: "message",
-                    apiEventType: eventType,
-                    payload: messagePayload
-                )
-            )
+            self.delegate?.error(err)
         }
     }
 }
@@ -435,11 +413,19 @@ public enum PCAPIEventError: Error {
     case eventTypeNameMissingInAPIEventPayload([String: Any])
     case apiEventDataMissingInAPIEventPayload([String: Any])
     case keyNotPresentInPCAPIEventPayload(key: String, apiEventType: PCAPIEventType, payload: [String: Any])
-    case incompleteDataForKeyInPCAPIEventPayload(key: String, apiEventType: PCAPIEventType, payload: [String: Any])
 }
 
 extension PCAPIEventError: LocalizedError {
-
+    public var errorDescription: String? {
+        switch self {
+        case .eventTypeNameMissingInAPIEventPayload(let payload):
+            return "Event type missing in API event payload: \(payload)"
+        case .apiEventDataMissingInAPIEventPayload(let payload):
+            return "Data missing in API event payload: \(payload)"
+        case .keyNotPresentInPCAPIEventPayload(let key, let apiEventType, let payload):
+            return "\(key) missing in \(apiEventType.rawValue) API event payload: \(payload)"
+        }
+    }
 }
 
 public enum PCError: Error {
@@ -450,14 +436,17 @@ public enum PCError: Error {
     case failedToCastJSONObjectToDictionary(Any)
 
 
+    // TODO: Where do these belong?!
+
+
     case userIdNotFoundInResponseJSON([String: Any])
 
     case roomCreationResponsePayloadIncomplete([String: Any])
 
 
-    // TODO: This does not belong here
-
     case incompleteRoomPayloadInGetRoomResponse([String: Any])
+
+    case messageIdKeyMissingInMessageCreationResponse([String: Int])
 
 }
 

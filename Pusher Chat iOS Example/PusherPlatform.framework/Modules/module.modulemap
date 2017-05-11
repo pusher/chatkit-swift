@@ -1,0 +1,10 @@
+framework module PusherPlatform {
+  umbrella header "PusherPlatform.h"
+
+  export *
+  module * { export * }
+}
+
+module PusherPlatform.Swift {
+    header "PusherPlatform-Swift.h"
+}

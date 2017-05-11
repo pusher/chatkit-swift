@@ -1,21 +1,31 @@
 import Foundation
+import PusherPlatform
 
 public struct PCPayloadDeserializer {
     static public func createUserFromPayload(_ userPayload: [String: Any]) throws -> PCUser {
-        guard let userId = userPayload["id"] as? Int,
-              let createdAt = userPayload["created_at"] as? String,
-              let updatedAt = userPayload["updated_at"] as? String
-        else {
-            throw PCPayloadDeserializerError.incompleteDataInPayloadToCreateEntity(type: String(describing: PCUser.self), payload: userPayload)
-        }
+        let basicUser = try createBasicUserFromPayload(userPayload)
 
         return PCUser(
-            id: userId,
-            createdAt: createdAt,
-            updatedAt: updatedAt,
+            id: basicUser.id,
+            createdAt: basicUser.createdAt,
+            updatedAt: basicUser.updatedAt,
             name: userPayload["name"] as? String,
             customId: userPayload["custom_id"] as? String,
             customData: userPayload["custom_data"] as? [String: Any]
+        )
+    }
+
+    static public func createCurrentUserFromPayload(_ userPayload: [String: Any], app: App) throws -> PCCurrentUser {
+        let basicUser = try createBasicUserFromPayload(userPayload)
+
+        return PCCurrentUser(
+            id: basicUser.id,
+            createdAt: basicUser.createdAt,
+            updatedAt: basicUser.updatedAt,
+            name: userPayload["name"] as? String,
+            customId: userPayload["custom_id"] as? String,
+            customData: userPayload["custom_data"] as? [String: Any],
+            app: app
         )
     }
 
@@ -26,7 +36,7 @@ public struct PCPayloadDeserializer {
               let roomCreatedAt = roomPayload["created_at"] as? String,
               let roomUpdatedAt = roomPayload["updated_at"] as? String
         else {
-            throw PCPayloadDeserializerError.incompleteDataInPayloadToCreateEntity(type: String(describing: PCRoom.self), payload: roomPayload)
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCRoom.self), payload: roomPayload)
         }
 
         return PCRoom(
@@ -47,7 +57,7 @@ public struct PCPayloadDeserializer {
               let messageCreatedAt = messagePayload["created_at"] as? String,
               let messageUpdatedAt = messagePayload["updated_at"] as? String
         else {
-            throw PCPayloadDeserializerError.incompleteDataInPayloadToCreateEntity(type: String(describing: PCMessage.self), payload: messagePayload)
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCMessage.self), payload: messagePayload)
         }
 
         return PCMessage(
@@ -60,20 +70,34 @@ public struct PCPayloadDeserializer {
         )
     }
 
+    static fileprivate func createBasicUserFromPayload(_ payload: [String: Any]) throws -> PCBasicUser {
+        guard let userId = payload["id"] as? Int,
+              let createdAt = payload["created_at"] as? String,
+              let updatedAt = payload["updated_at"] as? String
+        else {
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCUser.self), payload: payload)
+        }
+
+        return PCBasicUser(id: userId, createdAt: createdAt, updatedAt: updatedAt)
+    }
+
+}
+
+fileprivate struct PCBasicUser {
+    let id: Int
+    let createdAt: String
+    let updatedAt: String
 }
 
 public enum PCPayloadDeserializerError: Error {
-
-    // TODO: This should probably be more like incompleteOrInvalidPayloadToCreteEntity
-
-    case incompleteDataInPayloadToCreateEntity(type: String, payload: [String: Any])
+    case incompleteOrInvalidPayloadToCreteEntity(type: String, payload: [String: Any])
 }
 
 extension PCPayloadDeserializerError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .incompleteDataInPayloadToCreateEntity(type: let type, payload: let payload):
-            return "Incomplete data to create \(type) in provided payload: \(payload)"
+        case .incompleteOrInvalidPayloadToCreteEntity(let type, let payload):
+            return "Incomplete or invalid data in order to create \(type) in provided payload: \(payload)"
         }
     }
 }

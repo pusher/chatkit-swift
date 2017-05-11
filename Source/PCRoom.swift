@@ -1,12 +1,14 @@
+import PusherPlatform
+
 public class PCRoom {
     public let id: Int
-    public let name: String
+    public var name: String
     public let createdByUserId: Int
     public let createdAt: String
-    public let updatedAt: String
-    public let deletedAt: String?
-    public var users: [PCUser]
-    public var messages: [PCMessage]
+    public var updatedAt: String
+    public var deletedAt: String?
+    public var users: PCSynchronizedArray<PCUser>
+    public var messages: PCSynchronizedArray<PCMessage>
 
     public var subscription: PCRoomSubscription? = nil
 
@@ -19,8 +21,8 @@ public class PCRoom {
         createdAt: String,
         updatedAt: String,
         deletedAt: String? = nil,
-        users: [PCUser] = [],
-        messages: [PCMessage] = []
+        users: PCSynchronizedArray<PCUser> = PCSynchronizedArray<PCUser>(),
+        messages: PCSynchronizedArray<PCMessage> = PCSynchronizedArray<PCMessage>()
     ) {
         self.id = id
         self.name = name
@@ -31,8 +33,10 @@ public class PCRoom {
         self.users = users
         self.messages = messages
     }
-}
 
-public protocol PCRoomDelegate {
-    func messageReceived(room: PCRoom, message: PCMessage)
+    internal func updateWithPropertiesOfRoom(_ room: PCRoom) {
+        self.name = room.name
+        self.updatedAt = room.updatedAt
+        self.deletedAt = room.deletedAt
+    }
 }

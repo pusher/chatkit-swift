@@ -5,14 +5,16 @@ import PusherPlatform
 
     public let app: App
     public var options: PCOptions?
-    public var delegate: PCDelegate?
+    public internal(set) var userSubscription: PCUserSubscription? = nil
+
+    public var currentUser: PCCurrentUser? {
+        get {
+            return self.userSubscription?.currentUser
+        }
+    }
 
     // TODO: _remove_ userId should just be inferred from user token
     public var userId: Int? = nil
-
-    public internal(set) var userSubscription: PCUserSubscription? = nil
-
-    public var currentUser: PCCurrentUser? = nil
 
     public init(
         id: String,
@@ -22,11 +24,7 @@ import PusherPlatform
         logger: PPLogger? = nil,
         baseClient: PPBaseClient? = nil
     ) {
-        self.app = app ?? App(id: id, authorizer: authorizer, client: baseClient)
-
-        // TODO: Use me instead
-
-//        self.app = app ?? App(id: id, authorizer: authorizer, client: baseClient, logger: logger)
+        self.app = app ?? App(id: id, authorizer: authorizer, client: baseClient, logger: logger)
         self.options = options
     }
 
@@ -39,12 +37,7 @@ import PusherPlatform
         userSub.connectCompletionHandlers.append(completionHandler)
     }
 
-    // TODO: Maybe move PCDelegate to connect callsite
-    // TODO: Maybe rename PCDelegate to PCUserSubscriptionDelegate
-
-    public func connect(userId: Int, delegate: PCDelegate, completionHandler: @escaping (PCCurrentUser?, Error?) -> Void) {
-        self.delegate = delegate
-
+    public func connect(userId: Int, delegate: PCUserSubscriptionDelegate, completionHandler: @escaping (PCCurrentUser?, Error?) -> Void) {
         self.userId = userId
         let path = "/\(ChatAPI.namespace)/users/\(userId)"
 
@@ -58,14 +51,13 @@ import PusherPlatform
         self.userSubscription = PCUserSubscription(
             app: self.app,
             resumableSubscription: resumableSub,
-            delegate: self.delegate,
+            delegate: delegate,
             connectCompletionHandler: { user, error in
                 guard let cUser = user else {
                     completionHandler(nil, error)
                     return
                 }
 
-                self.currentUser = cUser
                 completionHandler(cUser, nil)
             }
         )
@@ -141,5 +133,5 @@ extension ChatAPI {
 }
 
 public struct PCOptions {
-    
+
 }

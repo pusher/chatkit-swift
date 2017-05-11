@@ -8,14 +8,28 @@
 
 import UIKit
 import PusherChat
+import PusherPlatform
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    public var pusherChat: ChatAPI? = nil
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
+        let pusherChat = ChatAPI(
+            id: "some-app-id",
+            baseClient: PPBaseClient(
+//                cluster: "api.kube.pusherplatform.io",
+                cluster: "localhost",
+                port: 10443,
+                insecure: true
+            )
+        )
+//        let pusherChat = ChatAPI(id: "some-app-id", baseClient: BaseClient(cluster: "localhost", port: 10443, insecure: true))
+
+        self.pusherChat = pusherChat
 
         return true
     }
