@@ -59,6 +59,18 @@ public class PCSynchronizedArray<T> {
         return element
     }
 
+    public func filter(_ isIncluded: @escaping (T) -> Bool) -> [T] {
+        var result = [T]()
+        self.accessQueue.sync { result = self.array.filter(isIncluded) }
+        return result
+    }
+
+    public func flatMap<ElementOfResult>(_ transform: @escaping (T) -> ElementOfResult?) -> [ElementOfResult] {
+        var result = [ElementOfResult]()
+        self.accessQueue.sync { result = self.array.flatMap(transform) }
+        return result
+    }
+
     public subscript(index: Int) -> T {
         set {
             self.accessQueue.async(flags: .barrier) {
