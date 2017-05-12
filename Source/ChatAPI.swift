@@ -1,7 +1,7 @@
 import PusherPlatform
 
 @objc public class ChatAPI: NSObject {
-    static public let namespace = "chat_api"
+    static public let namespace = "chat_api/v1"
 
     public let app: App
     public var options: PCOptions?
