@@ -28,3 +28,15 @@ public struct PCMessage {
         self.updatedAt = updatedAt
     }
 }
+
+extension PCMessage: Hashable {
+
+    public var hashValue: Int {
+        return self.id
+    }
+
+    public static func ==(_ lhs: PCMessage, _ rhs: PCMessage) -> Bool {
+        return lhs.id == rhs.id
+    }
+
+}
