@@ -31,46 +31,71 @@ public class PCUserSubscription {
             return
         }
 
-        guard let eventTypeName = json["event_name"] as? String else {
-            self.app.logger.log("Event type name missing for API event: \(json)", logLevel: .debug)
+        guard let eventNameString = json["event_name"] as? String else {
+            self.app.logger.log("Event name missing for API event: \(json)", logLevel: .debug)
             return
         }
 
         // TODO: Decide if we even need this in the client
 
-//        guard let timestamp = json["timestamp"] as? String else {
-//            return
-//        }
+        //        guard let timestamp = json["timestamp"] as? String else {
+        //            return
+        //        }
+
+        guard let eventTypeString = json["event_type"] as? String else {
+            self.app.logger.log("Event type missing for API event: \(json)", logLevel: .debug)
+            return
+        }
 
         guard let apiEventData = json["data"] as? [String: Any] else {
-            self.app.logger.log("Missing data for API event: \(json)", logLevel: .debug)
+            self.app.logger.log("Data missing for API event: \(json)", logLevel: .debug)
             return
         }
 
-        guard let eventType = PCAPIEventType(rawValue: eventTypeName) else {
-            self.app.logger.log("Unsupported API event type received: \(eventTypeName)", logLevel: .debug)
+        guard let eventName = PCAPIEventName(rawValue: eventNameString) else {
+            self.app.logger.log("Unsupported API event name received: \(eventNameString)", logLevel: .debug)
             return
         }
 
-        self.app.logger.log("Received data: \(apiEventData) for event type: \(eventTypeName)", logLevel: .verbose)
+        guard let eventType = PCAPIEventType(rawValue: eventTypeString) else {
+            self.app.logger.log("Unsupported API event type received: \(eventTypeString)", logLevel: .debug)
+            return
+        }
 
-        switch eventType {
+        let userId = json["user_id"] as? Int
+
+        if eventType == .user {
+            guard userId != nil else {
+                self.app.logger.log("user_id not received for API event: \(eventNameString)", logLevel: .debug)
+                return
+            }
+        }
+
+        self.app.logger.log("Received event type: \(eventTypeString), event name: \(eventNameString), and data: \(apiEventData)", logLevel: .verbose)
+
+        switch eventName {
         case .initial_state:
-            parseInitialStatePayload(eventType, data: apiEventData)
+            parseInitialStatePayload(eventName, data: apiEventData)
         case .added_to_room:
-            parseAddedToRoomPayload(eventType, data: apiEventData)
+            parseAddedToRoomPayload(eventName, data: apiEventData)
         case .removed_from_room:
-            parseRemovedFromRoomPayload(eventType, data: apiEventData)
+            parseRemovedFromRoomPayload(eventName, data: apiEventData)
         case .room_updated:
-            parseRoomUpdatedPayload(eventType, data: apiEventData)
+            parseRoomUpdatedPayload(eventName, data: apiEventData)
         case .room_deleted:
-            parseRoomDeletedPayload(eventType, data: apiEventData)
+            parseRoomDeletedPayload(eventName, data: apiEventData)
         case .user_joined:
-            parseUserJoinedPayload(eventType, data: apiEventData)
+            parseUserJoinedPayload(eventName, data: apiEventData)
         case .user_left:
-            parseUserLeftPayload(eventType, data: apiEventData)
-        case .new_room_message:
-            parseNewRoomMessagePayload(eventType, data: apiEventData)
+            parseUserLeftPayload(eventName, data: apiEventData)
+        case .typing_start:
+            parseTypingStartPayload(eventName, data: apiEventData, userId: userId!)
+        case .typing_stop:
+            parseTypingStopPayload(eventName, data: apiEventData, userId: userId!)
+
+        // TODO: Remove?
+//        case .new_room_message:
+//            parseNewRoomMessagePayload(eventType, data: apiEventData)
         }
     }
 
@@ -82,13 +107,14 @@ public class PCUserSubscription {
 }
 
 extension PCUserSubscription {
-    fileprivate func parseInitialStatePayload(_ eventType: PCAPIEventType, data: [String: Any]) {
+    fileprivate func parseInitialStatePayload(_ eventName: PCAPIEventName, data: [String: Any]) {
+
         guard let roomsPayload = data["rooms"] as? [[String: Any]] else {
             callConnectCompletionHandlers(
                 currentUser: nil,
                 error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
                     key: "rooms",
-                    apiEventType: eventType,
+                    apiEventName: eventName,
                     payload: data
                 )
             )
@@ -100,7 +126,7 @@ extension PCUserSubscription {
                 currentUser: nil,
                 error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
                     key: "user",
-                    apiEventType: eventType,
+                    apiEventName: eventName,
                     payload: data
                 )
             )
@@ -150,7 +176,8 @@ extension PCUserSubscription {
 
                 do {
                     let user = try PCPayloadDeserializer.createUserFromPayload(membershipUserPayload)
-                    room.users.append(user)
+                    receivedCurrentUser.users.insert(user)
+                    room.userIds.append(user.id)
                 } catch let err {
                     self.app.logger.log(err.localizedDescription, logLevel: .debug)
                     return
@@ -160,16 +187,18 @@ extension PCUserSubscription {
             receivedCurrentUser.rooms.append(room)
         }
 
+        // TODO: Store rooms here? receivedCurrentUser.rooms
+
         self.currentUser = receivedCurrentUser
         callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
     }
 
-    fileprivate func parseAddedToRoomPayload(_ eventType: PCAPIEventType, data: [String: Any]) {
+    fileprivate func parseAddedToRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomPayload = data["room"] as? [String: Any] else {
             self.delegate?.error(
                 PCAPIEventError.keyNotPresentInPCAPIEventPayload(
                     key: "room",
-                    apiEventType: eventType,
+                    apiEventName: eventName,
                     payload: data
                 )
             )
@@ -186,12 +215,12 @@ extension PCUserSubscription {
         }
     }
 
-    fileprivate func parseRemovedFromRoomPayload(_ eventType: PCAPIEventType, data: [String: Any]) {
+    fileprivate func parseRemovedFromRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomPayload = data["room"] as? [String: Any] else {
             self.delegate?.error(
                 PCAPIEventError.keyNotPresentInPCAPIEventPayload(
                     key: "room",
-                    apiEventType: eventType,
+                    apiEventName: eventName,
                     payload: data
                 )
             )
@@ -214,12 +243,12 @@ extension PCUserSubscription {
         }
     }
 
-    fileprivate func parseRoomUpdatedPayload(_ eventType: PCAPIEventType, data: [String: Any]) {
+    fileprivate func parseRoomUpdatedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomPayload = data["room"] as? [String: Any] else {
             self.delegate?.error(
                 PCAPIEventError.keyNotPresentInPCAPIEventPayload(
                     key: "room",
-                    apiEventType: eventType,
+                    apiEventName: eventName,
                     payload: data
                 )
             )
@@ -244,12 +273,12 @@ extension PCUserSubscription {
         }
     }
 
-    fileprivate func parseRoomDeletedPayload(_ eventType: PCAPIEventType, data: [String: Any]) {
+    fileprivate func parseRoomDeletedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomPayload = data["room"] as? [String: Any] else {
             self.delegate?.error(
                 PCAPIEventError.keyNotPresentInPCAPIEventPayload(
                     key: "room",
-                    apiEventType: eventType,
+                    apiEventName: eventName,
                     payload: data
                 )
             )
@@ -272,12 +301,12 @@ extension PCUserSubscription {
         }
     }
 
-    fileprivate func parseUserJoinedPayload(_ eventType: PCAPIEventType, data: [String: Any]) {
+    fileprivate func parseUserJoinedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomPayload = data["room"] as? [String: Any] else {
             self.delegate?.error(
                 PCAPIEventError.keyNotPresentInPCAPIEventPayload(
                     key: "room",
-                    apiEventType: eventType,
+                    apiEventName: eventName,
                     payload: data
                 )
             )
@@ -288,17 +317,17 @@ extension PCUserSubscription {
             self.delegate?.error(
                 PCAPIEventError.keyNotPresentInPCAPIEventPayload(
                     key: "user",
-                    apiEventType: eventType,
+                    apiEventName: eventName,
                     payload: data
                 )
             )
             return
         }
 
-        let user: PCUser
+        let receivedUser: PCUser
 
         do {
-            user = try PCPayloadDeserializer.createUserFromPayload(userPayload)
+            receivedUser = try PCPayloadDeserializer.createUserFromPayload(userPayload)
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
             self.delegate?.error(err)
@@ -315,104 +344,235 @@ extension PCUserSubscription {
             return
         }
 
-        guard let roomUserJoined = self.currentUser?.rooms.first(where: { $0.id == room.id }) else {
-            // TODO: Log and call delelgate?.error() ?
+        guard let currentUser = self.currentUser else {
+            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            self.delegate?.error(PCError.currentUserIsNil)
             return
         }
 
-        roomUserJoined.users.append(user)
-        self.delegate?.userJoinedRoom(roomUserJoined, user: user)
-    }
-
-    fileprivate func parseUserLeftPayload(_ eventType: PCAPIEventType, data: [String: Any]) {
-        guard let roomPayload = data["room"] as? [String: Any] else {
-            self.delegate?.error(
-                PCAPIEventError.keyNotPresentInPCAPIEventPayload(
-                    key: "room",
-                    apiEventType: eventType,
-                    payload: data
-                )
-            )
-            return
-        }
-
-        guard let userPayload = data["user"] as? [String: Any] else {
-            self.delegate?.error(
-                PCAPIEventError.keyNotPresentInPCAPIEventPayload(
-                    key: "user",
-                    apiEventType: eventType,
-                    payload: data
-                )
-            )
-            return
-        }
-
-        let user: PCUser
-
-        do {
-            user = try PCPayloadDeserializer.createUserFromPayload(userPayload)
-        } catch let err {
-            self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(err)
-            return
-        }
-
-        let room: PCRoom
-
-        do {
-            room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-        } catch let err {
-            self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(err)
-            return
-        }
-
-        guard let roomUserLeft = self.currentUser?.rooms.first(where: { $0.id == room.id }) else {
-            // TODO: Log and call delelgate?.error() ?
-            return
-        }
-
-        guard let userThatLeft = roomUserLeft.users.remove(where: { $0.id == user.id }) else {
-            // TODO: Log and call delelgate?.error() ?
-            return
-        }
-
-        self.delegate?.userLeftRoom(roomUserLeft, user: userThatLeft)
-    }
-
-    fileprivate func parseNewRoomMessagePayload(_ eventType: PCAPIEventType, data: [String: Any]) {
-        guard let messagePayload = data["message"] as? [String: Any] else {
-            self.delegate?.error(
-                PCAPIEventError.keyNotPresentInPCAPIEventPayload(
-                    key: "message",
-                    apiEventType: eventType,
-                    payload: data
-                )
-            )
-            return
-        }
-
-        do {
-            let message = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
-
-            guard let roomWithNewMessage = self.currentUser?.rooms.first(where: { $0.id == message.roomId }) else {
-                // TODO: Log and call delelgate?.error() ?
+        currentUser.findOrGetRoom(id: room.id) { room, err in
+            guard let room = room, err == nil else {
+                self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                self.delegate?.error(err!)
                 return
             }
 
-            roomWithNewMessage.messages.append(message)
-            self.delegate?.messageReceived(room: roomWithNewMessage, message: message)
-        } catch let err {
-            self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(err)
+            currentUser.findOrGetUser(id: receivedUser.id) { user, err in
+                guard let user = user, err == nil else {
+                    self.app.logger.log(
+                        "User with id \(receivedUser.id) left but no user information could be retrieved: error was: \(err!.localizedDescription)",
+                        logLevel: .info
+                    )
+                    self.delegate?.error(err!)
+                    return
+                }
+
+                // TODO: Add user to room here?
+
+                currentUser.users.insert(user)
+                room.userIds.append(user.id)
+
+                self.delegate?.userJoinedRoom(room, user: user)
+            }
         }
     }
+
+    fileprivate func parseUserLeftPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
+        guard let roomPayload = data["room"] as? [String: Any] else {
+            self.delegate?.error(
+                PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                    key: "room",
+                    apiEventName: eventName,
+                    payload: data
+                )
+            )
+            return
+        }
+
+        guard let userPayload = data["user"] as? [String: Any] else {
+            self.delegate?.error(
+                PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                    key: "user",
+                    apiEventName: eventName,
+                    payload: data
+                )
+            )
+            return
+        }
+
+        let receivedUser: PCUser
+
+        do {
+            receivedUser = try PCPayloadDeserializer.createUserFromPayload(userPayload)
+        } catch let err {
+            self.app.logger.log(err.localizedDescription, logLevel: .error)
+            self.delegate?.error(err)
+            return
+        }
+
+        let room: PCRoom
+
+        do {
+            room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
+        } catch let err {
+            self.app.logger.log(err.localizedDescription, logLevel: .error)
+            self.delegate?.error(err)
+            return
+        }
+
+        guard let currentUser = self.currentUser else {
+            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            self.delegate?.error(PCError.currentUserIsNil)
+            return
+        }
+
+        currentUser.findOrGetRoom(id: room.id) { room, err in
+            guard let room = room, err == nil else {
+                self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                self.delegate?.error(err!)
+                return
+            }
+
+            currentUser.findOrGetUser(id: receivedUser.id) { user, err in
+                guard let user = user, err == nil else {
+                    self.app.logger.log(
+                        "User with id \(receivedUser.id) left but no user information could be retrieved: error was: \(err!.localizedDescription)",
+                        logLevel: .info
+                    )
+                    self.delegate?.error(err!)
+                    return
+                }
+
+                let roomUserIdIndex = room.userIds.index(of: user.id)
+
+                if let indexToRemove = roomUserIdIndex {
+                    room.userIds.remove(at: indexToRemove)
+                }
+
+                self.delegate?.userLeftRoom(room, user: user)
+            }
+        }
+    }
+
+    fileprivate func parseTypingStartPayload(_ eventName: PCAPIEventName, data: [String: Any], userId: Int) {
+        guard let roomId = data["room_id"] as? Int else {
+            self.delegate?.error(
+                PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                    key: "room_id",
+                    apiEventName: eventName,
+                    payload: data
+                )
+            )
+            return
+        }
+
+        guard let currentUser = self.currentUser else {
+            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            self.delegate?.error(PCError.currentUserIsNil)
+            return
+        }
+
+        currentUser.findOrGetRoom(id: roomId) { room, err in
+            guard let room = room, err == nil else {
+                self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                self.delegate?.error(err!)
+                return
+            }
+
+            currentUser.findOrGetUser(id: userId) { user, err in
+                guard let user = user, err == nil else {
+                    self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                    self.delegate?.error(err!)
+                    return
+                }
+
+                // TODO: Should this go to the room or UserSubDelegate?
+
+                self.delegate?.userStartedTyping(room, user: user)
+            }
+        }
+
+
+    }
+
+
+    fileprivate func parseTypingStopPayload(_ eventName: PCAPIEventName, data: [String: Any], userId: Int) {
+        guard let roomId = data["room_id"] as? Int else {
+            self.delegate?.error(
+                PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                    key: "room_id",
+                    apiEventName: eventName,
+                    payload: data
+                )
+            )
+            return
+        }
+
+        guard let currentUser = self.currentUser else {
+            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            self.delegate?.error(PCError.currentUserIsNil)
+            return
+        }
+
+        currentUser.findOrGetRoom(id: roomId) { room, err in
+            guard let room = room, err == nil else {
+                self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                self.delegate?.error(err!)
+                return
+            }
+
+            currentUser.findOrGetUser(id: userId) { user, err in
+                guard let user = user, err == nil else {
+                    self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                    self.delegate?.error(err!)
+                    return
+                }
+
+                // TODO: Should this go to the room or UserSubDelegate?
+
+                self.delegate?.userStoppedTyping(room, user: user)
+            }
+        }
+
+
+    }
+
+
+    // TODO: Remove?
+
+    //    fileprivate func parseNewRoomMessagePayload(_ eventName: PCAPIEventName, data: [String: Any]) {
+    //        guard let messagePayload = data["message"] as? [String: Any] else {
+    //            self.delegate?.error(
+    //                PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+    //                    key: "message",
+    //                    apiEventName: eventName,
+    //                    payload: data
+    //                )
+    //            )
+    //            return
+    //        }
+    //
+    //        do {
+    //            let message = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
+    //
+    //            guard let roomWithNewMessage = self.currentUser?.rooms.first(where: { $0.id == message.roomId }) else {
+    //                // TODO: Log and call delelgate?.error() ?
+    //                return
+    //            }
+    //
+    //            roomWithNewMessage.messages.append(message)
+    //            self.delegate?.messageReceived(room: roomWithNewMessage, message: message)
+    //        } catch let err {
+    //            self.app.logger.log(err.localizedDescription, logLevel: .debug)
+    //            self.delegate?.error(err)
+    //        }
+    //    }
 }
 
 public enum PCAPIEventError: Error {
     case eventTypeNameMissingInAPIEventPayload([String: Any])
     case apiEventDataMissingInAPIEventPayload([String: Any])
-    case keyNotPresentInPCAPIEventPayload(key: String, apiEventType: PCAPIEventType, payload: [String: Any])
+    case keyNotPresentInPCAPIEventPayload(key: String, apiEventName: PCAPIEventName, payload: [String: Any])
 }
 
 extension PCAPIEventError: LocalizedError {
@@ -422,8 +582,8 @@ extension PCAPIEventError: LocalizedError {
             return "Event type missing in API event payload: \(payload)"
         case .apiEventDataMissingInAPIEventPayload(let payload):
             return "Data missing in API event payload: \(payload)"
-        case .keyNotPresentInPCAPIEventPayload(let key, let apiEventType, let payload):
-            return "\(key) missing in \(apiEventType.rawValue) API event payload: \(payload)"
+        case .keyNotPresentInPCAPIEventPayload(let key, let apiEventName, let payload):
+            return "\(key) missing in \(apiEventName.rawValue) API event payload: \(payload)"
         }
     }
 }
@@ -448,6 +608,7 @@ public enum PCError: Error {
 
     case messageIdKeyMissingInMessageCreationResponse([String: Int])
 
+    case currentUserIsNil
 }
 
 extension PCError: LocalizedError {
@@ -455,14 +616,23 @@ extension PCError: LocalizedError {
 }
 
 public enum PCAPIEventType: String {
+    case api
+    case user
+}
+
+public enum PCAPIEventName: String {
+    // TODO: Remove?
+    //    case new_room_message
+
     case initial_state
     case added_to_room
     case removed_from_room
-    case new_room_message
     case room_updated
     case room_deleted
     case user_joined
     case user_left
+    case typing_start
+    case typing_stop
 }
 
 public enum PCUserSubscriptionState {

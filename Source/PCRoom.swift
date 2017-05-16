@@ -7,7 +7,7 @@ public class PCRoom {
     public let createdAt: String
     public var updatedAt: String
     public var deletedAt: String?
-    public var users: PCSynchronizedArray<PCUser>
+    public var userIds: [Int]
     public var messages: PCSynchronizedArray<PCMessage>
 
     public var subscription: PCRoomSubscription? = nil
@@ -21,7 +21,7 @@ public class PCRoom {
         createdAt: String,
         updatedAt: String,
         deletedAt: String? = nil,
-        users: PCSynchronizedArray<PCUser> = PCSynchronizedArray<PCUser>(),
+        userIds: [Int] = [],
         messages: PCSynchronizedArray<PCMessage> = PCSynchronizedArray<PCMessage>()
     ) {
         self.id = id
@@ -30,7 +30,7 @@ public class PCRoom {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
-        self.users = users
+        self.userIds = userIds
         self.messages = messages
     }
 

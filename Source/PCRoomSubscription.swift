@@ -2,6 +2,10 @@ import PusherPlatform
 
 // TODO: Should this have the delegate or the PCRoom itself?
 
+// TODO: Make Room able to handle sending events to main delegate or Room delegate
+//
+// e.g. _internalDelegate (goes to PCUserSubscription delegate) or delegate, if set
+
 public class PCRoomSubscription {
     public var delegate: PCRoomDelegate?
     let resumableSubscription: PPResumableSubscription
