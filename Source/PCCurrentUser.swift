@@ -95,8 +95,12 @@ public class PCCurrentUser {
 
     // TODO: How to make unambiguous if you just want to pass in a name for the room?
 
-//    public func createRoom(name
-//        : String, delegate: PCRoomDelegate? = nil, addUsers users: [PCUser]? = nil, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
+//    public func createRoom(
+//        name: String,
+//        delegate: PCRoomDelegate? = nil,
+//        addUsers users: [PCUser]? = nil,
+//        completionHandler: @escaping (PCRoom?, Error?) -> Void
+//    ) {
 //        let userIdsToAdd = users?.flatMap { return $0.id }
 //        self.createRoom(name: name, delegate: delegate, addUserIds: userIdsToAdd, completionHandler: completionHandler)
 //    }
@@ -106,7 +110,7 @@ public class PCCurrentUser {
 
     // MARK: Room-related interactions
 
-    internal func findOrGetRoom(id: Int, completionHander: @escaping (PCRoom?, Error?) -> Void) {
+    public func findOrGetRoom(id: Int, completionHander: @escaping (PCRoom?, Error?) -> Void) {
         if let room = self.rooms.first(where: { $0.id == id }) {
             completionHander(room, nil)
         } else {
@@ -330,20 +334,19 @@ public class PCCurrentUser {
 
     // MARK: User-related interactions
 
-    internal func findOrGetUser(id: Int, completionHander: @escaping (PCUser?, Error?) -> Void) {
+    public func findOrGetUser(id: Int, completionHander: @escaping (PCUser?, Error?) -> Void) {
         if let user = self.users.first(where: { $0.id == id }) {
             completionHander(user, nil)
         } else {
             self.getUser(id: id) { user, err in
-                guard err == nil else {
+                guard let user = user, err == nil else {
                     self.app.logger.log(err!.localizedDescription, logLevel: .error)
                     completionHander(nil, err!)
                     return
                 }
 
-                // TODO: Should the user be added to the currentUser?
-
-                completionHander(user!, nil)
+                self.users.insert(user)
+                completionHander(user, nil)
             }
         }
     }
