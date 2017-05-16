@@ -62,6 +62,8 @@ import PusherPlatform
             }
         )
 
+        // TODO: Fix this stuff
+
         self.app.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
