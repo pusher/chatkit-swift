@@ -30,7 +30,11 @@ class ViewController: UIViewController {
 //            }
 
 
-            let room = currentUser!.rooms.first()!
+            print(currentUser!.roomStore.rooms.flatMap { String($0.id) }.joined(separator: ", "))
+
+            let room = currentUser!.roomStore.rooms[currentUser!.roomStore.rooms.count - 1]
+
+            print(room.id)
 
             currentUser!.subscribeToRoom(room: room, roomDelegate: self)
 
@@ -73,6 +77,14 @@ extension ViewController: PCUserSubscriptionDelegate {
 //                room.users = roomWithUsers!.users
 //            }
 //        }
+    }
+
+    public func userStartedTyping(_ room: PCRoom, user: PCUser) {
+        print("\(user.name) started typing in room \(room.name)")
+    }
+
+    public func userStoppedTyping(_ room: PCRoom, user: PCUser) {
+        print("\(user.name) stopped typing in room \(room.name)")
     }
 
     public func removedFromRoom(_ room: PCRoom) {

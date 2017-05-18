@@ -11,17 +11,21 @@ public class PCUserSubscription {
 
     public var connectCompletionHandlers: [(PCCurrentUser?, Error?) -> Void]
 
+    public let userStore: PCUserStore
+
     public var currentUser: PCCurrentUser? = nil
 
     public init(
         app: App,
         resumableSubscription: PPResumableSubscription,
+        userStore: PCUserStore,
         delegate: PCUserSubscriptionDelegate? = nil,
         connectCompletionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
         self.app = app
-        self.delegate = delegate
         self.resumableSubscription = resumableSubscription
+        self.userStore = userStore
+        self.delegate = delegate
         self.connectCompletionHandlers = [connectCompletionHandler]
     }
 
@@ -75,7 +79,7 @@ public class PCUserSubscription {
 
         switch eventName {
         case .initial_state:
-            parseInitialStatePayload(eventName, data: apiEventData)
+            parseInitialStatePayload(eventName, data: apiEventData, userStore: self.userStore)
         case .added_to_room:
             parseAddedToRoomPayload(eventName, data: apiEventData)
         case .removed_from_room:
@@ -107,7 +111,7 @@ public class PCUserSubscription {
 }
 
 extension PCUserSubscription {
-    fileprivate func parseInitialStatePayload(_ eventName: PCAPIEventName, data: [String: Any]) {
+    fileprivate func parseInitialStatePayload(_ eventName: PCAPIEventName, data: [String: Any], userStore: PCUserStore) {
 
         guard let roomsPayload = data["rooms"] as? [[String: Any]] else {
             callConnectCompletionHandlers(
@@ -121,7 +125,7 @@ extension PCUserSubscription {
             return
         }
 
-        guard let userPayload = data["user"] as? [String: Any] else {
+        guard let userPayload = data["current_user"] as? [String: Any] else {
             callConnectCompletionHandlers(
                 currentUser: nil,
                 error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
@@ -136,7 +140,7 @@ extension PCUserSubscription {
         let receivedCurrentUser: PCCurrentUser
 
         do {
-            receivedCurrentUser = try PCPayloadDeserializer.createCurrentUserFromPayload(userPayload, app: self.app)
+            receivedCurrentUser = try PCPayloadDeserializer.createCurrentUserFromPayload(userPayload, app: self.app, userStore: userStore)
         } catch let err {
             callConnectCompletionHandlers(
                 currentUser: nil,
@@ -166,28 +170,22 @@ extension PCUserSubscription {
             )
 
             memberships.forEach { membership in
-                guard let membershipUserPayload = membership["user"] as? [String: Any] else {
+                guard let membershipUserId = membership["user_id"] as? Int else {
                     self.app.logger.log(
-                        "Incomplete membership payload in initial_state event for room: \(roomName)",
+                        "Incomplete membership payload in initial_state event for room \(roomName): \(membership)",
                         logLevel: .debug
                     )
                     return
                 }
 
-                do {
-                    let user = try PCPayloadDeserializer.createUserFromPayload(membershipUserPayload)
-                    receivedCurrentUser.users.insert(user)
-                    room.userIds.append(user.id)
-                } catch let err {
-                    self.app.logger.log(err.localizedDescription, logLevel: .debug)
-                    return
-                }
+                // TODO: Should we be fetching info about the users in the background here?
+//                receivedCurrentUser.userStore.add(user)
+
+                room.userIds.append(membershipUserId)
             }
 
-            receivedCurrentUser.rooms.append(room)
+            receivedCurrentUser.roomStore.add(room)
         }
-
-        // TODO: Store rooms here? receivedCurrentUser.rooms
 
         self.currentUser = receivedCurrentUser
         callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
@@ -207,7 +205,7 @@ extension PCUserSubscription {
 
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-            self.currentUser?.rooms.append(room)
+            self.currentUser?.roomStore.add(room)
             self.delegate?.addedToRoom(room)
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
@@ -230,13 +228,13 @@ extension PCUserSubscription {
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
-            guard let removedRoom = self.currentUser?.rooms.remove(where: { $0.id == room.id }) else {
+            guard let roomRemovedFrom = self.currentUser?.roomStore.remove(id: room.id) else {
                 // TODO: Log and call delelgate?.error() ?
                 return
             }
 
             // TODO: Should this always be called?
-            self.delegate?.removedFromRoom(removedRoom)
+            self.delegate?.removedFromRoom(roomRemovedFrom)
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
             self.delegate?.error(err)
@@ -258,15 +256,18 @@ extension PCUserSubscription {
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
-            guard let roomToUpdate = self.currentUser?.rooms.first(where: { $0.id == room.id }) else {
-                // TODO: Log and call delelgate?.error() ?
-                return
+            self.currentUser?.roomStore.room(id: room.id) { roomToUpdate, err in
+
+                guard let roomToUpdate = roomToUpdate, err == nil else {
+                    self.app.logger.log(err!.localizedDescription, logLevel: .debug)
+                    return
+                }
+
+                roomToUpdate.updateWithPropertiesOfRoom(room)
+
+                // TODO: Should this always be called?
+                self.delegate?.roomUpdated(roomToUpdate)
             }
-
-            roomToUpdate.updateWithPropertiesOfRoom(room)
-
-            // TODO: Should this always be called?
-            self.delegate?.roomUpdated(roomToUpdate)
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
             self.delegate?.error(err)
@@ -288,7 +289,7 @@ extension PCUserSubscription {
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
-            guard let deletedRoom = self.currentUser?.rooms.remove(where: { $0.id == room.id }) else {
+            guard let deletedRoom = self.currentUser?.roomStore.remove(id: room.id) else {
                 // TODO: Log and call delelgate?.error() ?
                 return
             }
@@ -350,14 +351,14 @@ extension PCUserSubscription {
             return
         }
 
-        currentUser.findOrGetRoom(id: room.id) { room, err in
+        currentUser.roomStore.room(id: room.id) { room, err in
             guard let room = room, err == nil else {
                 self.app.logger.log(err!.localizedDescription, logLevel: .error)
                 self.delegate?.error(err!)
                 return
             }
 
-            currentUser.findOrGetUser(id: receivedUser.id) { user, err in
+            currentUser.userStore.user(id: receivedUser.id) { user, err in
                 guard let user = user, err == nil else {
                     self.app.logger.log(
                         "User with id \(receivedUser.id) left but no user information could be retrieved: error was: \(err!.localizedDescription)",
@@ -369,7 +370,7 @@ extension PCUserSubscription {
 
                 // TODO: Add user to room here?
 
-                currentUser.users.insert(user)
+                currentUser.userStore.add(user)
                 room.userIds.append(user.id)
 
                 self.delegate?.userJoinedRoom(room, user: user)
@@ -426,14 +427,14 @@ extension PCUserSubscription {
             return
         }
 
-        currentUser.findOrGetRoom(id: room.id) { room, err in
+        currentUser.roomStore.room(id: room.id) { room, err in
             guard let room = room, err == nil else {
                 self.app.logger.log(err!.localizedDescription, logLevel: .error)
                 self.delegate?.error(err!)
                 return
             }
 
-            currentUser.findOrGetUser(id: receivedUser.id) { user, err in
+            currentUser.userStore.user(id: receivedUser.id) { user, err in
                 guard let user = user, err == nil else {
                     self.app.logger.log(
                         "User with id \(receivedUser.id) left but no user information could be retrieved: error was: \(err!.localizedDescription)",
@@ -472,14 +473,14 @@ extension PCUserSubscription {
             return
         }
 
-        currentUser.findOrGetRoom(id: roomId) { room, err in
+        currentUser.roomStore.room(id: roomId) { room, err in
             guard let room = room, err == nil else {
                 self.app.logger.log(err!.localizedDescription, logLevel: .error)
                 self.delegate?.error(err!)
                 return
             }
 
-            currentUser.findOrGetUser(id: userId) { user, err in
+            currentUser.userStore.user(id: userId) { user, err in
                 guard let user = user, err == nil else {
                     self.app.logger.log(err!.localizedDescription, logLevel: .error)
                     self.delegate?.error(err!)
@@ -514,14 +515,14 @@ extension PCUserSubscription {
             return
         }
 
-        currentUser.findOrGetRoom(id: roomId) { room, err in
+        currentUser.roomStore.room(id: roomId) { room, err in
             guard let room = room, err == nil else {
                 self.app.logger.log(err!.localizedDescription, logLevel: .error)
                 self.delegate?.error(err!)
                 return
             }
 
-            currentUser.findOrGetUser(id: userId) { user, err in
+            currentUser.userStore.user(id: userId) { user, err in
                 guard let user = user, err == nil else {
                     self.app.logger.log(err!.localizedDescription, logLevel: .error)
                     self.delegate?.error(err!)

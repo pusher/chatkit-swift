@@ -1,5 +1,4 @@
 class PCBasicMessageEnricher {
-
     public let userStore: PCUserStore
     public let roomStore: PCRoomStore
 

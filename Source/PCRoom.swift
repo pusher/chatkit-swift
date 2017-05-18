@@ -8,11 +8,11 @@ public class PCRoom {
     public var updatedAt: String
     public var deletedAt: String?
     public var userIds: [Int]
+
+    // TODO: Is this still used?
     public var messages: PCSynchronizedArray<PCMessage>
 
     public var subscription: PCRoomSubscription? = nil
-
-    // TODO: Maybe a last event id received here, a la Feeds?
 
     public init(
         id: Int,

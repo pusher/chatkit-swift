@@ -1,8 +1,8 @@
 import Foundation
 import PusherPlatform
 
-public struct PCPayloadDeserializer {
-    static public func createUserFromPayload(_ userPayload: [String: Any]) throws -> PCUser {
+struct PCPayloadDeserializer {
+    static func createUserFromPayload(_ userPayload: [String: Any]) throws -> PCUser {
         let basicUser = try createBasicUserFromPayload(userPayload)
 
         return PCUser(
@@ -15,7 +15,7 @@ public struct PCPayloadDeserializer {
         )
     }
 
-    static public func createCurrentUserFromPayload(_ userPayload: [String: Any], app: App) throws -> PCCurrentUser {
+    static func createCurrentUserFromPayload(_ userPayload: [String: Any], app: App, userStore: PCUserStore) throws -> PCCurrentUser {
         let basicUser = try createBasicUserFromPayload(userPayload)
 
         return PCCurrentUser(
@@ -25,11 +25,12 @@ public struct PCPayloadDeserializer {
             name: userPayload["name"] as? String,
             customId: userPayload["custom_id"] as? String,
             customData: userPayload["custom_data"] as? [String: Any],
-            app: app
+            app: app,
+            userStore: userStore
         )
     }
 
-    static public func createRoomFromPayload(_ roomPayload: [String: Any]) throws -> PCRoom {
+    static func createRoomFromPayload(_ roomPayload: [String: Any]) throws -> PCRoom {
         guard let roomId = roomPayload["id"] as? Int,
               let roomName = roomPayload["name"] as? String,
               let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
@@ -49,7 +50,9 @@ public struct PCPayloadDeserializer {
         )
     }
 
-    static public func createMessageFromPayload(_ messagePayload: [String: Any]) throws -> PCMessage {
+    // This returns a PCBasicMessage, mainly to signal that it needs to be supplemented with
+    // information about its associated sender and the room it belongs to
+    static func createMessageFromPayload(_ messagePayload: [String: Any]) throws -> PCBasicMessage {
         guard let messageId = messagePayload["id"] as? Int,
               let messageSenderId = messagePayload["user_id"] as? Int,
               let messageRoomId = messagePayload["room_id"] as? Int,
@@ -57,10 +60,10 @@ public struct PCPayloadDeserializer {
               let messageCreatedAt = messagePayload["created_at"] as? String,
               let messageUpdatedAt = messagePayload["updated_at"] as? String
         else {
-            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCMessage.self), payload: messagePayload)
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCBasicMessage.self), payload: messagePayload)
         }
 
-        return PCMessage(
+        return PCBasicMessage(
             id: messageId,
             senderId: messageSenderId,
             roomId: messageRoomId,

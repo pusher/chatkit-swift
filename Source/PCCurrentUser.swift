@@ -8,11 +8,14 @@ public class PCCurrentUser {
     public let customId: String?
     public let customData: [String: Any]?
 
-    public internal(set) var rooms: PCSynchronizedArray<PCRoom>
-    public internal(set) var users: Set<PCUser> = []
+    public let userStore: PCUserStore
+    public let roomStore: PCRoomStore
+
+    internal lazy var basicMessageEnricher: PCBasicMessageEnricher = {
+        return PCBasicMessageEnricher(userStore: self.userStore, roomStore: self.roomStore)
+    }()
 
     fileprivate let app: App
-    public let logger: PPLogger
 
     public init(
         id: Int,
@@ -22,7 +25,8 @@ public class PCCurrentUser {
         customId: String? = nil,
         customData: [String: Any]?,
         rooms: PCSynchronizedArray<PCRoom> = PCSynchronizedArray<PCRoom>(),
-        app: App
+        app: App,
+        userStore: PCUserStore
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -30,9 +34,9 @@ public class PCCurrentUser {
         self.name = name
         self.customId = customId
         self.customData = customData
-        self.rooms = rooms
+        self.roomStore = PCRoomStore(rooms: rooms, app: app)
         self.app = app
-        self.logger = app.logger
+        self.userStore = userStore
     }
 
     public func createRoom(
@@ -62,7 +66,7 @@ public class PCCurrentUser {
             return
         }
 
-        let path = "/\(ChatAPI.namespace)/rooms"
+        let path = "/\(ChatManager.namespace)/rooms"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
         self.app.requestWithRetry(
@@ -108,25 +112,6 @@ public class PCCurrentUser {
     // TODO: How to setup completion handlers when return payload is unclear - do we
     // just optionally return an error or do we return User(s) / Room?
 
-    // MARK: Room-related interactions
-
-    public func findOrGetRoom(id: Int, completionHander: @escaping (PCRoom?, Error?) -> Void) {
-        if let room = self.rooms.first(where: { $0.id == id }) {
-            completionHander(room, nil)
-        } else {
-            self.getRoom(id: id) { room, err in
-                guard err == nil else {
-                    self.app.logger.log(err!.localizedDescription, logLevel: .error)
-                    completionHander(nil, err!)
-                    return
-                }
-
-                // TODO: Should the room be added to the currentUser?
-
-                completionHander(room!, nil)
-            }
-        }
-    }
 
     public func add(_ user: PCUser, to room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
         self.add([user], to: room, completionHandler: completionHandler)
@@ -167,7 +152,7 @@ public class PCCurrentUser {
             return
         }
 
-        let path = "/\(ChatAPI.namespace)/rooms/\(room.id)/users"
+        let path = "/\(ChatManager.namespace)/rooms/\(room.id)/users"
         let generalRequest = PPRequestOptions(method: HTTPMethod.PUT.rawValue, path: path, body: data)
 
         self.app.requestWithRetry(
@@ -196,66 +181,105 @@ public class PCCurrentUser {
         self.remove(userIds: [self.id], from: room, completionHandler: completionHandler)
     }
 
-    public func getRoom(id: Int, withMessages: Int? = nil, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
-        let path = "/\(ChatAPI.namespace)/rooms/\(id)"
-        let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
+    // TODO: Is this something we even want?
 
-        if let withMessages = withMessages {
-            let withMessagesQueryItem = URLQueryItem(name: "with_messages", value: String(withMessages))
-            generalRequest.addQueryItems([withMessagesQueryItem])
-        }
+//    public func getRoom(id: Int, withMessages: Int? = nil, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
+//        let path = "/\(ChatManager.namespace)/rooms/\(id)"
+//        let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
+//
+//        if let withMessages = withMessages {
+//            let withMessagesQueryItem = URLQueryItem(name: "with_messages", value: String(withMessages))
+//            generalRequest.addQueryItems([withMessagesQueryItem])
+//        }
+//
+//        self.app.requestWithRetry(
+//            using: generalRequest,
+//            onSuccess: { data in
+//                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
+//                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
+//                    return
+//                }
+//
+//                guard let roomPayload = jsonObject as? [String: Any] else {
+//                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
+//                    return
+//                }
+//
+//                let room: PCRoom
+//
+//                do {
+//                    room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
+//                } catch let err {
+//                    self.app.logger.log(err.localizedDescription, logLevel: .debug)
+//                    completionHandler(nil, err)
+//                    return
+//                }
+//
+//                if withMessages != nil {
+//                    guard let messagesPayload = roomPayload["messages"] as? [[String: Any]] else {
+//                        completionHandler(nil, PCError.incompleteRoomPayloadInGetRoomResponse(roomPayload))
+//                        return
+//                    }
+//
+//                    let progressCounter = MessageEnrichmentProgressCounter(totalCount: messagesPayload.count)
+//
+//                    messagesPayload.forEach { messagePayload in
+//                        do {
+//                            let basicMessage = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
+//
+//                            self.basicMessageEnricher.enrich(basicMessage) { message, err in
+//                                guard let message = message, err == nil else {
+//                                    progressCounter.incrementFailed()
+//                                    self.app.logger.log(err!.localizedDescription, logLevel: .debug)
+//
+//                                    if progressCounter.finished {
+//                                        completionHandler(room, nil)
+//                                    }
+//                                    return
+//                                }
+//
+//                                room.messages.append(message)
+//                                progressCounter.incrementSuccess()
+//
+//                                if progressCounter.finished {
+//                                    completionHandler(room, nil)
+//                                }
+//                            }
+//                        } catch let err {
+//                            progressCounter.incrementFailed()
+//                            self.app.logger.log(err.localizedDescription, logLevel: .debug)
+//
+//                            if progressCounter.finished {
+//                                completionHandler(room, nil)
+//                            }
+//                        }
+//                    }
+//
+////                    messagesPayload.forEach { messagePayload in
+////                        do {
+////                            let basicMessage = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
+////
+////
+////                            room.messages.append(message)
+////                        } catch let err {
+////                            self.app.logger.log(err.localizedDescription, logLevel: .debug)
+////                            completionHandler(nil, err)
+////                            return
+////                        }
+////                    }
+//                } else {
+//                    completionHandler(room, nil)
+//                }
+//            },
+//            onError: { error in
+//                completionHandler(nil, error)
+//            }
+//        )
+//    }
 
-        self.app.requestWithRetry(
-            using: generalRequest,
-            onSuccess: { data in
-                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
-                    return
-                }
-
-                guard let roomPayload = jsonObject as? [String: Any] else {
-                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
-                    return
-                }
-
-                let room: PCRoom
-
-                do {
-                    room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-                } catch let err {
-                    self.app.logger.log(err.localizedDescription, logLevel: .debug)
-                    completionHandler(nil, err)
-                    return
-                }
-
-                if withMessages != nil {
-                    guard let messagesPayload = roomPayload["messages"] as? [[String: Any]] else {
-                        completionHandler(nil, PCError.incompleteRoomPayloadInGetRoomResponse(roomPayload))
-                        return
-                    }
-
-                    messagesPayload.forEach { messagePayload in
-                        do {
-                            let message = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
-                            room.messages.append(message)
-                        } catch let err {
-                            self.app.logger.log(err.localizedDescription, logLevel: .debug)
-                            completionHandler(nil, err)
-                            return
-                        }
-                    }
-                }
-
-                completionHandler(room, nil)
-            },
-            onError: { error in
-                completionHandler(nil, error)
-            }
-        )
-    }
 
     public func getRooms(completionHandler: @escaping ([PCRoom]?, Error?) -> Void) {
-        let path = "/\(ChatAPI.namespace)/rooms"
+        let path = "/\(ChatManager.namespace)/rooms"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
         self.app.requestWithRetry(
@@ -275,7 +299,7 @@ public class PCCurrentUser {
                     do {
                         return try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
                     } catch let err {
-                        self.logger.log(err.localizedDescription, logLevel: .debug)
+                        self.app.logger.log(err.localizedDescription, logLevel: .debug)
                         return nil
                     }
                 }
@@ -303,7 +327,7 @@ public class PCCurrentUser {
             return
         }
 
-        let path = "/\(ChatAPI.namespace)/rooms/\(room.id)/events"
+        let path = "/\(ChatManager.namespace)/rooms/\(room.id)/events"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
         self.app.requestWithRetry(
@@ -332,58 +356,6 @@ public class PCCurrentUser {
         self.typingStateChange(eventPayload: eventPayload, room: room, completionHandler: completionHandler)
     }
 
-    // MARK: User-related interactions
-
-    public func findOrGetUser(id: Int, completionHander: @escaping (PCUser?, Error?) -> Void) {
-        if let user = self.users.first(where: { $0.id == id }) {
-            completionHander(user, nil)
-        } else {
-            self.getUser(id: id) { user, err in
-                guard let user = user, err == nil else {
-                    self.app.logger.log(err!.localizedDescription, logLevel: .error)
-                    completionHander(nil, err!)
-                    return
-                }
-
-                self.users.insert(user)
-                completionHander(user, nil)
-            }
-        }
-    }
-
-    public func getUser(id: Int, completionHandler: @escaping (PCUser?, Error?) -> Void) {
-        let path = "/\(ChatAPI.namespace)/users/\(id)"
-        let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
-
-        self.app.requestWithRetry(
-            using: generalRequest,
-            onSuccess: { data in
-                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
-                    return
-                }
-
-                guard let userPayload = jsonObject as? [String: Any] else {
-                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
-                    return
-                }
-
-                do {
-                    let user = try PCPayloadDeserializer.createUserFromPayload(userPayload)
-                    completionHandler(user, nil)
-                } catch let err {
-                    self.app.logger.log(err.localizedDescription, logLevel: .debug)
-                    completionHandler(nil, err)
-                    return
-                }
-            },
-            onError: { err in
-                completionHandler(nil, err)
-            }
-        )
-    }
-
-
     // MARK: Message-related interactions
 
     // TODO: Should we add the message to the room in the onSuccess here, as long as we
@@ -405,7 +377,7 @@ public class PCCurrentUser {
             return
         }
 
-        let path = "/\(ChatAPI.namespace)/rooms/\(room.id)/messages"
+        let path = "/\(ChatManager.namespace)/rooms/\(room.id)/messages"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
         self.app.requestWithRetry(
@@ -434,6 +406,72 @@ public class PCCurrentUser {
         )
     }
 
+
+
+    // TODO: Where should all the makeActiveRoom stuff live?
+
+    public func makeActiveRoom(_ room: PCRoom, delegate: PCRoomDelegate) {
+        self.subscribeToRoom(room: room, roomDelegate: delegate)
+    }
+
+    public func subscribeToRoom(room: PCRoom, roomDelegate: PCRoomDelegate) {
+        self.fetchMessagesFromRoom(room) { messages, err in
+            guard err == nil else {
+                roomDelegate.error(PCRoomSubscriptionError.failedToFetchInitialStateForRoomSubscription)
+                return
+            }
+
+            let path = "/\(ChatManager.namespace)/rooms/\(room.id)"
+
+            let subscribeRequest = PPRequestOptions(
+                method: HTTPMethod.SUBSCRIBE.rawValue,
+                path: path,
+                queryItems: [URLQueryItem(name: "user_id", value: String(self.id))]
+            )
+
+            var resumableSub = PPResumableSubscription(
+                app: self.app,
+                requestOptions: subscribeRequest
+            )
+
+            if let firstMessage = messages!.first {
+                self.app.logger.log("Subscribing to room \(room.name) and providing Last-Event-ID as \(firstMessage.id)", logLevel: .verbose)
+                let mostRecentlyReceivedMessageId = String(firstMessage.id)
+                subscribeRequest.addHeaders(["Last-Event-ID": mostRecentlyReceivedMessageId])
+                resumableSub.setLastEventIdReceivedTo(mostRecentlyReceivedMessageId)
+            }
+
+            room.subscription = PCRoomSubscription(
+                delegate: roomDelegate,
+                resumableSubscription: resumableSub,
+                logger: self.app.logger,
+                basicMessageEnricher: PCBasicMessageEnricher(
+                    userStore: self.userStore,
+                    roomStore: self.roomStore
+                )
+            )
+
+            messages?.reversed().forEach { message in
+                self.app.logger.log("Calling newMessage function on room delegate for message with id \(message.id)", logLevel: .verbose)
+                roomDelegate.newMessage(message)
+            }
+
+            self.app.subscribeWithResume(
+                with: &resumableSub,
+                using: subscribeRequest,
+                onEvent: room.subscription?.handleEvent
+
+                // TODO: This will probably be replaced by the state change delegate function, with an associated type, maybe
+                //                onError: { error in
+                //                    roomDelegate.receivedError(error)
+                //                }
+            )
+
+        }
+    }
+
+    // This seems to only be used by subscribeToRoom
+
     public func fetchMessagesFromRoom(
         _ room: PCRoom,
         initialId: String? = nil,
@@ -441,7 +479,7 @@ public class PCCurrentUser {
         direction: PCRoomMessageFetchDirection = .older,
         completionHandler: @escaping ([PCMessage]?, Error?) -> Void
     ) {
-        let path = "/\(ChatAPI.namespace)/rooms/\(room.id)/messages"
+        let path = "/\(ChatManager.namespace)/rooms/\(room.id)/messages"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
         if let initialId = initialId {
@@ -467,16 +505,40 @@ public class PCCurrentUser {
                     return
                 }
 
-                let messages = messagesPayload.flatMap { messagePayload -> PCMessage? in
+                let progressCounter = MessageEnrichmentProgressCounter(totalCount: messagesPayload.count)
+                let messages = PCSynchronizedArray<PCMessage>()
+
+                messagesPayload.forEach { messagePayload in
                     do {
-                        return try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
+                        let basicMessage = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
+
+                        self.basicMessageEnricher.enrich(basicMessage) { message, err in
+                            guard let message = message, err == nil else {
+                                progressCounter.incrementFailed()
+                                self.app.logger.log(err!.localizedDescription, logLevel: .debug)
+
+                                if progressCounter.finished {
+                                    completionHandler(messages.underlyingArray.sorted(by: { $0.0.id > $0.1.id }), nil)
+                                }
+                                return
+                            }
+
+                            messages.append(message)
+                            progressCounter.incrementSuccess()
+
+                            if progressCounter.finished {
+                                completionHandler(messages.underlyingArray.sorted(by: { $0.0.id > $0.1.id }), nil)
+                            }
+                        }
                     } catch let err {
-                        self.logger.log(err.localizedDescription, logLevel: .debug)
-                        return nil
+                        progressCounter.incrementFailed()
+                        self.app.logger.log(err.localizedDescription, logLevel: .debug)
+
+                        if progressCounter.finished {
+                            completionHandler(messages.underlyingArray.sorted(by: { $0.0.id > $0.1.id }), nil)
+                        }
                     }
                 }
-
-                completionHandler(messages, nil)
             },
             onError: { error in
                 completionHandler(nil, error)
@@ -484,62 +546,42 @@ public class PCCurrentUser {
         )
     }
 
-
-    // MARK: PCRoomSubscription
-
-    // TODO: What do we return here?
-
-    public func subscribeToRoom(room: PCRoom, roomDelegate: PCRoomDelegate) {
-        self.fetchMessagesFromRoom(room) { messages, err in
-            guard err == nil else {
-                roomDelegate.error(PCRoomSubscriptionError.failedToFetchInitialStateForRoomSubscription)
-                return
-            }
-
-            let path = "/\(ChatAPI.namespace)/rooms/\(room.id)"
-
-            let subscribeRequest = PPRequestOptions(
-                method: HTTPMethod.SUBSCRIBE.rawValue,
-                path: path,
-                queryItems: [URLQueryItem(name: "user_id", value: String(self.id))]
-            )
-
-            if let firstMessage = messages!.first {
-                subscribeRequest.addHeaders(["Last-Event-ID": String(firstMessage.id)])
-            }
-
-            var resumableSub = PPResumableSubscription(
-                app: self.app,
-                requestOptions: subscribeRequest
-            )
-
-            room.subscription = PCRoomSubscription(
-                delegate: roomDelegate,
-                resumableSubscription: resumableSub,
-                logger: self.app.logger
-            )
-
-            messages?.reversed().forEach { message in
-                roomDelegate.newMessage(message)
-            }
-
-            self.app.subscribeWithResume(
-                with: &resumableSub,
-                using: subscribeRequest,
-                onEvent: room.subscription?.handleEvent
-
-                // TODO: This will probably be replaced by the state change delegate function, with an associated type, maybe
-
-//                onError: { error in
-//                    roomDelegate.receivedError(error)
-//                }
-            )
-
-        }
+    public enum PCRoomMessageFetchDirection: String {
+        case older
+        case newer
     }
+
 }
 
-public enum PCRoomMessageFetchDirection: String {
-    case older
-    case newer
+
+// TODO: Should this be here?
+class MessageEnrichmentProgressCounter {
+    private var queue = DispatchQueue(label: "com.pusher.chat-api.message-enrichment-progress-counter")
+    let totalCount: Int
+    var successCount: Int = 0
+    var failedCount: Int = 0
+    var finished: Bool = false
+
+    init(totalCount: Int) {
+        self.totalCount = totalCount
+    }
+
+    func incrementSuccess() {
+        queue.sync {
+            successCount += 1
+            if totalCount == (successCount + failedCount) {
+                finished = true
+            }
+        }
+    }
+
+    func incrementFailed() {
+        queue.sync {
+            failedCount += 1
+            if totalCount == (successCount + failedCount) {
+                finished = true
+            }
+        }
+    }
+
 }

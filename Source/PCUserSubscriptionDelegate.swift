@@ -11,6 +11,7 @@ public protocol PCUserSubscriptionDelegate {
     func userJoinedRoom(_ room: PCRoom, user: PCUser)
     func userLeftRoom(_ room: PCRoom, user: PCUser)
 
+    // TODO: These two are moving
     func userStartedTyping(_ room: PCRoom, user: PCUser)
     func userStoppedTyping(_ room: PCRoom, user: PCUser)
 
