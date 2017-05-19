@@ -6,6 +6,11 @@ public protocol PCRoomDelegate {
 
     func newMessage(_ message: PCMessage)
 
+    func userStartedTyping(_ user: PCUser)
+    func userStoppedTyping(_ user: PCUser)
+
+    func userJoined(_ user: PCUser)
+    func userLeft(_ user: PCUser)
 
     // TODO: I don't think we'll want this - it could be handled by the state change - i.e. changed
     // to .failed, potentially with an associated error value
@@ -14,5 +19,5 @@ public protocol PCRoomDelegate {
 
     // TODO: Make all of this work, and probably duplicate in PCUserSubscriptionDelegate (PCDelegate)
 
-    func subscriptionStateChanged(from: PPResumableSubscriptionState, to: PPResumableSubscriptionState)
+//    func subscriptionStateChanged(from: PPResumableSubscriptionState, to: PPResumableSubscriptionState)
 }

@@ -368,12 +368,11 @@ extension PCUserSubscription {
                     return
                 }
 
-                // TODO: Add user to room here?
-
                 currentUser.userStore.add(user)
                 room.userIds.append(user.id)
 
                 self.delegate?.userJoinedRoom(room, user: user)
+                room.subscription?.delegate?.userJoined(user)
             }
         }
     }
@@ -451,6 +450,7 @@ extension PCUserSubscription {
                 }
 
                 self.delegate?.userLeftRoom(room, user: user)
+                room.subscription?.delegate?.userLeft(user)
             }
         }
     }
@@ -487,9 +487,8 @@ extension PCUserSubscription {
                     return
                 }
 
-                // TODO: Should this go to the room or UserSubDelegate?
-
-                self.delegate?.userStartedTyping(room, user: user)
+                self.delegate?.userStartedTypingInRoom(room, user: user)
+                room.subscription?.delegate?.userStartedTyping(user)
             }
         }
 
@@ -529,12 +528,10 @@ extension PCUserSubscription {
                     return
                 }
 
-                // TODO: Should this go to the room or UserSubDelegate?
-
-                self.delegate?.userStoppedTyping(room, user: user)
+                self.delegate?.userStoppedTypingInRoom(room, user: user)
+                room.subscription?.delegate?.userStoppedTyping(user)
             }
         }
-
 
     }
 

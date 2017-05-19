@@ -7,6 +7,7 @@ class ViewController: UIViewController {
     var delegate: AppDelegate!
 
     public var pusherChatUser: PCCurrentUser? = nil
+    public var currentRoom: PCRoom? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,20 +24,11 @@ class ViewController: UIViewController {
             print("Connected!")
             self.pusherChatUser = currentUser!
 
-//            self.getJoinableRooms()
-//
-//            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-//            }
-
-
             print(currentUser!.roomStore.rooms.flatMap { String($0.id) }.joined(separator: ", "))
+            self.currentRoom = currentUser!.roomStore.rooms[currentUser!.roomStore.rooms.count - 1]
+            print(self.currentRoom!.id)
 
-            let room = currentUser!.roomStore.rooms[currentUser!.roomStore.rooms.count - 1]
-
-            print(room.id)
-
-            currentUser!.subscribeToRoom(room: room, roomDelegate: self)
+            currentUser!.subscribeToRoom(room: self.currentRoom!, roomDelegate: self)
 
 //            currentUser!.createRoom(name: "hamhamtest") { room, err in
 //
@@ -57,9 +49,25 @@ extension ViewController: PCRoomDelegate {
         print("Room sub received message: \(message.text)")
     }
 
-    func subscriptionStateChanged(from: PPResumableSubscriptionState, to: PPResumableSubscriptionState) {
-
+    public func userJoined(_ user: PCUser) {
+        print("User \(user.name) joined room: \(self.currentRoom?.name)")
     }
+
+    public func userLeft(_ user: PCUser) {
+        print("User \(user.name) left room: \(self.currentRoom?.name)")
+    }
+
+    public func userStartedTyping(_ user: PCUser) {
+        print("\(user.name) started typing in room \(self.currentRoom?.name)")
+    }
+
+    public func userStoppedTyping(_ user: PCUser) {
+        print("\(user.name) stopped typing in room \(self.currentRoom?.name)")
+    }
+
+//    func subscriptionStateChanged(from: PPResumableSubscriptionState, to: PPResumableSubscriptionState) {
+//
+//    }
 
     func error(_ error: Error) {
         print("Room sub received error: \(error.localizedDescription)")
@@ -69,35 +77,19 @@ extension ViewController: PCRoomDelegate {
 extension ViewController: PCUserSubscriptionDelegate {
     public func addedToRoom(_ room: PCRoom) {
         print("Added to room: \(room.name)")
-
-//        self.pusherChatUser!.getRoom(id: room.id) { roomWithUsers, err in
-//            if err != nil {
-//                print("Error when getting room: \(err)")
-//            } else {
-//                room.users = roomWithUsers!.users
-//            }
-//        }
-    }
-
-    public func userStartedTyping(_ room: PCRoom, user: PCUser) {
-        print("\(user.name) started typing in room \(room.name)")
-    }
-
-    public func userStoppedTyping(_ room: PCRoom, user: PCUser) {
-        print("\(user.name) stopped typing in room \(room.name)")
     }
 
     public func removedFromRoom(_ room: PCRoom) {
         print("Removed from room: \(room.name)")
     }
 
-    public func messageReceived(room: PCRoom, message: PCMessage) {
-        print("Message received 2 \(message)")
+    public func roomUpdated(_ room: PCRoom) {
+        print("Room updated: \(room.name)")
     }
 
-//    public func error(_ error: Error) {
-//        print("Error: \(error)")
-//    }
+    public func roomDeleted(_ room: PCRoom) {
+        print("Room deleted: \(room.name)")
+    }
 
     public func userJoinedRoom(_ room: PCRoom, user: PCUser) {
         print("User \(user.name) joined room: \(room.name)")
@@ -107,12 +99,20 @@ extension ViewController: PCUserSubscriptionDelegate {
         print("User \(user.name) left room: \(room.name)")
     }
 
-    public func roomDeleted(_ room: PCRoom) {
-        print("Room deleted: \(room.name)")
+    public func userStartedTypingInRoom(_ room: PCRoom, user: PCUser) {
+        print("\(user.name) started typing in room \(room.name)")
     }
 
-    public func roomUpdated(_ room: PCRoom) {
-        print("Room updated: \(room.name)")
+    public func userStoppedTypingInRoom(_ room: PCRoom, user: PCUser) {
+        print("\(user.name) stopped typing in room \(room.name)")
     }
+
+    //    public func error(_ error: Error) {
+    //        print("Error: \(error)")
+    //    }
+
+    //    public func messageReceived(room: PCRoom, message: PCMessage) {
+    //        print("Message received 2 \(message)")
+    //    }
 
 }

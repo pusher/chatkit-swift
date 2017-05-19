@@ -7,6 +7,22 @@ public struct PCUser {
     public let name: String?
     public let customId: String?
     public let customData: [String: Any]?
+
+    public init(
+        id: Int,
+        createdAt: String,
+        updatedAt: String,
+        name: String? = nil,
+        customId: String? = nil,
+        customData: [String: Any]? = nil
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.name = name
+        self.customId = customId
+        self.customData = customData
+    }
 }
 
 extension PCUser: Hashable {
