@@ -13,8 +13,8 @@ class ViewController: UIViewController {
 
         let delegate = UIApplication.shared.delegate as! AppDelegate
 
-        // user id 4 on kube, 60 on local
-        delegate.pusherChat?.connect(userId: 60, delegate: self) { currentUser, error in
+        // user id 4 on kube, 61 on local
+        delegate.pusherChat?.connect(userId: 61, delegate: self) { currentUser, error in
             guard error == nil else {
                 print("Error connecting: \(error)")
                 return
