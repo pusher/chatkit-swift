@@ -42,7 +42,11 @@ import PusherPlatform
         userSub.connectCompletionHandlers.append(completionHandler)
     }
 
-    public func connect(userId: Int, delegate: PCUserSubscriptionDelegate, completionHandler: @escaping (PCCurrentUser?, Error?) -> Void) {
+    public func connect(
+        userId: Int,
+        delegate: PCChatManagerDelegate,
+        completionHandler: @escaping (PCCurrentUser?, Error?) -> Void
+    ) {
         self.userId = userId
         let path = "/\(ChatManager.namespace)/users/\(userId)"
 

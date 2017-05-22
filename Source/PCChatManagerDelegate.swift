@@ -1,4 +1,4 @@
-public protocol PCUserSubscriptionDelegate {
+public protocol PCChatManagerDelegate {
     // TODO: Remove? Currently we ignore, I think
 //    func messageReceived(room: PCRoom, message: PCMessage)
 
@@ -21,7 +21,7 @@ public protocol PCUserSubscriptionDelegate {
 //    func userSubscriptionStateChanged(from: PCUserSubscriptionState, to: PCUserSubscriptionState)
 }
 
-extension PCUserSubscriptionDelegate {
+extension PCChatManagerDelegate {
     public func userStartedTypingInRoom(_ room: PCRoom, user: PCUser) {}
     public func userStoppedTypingInRoom(_ room: PCRoom, user: PCUser) {}
     public func userJoinedRoom(_ room: PCRoom, user: PCUser) {}

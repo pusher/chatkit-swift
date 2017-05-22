@@ -74,7 +74,7 @@ extension ViewController: PCRoomDelegate {
     }
 }
 
-extension ViewController: PCUserSubscriptionDelegate {
+extension ViewController: PCChatManagerDelegate {
     public func addedToRoom(_ room: PCRoom) {
         print("Added to room: \(room.name)")
     }

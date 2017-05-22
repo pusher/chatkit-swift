@@ -1,25 +1,33 @@
+import PusherPlatform
+
 class PCBasicMessageEnricher {
     public let userStore: PCUserStore
     public let roomStore: PCRoomStore
+    let logger: PPLogger
 
-    init(userStore: PCUserStore, roomStore: PCRoomStore) {
+    init(userStore: PCUserStore, roomStore: PCRoomStore, logger: PPLogger) {
         self.userStore = userStore
         self.roomStore = roomStore
+        self.logger = logger
     }
 
     func enrich(_ basicMessage: PCBasicMessage, completionHandler: @escaping (PCMessage?, Error?) -> Void) {
         self.userStore.user(id: basicMessage.senderId) { user, err in
             guard let user = user, err == nil else {
-                // TODO: Logging
-
+                self.logger.log(
+                    "Unable to find user with id \(basicMessage.senderId), associated with message \(basicMessage.id). Error: \(err!.localizedDescription)",
+                    logLevel: .debug
+                )
                 completionHandler(nil, err!)
                 return
             }
 
             self.roomStore.room(id: basicMessage.roomId) { room, err in
                 guard let room = room, err == nil else {
-                    // TODO: Logging
-
+                    self.logger.log(
+                        "Unable to find room with id \(basicMessage.roomId), associated with message \(basicMessage.id). Error: \(err!.localizedDescription)",
+                        logLevel: .debug
+                    )
                     completionHandler(nil, err!)
                     return
                 }

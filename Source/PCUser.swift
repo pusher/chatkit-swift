@@ -1,5 +1,3 @@
-// TODO: Maybe make a PCUser protocol, or something similar
-
 public struct PCUser {
     public let id: Int
     public let createdAt: String

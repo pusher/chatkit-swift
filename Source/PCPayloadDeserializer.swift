@@ -50,7 +50,7 @@ struct PCPayloadDeserializer {
         )
     }
 
-    // This returns a PCBasicMessage, mainly to signal that it needs to be supplemented with
+    // This returns a PCBasicMessage mainly to signal that it needs to be enriched with
     // information about its associated sender and the room it belongs to
     static func createMessageFromPayload(_ messagePayload: [String: Any]) throws -> PCBasicMessage {
         guard let messageId = messagePayload["id"] as? Int,
@@ -84,12 +84,6 @@ struct PCPayloadDeserializer {
         return PCBasicUser(id: userId, createdAt: createdAt, updatedAt: updatedAt)
     }
 
-}
-
-fileprivate struct PCBasicUser {
-    let id: Int
-    let createdAt: String
-    let updatedAt: String
 }
 
 public enum PCPayloadDeserializerError: Error {

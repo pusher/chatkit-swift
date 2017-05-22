@@ -23,11 +23,14 @@ public class PCCurrentUser {
         }
     }
 
+    var typingIndicatorManagers: [Int: PCTypingIndicatorManager] = [:]
+    private var typingIndicatorQueue = DispatchQueue(label: "com.pusher.chat-api.typing-indicators")
+
     internal lazy var basicMessageEnricher: PCBasicMessageEnricher = {
-        return PCBasicMessageEnricher(userStore: self.userStore, roomStore: self.roomStore)
+        return PCBasicMessageEnricher(userStore: self.userStore, roomStore: self.roomStore, logger: self.app.logger)
     }()
 
-    fileprivate let app: App
+    let app: App
 
     public init(
         id: Int,
@@ -53,7 +56,6 @@ public class PCCurrentUser {
 
     public func createRoom(
         name: String,
-        delegate: PCRoomDelegate? = nil,
         addUserIds userIds: [Int]? = nil,
         completionHandler: @escaping (PCRoom?, Error?) -> Void
     ) {
@@ -131,11 +133,11 @@ public class PCCurrentUser {
 
     public func add(_ users: [PCUser], to room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
         let userIds = users.map { $0.id }
-        self.add(userIds: userIds, to: room, completionHandler: completionHandler)
+        self.add(userIds: userIds, to: room.id, completionHandler: completionHandler)
     }
 
-    public func add(userIds: [Int], to room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
-        self.addOrRemoveUsers(in: room, userIds: userIds, membershipChange: .add, completionHandler: completionHandler)
+    public func add(userIds: [Int], to roomId: Int, completionHandler: @escaping (Error?) -> Void) {
+        self.addOrRemoveUsers(in: roomId, userIds: userIds, membershipChange: .add, completionHandler: completionHandler)
     }
 
     public func remove(_ user: PCUser, from room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
@@ -148,10 +150,15 @@ public class PCCurrentUser {
     }
 
     public func remove(userIds: [Int], from room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
-        self.addOrRemoveUsers(in: room, userIds: userIds, membershipChange: .remove, completionHandler: completionHandler)
+        self.addOrRemoveUsers(in: room.id, userIds: userIds, membershipChange: .remove, completionHandler: completionHandler)
     }
 
-    fileprivate func addOrRemoveUsers(in room: PCRoom, userIds: [Int], membershipChange: PCUserMembershipChange, completionHandler: @escaping (Error?) -> Void) {
+    fileprivate func addOrRemoveUsers(
+        in roomId: Int,
+        userIds: [Int],
+        membershipChange: PCUserMembershipChange,
+        completionHandler: @escaping (Error?) -> Void
+    ) {
         let userPayload = ["\(membershipChange.rawValue)_user_ids": userIds]
 
         guard JSONSerialization.isValidJSONObject(userPayload) else {
@@ -164,7 +171,7 @@ public class PCCurrentUser {
             return
         }
 
-        let path = "/\(ChatManager.namespace)/rooms/\(room.id)/users"
+        let path = "/\(ChatManager.namespace)/rooms/\(roomId)/users"
         let generalRequest = PPRequestOptions(method: HTTPMethod.PUT.rawValue, path: path, body: data)
 
         self.app.requestWithRetry(
@@ -186,109 +193,16 @@ public class PCCurrentUser {
     }
 
     public func join(room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
-        self.add(userIds: [self.id], to: room, completionHandler: completionHandler)
+        self.add(userIds: [self.id], to: room.id, completionHandler: completionHandler)
+    }
+
+    public func join(roomId: Int, completionHandler: @escaping (Error?) -> Void) {
+        self.add(userIds: [self.id], to: roomId, completionHandler: completionHandler)
     }
 
     public func leave(room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
         self.remove(userIds: [self.id], from: room, completionHandler: completionHandler)
     }
-
-    // TODO: Is this something we even want?
-
-//    public func getRoom(id: Int, withMessages: Int? = nil, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
-//        let path = "/\(ChatManager.namespace)/rooms/\(id)"
-//        let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
-//
-//        if let withMessages = withMessages {
-//            let withMessagesQueryItem = URLQueryItem(name: "with_messages", value: String(withMessages))
-//            generalRequest.addQueryItems([withMessagesQueryItem])
-//        }
-//
-//        self.app.requestWithRetry(
-//            using: generalRequest,
-//            onSuccess: { data in
-//                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
-//                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
-//                    return
-//                }
-//
-//                guard let roomPayload = jsonObject as? [String: Any] else {
-//                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
-//                    return
-//                }
-//
-//                let room: PCRoom
-//
-//                do {
-//                    room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-//                } catch let err {
-//                    self.app.logger.log(err.localizedDescription, logLevel: .debug)
-//                    completionHandler(nil, err)
-//                    return
-//                }
-//
-//                if withMessages != nil {
-//                    guard let messagesPayload = roomPayload["messages"] as? [[String: Any]] else {
-//                        completionHandler(nil, PCError.incompleteRoomPayloadInGetRoomResponse(roomPayload))
-//                        return
-//                    }
-//
-//                    let progressCounter = MessageEnrichmentProgressCounter(totalCount: messagesPayload.count)
-//
-//                    messagesPayload.forEach { messagePayload in
-//                        do {
-//                            let basicMessage = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
-//
-//                            self.basicMessageEnricher.enrich(basicMessage) { message, err in
-//                                guard let message = message, err == nil else {
-//                                    progressCounter.incrementFailed()
-//                                    self.app.logger.log(err!.localizedDescription, logLevel: .debug)
-//
-//                                    if progressCounter.finished {
-//                                        completionHandler(room, nil)
-//                                    }
-//                                    return
-//                                }
-//
-//                                room.messages.append(message)
-//                                progressCounter.incrementSuccess()
-//
-//                                if progressCounter.finished {
-//                                    completionHandler(room, nil)
-//                                }
-//                            }
-//                        } catch let err {
-//                            progressCounter.incrementFailed()
-//                            self.app.logger.log(err.localizedDescription, logLevel: .debug)
-//
-//                            if progressCounter.finished {
-//                                completionHandler(room, nil)
-//                            }
-//                        }
-//                    }
-//
-////                    messagesPayload.forEach { messagePayload in
-////                        do {
-////                            let basicMessage = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
-////
-////
-////                            room.messages.append(message)
-////                        } catch let err {
-////                            self.app.logger.log(err.localizedDescription, logLevel: .debug)
-////                            completionHandler(nil, err)
-////                            return
-////                        }
-////                    }
-//                } else {
-//                    completionHandler(room, nil)
-//                }
-//            },
-//            onError: { error in
-//                completionHandler(nil, error)
-//            }
-//        )
-//    }
-
 
     public func getRooms(completionHandler: @escaping ([PCRoom]?, Error?) -> Void) {
         let path = "/\(ChatManager.namespace)/rooms"
@@ -326,7 +240,7 @@ public class PCCurrentUser {
 
     fileprivate func typingStateChange(
         eventPayload: [String: Any],
-        room: PCRoom,
+        roomId: Int,
         completionHandler: @escaping (Error?) -> Void
     ) {
         guard JSONSerialization.isValidJSONObject(eventPayload) else {
@@ -339,7 +253,7 @@ public class PCCurrentUser {
             return
         }
 
-        let path = "/\(ChatManager.namespace)/rooms/\(room.id)/events"
+        let path = "/\(ChatManager.namespace)/rooms/\(roomId)/events"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
         self.app.requestWithRetry(
@@ -355,17 +269,40 @@ public class PCCurrentUser {
         )
     }
 
-    public func startedTypingIn(_ room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
-        let eventPayload: [String: Any] = ["name": "typing_start", "data": [:], "user_id": self.id]
-        self.typingStateChange(eventPayload: eventPayload, room: room, completionHandler: completionHandler)
+    public func typing(in room: PCRoom, timeoutAfter: TimeInterval = 3) {
+        var typingIndicatorManager: PCTypingIndicatorManager!
+
+        typingIndicatorQueue.sync {
+            if let manager = self.typingIndicatorManagers[room.id] {
+                typingIndicatorManager = manager
+            } else {
+                let manager = PCTypingIndicatorManager(typingTimeoutInterval: timeoutAfter, roomId: room.id, currentUser: self)
+                self.typingIndicatorManagers[room.id] = manager
+                typingIndicatorManager = manager
+            }
+        }
+
+        typingIndicatorManager.typing()
     }
 
-    // TODO: Add version of startedTyping that auto-calls stoppedTyping after timeout period, unless
-    // some sort of update event is triggered locally in the SDK
+    func startedTypingIn(roomId: Int, completionHandler: @escaping (Error?) -> Void) {
+        let eventPayload: [String: Any] = ["name": "typing_start", "data": [:], "user_id": self.id]
+        self.typingStateChange(eventPayload: eventPayload, roomId: roomId, completionHandler: completionHandler)
+    }
+
+    func stoppedTypingIn(roomId: Int, completionHandler: @escaping (Error?) -> Void) {
+        let eventPayload: [String: Any] = ["name": "typing_stop", "data": [:], "user_id": self.id]
+        self.typingStateChange(eventPayload: eventPayload, roomId: roomId, completionHandler: completionHandler)
+    }
+
+    public func startedTypingIn(_ room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
+        let eventPayload: [String: Any] = ["name": "typing_start", "data": [:], "user_id": self.id]
+        self.typingStateChange(eventPayload: eventPayload, roomId: room.id, completionHandler: completionHandler)
+    }
 
     public func stoppedTypingIn(_ room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
         let eventPayload: [String: Any] = ["name": "typing_stop", "data": [:], "user_id": self.id]
-        self.typingStateChange(eventPayload: eventPayload, room: room, completionHandler: completionHandler)
+        self.typingStateChange(eventPayload: eventPayload, roomId: room.id, completionHandler: completionHandler)
     }
 
     // MARK: Message-related interactions
@@ -457,10 +394,7 @@ public class PCCurrentUser {
                 delegate: roomDelegate,
                 resumableSubscription: resumableSub,
                 logger: self.app.logger,
-                basicMessageEnricher: PCBasicMessageEnricher(
-                    userStore: self.userStore,
-                    roomStore: self.roomStore
-                )
+                basicMessageEnricher: self.basicMessageEnricher
             )
 
             messages?.reversed().forEach { message in
@@ -517,7 +451,7 @@ public class PCCurrentUser {
                     return
                 }
 
-                let progressCounter = MessageEnrichmentProgressCounter(totalCount: messagesPayload.count)
+                let progressCounter = PCMessageEnrichmentProgressCounter(totalCount: messagesPayload.count)
                 let messages = PCSynchronizedArray<PCMessage>()
 
                 messagesPayload.forEach { messagePayload in
@@ -558,42 +492,9 @@ public class PCCurrentUser {
         )
     }
 
-    public enum PCRoomMessageFetchDirection: String {
-        case older
-        case newer
-    }
-
 }
 
-
-// TODO: Should this be here?
-class MessageEnrichmentProgressCounter {
-    private var queue = DispatchQueue(label: "com.pusher.chat-api.message-enrichment-progress-counter")
-    let totalCount: Int
-    var successCount: Int = 0
-    var failedCount: Int = 0
-    var finished: Bool = false
-
-    init(totalCount: Int) {
-        self.totalCount = totalCount
-    }
-
-    func incrementSuccess() {
-        queue.sync {
-            successCount += 1
-            if totalCount == (successCount + failedCount) {
-                finished = true
-            }
-        }
-    }
-
-    func incrementFailed() {
-        queue.sync {
-            failedCount += 1
-            if totalCount == (successCount + failedCount) {
-                finished = true
-            }
-        }
-    }
-
+public enum PCRoomMessageFetchDirection: String {
+    case older
+    case newer
 }

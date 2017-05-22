@@ -7,7 +7,7 @@ public class PCUserSubscription {
     public let app: App
     public let resumableSubscription: PPResumableSubscription
 
-    public internal(set) var delegate: PCUserSubscriptionDelegate?
+    public internal(set) var delegate: PCChatManagerDelegate?
 
     public var connectCompletionHandlers: [(PCCurrentUser?, Error?) -> Void]
 
@@ -19,7 +19,7 @@ public class PCUserSubscription {
         app: App,
         resumableSubscription: PPResumableSubscription,
         userStore: PCUserStore,
-        delegate: PCUserSubscriptionDelegate? = nil,
+        delegate: PCChatManagerDelegate? = nil,
         connectCompletionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
         self.app = app
