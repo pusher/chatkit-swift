@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'PusherChat'
-  s.version          = '0.1.10'
+  s.version          = '0.1.11'
   s.summary          = 'Pusher Chat API SDK in Swift'
   s.homepage         = 'https://github.com/pusher/pusher-chat-api-swift'
   s.license          = 'MIT'
@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.source_files = 'Source/*.swift'
 
-  s.dependency 'PusherPlatform', '~> 0.1.13'
+  s.dependency 'PusherPlatform', '~> 0.1.14'
 
   s.ios.deployment_target = '9.0'
   s.osx.deployment_target = '10.11'

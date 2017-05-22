@@ -1,19 +1,21 @@
 # PusherChat (pusher-chat-api-swift)
 
-![Languages](https://img.shields.io/badge/languages-swift%20%7C%20objc-orange.svg)
 [![Twitter](https://img.shields.io/badge/twitter-@Pusher-blue.svg?style=flat)](http://twitter.com/Pusher)
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/pusher/pusher-chat-api-swift/master/LICENSE.md)
 
 
-## I just want to copy and paste some code to get me started
+## I just want to get started
 
-What else would you want? Head over to the example app [ViewController.swift](https://github.com/pusher/pusher-chat-api-swift/blob/master/Pusher%20Chat%20iOS%20Example/Pusher%20Chat%20iOS%20Example/ViewController.swift) to get some code you can drop in to get started.
+Head over to [our documentation](https://pusher-mimir.herokuapp.com/chat-api/reference/swift/).
 
 
 ## Table of Contents
 
 * [Installation](#installation)
-* [Chat API](#chat-api)
+  * [CocoaPods](#cocoapods)
+  * [Carthage](#carthage)
+  * [Directly using a Framework](#directly-using-a-framework)
+* [Using the SDK](#using-the-sdk)
 * [Testing](#testing)
 * [Communication](#communication)
 * [Credits](#credits)
@@ -84,13 +86,9 @@ github "pusher/pusher-chat-api-swift"
 TODO
 ```
 
-## PusherChat
+## Using the SDK
 
-### TL;DR (let me copy paste something)
-
-```swift
-TODO
-```
+For information about how to use the SDK please see [our documentation](https://pusher-mimir.herokuapp.com/chat-api/reference/swift/).
 
 
 ## Testing
