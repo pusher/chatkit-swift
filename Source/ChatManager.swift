@@ -12,7 +12,12 @@ import PusherPlatform
         }
     }
 
-    public let userStore: PCUserStore
+    let userStore: PCUserStore
+    public var users: Set<PCUser> {
+        get {
+            return self.userStore.users
+        }
+    }
 
     // TODO: _remove_ userId should just be inferred from user token
     public var userId: Int? = nil

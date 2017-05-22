@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let pusherChat = ChatManager(
             id: "some-app-id",
+            logger: HamLogger(),
             baseClient: PPBaseClient(
 //                cluster: "api.kube.pusherplatform.io",
                 cluster: "localhost",
@@ -34,5 +35,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        (self.pusherChat?.app.logger as? PPDefaultLogger)?.minimumLogLevel = .verbose
 
         return true
+    }
+}
+
+
+public struct HamLogger: PPLogger {
+    public func log(_ message: @autoclosure @escaping () -> String, logLevel: PPLogLevel) {
+        print("\(message())")
     }
 }

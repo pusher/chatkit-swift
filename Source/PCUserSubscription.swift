@@ -214,10 +214,10 @@ extension PCUserSubscription {
     }
 
     fileprivate func parseRemovedFromRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
-        guard let roomPayload = data["room"] as? [String: Any] else {
+        guard let roomId = data["room_id"] as? Int else {
             self.delegate?.error(
                 PCAPIEventError.keyNotPresentInPCAPIEventPayload(
-                    key: "room",
+                    key: "room_id",
                     apiEventName: eventName,
                     payload: data
                 )
@@ -225,20 +225,12 @@ extension PCUserSubscription {
             return
         }
 
-        do {
-            let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-
-            guard let roomRemovedFrom = self.currentUser?.roomStore.remove(id: room.id) else {
-                // TODO: Log and call delelgate?.error() ?
-                return
-            }
-
-            // TODO: Should this always be called?
-            self.delegate?.removedFromRoom(roomRemovedFrom)
-        } catch let err {
-            self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(err)
+        guard let roomRemovedFrom = self.currentUser?.roomStore.remove(id: roomId) else {
+            self.app.logger.log("Received \(eventName.rawValue) API event but room \(roomId) not found in local store of joined rooms", logLevel: .debug)
+            return
         }
+
+        self.delegate?.removedFromRoom(roomRemovedFrom)
     }
 
     fileprivate func parseRoomUpdatedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
@@ -275,73 +267,14 @@ extension PCUserSubscription {
     }
 
     fileprivate func parseRoomDeletedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
-        guard let roomPayload = data["room"] as? [String: Any] else {
+        guard let roomId = data["room_id"] as? Int else {
             self.delegate?.error(
                 PCAPIEventError.keyNotPresentInPCAPIEventPayload(
-                    key: "room",
+                    key: "room_id",
                     apiEventName: eventName,
                     payload: data
                 )
             )
-            return
-        }
-
-        do {
-            let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-
-            guard let deletedRoom = self.currentUser?.roomStore.remove(id: room.id) else {
-                // TODO: Log and call delelgate?.error() ?
-                return
-            }
-
-            // TODO: Should this always be called?
-            self.delegate?.roomDeleted(deletedRoom)
-        } catch let err {
-            self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(err)
-        }
-    }
-
-    fileprivate func parseUserJoinedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
-        guard let roomPayload = data["room"] as? [String: Any] else {
-            self.delegate?.error(
-                PCAPIEventError.keyNotPresentInPCAPIEventPayload(
-                    key: "room",
-                    apiEventName: eventName,
-                    payload: data
-                )
-            )
-            return
-        }
-
-        guard let userPayload = data["user"] as? [String: Any] else {
-            self.delegate?.error(
-                PCAPIEventError.keyNotPresentInPCAPIEventPayload(
-                    key: "user",
-                    apiEventName: eventName,
-                    payload: data
-                )
-            )
-            return
-        }
-
-        let receivedUser: PCUser
-
-        do {
-            receivedUser = try PCPayloadDeserializer.createUserFromPayload(userPayload)
-        } catch let err {
-            self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(err)
-            return
-        }
-
-        let room: PCRoom
-
-        do {
-            room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-        } catch let err {
-            self.app.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(err)
             return
         }
 
@@ -351,24 +284,63 @@ extension PCUserSubscription {
             return
         }
 
-        currentUser.roomStore.room(id: room.id) { room, err in
+        guard let deletedRoom = currentUser.roomStore.remove(id: roomId) else {
+            self.app.logger.log("Room \(roomId) was deleted but was not found in local store of joined rooms", logLevel: .debug)
+            return
+        }
+
+        self.delegate?.roomDeleted(deletedRoom)
+    }
+
+    fileprivate func parseUserJoinedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
+        guard let roomId = data["room_id"] as? Int else {
+            self.delegate?.error(
+                PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                    key: "room_id",
+                    apiEventName: eventName,
+                    payload: data
+                )
+            )
+            return
+        }
+
+        guard let userId = data["user_id"] as? Int else {
+            self.delegate?.error(
+                PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                    key: "user_id",
+                    apiEventName: eventName,
+                    payload: data
+                )
+            )
+            return
+        }
+
+        guard let currentUser = self.currentUser else {
+            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            self.delegate?.error(PCError.currentUserIsNil)
+            return
+        }
+
+        currentUser.roomStore.room(id: roomId) { room, err in
             guard let room = room, err == nil else {
-                self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                self.app.logger.log(
+                    "User with id \(userId) joined room with id \(roomId) but no information about the room could be retrieved. Error was: \(err!.localizedDescription)",
+                    logLevel: .error
+                )
                 self.delegate?.error(err!)
                 return
             }
 
-            currentUser.userStore.user(id: receivedUser.id) { user, err in
+            currentUser.userStore.user(id: userId) { user, err in
                 guard let user = user, err == nil else {
                     self.app.logger.log(
-                        "User with id \(receivedUser.id) left but no user information could be retrieved: error was: \(err!.localizedDescription)",
-                        logLevel: .info
+                        "User with id \(userId) joined room with id \(roomId) but no information about the user could be retrieved. Error was: \(err!.localizedDescription)",
+                        logLevel: .error
                     )
                     self.delegate?.error(err!)
                     return
                 }
 
-                currentUser.userStore.add(user)
                 room.userIds.append(user.id)
 
                 self.delegate?.userJoinedRoom(room, user: user)
@@ -378,10 +350,10 @@ extension PCUserSubscription {
     }
 
     fileprivate func parseUserLeftPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
-        guard let roomPayload = data["room"] as? [String: Any] else {
+        guard let roomId = data["room_id"] as? Int else {
             self.delegate?.error(
                 PCAPIEventError.keyNotPresentInPCAPIEventPayload(
-                    key: "room",
+                    key: "room_id",
                     apiEventName: eventName,
                     payload: data
                 )
@@ -389,34 +361,14 @@ extension PCUserSubscription {
             return
         }
 
-        guard let userPayload = data["user"] as? [String: Any] else {
+        guard let userId = data["user_id"] as? Int else {
             self.delegate?.error(
                 PCAPIEventError.keyNotPresentInPCAPIEventPayload(
-                    key: "user",
+                    key: "user_id",
                     apiEventName: eventName,
                     payload: data
                 )
             )
-            return
-        }
-
-        let receivedUser: PCUser
-
-        do {
-            receivedUser = try PCPayloadDeserializer.createUserFromPayload(userPayload)
-        } catch let err {
-            self.app.logger.log(err.localizedDescription, logLevel: .error)
-            self.delegate?.error(err)
-            return
-        }
-
-        let room: PCRoom
-
-        do {
-            room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-        } catch let err {
-            self.app.logger.log(err.localizedDescription, logLevel: .error)
-            self.delegate?.error(err)
             return
         }
 
@@ -426,18 +378,21 @@ extension PCUserSubscription {
             return
         }
 
-        currentUser.roomStore.room(id: room.id) { room, err in
+        currentUser.roomStore.room(id: roomId) { room, err in
             guard let room = room, err == nil else {
-                self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                self.app.logger.log(
+                    "User with id \(userId) left room with id \(roomId) but no information about the room could be retrieved. Error was: \(err!.localizedDescription)",
+                    logLevel: .error
+                )
                 self.delegate?.error(err!)
                 return
             }
 
-            currentUser.userStore.user(id: receivedUser.id) { user, err in
+            currentUser.userStore.user(id: userId) { user, err in
                 guard let user = user, err == nil else {
                     self.app.logger.log(
-                        "User with id \(receivedUser.id) left but no user information could be retrieved: error was: \(err!.localizedDescription)",
-                        logLevel: .info
+                        "User with id \(userId) left room with id \(roomId) but no information about the user could be retrieved. Error was: \(err!.localizedDescription)",
+                        logLevel: .error
                     )
                     self.delegate?.error(err!)
                     return

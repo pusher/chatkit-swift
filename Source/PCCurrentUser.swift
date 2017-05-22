@@ -8,8 +8,20 @@ public class PCCurrentUser {
     public let customId: String?
     public let customData: [String: Any]?
 
-    public let userStore: PCUserStore
-    public let roomStore: PCRoomStore
+    let userStore: PCUserStore
+    let roomStore: PCRoomStore
+
+    public var users: Set<PCUser> {
+        get {
+            return self.userStore.users
+        }
+    }
+
+    public var rooms: [PCRoom] {
+        get {
+            return self.roomStore.rooms.underlyingArray
+        }
+    }
 
     internal lazy var basicMessageEnricher: PCBasicMessageEnricher = {
         return PCBasicMessageEnricher(userStore: self.userStore, roomStore: self.roomStore)
