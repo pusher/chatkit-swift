@@ -54,7 +54,7 @@ public class PCRoomSubscription {
                     return
                 }
 
-                self.delegate?.newMessage(message)
+                self.delegate?.newMessage(message: message)
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)

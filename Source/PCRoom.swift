@@ -9,9 +9,6 @@ public class PCRoom {
     public var deletedAt: String?
     public var userIds: [Int]
 
-    // TODO: Is this still used?
-    public var messages: PCSynchronizedArray<PCMessage>
-
     public var subscription: PCRoomSubscription? = nil
 
     public init(
@@ -21,8 +18,7 @@ public class PCRoom {
         createdAt: String,
         updatedAt: String,
         deletedAt: String? = nil,
-        userIds: [Int] = [],
-        messages: PCSynchronizedArray<PCMessage> = PCSynchronizedArray<PCMessage>()
+        userIds: [Int] = []
     ) {
         self.id = id
         self.name = name
@@ -31,7 +27,6 @@ public class PCRoom {
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
         self.userIds = userIds
-        self.messages = messages
     }
 
     internal func updateWithPropertiesOfRoom(_ room: PCRoom) {

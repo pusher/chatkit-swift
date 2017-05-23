@@ -127,6 +127,8 @@ public class PCCurrentUser {
     // just optionally return an error or do we return User(s) / Room?
 
 
+    // MARK: Room membership-related interactions
+
     public func add(_ user: PCUser, to room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
         self.add([user], to: room, completionHandler: completionHandler)
     }
@@ -238,6 +240,8 @@ public class PCCurrentUser {
         )
     }
 
+    // MARK: Typing-indicator-related interactions
+
     fileprivate func typingStateChange(
         eventPayload: [String: Any],
         roomId: Int,
@@ -307,9 +311,6 @@ public class PCCurrentUser {
 
     // MARK: Message-related interactions
 
-    // TODO: Should we add the message to the room in the onSuccess here, as long as we
-    // get the message id back from the server?
-
     public func addMessage(text: String, to room: PCRoom, completionHandler: @escaping (Int?, Error?) -> Void) {
         let messageObject: [String: Any] = [
             "text": text,
@@ -356,7 +357,6 @@ public class PCCurrentUser {
     }
 
 
-
     // TODO: Where should all the makeActiveRoom stuff live?
 
     public func makeActiveRoom(_ room: PCRoom, delegate: PCRoomDelegate) {
@@ -366,7 +366,7 @@ public class PCCurrentUser {
     public func subscribeToRoom(room: PCRoom, roomDelegate: PCRoomDelegate) {
         self.fetchMessagesFromRoom(room) { messages, err in
             guard err == nil else {
-                roomDelegate.error(PCRoomSubscriptionError.failedToFetchInitialStateForRoomSubscription)
+                roomDelegate.error(error: PCRoomSubscriptionError.failedToFetchInitialStateForRoomSubscription)
                 return
             }
 
@@ -399,7 +399,7 @@ public class PCCurrentUser {
 
             messages?.reversed().forEach { message in
                 self.app.logger.log("Calling newMessage function on room delegate for message with id \(message.id)", logLevel: .verbose)
-                roomDelegate.newMessage(message)
+                roomDelegate.newMessage(message: message)
             }
 
             self.app.subscribeWithResume(
@@ -408,15 +408,13 @@ public class PCCurrentUser {
                 onEvent: room.subscription?.handleEvent
 
                 // TODO: This will probably be replaced by the state change delegate function, with an associated type, maybe
-                //                onError: { error in
-                //                    roomDelegate.receivedError(error)
-                //                }
+//                onError: { error in
+//                    roomDelegate.receivedError(error)
+//                }
             )
 
         }
     }
-
-    // This seems to only be used by subscribeToRoom
 
     public func fetchMessagesFromRoom(
         _ room: PCRoom,

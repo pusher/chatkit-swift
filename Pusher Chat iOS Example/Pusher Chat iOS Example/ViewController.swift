@@ -45,23 +45,23 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: PCRoomDelegate {
-    func newMessage(_ message: PCMessage) {
+    func newMessage(message: PCMessage) {
         print("Room sub received message: \(message.text)")
     }
 
-    public func userJoined(_ user: PCUser) {
+    public func userJoined(user: PCUser) {
         print("User \(user.name) joined room: \(self.currentRoom?.name)")
     }
 
-    public func userLeft(_ user: PCUser) {
+    public func userLeft(user: PCUser) {
         print("User \(user.name) left room: \(self.currentRoom?.name)")
     }
 
-    public func userStartedTyping(_ user: PCUser) {
+    public func userStartedTyping(user: PCUser) {
         print("\(user.name) started typing in room \(self.currentRoom?.name)")
     }
 
-    public func userStoppedTyping(_ user: PCUser) {
+    public func userStoppedTyping(user: PCUser) {
         print("\(user.name) stopped typing in room \(self.currentRoom?.name)")
     }
 
@@ -69,25 +69,25 @@ extension ViewController: PCRoomDelegate {
 //
 //    }
 
-    func error(_ error: Error) {
+    func error(error: Error) {
         print("Room sub received error: \(error.localizedDescription)")
     }
 }
 
 extension ViewController: PCChatManagerDelegate {
-    public func addedToRoom(_ room: PCRoom) {
+    public func addedToRoom(room: PCRoom) {
         print("Added to room: \(room.name)")
     }
 
-    public func removedFromRoom(_ room: PCRoom) {
+    public func removedFromRoom(room: PCRoom) {
         print("Removed from room: \(room.name)")
     }
 
-    public func roomUpdated(_ room: PCRoom) {
+    public func roomUpdated(room: PCRoom) {
         print("Room updated: \(room.name)")
     }
 
-    public func roomDeleted(_ room: PCRoom) {
+    public func roomDeleted(room: PCRoom) {
         print("Room deleted: \(room.name)")
     }
 
@@ -99,11 +99,11 @@ extension ViewController: PCChatManagerDelegate {
         print("User \(user.name) left room: \(room.name)")
     }
 
-    public func userStartedTypingInRoom(_ room: PCRoom, user: PCUser) {
+    public func userStartedTyping(room: PCRoom, user: PCUser) {
         print("\(user.name) started typing in room \(room.name)")
     }
 
-    public func userStoppedTypingInRoom(_ room: PCRoom, user: PCUser) {
+    public func userStoppedTyping(room: PCRoom, user: PCUser) {
         print("\(user.name) stopped typing in room \(room.name)")
     }
 
