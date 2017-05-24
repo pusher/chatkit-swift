@@ -5,7 +5,11 @@ public class PCSynchronizedArray<T> {
     private let accessQueue = DispatchQueue(label: "synchronized.array.access", attributes: .concurrent)
 
     public func append(_ newElement: T) {
-        self.accessQueue.async(flags: .barrier) {
+        // QOS is userInitiated here, mainly so that when the rooms are received as part
+        // of the initial_state for a user subscription they are added to the room store
+        // before the connectCompletionHandlers are called, where it would be likely that
+        // the rooms property of the currentUser would be accessed
+        self.accessQueue.async(qos: .userInitiated, flags: .barrier) {
             self.underlyingArray.append(newElement)
         }
     }

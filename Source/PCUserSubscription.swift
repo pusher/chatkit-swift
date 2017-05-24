@@ -155,7 +155,7 @@ extension PCUserSubscription {
                   let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
                   let roomCreatedAt = roomPayload["created_at"] as? String,
                   let roomUpdatedAt = roomPayload["updated_at"] as? String,
-                  let memberships = roomPayload["memberships"] as? [[String: Any]]
+                  let memberUserIds = roomPayload["member_user_ids"] as? [Int]
             else {
                 self.app.logger.log("Incomplete room payload in initial_state event: \(roomPayload)", logLevel: .debug)
                 return
@@ -166,24 +166,11 @@ extension PCUserSubscription {
                 name: roomName,
                 createdByUserId: roomCreatorUserId,
                 createdAt: roomCreatedAt,
-                updatedAt: roomUpdatedAt
+                updatedAt: roomUpdatedAt,
+                userIds: memberUserIds
             )
 
-            memberships.forEach { membership in
-                guard let membershipUserId = membership["user_id"] as? Int else {
-                    self.app.logger.log(
-                        "Incomplete membership payload in initial_state event for room \(roomName): \(membership)",
-                        logLevel: .debug
-                    )
-                    return
-                }
-
-                // TODO: Should we be fetching info about the users in the background here?
-//                receivedCurrentUser.userStore.add(user)
-
-                room.userIds.append(membershipUserId)
-            }
-
+            // TODO: Should we be fetching info about the users in the background here?
             receivedCurrentUser.roomStore.add(room)
         }
 
