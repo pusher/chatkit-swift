@@ -24,7 +24,7 @@ class ViewController: UIViewController {
             self.pusherChatUser = currentUser!
 
             print(currentUser!.rooms.flatMap { String($0.id) }.joined(separator: ", "))
-            self.currentRoom = currentUser!.rooms[currentUser!.rooms.count - 1]
+            self.currentRoom = currentUser!.rooms[0]
             print(self.currentRoom!.id)
 
             currentUser!.subscribeToRoom(room: self.currentRoom!, roomDelegate: self)
