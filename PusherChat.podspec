@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'PusherChat'
-  s.version          = '0.1.12'
+  s.version          = '0.1.13'
   s.summary          = 'Pusher Chat API SDK in Swift'
   s.homepage         = 'https://github.com/pusher/pusher-chat-api-swift'
   s.license          = 'MIT'
