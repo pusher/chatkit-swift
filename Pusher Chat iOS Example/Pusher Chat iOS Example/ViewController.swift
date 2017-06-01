@@ -48,6 +48,10 @@ extension ViewController: PCRoomDelegate {
         print("Room sub received message: \(message.text)")
     }
 
+    func usersPopulated() {
+        print("User list has been populated: \(self.currentRoom?.users.map { $0.name! }.joined(separator: ","))")
+    }
+
     public func userJoined(user: PCUser) {
         print("User \(user.name) joined room: \(self.currentRoom?.name)")
     }

@@ -1,15 +1,19 @@
 import Foundation
 import PusherPlatform
 
-public class PCUserStore {
+public class PCGlobalUserStore {
 
-    // TODO: Probably need to add a reader-writer queue for access to the users set
+    public var users: Set<PCUser> {
+        get {
+            return self.userStoreCore.users
+        }
+    }
 
-    public internal(set) var users: Set<PCUser>
+    public internal(set) var userStoreCore: PCUserStoreCore
     let app: App
 
-    init(users: Set<PCUser> = [], app: App) {
-        self.users = users
+    init(userStoreCore: PCUserStoreCore = PCUserStoreCore(), app: App) {
+        self.userStoreCore = userStoreCore
         self.app = app
     }
 
@@ -18,27 +22,15 @@ public class PCUserStore {
     }
 
     func addOrMerge(_ user: PCUser) -> PCUser {
-        let insertResult = self.users.insert(user)
-
-        if !insertResult.inserted {
-            // If a user already exists in the store with a matching id then merge
-            // the properties of the two user objects
-            return insertResult.memberAfterInsert.updateWithPropertiesOfUser(user)
-        } else {
-            return insertResult.memberAfterInsert
-        }
+        return self.userStoreCore.addOrMerge(user)
     }
 
     func remove(id: Int) -> PCUser? {
-        guard let userToRemove = self.users.first(where: { $0.id == id }) else {
-            return nil
-        }
-
-        return self.users.remove(userToRemove)
+        return self.userStoreCore.remove(id: id)
     }
 
     func findOrGetUser(id: Int, completionHander: @escaping (PCUser?, Error?) -> Void) {
-        if let user = self.users.first(where: { $0.id == id }) {
+        if let user = self.userStoreCore.users.first(where: { $0.id == id }) {
             completionHander(user, nil)
         } else {
             self.getUser(id: id) { user, err in
@@ -48,7 +40,7 @@ public class PCUserStore {
                     return
                 }
 
-                let userToReturn = self.addOrMerge(user)
+                let userToReturn = self.userStoreCore.addOrMerge(user)
                 completionHander(userToReturn, nil)
             }
         }
@@ -102,6 +94,12 @@ public class PCUserStore {
 
     // This will do the de-duping of userIds
     func fetchUsersWithIds(_ userIds: [Int], completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
+        guard userIds.count > 0 else {
+            self.app.logger.log("Requested to fetch users for a list of user ids which was empty", logLevel: .debug)
+            completionHandler?([], nil)
+            return
+        }
+
         let uniqueUserIds = Array(Set<Int>(userIds))
         let userIdsString = uniqueUserIds.map { String($0) }.joined(separator: ",")
 
@@ -138,7 +136,7 @@ public class PCUserStore {
                 let users = userPayloads.flatMap { userPayload -> PCUser? in
                     do {
                         let user = try PCPayloadDeserializer.createUserFromPayload(userPayload)
-                        let addedOrUpdatedUser = self.addOrMerge(user)
+                        let addedOrUpdatedUser = self.userStoreCore.addOrMerge(user)
                         return addedOrUpdatedUser
                     } catch let err {
                         self.app.logger.log("Error fetching user information: \(err.localizedDescription)", logLevel: .debug)

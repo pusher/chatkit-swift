@@ -89,6 +89,10 @@ public class PCSynchronizedArray<T> {
         return result
     }
 
+    public func forEach(_ body: (T) -> Void) {
+        self.accessQueue.sync { self.underlyingArray.forEach(body) }
+    }
+
     public subscript(index: Int) -> T {
         set {
             self.accessQueue.async(flags: .barrier) {

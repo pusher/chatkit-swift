@@ -1,0 +1,33 @@
+import Foundation
+
+public class PCUserStoreCore {
+
+    // TODO: Probably need to add a reader-writer queue for access to the users set
+
+    public internal(set) var users: Set<PCUser>
+
+    init(users: Set<PCUser> = []) {
+        self.users = users
+    }
+
+    func addOrMerge(_ user: PCUser) -> PCUser {
+        let insertResult = self.users.insert(user)
+
+        if !insertResult.inserted {
+            // If a user already exists in the store with a matching id then merge
+            // the properties of the two user objects
+            return insertResult.memberAfterInsert.updateWithPropertiesOfUser(user)
+        } else {
+            return insertResult.memberAfterInsert
+        }
+    }
+
+    func remove(id: Int) -> PCUser? {
+        guard let userToRemove = self.users.first(where: { $0.id == id }) else {
+            return nil
+        }
+
+        return self.users.remove(userToRemove)
+    }
+
+}

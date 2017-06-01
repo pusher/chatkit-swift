@@ -6,7 +6,7 @@ public class PCUserSubscription {
 
     let app: App
     public let resumableSubscription: PPResumableSubscription
-    public let userStore: PCUserStore
+    public let userStore: PCGlobalUserStore
     public internal(set) var delegate: PCChatManagerDelegate?
     public var connectCompletionHandlers: [(PCCurrentUser?, Error?) -> Void]
 
@@ -15,7 +15,7 @@ public class PCUserSubscription {
     public init(
         app: App,
         resumableSubscription: PPResumableSubscription,
-        userStore: PCUserStore,
+        userStore: PCGlobalUserStore,
         delegate: PCChatManagerDelegate? = nil,
         connectCompletionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
@@ -104,12 +104,12 @@ public class PCUserSubscription {
 }
 
 extension PCUserSubscription {
-    fileprivate func parseInitialStatePayload(_ eventName: PCAPIEventName, data: [String: Any], userStore: PCUserStore) {
+    fileprivate func parseInitialStatePayload(_ eventName: PCAPIEventName, data: [String: Any], userStore: PCGlobalUserStore) {
 
         guard let roomsPayload = data["rooms"] as? [[String: Any]] else {
             callConnectCompletionHandlers(
                 currentUser: nil,
-                error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "rooms",
                     apiEventName: eventName,
                     payload: data
@@ -121,7 +121,7 @@ extension PCUserSubscription {
         guard let userPayload = data["current_user"] as? [String: Any] else {
             callConnectCompletionHandlers(
                 currentUser: nil,
-                error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "user",
                     apiEventName: eventName,
                     payload: data
@@ -168,7 +168,44 @@ extension PCUserSubscription {
             return result + memberUserIds
         }
 
-        userStore.initialFetchOfUsersWithIds(userIds)
+        userStore.initialFetchOfUsersWithIds(userIds) { users, err in
+            guard err == nil else {
+                self.app.logger.log(
+                    "Unable to fetch user information after successful connection: \(err!.localizedDescription)",
+                    logLevel: .debug
+                )
+                return
+            }
+
+            // TODO: This could be a lot more efficient
+            receivedCurrentUser.roomStore.rooms.forEach { room in
+                let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users-")
+
+                room.userIds.forEach { userId in
+                    userStore.user(id: userId) { user, err in
+                        guard let user = user, err == nil else {
+                            self.app.logger.log(
+                                "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
+                                logLevel: .debug
+                            )
+                            roomUsersProgressCounter.incrementFailed()
+
+                            if roomUsersProgressCounter.finished {
+                                room.subscription?.delegate?.usersPopulated()
+                            }
+                            return
+                        }
+
+                        room.userStore.addOrMerge(user)
+                        roomUsersProgressCounter.incrementSuccess()
+
+                        if roomUsersProgressCounter.finished {
+                            room.subscription?.delegate?.usersPopulated()
+                        }
+                    }
+                }
+            }
+        }
 
         self.currentUser = receivedCurrentUser
         callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
@@ -177,7 +214,7 @@ extension PCUserSubscription {
     fileprivate func parseAddedToRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomPayload = data["room"] as? [String: Any] else {
             self.delegate?.error(
-                error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room",
                     apiEventName: eventName,
                     payload: data
@@ -188,6 +225,9 @@ extension PCUserSubscription {
 
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
+
+            // TODO: Should we be fetching users in the background here? Probably
+
             self.currentUser?.roomStore.add(room)
             self.delegate?.addedToRoom(room: room)
         } catch let err {
@@ -199,7 +239,7 @@ extension PCUserSubscription {
     fileprivate func parseRemovedFromRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomId = data["room_id"] as? Int else {
             self.delegate?.error(
-                error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
                     payload: data
@@ -219,7 +259,7 @@ extension PCUserSubscription {
     fileprivate func parseRoomUpdatedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomPayload = data["room"] as? [String: Any] else {
             self.delegate?.error(
-                error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room",
                     apiEventName: eventName,
                     payload: data
@@ -252,7 +292,7 @@ extension PCUserSubscription {
     fileprivate func parseRoomDeletedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomId = data["room_id"] as? Int else {
             self.delegate?.error(
-                error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
                     payload: data
@@ -278,7 +318,7 @@ extension PCUserSubscription {
     fileprivate func parseUserJoinedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomId = data["room_id"] as? Int else {
             self.delegate?.error(
-                error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
                     payload: data
@@ -289,7 +329,7 @@ extension PCUserSubscription {
 
         guard let userId = data["user_id"] as? Int else {
             self.delegate?.error(
-                error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "user_id",
                     apiEventName: eventName,
                     payload: data
@@ -324,6 +364,7 @@ extension PCUserSubscription {
                     return
                 }
 
+                room.userStore.addOrMerge(user)
                 room.userIds.append(user.id)
 
                 self.delegate?.userJoinedRoom(room: room, user: user)
@@ -335,7 +376,7 @@ extension PCUserSubscription {
     fileprivate func parseUserLeftPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomId = data["room_id"] as? Int else {
             self.delegate?.error(
-                error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
                     payload: data
@@ -346,7 +387,7 @@ extension PCUserSubscription {
 
         guard let userId = data["user_id"] as? Int else {
             self.delegate?.error(
-                error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "user_id",
                     apiEventName: eventName,
                     payload: data
@@ -387,6 +428,8 @@ extension PCUserSubscription {
                     room.userIds.remove(at: indexToRemove)
                 }
 
+                room.userStore.remove(id: user.id)
+
                 self.delegate?.userLeftRoom(room: room, user: user)
                 room.subscription?.delegate?.userLeft(user: user)
             }
@@ -396,7 +439,7 @@ extension PCUserSubscription {
     fileprivate func parseTypingStartPayload(_ eventName: PCAPIEventName, data: [String: Any], userId: Int) {
         guard let roomId = data["room_id"] as? Int else {
             self.delegate?.error(
-                error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
                     payload: data
@@ -429,15 +472,13 @@ extension PCUserSubscription {
                 room.subscription?.delegate?.userStartedTyping(user: user)
             }
         }
-
-
     }
 
 
     fileprivate func parseTypingStopPayload(_ eventName: PCAPIEventName, data: [String: Any], userId: Int) {
         guard let roomId = data["room_id"] as? Int else {
             self.delegate?.error(
-                error: PCAPIEventError.keyNotPresentInPCAPIEventPayload(
+                error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
                     payload: data
@@ -478,7 +519,7 @@ extension PCUserSubscription {
 public enum PCAPIEventError: Error {
     case eventTypeNameMissingInAPIEventPayload([String: Any])
     case apiEventDataMissingInAPIEventPayload([String: Any])
-    case keyNotPresentInPCAPIEventPayload(key: String, apiEventName: PCAPIEventName, payload: [String: Any])
+    case keyNotPresentInEventPayload(key: String, apiEventName: PCAPIEventName, payload: [String: Any])
 }
 
 extension PCAPIEventError: LocalizedError {
@@ -488,7 +529,7 @@ extension PCAPIEventError: LocalizedError {
             return "Event type missing in API event payload: \(payload)"
         case .apiEventDataMissingInAPIEventPayload(let payload):
             return "Data missing in API event payload: \(payload)"
-        case .keyNotPresentInPCAPIEventPayload(let key, let apiEventName, let payload):
+        case .keyNotPresentInEventPayload(let key, let apiEventName, let payload):
             return "\(key) missing in \(apiEventName.rawValue) API event payload: \(payload)"
         }
     }

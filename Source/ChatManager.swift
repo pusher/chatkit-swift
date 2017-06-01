@@ -12,7 +12,7 @@ import PusherPlatform
         }
     }
 
-    let userStore: PCUserStore
+    let userStore: PCGlobalUserStore
     public var users: Set<PCUser> {
         get {
             return self.userStore.users
@@ -32,7 +32,7 @@ import PusherPlatform
         baseClient: PPBaseClient? = nil
     ) {
         self.app = app ?? App(id: id, authorizer: authorizer, client: baseClient, logger: logger)
-        self.userStore = PCUserStore(app: self.app)
+        self.userStore = PCGlobalUserStore(app: self.app)
     }
 
     public func addConnectCompletionHandler(completionHandler: @escaping (PCCurrentUser?, Error?) -> Void) {

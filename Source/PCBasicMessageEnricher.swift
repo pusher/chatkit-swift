@@ -1,11 +1,11 @@
 import PusherPlatform
 
 class PCBasicMessageEnricher {
-    public let userStore: PCUserStore
+    public let userStore: PCGlobalUserStore
     public let roomStore: PCRoomStore
     let logger: PPLogger
 
-    init(userStore: PCUserStore, roomStore: PCRoomStore, logger: PPLogger) {
+    init(userStore: PCGlobalUserStore, roomStore: PCRoomStore, logger: PPLogger) {
         self.userStore = userStore
         self.roomStore = roomStore
         self.logger = logger

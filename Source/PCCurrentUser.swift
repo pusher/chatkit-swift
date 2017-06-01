@@ -8,7 +8,7 @@ public class PCCurrentUser {
     public let customId: String?
     public let customData: [String: Any]?
 
-    let userStore: PCUserStore
+    let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
 
     public var users: Set<PCUser> {
@@ -41,7 +41,7 @@ public class PCCurrentUser {
         customData: [String: Any]?,
         rooms: PCSynchronizedArray<PCRoom> = PCSynchronizedArray<PCRoom>(),
         app: App,
-        userStore: PCUserStore
+        userStore: PCGlobalUserStore
     ) {
         self.id = id
         self.createdAt = createdAt
@@ -364,6 +364,9 @@ public class PCCurrentUser {
     }
 
     public func subscribeToRoom(room: PCRoom, roomDelegate: PCRoomDelegate) {
+
+        // TODO: Don't need to fetchMessagesFromRoom before subscribing anymore
+
         self.fetchMessagesFromRoom(room) { messages, err in
             guard err == nil else {
                 roomDelegate.error(error: PCRoomSubscriptionError.failedToFetchInitialStateForRoomSubscription)
@@ -449,7 +452,7 @@ public class PCCurrentUser {
                     return
                 }
 
-                let progressCounter = PCMessageEnrichmentProgressCounter(totalCount: messagesPayload.count)
+                let progressCounter = PCProgressCounter(totalCount: messagesPayload.count, labelSuffix: "message-encricher")
                 let messages = PCSynchronizedArray<PCMessage>()
                 var basicMessages: [PCBasicMessage] = []
 

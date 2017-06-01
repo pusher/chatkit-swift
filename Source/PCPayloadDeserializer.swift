@@ -15,7 +15,7 @@ struct PCPayloadDeserializer {
         )
     }
 
-    static func createCurrentUserFromPayload(_ userPayload: [String: Any], app: App, userStore: PCUserStore) throws -> PCCurrentUser {
+    static func createCurrentUserFromPayload(_ userPayload: [String: Any], app: App, userStore: PCGlobalUserStore) throws -> PCCurrentUser {
         let basicUser = try createBasicUserFromPayload(userPayload)
 
         return PCCurrentUser(

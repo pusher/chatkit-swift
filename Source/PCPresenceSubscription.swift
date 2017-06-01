@@ -6,13 +6,13 @@ public class PCPresenceSubscription {
 
     let app: App
     public let resumableSubscription: PPResumableSubscription
-    public let userStore: PCUserStore
+    public let userStore: PCGlobalUserStore
     public internal(set) var delegate: PCChatManagerDelegate?
 
     public init(
         app: App,
         resumableSubscription: PPResumableSubscription,
-        userStore: PCUserStore,
+        userStore: PCGlobalUserStore,
         delegate: PCChatManagerDelegate? = nil
     ) {
         self.app = app
@@ -60,14 +60,16 @@ public class PCPresenceSubscription {
 }
 
 extension PCPresenceSubscription {
-    fileprivate func parseInitialStatePayload(_ eventName: PCPresenceEventName, data: [String: Any], userStore: PCUserStore) {
+    fileprivate func parseInitialStatePayload(_ eventName: PCPresenceEventName, data: [String: Any], userStore: PCGlobalUserStore) {
         guard let userStatesPayload = data["user_states"] as? [[String: Any]] else {
-            // TODO: log and eror:
-//            PCAPIEventError.keyNotPresentInPCAPIEventPayload(
-//                key: "user_states",
-//                apiEventName: eventName,
-//                payload: data
-//            )
+            let error = PCPresenceEventError.keyNotPresentInEventPayload(
+                key: "user_states",
+                apiEventName: eventName,
+                payload: data
+            )
+
+            self.app.logger.log(error.localizedDescription, logLevel: .debug)
+            self.delegate?.error(error: error)
             return
         }
 
@@ -84,13 +86,16 @@ extension PCPresenceSubscription {
         userStore.handleInitialPresencePayloads(userStates)
     }
 
-    fileprivate func parsePresenceUpdatePayload(_ eventName: PCPresenceEventName, data: [String: Any], userStore: PCUserStore) {
+    fileprivate func parsePresenceUpdatePayload(_ eventName: PCPresenceEventName, data: [String: Any], userStore: PCGlobalUserStore) {
         do {
             let presencePayload = try PCPayloadDeserializer.createPresencePayloadFromPayload(data)
 
             userStore.user(id: presencePayload.userId) { user, err in
                 guard let user = user, err == nil else {
-                    // TODO: Log and error
+                    self.app.logger.log(
+                        "Error fetching user information for user with id \(presencePayload.userId): \(err!.localizedDescription)",
+                        logLevel: .debug
+                    )
                     return
                 }
 
@@ -116,4 +121,17 @@ extension PCPresenceSubscription {
 public enum PCPresenceEventName: String {
     case initial_state
     case presence_update
+}
+
+public enum PCPresenceEventError: Error {
+    case keyNotPresentInEventPayload(key: String, apiEventName: PCPresenceEventName, payload: [String: Any])
+}
+
+extension PCPresenceEventError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .keyNotPresentInEventPayload(let key, let apiEventName, let payload):
+            return "\(key) missing in \(apiEventName.rawValue) API event payload: \(payload)"
+        }
+    }
 }

@@ -58,17 +58,14 @@ public class PCRoomStore {
                     return
                 }
 
-                let room: PCRoom
-
                 do {
-                    room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
+                    let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
+                    completionHandler(room, nil)
                 } catch let err {
                     self.app.logger.log(err.localizedDescription, logLevel: .debug)
                     completionHandler(nil, err)
                     return
                 }
-
-                completionHandler(room, nil)
             },
             onError: { error in
                 completionHandler(nil, error)
