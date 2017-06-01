@@ -12,6 +12,9 @@ public protocol PCRoomDelegate {
     func userJoined(user: PCUser)
     func userLeft(user: PCUser)
 
+    func userCameOnline(user: PCUser)
+    func userWentOffline(user: PCUser)
+
     // TODO: I don't think we'll want this - it could be handled by the state change - i.e. changed
     // to .failed, potentially with an associated error value
 

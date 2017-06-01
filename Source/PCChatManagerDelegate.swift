@@ -13,6 +13,8 @@ public protocol PCChatManagerDelegate {
     func userStoppedTyping(room: PCRoom, user: PCUser)
     func userJoinedRoom(room: PCRoom, user: PCUser)
     func userLeftRoom(room: PCRoom, user: PCUser)
+    func userCameOnline(user: PCUser)
+    func userWentOffline(user: PCUser)
 
     // TODO: Is this the best way of communicating errors? What errors are
     // communicated using this?

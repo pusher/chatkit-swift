@@ -73,6 +73,21 @@ struct PCPayloadDeserializer {
         )
     }
 
+    static func createPresencePayloadFromPayload(_ payload: [String: Any]) throws -> PCPresencePayload {
+        guard let userId = payload["user_id"] as? Int,
+              let stateString = payload["state"] as? String,
+              let state = PCPresenceState(rawValue: stateString)
+        else {
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCPresencePayload.self), payload: payload)
+        }
+
+        return PCPresencePayload(
+            userId: userId,
+            state: state,
+            lastSeenAt: payload["last_seen_at"] as? String
+        )
+    }
+
     static fileprivate func createBasicUserFromPayload(_ payload: [String: Any]) throws -> PCBasicUser {
         guard let userId = payload["id"] as? Int,
               let createdAt = payload["created_at"] as? String,

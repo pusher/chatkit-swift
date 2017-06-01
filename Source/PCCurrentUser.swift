@@ -344,7 +344,7 @@ public class PCCurrentUser {
                 }
 
                 guard let messageId = messageIdPayload["message_id"] else {
-                    completionHandler(nil, PCError.messageIdKeyMissingInMessageCreationResponse(messageIdPayload))
+                    completionHandler(nil, PCMessageError.messageIdKeyMissingInMessageCreationResponse(messageIdPayload))
                     return
                 }
 
@@ -451,11 +451,25 @@ public class PCCurrentUser {
 
                 let progressCounter = PCMessageEnrichmentProgressCounter(totalCount: messagesPayload.count)
                 let messages = PCSynchronizedArray<PCMessage>()
+                var basicMessages: [PCBasicMessage] = []
 
-                messagesPayload.forEach { messagePayload in
+                let messageUserIds = messagesPayload.flatMap { messagePayload -> Int? in
                     do {
                         let basicMessage = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
+                        basicMessages.append(basicMessage)
+                        return basicMessage.senderId
+                    } catch let err {
+                        self.app.logger.log(err.localizedDescription, logLevel: .debug)
+                        return nil
+                    }
+                }
 
+                self.userStore.fetchUsersWithIds(messageUserIds) { _, err in
+                    if let err = err {
+                        self.app.logger.log(err.localizedDescription, logLevel: .debug)
+                    }
+
+                    basicMessages.forEach { basicMessage in
                         self.basicMessageEnricher.enrich(basicMessage) { message, err in
                             guard let message = message, err == nil else {
                                 progressCounter.incrementFailed()
@@ -474,13 +488,6 @@ public class PCCurrentUser {
                                 completionHandler(messages.underlyingArray.sorted(by: { $0.0.id > $0.1.id }), nil)
                             }
                         }
-                    } catch let err {
-                        progressCounter.incrementFailed()
-                        self.app.logger.log(err.localizedDescription, logLevel: .debug)
-
-                        if progressCounter.finished {
-                            completionHandler(messages.underlyingArray.sorted(by: { $0.0.id > $0.1.id }), nil)
-                        }
                     }
                 }
             },
@@ -488,6 +495,21 @@ public class PCCurrentUser {
                 completionHandler(nil, error)
             }
         )
+    }
+
+}
+
+public enum PCMessageError: Error {
+    case messageIdKeyMissingInMessageCreationResponse([String: Int])
+}
+
+extension PCMessageError: LocalizedError {
+
+    public var errorDescription: String? {
+        switch self {
+        case .messageIdKeyMissingInMessageCreationResponse(let payload):
+            return "\"message_id\" key missing from response after message creation: \(payload)"
+        }
     }
 
 }

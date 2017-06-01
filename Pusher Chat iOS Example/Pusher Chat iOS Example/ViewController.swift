@@ -64,6 +64,14 @@ extension ViewController: PCRoomDelegate {
         print("\(user.name) stopped typing in room \(self.currentRoom?.name)")
     }
 
+    func userCameOnline(user: PCUser) {
+        print("\(user.name) came online")
+    }
+
+    func userWentOffline(user: PCUser) {
+        print("\(user.name) went offline")
+    }
+
 //    func subscriptionStateChanged(from: PPResumableSubscriptionState, to: PPResumableSubscriptionState) {
 //
 //    }

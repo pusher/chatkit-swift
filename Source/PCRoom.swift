@@ -2,14 +2,14 @@ import PusherPlatform
 
 public class PCRoom {
     public let id: Int
-    public var name: String
+    public internal(set) var name: String
     public let createdByUserId: Int
     public let createdAt: String
-    public var updatedAt: String
-    public var deletedAt: String?
-    public var userIds: [Int]
+    public internal(set) var updatedAt: String
+    public internal(set) var deletedAt: String?
+    public internal(set) var userIds: [Int]
 
-    public var subscription: PCRoomSubscription? = nil
+    public internal(set) var subscription: PCRoomSubscription? = nil
 
     public init(
         id: Int,
@@ -29,7 +29,7 @@ public class PCRoom {
         self.userIds = userIds
     }
 
-    internal func updateWithPropertiesOfRoom(_ room: PCRoom) {
+    func updateWithPropertiesOfRoom(_ room: PCRoom) {
         self.name = room.name
         self.updatedAt = room.updatedAt
         self.deletedAt = room.deletedAt

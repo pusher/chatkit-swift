@@ -15,15 +15,15 @@ public class PCRoomStore {
         self.findOrGetRoom(id: id, completionHander: completionHandler)
     }
 
-    public func add(_ room: PCRoom) {
+    func add(_ room: PCRoom) {
         self.rooms.append(room)
     }
 
-    public func remove(id: Int) -> PCRoom? {
+    func remove(id: Int) -> PCRoom? {
         return self.rooms.remove(where: { $0.id == id })
     }
 
-    internal func findOrGetRoom(id: Int, completionHander: @escaping (PCRoom?, Error?) -> Void) {
+    func findOrGetRoom(id: Int, completionHander: @escaping (PCRoom?, Error?) -> Void) {
         if let room = self.rooms.first(where: { $0.id == id }) {
             completionHander(room, nil)
         } else {
@@ -41,7 +41,7 @@ public class PCRoomStore {
         }
     }
 
-    public func getRoom(id: Int, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
+    func getRoom(id: Int, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
         let path = "/\(ChatManager.namespace)/rooms/\(id)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
