@@ -138,8 +138,8 @@ public class PCUserStore {
                 let users = userPayloads.flatMap { userPayload -> PCUser? in
                     do {
                         let user = try PCPayloadDeserializer.createUserFromPayload(userPayload)
-                        self.addOrMerge(user)
-                        return user
+                        let addedOrUpdatedUser = self.addOrMerge(user)
+                        return addedOrUpdatedUser
                     } catch let err {
                         self.app.logger.log("Error fetching user information: \(err.localizedDescription)", logLevel: .debug)
                         return nil
