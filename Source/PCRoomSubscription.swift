@@ -58,13 +58,8 @@ public class PCRoomSubscription {
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)
-//            self.delegate?.error(err)
+
+            // TODO: Should we call the delegate error func?
         }
     }
 }
-
-public enum  PCRoomSubscriptionError: Error {
-    case failedToFetchInitialStateForRoomSubscription
-}
-
-// TOOD: LocalizedError

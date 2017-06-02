@@ -1,5 +1,5 @@
 struct PCPresencePayload {
-    let userId: Int
+    let userId: String
     let state: PCPresenceState
     let lastSeenAt: String?
 }

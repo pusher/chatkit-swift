@@ -20,7 +20,7 @@ import PusherPlatform
     }
 
     // TODO: _remove_ userId should just be inferred from user token
-    public var userId: Int? = nil
+    public var userId: String? = nil
 
     public internal(set) var presenceSubscription: PCPresenceSubscription? = nil
 
@@ -45,7 +45,7 @@ import PusherPlatform
     }
 
     public func connect(
-        userId: Int,
+        userId: String,
         delegate: PCChatManagerDelegate,
         completionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
@@ -98,7 +98,7 @@ import PusherPlatform
     //        self.delegate?.userSubscriptionStateChanged(from: <#T##PCUserSubscriptionState#>, to: <#T##PCUserSubscriptionState#>)
     //    }
 
-    public func setupPresenceSubscription(userId: Int, delegate: PCChatManagerDelegate) {
+    public func setupPresenceSubscription(userId: String, delegate: PCChatManagerDelegate) {
         let path = "/\(ChatManager.namespace)/users/\(userId)/presence"
 
         let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)

@@ -17,7 +17,7 @@ public class PCGlobalUserStore {
         self.app = app
     }
 
-    public func user(id: Int, completionHandler: @escaping (PCUser?, Error?) -> Void) {
+    public func user(id: String, completionHandler: @escaping (PCUser?, Error?) -> Void) {
         self.findOrGetUser(id: id, completionHander: completionHandler)
     }
 
@@ -25,11 +25,11 @@ public class PCGlobalUserStore {
         return self.userStoreCore.addOrMerge(user)
     }
 
-    func remove(id: Int) -> PCUser? {
+    func remove(id: String) -> PCUser? {
         return self.userStoreCore.remove(id: id)
     }
 
-    func findOrGetUser(id: Int, completionHander: @escaping (PCUser?, Error?) -> Void) {
+    func findOrGetUser(id: String, completionHander: @escaping (PCUser?, Error?) -> Void) {
         if let user = self.userStoreCore.users.first(where: { $0.id == id }) {
             completionHander(user, nil)
         } else {
@@ -46,7 +46,7 @@ public class PCGlobalUserStore {
         }
     }
 
-    func getUser(id: Int, completionHandler: @escaping (PCUser?, Error?) -> Void) {
+    func getUser(id: String, completionHandler: @escaping (PCUser?, Error?) -> Void) {
         let path = "/\(ChatManager.namespace)/users/\(id)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
@@ -93,15 +93,15 @@ public class PCGlobalUserStore {
     }
 
     // This will do the de-duping of userIds
-    func fetchUsersWithIds(_ userIds: [Int], completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
+    func fetchUsersWithIds(_ userIds: [String], completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
         guard userIds.count > 0 else {
             self.app.logger.log("Requested to fetch users for a list of user ids which was empty", logLevel: .debug)
             completionHandler?([], nil)
             return
         }
 
-        let uniqueUserIds = Array(Set<Int>(userIds))
-        let userIdsString = uniqueUserIds.map { String($0) }.joined(separator: ",")
+        let uniqueUserIds = Array(Set<String>(userIds))
+        let userIdsString = uniqueUserIds.joined(separator: ",")
 
         let path = "/\(ChatManager.namespace)/users"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
@@ -151,7 +151,7 @@ public class PCGlobalUserStore {
         )
     }
 
-    func initialFetchOfUsersWithIds(_ userIds: [Int], completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
+    func initialFetchOfUsersWithIds(_ userIds: [String], completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
         self.fetchUsersWithIds(userIds)
     }
 

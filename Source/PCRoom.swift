@@ -3,7 +3,7 @@ import PusherPlatform
 public class PCRoom {
     public let id: Int
     public internal(set) var name: String
-    public let createdByUserId: Int
+    public let createdByUserId: String
     public let createdAt: String
     public internal(set) var updatedAt: String
     public internal(set) var deletedAt: String?
@@ -12,7 +12,7 @@ public class PCRoom {
 
     // TODO: This should be a Set
     // TODO: Do we need both userIds and users? Probably
-    public internal(set) var userIds: [Int]
+    public internal(set) var userIds: [String]
 
     // TODO: Should each Room instead have access to the user store and then the users
     // property would become a func with a completion handler that queried the user store
@@ -24,11 +24,11 @@ public class PCRoom {
     public init(
         id: Int,
         name: String,
-        createdByUserId: Int,
+        createdByUserId: String,
         createdAt: String,
         updatedAt: String,
         deletedAt: String? = nil,
-        userIds: [Int] = []
+        userIds: [String] = []
     ) {
         self.id = id
         self.name = name

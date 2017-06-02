@@ -10,7 +10,6 @@ struct PCPayloadDeserializer {
             createdAt: basicUser.createdAt,
             updatedAt: basicUser.updatedAt,
             name: userPayload["name"] as? String,
-            customId: userPayload["custom_id"] as? String,
             customData: userPayload["custom_data"] as? [String: Any]
         )
     }
@@ -23,7 +22,6 @@ struct PCPayloadDeserializer {
             createdAt: basicUser.createdAt,
             updatedAt: basicUser.updatedAt,
             name: userPayload["name"] as? String,
-            customId: userPayload["custom_id"] as? String,
             customData: userPayload["custom_data"] as? [String: Any],
             app: app,
             userStore: userStore
@@ -33,7 +31,7 @@ struct PCPayloadDeserializer {
     static func createRoomFromPayload(_ roomPayload: [String: Any]) throws -> PCRoom {
         guard let roomId = roomPayload["id"] as? Int,
               let roomName = roomPayload["name"] as? String,
-              let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
+              let roomCreatorUserId = roomPayload["created_by_id"] as? String,
               let roomCreatedAt = roomPayload["created_at"] as? String,
               let roomUpdatedAt = roomPayload["updated_at"] as? String
         else {
@@ -54,7 +52,7 @@ struct PCPayloadDeserializer {
     // information about its associated sender and the room it belongs to
     static func createMessageFromPayload(_ messagePayload: [String: Any]) throws -> PCBasicMessage {
         guard let messageId = messagePayload["id"] as? Int,
-              let messageSenderId = messagePayload["user_id"] as? Int,
+              let messageSenderId = messagePayload["user_id"] as? String,
               let messageRoomId = messagePayload["room_id"] as? Int,
               let messageText = messagePayload["text"] as? String,
               let messageCreatedAt = messagePayload["created_at"] as? String,
@@ -74,7 +72,7 @@ struct PCPayloadDeserializer {
     }
 
     static func createPresencePayloadFromPayload(_ payload: [String: Any]) throws -> PCPresencePayload {
-        guard let userId = payload["user_id"] as? Int,
+        guard let userId = payload["user_id"] as? String,
               let stateString = payload["state"] as? String,
               let state = PCPresenceState(rawValue: stateString)
         else {
@@ -89,7 +87,7 @@ struct PCPayloadDeserializer {
     }
 
     static fileprivate func createBasicUserFromPayload(_ payload: [String: Any]) throws -> PCBasicUser {
-        guard let userId = payload["id"] as? Int,
+        guard let userId = payload["id"] as? String,
               let createdAt = payload["created_at"] as? String,
               let updatedAt = payload["updated_at"] as? String
         else {

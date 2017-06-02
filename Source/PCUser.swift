@@ -1,26 +1,23 @@
 public class PCUser {
-    public let id: Int
+    public let id: String
     public let createdAt: String
     public let updatedAt: String
     public let name: String?
-    public let customId: String?
     public let customData: [String: Any]?
     public internal(set) var presenceState: PCPresenceState
     public internal(set) var lastSeenAt: String?
 
     public init(
-        id: Int,
+        id: String,
         createdAt: String,
         updatedAt: String,
         name: String? = nil,
-        customId: String? = nil,
         customData: [String: Any]? = nil
     ) {
         self.id = id
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.name = name
-        self.customId = customId
         self.customData = customData
         self.presenceState = .unknown
         self.lastSeenAt = nil
@@ -39,7 +36,7 @@ public class PCUser {
 extension PCUser: Hashable {
 
     public var hashValue: Int {
-        return self.id
+        return self.id.hashValue
     }
 
     public static func ==(_ lhs: PCUser, _ rhs: PCUser) -> Bool {

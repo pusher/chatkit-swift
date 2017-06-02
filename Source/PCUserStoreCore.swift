@@ -22,7 +22,7 @@ public class PCUserStoreCore {
         }
     }
 
-    func remove(id: Int) -> PCUser? {
+    func remove(id: String) -> PCUser? {
         guard let userToRemove = self.users.first(where: { $0.id == id }) else {
             return nil
         }

@@ -1,11 +1,10 @@
 import PusherPlatform
 
 public class PCCurrentUser {
-    public let id: Int
+    public let id: String
     public let createdAt: String
     public let updatedAt: String
     public let name: String?
-    public let customId: String?
     public let customData: [String: Any]?
 
     let userStore: PCGlobalUserStore
@@ -23,6 +22,8 @@ public class PCCurrentUser {
         }
     }
 
+    public let pathFriendlyId: String
+
     var typingIndicatorManagers: [Int: PCTypingIndicatorManager] = [:]
     private var typingIndicatorQueue = DispatchQueue(label: "com.pusher.chat-api.typing-indicators")
 
@@ -33,11 +34,10 @@ public class PCCurrentUser {
     let app: App
 
     public init(
-        id: Int,
+        id: String,
         createdAt: String,
         updatedAt: String,
         name: String? = nil,
-        customId: String? = nil,
         customData: [String: Any]?,
         rooms: PCSynchronizedArray<PCRoom> = PCSynchronizedArray<PCRoom>(),
         app: App,
@@ -47,24 +47,28 @@ public class PCCurrentUser {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.name = name
-        self.customId = customId
         self.customData = customData
         self.roomStore = PCRoomStore(rooms: rooms, app: app)
         self.app = app
         self.userStore = userStore
+
+        let allowedCharacterSet = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] ").inverted
+
+        // TODO: When can percent encoding fail?
+        self.pathFriendlyId = id.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? id
     }
 
     public func createRoom(
         name: String,
-        addUserIds userIds: [Int]? = nil,
+        isPrivate: Bool = true,
+        addUserIds userIds: [String]? = nil,
         completionHandler: @escaping (PCRoom?, Error?) -> Void
     ) {
         var roomObject: [String: Any] = [
             "name": name,
-            "created_by_id": self.id
+            "created_by_id": self.id,
+            "private": isPrivate
         ]
-
-        // TODO: This is a bit gross
 
         if userIds != nil && userIds!.count > 0 {
             roomObject["user_ids"] = userIds
@@ -138,7 +142,7 @@ public class PCCurrentUser {
         self.add(userIds: userIds, to: room.id, completionHandler: completionHandler)
     }
 
-    public func add(userIds: [Int], to roomId: Int, completionHandler: @escaping (Error?) -> Void) {
+    public func add(userIds: [String], to roomId: Int, completionHandler: @escaping (Error?) -> Void) {
         self.addOrRemoveUsers(in: roomId, userIds: userIds, membershipChange: .add, completionHandler: completionHandler)
     }
 
@@ -151,17 +155,17 @@ public class PCCurrentUser {
         self.remove(userIds: userIds, from: room, completionHandler: completionHandler)
     }
 
-    public func remove(userIds: [Int], from room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
+    public func remove(userIds: [String], from room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
         self.addOrRemoveUsers(in: room.id, userIds: userIds, membershipChange: .remove, completionHandler: completionHandler)
     }
 
     fileprivate func addOrRemoveUsers(
         in roomId: Int,
-        userIds: [Int],
+        userIds: [String],
         membershipChange: PCUserMembershipChange,
         completionHandler: @escaping (Error?) -> Void
     ) {
-        let userPayload = ["\(membershipChange.rawValue)_user_ids": userIds]
+        let userPayload = ["user_ids": userIds]
 
         guard JSONSerialization.isValidJSONObject(userPayload) else {
             completionHandler(PCError.invalidJSONObjectAsData(userPayload))
@@ -173,7 +177,7 @@ public class PCCurrentUser {
             return
         }
 
-        let path = "/\(ChatManager.namespace)/rooms/\(roomId)/users"
+        let path = "/\(ChatManager.namespace)/rooms/\(roomId)/users/\(membershipChange.rawValue)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.PUT.rawValue, path: path, body: data)
 
         self.app.requestWithRetry(
@@ -194,16 +198,46 @@ public class PCCurrentUser {
         case remove
     }
 
+    fileprivate enum PCCurrentUserMembershipChange: String {
+        case join
+        case leave
+    }
+
+    fileprivate func joinOrLeaveRoom(
+        roomId: Int,
+        membershipChange: PCCurrentUserMembershipChange,
+        completionHandler: @escaping (Error?) -> Void
+    ) {
+        let path = "/\(ChatManager.namespace)/users/\(self.pathFriendlyId)/rooms/\(roomId)/\(membershipChange.rawValue)"
+        let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
+
+        self.app.requestWithRetry(
+            using: generalRequest,
+            onSuccess: { data in
+                // TODO: What is data here?
+
+                completionHandler(nil)
+            },
+            onError: { error in
+                completionHandler(error)
+            }
+        )
+    }
+
     public func join(room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
-        self.add(userIds: [self.id], to: room.id, completionHandler: completionHandler)
+        self.joinOrLeaveRoom(roomId: room.id, membershipChange: .join, completionHandler: completionHandler)
     }
 
     public func join(roomId: Int, completionHandler: @escaping (Error?) -> Void) {
-        self.add(userIds: [self.id], to: roomId, completionHandler: completionHandler)
+        self.joinOrLeaveRoom(roomId: roomId, membershipChange: .join, completionHandler: completionHandler)
     }
 
     public func leave(room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
-        self.remove(userIds: [self.id], from: room, completionHandler: completionHandler)
+        self.joinOrLeaveRoom(roomId: room.id, membershipChange: .leave, completionHandler: completionHandler)
+    }
+
+    public func leave(roomId: Int, completionHandler: @escaping (Error?) -> Void) {
+        self.joinOrLeaveRoom(roomId: roomId, membershipChange: .leave, completionHandler: completionHandler)
     }
 
     public func getRooms(completionHandler: @escaping ([PCRoom]?, Error?) -> Void) {
@@ -356,67 +390,48 @@ public class PCCurrentUser {
         )
     }
 
-
     // TODO: Where should all the makeActiveRoom stuff live?
 
     public func makeActiveRoom(_ room: PCRoom, delegate: PCRoomDelegate) {
         self.subscribeToRoom(room: room, roomDelegate: delegate)
     }
 
-    public func subscribeToRoom(room: PCRoom, roomDelegate: PCRoomDelegate) {
+    // TODO: Do I need to add a Last-Event-ID option here?
+    public func subscribeToRoom(room: PCRoom, roomDelegate: PCRoomDelegate, messageLimit: Int = 20) {
+        let path = "/\(ChatManager.namespace)/rooms/\(room.id)"
 
-        // TODO: Don't need to fetchMessagesFromRoom before subscribing anymore
+        // TODO: What happens if you provide both a message_limit and a Last-Event-ID?
+        let subscribeRequest = PPRequestOptions(
+            method: HTTPMethod.SUBSCRIBE.rawValue,
+            path: path,
+            queryItems: [
+                URLQueryItem(name: "user_id", value: self.id),
+                URLQueryItem(name: "message_limit", value: String(messageLimit))
+            ]
+        )
 
-        self.fetchMessagesFromRoom(room) { messages, err in
-            guard err == nil else {
-                roomDelegate.error(error: PCRoomSubscriptionError.failedToFetchInitialStateForRoomSubscription)
-                return
-            }
+        var resumableSub = PPResumableSubscription(
+            app: self.app,
+            requestOptions: subscribeRequest
+        )
 
-            let path = "/\(ChatManager.namespace)/rooms/\(room.id)"
+        room.subscription = PCRoomSubscription(
+            delegate: roomDelegate,
+            resumableSubscription: resumableSub,
+            logger: self.app.logger,
+            basicMessageEnricher: self.basicMessageEnricher
+        )
 
-            let subscribeRequest = PPRequestOptions(
-                method: HTTPMethod.SUBSCRIBE.rawValue,
-                path: path,
-                queryItems: [URLQueryItem(name: "user_id", value: String(self.id))]
-            )
+        self.app.subscribeWithResume(
+            with: &resumableSub,
+            using: subscribeRequest,
+            onEvent: room.subscription?.handleEvent
 
-            var resumableSub = PPResumableSubscription(
-                app: self.app,
-                requestOptions: subscribeRequest
-            )
-
-            if let firstMessage = messages!.first {
-                self.app.logger.log("Subscribing to room \(room.name) and providing Last-Event-ID as \(firstMessage.id)", logLevel: .verbose)
-                let mostRecentlyReceivedMessageId = String(firstMessage.id)
-                subscribeRequest.addHeaders(["Last-Event-ID": mostRecentlyReceivedMessageId])
-                resumableSub.setLastEventIdReceivedTo(mostRecentlyReceivedMessageId)
-            }
-
-            room.subscription = PCRoomSubscription(
-                delegate: roomDelegate,
-                resumableSubscription: resumableSub,
-                logger: self.app.logger,
-                basicMessageEnricher: self.basicMessageEnricher
-            )
-
-            messages?.reversed().forEach { message in
-                self.app.logger.log("Calling newMessage function on room delegate for message with id \(message.id)", logLevel: .verbose)
-                roomDelegate.newMessage(message: message)
-            }
-
-            self.app.subscribeWithResume(
-                with: &resumableSub,
-                using: subscribeRequest,
-                onEvent: room.subscription?.handleEvent
-
-                // TODO: This will probably be replaced by the state change delegate function, with an associated type, maybe
-//                onError: { error in
-//                    roomDelegate.receivedError(error)
-//                }
-            )
-
-        }
+            // TODO: This will probably be replaced by the state change delegate function, with an associated type, maybe
+//            onError: { error in
+//                roomDelegate.receivedError(error)
+//            }
+        )
     }
 
     public func fetchMessagesFromRoom(
@@ -456,7 +471,7 @@ public class PCCurrentUser {
                 let messages = PCSynchronizedArray<PCMessage>()
                 var basicMessages: [PCBasicMessage] = []
 
-                let messageUserIds = messagesPayload.flatMap { messagePayload -> Int? in
+                let messageUserIds = messagesPayload.flatMap { messagePayload -> String? in
                     do {
                         let basicMessage = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
                         basicMessages.append(basicMessage)

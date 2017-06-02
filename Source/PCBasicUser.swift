@@ -1,5 +1,5 @@
 struct PCBasicUser {
-    let id: Int
+    let id: String
     let createdAt: String
     let updatedAt: String
 }

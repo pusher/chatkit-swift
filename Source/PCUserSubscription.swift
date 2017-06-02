@@ -63,7 +63,7 @@ public class PCUserSubscription {
             return
         }
 
-        let userId = json["user_id"] as? Int
+        let userId = json["user_id"] as? String
 
         if eventType == .user {
             guard userId != nil else {
@@ -142,13 +142,13 @@ extension PCUserSubscription {
             return
         }
 
-        let userIds = roomsPayload.reduce([Int]()) { result, roomPayload in
+        let userIds = roomsPayload.reduce([String]()) { result, roomPayload in
             guard let roomId = roomPayload["id"] as? Int,
                   let roomName = roomPayload["name"] as? String,
-                  let roomCreatorUserId = roomPayload["created_by_id"] as? Int,
+                  let roomCreatorUserId = roomPayload["created_by_id"] as? String,
                   let roomCreatedAt = roomPayload["created_at"] as? String,
                   let roomUpdatedAt = roomPayload["updated_at"] as? String,
-                  let memberUserIds = roomPayload["member_user_ids"] as? [Int]
+                  let memberUserIds = roomPayload["member_user_ids"] as? [String]
             else {
                 self.app.logger.log("Incomplete room payload in initial_state event: \(roomPayload)", logLevel: .debug)
                 return result
@@ -327,7 +327,7 @@ extension PCUserSubscription {
             return
         }
 
-        guard let userId = data["user_id"] as? Int else {
+        guard let userId = data["user_id"] as? String else {
             self.delegate?.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "user_id",
@@ -385,7 +385,7 @@ extension PCUserSubscription {
             return
         }
 
-        guard let userId = data["user_id"] as? Int else {
+        guard let userId = data["user_id"] as? String else {
             self.delegate?.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "user_id",
@@ -436,7 +436,7 @@ extension PCUserSubscription {
         }
     }
 
-    fileprivate func parseTypingStartPayload(_ eventName: PCAPIEventName, data: [String: Any], userId: Int) {
+    fileprivate func parseTypingStartPayload(_ eventName: PCAPIEventName, data: [String: Any], userId: String) {
         guard let roomId = data["room_id"] as? Int else {
             self.delegate?.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
@@ -475,7 +475,7 @@ extension PCUserSubscription {
     }
 
 
-    fileprivate func parseTypingStopPayload(_ eventName: PCAPIEventName, data: [String: Any], userId: Int) {
+    fileprivate func parseTypingStopPayload(_ eventName: PCAPIEventName, data: [String: Any], userId: String) {
         guard let roomId = data["room_id"] as? Int else {
             self.delegate?.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(

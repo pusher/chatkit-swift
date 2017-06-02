@@ -21,7 +21,7 @@ public class PCRoomUserStore {
     }
 
     @discardableResult
-    func remove(id: Int) -> PCUser? {
+    func remove(id: String) -> PCUser? {
         return self.userStoreCore.remove(id: id)
     }
 
