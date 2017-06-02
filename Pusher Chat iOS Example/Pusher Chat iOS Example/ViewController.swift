@@ -16,7 +16,7 @@ class ViewController: UIViewController {
 
         delegate.pusherChat?.connect(userId: "ham", delegate: self) { currentUser, error in
             guard error == nil else {
-                print("Error connecting: \(error)")
+                print("Error connecting: \(error!)")
                 return
             }
 
@@ -49,31 +49,31 @@ extension ViewController: PCRoomDelegate {
     }
 
     func usersPopulated() {
-        print("User list has been populated: \(self.currentRoom?.users.map { $0.name! }.joined(separator: ","))")
+        print("User list has been populated: \(self.currentRoom!.users.map { $0.name! }.joined(separator: ","))")
     }
 
     public func userJoined(user: PCUser) {
-        print("User \(user.name) joined room: \(self.currentRoom?.name)")
+        print("User \(user.name ?? user.id) joined room: \(self.currentRoom!.name)")
     }
 
     public func userLeft(user: PCUser) {
-        print("User \(user.name) left room: \(self.currentRoom?.name)")
+        print("User \(user.name ?? user.id) left room: \(self.currentRoom!.name)")
     }
 
     public func userStartedTyping(user: PCUser) {
-        print("\(user.name) started typing in room \(self.currentRoom?.name)")
+        print("\(user.name ?? user.id) started typing in room \(self.currentRoom!.name)")
     }
 
     public func userStoppedTyping(user: PCUser) {
-        print("\(user.name) stopped typing in room \(self.currentRoom?.name)")
+        print("\(user.name ?? user.id) stopped typing in room \(self.currentRoom!.name)")
     }
 
     func userCameOnline(user: PCUser) {
-        print("\(user.name) came online")
+        print("\(user.name ?? user.id) came online")
     }
 
     func userWentOffline(user: PCUser) {
-        print("\(user.name) went offline")
+        print("\(user.name ?? user.id) went offline")
     }
 
 //    func subscriptionStateChanged(from: PPResumableSubscriptionState, to: PPResumableSubscriptionState) {
@@ -103,19 +103,19 @@ extension ViewController: PCChatManagerDelegate {
     }
 
     public func userJoinedRoom(_ room: PCRoom, user: PCUser) {
-        print("User \(user.name) joined room: \(room.name)")
+        print("User \(user.name ?? user.id) joined room: \(room.name)")
     }
 
     public func userLeftRoom(_ room: PCRoom, user: PCUser) {
-        print("User \(user.name) left room: \(room.name)")
+        print("User \(user.name ?? user.id) left room: \(room.name)")
     }
 
     public func userStartedTyping(room: PCRoom, user: PCUser) {
-        print("\(user.name) started typing in room \(room.name)")
+        print("\(user.name ?? user.id) started typing in room \(room.name)")
     }
 
     public func userStoppedTyping(room: PCRoom, user: PCUser) {
-        print("\(user.name) stopped typing in room \(room.name)")
+        print("\(user.name ?? user.id) stopped typing in room \(room.name)")
     }
 
     //    public func error(_ error: Error) {
