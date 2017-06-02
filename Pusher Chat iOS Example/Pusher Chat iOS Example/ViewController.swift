@@ -25,19 +25,8 @@ class ViewController: UIViewController {
 
             print(currentUser!.rooms.flatMap { String($0.id) }.joined(separator: ", "))
             self.currentRoom = currentUser!.rooms[0]
-            print(self.currentRoom!.id)
 
             currentUser!.subscribeToRoom(room: self.currentRoom!, roomDelegate: self)
-
-//            currentUser!.createRoom(name: "hamhamtest") { room, err in
-//
-//                if let error = err {
-//                    print("Error creating room: \(error)")
-//                } else {
-//                    print("Created room: \(room)")
-//                }
-//
-//            }
         }
 
     }
@@ -76,16 +65,17 @@ extension ViewController: PCRoomDelegate {
         print("\(user.name ?? user.id) went offline")
     }
 
-//    func subscriptionStateChanged(from: PPResumableSubscriptionState, to: PPResumableSubscriptionState) {
-//
-//    }
-
     func error(error: Error) {
         print("Room sub received error: \(error.localizedDescription)")
     }
+
+    //    func subscriptionStateChanged(from: PPResumableSubscriptionState, to: PPResumableSubscriptionState) {
+    //
+    //    }
 }
 
 extension ViewController: PCChatManagerDelegate {
+
     public func addedToRoom(room: PCRoom) {
         print("Added to room: \(room.name)")
     }
@@ -117,13 +107,5 @@ extension ViewController: PCChatManagerDelegate {
     public func userStoppedTyping(room: PCRoom, user: PCUser) {
         print("\(user.name ?? user.id) stopped typing in room \(room.name)")
     }
-
-    //    public func error(_ error: Error) {
-    //        print("Error: \(error)")
-    //    }
-
-    //    public func messageReceived(room: PCRoom, message: PCMessage) {
-    //        print("Message received 2 \(message)")
-    //    }
 
 }

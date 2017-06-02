@@ -41,6 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 public struct HamLogger: PPLogger {
     public func log(_ message: @autoclosure @escaping () -> String, logLevel: PPLogLevel) {
+        guard logLevel >= .debug else { return }
         print("\(message())")
     }
 }
