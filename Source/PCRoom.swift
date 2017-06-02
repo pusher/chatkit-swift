@@ -17,7 +17,11 @@ public class PCRoom {
     // TODO: Should each Room instead have access to the user store and then the users
     // property would become a func with a completion handler that queried the user store
     // based on the user ids that are being tracked in the Room objects
-    public internal(set) var users: Set<PCUser> = []
+    public var users: Set<PCUser> {
+        get {
+            return self.userStore.users
+        }
+    }
 
     public internal(set) var userStore: PCRoomUserStore
 

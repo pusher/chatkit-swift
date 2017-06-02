@@ -142,6 +142,8 @@ extension PCUserSubscription {
             return
         }
 
+        var roomsToFetchUsersFor: [PCRoom] = []
+
         let userIds = roomsPayload.reduce([String]()) { result, roomPayload in
             guard let roomId = roomPayload["id"] as? Int,
                   let roomName = roomPayload["name"] as? String,
@@ -163,6 +165,10 @@ extension PCUserSubscription {
                 userIds: memberUserIds
             )
 
+            // TODO: Don't think we actually need to create this intermediate array - should be able to
+            // use receivedCurrentUser.roomStore.rooms (maybe that doesn't need to use a queue to add
+            // items to its underlying array?)
+            roomsToFetchUsersFor.append(room)
             receivedCurrentUser.roomStore.add(room)
 
             return result + memberUserIds
@@ -179,7 +185,7 @@ extension PCUserSubscription {
 
             // TODO: This could be a lot more efficient
             receivedCurrentUser.roomStore.rooms.forEach { room in
-                let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users-")
+                let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users")
 
                 room.userIds.forEach { userId in
                     userStore.user(id: userId) { user, err in

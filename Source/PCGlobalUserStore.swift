@@ -152,7 +152,7 @@ public class PCGlobalUserStore {
     }
 
     func initialFetchOfUsersWithIds(_ userIds: [String], completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
-        self.fetchUsersWithIds(userIds)
+        self.fetchUsersWithIds(userIds, completionHandler: completionHandler)
     }
 
 }
