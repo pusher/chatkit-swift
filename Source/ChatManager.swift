@@ -13,6 +13,8 @@ import PusherPlatform
     }
 
     let userStore: PCGlobalUserStore
+
+    // TODO: Do we need this here?
     public var users: Set<PCUser> {
         get {
             return self.userStore.users
@@ -21,8 +23,6 @@ import PusherPlatform
 
     // TODO: _remove_ userId should just be inferred from user token
     public var userId: String? = nil
-
-    public internal(set) var presenceSubscription: PCPresenceSubscription? = nil
 
     public init(
         id: String,
@@ -70,8 +70,6 @@ import PusherPlatform
                     return
                 }
 
-                self.setupPresenceSubscription(userId: userId, delegate: delegate)
-
                 completionHandler(cUser, nil)
             }
         )
@@ -97,29 +95,5 @@ import PusherPlatform
     //    fileprivate func onUserSubscriptionStateChange(newState: ) {
     //        self.delegate?.userSubscriptionStateChanged(from: <#T##PCUserSubscriptionState#>, to: <#T##PCUserSubscriptionState#>)
     //    }
-
-    public func setupPresenceSubscription(userId: String, delegate: PCChatManagerDelegate) {
-        let path = "/\(ChatManager.namespace)/users/\(userId)/presence"
-
-        let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
-
-        var resumableSub = PPResumableSubscription(
-            app: self.app,
-            requestOptions: subscribeRequest
-        )
-
-        self.presenceSubscription = PCPresenceSubscription(
-            app: self.app,
-            resumableSubscription: resumableSub,
-            userStore: self.userStore,
-            delegate: delegate
-        )
-
-        self.app.subscribeWithResume(
-            with: &resumableSub,
-            using: subscribeRequest,
-            onEvent: self.presenceSubscription!.handleEvent
-        )
-    }
 
 }

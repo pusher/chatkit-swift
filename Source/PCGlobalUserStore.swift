@@ -78,16 +78,26 @@ public class PCGlobalUserStore {
         )
     }
 
-    func handleInitialPresencePayloads(_ payloads: [PCPresencePayload]) {
+    func handleInitialPresencePayloads(_ payloads: [PCPresencePayload], completionHandler: @escaping () -> Void) {
+        let initialPresenceProgressCounter = PCProgressCounter(totalCount: payloads.count, labelSuffix: "initial-presence-payload")
+
         payloads.forEach { payload in
-            self.findOrGetUser(id: payload.userId) { user, err in
+            self.user(id: payload.userId) { user, err in
                 guard let user = user, err == nil else {
                     self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                    if initialPresenceProgressCounter.incrementFailedAndCheckIfFinished() {
+                        completionHandler()
+                    }
+
                     return
                 }
 
                 user.presenceState = payload.state
                 user.lastSeenAt = payload.lastSeenAt
+
+                if initialPresenceProgressCounter.incrementSuccessAndCheckIfFinished() {
+                    completionHandler()
+                }
             }
         }
     }

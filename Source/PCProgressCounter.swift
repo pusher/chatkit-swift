@@ -3,7 +3,7 @@ class PCProgressCounter {
     let totalCount: Int
     var successCount: Int = 0
     var failedCount: Int = 0
-    var finished: Bool = false
+    var finished = false
 
     init(totalCount: Int, labelSuffix: String? = nil) {
         self.totalCount = totalCount
@@ -11,22 +11,28 @@ class PCProgressCounter {
         self.queue = DispatchQueue(label: "com.pusher.chat-api.\(queueLabelSuffix)")
     }
 
-    func incrementSuccess() {
+    func incrementSuccessAndCheckIfFinished() -> Bool {
+        var isFinished = false
         queue.sync {
             successCount += 1
             if totalCount == (successCount + failedCount) {
                 finished = true
+                isFinished = true
             }
         }
+        return isFinished
     }
 
-    func incrementFailed() {
+    func incrementFailedAndCheckIfFinished() -> Bool {
+        var isFinished = false
         queue.sync {
             failedCount += 1
             if totalCount == (successCount + failedCount) {
                 finished = true
+                isFinished = true
             }
         }
+        return isFinished
     }
 
 }

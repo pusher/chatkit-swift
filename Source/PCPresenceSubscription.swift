@@ -7,17 +7,20 @@ public class PCPresenceSubscription {
     let app: App
     public let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore
+    public let roomStore: PCRoomStore
     public internal(set) var delegate: PCChatManagerDelegate?
 
     public init(
         app: App,
         resumableSubscription: PPResumableSubscription,
         userStore: PCGlobalUserStore,
+        roomStore: PCRoomStore,
         delegate: PCChatManagerDelegate? = nil
     ) {
         self.app = app
         self.resumableSubscription = resumableSubscription
         self.userStore = userStore
+        self.roomStore = roomStore
         self.delegate = delegate
     }
 
@@ -83,7 +86,11 @@ extension PCPresenceSubscription {
             }
         }
 
-        userStore.handleInitialPresencePayloads(userStates)
+        userStore.handleInitialPresencePayloads(userStates) {
+            self.roomStore.rooms.forEach { room in
+                room.subscription?.delegate?.usersUpdated()
+            }
+        }
     }
 
     fileprivate func parsePresenceUpdatePayload(_ eventName: PCPresenceEventName, data: [String: Any], userStore: PCGlobalUserStore) {
@@ -98,6 +105,9 @@ extension PCPresenceSubscription {
                     )
                     return
                 }
+
+                user.presenceState = presencePayload.state
+                user.lastSeenAt = presencePayload.lastSeenAt
 
                 switch presencePayload.state {
                 case .online:

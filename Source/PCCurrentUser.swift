@@ -10,6 +10,8 @@ public class PCCurrentUser {
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
 
+    // TODO: This should probably be [PCUser] instead, like the users property
+    // in PCRoom, or something even simpler
     public var users: Set<PCUser> {
         get {
             return self.userStore.users
@@ -24,12 +26,10 @@ public class PCCurrentUser {
 
     public let pathFriendlyId: String
 
+    public internal(set) var presenceSubscription: PCPresenceSubscription? = nil
+
     var typingIndicatorManagers: [Int: PCTypingIndicatorManager] = [:]
     private var typingIndicatorQueue = DispatchQueue(label: "com.pusher.chat-api.typing-indicators")
-
-    internal lazy var basicMessageEnricher: PCBasicMessageEnricher = {
-        return PCBasicMessageEnricher(userStore: self.userStore, roomStore: self.roomStore, logger: self.app.logger)
-    }()
 
     let app: App
 
@@ -56,6 +56,31 @@ public class PCCurrentUser {
 
         // TODO: When can percent encoding fail?
         self.pathFriendlyId = id.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? id
+    }
+
+    func setupPresenceSubscription(delegate: PCChatManagerDelegate) {
+        let path = "/\(ChatManager.namespace)/users/\(self.id)/presence"
+
+        let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
+
+        var resumableSub = PPResumableSubscription(
+            app: self.app,
+            requestOptions: subscribeRequest
+        )
+
+        self.presenceSubscription = PCPresenceSubscription(
+            app: self.app,
+            resumableSubscription: resumableSub,
+            userStore: self.userStore,
+            roomStore: self.roomStore,
+            delegate: delegate
+        )
+
+        self.app.subscribeWithResume(
+            with: &resumableSub,
+            using: subscribeRequest,
+            onEvent: self.presenceSubscription!.handleEvent
+        )
     }
 
     public func createRoom(
@@ -419,7 +444,7 @@ public class PCCurrentUser {
             delegate: roomDelegate,
             resumableSubscription: resumableSub,
             logger: self.app.logger,
-            basicMessageEnricher: self.basicMessageEnricher
+            basicMessageEnricher: PCBasicMessageEnricher(userStore: self.userStore, room: room, logger: self.app.logger)
         )
 
         self.app.subscribeWithResume(
@@ -487,22 +512,26 @@ public class PCCurrentUser {
                         self.app.logger.log(err.localizedDescription, logLevel: .debug)
                     }
 
+                    let messageEnricher = PCBasicMessageEnricher(
+                        userStore: self.userStore,
+                        room: room,
+                        logger: self.app.logger
+                    )
+
                     basicMessages.forEach { basicMessage in
-                        self.basicMessageEnricher.enrich(basicMessage) { message, err in
+                        messageEnricher.enrich(basicMessage) { message, err in
                             guard let message = message, err == nil else {
-                                progressCounter.incrementFailed()
                                 self.app.logger.log(err!.localizedDescription, logLevel: .debug)
 
-                                if progressCounter.finished {
+                                if progressCounter.incrementFailedAndCheckIfFinished() {
                                     completionHandler(messages.underlyingArray.sorted(by: { $0.0.id > $0.1.id }), nil)
                                 }
+
                                 return
                             }
 
                             messages.append(message)
-                            progressCounter.incrementSuccess()
-
-                            if progressCounter.finished {
+                            if progressCounter.incrementSuccessAndCheckIfFinished() {
                                 completionHandler(messages.underlyingArray.sorted(by: { $0.0.id > $0.1.id }), nil)
                             }
                         }

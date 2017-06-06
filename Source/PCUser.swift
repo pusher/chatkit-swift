@@ -23,6 +23,8 @@ public class PCUser {
         self.lastSeenAt = nil
     }
 
+
+    // TODO: Could use inout?
     func updateWithPropertiesOfUser(_ user: PCUser) -> PCUser {
         if self.presenceState != .unknown {
             self.presenceState = user.presenceState

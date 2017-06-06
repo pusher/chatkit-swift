@@ -1,8 +1,7 @@
 import Foundation
 
 public class PCUserStoreCore {
-
-    // TODO: Probably need to add a reader-writer queue for access to the users set
+    fileprivate let userStoreQueue = DispatchQueue(label: "com.pusher.chat-api.user-store-core")
 
     public internal(set) var users: Set<PCUser>
 

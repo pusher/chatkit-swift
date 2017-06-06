@@ -37,16 +37,18 @@ extension ViewController: PCRoomDelegate {
         print("Room sub received message: \(message.text)")
     }
 
-    func usersPopulated() {
-        print("User list has been populated: \(self.currentRoom!.users.map { $0.name! }.joined(separator: ","))")
+    func usersUpdated() {
+        print("Users updated " + self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
     }
 
     public func userJoined(user: PCUser) {
         print("User \(user.name ?? user.id) joined room: \(self.currentRoom!.name)")
+        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: ","))
     }
 
     public func userLeft(user: PCUser) {
         print("User \(user.name ?? user.id) left room: \(self.currentRoom!.name)")
+        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: ","))
     }
 
     public func userStartedTyping(user: PCUser) {
@@ -59,10 +61,12 @@ extension ViewController: PCRoomDelegate {
 
     func userCameOnline(user: PCUser) {
         print("\(user.name ?? user.id) came online")
+        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
     }
 
     func userWentOffline(user: PCUser) {
         print("\(user.name ?? user.id) went offline")
+        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
     }
 
     func error(error: Error) {

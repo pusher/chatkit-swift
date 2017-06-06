@@ -14,7 +14,7 @@ public protocol PCRoomDelegate {
     func userWentOffline(user: PCUser)
 
     // TODO: This seems like it could instead be `userListUpdated`, or something similar?
-    func usersPopulated()
+    func usersUpdated()
 
     // TODO: I don't think we'll want this - it could be handled by the state change - i.e. changed
     // to .failed, potentially with an associated error value

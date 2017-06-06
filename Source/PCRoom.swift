@@ -17,9 +17,11 @@ public class PCRoom {
     // TODO: Should each Room instead have access to the user store and then the users
     // property would become a func with a completion handler that queried the user store
     // based on the user ids that are being tracked in the Room objects
-    public var users: Set<PCUser> {
+    public var users: [PCUser] {
         get {
-            return self.userStore.users
+            // TODO: Is this going to be expensive if this is used as a datasource for a
+            // tableview, or similar?
+            return Array(self.userStore.users).sorted(by: { $0.0.id > $0.1.id })
         }
     }
 
