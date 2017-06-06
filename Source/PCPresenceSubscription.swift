@@ -119,6 +119,20 @@ extension PCPresenceSubscription {
                     self.app.logger.log("Somehow the presence state of user \(user.debugDescription) is unknown", logLevel: .debug)
                     return
                 }
+
+                // TODO: Could check if any room is active to speed this up? Or keep a better
+                // map of user_ids to rooms
+                self.roomStore.rooms.forEach { room in
+                    guard room.users.contains(user) else {
+                        return
+                    }
+
+                    switch presencePayload.state {
+                    case .online: room.subscription?.delegate?.userCameOnline(user: user)
+                    case .offline: room.subscription?.delegate?.userWentOffline(user: user)
+                    default: return
+                    }
+                }
             }
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
