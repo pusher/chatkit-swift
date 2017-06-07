@@ -143,6 +143,11 @@ extension PCUserSubscription {
 
         var roomsToFetchUsersFor: [PCRoom] = []
 
+        let roomsAddedToRoomStoreProgressCounter = PCProgressCounter(
+            totalCount: roomsPayload.count,
+            labelSuffix: "roomstore-room-append"
+        )
+
         let userIds = roomsPayload.reduce([String]()) { result, roomPayload in
             guard let roomId = roomPayload["id"] as? Int,
                   let roomName = roomPayload["name"] as? String,
@@ -152,6 +157,9 @@ extension PCUserSubscription {
                   let memberUserIds = roomPayload["member_user_ids"] as? [String]
             else {
                 self.app.logger.log("Incomplete room payload in initial_state event: \(roomPayload)", logLevel: .debug)
+                if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
+                    self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
+                }
                 return result
             }
 
@@ -168,7 +176,11 @@ extension PCUserSubscription {
             // use receivedCurrentUser.roomStore.rooms (maybe that doesn't need to use a queue to add
             // items to its underlying array?)
             roomsToFetchUsersFor.append(room)
-            receivedCurrentUser.roomStore.add(room)
+            receivedCurrentUser.roomStore.add(room) {
+                if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
+                    self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
+                }
+            }
 
             return result + memberUserIds
         }
@@ -182,6 +194,7 @@ extension PCUserSubscription {
                 return
             }
 
+            // TODO: I think the count should actually be based on the roomsPayload
             let combinedRoomUsersProgressCounter = PCProgressCounter(totalCount: receivedCurrentUser.roomStore.rooms.count, labelSuffix: "room-users-combined")
 
             // TODO: This could be a lot more efficient
@@ -221,7 +234,6 @@ extension PCUserSubscription {
         }
 
         self.currentUser = receivedCurrentUser
-        callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
     }
 
     fileprivate func parseAddedToRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
@@ -239,8 +251,9 @@ extension PCUserSubscription {
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
-            self.currentUser?.roomStore.add(room)
-            self.delegate.addedToRoom(room: room)
+            self.currentUser?.roomStore.add(room) {
+                self.delegate.addedToRoom(room: room)
+            }
 
             // TODO: Use the soon-to-be-created new version of fetchUsersWithIds from the
             // userStore
@@ -287,12 +300,14 @@ extension PCUserSubscription {
             return
         }
 
-        guard let roomRemovedFrom = self.currentUser?.roomStore.remove(id: roomId) else {
-            self.app.logger.log("Received \(eventName.rawValue) API event but room \(roomId) not found in local store of joined rooms", logLevel: .debug)
-            return
-        }
+        self.currentUser?.roomStore.remove(id: roomId) { room in
+            guard let roomRemovedFrom = room else {
+                self.app.logger.log("Received \(eventName.rawValue) API event but room \(roomId) not found in local store of joined rooms", logLevel: .debug)
+                return
+            }
 
-        self.delegate.removedFromRoom(room: roomRemovedFrom)
+            self.delegate.removedFromRoom(room: roomRemovedFrom)
+        }
     }
 
     fileprivate func parseRoomUpdatedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
@@ -346,12 +361,14 @@ extension PCUserSubscription {
             return
         }
 
-        guard let deletedRoom = currentUser.roomStore.remove(id: roomId) else {
-            self.app.logger.log("Room \(roomId) was deleted but was not found in local store of joined rooms", logLevel: .debug)
-            return
-        }
+        currentUser.roomStore.remove(id: roomId) { room in
+            guard let deletedRoom = room else {
+                self.app.logger.log("Room \(roomId) was deleted but was not found in local store of joined rooms", logLevel: .debug)
+                return
+            }
 
-        self.delegate.roomDeleted(room: deletedRoom)
+            self.delegate.roomDeleted(room: deletedRoom)
+        }
     }
 
     fileprivate func parseUserJoinedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {

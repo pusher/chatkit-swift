@@ -4,19 +4,42 @@ public class PCSynchronizedArray<T> {
     internal var underlyingArray: [T] = []
     private let accessQueue = DispatchQueue(label: "synchronized.array.access", attributes: .concurrent)
 
-    public func append(_ newElement: T) {
+    public func append(_ newElement: T, completionHandler: (() -> Void)? = nil) {
         // QOS is userInitiated here, mainly so that when the rooms are received as part
         // of the initial_state for a user subscription they are added to the room store
         // before the connectCompletionHandlers are called, where it would be likely that
-        // the rooms property of the currentUser would be accessed
+        // the rooms property of the currentUser would be accessed - maybe there's a better
+        // way to ensure ordering by dispatching some part of it on the main queue?
         self.accessQueue.async(qos: .userInitiated, flags: .barrier) {
             self.underlyingArray.append(newElement)
+
+            DispatchQueue.main.async {
+                completionHandler?()
+            }
         }
     }
 
-    public func removeAtIndex(index: Int) {
+    public func remove(where predicate: @escaping (T) -> Bool, completionHandler: ((T?) -> Void)? = nil) {
         self.accessQueue.async(flags: .barrier) {
-            self.underlyingArray.remove(at: index)
+            guard let index = self.underlyingArray.index(where: predicate) else {
+                completionHandler?(nil)
+                return
+            }
+
+            let element = self.underlyingArray.remove(at: index)
+
+            DispatchQueue.main.async {
+                completionHandler?(element)
+            }
+        }
+    }
+    public func remove(at index: Int, completionHandler: ((T) -> Void)? = nil) {
+        self.accessQueue.async(flags: .barrier) {
+            let element = self.underlyingArray.remove(at: index)
+
+            DispatchQueue.main.async {
+                completionHandler?(element)
+            }
         }
     }
 
@@ -60,15 +83,15 @@ public class PCSynchronizedArray<T> {
         return result
     }
 
-    public func remove(where predicate: @escaping (T) -> Bool) -> T? {
-        var element: T?
-
+    public func remove(where predicate: @escaping (T) -> Bool, completion: ((T) -> Void)? = nil) {
         self.accessQueue.async(flags: .barrier) {
             guard let index = self.underlyingArray.index(where: predicate) else { return }
-            element = self.underlyingArray.remove(at: index)
-        }
+            let element = self.underlyingArray.remove(at: index)
 
-        return element
+            DispatchQueue.main.async {
+                completion?(element)
+            }
+        }
     }
 
     public func filter(_ isIncluded: @escaping (T) -> Bool) -> [T] {

@@ -132,9 +132,9 @@ public class PCCurrentUser {
                     // TODO: Use the soon-to-be-created new version of fetchUsersWithIds from the 
                     // userStore
 
-                    self.roomStore.add(room)
-
-                    completionHandler(room, nil)
+                    self.roomStore.add(room) {
+                        completionHandler(room, nil)
+                    }
 
                     let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users")
 

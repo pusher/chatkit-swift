@@ -15,12 +15,12 @@ public class PCRoomStore {
         self.findOrGetRoom(id: id, completionHander: completionHandler)
     }
 
-    func add(_ room: PCRoom) {
-        self.rooms.append(room)
+    func add(_ room: PCRoom, completionHandler: (() -> Void)? = nil) {
+        self.rooms.append(room, completionHandler: completionHandler)
     }
 
-    func remove(id: Int) -> PCRoom? {
-        return self.rooms.remove(where: { $0.id == id })
+    func remove(id: Int, completionHandler: ((PCRoom?) -> Void)? = nil) {
+        return self.rooms.remove(where: { $0.id == id }, completionHandler: completionHandler)
     }
 
     func findOrGetRoom(id: Int, completionHander: @escaping (PCRoom?, Error?) -> Void) {
