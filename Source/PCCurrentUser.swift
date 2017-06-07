@@ -128,7 +128,10 @@ public class PCCurrentUser {
                 do {
                     let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
-                    // TODO: Does added_to_room get triggered?
+                    // TODO: Would it be better if we instead relied on `added_to_room` event?
+                    // TODO: Should we be fetching users in the background here? Probably
+                    self.roomStore.add(room)
+
                     completionHandler(room, nil)
                 } catch let err {
                     completionHandler(nil, err)
