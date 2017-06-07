@@ -102,6 +102,11 @@ public class PCGlobalUserStore {
         }
     }
 
+    // TODO: Need a version of this that first checks the userStore for any of the userIds
+    // provided and then only makes a request to fetch the user information for the userIds
+    // that aren't known about. This would be used in the creatRoom callback and the
+    // addedToRoom parsing function
+
     // This will do the de-duping of userIds
     func fetchUsersWithIds(_ userIds: [String], completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
         guard userIds.count > 0 else {

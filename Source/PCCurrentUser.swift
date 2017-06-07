@@ -129,10 +129,37 @@ public class PCCurrentUser {
                     let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
                     // TODO: Would it be better if we instead relied on `added_to_room` event?
-                    // TODO: Should we be fetching users in the background here? Probably
+                    // TODO: Use the soon-to-be-created new version of fetchUsersWithIds from the 
+                    // userStore
+
                     self.roomStore.add(room)
 
                     completionHandler(room, nil)
+
+                    let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users")
+
+                    room.userIds.forEach { userId in
+                        self.userStore.user(id: userId) { user, err in
+                            guard let user = user, err == nil else {
+                                self.app.logger.log(
+                                    "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
+                                    logLevel: .debug
+                                )
+
+                                if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
+                                    room.subscription?.delegate?.usersUpdated()
+                                }
+
+                                return
+                            }
+
+                            room.userStore.addOrMerge(user)
+
+                            if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
+                                room.subscription?.delegate?.usersUpdated()
+                            }
+                        }
+                    }
                 } catch let err {
                     completionHandler(nil, err)
                 }

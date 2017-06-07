@@ -239,10 +239,36 @@ extension PCUserSubscription {
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
-            // TODO: Should we be fetching users in the background here? Probably
-
             self.currentUser?.roomStore.add(room)
             self.delegate.addedToRoom(room: room)
+
+            // TODO: Use the soon-to-be-created new version of fetchUsersWithIds from the
+            // userStore
+
+            let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users")
+
+            room.userIds.forEach { userId in
+                self.userStore.user(id: userId) { user, err in
+                    guard let user = user, err == nil else {
+                        self.app.logger.log(
+                            "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
+                            logLevel: .debug
+                        )
+
+                        if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
+                            room.subscription?.delegate?.usersUpdated()
+                        }
+
+                        return
+                    }
+
+                    room.userStore.addOrMerge(user)
+
+                    if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
+                        room.subscription?.delegate?.usersUpdated()
+                    }
+                }
+            }
         } catch let err {
             self.app.logger.log(err.localizedDescription, logLevel: .debug)
             self.delegate.error(error: err)
