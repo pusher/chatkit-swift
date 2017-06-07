@@ -141,6 +141,8 @@ extension PCUserSubscription {
             return
         }
 
+        self.currentUser = receivedCurrentUser
+
         var roomsToFetchUsersFor: [PCRoom] = []
 
         let roomsAddedToRoomStoreProgressCounter = PCProgressCounter(
@@ -148,7 +150,14 @@ extension PCUserSubscription {
             labelSuffix: "roomstore-room-append"
         )
 
-        let userIds = roomsPayload.reduce([String]()) { result, roomPayload in
+        guard roomsPayload.count > 0 else {
+            self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
+            return
+        }
+
+        var combinedRoomUserIds = [String]()
+
+        roomsPayload.forEach { roomPayload in
             guard let roomId = roomPayload["id"] as? Int,
                   let roomName = roomPayload["name"] as? String,
                   let roomCreatorUserId = roomPayload["created_by_id"] as? String,
@@ -159,8 +168,9 @@ extension PCUserSubscription {
                 self.app.logger.log("Incomplete room payload in initial_state event: \(roomPayload)", logLevel: .debug)
                 if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
                     self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
+                    self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: receivedCurrentUser)
                 }
-                return result
+                return
             }
 
             let room = PCRoom(
@@ -172,6 +182,8 @@ extension PCUserSubscription {
                 userIds: memberUserIds
             )
 
+            combinedRoomUserIds += memberUserIds
+
             // TODO: Don't think we actually need to create this intermediate array - should be able to
             // use receivedCurrentUser.roomStore.rooms (maybe that doesn't need to use a queue to add
             // items to its underlying array?)
@@ -179,13 +191,14 @@ extension PCUserSubscription {
             receivedCurrentUser.roomStore.add(room) {
                 if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
                     self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
+                    self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: receivedCurrentUser)
                 }
             }
-
-            return result + memberUserIds
         }
+    }
 
-        userStore.initialFetchOfUsersWithIds(userIds) { users, err in
+    fileprivate func fetchInitialUserInformationForUserIds(_ userIds: [String], currentUser: PCCurrentUser) {
+        self.userStore.initialFetchOfUsersWithIds(userIds) { users, err in
             guard err == nil else {
                 self.app.logger.log(
                     "Unable to fetch user information after successful connection: \(err!.localizedDescription)",
@@ -194,15 +207,14 @@ extension PCUserSubscription {
                 return
             }
 
-            // TODO: I think the count should actually be based on the roomsPayload
-            let combinedRoomUsersProgressCounter = PCProgressCounter(totalCount: receivedCurrentUser.roomStore.rooms.count, labelSuffix: "room-users-combined")
+            let combinedRoomUsersProgressCounter = PCProgressCounter(totalCount: currentUser.roomStore.rooms.count, labelSuffix: "room-users-combined")
 
             // TODO: This could be a lot more efficient
-            receivedCurrentUser.roomStore.rooms.forEach { room in
+            currentUser.roomStore.rooms.forEach { room in
                 let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users")
 
                 room.userIds.forEach { userId in
-                    userStore.user(id: userId) { user, err in
+                    self.userStore.user(id: userId) { user, err in
                         guard let user = user, err == nil else {
                             self.app.logger.log(
                                 "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
@@ -212,7 +224,7 @@ extension PCUserSubscription {
                                 room.subscription?.delegate?.usersUpdated()
 
                                 if combinedRoomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
-                                    receivedCurrentUser.setupPresenceSubscription(delegate: self.delegate)
+                                    currentUser.setupPresenceSubscription(delegate: self.delegate)
                                 }
                             }
 
@@ -225,15 +237,13 @@ extension PCUserSubscription {
                             room.subscription?.delegate?.usersUpdated()
 
                             if combinedRoomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
-                                receivedCurrentUser.setupPresenceSubscription(delegate: self.delegate)
+                                currentUser.setupPresenceSubscription(delegate: self.delegate)
                             }
                         }
                     }
                 }
             }
         }
-
-        self.currentUser = receivedCurrentUser
     }
 
     fileprivate func parseAddedToRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
@@ -529,7 +539,6 @@ extension PCUserSubscription {
             }
         }
     }
-
 
     fileprivate func parseTypingStopPayload(_ eventName: PCAPIEventName, data: [String: Any], userId: String) {
         guard let roomId = data["room_id"] as? Int else {
