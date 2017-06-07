@@ -158,6 +158,9 @@ extension PCUserSubscription {
         var combinedRoomUserIds = [String]()
 
         roomsPayload.forEach { roomPayload in
+
+            // TODO: Use the normal deserializer now
+
             guard let roomId = roomPayload["id"] as? Int,
                   let roomName = roomPayload["name"] as? String,
                   let roomCreatorUserId = roomPayload["created_by_id"] as? String,

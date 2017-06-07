@@ -34,7 +34,7 @@ public class PCRoom {
         createdAt: String,
         updatedAt: String,
         deletedAt: String? = nil,
-        userIds: [String] = []
+        userIds: [String]? = nil
     ) {
         self.id = id
         self.name = name
@@ -42,7 +42,7 @@ public class PCRoom {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
-        self.userIds = userIds
+        self.userIds = userIds ?? []
         self.userStore = PCRoomUserStore()
     }
 

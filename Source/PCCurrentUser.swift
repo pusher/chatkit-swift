@@ -314,6 +314,7 @@ public class PCCurrentUser {
 
                 let rooms = roomsPayload.flatMap { roomPayload -> PCRoom? in
                     do {
+                        // TODO: Do we need to fetch users in the room here?
                         return try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
                     } catch let err {
                         self.app.logger.log(err.localizedDescription, logLevel: .debug)
