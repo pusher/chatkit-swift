@@ -60,7 +60,6 @@ public class PCPresenceSubscription {
             parsePresenceUpdatePayload(eventName, data: apiEventData, userStore: self.userStore)
         case .join_room_presence_update:
             parseJoinRoomPresenceUpdatePayload(eventName, data: apiEventData, userStore: self.userStore)
-        // TODO: Add case for added_to_room or whatever it's called
         }
     }
 
