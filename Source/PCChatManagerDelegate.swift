@@ -1,3 +1,5 @@
+import Foundation
+
 public protocol PCChatManagerDelegate {
     // TODO: Remove? Currently we ignore, I think
 //    func messageReceived(room: PCRoom, message: PCMessage)

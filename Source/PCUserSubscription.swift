@@ -1,3 +1,4 @@
+import Foundation
 import PusherPlatform
 
 public class PCUserSubscription {
@@ -48,13 +49,13 @@ public class PCUserSubscription {
             return
         }
 
-        guard let apiEventData = json["data"] as? [String: Any] else {
-            self.app.logger.log("Data missing for API event: \(json)", logLevel: .debug)
+        guard let eventName = PCAPIEventName(rawValue: eventNameString) else {
+            self.app.logger.log("Unsupported API event name received: \(eventNameString)", logLevel: .debug)
             return
         }
 
-        guard let eventName = PCAPIEventName(rawValue: eventNameString) else {
-            self.app.logger.log("Unsupported API event name received: \(eventNameString)", logLevel: .debug)
+        guard let apiEventData = json["data"] as? [String: Any] else {
+            self.app.logger.log("Data missing for API event: \(json)", logLevel: .debug)
             return
         }
 
@@ -152,6 +153,7 @@ extension PCUserSubscription {
 
         guard roomsPayload.count > 0 else {
             self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
+            receivedCurrentUser.setupPresenceSubscription(delegate: self.delegate)
             return
         }
 

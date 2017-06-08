@@ -78,6 +78,31 @@ public class PCGlobalUserStore {
         )
     }
 
+    // TODO: So much duplication
+    func handleInitialPresencePayloadsAfterRoomJoin(_ payloads: [PCPresencePayload], completionHandler: @escaping () -> Void) {
+        let roomJoinedPresenceProgressCounter = PCProgressCounter(totalCount: payloads.count, labelSuffix: "room-joined-presence-payload")
+
+        payloads.forEach { payload in
+            self.user(id: payload.userId) { user, err in
+                guard let user = user, err == nil else {
+                    self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                    if roomJoinedPresenceProgressCounter.incrementFailedAndCheckIfFinished() {
+                        completionHandler()
+                    }
+
+                    return
+                }
+
+                user.presenceState = payload.state
+                user.lastSeenAt = payload.lastSeenAt
+
+                if roomJoinedPresenceProgressCounter.incrementSuccessAndCheckIfFinished() {
+                    completionHandler()
+                }
+            }
+        }
+    }
+
     func handleInitialPresencePayloads(_ payloads: [PCPresencePayload], completionHandler: @escaping () -> Void) {
         let initialPresenceProgressCounter = PCProgressCounter(totalCount: payloads.count, labelSuffix: "initial-presence-payload")
 

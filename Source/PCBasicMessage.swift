@@ -1,3 +1,5 @@
+import Foundation
+
 struct PCBasicMessage {
     let id: Int
     let senderId: String

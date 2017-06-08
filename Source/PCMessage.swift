@@ -1,3 +1,5 @@
+import Foundation
+
 public class PCMessage {
     public let id: Int
     public let text: String

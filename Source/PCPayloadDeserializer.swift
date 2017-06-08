@@ -45,7 +45,7 @@ struct PCPayloadDeserializer {
             createdAt: roomCreatedAt,
             updatedAt: roomUpdatedAt,
             deletedAt: roomPayload["deleted_at"] as? String,
-            userIds: roomPayload["members_user_ids"] as? [String]
+            userIds: roomPayload["member_user_ids"] as? [String]
         )
     }
 

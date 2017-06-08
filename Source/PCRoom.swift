@@ -1,3 +1,4 @@
+import Foundation
 import PusherPlatform
 
 public class PCRoom {
@@ -21,6 +22,8 @@ public class PCRoom {
         get {
             // TODO: Is this going to be expensive if this is used as a datasource for a
             // tableview, or similar?
+            // TODO: This will also not work well if references to users are stored by
+            // a customer
             return Array(self.userStore.users).sorted(by: { $0.0.id > $0.1.id })
         }
     }

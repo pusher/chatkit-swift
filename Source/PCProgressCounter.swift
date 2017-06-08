@@ -1,3 +1,5 @@
+import Foundation
+
 class PCProgressCounter {
     private var queue: DispatchQueue
     let totalCount: Int

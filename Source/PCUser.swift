@@ -1,3 +1,5 @@
+import Foundation
+
 public class PCUser {
     public let id: String
     public let createdAt: String

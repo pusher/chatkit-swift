@@ -1,3 +1,4 @@
+import Foundation
 import PusherPlatform
 
 @objc public class ChatManager: NSObject {

@@ -1,3 +1,4 @@
+import Foundation
 import PusherPlatform
 
 public class PCPresenceSubscription {
@@ -40,13 +41,13 @@ public class PCPresenceSubscription {
             return
         }
 
-        guard let apiEventData = json["data"] as? [String: Any] else {
-            self.app.logger.log("Data missing for API event: \(json)", logLevel: .debug)
+        guard let eventName = PCPresenceEventName(rawValue: eventNameString) else {
+            self.app.logger.log("Unsupported API event name received: \(eventNameString)", logLevel: .debug)
             return
         }
 
-        guard let eventName = PCPresenceEventName(rawValue: eventNameString) else {
-            self.app.logger.log("Unsupported API event name received: \(eventNameString)", logLevel: .debug)
+        guard let apiEventData = json["data"] as? [String: Any] else {
+            self.app.logger.log("Data missing for API event: \(json)", logLevel: .debug)
             return
         }
 
@@ -57,6 +58,9 @@ public class PCPresenceSubscription {
             parseInitialStatePayload(eventName, data: apiEventData, userStore: self.userStore)
         case .presence_update:
             parsePresenceUpdatePayload(eventName, data: apiEventData, userStore: self.userStore)
+        case .join_room_presence_update:
+            parseJoinRoomPresenceUpdatePayload(eventName, data: apiEventData, userStore: self.userStore)
+        // TODO: Add case for added_to_room or whatever it's called
         }
     }
 
@@ -84,6 +88,11 @@ extension PCPresenceSubscription {
                 self.delegate?.error(error: err)
                 return nil
             }
+        }
+
+        guard userStates.count > 0 else {
+            self.app.logger.log("No presence user states to process", logLevel: .verbose)
+            return
         }
 
         userStore.handleInitialPresencePayloads(userStates) {
@@ -140,11 +149,49 @@ extension PCPresenceSubscription {
         }
     }
 
+    // TODO: So much duplication
+    fileprivate func parseJoinRoomPresenceUpdatePayload(_ eventName: PCPresenceEventName, data: [String: Any], userStore: PCGlobalUserStore) {
+        guard let userStatesPayload = data["user_states"] as? [[String: Any]] else {
+            let error = PCPresenceEventError.keyNotPresentInEventPayload(
+                key: "user_states",
+                apiEventName: eventName,
+                payload: data
+            )
+
+            self.app.logger.log(error.localizedDescription, logLevel: .debug)
+            self.delegate?.error(error: error)
+            return
+        }
+
+        let userStates = userStatesPayload.flatMap { userStatePayload -> PCPresencePayload? in
+            do {
+                return try PCPayloadDeserializer.createPresencePayloadFromPayload(userStatePayload)
+            } catch let err {
+                self.app.logger.log(err.localizedDescription, logLevel: .debug)
+                self.delegate?.error(error: err)
+                return nil
+            }
+        }
+
+        guard userStates.count > 0 else {
+            self.app.logger.log("No presence user states to process", logLevel: .verbose)
+            return
+        }
+
+        // TODO: So much duplication
+        userStore.handleInitialPresencePayloadsAfterRoomJoin(userStates) {
+            self.roomStore.rooms.forEach { room in
+                room.subscription?.delegate?.usersUpdated()
+            }
+        }
+    }
+
 }
 
 public enum PCPresenceEventName: String {
     case initial_state
     case presence_update
+    case join_room_presence_update
 }
 
 public enum PCPresenceEventError: Error {

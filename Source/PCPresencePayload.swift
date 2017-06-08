@@ -1,3 +1,5 @@
+import Foundation
+
 struct PCPresencePayload {
     let userId: String
     let state: PCPresenceState
