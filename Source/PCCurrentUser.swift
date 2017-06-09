@@ -296,9 +296,20 @@ public class PCCurrentUser {
         self.joinOrLeaveRoom(roomId: roomId, membershipChange: .leave, completionHandler: completionHandler)
     }
 
-    public func getRooms(completionHandler: @escaping ([PCRoom]?, Error?) -> Void) {
+    public func getAllRooms(completionHandler: @escaping ([PCRoom]?, Error?) -> Void) {
+        self.getUserRooms(onlyJoinable: false, completionHandler: completionHandler)
+    }
+
+    public func getJoinableRooms(completionHandler: @escaping ([PCRoom]?, Error?) -> Void) {
+        self.getUserRooms(onlyJoinable: true, completionHandler: completionHandler)
+    }
+
+    fileprivate func getUserRooms(onlyJoinable: Bool = false, completionHandler: @escaping ([PCRoom]?, Error?) -> Void) {
         let path = "/\(ChatManager.namespace)/rooms"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
+
+        let joinableQueryItemValue = onlyJoinable ? "true" : "false"
+        generalRequest.addQueryItems([URLQueryItem(name: "joinable", value: joinableQueryItemValue)])
 
         self.app.requestWithRetry(
             using: generalRequest,
