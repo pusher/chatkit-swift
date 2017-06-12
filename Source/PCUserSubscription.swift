@@ -160,41 +160,27 @@ extension PCUserSubscription {
         var combinedRoomUserIds = [String]()
 
         roomsPayload.forEach { roomPayload in
+            do {
+                let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
-            // TODO: Use the normal deserializer now
+                combinedRoomUserIds += room.userIds
 
-            guard let roomId = roomPayload["id"] as? Int,
-                  let roomName = roomPayload["name"] as? String,
-                  let roomCreatorUserId = roomPayload["created_by_id"] as? String,
-                  let roomCreatedAt = roomPayload["created_at"] as? String,
-                  let roomUpdatedAt = roomPayload["updated_at"] as? String,
-                  let memberUserIds = roomPayload["member_user_ids"] as? [String]
-            else {
-                self.app.logger.log("Incomplete room payload in initial_state event: \(roomPayload)", logLevel: .debug)
-                if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
-                    self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
-                    self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: receivedCurrentUser)
+                // TODO: Don't think we actually need to create this intermediate array - should be able to
+                // use receivedCurrentUser.roomStore.rooms (maybe that doesn't need to use a queue to add
+                // items to its underlying array?)
+                roomsToFetchUsersFor.append(room)
+                receivedCurrentUser.roomStore.add(room) {
+                    if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
+                        self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
+                        self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: receivedCurrentUser)
+                    }
                 }
-                return
-            }
-
-            let room = PCRoom(
-                id: roomId,
-                name: roomName,
-                createdByUserId: roomCreatorUserId,
-                createdAt: roomCreatedAt,
-                updatedAt: roomUpdatedAt,
-                userIds: memberUserIds
-            )
-
-            combinedRoomUserIds += memberUserIds
-
-            // TODO: Don't think we actually need to create this intermediate array - should be able to
-            // use receivedCurrentUser.roomStore.rooms (maybe that doesn't need to use a queue to add
-            // items to its underlying array?)
-            roomsToFetchUsersFor.append(room)
-            receivedCurrentUser.roomStore.add(room) {
-                if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
+            } catch let err {
+                self.app.logger.log(
+                    "Incomplete room payload in initial_state event: \(roomPayload). Error: \(err.localizedDescription)",
+                    logLevel: .debug
+                )
+                if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
                     self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
                     self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: receivedCurrentUser)
                 }
@@ -348,8 +334,6 @@ extension PCUserSubscription {
                 }
 
                 roomToUpdate.updateWithPropertiesOfRoom(room)
-
-                // TODO: Should this always be called?
                 self.delegate.roomUpdated(room: roomToUpdate)
             }
         } catch let err {

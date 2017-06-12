@@ -9,14 +9,11 @@ class PCBasicMessageEnricher {
     fileprivate var completionOrderList: [Int] = []
     fileprivate var messageIdToCompletionHandlers: [Int: (PCMessage?, Error?) -> Void] = [:]
     fileprivate var enrichedMessagesAwaitingCompletionCalls: [Int: PCMessageEnrichmentResult] = [:]
-
-    // TODO: What should the QoS be here?
     fileprivate let messageEnrichmentQueue = DispatchQueue(label: "com.pusher.chat-api.message-enrichment")
 
     fileprivate var userIdsBeingRetrieved: [String] = []
     fileprivate var userIdsToBasicMessageIds: [String: [Int]] = [:]
     fileprivate var messagesAwaitingEnrichmentDependentOnUserRetrieval: [Int: PCBasicMessage] = [:]
-
     fileprivate let userRetrievalQueue = DispatchQueue(label: "com.pusher.chat-api.user-retrieval")
 
     init(userStore: PCGlobalUserStore, room: PCRoom, logger: PPLogger) {
@@ -61,7 +58,10 @@ class PCBasicMessageEnricher {
 
                 self.userRetrievalQueue.async(flags: .barrier) {
                     guard let basicMessageIds = self.userIdsToBasicMessageIds[basicMessageSenderId] else {
-                        // TODO: Log
+                        self.logger.log(
+                            "Fetched user information for user with id \(user.id) but no messages needed information for this user",
+                            logLevel: .verbose
+                        )
                         return
                     }
 
@@ -107,6 +107,10 @@ class PCBasicMessageEnricher {
              guard id == nextIdToComplete else {
                 // If the message id received isn't the next to have its completionHandler called
                 // then return as we've already stored the result so it can be used later
+                self.logger.log(
+                    "Waiting to call completion handler for message id \(id) as there are other older messages still to be enriched",
+                    logLevel: .verbose
+                )
                 return
             }
 

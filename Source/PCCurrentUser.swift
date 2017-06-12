@@ -171,48 +171,33 @@ public class PCCurrentUser {
         )
     }
 
-    // TODO: How to make unambiguous if you just want to pass in a name for the room?
-
-//    public func createRoom(
-//        name: String,
-//        delegate: PCRoomDelegate? = nil,
-//        addUsers users: [PCUser]? = nil,
-//        completionHandler: @escaping (PCRoom?, Error?) -> Void
-//    ) {
-//        let userIdsToAdd = users?.flatMap { return $0.id }
-//        self.createRoom(name: name, delegate: delegate, addUserIds: userIdsToAdd, completionHandler: completionHandler)
-//    }
-
-    // TODO: How to setup completion handlers when return payload is unclear - do we
-    // just optionally return an error or do we return User(s) / Room?
-
 
     // MARK: Room membership-related interactions
 
-    public func add(_ user: PCUser, to room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
-        self.add([user], to: room, completionHandler: completionHandler)
+    public func addUser(_ user: PCUser, to room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
+        self.addUsers([user], to: room, completionHandler: completionHandler)
     }
 
-    public func add(_ users: [PCUser], to room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
+    public func addUsers(_ users: [PCUser], to room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
         let userIds = users.map { $0.id }
-        self.add(userIds: userIds, to: room.id, completionHandler: completionHandler)
+        self.addUsers(ids: userIds, to: room.id, completionHandler: completionHandler)
     }
 
-    public func add(userIds: [String], to roomId: Int, completionHandler: @escaping (Error?) -> Void) {
-        self.addOrRemoveUsers(in: roomId, userIds: userIds, membershipChange: .add, completionHandler: completionHandler)
+    public func addUsers(ids: [String], to roomId: Int, completionHandler: @escaping (Error?) -> Void) {
+        self.addOrRemoveUsers(in: roomId, userIds: ids, membershipChange: .add, completionHandler: completionHandler)
     }
 
-    public func remove(_ user: PCUser, from room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
-        self.remove([user], from: room, completionHandler: completionHandler)
+    public func removeUser(_ user: PCUser, from room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
+        self.removeUsers([user], from: room, completionHandler: completionHandler)
     }
 
-    public func remove(_ users: [PCUser], from room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
+    public func removeUsers(_ users: [PCUser], from room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
         let userIds = users.map { $0.id }
-        self.remove(userIds: userIds, from: room, completionHandler: completionHandler)
+        self.removeUsers(ids: userIds, from: room, completionHandler: completionHandler)
     }
 
-    public func remove(userIds: [String], from room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
-        self.addOrRemoveUsers(in: room.id, userIds: userIds, membershipChange: .remove, completionHandler: completionHandler)
+    public func removeUsers(ids: [String], from room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
+        self.addOrRemoveUsers(in: room.id, userIds: ids, membershipChange: .remove, completionHandler: completionHandler)
     }
 
     fileprivate func addOrRemoveUsers(
@@ -254,17 +239,24 @@ public class PCCurrentUser {
         case remove
     }
 
-    fileprivate enum PCCurrentUserMembershipChange: String {
-        case join
-        case leave
+    public func joinRoom(_ room: PCRoom, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
+        self.joinRoom(roomId: room.id, completionHandler: completionHandler)
     }
 
-    fileprivate func joinOrLeaveRoom(
-        roomId: Int,
-        membershipChange: PCCurrentUserMembershipChange,
-        completionHandler: @escaping (Error?) -> Void
-    ) {
-        let path = "/\(ChatManager.namespace)/users/\(self.pathFriendlyId)/rooms/\(roomId)/\(membershipChange.rawValue)"
+    public func joinRoom(id: Int, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
+        self.joinRoom(roomId: id, completionHandler: completionHandler)
+    }
+
+    public func leaveRoom(_ room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
+        self.leaveRoom(roomId: room.id, completionHandler: completionHandler)
+    }
+
+    public func leaveRoom(id roomId: Int, completionHandler: @escaping (Error?) -> Void) {
+        self.leaveRoom(id: roomId, completionHandler: completionHandler)
+    }
+
+    fileprivate func leaveRoom(roomId: Int, completionHandler: @escaping (Error?) -> Void) {
+        let path = "/\(ChatManager.namespace)/users/\(self.pathFriendlyId)/rooms/\(roomId)/leave"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
 
         self.app.requestWithRetry(
@@ -280,23 +272,44 @@ public class PCCurrentUser {
         )
     }
 
-    public func join(room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
-        self.joinOrLeaveRoom(roomId: room.id, membershipChange: .join, completionHandler: completionHandler)
+    fileprivate func joinRoom(roomId: Int, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
+        let path = "/\(ChatManager.namespace)/users/\(self.pathFriendlyId)/rooms/\(roomId)/join"
+        let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
+
+        self.app.requestWithRetry(
+            using: generalRequest,
+            onSuccess: { data in
+                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
+                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
+                    return
+                }
+
+                guard let roomPayload = jsonObject as? [String: Any] else {
+                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
+                    return
+                }
+
+                do {
+                    // TODO: Do we need to fetch users in the room here?
+
+                    let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
+                    completionHandler(room, nil)
+                } catch let err {
+                    self.app.logger.log(err.localizedDescription, logLevel: .debug)
+                    completionHandler(nil, err)
+                    return
+                }
+            },
+            onError: { error in
+                completionHandler(nil, error)
+            }
+        )
     }
 
-    public func join(roomId: Int, completionHandler: @escaping (Error?) -> Void) {
-        self.joinOrLeaveRoom(roomId: roomId, membershipChange: .join, completionHandler: completionHandler)
-    }
 
-    public func leave(room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
-        self.joinOrLeaveRoom(roomId: room.id, membershipChange: .leave, completionHandler: completionHandler)
-    }
+    // MARK: Room fetching
 
-    public func leave(roomId: Int, completionHandler: @escaping (Error?) -> Void) {
-        self.joinOrLeaveRoom(roomId: roomId, membershipChange: .leave, completionHandler: completionHandler)
-    }
-
-    public func getAllRooms(completionHandler: @escaping ([PCRoom]?, Error?) -> Void) {
+    public func getJoinedRooms(completionHandler: @escaping ([PCRoom]?, Error?) -> Void) {
         self.getUserRooms(onlyJoinable: false, completionHandler: completionHandler)
     }
 
@@ -305,14 +318,23 @@ public class PCCurrentUser {
     }
 
     fileprivate func getUserRooms(onlyJoinable: Bool = false, completionHandler: @escaping ([PCRoom]?, Error?) -> Void) {
-        let path = "/\(ChatManager.namespace)/rooms"
+        let path = "/\(ChatManager.namespace)/users/\(self.pathFriendlyId)/rooms"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
         let joinableQueryItemValue = onlyJoinable ? "true" : "false"
         generalRequest.addQueryItems([URLQueryItem(name: "joinable", value: joinableQueryItemValue)])
+        self.getRooms(request: generalRequest, completionHandler: completionHandler)
+    }
 
+    public func getAllRooms(completionHandler: @escaping ([PCRoom]?, Error?) -> Void) {
+        let path = "/\(ChatManager.namespace)/rooms"
+        let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
+        self.getRooms(request: generalRequest, completionHandler: completionHandler)
+    }
+
+    fileprivate func getRooms(request: PPRequestOptions, completionHandler: @escaping ([PCRoom]?, Error?) -> Void) {
         self.app.requestWithRetry(
-            using: generalRequest,
+            using: request,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
                     completionHandler(nil, PCError.failedToDeserializeJSON(data))

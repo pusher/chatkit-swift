@@ -15,7 +15,7 @@ import PusherPlatform
 
     let userStore: PCGlobalUserStore
 
-    // TODO: Do we need this here?
+    // TODO: Do we need this here? Should it instead just live on the PCCurrentUser?
     public var users: Set<PCUser> {
         get {
             return self.userStore.users

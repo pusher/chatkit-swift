@@ -4,11 +4,7 @@ import PusherPlatform
 public class PCRoomSubscription {
     public var delegate: PCRoomDelegate?
     let resumableSubscription: PPResumableSubscription
-
-    // TODO: This should probably be updated automatically if the app logger is updated
-
     public var logger: PPLogger
-
     let basicMessageEnricher: PCBasicMessageEnricher
 
     init(
