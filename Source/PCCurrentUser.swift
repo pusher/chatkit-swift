@@ -293,7 +293,9 @@ public class PCCurrentUser {
                     // TODO: Do we need to fetch users in the room here?
 
                     let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-                    completionHandler(room, nil)
+                    self.roomStore.add(room) {
+                        completionHandler(room, nil)
+                    }
                 } catch let err {
                     self.app.logger.log(err.localizedDescription, logLevel: .debug)
                     completionHandler(nil, err)
