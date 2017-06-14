@@ -15,8 +15,17 @@ public class PCRoomStore {
         self.findOrGetRoom(id: id, completionHander: completionHandler)
     }
 
-    func add(_ room: PCRoom, completionHandler: (() -> Void)? = nil) {
-        self.rooms.append(room, completionHandler: completionHandler)
+    func addOrMerge(_ room: PCRoom, completionHandler: @escaping (PCRoom) -> Void) {
+
+        // TODO: Maybe we need to create a synchronisation point here? Or maybe changing the
+        // rooms to be an ordered set would make it easier?
+
+        if let existingRoom = self.rooms.first(where: { $0.id == room.id }) {
+            existingRoom.updateWithPropertiesOfRoom(room)
+            completionHandler(existingRoom)
+        } else {
+            self.rooms.appendAndComplete(room, completionHandler: completionHandler)
+        }
     }
 
     func remove(id: Int, completionHandler: ((PCRoom?) -> Void)? = nil) {

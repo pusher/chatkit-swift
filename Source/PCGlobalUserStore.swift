@@ -93,8 +93,7 @@ public class PCGlobalUserStore {
                     return
                 }
 
-                user.presenceState = payload.state
-                user.lastSeenAt = payload.lastSeenAt
+                user.updatePresenceInfoIfAppropriate(newInfoPayload: payload)
 
                 if roomJoinedPresenceProgressCounter.incrementSuccessAndCheckIfFinished() {
                     completionHandler()
@@ -117,8 +116,7 @@ public class PCGlobalUserStore {
                     return
                 }
 
-                user.presenceState = payload.state
-                user.lastSeenAt = payload.lastSeenAt
+                user.updatePresenceInfoIfAppropriate(newInfoPayload: payload)
 
                 if initialPresenceProgressCounter.incrementSuccessAndCheckIfFinished() {
                     completionHandler()
@@ -133,15 +131,14 @@ public class PCGlobalUserStore {
     // addedToRoom parsing function
 
     // This will do the de-duping of userIds
-    func fetchUsersWithIds(_ userIds: [String], completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
+    func fetchUsersWithIds(_ userIds: Set<String>, completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
         guard userIds.count > 0 else {
             self.app.logger.log("Requested to fetch users for a list of user ids which was empty", logLevel: .debug)
             completionHandler?([], nil)
             return
         }
 
-        let uniqueUserIds = Array(Set<String>(userIds))
-        let userIdsString = uniqueUserIds.joined(separator: ",")
+        let userIdsString = userIds.joined(separator: ",")
 
         let path = "/\(ChatManager.namespace)/users"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
@@ -191,7 +188,7 @@ public class PCGlobalUserStore {
         )
     }
 
-    func initialFetchOfUsersWithIds(_ userIds: [String], completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
+    func initialFetchOfUsersWithIds(_ userIds: Set<String>, completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
         self.fetchUsersWithIds(userIds, completionHandler: completionHandler)
     }
 

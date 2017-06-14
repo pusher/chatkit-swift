@@ -28,12 +28,19 @@ public class PCUser {
 
     // TODO: Could use inout?
     func updateWithPropertiesOfUser(_ user: PCUser) -> PCUser {
-        if self.presenceState != .unknown {
+        if user.presenceState != .unknown {
             self.presenceState = user.presenceState
             self.lastSeenAt = user.lastSeenAt
         }
 
         return self
+    }
+
+    func updatePresenceInfoIfAppropriate(newInfoPayload: PCPresencePayload) {
+        if newInfoPayload.state != .unknown {
+            self.presenceState = newInfoPayload.state
+            self.lastSeenAt = newInfoPayload.lastSeenAt
+        }
     }
 }
 

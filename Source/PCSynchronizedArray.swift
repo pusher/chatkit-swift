@@ -5,7 +5,7 @@ public class PCSynchronizedArray<T> {
     private let accessQueue = DispatchQueue(label: "synchronized.array.access", attributes: .concurrent)
 
     public func append(_ newElement: T, completionHandler: (() -> Void)? = nil) {
-        // QOS is userInitiated here, mainly so that when the rooms are received as part
+        // QoS is userInitiated here, mainly so that when the rooms are received as part
         // of the initial_state for a user subscription they are added to the room store
         // before the connectCompletionHandlers are called, where it would be likely that
         // the rooms property of the currentUser would be accessed - maybe there's a better
@@ -15,6 +15,19 @@ public class PCSynchronizedArray<T> {
 
             DispatchQueue.main.async {
                 completionHandler?()
+            }
+        }
+    }
+
+    func appendAndComplete(_ newElement: T, completionHandler: @escaping (T) -> Void) {
+
+        // TODO: Does this need a userInitiated QoS as well?
+
+        self.accessQueue.async(qos: .userInitiated, flags: .barrier) {
+            self.underlyingArray.append(newElement)
+
+            DispatchQueue.main.async {
+                completionHandler(newElement)
             }
         }
     }

@@ -13,7 +13,7 @@ public class PCRoom {
 
     // TODO: This should be a Set
     // TODO: Do we need both userIds and users? Probably
-    public internal(set) var userIds: [String]
+    public internal(set) var userIds: Set<String>
 
     // TODO: Should each Room instead have access to the user store and then the users
     // property would become a func with a completion handler that queried the user store
@@ -37,7 +37,7 @@ public class PCRoom {
         createdAt: String,
         updatedAt: String,
         deletedAt: String? = nil,
-        userIds: [String]? = nil
+        userIds: Set<String>? = nil
     ) {
         self.id = id
         self.name = name
@@ -53,5 +53,6 @@ public class PCRoom {
         self.name = room.name
         self.updatedAt = room.updatedAt
         self.deletedAt = room.deletedAt
+        self.userIds = room.userIds
     }
 }

@@ -4,9 +4,9 @@ import PusherPlatform
 public class PCCurrentUser {
     public let id: String
     public let createdAt: String
-    public let updatedAt: String
-    public let name: String?
-    public let customData: [String: Any]?
+    public var updatedAt: String
+    public var name: String?
+    public var customData: [String: Any]?
 
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
@@ -57,6 +57,12 @@ public class PCCurrentUser {
 
         // TODO: When can percent encoding fail?
         self.pathFriendlyId = id.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? id
+    }
+
+    func updateWithPropertiesOf(_ currentUser: PCCurrentUser) {
+        self.updatedAt = currentUser.updatedAt
+        self.name = currentUser.name
+        self.customData = currentUser.customData
     }
 
     func setupPresenceSubscription(delegate: PCChatManagerDelegate) {
@@ -128,39 +134,8 @@ public class PCCurrentUser {
 
                 do {
                     let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-
-                    // TODO: Would it be better if we instead relied on `added_to_room` event?
-                    // TODO: Use the soon-to-be-created new version of fetchUsersWithIds from the 
-                    // userStore
-
-                    self.roomStore.add(room) {
-                        completionHandler(room, nil)
-                    }
-
-                    let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users")
-
-                    room.userIds.forEach { userId in
-                        self.userStore.user(id: userId) { user, err in
-                            guard let user = user, err == nil else {
-                                self.app.logger.log(
-                                    "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
-                                    logLevel: .debug
-                                )
-
-                                if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
-                                    room.subscription?.delegate?.usersUpdated()
-                                }
-
-                                return
-                            }
-
-                            room.userStore.addOrMerge(user)
-
-                            if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
-                                room.subscription?.delegate?.usersUpdated()
-                            }
-                        }
-                    }
+                    self.roomStore.addOrMerge(room) { room in completionHandler(room, nil) }
+                    self.populateRoomUserStore(room)
                 } catch let err {
                     completionHandler(nil, err)
                 }
@@ -247,6 +222,69 @@ public class PCCurrentUser {
         self.joinRoom(roomId: id, completionHandler: completionHandler)
     }
 
+    fileprivate func joinRoom(roomId: Int, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
+        let path = "/\(ChatManager.namespace)/users/\(self.pathFriendlyId)/rooms/\(roomId)/join"
+        let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
+
+        self.app.requestWithRetry(
+            using: generalRequest,
+            onSuccess: { data in
+                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
+                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
+                    return
+                }
+
+                guard let roomPayload = jsonObject as? [String: Any] else {
+                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
+                    return
+                }
+
+                do {
+                    let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
+                    self.roomStore.addOrMerge(room) { room in completionHandler(room, nil) }
+                    self.populateRoomUserStore(room)
+                } catch let err {
+                    self.app.logger.log(err.localizedDescription, logLevel: .debug)
+                    completionHandler(nil, err)
+                    return
+                }
+            },
+            onError: { error in
+                completionHandler(nil, error)
+            }
+        )
+    }
+
+    fileprivate func populateRoomUserStore(_ room: PCRoom) {
+        let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users")
+
+        // TODO: Use the soon-to-be-created new version of fetchUsersWithIds from the
+        // userStore
+
+        room.userIds.forEach { userId in
+            self.userStore.user(id: userId) { user, err in
+                guard let user = user, err == nil else {
+                    self.app.logger.log(
+                        "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
+                        logLevel: .debug
+                    )
+
+                    if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
+                        room.subscription?.delegate?.usersUpdated()
+                    }
+
+                    return
+                }
+
+                room.userStore.addOrMerge(user)
+
+                if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
+                    room.subscription?.delegate?.usersUpdated()
+                }
+            }
+        }
+    }
+
     public func leaveRoom(_ room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
         self.leaveRoom(roomId: room.id, completionHandler: completionHandler)
     }
@@ -268,42 +306,6 @@ public class PCCurrentUser {
             },
             onError: { error in
                 completionHandler(error)
-            }
-        )
-    }
-
-    fileprivate func joinRoom(roomId: Int, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
-        let path = "/\(ChatManager.namespace)/users/\(self.pathFriendlyId)/rooms/\(roomId)/join"
-        let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
-
-        self.app.requestWithRetry(
-            using: generalRequest,
-            onSuccess: { data in
-                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
-                    return
-                }
-
-                guard let roomPayload = jsonObject as? [String: Any] else {
-                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
-                    return
-                }
-
-                do {
-                    // TODO: Do we need to fetch users in the room here?
-
-                    let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-                    self.roomStore.add(room) {
-                        completionHandler(room, nil)
-                    }
-                } catch let err {
-                    self.app.logger.log(err.localizedDescription, logLevel: .debug)
-                    completionHandler(nil, err)
-                    return
-                }
-            },
-            onError: { error in
-                completionHandler(nil, error)
             }
         )
     }
@@ -574,7 +576,9 @@ public class PCCurrentUser {
                     }
                 }
 
-                self.userStore.fetchUsersWithIds(messageUserIds) { _, err in
+                let messageUserIdsSet = Set<String>(messageUserIds)
+
+                self.userStore.fetchUsersWithIds(messageUserIdsSet) { _, err in
                     if let err = err {
                         self.app.logger.log(err.localizedDescription, logLevel: .debug)
                     }

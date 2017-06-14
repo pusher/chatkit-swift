@@ -38,6 +38,12 @@ struct PCPayloadDeserializer {
             throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCRoom.self), payload: roomPayload)
         }
 
+        var memberUserIdsSet: Set<String>? = nil
+
+        if let memberUserIds = roomPayload["member_user_ids"] as? [String] {
+            memberUserIdsSet = Set<String>(memberUserIds)
+        }
+
         return PCRoom(
             id: roomId,
             name: roomName,
@@ -45,7 +51,7 @@ struct PCPayloadDeserializer {
             createdAt: roomCreatedAt,
             updatedAt: roomUpdatedAt,
             deletedAt: roomPayload["deleted_at"] as? String,
-            userIds: roomPayload["member_user_ids"] as? [String]
+            userIds: memberUserIdsSet
         )
     }
 

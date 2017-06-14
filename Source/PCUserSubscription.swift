@@ -142,14 +142,11 @@ extension PCUserSubscription {
             return
         }
 
-        self.currentUser = receivedCurrentUser
-
-        var roomsToFetchUsersFor: [PCRoom] = []
-
-        let roomsAddedToRoomStoreProgressCounter = PCProgressCounter(
-            totalCount: roomsPayload.count,
-            labelSuffix: "roomstore-room-append"
-        )
+        if let currentUser = self.currentUser {
+            currentUser.updateWithPropertiesOf(receivedCurrentUser)
+        } else {
+            self.currentUser = receivedCurrentUser
+        }
 
         guard roomsPayload.count > 0 else {
             self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
@@ -157,19 +154,20 @@ extension PCUserSubscription {
             return
         }
 
-        var combinedRoomUserIds = [String]()
+        let roomsAddedToRoomStoreProgressCounter = PCProgressCounter(
+            totalCount: roomsPayload.count,
+            labelSuffix: "roomstore-room-append"
+        )
+
+        var combinedRoomUserIds = Set<String>()
 
         roomsPayload.forEach { roomPayload in
             do {
                 let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
-                combinedRoomUserIds += room.userIds
+                combinedRoomUserIds.formUnion(room.userIds)
 
-                // TODO: Don't think we actually need to create this intermediate array - should be able to
-                // use receivedCurrentUser.roomStore.rooms (maybe that doesn't need to use a queue to add
-                // items to its underlying array?)
-                roomsToFetchUsersFor.append(room)
-                receivedCurrentUser.roomStore.add(room) {
+                receivedCurrentUser.roomStore.addOrMerge(room) { room in
                     if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
                         self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
                         self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: receivedCurrentUser)
@@ -188,7 +186,7 @@ extension PCUserSubscription {
         }
     }
 
-    fileprivate func fetchInitialUserInformationForUserIds(_ userIds: [String], currentUser: PCCurrentUser) {
+    fileprivate func fetchInitialUserInformationForUserIds(_ userIds: Set<String>, currentUser: PCCurrentUser) {
         self.userStore.initialFetchOfUsersWithIds(userIds) { users, err in
             guard err == nil else {
                 self.app.logger.log(
@@ -252,7 +250,7 @@ extension PCUserSubscription {
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
-            self.currentUser?.roomStore.add(room) {
+            self.currentUser?.roomStore.addOrMerge(room) { room in
                 self.delegate.addedToRoom(room: room)
             }
 
@@ -419,11 +417,11 @@ extension PCUserSubscription {
                     return
                 }
 
-                room.userStore.addOrMerge(user)
-                room.userIds.append(user.id)
+                let addedOrMergedUser = room.userStore.addOrMerge(user)
+                room.userIds.insert(addedOrMergedUser.id)
 
-                self.delegate.userJoinedRoom(room: room, user: user)
-                room.subscription?.delegate?.userJoined(user: user)
+                self.delegate.userJoinedRoom(room: room, user: addedOrMergedUser)
+                room.subscription?.delegate?.userJoined(user: addedOrMergedUser)
             }
         }
     }

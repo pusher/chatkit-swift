@@ -51,7 +51,10 @@ public class PCPresenceSubscription {
             return
         }
 
-        self.app.logger.log("Received event type: \(eventTypeString), event name: \(eventNameString), and data: \(apiEventData)", logLevel: .verbose)
+        self.app.logger.log(
+            "Received event type: \(eventTypeString), event name: \(eventNameString), and data: \(apiEventData)",
+            logLevel: .verbose
+        )
 
         switch eventName {
         case .initial_state:
@@ -114,8 +117,7 @@ extension PCPresenceSubscription {
                     return
                 }
 
-                user.presenceState = presencePayload.state
-                user.lastSeenAt = presencePayload.lastSeenAt
+                user.updatePresenceInfoIfAppropriate(newInfoPayload: presencePayload)
 
                 switch presencePayload.state {
                 case .online:
