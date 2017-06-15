@@ -11,7 +11,6 @@ public class PCRoom {
 
     public internal(set) var subscription: PCRoomSubscription? = nil
 
-    // TODO: This should be a Set
     // TODO: Do we need both userIds and users? Probably
     public internal(set) var userIds: Set<String>
 
