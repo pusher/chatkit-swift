@@ -148,6 +148,10 @@ extension PCUserSubscription {
             self.currentUser = receivedCurrentUser
         }
 
+        if let presSub = self.currentUser?.presenceSubscription {
+            presSub.end()
+        }
+
         guard roomsPayload.count > 0 else {
             self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
             receivedCurrentUser.setupPresenceSubscription(delegate: self.delegate)

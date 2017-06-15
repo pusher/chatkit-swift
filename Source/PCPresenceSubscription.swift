@@ -66,6 +66,10 @@ public class PCPresenceSubscription {
         }
     }
 
+    func end() {
+        self.resumableSubscription.end()
+    }
+
 }
 
 extension PCPresenceSubscription {
@@ -97,8 +101,14 @@ extension PCPresenceSubscription {
             return
         }
 
-        userStore.handleInitialPresencePayloads(userStates) {
-            self.roomStore.rooms.forEach { room in
+        // TODO: Do we need [weak self] here?
+        userStore.handleInitialPresencePayloads(userStates) { [weak self] in
+            guard let strongSelf = self else {
+                print("self is nil when handling initial presence payloads has completed")
+                return
+            }
+
+            strongSelf.roomStore.rooms.forEach { room in
                 room.subscription?.delegate?.usersUpdated()
             }
         }
