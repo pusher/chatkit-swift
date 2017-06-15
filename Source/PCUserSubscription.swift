@@ -150,11 +150,12 @@ extension PCUserSubscription {
 
         if let presSub = self.currentUser?.presenceSubscription {
             presSub.end()
+            self.currentUser!.presenceSubscription = nil
         }
 
         guard roomsPayload.count > 0 else {
             self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
-            receivedCurrentUser.setupPresenceSubscription(delegate: self.delegate)
+            self.currentUser!.setupPresenceSubscription(delegate: self.delegate)
             return
         }
 
@@ -171,10 +172,10 @@ extension PCUserSubscription {
 
                 combinedRoomUserIds.formUnion(room.userIds)
 
-                receivedCurrentUser.roomStore.addOrMerge(room) { room in
+                self.currentUser!.roomStore.addOrMerge(room) { room in
                     if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
                         self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
-                        self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: receivedCurrentUser)
+                        self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: self.currentUser!)
                     }
                 }
             } catch let err {
@@ -184,7 +185,7 @@ extension PCUserSubscription {
                 )
                 if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
                     self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
-                    self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: receivedCurrentUser)
+                    self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: self.currentUser!)
                 }
             }
         }
@@ -207,9 +208,14 @@ extension PCUserSubscription {
                 let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users")
 
                 room.userIds.forEach { userId in
-                    self.userStore.user(id: userId) { user, err in
+                    self.userStore.user(id: userId) { [weak self] user, err in
+                        guard let strongSelf = self else {
+                            print("self is nil when user store returns user after initial fetch of users")
+                            return
+                        }
+
                         guard let user = user, err == nil else {
-                            self.app.logger.log(
+                            strongSelf.app.logger.log(
                                 "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
                                 logLevel: .debug
                             )
@@ -217,7 +223,7 @@ extension PCUserSubscription {
                                 room.subscription?.delegate?.usersUpdated()
 
                                 if combinedRoomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
-                                    currentUser.setupPresenceSubscription(delegate: self.delegate)
+                                    currentUser.setupPresenceSubscription(delegate: strongSelf.delegate)
                                 }
                             }
 
@@ -230,7 +236,7 @@ extension PCUserSubscription {
                             room.subscription?.delegate?.usersUpdated()
 
                             if combinedRoomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
-                                currentUser.setupPresenceSubscription(delegate: self.delegate)
+                                currentUser.setupPresenceSubscription(delegate: strongSelf.delegate)
                             }
                         }
                     }
@@ -264,9 +270,14 @@ extension PCUserSubscription {
             let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users")
 
             room.userIds.forEach { userId in
-                self.userStore.user(id: userId) { user, err in
+                self.userStore.user(id: userId) { [weak self] user, err in
+                    guard let strongSelf = self else {
+                        print("self is nil when user store returns user after parsing added to room event")
+                        return
+                    }
+
                     guard let user = user, err == nil else {
-                        self.app.logger.log(
+                        strongSelf.app.logger.log(
                             "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
                             logLevel: .debug
                         )
@@ -411,20 +422,25 @@ extension PCUserSubscription {
                 return
             }
 
-            currentUser.userStore.user(id: userId) { user, err in
+            currentUser.userStore.user(id: userId) { [weak self] user, err in
+                guard let strongSelf = self else {
+                    print("self is nil when user store returns user after parsing user joined event")
+                    return
+                }
+
                 guard let user = user, err == nil else {
-                    self.app.logger.log(
+                    strongSelf.app.logger.log(
                         "User with id \(userId) joined room with id \(roomId) but no information about the user could be retrieved. Error was: \(err!.localizedDescription)",
                         logLevel: .error
                     )
-                    self.delegate.error(error: err!)
+                    strongSelf.delegate.error(error: err!)
                     return
                 }
 
                 let addedOrMergedUser = room.userStore.addOrMerge(user)
                 room.userIds.insert(addedOrMergedUser.id)
 
-                self.delegate.userJoinedRoom(room: room, user: addedOrMergedUser)
+                strongSelf.delegate.userJoinedRoom(room: room, user: addedOrMergedUser)
                 room.subscription?.delegate?.userJoined(user: addedOrMergedUser)
             }
         }
@@ -469,13 +485,18 @@ extension PCUserSubscription {
                 return
             }
 
-            currentUser.userStore.user(id: userId) { user, err in
+            currentUser.userStore.user(id: userId) { [weak self] user, err in
+                guard let strongSelf = self else {
+                    print("self is nil when user store returns user after parsing user left event")
+                    return
+                }
+
                 guard let user = user, err == nil else {
-                    self.app.logger.log(
+                    strongSelf.app.logger.log(
                         "User with id \(userId) left room with id \(roomId) but no information about the user could be retrieved. Error was: \(err!.localizedDescription)",
                         logLevel: .error
                     )
-                    self.delegate.error(error: err!)
+                    strongSelf.delegate.error(error: err!)
                     return
                 }
 
@@ -487,7 +508,7 @@ extension PCUserSubscription {
 
                 room.userStore.remove(id: user.id)
 
-                self.delegate.userLeftRoom(room: room, user: user)
+                strongSelf.delegate.userLeftRoom(room: room, user: user)
                 room.subscription?.delegate?.userLeft(user: user)
             }
         }
@@ -518,14 +539,19 @@ extension PCUserSubscription {
                 return
             }
 
-            currentUser.userStore.user(id: userId) { user, err in
-                guard let user = user, err == nil else {
-                    self.app.logger.log(err!.localizedDescription, logLevel: .error)
-                    self.delegate.error(error: err!)
+            currentUser.userStore.user(id: userId) { [weak self] user, err in
+                guard let strongSelf = self else {
+                    print("self is nil when user store returns user after parsing typing start event")
                     return
                 }
 
-                self.delegate.userStartedTyping(room: room, user: user)
+                guard let user = user, err == nil else {
+                    strongSelf.app.logger.log(err!.localizedDescription, logLevel: .error)
+                    strongSelf.delegate.error(error: err!)
+                    return
+                }
+
+                strongSelf.delegate.userStartedTyping(room: room, user: user)
                 room.subscription?.delegate?.userStartedTyping(user: user)
             }
         }
@@ -556,14 +582,19 @@ extension PCUserSubscription {
                 return
             }
 
-            currentUser.userStore.user(id: userId) { user, err in
-                guard let user = user, err == nil else {
-                    self.app.logger.log(err!.localizedDescription, logLevel: .error)
-                    self.delegate.error(error: err!)
+            currentUser.userStore.user(id: userId) { [weak self] user, err in
+                guard let strongSelf = self else {
+                    print("self is nil when user store returns user after parsing typing stop event")
                     return
                 }
 
-                self.delegate.userStoppedTyping(room: room, user: user)
+                guard let user = user, err == nil else {
+                    strongSelf.app.logger.log(err!.localizedDescription, logLevel: .error)
+                    strongSelf.delegate.error(error: err!)
+                    return
+                }
+
+                strongSelf.delegate.userStoppedTyping(room: room, user: user)
                 room.subscription?.delegate?.userStoppedTyping(user: user)
             }
         }

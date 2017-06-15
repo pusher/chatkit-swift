@@ -45,13 +45,18 @@ public class PCRoomSubscription {
         do {
             let basicMessage = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
 
-            self.basicMessageEnricher.enrich(basicMessage) { message, err in
-                guard let message = message, err == nil else {
-                    self.logger.log(err!.localizedDescription, logLevel: .debug)
+            self.basicMessageEnricher.enrich(basicMessage) { [weak self] message, err in
+                guard let strongSelf = self else {
+                    print("self is nil when enrichment of basicMessage has completed")
                     return
                 }
 
-                self.delegate?.newMessage(message: message)
+                guard let message = message, err == nil else {
+                    strongSelf.logger.log(err!.localizedDescription, logLevel: .debug)
+                    return
+                }
+
+                strongSelf.delegate?.newMessage(message: message)
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)

@@ -33,14 +33,19 @@ public class PCGlobalUserStore {
         if let user = self.userStoreCore.users.first(where: { $0.id == id }) {
             completionHander(user, nil)
         } else {
-            self.getUser(id: id) { user, err in
+            self.getUser(id: id) { [weak self] user, err in
+                guard let strongSelf = self else {
+                    print("self is nil getUser completes in the user store")
+                    return
+                }
+
                 guard let user = user, err == nil else {
-                    self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                    strongSelf.app.logger.log(err!.localizedDescription, logLevel: .error)
                     completionHander(nil, err!)
                     return
                 }
 
-                let userToReturn = self.userStoreCore.addOrMerge(user)
+                let userToReturn = strongSelf.userStoreCore.addOrMerge(user)
                 completionHander(userToReturn, nil)
             }
         }
@@ -83,9 +88,14 @@ public class PCGlobalUserStore {
         let roomJoinedPresenceProgressCounter = PCProgressCounter(totalCount: payloads.count, labelSuffix: "room-joined-presence-payload")
 
         payloads.forEach { payload in
-            self.user(id: payload.userId) { user, err in
+            self.user(id: payload.userId) { [weak self] user, err in
+                guard let strongSelf = self else {
+                    print("self is nil when user store returns user when handling intitial presence payload event after room join")
+                    return
+                }
+
                 guard let user = user, err == nil else {
-                    self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                    strongSelf.app.logger.log(err!.localizedDescription, logLevel: .error)
                     if roomJoinedPresenceProgressCounter.incrementFailedAndCheckIfFinished() {
                         completionHandler()
                     }
@@ -106,9 +116,14 @@ public class PCGlobalUserStore {
         let initialPresenceProgressCounter = PCProgressCounter(totalCount: payloads.count, labelSuffix: "initial-presence-payload")
 
         payloads.forEach { payload in
-            self.user(id: payload.userId) { user, err in
+            self.user(id: payload.userId) { [weak self] user, err in
+                guard let strongSelf = self else {
+                    print("self is nil when user store returns user when handling intitial presence payload event")
+                    return
+                }
+
                 guard let user = user, err == nil else {
-                    self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                    strongSelf.app.logger.log(err!.localizedDescription, logLevel: .error)
                     if initialPresenceProgressCounter.incrementFailedAndCheckIfFinished() {
                         completionHandler()
                     }

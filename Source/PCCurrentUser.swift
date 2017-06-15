@@ -262,9 +262,14 @@ public class PCCurrentUser {
         // userStore
 
         room.userIds.forEach { userId in
-            self.userStore.user(id: userId) { user, err in
+            self.userStore.user(id: userId) { [weak self] user, err in
+                guard let strongSelf = self else {
+                    print("self is nil when user store returns user during population of room user store")
+                    return
+                }
+
                 guard let user = user, err == nil else {
-                    self.app.logger.log(
+                    strongSelf.app.logger.log(
                         "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
                         logLevel: .debug
                     )
@@ -590,9 +595,14 @@ public class PCCurrentUser {
                     )
 
                     basicMessages.forEach { basicMessage in
-                        messageEnricher.enrich(basicMessage) { message, err in
+                        messageEnricher.enrich(basicMessage) { [weak self] message, err in
+                            guard let strongSelf = self else {
+                                print("self is enrichment of basicMessage has completed")
+                                return
+                            }
+
                             guard let message = message, err == nil else {
-                                self.app.logger.log(err!.localizedDescription, logLevel: .debug)
+                                strongSelf.app.logger.log(err!.localizedDescription, logLevel: .debug)
 
                                 if progressCounter.incrementFailedAndCheckIfFinished() {
                                     completionHandler(messages.underlyingArray.sorted(by: { $0.0.id > $0.1.id }), nil)

@@ -118,9 +118,14 @@ extension PCPresenceSubscription {
         do {
             let presencePayload = try PCPayloadDeserializer.createPresencePayloadFromPayload(data)
 
-            userStore.user(id: presencePayload.userId) { user, err in
+            userStore.user(id: presencePayload.userId) { [weak self] user, err in
+                guard let strongSelf = self else {
+                    print("self is nil when user store returns user when handling presence update event")
+                    return
+                }
+
                 guard let user = user, err == nil else {
-                    self.app.logger.log(
+                    strongSelf.app.logger.log(
                         "Error fetching user information for user with id \(presencePayload.userId): \(err!.localizedDescription)",
                         logLevel: .debug
                     )
@@ -131,18 +136,18 @@ extension PCPresenceSubscription {
 
                 switch presencePayload.state {
                 case .online:
-                    self.delegate?.userCameOnline(user: user)
+                    strongSelf.delegate?.userCameOnline(user: user)
                 case .offline:
-                    self.delegate?.userWentOffline(user: user)
+                    strongSelf.delegate?.userWentOffline(user: user)
                 case .unknown:
                     // This should never be the case
-                    self.app.logger.log("Somehow the presence state of user \(user.debugDescription) is unknown", logLevel: .debug)
+                    strongSelf.app.logger.log("Somehow the presence state of user \(user.debugDescription) is unknown", logLevel: .debug)
                     return
                 }
 
                 // TODO: Could check if any room is active to speed this up? Or keep a better
                 // map of user_ids to rooms
-                self.roomStore.rooms.forEach { room in
+                strongSelf.roomStore.rooms.forEach { room in
                     guard room.users.contains(user) else {
                         return
                     }

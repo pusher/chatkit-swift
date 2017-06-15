@@ -46,19 +46,24 @@ class PCBasicMessageEnricher {
                 self.userIdsBeingRetrieved.append(basicMessageSenderId)
             }
 
-            self.userStore.user(id: basicMessage.senderId) { user, err in
-                guard let user = user, err == nil else {
-                    self.logger.log(
-                        "Unable to find user with id \(basicMessage.senderId), associated with message \(basicMessageId). Error: \(err!.localizedDescription)",
-                        logLevel: .debug
-                    )
-                    self.callCompletionHandlersForEnrichedMessagesWithIdsLessThanOrEqualTo(id: basicMessageId, result: .error(err!))
+            self.userStore.user(id: basicMessage.senderId) { [weak self] user, err in
+                guard let strongSelf = self else {
+                    print("self is nil when user store returns user while enriching messages")
                     return
                 }
 
-                self.userRetrievalQueue.async(flags: .barrier) {
-                    guard let basicMessageIds = self.userIdsToBasicMessageIds[basicMessageSenderId] else {
-                        self.logger.log(
+                guard let user = user, err == nil else {
+                    strongSelf.logger.log(
+                        "Unable to find user with id \(basicMessage.senderId), associated with message \(basicMessageId). Error: \(err!.localizedDescription)",
+                        logLevel: .debug
+                    )
+                    strongSelf.callCompletionHandlersForEnrichedMessagesWithIdsLessThanOrEqualTo(id: basicMessageId, result: .error(err!))
+                    return
+                }
+
+                strongSelf.userRetrievalQueue.async(flags: .barrier) {
+                    guard let basicMessageIds = strongSelf.userIdsToBasicMessageIds[basicMessageSenderId] else {
+                        strongSelf.logger.log(
                             "Fetched user information for user with id \(user.id) but no messages needed information for this user",
                             logLevel: .verbose
                         )
@@ -66,13 +71,13 @@ class PCBasicMessageEnricher {
                     }
 
                     let basicMessages = basicMessageIds.flatMap { bmId -> PCBasicMessage? in
-                        return self.messagesAwaitingEnrichmentDependentOnUserRetrieval[bmId]
+                        return strongSelf.messagesAwaitingEnrichmentDependentOnUserRetrieval[bmId]
                     }
 
-                    self.enrichMessagesWithUser(user, messages: basicMessages)
+                    strongSelf.enrichMessagesWithUser(user, messages: basicMessages)
 
-                    if let indexToRemove = self.userIdsBeingRetrieved.index(of: basicMessageSenderId) {
-                        self.userIdsBeingRetrieved.remove(at: indexToRemove)
+                    if let indexToRemove = strongSelf.userIdsBeingRetrieved.index(of: basicMessageSenderId) {
+                        strongSelf.userIdsBeingRetrieved.remove(at: indexToRemove)
                     }
                 }
             }

@@ -31,11 +31,16 @@ public class PCTypingIndicatorManager {
 
             self.typingTimeoutTimer?.invalidate()
 
-            DispatchQueue.main.async {
-                self.typingTimeoutTimer = Timer.scheduledTimer(
-                    timeInterval: self.typingTimeoutInterval,
-                    target: self,
-                    selector: #selector(self.stopTyping),
+            DispatchQueue.main.async { [weak self] in
+                guard let strongSelf = self else {
+                    print("self is nil when about to call stopTyping function")
+                    return
+                }
+
+                strongSelf.typingTimeoutTimer = Timer.scheduledTimer(
+                    timeInterval: strongSelf.typingTimeoutInterval,
+                    target: strongSelf,
+                    selector: #selector(strongSelf.stopTyping),
                     userInfo: nil,
                     repeats: false
                 )
