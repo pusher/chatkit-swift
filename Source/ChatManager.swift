@@ -26,11 +26,12 @@ import PusherPlatform
 
     public init(
         id: String,
+        tokenProvider: PPTokenProvider,
         app: App? = nil,
-        tokenProvider: PPTokenProvider? = nil,
         logger: PPLogger = PPDefaultLogger(),
         baseClient: PPBaseClient? = nil
     ) {
+        (tokenProvider as? PCTestingTokenProvider)?.logger = logger
         self.app = app ?? App(id: id, tokenProvider: tokenProvider, client: baseClient, logger: logger)
         self.userStore = PCGlobalUserStore(app: self.app)
     }
@@ -49,6 +50,10 @@ import PusherPlatform
         delegate: PCChatManagerDelegate,
         completionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
+        // TODO: This is where you would use the tokenProvider (which would need to be stored) to
+        // call fetchTokenAndUserId to get the userId so that the developer doesn't need to provide
+        // both a tokenProvider and a userId explicitly
+
         self.userId = userId
         let path = "/\(ChatManager.namespace)/users/\(userId)"
 
