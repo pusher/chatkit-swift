@@ -9,41 +9,25 @@
 /* Begin PBXBuildFile section */
 		3388D5EC1EAE4B7E0072A742 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3388D5E81EAE4B7E0072A742 /* LaunchScreen.storyboard */; };
 		3388D5ED1EAE4B7E0072A742 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3388D5EA1EAE4B7E0072A742 /* Main.storyboard */; };
-		339CABD51EC3188100FDFB58 /* PusherChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 339CABD41EC3188100FDFB58 /* PusherChat.framework */; };
-		339CABD61EC3188100FDFB58 /* PusherChat.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 339CABD41EC3188100FDFB58 /* PusherChat.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		339CABDB1EC318B000FDFB58 /* PusherPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 339CABDA1EC318B000FDFB58 /* PusherPlatform.framework */; };
-		339CABDC1EC318B000FDFB58 /* PusherPlatform.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 339CABDA1EC318B000FDFB58 /* PusherPlatform.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		33CC931A1E38E48C003E6325 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC93151E38E48C003E6325 /* AppDelegate.swift */; };
 		33CC931B1E38E48C003E6325 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC93161E38E48C003E6325 /* Assets.xcassets */; };
 		33CC931C1E38E48C003E6325 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC93181E38E48C003E6325 /* ViewController.swift */; };
+		33D710F61EF922B700F2A99A /* PusherChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D710F51EF922B700F2A99A /* PusherChat.framework */; };
+		33D710F81EF922C500F2A99A /* PusherPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D710F71EF922C500F2A99A /* PusherPlatform.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		33CEFDA11E38F6B900FC9F03 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				339CABDC1EC318B000FDFB58 /* PusherPlatform.framework in Embed Frameworks */,
-				339CABD61EC3188100FDFB58 /* PusherChat.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3302637D1DC2475E007D7317 /* Pusher Chat iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pusher Chat iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		334150E01EF924DD009F10FB /* Carthage.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Carthage.xcconfig; sourceTree = "<group>"; };
 		3388D5E91EAE4B7E0072A742 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "Pusher Chat iOS Example/Base.lproj/LaunchScreen.storyboard"; sourceTree = SOURCE_ROOT; };
 		3388D5EB1EAE4B7E0072A742 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = "Pusher Chat iOS Example/Base.lproj/Main.storyboard"; sourceTree = SOURCE_ROOT; };
-		339CABD41EC3188100FDFB58 /* PusherChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PusherChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		339CABDA1EC318B000FDFB58 /* PusherPlatform.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PusherPlatform.framework; path = ../Carthage/Build/iOS/PusherPlatform.framework; sourceTree = "<group>"; };
 		33CC93151E38E48C003E6325 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = "Pusher Chat iOS Example/AppDelegate.swift"; sourceTree = SOURCE_ROOT; };
 		33CC93161E38E48C003E6325 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "Pusher Chat iOS Example/Assets.xcassets"; sourceTree = SOURCE_ROOT; };
 		33CC93171E38E48C003E6325 /* Pusher Chat iOS Example.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = "Pusher Chat iOS Example.entitlements"; path = "Pusher Chat iOS Example/Pusher Chat iOS Example.entitlements"; sourceTree = SOURCE_ROOT; };
 		33CC93181E38E48C003E6325 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = "Pusher Chat iOS Example/ViewController.swift"; sourceTree = SOURCE_ROOT; };
 		33CC93191E38E48C003E6325 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Pusher Chat iOS Example/Info.plist"; sourceTree = SOURCE_ROOT; };
+		33D710F51EF922B700F2A99A /* PusherChat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PusherChat.framework; path = "../../../Library/Developer/Xcode/DerivedData/PusherChat-afwvmyafyxwishbqzenwuzuttwkk/Build/Products/Debug-iphonesimulator/PusherChat.framework"; sourceTree = "<group>"; };
+		33D710F71EF922C500F2A99A /* PusherPlatform.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PusherPlatform.framework; path = ../Carthage/Build/iOS/PusherPlatform.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +35,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				339CABDB1EC318B000FDFB58 /* PusherPlatform.framework in Frameworks */,
-				339CABD51EC3188100FDFB58 /* PusherChat.framework in Frameworks */,
+				33D710F81EF922C500F2A99A /* PusherPlatform.framework in Frameworks */,
+				33D710F61EF922B700F2A99A /* PusherChat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,8 +46,8 @@
 		2D4332111DF6E0C9008696FD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				339CABDA1EC318B000FDFB58 /* PusherPlatform.framework */,
-				339CABD41EC3188100FDFB58 /* PusherChat.framework */,
+				33D710F71EF922C500F2A99A /* PusherPlatform.framework */,
+				33D710F51EF922B700F2A99A /* PusherChat.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -96,7 +80,7 @@
 				33AE48291EAE4AB6006C27A6 /* Supporting FIles */,
 			);
 			name = "PusherChat iOS Example";
-			path = "Pusher Platform iOS Example";
+			path = "Pusher Chat iOS Example";
 			sourceTree = "<group>";
 		};
 		33AE48291EAE4AB6006C27A6 /* Supporting FIles */ = {
@@ -104,6 +88,7 @@
 			children = (
 				33CC93171E38E48C003E6325 /* Pusher Chat iOS Example.entitlements */,
 				33CC93191E38E48C003E6325 /* Info.plist */,
+				334150E01EF924DD009F10FB /* Carthage.xcconfig */,
 			);
 			name = "Supporting FIles";
 			sourceTree = "<group>";
@@ -118,7 +103,7 @@
 				330263791DC2475E007D7317 /* Sources */,
 				3302637A1DC2475E007D7317 /* Frameworks */,
 				3302637B1DC2475E007D7317 /* Resources */,
-				33CEFDA11E38F6B900FC9F03 /* Embed Frameworks */,
+				330403E71EF91FEE00B68A1C /* Copy Carthage Frameworks */,
 			);
 			buildRules = (
 			);
@@ -182,6 +167,24 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		330403E71EF91FEE00B68A1C /* Copy Carthage Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/../Carthage/Build/iOS/PusherPlatform.framework",
+			);
+			name = "Copy Carthage Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		330263791DC2475E007D7317 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -216,6 +219,7 @@
 /* Begin XCBuildConfiguration section */
 		3302638D1DC2475E007D7317 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 334150E01EF924DD009F10FB /* Carthage.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -266,6 +270,7 @@
 		};
 		3302638E1DC2475E007D7317 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 334150E01EF924DD009F10FB /* Carthage.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
