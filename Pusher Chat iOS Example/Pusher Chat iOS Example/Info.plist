@@ -40,7 +40,7 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>api.kube.pusherplatform.io</key>
+			<key>api-ceres.kube.pusherplatform.io</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
