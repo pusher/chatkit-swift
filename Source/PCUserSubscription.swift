@@ -142,7 +142,7 @@ extension PCUserSubscription {
             return
         }
 
-        let wasExistingCurrentUser = self.currentUser == nil
+        let wasExistingCurrentUser = self.currentUser != nil
 
         // If the currentUser property is already set then the assumption is that there was
         // already a user subscription and so instead of setting the property to a new
@@ -273,6 +273,7 @@ extension PCUserSubscription {
         let noLongerAMemberOfRooms = roomStoreRooms.subtracting(mostRecentConnectionRooms)
 
         noLongerAMemberOfRooms.forEach { room in
+
             // TODO: Not sure if this is the best way of communicating that while the subscription
             // was closed there was an event that meant that the current user is no longer a
             // member of a given room
