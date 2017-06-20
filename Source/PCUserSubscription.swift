@@ -3,7 +3,7 @@ import PusherPlatform
 
 public class PCUserSubscription {
 
-    // TODO: Do we need to be careful of retain cycles here?
+    // TODO: Do we need to be careful of retain cycles here? e.g. weak app
 
     let app: App
     public let resumableSubscription: PPResumableSubscription
@@ -142,12 +142,20 @@ extension PCUserSubscription {
             return
         }
 
+        let wasExistingCurrentUser = self.currentUser == nil
+
+        // If the currentUser property is already set then the assumption is that there was
+        // already a user subscription and so instead of setting the property to a new
+        // PCCurrentUser, we update the existing one to have the most up-to-date state
         if let currentUser = self.currentUser {
             currentUser.updateWithPropertiesOf(receivedCurrentUser)
         } else {
             self.currentUser = receivedCurrentUser
         }
 
+        // If a presenceSubscription already exists then we want to create a new one
+        // to ensure that the most up-to-date state is received, so we first close the
+        // existing subscription, if it was still open
         if let presSub = self.currentUser?.presenceSubscription {
             presSub.end()
             self.currentUser!.presenceSubscription = nil
@@ -165,17 +173,22 @@ extension PCUserSubscription {
         )
 
         var combinedRoomUserIds = Set<String>()
+        var roomsFromConnection = [PCRoom]()
 
         roomsPayload.forEach { roomPayload in
             do {
                 let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
                 combinedRoomUserIds.formUnion(room.userIds)
+                roomsFromConnection.append(room)
 
                 self.currentUser!.roomStore.addOrMerge(room) { room in
                     if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
                         self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
                         self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: self.currentUser!)
+                        if wasExistingCurrentUser {
+                            self.reconcileExistingRoomStoreWithRoomsReceivedOnConnection(roomsFromConnection: roomsFromConnection)
+                        }
                     }
                 }
             } catch let err {
@@ -186,6 +199,9 @@ extension PCUserSubscription {
                 if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
                     self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
                     self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: self.currentUser!)
+                    if wasExistingCurrentUser {
+                        self.reconcileExistingRoomStoreWithRoomsReceivedOnConnection(roomsFromConnection: roomsFromConnection)
+                    }
                 }
             }
         }
@@ -242,6 +258,26 @@ extension PCUserSubscription {
                     }
                 }
             }
+        }
+    }
+
+    fileprivate func reconcileExistingRoomStoreWithRoomsReceivedOnConnection(roomsFromConnection: [PCRoom]) {
+        guard let currentUser = self.currentUser else {
+            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            self.delegate.error(error: PCError.currentUserIsNil)
+            return
+        }
+
+        let roomStoreRooms = Set<PCRoom>(currentUser.roomStore.rooms.underlyingArray)
+        let mostRecentConnectionRooms = Set<PCRoom>(roomsFromConnection)
+        let noLongerAMemberOfRooms = roomStoreRooms.subtracting(mostRecentConnectionRooms)
+
+        noLongerAMemberOfRooms.forEach { room in
+            // TODO: Not sure if this is the best way of communicating that while the subscription
+            // was closed there was an event that meant that the current user is no longer a
+            // member of a given room
+
+            self.delegate.removedFromRoom(room: room)
         }
     }
 

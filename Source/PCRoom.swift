@@ -11,7 +11,6 @@ public class PCRoom {
 
     public internal(set) var subscription: PCRoomSubscription? = nil
 
-    // TODO: Do we need both userIds and users? Probably
     public internal(set) var userIds: Set<String>
 
     // TODO: Should each Room instead have access to the user store and then the users
@@ -55,3 +54,24 @@ public class PCRoom {
         self.userIds = room.userIds
     }
 }
+
+extension PCRoom: Hashable {
+
+    public var hashValue: Int {
+        return self.id
+    }
+
+    public static func ==(_ lhs: PCRoom, _ rhs: PCRoom) -> Bool {
+        return lhs.id == rhs.id
+    }
+
+}
+
+extension PCRoom: CustomDebugStringConvertible {
+
+    public var debugDescription: String {
+        return "ID: \(self.id) Name: \(self.name)"
+    }
+
+}
+

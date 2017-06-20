@@ -3,7 +3,7 @@ import PusherPlatform
 
 public class PCPresenceSubscription {
 
-    // TODO: Do we need to be careful of retain cycles here?
+    // TODO: Do we need to be careful of retain cycles here? e.g. weak app
 
     let app: App
     public let resumableSubscription: PPResumableSubscription

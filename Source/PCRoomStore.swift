@@ -43,8 +43,6 @@ public class PCRoomStore {
                     return
                 }
 
-                // TODO: Should the room be added to the currentUser?
-
                 completionHander(room!, nil)
             }
         }

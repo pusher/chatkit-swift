@@ -22,17 +22,16 @@ import PusherPlatform
         }
     }
 
-    // TODO: _remove_ userId should just be inferred from user token
     public var userId: String? = nil
 
     public init(
         id: String,
         app: App? = nil,
-        authorizer: PPAuthorizer? = nil,
+        tokenProvider: PPTokenProvider? = nil,
         logger: PPLogger = PPDefaultLogger(),
         baseClient: PPBaseClient? = nil
     ) {
-        self.app = app ?? App(id: id, authorizer: authorizer, client: baseClient, logger: logger)
+        self.app = app ?? App(id: id, tokenProvider: tokenProvider, client: baseClient, logger: logger)
         self.userStore = PCGlobalUserStore(app: self.app)
     }
 

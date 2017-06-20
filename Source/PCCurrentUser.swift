@@ -199,8 +199,6 @@ public class PCCurrentUser {
         self.app.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
-                // TODO: What is data here?
-
                 completionHandler(nil)
             },
             onError: { error in
@@ -305,8 +303,6 @@ public class PCCurrentUser {
         self.app.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
-                // TODO: What is data here?
-
                 completionHandler(nil)
             },
             onError: { error in
@@ -396,8 +392,6 @@ public class PCCurrentUser {
         self.app.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
-                // TODO: What is data here?
-
                 completionHandler(nil)
             },
             onError: { error in
