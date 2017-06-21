@@ -18,17 +18,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
+        let kubeBaseClient = PPBaseClient(
+            cluster: "api-ceres.kube.pusherplatform.io",
+            insecure: true
+        )
+
+        let localhostBaseClient = PPBaseClient(
+            cluster: "localhost",
+            port: 10443,
+            insecure: true
+        )
+
         let pusherChat = ChatManager(
             id: "some-app-id",
+            tokenProvider: PCTestingTokenProvider(userId: "ham", serviceId: "some-app-id"),
             logger: HamLogger(),
-            baseClient: PPBaseClient(
-//                cluster: "api.kube.pusherplatform.io",
-                cluster: "localhost",
-                port: 10443,
-                insecure: true
-            )
+            baseClient: localhostBaseClient
         )
-//        let pusherChat = ChatAPI(id: "some-app-id", baseClient: BaseClient(cluster: "localhost", port: 10443, insecure: true))
 
         self.pusherChat = pusherChat
 

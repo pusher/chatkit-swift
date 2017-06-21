@@ -14,7 +14,7 @@ class ViewController: UIViewController {
 
         let delegate = UIApplication.shared.delegate as! AppDelegate
 
-        delegate.pusherChat?.connect(userId: "ham", delegate: self) { currentUser, error in
+        delegate.pusherChat?.connect(delegate: self) { currentUser, error in
             guard error == nil else {
                 print("Error connecting: \(error!)")
                 return

@@ -22,8 +22,6 @@ import PusherPlatform
         }
     }
 
-    public var userId: String? = nil
-
     public init(
         id: String,
         tokenProvider: PPTokenProvider,
@@ -46,17 +44,10 @@ import PusherPlatform
     }
 
     public func connect(
-        userId: String,
         delegate: PCChatManagerDelegate,
         completionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
-        // TODO: This is where you would use the tokenProvider (which would need to be stored) to
-        // call fetchTokenAndUserId to get the userId so that the developer doesn't need to provide
-        // both a tokenProvider and a userId explicitly
-
-        self.userId = userId
-        let path = "/\(ChatManager.namespace)/users/\(userId)"
-
+        let path = "/\(ChatManager.namespace)/users"
         let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
 
         var resumableSub = PPResumableSubscription(
