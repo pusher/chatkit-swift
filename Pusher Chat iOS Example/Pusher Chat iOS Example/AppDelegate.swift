@@ -18,10 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
-        let kubeBaseClient = PPBaseClient(
-            cluster: "api-ceres.kube.pusherplatform.io",
-            insecure: true
-        )
+        let kubeBaseClient = PPBaseClient(cluster: "api-ceres.pusherplatform.io")
 
         let localhostBaseClient = PPBaseClient(
             cluster: "localhost",

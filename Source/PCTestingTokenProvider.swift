@@ -24,7 +24,7 @@ public class PCTestingTokenProvider: PPTokenProvider {
                     ]
                 )
                 return req
-        }
+            }
         )
 
         self.internalTokenProvider = tokenProvider
