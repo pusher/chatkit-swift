@@ -19,7 +19,7 @@ public class PCRoomSubscription {
         self.basicMessageEnricher = basicMessageEnricher
     }
 
-    func handleEvent(eventId: String, headers: [String: String], data: Any) {
+    func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
             self.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
             return
@@ -45,7 +45,7 @@ public class PCRoomSubscription {
         do {
             let basicMessage = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
 
-            self.basicMessageEnricher.enrich(basicMessage) { [weak self] message, err in
+            basicMessageEnricher.enrich(basicMessage) { [weak self] message, err in
                 guard let strongSelf = self else {
                     print("self is nil when enrichment of basicMessage has completed")
                     return

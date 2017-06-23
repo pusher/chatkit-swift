@@ -14,20 +14,16 @@ public class PCCurrentUser {
     // TODO: This should probably be [PCUser] instead, like the users property
     // in PCRoom, or something even simpler
     public var users: Set<PCUser> {
-        get {
-            return self.userStore.users
-        }
+        return self.userStore.users
     }
 
     public var rooms: [PCRoom] {
-        get {
-            return self.roomStore.rooms.underlyingArray
-        }
+        return self.roomStore.rooms.underlyingArray
     }
 
     public let pathFriendlyId: String
 
-    public internal(set) var presenceSubscription: PCPresenceSubscription? = nil
+    public internal(set) var presenceSubscription: PCPresenceSubscription?
 
     var typingIndicatorManagers: [Int: PCTypingIndicatorManager] = [:]
     private var typingIndicatorQueue = DispatchQueue(label: "com.pusher.chat-api.typing-indicators")
@@ -56,7 +52,7 @@ public class PCCurrentUser {
         let allowedCharacterSet = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] ").inverted
 
         // TODO: When can percent encoding fail?
-        self.pathFriendlyId = id.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? id
+        pathFriendlyId = id.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? id
     }
 
     func updateWithPropertiesOf(_ currentUser: PCCurrentUser) {
@@ -71,22 +67,22 @@ public class PCCurrentUser {
         let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
 
         var resumableSub = PPResumableSubscription(
-            app: self.app,
+            app: app,
             requestOptions: subscribeRequest
         )
 
-        self.presenceSubscription = PCPresenceSubscription(
-            app: self.app,
+        presenceSubscription = PCPresenceSubscription(
+            app: app,
             resumableSubscription: resumableSub,
-            userStore: self.userStore,
-            roomStore: self.roomStore,
+            userStore: userStore,
+            roomStore: roomStore,
             delegate: delegate
         )
 
-        self.app.subscribeWithResume(
+        app.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
-            onEvent: self.presenceSubscription!.handleEvent
+            onEvent: presenceSubscription!.handleEvent
         )
     }
 
@@ -99,7 +95,7 @@ public class PCCurrentUser {
         var roomObject: [String: Any] = [
             "name": name,
             "created_by_id": self.id,
-            "private": isPrivate
+            "private": isPrivate,
         ]
 
         if userIds != nil && userIds!.count > 0 {
@@ -119,7 +115,7 @@ public class PCCurrentUser {
         let path = "/\(ChatManager.namespace)/rooms"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
-        self.app.requestWithRetry(
+        app.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -146,7 +142,6 @@ public class PCCurrentUser {
         )
     }
 
-
     // MARK: Room membership-related interactions
 
     public func addUser(_ user: PCUser, to room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
@@ -155,7 +150,7 @@ public class PCCurrentUser {
 
     public func addUsers(_ users: [PCUser], to room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
         let userIds = users.map { $0.id }
-        self.addUsers(ids: userIds, to: room.id, completionHandler: completionHandler)
+        addUsers(ids: userIds, to: room.id, completionHandler: completionHandler)
     }
 
     public func addUsers(ids: [String], to roomId: Int, completionHandler: @escaping (Error?) -> Void) {
@@ -168,7 +163,7 @@ public class PCCurrentUser {
 
     public func removeUsers(_ users: [PCUser], from room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
         let userIds = users.map { $0.id }
-        self.removeUsers(ids: userIds, from: room, completionHandler: completionHandler)
+        removeUsers(ids: userIds, from: room, completionHandler: completionHandler)
     }
 
     public func removeUsers(ids: [String], from room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
@@ -196,9 +191,9 @@ public class PCCurrentUser {
         let path = "/\(ChatManager.namespace)/rooms/\(roomId)/users/\(membershipChange.rawValue)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.PUT.rawValue, path: path, body: data)
 
-        self.app.requestWithRetry(
+        app.requestWithRetry(
             using: generalRequest,
-            onSuccess: { data in
+            onSuccess: { _ in
                 completionHandler(nil)
             },
             onError: { error in
@@ -224,7 +219,7 @@ public class PCCurrentUser {
         let path = "/\(ChatManager.namespace)/users/\(self.pathFriendlyId)/rooms/\(roomId)/join"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
 
-        self.app.requestWithRetry(
+        app.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -300,9 +295,9 @@ public class PCCurrentUser {
         let path = "/\(ChatManager.namespace)/users/\(self.pathFriendlyId)/rooms/\(roomId)/leave"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
 
-        self.app.requestWithRetry(
+        app.requestWithRetry(
             using: generalRequest,
-            onSuccess: { data in
+            onSuccess: { _ in
                 completionHandler(nil)
             },
             onError: { error in
@@ -310,7 +305,6 @@ public class PCCurrentUser {
             }
         )
     }
-
 
     // MARK: Room fetching
 
@@ -389,9 +383,9 @@ public class PCCurrentUser {
         let path = "/\(ChatManager.namespace)/rooms/\(roomId)/events"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
-        self.app.requestWithRetry(
+        app.requestWithRetry(
             using: generalRequest,
-            onSuccess: { data in
+            onSuccess: { _ in
                 completionHandler(nil)
             },
             onError: { error in
@@ -418,22 +412,22 @@ public class PCCurrentUser {
 
     func startedTypingIn(roomId: Int, completionHandler: @escaping (Error?) -> Void) {
         let eventPayload: [String: Any] = ["name": "typing_start", "data": [:], "user_id": self.id]
-        self.typingStateChange(eventPayload: eventPayload, roomId: roomId, completionHandler: completionHandler)
+        typingStateChange(eventPayload: eventPayload, roomId: roomId, completionHandler: completionHandler)
     }
 
     func stoppedTypingIn(roomId: Int, completionHandler: @escaping (Error?) -> Void) {
         let eventPayload: [String: Any] = ["name": "typing_stop", "data": [:], "user_id": self.id]
-        self.typingStateChange(eventPayload: eventPayload, roomId: roomId, completionHandler: completionHandler)
+        typingStateChange(eventPayload: eventPayload, roomId: roomId, completionHandler: completionHandler)
     }
 
     public func startedTypingIn(_ room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
         let eventPayload: [String: Any] = ["name": "typing_start", "data": [:], "user_id": self.id]
-        self.typingStateChange(eventPayload: eventPayload, roomId: room.id, completionHandler: completionHandler)
+        typingStateChange(eventPayload: eventPayload, roomId: room.id, completionHandler: completionHandler)
     }
 
     public func stoppedTypingIn(_ room: PCRoom, completionHandler: @escaping (Error?) -> Void) {
         let eventPayload: [String: Any] = ["name": "typing_stop", "data": [:], "user_id": self.id]
-        self.typingStateChange(eventPayload: eventPayload, roomId: room.id, completionHandler: completionHandler)
+        typingStateChange(eventPayload: eventPayload, roomId: room.id, completionHandler: completionHandler)
     }
 
     // MARK: Message-related interactions
@@ -441,7 +435,7 @@ public class PCCurrentUser {
     public func addMessage(text: String, to room: PCRoom, completionHandler: @escaping (Int?, Error?) -> Void) {
         let messageObject: [String: Any] = [
             "text": text,
-            "user_id": self.id
+            "user_id": self.id,
         ]
 
         guard JSONSerialization.isValidJSONObject(messageObject) else {
@@ -457,7 +451,7 @@ public class PCCurrentUser {
         let path = "/\(ChatManager.namespace)/rooms/\(room.id)/messages"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
-        self.app.requestWithRetry(
+        app.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -499,31 +493,31 @@ public class PCCurrentUser {
             path: path,
             queryItems: [
                 URLQueryItem(name: "user_id", value: self.id),
-                URLQueryItem(name: "message_limit", value: String(messageLimit))
+                URLQueryItem(name: "message_limit", value: String(messageLimit)),
             ]
         )
 
         var resumableSub = PPResumableSubscription(
-            app: self.app,
+            app: app,
             requestOptions: subscribeRequest
         )
 
         room.subscription = PCRoomSubscription(
             delegate: roomDelegate,
             resumableSubscription: resumableSub,
-            logger: self.app.logger,
-            basicMessageEnricher: PCBasicMessageEnricher(userStore: self.userStore, room: room, logger: self.app.logger)
+            logger: app.logger,
+            basicMessageEnricher: PCBasicMessageEnricher(userStore: userStore, room: room, logger: app.logger)
         )
 
-        self.app.subscribeWithResume(
+        app.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
             onEvent: room.subscription?.handleEvent
 
             // TODO: This will probably be replaced by the state change delegate function, with an associated type, maybe
-//            onError: { error in
-//                roomDelegate.receivedError(error)
-//            }
+            //            onError: { error in
+            //                roomDelegate.receivedError(error)
+            //            }
         )
     }
 
@@ -618,7 +612,6 @@ public class PCCurrentUser {
             }
         )
     }
-
 }
 
 public enum PCMessageError: Error {
@@ -629,11 +622,10 @@ extension PCMessageError: LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .messageIdKeyMissingInMessageCreationResponse(let payload):
+        case let .messageIdKeyMissingInMessageCreationResponse(payload):
             return "\"message_id\" key missing from response after message creation: \(payload)"
         }
     }
-
 }
 
 public enum PCRoomMessageFetchDirection: String {

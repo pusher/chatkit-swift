@@ -6,8 +6,8 @@ class ViewController: UIViewController {
     @IBOutlet var feedLabel: UILabel!
     var delegate: AppDelegate!
 
-    public var pusherChatUser: PCCurrentUser? = nil
-    public var currentRoom: PCRoom? = nil
+    public var pusherChatUser: PCCurrentUser?
+    public var currentRoom: PCRoom?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +28,6 @@ class ViewController: UIViewController {
 
             currentUser!.subscribeToRoom(room: self.currentRoom!, roomDelegate: self)
         }
-
     }
 }
 
@@ -38,17 +37,17 @@ extension ViewController: PCRoomDelegate {
     }
 
     func usersUpdated() {
-        print("Users updated " + self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
+        print("Users updated " + currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
     }
 
     public func userJoined(user: PCUser) {
         print("User \(user.name ?? user.id) joined room: \(self.currentRoom!.name)")
-        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: ","))
+        print(currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: ","))
     }
 
     public func userLeft(user: PCUser) {
         print("User \(user.name ?? user.id) left room: \(self.currentRoom!.name)")
-        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: ","))
+        print(currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: ","))
     }
 
     public func userStartedTyping(user: PCUser) {
@@ -61,12 +60,12 @@ extension ViewController: PCRoomDelegate {
 
     func userCameOnline(user: PCUser) {
         print("\(user.name ?? user.id) came online")
-        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
+        print(currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
     }
 
     func userWentOffline(user: PCUser) {
         print("\(user.name ?? user.id) went offline")
-        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
+        print(currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
     }
 
     func error(error: Error) {
@@ -111,5 +110,4 @@ extension ViewController: PCChatManagerDelegate {
     public func userStoppedTyping(room: PCRoom, user: PCUser) {
         print("\(user.name ?? user.id) stopped typing in room \(room.name)")
     }
-
 }

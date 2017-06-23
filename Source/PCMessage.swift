@@ -28,11 +28,10 @@ public class PCMessage {
 extension PCMessage: Hashable {
 
     public var hashValue: Int {
-        return self.id
+        return id
     }
 
     public static func ==(_ lhs: PCMessage, _ rhs: PCMessage) -> Bool {
         return lhs.id == rhs.id
     }
-
 }

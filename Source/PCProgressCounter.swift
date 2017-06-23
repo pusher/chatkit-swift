@@ -10,7 +10,7 @@ class PCProgressCounter {
     init(totalCount: Int, labelSuffix: String? = nil) {
         self.totalCount = totalCount
         let queueLabelSuffix = labelSuffix ?? "progress-counter"
-        self.queue = DispatchQueue(label: "com.pusher.chat-api.\(queueLabelSuffix)")
+        queue = DispatchQueue(label: "com.pusher.chat-api.\(queueLabelSuffix)")
     }
 
     func incrementSuccessAndCheckIfFinished() -> Bool {
@@ -36,5 +36,4 @@ class PCProgressCounter {
         }
         return isFinished
     }
-
 }

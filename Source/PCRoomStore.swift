@@ -52,7 +52,7 @@ public class PCRoomStore {
         let path = "/\(ChatManager.namespace)/rooms/\(id)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
-        self.app.requestWithRetry(
+        app.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -79,5 +79,4 @@ public class PCRoomStore {
             }
         )
     }
-
 }

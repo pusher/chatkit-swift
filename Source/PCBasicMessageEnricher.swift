@@ -109,7 +109,7 @@ class PCBasicMessageEnricher {
 
             self.enrichedMessagesAwaitingCompletionCalls[id] = result
 
-             guard id == nextIdToComplete else {
+            guard id == nextIdToComplete else {
                 // If the message id received isn't the next to have its completionHandler called
                 // then return as we've already stored the result so it can be used later
                 self.logger.log(
@@ -133,9 +133,9 @@ class PCBasicMessageEnricher {
                 }
 
                 switch result {
-                case .success(let message):
+                case let .success(message):
                     completionHandler(message, nil)
-                case .error(let err):
+                case let .error(err):
                     completionHandler(nil, err)
                 }
 
