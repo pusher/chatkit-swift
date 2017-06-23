@@ -12,7 +12,7 @@ public class PCRoomStore {
     }
 
     public func room(id: Int, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
-        self.findOrGetRoom(id: id, completionHander: completionHandler)
+        self.findOrGetRoom(id: id, completionHandler: completionHandler)
     }
 
     func addOrMerge(_ room: PCRoom, completionHandler: @escaping (PCRoom) -> Void) {
@@ -32,18 +32,18 @@ public class PCRoomStore {
         return self.rooms.remove(where: { $0.id == id }, completionHandler: completionHandler)
     }
 
-    func findOrGetRoom(id: Int, completionHander: @escaping (PCRoom?, Error?) -> Void) {
+    func findOrGetRoom(id: Int, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
         if let room = self.rooms.first(where: { $0.id == id }) {
-            completionHander(room, nil)
+            completionHandler(room, nil)
         } else {
             self.getRoom(id: id) { room, err in
                 guard err == nil else {
                     self.app.logger.log(err!.localizedDescription, logLevel: .error)
-                    completionHander(nil, err!)
+                    completionHandler(nil, err!)
                     return
                 }
 
-                completionHander(room!, nil)
+                completionHandler(room!, nil)
             }
         }
     }
