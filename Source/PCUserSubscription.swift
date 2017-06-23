@@ -11,7 +11,7 @@ final public class PCUserSubscription {
     public internal(set) var delegate: PCChatManagerDelegate
     public var connectCompletionHandlers: [(PCCurrentUser?, Error?) -> Void]
 
-    public var currentUser: PCCurrentUser? = nil
+    public var currentUser: PCCurrentUser?
 
     public init(
         app: App,
@@ -27,7 +27,7 @@ final public class PCUserSubscription {
         self.connectCompletionHandlers = [connectCompletionHandler]
     }
 
-    public func handleEvent(eventId: String, headers: [String: String], data: Any) {
+    public func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
             self.app.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
             return
@@ -40,9 +40,9 @@ final public class PCUserSubscription {
 
         // TODO: Decide if we even need this in the client
 
-//        guard let timestamp = json["timestamp"] as? String else {
-//            return
-//        }
+        //        guard let timestamp = json["timestamp"] as? String else {
+        //            return
+        //        }
 
         guard let eventTypeString = json["event_type"] as? String else {
             self.app.logger.log("Event type missing for API event: \(json)", logLevel: .debug)
@@ -182,7 +182,7 @@ extension PCUserSubscription {
                 combinedRoomUserIds.formUnion(room.userIds)
                 roomsFromConnection.append(room)
 
-                self.currentUser!.roomStore.addOrMerge(room) { room in
+                self.currentUser!.roomStore.addOrMerge(room) { _ in
                     if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
                         self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
                         self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: self.currentUser!)
@@ -208,7 +208,7 @@ extension PCUserSubscription {
     }
 
     fileprivate func fetchInitialUserInformationForUserIds(_ userIds: Set<String>, currentUser: PCCurrentUser) {
-        self.userStore.initialFetchOfUsersWithIds(userIds) { users, err in
+        self.userStore.initialFetchOfUsersWithIds(userIds) { _, err in
             guard err == nil else {
                 self.app.logger.log(
                     "Unable to fetch user information after successful connection: \(err!.localizedDescription)",
@@ -635,9 +635,7 @@ extension PCUserSubscription {
                 room.subscription?.delegate?.userStoppedTyping(user: user)
             }
         }
-
     }
-
 }
 
 public enum PCAPIEventError: Error {
@@ -649,11 +647,11 @@ public enum PCAPIEventError: Error {
 extension PCAPIEventError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .eventTypeNameMissingInAPIEventPayload(let payload):
+        case let .eventTypeNameMissingInAPIEventPayload(payload):
             return "Event type missing in API event payload: \(payload)"
-        case .apiEventDataMissingInAPIEventPayload(let payload):
+        case let .apiEventDataMissingInAPIEventPayload(payload):
             return "Data missing in API event payload: \(payload)"
-        case .keyNotPresentInEventPayload(let key, let apiEventName, let payload):
+        case let .keyNotPresentInEventPayload(key, apiEventName, payload):
             return "\(key) missing in \(apiEventName.rawValue) API event payload: \(payload)"
         }
     }
@@ -670,17 +668,17 @@ public enum PCError: Error {
 extension PCError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .invalidJSONObjectAsData(let jsonObject):
+        case let .invalidJSONObjectAsData(jsonObject):
             return "Invalid object for JSON serialization: \(jsonObject)"
-        case .failedToJSONSerializeData(let jsonObject):
+        case let .failedToJSONSerializeData(jsonObject):
             return "Failed to JSON serialize object: \(jsonObject)"
-        case .failedToDeserializeJSON(let data):
+        case let .failedToDeserializeJSON(data):
             if let dataString = String(data: data, encoding: .utf8) {
                 return "Failed to deserialize JSON: \(dataString)"
             } else {
                 return "Failed to deserialize JSON"
             }
-        case .failedToCastJSONObjectToDictionary(let jsonObject):
+        case let .failedToCastJSONObjectToDictionary(jsonObject):
             return "Failed to cast JSON object to Dictionary: \(jsonObject)"
         case .currentUserIsNil:
             return "currentUser property is nil for PCUserSubscription"

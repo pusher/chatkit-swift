@@ -25,7 +25,6 @@ final public class PCUser {
         self.lastSeenAt = nil
     }
 
-
     // TODO: Could use inout?
     func updateWithPropertiesOfUser(_ user: PCUser) -> PCUser {
         if user.presenceState != .unknown {
@@ -53,7 +52,6 @@ extension PCUser: Hashable {
     public static func ==(_ lhs: PCUser, _ rhs: PCUser) -> Bool {
         return lhs.id == rhs.id
     }
-
 }
 
 extension PCUser: CustomDebugStringConvertible {
@@ -61,5 +59,4 @@ extension PCUser: CustomDebugStringConvertible {
     public var debugDescription: String {
         return "ID: \(self.id) Name: \(self.name ?? "nil")"
     }
-
 }

@@ -34,5 +34,4 @@ extension PCMessage: Hashable {
     public static func ==(_ lhs: PCMessage, _ rhs: PCMessage) -> Bool {
         return lhs.id == rhs.id
     }
-
 }

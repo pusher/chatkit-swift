@@ -36,5 +36,4 @@ final class PCProgressCounter {
         }
         return isFinished
     }
-
 }

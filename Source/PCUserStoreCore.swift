@@ -28,5 +28,4 @@ final public class PCUserStoreCore {
 
         return self.users.remove(userToRemove)
     }
-
 }

@@ -19,7 +19,7 @@ final public class PCRoomSubscription {
         self.basicMessageEnricher = basicMessageEnricher
     }
 
-    func handleEvent(eventId: String, headers: [String: String], data: Any) {
+    func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
             self.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
             return

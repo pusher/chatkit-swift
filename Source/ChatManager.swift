@@ -1,25 +1,21 @@
 import Foundation
 import PusherPlatform
 
-@objc final public class ChatManager: NSObject {
-    static public let namespace = "chat_api/v1"
+@objc public class ChatManager: NSObject {
+    public static let namespace = "chat_api/v1"
 
     public let app: App
-    public internal(set) var userSubscription: PCUserSubscription? = nil
+    public internal(set) var userSubscription: PCUserSubscription?
 
     public var currentUser: PCCurrentUser? {
-        get {
-            return self.userSubscription?.currentUser
-        }
+        return self.userSubscription?.currentUser
     }
 
     let userStore: PCGlobalUserStore
 
     // TODO: Do we need this here? Should it instead just live on the PCCurrentUser?
     public var users: Set<PCUser> {
-        get {
-            return self.userStore.users
-        }
+        return self.userStore.users
     }
 
     public init(
@@ -79,7 +75,7 @@ import PusherPlatform
             //            onOpen: onOpen,
             //            onResuming: onResuming,
             onEvent: self.userSubscription!.handleEvent,
-            onEnd: { statusCode, headers, info in
+            onEnd: { _, _, _ in
                 print("ENDED")
             },
             onError: { error in
@@ -91,5 +87,4 @@ import PusherPlatform
     //    fileprivate func onUserSubscriptionStateChange(newState: ) {
     //        self.delegate?.userSubscriptionStateChanged(from: <#T##PCUserSubscriptionState#>, to: <#T##PCUserSubscriptionState#>)
     //    }
-
 }

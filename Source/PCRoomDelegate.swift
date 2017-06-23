@@ -23,5 +23,5 @@ public protocol PCRoomDelegate {
 
     // TODO: Make all of this work, and probably duplicate in PCChatManagerDelegate
 
-//    func subscriptionStateChanged(from: PPResumableSubscriptionState, to: PPResumableSubscriptionState)
+    //    func subscriptionStateChanged(from: PPResumableSubscriptionState, to: PPResumableSubscriptionState)
 }

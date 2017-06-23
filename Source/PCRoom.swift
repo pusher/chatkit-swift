@@ -9,7 +9,7 @@ final public class PCRoom {
     public internal(set) var updatedAt: String
     public internal(set) var deletedAt: String?
 
-    public internal(set) var subscription: PCRoomSubscription? = nil
+    public internal(set) var subscription: PCRoomSubscription?
 
     public internal(set) var userIds: Set<String>
 
@@ -17,13 +17,11 @@ final public class PCRoom {
     // property would become a func with a completion handler that queried the user store
     // based on the user ids that are being tracked in the Room objects
     public var users: [PCUser] {
-        get {
-            // TODO: Is this going to be expensive if this is used as a datasource for a
-            // tableview, or similar?
-            // TODO: This will also not work well if references to users are stored by
-            // a customer
-            return Array(self.userStore.users).sorted(by: { $0.0.id > $0.1.id })
-        }
+        // TODO: Is this going to be expensive if this is used as a datasource for a
+        // tableview, or similar?
+        // TODO: This will also not work well if references to users are stored by
+        // a customer
+        return Array(self.userStore.users).sorted(by: { $0.0.id > $0.1.id })
     }
 
     public internal(set) var userStore: PCRoomUserStore
@@ -64,7 +62,6 @@ extension PCRoom: Hashable {
     public static func ==(_ lhs: PCRoom, _ rhs: PCRoom) -> Bool {
         return lhs.id == rhs.id
     }
-
 }
 
 extension PCRoom: CustomDebugStringConvertible {
@@ -72,6 +69,4 @@ extension PCRoom: CustomDebugStringConvertible {
     public var debugDescription: String {
         return "ID: \(self.id) Name: \(self.name)"
     }
-
 }
-

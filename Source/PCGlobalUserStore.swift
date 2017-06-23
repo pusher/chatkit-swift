@@ -4,9 +4,7 @@ import PusherPlatform
 final public class PCGlobalUserStore {
 
     public var users: Set<PCUser> {
-        get {
-            return self.userStoreCore.users
-        }
+        return self.userStoreCore.users
     }
 
     public internal(set) var userStoreCore: PCUserStoreCore
@@ -206,5 +204,4 @@ final public class PCGlobalUserStore {
     func initialFetchOfUsersWithIds(_ userIds: Set<String>, completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
         self.fetchUsersWithIds(userIds, completionHandler: completionHandler)
     }
-
 }
