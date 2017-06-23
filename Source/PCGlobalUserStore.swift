@@ -4,9 +4,7 @@ import PusherPlatform
 public class PCGlobalUserStore {
 
     public var users: Set<PCUser> {
-        get {
-            return self.userStoreCore.users
-        }
+        return self.userStoreCore.users
     }
 
     public internal(set) var userStoreCore: PCUserStoreCore
@@ -55,7 +53,7 @@ public class PCGlobalUserStore {
         let path = "/\(ChatManager.namespace)/users/\(id)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
-        self.app.requestWithRetry(
+        app.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -162,7 +160,7 @@ public class PCGlobalUserStore {
         // We want this to complete quickly, whether it succeeds or not
         generalRequest.retryStrategy = PPDefaultRetryStrategy(maxNumberOfAttempts: 1)
 
-        self.app.requestWithRetry(
+        app.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -206,5 +204,4 @@ public class PCGlobalUserStore {
     func initialFetchOfUsersWithIds(_ userIds: Set<String>, completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
         self.fetchUsersWithIds(userIds, completionHandler: completionHandler)
     }
-
 }

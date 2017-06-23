@@ -2,7 +2,7 @@ import Foundation
 
 public class PCTypingIndicatorManager {
     private var queue = DispatchQueue(label: "com.pusher.chat-api.typing-indicator-manager")
-    public var typingTimeoutTimer: Timer? = nil
+    public var typingTimeoutTimer: Timer?
     public var typingTimeoutInterval: TimeInterval
     public let roomId: Int
     public internal(set) var isTyping: Bool = false
@@ -23,7 +23,7 @@ public class PCTypingIndicatorManager {
     }
 
     public func typing() {
-        queue.sync {
+        self.queue.sync {
             if !self.isTyping {
                 self.isTyping = true
                 self.signalTypingStarted()
@@ -49,7 +49,7 @@ public class PCTypingIndicatorManager {
     }
 
     @objc public func stopTyping() {
-        queue.sync {
+        self.queue.sync {
             self.isTyping = false
             self.typingTimeoutTimer?.invalidate()
             self.signalTypingStopped()
@@ -71,5 +71,4 @@ public class PCTypingIndicatorManager {
             }
         }
     }
-
 }

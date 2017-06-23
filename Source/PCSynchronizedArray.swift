@@ -46,6 +46,7 @@ public class PCSynchronizedArray<T> {
             }
         }
     }
+
     public func remove(at index: Int, completionHandler: ((T) -> Void)? = nil) {
         self.accessQueue.async(flags: .barrier) {
             let element = self.underlyingArray.remove(at: index)
@@ -59,7 +60,7 @@ public class PCSynchronizedArray<T> {
     public var count: Int {
         var count = 0
 
-        self.accessQueue.sync {
+        accessQueue.sync {
             count = self.underlyingArray.count
         }
 
@@ -68,15 +69,14 @@ public class PCSynchronizedArray<T> {
 
     public var isEmpty: Bool {
         var result = false
-        self.accessQueue.sync { result = self.underlyingArray.isEmpty }
+        accessQueue.sync { result = self.underlyingArray.isEmpty }
         return result
     }
-
 
     public func first(where predicate: (T) -> Bool) -> T? {
         var element: T?
 
-        self.accessQueue.sync {
+        accessQueue.sync {
             element = self.underlyingArray.first(where: predicate)
         }
 
@@ -85,14 +85,13 @@ public class PCSynchronizedArray<T> {
 
     public var first: T? {
         var result: T?
-        self.accessQueue.sync { result = self.underlyingArray.first }
+        accessQueue.sync { result = self.underlyingArray.first }
         return result
     }
 
-
     public var last: T? {
         var result: T?
-        self.accessQueue.sync { result = self.underlyingArray.last }
+        accessQueue.sync { result = self.underlyingArray.last }
         return result
     }
 
@@ -109,19 +108,19 @@ public class PCSynchronizedArray<T> {
 
     public func filter(_ isIncluded: @escaping (T) -> Bool) -> [T] {
         var result = [T]()
-        self.accessQueue.sync { result = self.underlyingArray.filter(isIncluded) }
+        accessQueue.sync { result = self.underlyingArray.filter(isIncluded) }
         return result
     }
 
     public func sorted(by areInIncreasingOrder: (T, T) -> Bool) -> [T] {
         var result = [T]()
-        self.accessQueue.sync { result = self.underlyingArray.sorted(by: areInIncreasingOrder) }
+        accessQueue.sync { result = self.underlyingArray.sorted(by: areInIncreasingOrder) }
         return result
     }
 
     public func flatMap<ElementOfResult>(_ transform: @escaping (T) -> ElementOfResult?) -> [ElementOfResult] {
         var result = [ElementOfResult]()
-        self.accessQueue.sync { result = self.underlyingArray.flatMap(transform) }
+        accessQueue.sync { result = self.underlyingArray.flatMap(transform) }
         return result
     }
 
@@ -137,7 +136,7 @@ public class PCSynchronizedArray<T> {
         }
         get {
             var element: T!
-            self.accessQueue.sync {
+            accessQueue.sync {
                 element = self.underlyingArray[index]
             }
 

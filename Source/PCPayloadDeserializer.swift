@@ -30,15 +30,15 @@ struct PCPayloadDeserializer {
 
     static func createRoomFromPayload(_ roomPayload: [String: Any]) throws -> PCRoom {
         guard let roomId = roomPayload["id"] as? Int,
-              let roomName = roomPayload["name"] as? String,
-              let roomCreatorUserId = roomPayload["created_by_id"] as? String,
-              let roomCreatedAt = roomPayload["created_at"] as? String,
-              let roomUpdatedAt = roomPayload["updated_at"] as? String
+            let roomName = roomPayload["name"] as? String,
+            let roomCreatorUserId = roomPayload["created_by_id"] as? String,
+            let roomCreatedAt = roomPayload["created_at"] as? String,
+            let roomUpdatedAt = roomPayload["updated_at"] as? String
         else {
             throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCRoom.self), payload: roomPayload)
         }
 
-        var memberUserIdsSet: Set<String>? = nil
+        var memberUserIdsSet: Set<String>?
 
         if let memberUserIds = roomPayload["member_user_ids"] as? [String] {
             memberUserIdsSet = Set<String>(memberUserIds)
@@ -59,11 +59,11 @@ struct PCPayloadDeserializer {
     // information about its associated sender and the room it belongs to
     static func createMessageFromPayload(_ messagePayload: [String: Any]) throws -> PCBasicMessage {
         guard let messageId = messagePayload["id"] as? Int,
-              let messageSenderId = messagePayload["user_id"] as? String,
-              let messageRoomId = messagePayload["room_id"] as? Int,
-              let messageText = messagePayload["text"] as? String,
-              let messageCreatedAt = messagePayload["created_at"] as? String,
-              let messageUpdatedAt = messagePayload["updated_at"] as? String
+            let messageSenderId = messagePayload["user_id"] as? String,
+            let messageRoomId = messagePayload["room_id"] as? Int,
+            let messageText = messagePayload["text"] as? String,
+            let messageCreatedAt = messagePayload["created_at"] as? String,
+            let messageUpdatedAt = messagePayload["updated_at"] as? String
         else {
             throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCBasicMessage.self), payload: messagePayload)
         }
@@ -80,8 +80,8 @@ struct PCPayloadDeserializer {
 
     static func createPresencePayloadFromPayload(_ payload: [String: Any]) throws -> PCPresencePayload {
         guard let userId = payload["user_id"] as? String,
-              let stateString = payload["state"] as? String,
-              let state = PCPresenceState(rawValue: stateString)
+            let stateString = payload["state"] as? String,
+            let state = PCPresenceState(rawValue: stateString)
         else {
             throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCPresencePayload.self), payload: payload)
         }
@@ -93,17 +93,16 @@ struct PCPayloadDeserializer {
         )
     }
 
-    static fileprivate func createBasicUserFromPayload(_ payload: [String: Any]) throws -> PCBasicUser {
+    fileprivate static func createBasicUserFromPayload(_ payload: [String: Any]) throws -> PCBasicUser {
         guard let userId = payload["id"] as? String,
-              let createdAt = payload["created_at"] as? String,
-              let updatedAt = payload["updated_at"] as? String
+            let createdAt = payload["created_at"] as? String,
+            let updatedAt = payload["updated_at"] as? String
         else {
             throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCUser.self), payload: payload)
         }
 
         return PCBasicUser(id: userId, createdAt: createdAt, updatedAt: updatedAt)
     }
-
 }
 
 public enum PCPayloadDeserializerError: Error {
@@ -113,7 +112,7 @@ public enum PCPayloadDeserializerError: Error {
 extension PCPayloadDeserializerError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .incompleteOrInvalidPayloadToCreteEntity(let type, let payload):
+        case let .incompleteOrInvalidPayloadToCreteEntity(type, payload):
             return "Incomplete or invalid data in order to create \(type) in provided payload: \(payload)"
         }
     }

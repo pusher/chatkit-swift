@@ -11,7 +11,7 @@ public class PCUserSubscription {
     public internal(set) var delegate: PCChatManagerDelegate
     public var connectCompletionHandlers: [(PCCurrentUser?, Error?) -> Void]
 
-    public var currentUser: PCCurrentUser? = nil
+    public var currentUser: PCCurrentUser?
 
     public init(
         app: App,
@@ -27,7 +27,7 @@ public class PCUserSubscription {
         self.connectCompletionHandlers = [connectCompletionHandler]
     }
 
-    public func handleEvent(eventId: String, headers: [String: String], data: Any) {
+    public func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
             self.app.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
             return
@@ -40,9 +40,9 @@ public class PCUserSubscription {
 
         // TODO: Decide if we even need this in the client
 
-//        guard let timestamp = json["timestamp"] as? String else {
-//            return
-//        }
+        //        guard let timestamp = json["timestamp"] as? String else {
+        //            return
+        //        }
 
         guard let eventTypeString = json["event_type"] as? String else {
             self.app.logger.log("Event type missing for API event: \(json)", logLevel: .debug)
@@ -133,7 +133,7 @@ extension PCUserSubscription {
         let receivedCurrentUser: PCCurrentUser
 
         do {
-            receivedCurrentUser = try PCPayloadDeserializer.createCurrentUserFromPayload(userPayload, app: self.app, userStore: userStore)
+            receivedCurrentUser = try PCPayloadDeserializer.createCurrentUserFromPayload(userPayload, app: app, userStore: userStore)
         } catch let err {
             callConnectCompletionHandlers(
                 currentUser: nil,
@@ -142,7 +142,7 @@ extension PCUserSubscription {
             return
         }
 
-        let wasExistingCurrentUser = self.currentUser != nil
+        let wasExistingCurrentUser = currentUser != nil
 
         // If the currentUser property is already set then the assumption is that there was
         // already a user subscription and so instead of setting the property to a new
@@ -150,7 +150,7 @@ extension PCUserSubscription {
         if let currentUser = self.currentUser {
             currentUser.updateWithPropertiesOf(receivedCurrentUser)
         } else {
-            self.currentUser = receivedCurrentUser
+            currentUser = receivedCurrentUser
         }
 
         // If a presenceSubscription already exists then we want to create a new one
@@ -158,12 +158,12 @@ extension PCUserSubscription {
         // existing subscription, if it was still open
         if let presSub = self.currentUser?.presenceSubscription {
             presSub.end()
-            self.currentUser!.presenceSubscription = nil
+            currentUser!.presenceSubscription = nil
         }
 
         guard roomsPayload.count > 0 else {
-            self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
-            self.currentUser!.setupPresenceSubscription(delegate: self.delegate)
+            callConnectCompletionHandlers(currentUser: currentUser, error: nil)
+            currentUser!.setupPresenceSubscription(delegate: delegate)
             return
         }
 
@@ -182,7 +182,7 @@ extension PCUserSubscription {
                 combinedRoomUserIds.formUnion(room.userIds)
                 roomsFromConnection.append(room)
 
-                self.currentUser!.roomStore.addOrMerge(room) { room in
+                self.currentUser!.roomStore.addOrMerge(room) { _ in
                     if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
                         self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
                         self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: self.currentUser!)
@@ -208,7 +208,7 @@ extension PCUserSubscription {
     }
 
     fileprivate func fetchInitialUserInformationForUserIds(_ userIds: Set<String>, currentUser: PCCurrentUser) {
-        self.userStore.initialFetchOfUsersWithIds(userIds) { users, err in
+        userStore.initialFetchOfUsersWithIds(userIds) { _, err in
             guard err == nil else {
                 self.app.logger.log(
                     "Unable to fetch user information after successful connection: \(err!.localizedDescription)",
@@ -263,8 +263,8 @@ extension PCUserSubscription {
 
     fileprivate func reconcileExistingRoomStoreWithRoomsReceivedOnConnection(roomsFromConnection: [PCRoom]) {
         guard let currentUser = self.currentUser else {
-            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
-            self.delegate.error(error: PCError.currentUserIsNil)
+            app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            delegate.error(error: PCError.currentUserIsNil)
             return
         }
 
@@ -284,7 +284,7 @@ extension PCUserSubscription {
 
     fileprivate func parseAddedToRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomPayload = data["room"] as? [String: Any] else {
-            self.delegate.error(
+            delegate.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room",
                     apiEventName: eventName,
@@ -297,7 +297,7 @@ extension PCUserSubscription {
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
-            self.currentUser?.roomStore.addOrMerge(room) { room in
+            currentUser?.roomStore.addOrMerge(room) { room in
                 self.delegate.addedToRoom(room: room)
             }
 
@@ -341,7 +341,7 @@ extension PCUserSubscription {
 
     fileprivate func parseRemovedFromRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomId = data["room_id"] as? Int else {
-            self.delegate.error(
+            delegate.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
@@ -351,7 +351,7 @@ extension PCUserSubscription {
             return
         }
 
-        self.currentUser?.roomStore.remove(id: roomId) { room in
+        currentUser?.roomStore.remove(id: roomId) { room in
             guard let roomRemovedFrom = room else {
                 self.app.logger.log("Received \(eventName.rawValue) API event but room \(roomId) not found in local store of joined rooms", logLevel: .debug)
                 return
@@ -363,7 +363,7 @@ extension PCUserSubscription {
 
     fileprivate func parseRoomUpdatedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomPayload = data["room"] as? [String: Any] else {
-            self.delegate.error(
+            delegate.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room",
                     apiEventName: eventName,
@@ -376,7 +376,7 @@ extension PCUserSubscription {
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
-            self.currentUser?.roomStore.room(id: room.id) { roomToUpdate, err in
+            currentUser?.roomStore.room(id: room.id) { roomToUpdate, err in
 
                 guard let roomToUpdate = roomToUpdate, err == nil else {
                     self.app.logger.log(err!.localizedDescription, logLevel: .debug)
@@ -394,7 +394,7 @@ extension PCUserSubscription {
 
     fileprivate func parseRoomDeletedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomId = data["room_id"] as? Int else {
-            self.delegate.error(
+            delegate.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
@@ -405,8 +405,8 @@ extension PCUserSubscription {
         }
 
         guard let currentUser = self.currentUser else {
-            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
-            self.delegate.error(error: PCError.currentUserIsNil)
+            app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            delegate.error(error: PCError.currentUserIsNil)
             return
         }
 
@@ -422,7 +422,7 @@ extension PCUserSubscription {
 
     fileprivate func parseUserJoinedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomId = data["room_id"] as? Int else {
-            self.delegate.error(
+            delegate.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
@@ -433,7 +433,7 @@ extension PCUserSubscription {
         }
 
         guard let userId = data["user_id"] as? String else {
-            self.delegate.error(
+            delegate.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "user_id",
                     apiEventName: eventName,
@@ -444,8 +444,8 @@ extension PCUserSubscription {
         }
 
         guard let currentUser = self.currentUser else {
-            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
-            self.delegate.error(error: PCError.currentUserIsNil)
+            app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            delegate.error(error: PCError.currentUserIsNil)
             return
         }
 
@@ -485,7 +485,7 @@ extension PCUserSubscription {
 
     fileprivate func parseUserLeftPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomId = data["room_id"] as? Int else {
-            self.delegate.error(
+            delegate.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
@@ -496,7 +496,7 @@ extension PCUserSubscription {
         }
 
         guard let userId = data["user_id"] as? String else {
-            self.delegate.error(
+            delegate.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "user_id",
                     apiEventName: eventName,
@@ -507,8 +507,8 @@ extension PCUserSubscription {
         }
 
         guard let currentUser = self.currentUser else {
-            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
-            self.delegate.error(error: PCError.currentUserIsNil)
+            app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            delegate.error(error: PCError.currentUserIsNil)
             return
         }
 
@@ -553,7 +553,7 @@ extension PCUserSubscription {
 
     fileprivate func parseTypingStartPayload(_ eventName: PCAPIEventName, data: [String: Any], userId: String) {
         guard let roomId = data["room_id"] as? Int else {
-            self.delegate.error(
+            delegate.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
@@ -564,8 +564,8 @@ extension PCUserSubscription {
         }
 
         guard let currentUser = self.currentUser else {
-            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
-            self.delegate.error(error: PCError.currentUserIsNil)
+            app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            delegate.error(error: PCError.currentUserIsNil)
             return
         }
 
@@ -596,7 +596,7 @@ extension PCUserSubscription {
 
     fileprivate func parseTypingStopPayload(_ eventName: PCAPIEventName, data: [String: Any], userId: String) {
         guard let roomId = data["room_id"] as? Int else {
-            self.delegate.error(
+            delegate.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
@@ -607,8 +607,8 @@ extension PCUserSubscription {
         }
 
         guard let currentUser = self.currentUser else {
-            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
-            self.delegate.error(error: PCError.currentUserIsNil)
+            app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            delegate.error(error: PCError.currentUserIsNil)
             return
         }
 
@@ -635,9 +635,7 @@ extension PCUserSubscription {
                 room.subscription?.delegate?.userStoppedTyping(user: user)
             }
         }
-
     }
-
 }
 
 public enum PCAPIEventError: Error {
@@ -649,11 +647,11 @@ public enum PCAPIEventError: Error {
 extension PCAPIEventError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .eventTypeNameMissingInAPIEventPayload(let payload):
+        case let .eventTypeNameMissingInAPIEventPayload(payload):
             return "Event type missing in API event payload: \(payload)"
-        case .apiEventDataMissingInAPIEventPayload(let payload):
+        case let .apiEventDataMissingInAPIEventPayload(payload):
             return "Data missing in API event payload: \(payload)"
-        case .keyNotPresentInEventPayload(let key, let apiEventName, let payload):
+        case let .keyNotPresentInEventPayload(key, apiEventName, payload):
             return "\(key) missing in \(apiEventName.rawValue) API event payload: \(payload)"
         }
     }
@@ -670,17 +668,17 @@ public enum PCError: Error {
 extension PCError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .invalidJSONObjectAsData(let jsonObject):
+        case let .invalidJSONObjectAsData(jsonObject):
             return "Invalid object for JSON serialization: \(jsonObject)"
-        case .failedToJSONSerializeData(let jsonObject):
+        case let .failedToJSONSerializeData(jsonObject):
             return "Failed to JSON serialize object: \(jsonObject)"
-        case .failedToDeserializeJSON(let data):
+        case let .failedToDeserializeJSON(data):
             if let dataString = String(data: data, encoding: .utf8) {
                 return "Failed to deserialize JSON: \(dataString)"
             } else {
                 return "Failed to deserialize JSON"
             }
-        case .failedToCastJSONObjectToDictionary(let jsonObject):
+        case let .failedToCastJSONObjectToDictionary(jsonObject):
             return "Failed to cast JSON object to Dictionary: \(jsonObject)"
         case .currentUserIsNil:
             return "currentUser property is nil for PCUserSubscription"

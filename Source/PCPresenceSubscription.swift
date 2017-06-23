@@ -25,7 +25,7 @@ public class PCPresenceSubscription {
         self.delegate = delegate
     }
 
-    public func handleEvent(eventId: String, headers: [String: String], data: Any) {
+    public func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
             self.app.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
             return
@@ -69,7 +69,6 @@ public class PCPresenceSubscription {
     func end() {
         self.resumableSubscription.end()
     }
-
 }
 
 extension PCPresenceSubscription {
@@ -81,8 +80,8 @@ extension PCPresenceSubscription {
                 payload: data
             )
 
-            self.app.logger.log(error.localizedDescription, logLevel: .debug)
-            self.delegate?.error(error: error)
+            app.logger.log(error.localizedDescription, logLevel: .debug)
+            delegate?.error(error: error)
             return
         }
 
@@ -97,7 +96,7 @@ extension PCPresenceSubscription {
         }
 
         guard userStates.count > 0 else {
-            self.app.logger.log("No presence user states to process", logLevel: .verbose)
+            app.logger.log("No presence user states to process", logLevel: .verbose)
             return
         }
 
@@ -114,7 +113,7 @@ extension PCPresenceSubscription {
         }
     }
 
-    fileprivate func parsePresenceUpdatePayload(_ eventName: PCPresenceEventName, data: [String: Any], userStore: PCGlobalUserStore) {
+    fileprivate func parsePresenceUpdatePayload(_: PCPresenceEventName, data: [String: Any], userStore: PCGlobalUserStore) {
         do {
             let presencePayload = try PCPayloadDeserializer.createPresencePayloadFromPayload(data)
 
@@ -174,8 +173,8 @@ extension PCPresenceSubscription {
                 payload: data
             )
 
-            self.app.logger.log(error.localizedDescription, logLevel: .debug)
-            self.delegate?.error(error: error)
+            app.logger.log(error.localizedDescription, logLevel: .debug)
+            delegate?.error(error: error)
             return
         }
 
@@ -190,7 +189,7 @@ extension PCPresenceSubscription {
         }
 
         guard userStates.count > 0 else {
-            self.app.logger.log("No presence user states to process", logLevel: .verbose)
+            app.logger.log("No presence user states to process", logLevel: .verbose)
             return
         }
 
@@ -201,7 +200,6 @@ extension PCPresenceSubscription {
             }
         }
     }
-
 }
 
 public enum PCPresenceEventName: String {
@@ -217,7 +215,7 @@ public enum PCPresenceEventError: Error {
 extension PCPresenceEventError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .keyNotPresentInEventPayload(let key, let apiEventName, let payload):
+        case let .keyNotPresentInEventPayload(key, apiEventName, payload):
             return "\(key) missing in \(apiEventName.rawValue) API event payload: \(payload)"
         }
     }

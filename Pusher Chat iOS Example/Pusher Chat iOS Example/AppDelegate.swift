@@ -1,4 +1,4 @@
- //
+//
 //  AppDelegate.swift
 //  Pusher Platform iOS Example
 //
@@ -14,9 +14,9 @@ import PusherPlatform
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    public var pusherChat: ChatManager? = nil
+    public var pusherChat: ChatManager?
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
         let kubeBaseClient = PPBaseClient(cluster: "api-ceres.pusherplatform.io")
 
@@ -35,12 +35,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         self.pusherChat = pusherChat
 
-//        (self.pusherChat?.app.logger as? PPDefaultLogger)?.minimumLogLevel = .verbose
+        //        (self.pusherChat?.app.logger as? PPDefaultLogger)?.minimumLogLevel = .verbose
 
         return true
     }
 }
-
 
 public struct HamLogger: PPLogger {
     public func log(_ message: @autoclosure @escaping () -> String, logLevel: PPLogLevel) {

@@ -10,7 +10,7 @@ public class PCUserStoreCore {
     }
 
     func addOrMerge(_ user: PCUser) -> PCUser {
-        let insertResult = self.users.insert(user)
+        let insertResult = users.insert(user)
 
         if !insertResult.inserted {
             // If a user already exists in the store with a matching id then merge
@@ -28,5 +28,4 @@ public class PCUserStoreCore {
 
         return self.users.remove(userToRemove)
     }
-
 }
