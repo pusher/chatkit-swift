@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-public class PCRoom {
+final public class PCRoom {
     public let id: Int
     public internal(set) var name: String
     public let createdByUserId: String

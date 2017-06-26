@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-public class PCCurrentUser {
+final public class PCCurrentUser {
     public let id: String
     public let createdAt: String
     public var updatedAt: String

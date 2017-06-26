@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-public class PCRoomSubscription {
+final public class PCRoomSubscription {
     public var delegate: PCRoomDelegate?
     let resumableSubscription: PPResumableSubscription
     public var logger: PPLogger

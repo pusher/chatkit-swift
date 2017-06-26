@@ -1,6 +1,6 @@
 import Foundation
 
-public class PCMessage {
+final public class PCMessage {
     public let id: Int
     public let text: String
     public let createdAt: String

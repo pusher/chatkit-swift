@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-class PCBasicMessageEnricher {
+final class PCBasicMessageEnricher {
     public let userStore: PCGlobalUserStore
     public let room: PCRoom
     let logger: PPLogger

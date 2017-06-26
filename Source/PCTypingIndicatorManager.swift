@@ -1,6 +1,6 @@
 import Foundation
 
-public class PCTypingIndicatorManager {
+final public class PCTypingIndicatorManager {
     private var queue = DispatchQueue(label: "com.pusher.chat-api.typing-indicator-manager")
     public var typingTimeoutTimer: Timer? = nil
     public var typingTimeoutInterval: TimeInterval
