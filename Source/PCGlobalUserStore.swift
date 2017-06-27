@@ -85,12 +85,12 @@ public class PCGlobalUserStore {
 
     func handleInitialPresencePayloadsAfterRoomJoin(_ payloads: [PCPresencePayload], completionHandler: @escaping () -> Void) {
         let roomJoinedPresenceProgressCounter = PCProgressCounter(totalCount: payloads.count, labelSuffix: "room-joined-presence-payload")
-        self.handleInitialPresencePayloads(payloads: payloads, progressCounter: roomJoinedPresenceProgressCounter, completionHandler: completionHandler)
+        self.handleInitialPresencePayloads(payloads, progressCounter: roomJoinedPresenceProgressCounter, completionHandler: completionHandler)
     }
     
     func handleInitialPresencePayloads(_ payloads: [PCPresencePayload], completionHandler: @escaping () -> Void) {
         let initialPresenceProgressCounter = PCProgressCounter(totalCount: payloads.count, labelSuffix: "initial-presence-payload")
-        self.handleInitialPresencePayloads(payloads: payloads, progressCounter: initialPresenceProgressCounter, completionHandler: completionHandler)
+        self.handleInitialPresencePayloads(payloads, progressCounter: initialPresenceProgressCounter, completionHandler: completionHandler)
     }
     
     private func handleInitialPresencePayloads(_ payloads: [PCPresencePayload], progressCounter: PCProgressCounter, completionHandler: @escaping () -> Void) {
