@@ -1,6 +1,6 @@
 import Foundation
 
-final public class PCUserStoreCore {
+public final class PCUserStoreCore {
     fileprivate let userStoreQueue = DispatchQueue(label: "com.pusher.chat-api.user-store-core")
 
     public internal(set) var users: Set<PCUser>
@@ -28,5 +28,4 @@ final public class PCUserStoreCore {
 
         return self.users.remove(userToRemove)
     }
-
 }

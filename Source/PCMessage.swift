@@ -1,6 +1,6 @@
 import Foundation
 
-final public class PCMessage {
+public final class PCMessage {
     public let id: Int
     public let text: String
     public let createdAt: String
@@ -34,5 +34,4 @@ extension PCMessage: Hashable {
     public static func ==(_ lhs: PCMessage, _ rhs: PCMessage) -> Bool {
         return lhs.id == rhs.id
     }
-
 }

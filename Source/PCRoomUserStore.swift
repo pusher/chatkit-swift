@@ -1,12 +1,10 @@
 import Foundation
 import PusherPlatform
 
-final public class PCRoomUserStore {
+public final class PCRoomUserStore {
 
     public var users: Set<PCUser> {
-        get {
-            return self.userStoreCore.users
-        }
+        return self.userStoreCore.users
     }
 
     public internal(set) var userStoreCore: PCUserStoreCore
@@ -24,5 +22,4 @@ final public class PCRoomUserStore {
     func remove(id: String) -> PCUser? {
         return self.userStoreCore.remove(id: id)
     }
-
 }

@@ -1,11 +1,11 @@
 import Foundation
 import PusherPlatform
 
-final public class PCTestingTokenProvider: PPTokenProvider {
+public final class PCTestingTokenProvider: PPTokenProvider {
 
     public let userId: String
     let internalTokenProvider: PPHTTPEndpointTokenProvider
-    public var logger: PPLogger? = nil {
+    public var logger: PPLogger? {
         willSet {
             self.internalTokenProvider.logger = newValue
         }
@@ -20,7 +20,7 @@ final public class PCTestingTokenProvider: PPTokenProvider {
                 req.addQueryItems(
                     [
                         URLQueryItem(name: "user_id", value: userId),
-                        URLQueryItem(name: "service_id", value: serviceId)
+                        URLQueryItem(name: "service_id", value: serviceId),
                     ]
                 )
                 return req
@@ -33,5 +33,4 @@ final public class PCTestingTokenProvider: PPTokenProvider {
     public func fetchToken(completionHandler: @escaping (PPTokenProviderResult) -> Void) {
         self.internalTokenProvider.fetchToken(completionHandler: completionHandler)
     }
-
 }

@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-final public class PCCurrentUser {
+public final class PCCurrentUser {
     public let id: String
     public let createdAt: String
     public var updatedAt: String
@@ -14,24 +14,20 @@ final public class PCCurrentUser {
     public typealias ErrorCompletionHandler = (Error?) -> Void
     public typealias RoomCompletionHandler = (PCRoom?, Error?) -> Void
     public typealias RoomsCompletionHandler = ([PCRoom]?, Error?) -> Void
-    
+
     // TODO: This should probably be [PCUser] instead, like the users property
     // in PCRoom, or something even simpler
     public var users: Set<PCUser> {
-        get {
-            return self.userStore.users
-        }
+        return self.userStore.users
     }
 
     public var rooms: [PCRoom] {
-        get {
-            return self.roomStore.rooms.underlyingArray
-        }
+        return self.roomStore.rooms.underlyingArray
     }
 
     public let pathFriendlyId: String
 
-    public internal(set) var presenceSubscription: PCPresenceSubscription? = nil
+    public internal(set) var presenceSubscription: PCPresenceSubscription?
 
     var typingIndicatorManagers: [Int: PCTypingIndicatorManager] = [:]
     private var typingIndicatorQueue = DispatchQueue(label: "com.pusher.chat-api.typing-indicators")
@@ -103,7 +99,7 @@ final public class PCCurrentUser {
         var roomObject: [String: Any] = [
             "name": name,
             "created_by_id": self.id,
-            "private": isPrivate
+            "private": isPrivate,
         ]
 
         if userIds != nil && userIds!.count > 0 {
@@ -150,7 +146,6 @@ final public class PCCurrentUser {
         )
     }
 
-
     // MARK: Room membership-related interactions
 
     public func addUser(_ user: PCUser, to room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
@@ -161,7 +156,7 @@ final public class PCCurrentUser {
         let userIds = users.map { $0.id }
         self.addUsers(ids: userIds, to: room.id, completionHandler: completionHandler)
     }
-    
+
     public func addUser(id: String, to roomId: Int, completionHandler: @escaping (Error?) -> Void) {
         self.addOrRemoveUsers(in: roomId, userIds: [id], membershipChange: .add, completionHandler: completionHandler)
     }
@@ -206,7 +201,7 @@ final public class PCCurrentUser {
 
         self.app.requestWithRetry(
             using: generalRequest,
-            onSuccess: { data in
+            onSuccess: { _ in
                 completionHandler(nil)
             },
             onError: { error in
@@ -310,7 +305,7 @@ final public class PCCurrentUser {
 
         self.app.requestWithRetry(
             using: generalRequest,
-            onSuccess: { data in
+            onSuccess: { _ in
                 completionHandler(nil)
             },
             onError: { error in
@@ -318,7 +313,6 @@ final public class PCCurrentUser {
             }
         )
     }
-
 
     // MARK: Room fetching
 
@@ -399,7 +393,7 @@ final public class PCCurrentUser {
 
         self.app.requestWithRetry(
             using: generalRequest,
-            onSuccess: { data in
+            onSuccess: { _ in
                 completionHandler(nil)
             },
             onError: { error in
@@ -449,7 +443,7 @@ final public class PCCurrentUser {
     public func addMessage(text: String, to room: PCRoom, completionHandler: @escaping (Int?, Error?) -> Void) {
         let messageObject: [String: Any] = [
             "text": text,
-            "user_id": self.id
+            "user_id": self.id,
         ]
 
         guard JSONSerialization.isValidJSONObject(messageObject) else {
@@ -507,7 +501,7 @@ final public class PCCurrentUser {
             path: path,
             queryItems: [
                 URLQueryItem(name: "user_id", value: self.id),
-                URLQueryItem(name: "message_limit", value: String(messageLimit))
+                URLQueryItem(name: "message_limit", value: String(messageLimit)),
             ]
         )
 
@@ -529,9 +523,9 @@ final public class PCCurrentUser {
             onEvent: room.subscription?.handleEvent
 
             // TODO: This will probably be replaced by the state change delegate function, with an associated type, maybe
-//            onError: { error in
-//                roomDelegate.receivedError(error)
-//            }
+            //            onError: { error in
+            //                roomDelegate.receivedError(error)
+            //            }
         )
     }
 
@@ -626,7 +620,6 @@ final public class PCCurrentUser {
             }
         )
     }
-
 }
 
 public enum PCMessageError: Error {
@@ -637,11 +630,10 @@ extension PCMessageError: LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .messageIdKeyMissingInMessageCreationResponse(let payload):
+        case let .messageIdKeyMissingInMessageCreationResponse(payload):
             return "\"message_id\" key missing from response after message creation: \(payload)"
         }
     }
-
 }
 
 public enum PCRoomMessageFetchDirection: String {

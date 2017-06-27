@@ -19,12 +19,12 @@ public protocol PCChatManagerDelegate {
     // communicated using this?
     func error(error: Error)
 
-//    func userSubscriptionStateChanged(from: PCUserSubscriptionState, to: PCUserSubscriptionState)
+    //    func userSubscriptionStateChanged(from: PCUserSubscriptionState, to: PCUserSubscriptionState)
 }
 
 extension PCChatManagerDelegate {
-    public func userStartedTyping(room: PCRoom, user: PCUser) {}
-    public func userStoppedTyping(room: PCRoom, user: PCUser) {}
-    public func userJoinedRoom(room: PCRoom, user: PCUser) {}
-    public func userLeftRoom(room: PCRoom, user: PCUser) {}
+    public func userStartedTyping(room _: PCRoom, user _: PCUser) {}
+    public func userStoppedTyping(room _: PCRoom, user _: PCUser) {}
+    public func userJoinedRoom(room _: PCRoom, user _: PCUser) {}
+    public func userLeftRoom(room _: PCRoom, user _: PCUser) {}
 }

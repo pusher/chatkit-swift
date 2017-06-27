@@ -1,6 +1,6 @@
 import Foundation
 
-final public class PCUser {
+public final class PCUser {
     public let id: String
     public let createdAt: String
     public let updatedAt: String
@@ -24,7 +24,6 @@ final public class PCUser {
         self.presenceState = .unknown
         self.lastSeenAt = nil
     }
-
 
     // TODO: Could use inout?
     func updateWithPropertiesOfUser(_ user: PCUser) -> PCUser {
@@ -53,7 +52,6 @@ extension PCUser: Hashable {
     public static func ==(_ lhs: PCUser, _ rhs: PCUser) -> Bool {
         return lhs.id == rhs.id
     }
-
 }
 
 extension PCUser: CustomDebugStringConvertible {
@@ -61,5 +59,4 @@ extension PCUser: CustomDebugStringConvertible {
     public var debugDescription: String {
         return "ID: \(self.id) Name: \(self.name ?? "nil")"
     }
-
 }

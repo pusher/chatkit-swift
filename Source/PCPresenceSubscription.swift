@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-final public class PCPresenceSubscription {
+public final class PCPresenceSubscription {
 
     // TODO: Do we need to be careful of retain cycles here? e.g. weak app
 
@@ -25,7 +25,7 @@ final public class PCPresenceSubscription {
         self.delegate = delegate
     }
 
-    public func handleEvent(eventId: String, headers: [String: String], data: Any) {
+    public func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
             self.app.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
             return
@@ -69,7 +69,6 @@ final public class PCPresenceSubscription {
     func end() {
         self.resumableSubscription.end()
     }
-
 }
 
 extension PCPresenceSubscription {
@@ -114,7 +113,7 @@ extension PCPresenceSubscription {
         }
     }
 
-    fileprivate func parsePresenceUpdatePayload(_ eventName: PCPresenceEventName, data: [String: Any], userStore: PCGlobalUserStore) {
+    fileprivate func parsePresenceUpdatePayload(_: PCPresenceEventName, data: [String: Any], userStore: PCGlobalUserStore) {
         do {
             let presencePayload = try PCPayloadDeserializer.createPresencePayloadFromPayload(data)
 
@@ -201,7 +200,6 @@ extension PCPresenceSubscription {
             }
         }
     }
-
 }
 
 public enum PCPresenceEventName: String {
@@ -217,7 +215,7 @@ public enum PCPresenceEventError: Error {
 extension PCPresenceEventError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .keyNotPresentInEventPayload(let key, let apiEventName, let payload):
+        case let .keyNotPresentInEventPayload(key, apiEventName, payload):
             return "\(key) missing in \(apiEventName.rawValue) API event payload: \(payload)"
         }
     }

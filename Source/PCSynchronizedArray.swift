@@ -1,6 +1,6 @@
 import Foundation
 
-final public class PCSynchronizedArray<T> {
+public final class PCSynchronizedArray<T> {
     internal var underlyingArray: [T] = []
     private let accessQueue = DispatchQueue(label: "synchronized.array.access", attributes: .concurrent)
 
@@ -46,6 +46,7 @@ final public class PCSynchronizedArray<T> {
             }
         }
     }
+
     public func remove(at index: Int, completionHandler: ((T) -> Void)? = nil) {
         self.accessQueue.async(flags: .barrier) {
             let element = self.underlyingArray.remove(at: index)
@@ -72,7 +73,6 @@ final public class PCSynchronizedArray<T> {
         return result
     }
 
-
     public func first(where predicate: (T) -> Bool) -> T? {
         var element: T?
 
@@ -88,7 +88,6 @@ final public class PCSynchronizedArray<T> {
         self.accessQueue.sync { result = self.underlyingArray.first }
         return result
     }
-
 
     public var last: T? {
         var result: T?

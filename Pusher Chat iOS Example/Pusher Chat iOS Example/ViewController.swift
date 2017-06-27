@@ -6,8 +6,8 @@ class ViewController: UIViewController {
     @IBOutlet var feedLabel: UILabel!
     var delegate: AppDelegate!
 
-    public var pusherChatUser: PCCurrentUser? = nil
-    public var currentRoom: PCRoom? = nil
+    public var pusherChatUser: PCCurrentUser?
+    public var currentRoom: PCRoom?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +28,6 @@ class ViewController: UIViewController {
 
             currentUser!.subscribeToRoom(room: self.currentRoom!, roomDelegate: self)
         }
-
     }
 }
 
@@ -111,5 +110,4 @@ extension ViewController: PCChatManagerDelegate {
     public func userStoppedTyping(room: PCRoom, user: PCUser) {
         print("\(user.name ?? user.id) stopped typing in room \(room.name)")
     }
-
 }
