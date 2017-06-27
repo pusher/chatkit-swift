@@ -161,6 +161,10 @@ public class PCCurrentUser {
         let userIds = users.map { $0.id }
         self.addUsers(ids: userIds, to: room.id, completionHandler: completionHandler)
     }
+    
+    public func addUser(id: String, to roomId: Int, completionHandler: @escaping (Error?) -> Void) {
+        self.addOrRemoveUsers(in: roomId, userIds: [id], membershipChange: .add, completionHandler: completionHandler)
+    }
 
     public func addUsers(ids: [String], to roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
         self.addOrRemoveUsers(in: roomId, userIds: ids, membershipChange: .add, completionHandler: completionHandler)
