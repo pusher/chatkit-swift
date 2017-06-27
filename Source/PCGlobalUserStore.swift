@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-final public class PCGlobalUserStore {
+public final class PCGlobalUserStore {
 
     public var users: Set<PCUser> {
         return self.userStoreCore.users

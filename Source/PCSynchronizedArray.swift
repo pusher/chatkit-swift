@@ -1,6 +1,6 @@
 import Foundation
 
-final public class PCSynchronizedArray<T> {
+public final class PCSynchronizedArray<T> {
     internal var underlyingArray: [T] = []
     private let accessQueue = DispatchQueue(label: "synchronized.array.access", attributes: .concurrent)
 

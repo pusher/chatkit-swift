@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-final public class PCTestingTokenProvider: PPTokenProvider {
+public final class PCTestingTokenProvider: PPTokenProvider {
 
     public let userId: String
     let internalTokenProvider: PPHTTPEndpointTokenProvider

@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-final public class PCRoomStore {
+public final class PCRoomStore {
 
     public var rooms: PCSynchronizedArray<PCRoom>
     public let app: App

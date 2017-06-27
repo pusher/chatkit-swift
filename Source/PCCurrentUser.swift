@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-final public class PCCurrentUser {
+public final class PCCurrentUser {
     public let id: String
     public let createdAt: String
     public var updatedAt: String
@@ -14,7 +14,7 @@ final public class PCCurrentUser {
     public typealias ErrorCompletionHandler = (Error?) -> Void
     public typealias RoomCompletionHandler = (PCRoom?, Error?) -> Void
     public typealias RoomsCompletionHandler = ([PCRoom]?, Error?) -> Void
-    
+
     // TODO: This should probably be [PCUser] instead, like the users property
     // in PCRoom, or something even simpler
     public var users: Set<PCUser> {
@@ -156,7 +156,7 @@ final public class PCCurrentUser {
         let userIds = users.map { $0.id }
         self.addUsers(ids: userIds, to: room.id, completionHandler: completionHandler)
     }
-    
+
     public func addUser(id: String, to roomId: Int, completionHandler: @escaping (Error?) -> Void) {
         self.addOrRemoveUsers(in: roomId, userIds: [id], membershipChange: .add, completionHandler: completionHandler)
     }

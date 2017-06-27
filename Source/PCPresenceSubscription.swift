@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-final public class PCPresenceSubscription {
+public final class PCPresenceSubscription {
 
     // TODO: Do we need to be careful of retain cycles here? e.g. weak app
 
