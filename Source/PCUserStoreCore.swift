@@ -1,6 +1,6 @@
 import Foundation
 
-public class PCUserStoreCore {
+final public class PCUserStoreCore {
     fileprivate let userStoreQueue = DispatchQueue(label: "com.pusher.chat-api.user-store-core")
 
     public internal(set) var users: Set<PCUser>

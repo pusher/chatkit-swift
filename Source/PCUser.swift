@@ -1,6 +1,6 @@
 import Foundation
 
-public class PCUser {
+final public class PCUser {
     public let id: String
     public let createdAt: String
     public let updatedAt: String

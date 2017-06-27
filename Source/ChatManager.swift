@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-@objc public class ChatManager: NSObject {
+@objc final public class ChatManager: NSObject {
     static public let namespace = "chat_api/v1"
 
     public let app: App

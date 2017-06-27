@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-public class PCRoomUserStore {
+final public class PCRoomUserStore {
 
     public var users: Set<PCUser> {
         get {

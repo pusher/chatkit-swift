@@ -1,6 +1,6 @@
 import Foundation
 
-class PCProgressCounter {
+final class PCProgressCounter {
     private var queue: DispatchQueue
     let totalCount: Int
     var successCount: Int = 0
