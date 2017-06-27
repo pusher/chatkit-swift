@@ -83,38 +83,19 @@ final public class PCGlobalUserStore {
         )
     }
 
-    // TODO: So much duplication
     func handleInitialPresencePayloadsAfterRoomJoin(_ payloads: [PCPresencePayload], completionHandler: @escaping () -> Void) {
         let roomJoinedPresenceProgressCounter = PCProgressCounter(totalCount: payloads.count, labelSuffix: "room-joined-presence-payload")
-
-        payloads.forEach { payload in
-            self.user(id: payload.userId) { [weak self] user, err in
-                guard let strongSelf = self else {
-                    print("self is nil when user store returns user when handling intitial presence payload event after room join")
-                    return
-                }
-
-                guard let user = user, err == nil else {
-                    strongSelf.app.logger.log(err!.localizedDescription, logLevel: .error)
-                    if roomJoinedPresenceProgressCounter.incrementFailedAndCheckIfFinished() {
-                        completionHandler()
-                    }
-
-                    return
-                }
-
-                user.updatePresenceInfoIfAppropriate(newInfoPayload: payload)
-
-                if roomJoinedPresenceProgressCounter.incrementSuccessAndCheckIfFinished() {
-                    completionHandler()
-                }
-            }
-        }
+        self.handleInitialPresencePayloads(payloads, progressCounter: roomJoinedPresenceProgressCounter, completionHandler: completionHandler)
     }
 
     func handleInitialPresencePayloads(_ payloads: [PCPresencePayload], completionHandler: @escaping () -> Void) {
         let initialPresenceProgressCounter = PCProgressCounter(totalCount: payloads.count, labelSuffix: "initial-presence-payload")
-
+        self.handleInitialPresencePayloads(payloads, progressCounter: initialPresenceProgressCounter, completionHandler: completionHandler)
+    }
+    
+    private func handleInitialPresencePayloads(_ payloads: [PCPresencePayload], progressCounter: PCProgressCounter, completionHandler: @escaping () -> Void) {
+        let presenceProgressCounter = progressCounter
+        
         payloads.forEach { payload in
             self.user(id: payload.userId) { [weak self] user, err in
                 guard let strongSelf = self else {
@@ -124,7 +105,7 @@ final public class PCGlobalUserStore {
 
                 guard let user = user, err == nil else {
                     strongSelf.app.logger.log(err!.localizedDescription, logLevel: .error)
-                    if initialPresenceProgressCounter.incrementFailedAndCheckIfFinished() {
+                    if presenceProgressCounter.incrementFailedAndCheckIfFinished() {
                         completionHandler()
                     }
 
@@ -133,7 +114,7 @@ final public class PCGlobalUserStore {
 
                 user.updatePresenceInfoIfAppropriate(newInfoPayload: payload)
 
-                if initialPresenceProgressCounter.incrementSuccessAndCheckIfFinished() {
+                if presenceProgressCounter.incrementSuccessAndCheckIfFinished() {
                     completionHandler()
                 }
             }
