@@ -1,1 +1,1 @@
-github "pusher/pusher-platform-swift" "feature/xcode9-support"
+github "pusher/pusher-platform-swift" ~> 0.1.23
