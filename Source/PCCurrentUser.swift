@@ -157,7 +157,7 @@ public final class PCCurrentUser {
         self.addUsers(ids: userIds, to: room.id, completionHandler: completionHandler)
     }
 
-    public func addUser(id: String, to roomId: Int, completionHandler: @escaping (Error?) -> Void) {
+    public func addUser(id: String, to roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
         self.addOrRemoveUsers(in: roomId, userIds: [id], membershipChange: .add, completionHandler: completionHandler)
     }
 
