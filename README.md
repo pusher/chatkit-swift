@@ -8,14 +8,6 @@
 
 Head over to [our documentation](https://pusher-mimir-pr-47.herokuapp.com/chat-api/reference/swift/).
 
-
-## Testing
-
-There are a set of tests for the library that can be run using the standard method (Command-U in Xcode).
-
-The tests also get run on [Travis-CI](https://travis-ci.org/pusher/pusher-chat-api-swift). See [.travis.yml](https://github.com/pusher/pusher-chat-api-swift/blob/master/.travis.yml) for details on how the Travis tests are run.
-
-
 ## Communication
 
 - Found a bug? Please open an issue.
