@@ -6,7 +6,7 @@
 
 ## Getting started
 
-Head over to [our documentation](https://pusher-mimir.herokuapp.com/chat-api/reference/swift/).
+Head over to [our documentation](https://pusher-mimir-pr-47.herokuapp.com/chat-api/reference/swift/).
 
 
 ## Testing
