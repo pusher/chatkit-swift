@@ -93,7 +93,7 @@ public class PCGlobalUserStore {
         self.handleInitialPresencePayloads(payloads: payloads, progressCounter: initialPresenceProgressCounter, completionHandler: completionHandler)
     }
     
-    private func handleInitialPresencePayloads(payloads: [PCPresencePayload], progressCounter: PCProgressCounter, completionHandler: @escaping () -> Void) {
+    private func handleInitialPresencePayloads(_ payloads: [PCPresencePayload], progressCounter: PCProgressCounter, completionHandler: @escaping () -> Void) {
         let presenceProgressCounter = progressCounter
         
         payloads.forEach { payload in
