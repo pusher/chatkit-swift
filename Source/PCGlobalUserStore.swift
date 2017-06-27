@@ -18,7 +18,7 @@ final public class PCGlobalUserStore {
     }
 
     public func user(id: String, completionHandler: @escaping (PCUser?, Error?) -> Void) {
-        self.findOrGetUser(id: id, completionHander: completionHandler)
+        self.findOrGetUser(id: id, completionHandler: completionHandler)
     }
 
     func addOrMerge(_ user: PCUser) -> PCUser {
@@ -29,9 +29,9 @@ final public class PCGlobalUserStore {
         return self.userStoreCore.remove(id: id)
     }
 
-    func findOrGetUser(id: String, completionHander: @escaping (PCUser?, Error?) -> Void) {
+    func findOrGetUser(id: String, completionHandler: @escaping (PCUser?, Error?) -> Void) {
         if let user = self.userStoreCore.users.first(where: { $0.id == id }) {
-            completionHander(user, nil)
+            completionHandler(user, nil)
         } else {
             self.getUser(id: id) { [weak self] user, err in
                 guard let strongSelf = self else {
@@ -41,12 +41,12 @@ final public class PCGlobalUserStore {
 
                 guard let user = user, err == nil else {
                     strongSelf.app.logger.log(err!.localizedDescription, logLevel: .error)
-                    completionHander(nil, err!)
+                    completionHandler(nil, err!)
                     return
                 }
 
                 let userToReturn = strongSelf.userStoreCore.addOrMerge(user)
-                completionHander(userToReturn, nil)
+                completionHandler(userToReturn, nil)
             }
         }
     }
