@@ -87,7 +87,7 @@ public class PCGlobalUserStore {
         let roomJoinedPresenceProgressCounter = PCProgressCounter(totalCount: payloads.count, labelSuffix: "room-joined-presence-payload")
         self.handleInitialPresencePayloads(payloads, progressCounter: roomJoinedPresenceProgressCounter, completionHandler: completionHandler)
     }
-    
+
     func handleInitialPresencePayloads(_ payloads: [PCPresencePayload], completionHandler: @escaping () -> Void) {
         let initialPresenceProgressCounter = PCProgressCounter(totalCount: payloads.count, labelSuffix: "initial-presence-payload")
         self.handleInitialPresencePayloads(payloads, progressCounter: initialPresenceProgressCounter, completionHandler: completionHandler)
@@ -102,18 +102,18 @@ public class PCGlobalUserStore {
                     print("self is nil when user store returns user when handling intitial presence payload event")
                     return
                 }
-                
+
                 guard let user = user, err == nil else {
                     strongSelf.app.logger.log(err!.localizedDescription, logLevel: .error)
                     if presenceProgressCounter.incrementFailedAndCheckIfFinished() {
                         completionHandler()
                     }
-                    
+
                     return
                 }
-                
+
                 user.updatePresenceInfoIfAppropriate(newInfoPayload: payload)
-                
+
                 if presenceProgressCounter.incrementSuccessAndCheckIfFinished() {
                     completionHandler()
                 }
