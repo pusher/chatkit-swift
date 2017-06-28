@@ -178,6 +178,40 @@ public final class PCCurrentUser {
         self.addOrRemoveUsers(in: room.id, userIds: ids, membershipChange: .remove, completionHandler: completionHandler)
     }
 
+    //MARK: Delete Room
+    /**
+     *  Delete a room
+     *
+     * - parameter room: The room which should be deleted.
+     *
+     * - returns: ErrorCompletionHandler
+     */
+    public func deleteRoom(_ room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
+        self.deleteRoom(roomId: room.id, completionHandler: completionHandler)
+    }
+
+    /**
+     *  Delete a room by providing the room id
+     *
+     * - parameter id: The id of the room which should be deleted.
+     *
+     * - returns: ErrorCompletionHandler
+     */
+    public func deleteRoom(id: Int, completionHandler: @escaping ErrorCompletionHandler) {
+        self.deleteRoom(roomId: id, completionHandler: completionHandler)
+    }
+
+    fileprivate func deleteRoom(roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+        let path = "/\(ChatManager.namespace)/rooms/\(roomId)"
+        let generalRequest = PPRequestOptions(method: HTTPMethod.DELETE.rawValue, path: path)
+
+        self.app.requestWithRetry(using: generalRequest, onSuccess: { _ in
+            completionHandler(nil)
+        }){ error in
+            completionHandler(error)
+        }
+    }
+
     fileprivate func addOrRemoveUsers(
         in roomId: Int,
         userIds: [String],
