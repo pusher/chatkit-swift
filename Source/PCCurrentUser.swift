@@ -205,11 +205,15 @@ public final class PCCurrentUser {
         let path = "/\(ChatManager.namespace)/rooms/\(roomId)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.DELETE.rawValue, path: path)
 
-        self.app.requestWithRetry(using: generalRequest, onSuccess: { _ in
-            completionHandler(nil)
-        }){ error in
-            completionHandler(error)
-        }
+        self.app.requestWithRetry(
+            using: generalRequest,
+            onSuccess: { _ in
+              completionHandler(nil)
+            },
+            onError: { error in
+              completionHandler(error)
+            }
+        )
     }
 
     fileprivate func addOrRemoveUsers(
