@@ -1,8 +1,8 @@
-# PusherChat (pusher-chat-api-swift)
+# PusherChat (chat-api-swift)
 
 [![Twitter](https://img.shields.io/badge/twitter-@Pusher-blue.svg?style=flat)](http://twitter.com/Pusher)
 [![Carthage](https://img.shields.io/badge/carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/pusher/pusher-chat-api-swift/master/LICENSE.md)
+[![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/pusher/chat-api-swift/master/LICENSE.md)
 
 
 ## Getting started
@@ -23,4 +23,4 @@ PusherChat is owned and maintained by [Pusher](https://pusher.com). It was origi
 
 ## License
 
-PusherChat is released under the MIT license. See [LICENSE](https://github.com/pusher/pusher-chat-api-swift/blob/master/LICENSE.md) for details.
+PusherChat is released under the MIT license. See [LICENSE](https://github.com/pusher/chat-api-swift/blob/master/LICENSE.md) for details.
