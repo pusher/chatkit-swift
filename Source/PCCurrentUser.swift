@@ -184,7 +184,7 @@ public final class PCCurrentUser {
      *
      * - parameter room: The room which should be deleted.
      *
-     * - returns: ErrorCompletionHandler
+     * - parameter completionHandler: Invoked when request failed or completed.
      */
     public func deleteRoom(_ room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
         self.deleteRoom(roomId: room.id, completionHandler: completionHandler)
@@ -195,7 +195,7 @@ public final class PCCurrentUser {
      *
      * - parameter id: The id of the room which should be deleted.
      *
-     * - returns: ErrorCompletionHandler
+     * - parameter completionHandler: Invoked when request failed or completed.
      */
     public func deleteRoom(id: Int, completionHandler: @escaping ErrorCompletionHandler) {
         self.deleteRoom(roomId: id, completionHandler: completionHandler)
