@@ -1,6 +1,6 @@
 ### What?
 
-...
+Change the CC
 
 #### Why?
 
@@ -11,4 +11,4 @@
 ...
 
 ----
-CC @pl @zmarkan @hamchapman
+CC @pusher/mobile
