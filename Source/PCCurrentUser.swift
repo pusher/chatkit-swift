@@ -169,6 +169,10 @@ public final class PCCurrentUser {
         self.removeUsers([user], from: room, completionHandler: completionHandler)
     }
 
+    public func removeUser(id: String, from room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
+        self.removeUsers(ids: [id], from: room, completionHandler: completionHandler)
+    }
+
     public func removeUsers(_ users: [PCUser], from room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
         let userIds = users.map { $0.id }
         self.removeUsers(ids: userIds, from: room, completionHandler: completionHandler)
