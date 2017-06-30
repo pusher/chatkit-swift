@@ -11,9 +11,9 @@ Head over to [our documentation](https://pusher-mimir-pr-47.herokuapp.com/chat-a
 
 ## Communication
 
-- Found a bug? Please open an issue.
-- Have a feature request. Please open an issue.
-- If you want to contribute, please submit a pull request (preferrably with some tests 🙂 ).
+- Found a bug? Please open an [issue](https://github.com/pusher/chat-api-swift/issues).
+- Have a feature request. Please open an [issue](https://github.com/pusher/chat-api-swift/issues).
+- If you want to contribute, please submit a [pull request](https://github.com/pusher/chat-api-swift/pulls) (preferrably with some tests 🙂 ).
 
 
 ## Credits
