@@ -12,9 +12,9 @@ Head over to [our documentation](https://pusher-mimir-staging-pr-47.herokuapp.co
 
 ## Communication
 
-- Found a bug? Please open an [issue](https://github.com/pusher/chat-api-swift/issues).
-- Have a feature request. Please open an [issue](https://github.com/pusher/chat-api-swift/issues).
-- If you want to contribute, please submit a [pull request](https://github.com/pusher/chat-api-swift/pulls) (preferrably with some tests 🙂 ).
+- Found a bug? Please open an [issue](https://github.com/pusher/chatkit-swift/issues).
+- Have a feature request. Please open an [issue](https://github.com/pusher/chatkit-swift/issues).
+- If you want to contribute, please submit a [pull request](https://github.com/pusher/chatkit-swift/pulls) (preferrably with some tests 🙂 ).
 
 
 ## Credits
