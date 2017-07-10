@@ -1,13 +1,14 @@
-# PusherChat (chat-api-swift)
+# PusherChat (chatkit-swift)
 
+[![Read the docs](https://img.shields.io/badge/read_the-docs-92A8D1.svg)](https://pusher-mimir-staging-pr-47.herokuapp.com/chat-api/reference/swift/)
 [![Twitter](https://img.shields.io/badge/twitter-@Pusher-blue.svg?style=flat)](http://twitter.com/Pusher)
 [![Carthage](https://img.shields.io/badge/carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/pusher/chat-api-swift/blob/master/LICENSE.md)
+[![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/pusher/chatkit-swift/blob/master/LICENSE.md)
 
 
 ## Getting started
 
-Head over to [our documentation](https://pusher-mimir-pr-47.herokuapp.com/chat-api/reference/swift/).
+Head over to [our documentation](https://pusher-mimir-staging-pr-47.herokuapp.com/chat-api/reference/swift/).
 
 ## Communication
 
@@ -18,9 +19,9 @@ Head over to [our documentation](https://pusher-mimir-pr-47.herokuapp.com/chat-a
 
 ## Credits
 
-PusherChat is owned and maintained by [Pusher](https://pusher.com). It was originally created by [Hamilton Chapman](https://github.com/hamchapman).
+PusherChat is owned and maintained by [Pusher](https://pusher.com).
 
 
 ## License
 
-PusherChat is released under the MIT license. See [LICENSE](https://github.com/pusher/chat-api-swift/blob/master/LICENSE.md) for details.
+PusherChat is released under the MIT license. See [LICENSE](https://github.com/pusher/chatkit-swift/blob/master/LICENSE.md) for details.
