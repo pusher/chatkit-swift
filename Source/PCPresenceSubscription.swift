@@ -36,11 +36,6 @@ public final class PCPresenceSubscription {
             return
         }
 
-        guard let eventTypeString = json["event_type"] as? String else {
-            self.app.logger.log("Event type missing for API event: \(json)", logLevel: .debug)
-            return
-        }
-
         guard let eventName = PCPresenceEventName(rawValue: eventNameString) else {
             self.app.logger.log("Unsupported API event name received: \(eventNameString)", logLevel: .debug)
             return
@@ -52,7 +47,7 @@ public final class PCPresenceSubscription {
         }
 
         self.app.logger.log(
-            "Received event type: \(eventTypeString), event name: \(eventNameString), and data: \(apiEventData)",
+            "Received event name: \(eventNameString), and data: \(apiEventData)",
             logLevel: .verbose
         )
 
