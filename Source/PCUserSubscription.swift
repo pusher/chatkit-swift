@@ -44,11 +44,6 @@ public final class PCUserSubscription {
         //            return
         //        }
 
-        guard let eventTypeString = json["event_type"] as? String else {
-            self.app.logger.log("Event type missing for API event: \(json)", logLevel: .debug)
-            return
-        }
-
         guard let eventName = PCAPIEventName(rawValue: eventNameString) else {
             self.app.logger.log("Unsupported API event name received: \(eventNameString)", logLevel: .debug)
             return
@@ -59,21 +54,9 @@ public final class PCUserSubscription {
             return
         }
 
-        guard let eventType = PCAPIEventType(rawValue: eventTypeString) else {
-            self.app.logger.log("Unsupported API event type received: \(eventTypeString)", logLevel: .debug)
-            return
-        }
-
         let userId = json["user_id"] as? String
 
-        if eventType == .user {
-            guard userId != nil else {
-                self.app.logger.log("user_id not received for API event: \(eventNameString)", logLevel: .debug)
-                return
-            }
-        }
-
-        self.app.logger.log("Received event type: \(eventTypeString), event name: \(eventNameString), and data: \(apiEventData)", logLevel: .verbose)
+        self.app.logger.log("Received event name: \(eventNameString), and data: \(apiEventData)", logLevel: .verbose)
 
         switch eventName {
         case .initial_state:
