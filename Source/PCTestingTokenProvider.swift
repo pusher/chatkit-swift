@@ -15,7 +15,7 @@ public final class PCTestingTokenProvider: PPTokenProvider {
         self.userId = userId
 
         let tokenProvider = PPHTTPEndpointTokenProvider(
-            url: "https://chat-api-test-token-provider.herokuapp.com/token",
+            url: "https://chatkit-test-token-provider.herokuapp.com/token",
             requestInjector: { req -> PPHTTPEndpointTokenProviderRequest in
                 req.addQueryItems(
                     [
