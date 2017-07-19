@@ -2,7 +2,7 @@ import Foundation
 import PusherPlatform
 
 @objc public class ChatManager: NSObject {
-    public static let namespace = "chat_api/v1"
+    public static let namespace = "chatkit/v1"
 
     public let app: App
     public internal(set) var userSubscription: PCUserSubscription?
