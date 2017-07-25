@@ -32,7 +32,7 @@ public final class PCCurrentUser {
     var typingIndicatorManagers: [Int: PCTypingIndicatorManager] = [:]
     private var typingIndicatorQueue = DispatchQueue(label: "com.pusher.chat-api.typing-indicators")
 
-    let app: App
+    let instance: Instance
 
     public init(
         id: String,
@@ -41,7 +41,7 @@ public final class PCCurrentUser {
         name: String? = nil,
         customData: [String: Any]?,
         rooms: PCSynchronizedArray<PCRoom> = PCSynchronizedArray<PCRoom>(),
-        app: App,
+        instance: Instance,
         userStore: PCGlobalUserStore
     ) {
         self.id = id
@@ -49,8 +49,8 @@ public final class PCCurrentUser {
         self.updatedAt = updatedAt
         self.name = name
         self.customData = customData
-        self.roomStore = PCRoomStore(rooms: rooms, app: app)
-        self.app = app
+        self.roomStore = PCRoomStore(rooms: rooms, instance: instance)
+        self.instance = instance
         self.userStore = userStore
 
         let allowedCharacterSet = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] ").inverted
@@ -71,19 +71,19 @@ public final class PCCurrentUser {
         let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
 
         var resumableSub = PPResumableSubscription(
-            app: self.app,
+            instance: self.instance,
             requestOptions: subscribeRequest
         )
 
         self.presenceSubscription = PCPresenceSubscription(
-            app: self.app,
+            instance: self.instance,
             resumableSubscription: resumableSub,
             userStore: self.userStore,
             roomStore: self.roomStore,
             delegate: delegate
         )
 
-        self.app.subscribeWithResume(
+        self.instance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
             onEvent: self.presenceSubscription!.handleEvent
@@ -119,7 +119,7 @@ public final class PCCurrentUser {
         let path = "/\(ChatManager.namespace)/rooms"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
-        self.app.requestWithRetry(
+        self.instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -209,7 +209,7 @@ public final class PCCurrentUser {
         let path = "/\(ChatManager.namespace)/rooms/\(roomId)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.DELETE.rawValue, path: path)
 
-        self.app.requestWithRetry(
+        self.instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { _ in
               completionHandler(nil)
@@ -241,7 +241,7 @@ public final class PCCurrentUser {
         let path = "/\(ChatManager.namespace)/rooms/\(roomId)/users/\(membershipChange.rawValue)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.PUT.rawValue, path: path, body: data)
 
-        self.app.requestWithRetry(
+        self.instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { _ in
                 completionHandler(nil)
@@ -269,7 +269,7 @@ public final class PCCurrentUser {
         let path = "/\(ChatManager.namespace)/users/\(self.pathFriendlyId)/rooms/\(roomId)/join"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
 
-        self.app.requestWithRetry(
+        self.instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -287,7 +287,7 @@ public final class PCCurrentUser {
                     self.roomStore.addOrMerge(room) { room in completionHandler(room, nil) }
                     self.populateRoomUserStore(room)
                 } catch let err {
-                    self.app.logger.log(err.localizedDescription, logLevel: .debug)
+                    self.instance.logger.log(err.localizedDescription, logLevel: .debug)
                     completionHandler(nil, err)
                     return
                 }
@@ -312,7 +312,7 @@ public final class PCCurrentUser {
                 }
 
                 guard let user = user, err == nil else {
-                    strongSelf.app.logger.log(
+                    strongSelf.instance.logger.log(
                         "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
                         logLevel: .debug
                     )
@@ -345,7 +345,7 @@ public final class PCCurrentUser {
         let path = "/\(ChatManager.namespace)/users/\(self.pathFriendlyId)/rooms/\(roomId)/leave"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
 
-        self.app.requestWithRetry(
+        self.instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { _ in
                 completionHandler(nil)
@@ -382,7 +382,7 @@ public final class PCCurrentUser {
     }
 
     fileprivate func getRooms(request: PPRequestOptions, completionHandler: @escaping RoomsCompletionHandler) {
-        self.app.requestWithRetry(
+        self.instance.requestWithRetry(
             using: request,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -400,7 +400,7 @@ public final class PCCurrentUser {
                         // TODO: Do we need to fetch users in the room here?
                         return try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
                     } catch let err {
-                        self.app.logger.log(err.localizedDescription, logLevel: .debug)
+                        self.instance.logger.log(err.localizedDescription, logLevel: .debug)
                         return nil
                     }
                 }
@@ -433,7 +433,7 @@ public final class PCCurrentUser {
         let path = "/\(ChatManager.namespace)/rooms/\(roomId)/events"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
-        self.app.requestWithRetry(
+        self.instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { _ in
                 completionHandler(nil)
@@ -501,7 +501,7 @@ public final class PCCurrentUser {
         let path = "/\(ChatManager.namespace)/rooms/\(room.id)/messages"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
-        self.app.requestWithRetry(
+        self.instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -548,18 +548,18 @@ public final class PCCurrentUser {
         )
 
         var resumableSub = PPResumableSubscription(
-            app: self.app,
+            instance: self.instance,
             requestOptions: subscribeRequest
         )
 
         room.subscription = PCRoomSubscription(
             delegate: roomDelegate,
             resumableSubscription: resumableSub,
-            logger: self.app.logger,
-            basicMessageEnricher: PCBasicMessageEnricher(userStore: self.userStore, room: room, logger: self.app.logger)
+            logger: self.instance.logger,
+            basicMessageEnricher: PCBasicMessageEnricher(userStore: self.userStore, room: room, logger: self.instance.logger)
         )
 
-        self.app.subscribeWithResume(
+        self.instance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
             onEvent: room.subscription?.handleEvent
@@ -591,7 +591,7 @@ public final class PCCurrentUser {
 
         generalRequest.addQueryItems([URLQueryItem(name: "direction", value: direction.rawValue)])
 
-        self.app.requestWithRetry(
+        self.instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -614,7 +614,7 @@ public final class PCCurrentUser {
                         basicMessages.append(basicMessage)
                         return basicMessage.senderId
                     } catch let err {
-                        self.app.logger.log(err.localizedDescription, logLevel: .debug)
+                        self.instance.logger.log(err.localizedDescription, logLevel: .debug)
                         return nil
                     }
                 }
@@ -623,13 +623,13 @@ public final class PCCurrentUser {
 
                 self.userStore.fetchUsersWithIds(messageUserIdsSet) { _, err in
                     if let err = err {
-                        self.app.logger.log(err.localizedDescription, logLevel: .debug)
+                        self.instance.logger.log(err.localizedDescription, logLevel: .debug)
                     }
 
                     let messageEnricher = PCBasicMessageEnricher(
                         userStore: self.userStore,
                         room: room,
-                        logger: self.app.logger
+                        logger: self.instance.logger
                     )
 
                     basicMessages.forEach { basicMessage in
@@ -640,7 +640,7 @@ public final class PCCurrentUser {
                             }
 
                             guard let message = message, err == nil else {
-                                strongSelf.app.logger.log(err!.localizedDescription, logLevel: .debug)
+                                strongSelf.instance.logger.log(err!.localizedDescription, logLevel: .debug)
 
                                 if progressCounter.incrementFailedAndCheckIfFinished() {
                                     completionHandler(messages.underlyingArray.sorted(by: { $0.0.id > $0.1.id }), nil)

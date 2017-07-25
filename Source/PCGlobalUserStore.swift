@@ -8,11 +8,11 @@ public final class PCGlobalUserStore {
     }
 
     public internal(set) var userStoreCore: PCUserStoreCore
-    let app: App
+    let instance: Instance
 
-    init(userStoreCore: PCUserStoreCore = PCUserStoreCore(), app: App) {
+    init(userStoreCore: PCUserStoreCore = PCUserStoreCore(), instance: Instance) {
         self.userStoreCore = userStoreCore
-        self.app = app
+        self.instance = instance
     }
 
     public func user(id: String, completionHandler: @escaping (PCUser?, Error?) -> Void) {
@@ -38,7 +38,7 @@ public final class PCGlobalUserStore {
                 }
 
                 guard let user = user, err == nil else {
-                    strongSelf.app.logger.log(err!.localizedDescription, logLevel: .error)
+                    strongSelf.instance.logger.log(err!.localizedDescription, logLevel: .error)
                     completionHandler(nil, err!)
                     return
                 }
@@ -53,7 +53,7 @@ public final class PCGlobalUserStore {
         let path = "/\(ChatManager.namespace)/users/\(id)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
-        self.app.requestWithRetry(
+        self.instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -70,7 +70,7 @@ public final class PCGlobalUserStore {
                     let user = try PCPayloadDeserializer.createUserFromPayload(userPayload)
                     completionHandler(user, nil)
                 } catch let err {
-                    self.app.logger.log(err.localizedDescription, logLevel: .debug)
+                    self.instance.logger.log(err.localizedDescription, logLevel: .debug)
                     completionHandler(nil, err)
                     return
                 }
@@ -102,7 +102,7 @@ public final class PCGlobalUserStore {
                 }
 
                 guard let user = user, err == nil else {
-                    strongSelf.app.logger.log(err!.localizedDescription, logLevel: .error)
+                    strongSelf.instance.logger.log(err!.localizedDescription, logLevel: .error)
                     if presenceProgressCounter.incrementFailedAndCheckIfFinished() {
                         completionHandler()
                     }
@@ -127,7 +127,7 @@ public final class PCGlobalUserStore {
     // This will do the de-duping of userIds
     func fetchUsersWithIds(_ userIds: Set<String>, completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
         guard userIds.count > 0 else {
-            self.app.logger.log("Requested to fetch users for a list of user ids which was empty", logLevel: .debug)
+            self.instance.logger.log("Requested to fetch users for a list of user ids which was empty", logLevel: .debug)
             completionHandler?([], nil)
             return
         }
@@ -141,12 +141,12 @@ public final class PCGlobalUserStore {
         // We want this to complete quickly, whether it succeeds or not
         generalRequest.retryStrategy = PPDefaultRetryStrategy(maxNumberOfAttempts: 1)
 
-        self.app.requestWithRetry(
+        self.instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
                     let err = PCError.failedToDeserializeJSON(data)
-                    self.app.logger.log(
+                    self.instance.logger.log(
                         "Error fetching user information: \(err.localizedDescription)",
                         logLevel: .debug
                     )
@@ -156,7 +156,7 @@ public final class PCGlobalUserStore {
 
                 guard let userPayloads = jsonObject as? [[String: Any]] else {
                     let err = PCError.failedToCastJSONObjectToDictionary(jsonObject)
-                    self.app.logger.log(
+                    self.instance.logger.log(
                         "Error fetching user information: \(err.localizedDescription)",
                         logLevel: .debug
                     )
@@ -170,14 +170,14 @@ public final class PCGlobalUserStore {
                         let addedOrUpdatedUser = self.userStoreCore.addOrMerge(user)
                         return addedOrUpdatedUser
                     } catch let err {
-                        self.app.logger.log("Error fetching user information: \(err.localizedDescription)", logLevel: .debug)
+                        self.instance.logger.log("Error fetching user information: \(err.localizedDescription)", logLevel: .debug)
                         return nil
                     }
                 }
                 completionHandler?(users, nil)
             },
             onError: { err in
-                self.app.logger.log("Error fetching user information: \(err.localizedDescription)", logLevel: .debug)
+                self.instance.logger.log("Error fetching user information: \(err.localizedDescription)", logLevel: .debug)
             }
         )
     }

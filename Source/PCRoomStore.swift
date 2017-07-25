@@ -4,11 +4,11 @@ import PusherPlatform
 public final class PCRoomStore {
 
     public var rooms: PCSynchronizedArray<PCRoom>
-    public let app: App
+    public let instance: Instance
 
-    public init(rooms: PCSynchronizedArray<PCRoom>, app: App) {
+    public init(rooms: PCSynchronizedArray<PCRoom>, instance: Instance) {
         self.rooms = rooms
-        self.app = app
+        self.instance = instance
     }
 
     public func room(id: Int, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
@@ -38,7 +38,7 @@ public final class PCRoomStore {
         } else {
             self.getRoom(id: id) { room, err in
                 guard err == nil else {
-                    self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                    self.instance.logger.log(err!.localizedDescription, logLevel: .error)
                     completionHandler(nil, err!)
                     return
                 }
@@ -52,7 +52,7 @@ public final class PCRoomStore {
         let path = "/\(ChatManager.namespace)/rooms/\(id)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
-        self.app.requestWithRetry(
+        self.instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -69,7 +69,7 @@ public final class PCRoomStore {
                     let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
                     completionHandler(room, nil)
                 } catch let err {
-                    self.app.logger.log(err.localizedDescription, logLevel: .debug)
+                    self.instance.logger.log(err.localizedDescription, logLevel: .debug)
                     completionHandler(nil, err)
                     return
                 }

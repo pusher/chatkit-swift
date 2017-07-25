@@ -4,7 +4,7 @@ import PusherPlatform
 @objc public class ChatManager: NSObject {
     public static let namespace = "chatkit/v1"
 
-    public let app: App
+    public let instance: Instance
     public internal(set) var userSubscription: PCUserSubscription?
 
     public var currentUser: PCCurrentUser? {
@@ -19,20 +19,28 @@ import PusherPlatform
     }
 
     public init(
-        id: String,
+        instanceId: String,
         tokenProvider: PPTokenProvider,
-        app: App? = nil,
         logger: PPLogger = PPDefaultLogger(),
         baseClient: PPBaseClient? = nil
     ) {
         (tokenProvider as? PCTestingTokenProvider)?.logger = logger
-        self.app = app ?? App(id: id, tokenProvider: tokenProvider, client: baseClient, logger: logger)
-        self.userStore = PCGlobalUserStore(app: self.app)
+        
+        self.instance = Instance(
+            instanceId: instanceId,
+            serviceName: "chatkit",
+            serviceVersion: "v1",
+            tokenProvider: tokenProvider,
+            client: baseClient,
+            logger: logger
+        )
+
+        self.userStore = PCGlobalUserStore(instance: self.instance)
     }
 
     public func addConnectCompletionHandler(completionHandler: @escaping (PCCurrentUser?, Error?) -> Void) {
         guard let userSub = userSubscription else {
-            self.app.logger.log("userSubscription is nil so unable to add a connectCompletionHandler", logLevel: .debug)
+            self.instance.logger.log("userSubscription is nil so unable to add a connectCompletionHandler", logLevel: .debug)
             return
         }
 
@@ -47,12 +55,12 @@ import PusherPlatform
         let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
 
         var resumableSub = PPResumableSubscription(
-            app: self.app,
+            instance: self.instance,
             requestOptions: subscribeRequest
         )
 
         self.userSubscription = PCUserSubscription(
-            app: self.app,
+            instance: self.instance,
             resumableSubscription: resumableSub,
             userStore: self.userStore,
             delegate: delegate,
@@ -68,7 +76,7 @@ import PusherPlatform
 
         // TODO: Fix this stuff
 
-        self.app.subscribeWithResume(
+        self.instance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
             //            onOpening: onOpening,
