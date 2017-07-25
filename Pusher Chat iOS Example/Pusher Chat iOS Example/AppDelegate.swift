@@ -24,8 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
 
         let pusherChat = ChatManager(
-            id: "some-instance-id",
-
+            instanceId: "v1:CLUSTER_SUBDOMAIN_HERE:blah-blah",
             tokenProvider: PCTestingTokenProvider(userId: "ham", serviceId: "some-instance-id"),
             logger: HamLogger(),
             baseClient: localhostBaseClient
