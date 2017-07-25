@@ -33,8 +33,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         self.pusherChat = pusherChat
 
-        //        (self.pusherChat?.instance.logger as? PPDefaultLogger)?.minimumLogLevel = .verbose
-
         return true
     }
 }
