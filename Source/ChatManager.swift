@@ -25,12 +25,11 @@ import PusherPlatform
         baseClient: PPBaseClient? = nil
     ) {
         (tokenProvider as? PCTestingTokenProvider)?.logger = logger
-
+        
         self.instance = Instance(
             instanceId: instanceId,
             serviceName: "chatkit",
             serviceVersion: "v1",
-            host: nil,
             tokenProvider: tokenProvider,
             client: baseClient,
             logger: logger
