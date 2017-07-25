@@ -3,22 +3,22 @@ import PusherPlatform
 
 public final class PCPresenceSubscription {
 
-    // TODO: Do we need to be careful of retain cycles here? e.g. weak app
+    // TODO: Do we need to be careful of retain cycles here? e.g. weak instance
 
-    let app: App
+    let instance: Instance
     public let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore
     public let roomStore: PCRoomStore
     public internal(set) var delegate: PCChatManagerDelegate?
 
     public init(
-        app: App,
+        instance: Instance,
         resumableSubscription: PPResumableSubscription,
         userStore: PCGlobalUserStore,
         roomStore: PCRoomStore,
         delegate: PCChatManagerDelegate? = nil
     ) {
-        self.app = app
+        self.instance = instance
         self.resumableSubscription = resumableSubscription
         self.userStore = userStore
         self.roomStore = roomStore
@@ -27,26 +27,26 @@ public final class PCPresenceSubscription {
 
     public func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
-            self.app.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
+            self.instance.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
             return
         }
 
         guard let eventNameString = json["event_name"] as? String else {
-            self.app.logger.log("Event name missing for API event: \(json)", logLevel: .debug)
+            self.instance.logger.log("Event name missing for API event: \(json)", logLevel: .debug)
             return
         }
 
         guard let eventName = PCPresenceEventName(rawValue: eventNameString) else {
-            self.app.logger.log("Unsupported API event name received: \(eventNameString)", logLevel: .debug)
+            self.instance.logger.log("Unsupported API event name received: \(eventNameString)", logLevel: .debug)
             return
         }
 
         guard let apiEventData = json["data"] as? [String: Any] else {
-            self.app.logger.log("Data missing for API event: \(json)", logLevel: .debug)
+            self.instance.logger.log("Data missing for API event: \(json)", logLevel: .debug)
             return
         }
 
-        self.app.logger.log(
+        self.instance.logger.log(
             "Received event name: \(eventNameString), and data: \(apiEventData)",
             logLevel: .verbose
         )
@@ -75,7 +75,7 @@ extension PCPresenceSubscription {
                 payload: data
             )
 
-            self.app.logger.log(error.localizedDescription, logLevel: .debug)
+            self.instance.logger.log(error.localizedDescription, logLevel: .debug)
             self.delegate?.error(error: error)
             return
         }
@@ -84,14 +84,14 @@ extension PCPresenceSubscription {
             do {
                 return try PCPayloadDeserializer.createPresencePayloadFromPayload(userStatePayload)
             } catch let err {
-                self.app.logger.log(err.localizedDescription, logLevel: .debug)
+                self.instance.logger.log(err.localizedDescription, logLevel: .debug)
                 self.delegate?.error(error: err)
                 return nil
             }
         }
 
         guard userStates.count > 0 else {
-            self.app.logger.log("No presence user states to process", logLevel: .verbose)
+            self.instance.logger.log("No presence user states to process", logLevel: .verbose)
             return
         }
 
@@ -119,7 +119,7 @@ extension PCPresenceSubscription {
                 }
 
                 guard let user = user, err == nil else {
-                    strongSelf.app.logger.log(
+                    strongSelf.instance.logger.log(
                         "Error fetching user information for user with id \(presencePayload.userId): \(err!.localizedDescription)",
                         logLevel: .debug
                     )
@@ -135,7 +135,7 @@ extension PCPresenceSubscription {
                     strongSelf.delegate?.userWentOffline(user: user)
                 case .unknown:
                     // This should never be the case
-                    strongSelf.app.logger.log("Somehow the presence state of user \(user.debugDescription) is unknown", logLevel: .debug)
+                    strongSelf.instance.logger.log("Somehow the presence state of user \(user.debugDescription) is unknown", logLevel: .debug)
                     return
                 }
 
@@ -154,7 +154,7 @@ extension PCPresenceSubscription {
                 }
             }
         } catch let err {
-            self.app.logger.log(err.localizedDescription, logLevel: .debug)
+            self.instance.logger.log(err.localizedDescription, logLevel: .debug)
             self.delegate?.error(error: err)
         }
     }
@@ -168,7 +168,7 @@ extension PCPresenceSubscription {
                 payload: data
             )
 
-            self.app.logger.log(error.localizedDescription, logLevel: .debug)
+            self.instance.logger.log(error.localizedDescription, logLevel: .debug)
             self.delegate?.error(error: error)
             return
         }
@@ -177,14 +177,14 @@ extension PCPresenceSubscription {
             do {
                 return try PCPayloadDeserializer.createPresencePayloadFromPayload(userStatePayload)
             } catch let err {
-                self.app.logger.log(err.localizedDescription, logLevel: .debug)
+                self.instance.logger.log(err.localizedDescription, logLevel: .debug)
                 self.delegate?.error(error: err)
                 return nil
             }
         }
 
         guard userStates.count > 0 else {
-            self.app.logger.log("No presence user states to process", logLevel: .verbose)
+            self.instance.logger.log("No presence user states to process", logLevel: .verbose)
             return
         }
 

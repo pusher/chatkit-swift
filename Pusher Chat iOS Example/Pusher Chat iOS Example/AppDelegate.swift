@@ -18,24 +18,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
-        let kubeBaseClient = PPBaseClient(cluster: "api-ceres.pusherplatform.io")
-
         let localhostBaseClient = PPBaseClient(
-            cluster: "localhost",
-            port: 10443,
+            host: "",
             insecure: true
         )
 
         let pusherChat = ChatManager(
-            id: "some-app-id",
-            tokenProvider: PCTestingTokenProvider(userId: "ham", serviceId: "some-app-id"),
+            id: "some-instance-id",
+
+            tokenProvider: PCTestingTokenProvider(userId: "ham", serviceId: "some-instance-id"),
             logger: HamLogger(),
             baseClient: localhostBaseClient
         )
 
         self.pusherChat = pusherChat
 
-        //        (self.pusherChat?.app.logger as? PPDefaultLogger)?.minimumLogLevel = .verbose
+        //        (self.pusherChat?.instance.logger as? PPDefaultLogger)?.minimumLogLevel = .verbose
 
         return true
     }

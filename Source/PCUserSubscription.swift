@@ -3,9 +3,9 @@ import PusherPlatform
 
 public final class PCUserSubscription {
 
-    // TODO: Do we need to be careful of retain cycles here? e.g. weak app
+    // TODO: Do we need to be careful of retain cycles here? e.g. weak instance
 
-    let app: App
+    let instance: Instance
     public let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore
     public internal(set) var delegate: PCChatManagerDelegate
@@ -14,13 +14,13 @@ public final class PCUserSubscription {
     public var currentUser: PCCurrentUser?
 
     public init(
-        app: App,
+        instance: Instance,
         resumableSubscription: PPResumableSubscription,
         userStore: PCGlobalUserStore,
         delegate: PCChatManagerDelegate,
         connectCompletionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
-        self.app = app
+        self.instance = instance
         self.resumableSubscription = resumableSubscription
         self.userStore = userStore
         self.delegate = delegate
@@ -29,12 +29,12 @@ public final class PCUserSubscription {
 
     public func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
-            self.app.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
+            self.instance.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
             return
         }
 
         guard let eventNameString = json["event_name"] as? String else {
-            self.app.logger.log("Event name missing for API event: \(json)", logLevel: .debug)
+            self.instance.logger.log("Event name missing for API event: \(json)", logLevel: .debug)
             return
         }
 
@@ -45,18 +45,18 @@ public final class PCUserSubscription {
         //        }
 
         guard let eventName = PCAPIEventName(rawValue: eventNameString) else {
-            self.app.logger.log("Unsupported API event name received: \(eventNameString)", logLevel: .debug)
+            self.instance.logger.log("Unsupported API event name received: \(eventNameString)", logLevel: .debug)
             return
         }
 
         guard let apiEventData = json["data"] as? [String: Any] else {
-            self.app.logger.log("Data missing for API event: \(json)", logLevel: .debug)
+            self.instance.logger.log("Data missing for API event: \(json)", logLevel: .debug)
             return
         }
 
         let userId = json["user_id"] as? String
 
-        self.app.logger.log("Received event name: \(eventNameString), and data: \(apiEventData)", logLevel: .verbose)
+        self.instance.logger.log("Received event name: \(eventNameString), and data: \(apiEventData)", logLevel: .verbose)
 
         switch eventName {
         case .initial_state:
@@ -116,7 +116,7 @@ extension PCUserSubscription {
         let receivedCurrentUser: PCCurrentUser
 
         do {
-            receivedCurrentUser = try PCPayloadDeserializer.createCurrentUserFromPayload(userPayload, app: self.app, userStore: userStore)
+            receivedCurrentUser = try PCPayloadDeserializer.createCurrentUserFromPayload(userPayload, instance: self.instance, userStore: userStore)
         } catch let err {
             callConnectCompletionHandlers(
                 currentUser: nil,
@@ -175,7 +175,7 @@ extension PCUserSubscription {
                     }
                 }
             } catch let err {
-                self.app.logger.log(
+                self.instance.logger.log(
                     "Incomplete room payload in initial_state event: \(roomPayload). Error: \(err.localizedDescription)",
                     logLevel: .debug
                 )
@@ -193,7 +193,7 @@ extension PCUserSubscription {
     fileprivate func fetchInitialUserInformationForUserIds(_ userIds: Set<String>, currentUser: PCCurrentUser) {
         self.userStore.initialFetchOfUsersWithIds(userIds) { _, err in
             guard err == nil else {
-                self.app.logger.log(
+                self.instance.logger.log(
                     "Unable to fetch user information after successful connection: \(err!.localizedDescription)",
                     logLevel: .debug
                 )
@@ -214,7 +214,7 @@ extension PCUserSubscription {
                         }
 
                         guard let user = user, err == nil else {
-                            strongSelf.app.logger.log(
+                            strongSelf.instance.logger.log(
                                 "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
                                 logLevel: .debug
                             )
@@ -246,7 +246,7 @@ extension PCUserSubscription {
 
     fileprivate func reconcileExistingRoomStoreWithRoomsReceivedOnConnection(roomsFromConnection: [PCRoom]) {
         guard let currentUser = self.currentUser else {
-            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
             self.delegate.error(error: PCError.currentUserIsNil)
             return
         }
@@ -297,7 +297,7 @@ extension PCUserSubscription {
                     }
 
                     guard let user = user, err == nil else {
-                        strongSelf.app.logger.log(
+                        strongSelf.instance.logger.log(
                             "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
                             logLevel: .debug
                         )
@@ -317,7 +317,7 @@ extension PCUserSubscription {
                 }
             }
         } catch let err {
-            self.app.logger.log(err.localizedDescription, logLevel: .debug)
+            self.instance.logger.log(err.localizedDescription, logLevel: .debug)
             self.delegate.error(error: err)
         }
     }
@@ -336,7 +336,7 @@ extension PCUserSubscription {
 
         self.currentUser?.roomStore.remove(id: roomId) { room in
             guard let roomRemovedFrom = room else {
-                self.app.logger.log("Received \(eventName.rawValue) API event but room \(roomId) not found in local store of joined rooms", logLevel: .debug)
+                self.instance.logger.log("Received \(eventName.rawValue) API event but room \(roomId) not found in local store of joined rooms", logLevel: .debug)
                 return
             }
 
@@ -362,7 +362,7 @@ extension PCUserSubscription {
             self.currentUser?.roomStore.room(id: room.id) { roomToUpdate, err in
 
                 guard let roomToUpdate = roomToUpdate, err == nil else {
-                    self.app.logger.log(err!.localizedDescription, logLevel: .debug)
+                    self.instance.logger.log(err!.localizedDescription, logLevel: .debug)
                     return
                 }
 
@@ -370,7 +370,7 @@ extension PCUserSubscription {
                 self.delegate.roomUpdated(room: roomToUpdate)
             }
         } catch let err {
-            self.app.logger.log(err.localizedDescription, logLevel: .debug)
+            self.instance.logger.log(err.localizedDescription, logLevel: .debug)
             self.delegate.error(error: err)
         }
     }
@@ -388,14 +388,14 @@ extension PCUserSubscription {
         }
 
         guard let currentUser = self.currentUser else {
-            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
             self.delegate.error(error: PCError.currentUserIsNil)
             return
         }
 
         currentUser.roomStore.remove(id: roomId) { room in
             guard let deletedRoom = room else {
-                self.app.logger.log("Room \(roomId) was deleted but was not found in local store of joined rooms", logLevel: .debug)
+                self.instance.logger.log("Room \(roomId) was deleted but was not found in local store of joined rooms", logLevel: .debug)
                 return
             }
 
@@ -427,14 +427,14 @@ extension PCUserSubscription {
         }
 
         guard let currentUser = self.currentUser else {
-            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
             self.delegate.error(error: PCError.currentUserIsNil)
             return
         }
 
         currentUser.roomStore.room(id: roomId) { room, err in
             guard let room = room, err == nil else {
-                self.app.logger.log(
+                self.instance.logger.log(
                     "User with id \(userId) joined room with id \(roomId) but no information about the room could be retrieved. Error was: \(err!.localizedDescription)",
                     logLevel: .error
                 )
@@ -449,7 +449,7 @@ extension PCUserSubscription {
                 }
 
                 guard let user = user, err == nil else {
-                    strongSelf.app.logger.log(
+                    strongSelf.instance.logger.log(
                         "User with id \(userId) joined room with id \(roomId) but no information about the user could be retrieved. Error was: \(err!.localizedDescription)",
                         logLevel: .error
                     )
@@ -490,14 +490,14 @@ extension PCUserSubscription {
         }
 
         guard let currentUser = self.currentUser else {
-            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
             self.delegate.error(error: PCError.currentUserIsNil)
             return
         }
 
         currentUser.roomStore.room(id: roomId) { room, err in
             guard let room = room, err == nil else {
-                self.app.logger.log(
+                self.instance.logger.log(
                     "User with id \(userId) left room with id \(roomId) but no information about the room could be retrieved. Error was: \(err!.localizedDescription)",
                     logLevel: .error
                 )
@@ -512,7 +512,7 @@ extension PCUserSubscription {
                 }
 
                 guard let user = user, err == nil else {
-                    strongSelf.app.logger.log(
+                    strongSelf.instance.logger.log(
                         "User with id \(userId) left room with id \(roomId) but no information about the user could be retrieved. Error was: \(err!.localizedDescription)",
                         logLevel: .error
                     )
@@ -547,14 +547,14 @@ extension PCUserSubscription {
         }
 
         guard let currentUser = self.currentUser else {
-            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
             self.delegate.error(error: PCError.currentUserIsNil)
             return
         }
 
         currentUser.roomStore.room(id: roomId) { room, err in
             guard let room = room, err == nil else {
-                self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                self.instance.logger.log(err!.localizedDescription, logLevel: .error)
                 self.delegate.error(error: err!)
                 return
             }
@@ -566,7 +566,7 @@ extension PCUserSubscription {
                 }
 
                 guard let user = user, err == nil else {
-                    strongSelf.app.logger.log(err!.localizedDescription, logLevel: .error)
+                    strongSelf.instance.logger.log(err!.localizedDescription, logLevel: .error)
                     strongSelf.delegate.error(error: err!)
                     return
                 }
@@ -590,14 +590,14 @@ extension PCUserSubscription {
         }
 
         guard let currentUser = self.currentUser else {
-            self.app.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
             self.delegate.error(error: PCError.currentUserIsNil)
             return
         }
 
         currentUser.roomStore.room(id: roomId) { room, err in
             guard let room = room, err == nil else {
-                self.app.logger.log(err!.localizedDescription, logLevel: .error)
+                self.instance.logger.log(err!.localizedDescription, logLevel: .error)
                 self.delegate.error(error: err!)
                 return
             }
@@ -609,7 +609,7 @@ extension PCUserSubscription {
                 }
 
                 guard let user = user, err == nil else {
-                    strongSelf.app.logger.log(err!.localizedDescription, logLevel: .error)
+                    strongSelf.instance.logger.log(err!.localizedDescription, logLevel: .error)
                     strongSelf.delegate.error(error: err!)
                     return
                 }

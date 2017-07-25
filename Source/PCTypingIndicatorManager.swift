@@ -59,7 +59,7 @@ public final class PCTypingIndicatorManager {
     public func signalTypingStarted() {
         self.currentUser.startedTypingIn(roomId: self.roomId) { err in
             if let error = err {
-                self.currentUser.app.logger.log("Error sending typing_start event: \(error.localizedDescription)", logLevel: .debug)
+                self.currentUser.instance.logger.log("Error sending typing_start event: \(error.localizedDescription)", logLevel: .debug)
             }
         }
     }
@@ -67,7 +67,7 @@ public final class PCTypingIndicatorManager {
     public func signalTypingStopped() {
         self.currentUser.stoppedTypingIn(roomId: self.roomId) { err in
             if let error = err {
-                self.currentUser.app.logger.log("Error sending typing_stop event: \(error.localizedDescription)", logLevel: .debug)
+                self.currentUser.instance.logger.log("Error sending typing_stop event: \(error.localizedDescription)", logLevel: .debug)
             }
         }
     }
