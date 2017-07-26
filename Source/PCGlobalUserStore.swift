@@ -134,7 +134,7 @@ public final class PCGlobalUserStore {
 
         let userIdsString = userIds.joined(separator: ",")
 
-        let path = "/\(ChatManager.namespace)/users"
+        let path = "/\(ChatManager.namespace)/users_by_ids"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
         generalRequest.addQueryItems([URLQueryItem(name: "user_ids", value: userIdsString)])
 
