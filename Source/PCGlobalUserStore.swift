@@ -50,7 +50,7 @@ public final class PCGlobalUserStore {
     }
 
     func getUser(id: String, completionHandler: @escaping (PCUser?, Error?) -> Void) {
-        let path = "/\(ChatManager.namespace)/users/\(id)"
+        let path = "/users/\(id)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
         self.instance.requestWithRetry(
@@ -134,7 +134,7 @@ public final class PCGlobalUserStore {
 
         let userIdsString = userIds.joined(separator: ",")
 
-        let path = "/\(ChatManager.namespace)/users_by_ids"
+        let path = "/users_by_ids"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
         generalRequest.addQueryItems([URLQueryItem(name: "user_ids", value: userIdsString)])
 

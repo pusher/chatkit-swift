@@ -49,7 +49,7 @@ public final class PCRoomStore {
     }
 
     func getRoom(id: Int, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
-        let path = "/\(ChatManager.namespace)/rooms/\(id)"
+        let path = "/rooms/\(id)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
         self.instance.requestWithRetry(
