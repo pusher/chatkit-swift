@@ -14,19 +14,27 @@ class ViewController: UIViewController {
 
         let delegate = UIApplication.shared.delegate as! AppDelegate
 
-        delegate.pusherChat?.connect(delegate: self) { currentUser, error in
+        delegate.pusherChat?.connect(delegate: self) { [weak self] currentUser, error in
             guard error == nil else {
                 print("Error connecting: \(error!)")
                 return
             }
 
             print("Connected!")
-            self.pusherChatUser = currentUser!
 
-            print(currentUser!.rooms.flatMap { String($0.id) }.joined(separator: ", "))
-            self.currentRoom = currentUser!.rooms[0]
+            guard
+                let strongSelf = self,
+                let currentUser = currentUser
+            else { return }
 
-            currentUser!.subscribeToRoom(room: self.currentRoom!, roomDelegate: self)
+            strongSelf.pusherChatUser = currentUser
+
+            print(currentUser.rooms.flatMap { String($0.id) }.joined(separator: ", "))
+
+            if currentUser.rooms.count != 0 {
+                strongSelf.currentRoom = currentUser.rooms[0]
+                currentUser.subscribeToRoom(room: strongSelf.currentRoom!, roomDelegate: strongSelf)
+            }
         }
     }
 }

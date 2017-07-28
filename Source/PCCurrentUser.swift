@@ -66,7 +66,7 @@ public final class PCCurrentUser {
     }
 
     func setupPresenceSubscription(delegate: PCChatManagerDelegate) {
-        let path = "/\(ChatManager.namespace)/users/\(self.id)/presence"
+        let path = "/users/\(self.id)/presence"
 
         let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
 
@@ -116,7 +116,7 @@ public final class PCCurrentUser {
             return
         }
 
-        let path = "/\(ChatManager.namespace)/rooms"
+        let path = "/rooms"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
         self.instance.requestWithRetry(
@@ -206,7 +206,7 @@ public final class PCCurrentUser {
     }
 
     fileprivate func deleteRoom(roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
-        let path = "/\(ChatManager.namespace)/rooms/\(roomId)"
+        let path = "/rooms/\(roomId)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.DELETE.rawValue, path: path)
 
         self.instance.requestWithRetry(
@@ -238,7 +238,7 @@ public final class PCCurrentUser {
             return
         }
 
-        let path = "/\(ChatManager.namespace)/rooms/\(roomId)/users/\(membershipChange.rawValue)"
+        let path = "/rooms/\(roomId)/users/\(membershipChange.rawValue)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.PUT.rawValue, path: path, body: data)
 
         self.instance.requestWithRetry(
@@ -266,7 +266,7 @@ public final class PCCurrentUser {
     }
 
     fileprivate func joinRoom(roomId: Int, completionHandler: @escaping RoomCompletionHandler) {
-        let path = "/\(ChatManager.namespace)/users/\(self.pathFriendlyId)/rooms/\(roomId)/join"
+        let path = "/users/\(self.pathFriendlyId)/rooms/\(roomId)/join"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
 
         self.instance.requestWithRetry(
@@ -342,7 +342,7 @@ public final class PCCurrentUser {
     }
 
     fileprivate func leaveRoom(roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
-        let path = "/\(ChatManager.namespace)/users/\(self.pathFriendlyId)/rooms/\(roomId)/leave"
+        let path = "/users/\(self.pathFriendlyId)/rooms/\(roomId)/leave"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
 
         self.instance.requestWithRetry(
@@ -367,7 +367,7 @@ public final class PCCurrentUser {
     }
 
     fileprivate func getUserRooms(onlyJoinable: Bool = false, completionHandler: @escaping RoomsCompletionHandler) {
-        let path = "/\(ChatManager.namespace)/users/\(self.pathFriendlyId)/rooms"
+        let path = "/users/\(self.pathFriendlyId)/rooms"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
         let joinableQueryItemValue = onlyJoinable ? "true" : "false"
@@ -376,7 +376,7 @@ public final class PCCurrentUser {
     }
 
     public func getAllRooms(completionHandler: @escaping RoomsCompletionHandler) {
-        let path = "/\(ChatManager.namespace)/rooms"
+        let path = "/rooms"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
         self.getRooms(request: generalRequest, completionHandler: completionHandler)
     }
@@ -430,7 +430,7 @@ public final class PCCurrentUser {
             return
         }
 
-        let path = "/\(ChatManager.namespace)/rooms/\(roomId)/events"
+        let path = "/rooms/\(roomId)/events"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
         self.instance.requestWithRetry(
@@ -498,7 +498,7 @@ public final class PCCurrentUser {
             return
         }
 
-        let path = "/\(ChatManager.namespace)/rooms/\(room.id)/messages"
+        let path = "/rooms/\(room.id)/messages"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
         self.instance.requestWithRetry(
@@ -535,7 +535,7 @@ public final class PCCurrentUser {
 
     // TODO: Do I need to add a Last-Event-ID option here?
     public func subscribeToRoom(room: PCRoom, roomDelegate: PCRoomDelegate, messageLimit: Int = 20) {
-        let path = "/\(ChatManager.namespace)/rooms/\(room.id)"
+        let path = "/rooms/\(room.id)"
 
         // TODO: What happens if you provide both a message_limit and a Last-Event-ID?
         let subscribeRequest = PPRequestOptions(
@@ -578,7 +578,7 @@ public final class PCCurrentUser {
         direction: PCRoomMessageFetchDirection = .older,
         completionHandler: @escaping ([PCMessage]?, Error?) -> Void
     ) {
-        let path = "/\(ChatManager.namespace)/rooms/\(room.id)/messages"
+        let path = "/rooms/\(room.id)/messages"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
         if let initialId = initialId {

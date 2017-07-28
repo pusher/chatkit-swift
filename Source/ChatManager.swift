@@ -51,7 +51,7 @@ import PusherPlatform
         delegate: PCChatManagerDelegate,
         completionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
-        let path = "/\(ChatManager.namespace)/users"
+        let path = "/users"
         let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
 
         var resumableSub = PPResumableSubscription(
