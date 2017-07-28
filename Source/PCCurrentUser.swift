@@ -6,6 +6,7 @@ public final class PCCurrentUser {
     public let createdAt: String
     public var updatedAt: String
     public var name: String?
+    public var avatarURL: String?
     public var customData: [String: Any]?
 
     let userStore: PCGlobalUserStore
@@ -38,7 +39,8 @@ public final class PCCurrentUser {
         id: String,
         createdAt: String,
         updatedAt: String,
-        name: String? = nil,
+        name: String?,
+        avatarURL: String?,
         customData: [String: Any]?,
         rooms: PCSynchronizedArray<PCRoom> = PCSynchronizedArray<PCRoom>(),
         instance: Instance,
@@ -48,6 +50,7 @@ public final class PCCurrentUser {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.name = name
+        self.avatarURL = avatarURL
         self.customData = customData
         self.roomStore = PCRoomStore(rooms: rooms, instance: instance)
         self.instance = instance

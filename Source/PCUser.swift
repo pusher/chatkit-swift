@@ -5,6 +5,7 @@ public final class PCUser {
     public let createdAt: String
     public let updatedAt: String
     public let name: String?
+    public var avatarURL: String?
     public let customData: [String: Any]?
     public internal(set) var presenceState: PCPresenceState
     public internal(set) var lastSeenAt: String?
@@ -13,13 +14,15 @@ public final class PCUser {
         id: String,
         createdAt: String,
         updatedAt: String,
-        name: String? = nil,
+        name: String?,
+        avatarURL: String?,
         customData: [String: Any]? = nil
     ) {
         self.id = id
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.name = name
+        self.avatarURL = avatarURL
         self.customData = customData
         self.presenceState = .unknown
         self.lastSeenAt = nil
