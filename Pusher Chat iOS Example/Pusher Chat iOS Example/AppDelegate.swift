@@ -18,16 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
-        let localhostBaseClient = PPBaseClient(
-            host: "",
-            insecure: true
-        )
-
         let pusherChat = ChatManager(
-            instanceId: "v1:CLUSTER_SUBDOMAIN_HERE:blah-blah",
-            tokenProvider: PCTestingTokenProvider(userId: "ham", serviceId: "some-instance-id"),
+            instanceId: "v1:api-ceres:luka-chat",
+            tokenProvider: PCTestingTokenProvider(userId: "pusherino", serviceId: "luka-chat"),
             logger: HamLogger(),
-            baseClient: localhostBaseClient
+            baseClient: nil
         )
 
         self.pusherChat = pusherChat
