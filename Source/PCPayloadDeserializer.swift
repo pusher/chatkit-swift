@@ -10,6 +10,7 @@ struct PCPayloadDeserializer {
             createdAt: basicUser.createdAt,
             updatedAt: basicUser.updatedAt,
             name: userPayload["name"] as? String,
+            avatarURL: userPayload["avatar_url"] as? String,
             customData: userPayload["custom_data"] as? [String: Any]
         )
     }
@@ -22,6 +23,7 @@ struct PCPayloadDeserializer {
             createdAt: basicUser.createdAt,
             updatedAt: basicUser.updatedAt,
             name: userPayload["name"] as? String,
+            avatarURL: userPayload["avatar_url"] as? String,
             customData: userPayload["custom_data"] as? [String: Any],
             instance: instance,
             userStore: userStore
