@@ -34,6 +34,7 @@ struct PCPayloadDeserializer {
         guard
             let roomId = roomPayload["id"] as? Int,
             let roomName = roomPayload["name"] as? String,
+            let isPrivate = roomPayload["private"] as? Bool,
             let roomCreatorUserId = roomPayload["created_by_id"] as? String,
             let roomCreatedAt = roomPayload["created_at"] as? String,
             let roomUpdatedAt = roomPayload["updated_at"] as? String
@@ -50,6 +51,7 @@ struct PCPayloadDeserializer {
         return PCRoom(
             id: roomId,
             name: roomName,
+            isPrivate: isPrivate,
             createdByUserId: roomCreatorUserId,
             createdAt: roomCreatedAt,
             updatedAt: roomUpdatedAt,

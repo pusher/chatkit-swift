@@ -4,6 +4,7 @@ import PusherPlatform
 public final class PCRoom {
     public let id: Int
     public internal(set) var name: String
+    public private(set) var isPrivate: Bool
     public let createdByUserId: String
     public let createdAt: String
     public internal(set) var updatedAt: String
@@ -29,6 +30,7 @@ public final class PCRoom {
     public init(
         id: Int,
         name: String,
+        isPrivate: Bool,
         createdByUserId: String,
         createdAt: String,
         updatedAt: String,
@@ -37,6 +39,7 @@ public final class PCRoom {
     ) {
         self.id = id
         self.name = name
+        self.isPrivate = isPrivate
         self.createdByUserId = createdByUserId
         self.createdAt = createdAt
         self.updatedAt = updatedAt
@@ -47,6 +50,7 @@ public final class PCRoom {
 
     func updateWithPropertiesOfRoom(_ room: PCRoom) {
         self.name = room.name
+        self.isPrivate = room.isPrivate
         self.updatedAt = room.updatedAt
         self.deletedAt = room.deletedAt
         self.userIds = room.userIds
@@ -67,6 +71,6 @@ extension PCRoom: Hashable {
 extension PCRoom: CustomDebugStringConvertible {
 
     public var debugDescription: String {
-        return "ID: \(self.id) Name: \(self.name)"
+        return "ID: \(self.id) Name: \(self.name) Private: \(self.isPrivate)"
     }
 }
