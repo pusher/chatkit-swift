@@ -8,7 +8,7 @@
 
 ## Getting started
 
-Head over to [our documentation](https://pusher-mimir-staging-pr-47.herokuapp.com/chat-api/reference/swift/).
+Head over to [our documentation](https://pusher-mimir-staging-pr-78.herokuapp.com/chatkit/reference/swift/).
 
 ## Communication
 
