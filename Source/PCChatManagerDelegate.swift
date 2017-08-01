@@ -18,8 +18,6 @@ public protocol PCChatManagerDelegate {
     // TODO: Is this the best way of communicating errors? What errors are
     // communicated using this?
     func error(error: Error)
-
-    //    func userSubscriptionStateChanged(from: PCUserSubscriptionState, to: PCUserSubscriptionState)
 }
 
 extension PCChatManagerDelegate {
