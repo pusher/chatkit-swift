@@ -147,8 +147,8 @@ extension PCPresenceSubscription {
                     }
 
                     switch presencePayload.state {
-                    case .online: room.subscription?.delegate?.userCameOnline(user: user)
-                    case .offline: room.subscription?.delegate?.userWentOffline(user: user)
+                    case .online: room.subscription?.delegate?.userCameOnlineInRoom(user: user)
+                    case .offline: room.subscription?.delegate?.userWentOfflineInRoom(user: user)
                     default: return
                     }
                 }

@@ -66,12 +66,12 @@ extension ViewController: PCRoomDelegate {
         print("\(user.name ?? user.id) stopped typing in room \(self.currentRoom!.name)")
     }
 
-    func userCameOnline(user: PCUser) {
+    func userCameOnlineInRoom(user: PCUser) {
         print("\(user.name ?? user.id) came online")
         print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
     }
 
-    func userWentOffline(user: PCUser) {
+    func userWentOfflineInRoom(user: PCUser) {
         print("\(user.name ?? user.id) went offline")
         print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
     }

@@ -10,8 +10,8 @@ public protocol PCRoomDelegate {
     func userJoined(user: PCUser)
     func userLeft(user: PCUser)
 
-    func userCameOnline(user: PCUser)
-    func userWentOffline(user: PCUser)
+    func userCameOnlineInRoom(user: PCUser)
+    func userWentOfflineInRoom(user: PCUser)
 
     // TODO: This seems like it could instead be `userListUpdated`, or something similar?
     func usersUpdated()
