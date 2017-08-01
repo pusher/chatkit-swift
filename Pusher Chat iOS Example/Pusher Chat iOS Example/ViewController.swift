@@ -110,4 +110,8 @@ extension ViewController: PCChatManagerDelegate {
     public func userStoppedTyping(room: PCRoom, user: PCUser) {
         print("\(user.name ?? user.id) stopped typing in room \(room.name)")
     }
+
+    public func error(error: Error) {
+        print("Error: \(error.localizedDescription)")
+    }
 }
