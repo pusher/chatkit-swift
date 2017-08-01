@@ -19,7 +19,7 @@ public protocol PCRoomDelegate {
     // TODO: I don't think we'll want this - it could be handled by the state change - i.e. changed
     // to .failed, potentially with an associated error value
 
-    func error(error: Error)
+    // func error(error: Error)
 
     // TODO: Make all of this work, and probably duplicate in PCChatManagerDelegate
 
