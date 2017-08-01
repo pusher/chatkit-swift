@@ -75,14 +75,6 @@ extension ViewController: PCRoomDelegate {
         print("\(user.name ?? user.id) went offline")
         print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
     }
-
-    func error(error: Error) {
-        print("Room sub received error: \(error.localizedDescription)")
-    }
-
-    //    func subscriptionStateChanged(from: PPResumableSubscriptionState, to: PPResumableSubscriptionState) {
-    //
-    //    }
 }
 
 extension ViewController: PCChatManagerDelegate {
