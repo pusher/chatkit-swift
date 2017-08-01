@@ -103,6 +103,14 @@ extension ViewController: PCChatManagerDelegate {
         print("User \(user.name ?? user.id) left room: \(room.name)")
     }
 
+    public func userCameOnline(user: PCUser) {
+        print("User \(user.name ?? user.id) came online")
+    }
+
+    public func userWentOffline(user: PCUser) {
+        print("User \(user.name ?? user.id) went online")
+    }
+
     public func userStartedTyping(room: PCRoom, user: PCUser) {
         print("\(user.name ?? user.id) started typing in room \(room.name)")
     }
