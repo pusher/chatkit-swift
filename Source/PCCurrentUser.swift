@@ -566,11 +566,6 @@ public final class PCCurrentUser {
             with: &resumableSub,
             using: subscribeRequest,
             onEvent: room.subscription?.handleEvent
-
-            // TODO: This will probably be replaced by the state change delegate function, with an associated type, maybe
-            //            onError: { error in
-            //                roomDelegate.receivedError(error)
-            //            }
         )
     }
 
