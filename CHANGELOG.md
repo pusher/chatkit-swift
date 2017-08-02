@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.2.9](https://github.com/pusher/chat-api-swift/compare/0.2.8...0.2.9) - 2017-08-02
 ## Changed
 - `PCTestingTokenProvider` parameter name
+- Move to deneb cluster
 
 ## [0.2.8](https://github.com/pusher/chat-api-swift/compare/0.2.7...0.2.8) - 2017-08-01
 ### Added
