@@ -20,7 +20,7 @@ public final class PCTestingTokenProvider: PPTokenProvider {
                 req.addQueryItems(
                     [
                         URLQueryItem(name: "user_id", value: userId),
-                        URLQueryItem(name: "instance", value: "v1:api-ceres:\(instanceId)"),
+                        URLQueryItem(name: "instance", value: instanceId),
                     ]
                 )
                 return req

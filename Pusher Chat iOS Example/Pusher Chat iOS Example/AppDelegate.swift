@@ -19,8 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
         let pusherChat = ChatManager(
-            instanceId: "v1:api-ceres:luka-chat",
-            tokenProvider: PCTestingTokenProvider(userId: "pusherino", instanceId: "luka-chat"),
+            instanceId: "v1:api-deneb:luka-chat",
+            tokenProvider: PCTestingTokenProvider(userId: "pusherino", instanceId: "v1:api-deneb:luka-chat"),
             logger: HamLogger(),
             baseClient: nil
         )
