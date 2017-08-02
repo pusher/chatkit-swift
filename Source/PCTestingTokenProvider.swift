@@ -11,7 +11,7 @@ public final class PCTestingTokenProvider: PPTokenProvider {
         }
     }
 
-    public init(userId: String, serviceId: String) {
+    public init(userId: String, instanceId: String) {
         self.userId = userId
 
         let tokenProvider = PPHTTPEndpointTokenProvider(
@@ -20,7 +20,7 @@ public final class PCTestingTokenProvider: PPTokenProvider {
                 req.addQueryItems(
                     [
                         URLQueryItem(name: "user_id", value: userId),
-                        URLQueryItem(name: "instance", value: "v1:api-ceres:\(serviceId)"),
+                        URLQueryItem(name: "instance", value: "v1:api-ceres:\(instanceId)"),
                     ]
                 )
                 return req
