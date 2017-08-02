@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let pusherChat = ChatManager(
             instanceId: "v1:api-ceres:luka-chat",
-            tokenProvider: PCTestingTokenProvider(userId: "pusherino", serviceId: "luka-chat"),
+            tokenProvider: PCTestingTokenProvider(userId: "pusherino", instanceId: "luka-chat"),
             logger: HamLogger(),
             baseClient: nil
         )
