@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             instanceId: "v1:api-deneb:luka-chat",
             tokenProvider: PCTestingTokenProvider(userId: "pusherino", instanceId: "v1:api-deneb:luka-chat"),
             logger: HamLogger(),
-            baseClient: nil
+            baseClient: PPBaseClient(host: "api-deneb.pusherplatform.io", insecure: true)
         )
 
         self.pusherChat = pusherChat
