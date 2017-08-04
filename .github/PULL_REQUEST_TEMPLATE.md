@@ -6,9 +6,5 @@
 
 ...
 
-#### How?
-
-...
-
 ----
 CC @pusher/mobile
