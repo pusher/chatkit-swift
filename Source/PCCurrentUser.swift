@@ -185,12 +185,72 @@ public final class PCCurrentUser {
         self.addOrRemoveUsers(in: room.id, userIds: ids, membershipChange: .remove, completionHandler: completionHandler)
     }
 
+    //MARK: Update Room
+    /**
+     *  Update a room
+     *
+     * - parameter room: The room which should be updated.
+     * - parameter name: Name of the room.
+     * - parameter isPrivate: Indicates if a room should be private or public.
+     * - parameter completionHandler: Invoked when request failed or completed.
+     */
+    public func updateRoom(_ room: PCRoom, name: String? = nil, isPrivate: Bool? = nil, completionHandler: @escaping ErrorCompletionHandler) {
+        self.updateRoom(roomId: room.id, name: name, isPrivate: isPrivate, completionHandler: completionHandler)
+    }
+
+    /**
+     *  Update a room by providing the room id
+     *
+     * - parameter id: The id of the room which should be updated.
+     * - parameter name: Name of the room.
+     * - parameter isPrivate: Indicates if a room should be private or public.
+     * - parameter completionHandler: Invoked when request failed or completed.
+     */
+    public func updateRoom(id: Int, name: String? = nil, isPrivate: Bool? = nil, completionHandler: @escaping ErrorCompletionHandler) {
+        self.updateRoom(roomId: id, name: name, isPrivate: isPrivate, completionHandler: completionHandler)
+    }
+
+    fileprivate func updateRoom(roomId: Int, name: String?, isPrivate: Bool?, completionHandler: @escaping ErrorCompletionHandler) {
+
+        var userPayload: [String : Any] = [:]
+
+        if let name = name {
+            userPayload["name"] = name
+        }
+
+        if let isPrivate = isPrivate {
+            userPayload["private"] = isPrivate
+        }
+
+        guard JSONSerialization.isValidJSONObject(userPayload) else {
+            completionHandler(PCError.invalidJSONObjectAsData(userPayload))
+            return
+        }
+
+        guard let data = try? JSONSerialization.data(withJSONObject: userPayload, options: []) else {
+            completionHandler(PCError.failedToJSONSerializeData(userPayload))
+            return
+        }
+
+        let path = "/rooms/\(roomId)"
+        let generalRequest = PPRequestOptions(method: HTTPMethod.PUT.rawValue, path: path, body: data)
+
+        self.instance.requestWithRetry(
+            using: generalRequest,
+            onSuccess: { _ in
+                completionHandler(nil)
+        },
+            onError: { error in
+                completionHandler(error)
+        }
+        )
+    }
+
     //MARK: Delete Room
     /**
      *  Delete a room
      *
      * - parameter room: The room which should be deleted.
-     *
      * - parameter completionHandler: Invoked when request failed or completed.
      */
     public func deleteRoom(_ room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
@@ -201,7 +261,6 @@ public final class PCCurrentUser {
      *  Delete a room by providing the room id
      *
      * - parameter id: The id of the room which should be deleted.
-     *
      * - parameter completionHandler: Invoked when request failed or completed.
      */
     public func deleteRoom(id: Int, completionHandler: @escaping ErrorCompletionHandler) {
