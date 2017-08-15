@@ -222,6 +222,10 @@ public final class PCCurrentUser {
             userPayload["private"] = isPrivate
         }
 
+        guard !userPayload.isEmpty else {
+            return
+        }
+
         guard JSONSerialization.isValidJSONObject(userPayload) else {
             completionHandler(PCError.invalidJSONObjectAsData(userPayload))
             return
