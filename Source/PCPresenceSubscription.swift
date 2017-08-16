@@ -104,6 +104,7 @@ extension PCPresenceSubscription {
 
             strongSelf.roomStore.rooms.forEach { room in
                 room.subscription?.delegate?.usersUpdated()
+                strongSelf.instance.logger.log("Users updated " + room.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "), logLevel: .verbose)
             }
         }
     }
@@ -147,8 +148,14 @@ extension PCPresenceSubscription {
                     }
 
                     switch presencePayload.state {
-                    case .online: room.subscription?.delegate?.userCameOnlineInRoom(user: user)
-                    case .offline: room.subscription?.delegate?.userWentOfflineInRoom(user: user)
+                    case .online:
+                        room.subscription?.delegate?.userCameOnlineInRoom(user: user)
+                        strongSelf.instance.logger.log("\(user.name ?? user.id) came online", logLevel: .verbose)
+                        strongSelf.instance.logger.log("\(room.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))", logLevel: .verbose)
+                    case .offline:
+                        room.subscription?.delegate?.userWentOfflineInRoom(user: user)
+                        strongSelf.instance.logger.log("\(user.name ?? user.id) went offline", logLevel: .verbose)
+                        strongSelf.instance.logger.log("\(room.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))", logLevel: .verbose)
                     default: return
                     }
                 }
@@ -192,6 +199,7 @@ extension PCPresenceSubscription {
         userStore.handleInitialPresencePayloadsAfterRoomJoin(userStates) {
             self.roomStore.rooms.forEach { room in
                 room.subscription?.delegate?.usersUpdated()
+                self.instance.logger.log("Users updated " + room.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "), logLevel: .verbose)
             }
         }
     }

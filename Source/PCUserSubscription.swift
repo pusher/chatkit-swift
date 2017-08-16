@@ -220,6 +220,7 @@ extension PCUserSubscription {
                             )
                             if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
                                 room.subscription?.delegate?.usersUpdated()
+                                strongSelf.instance.logger.log("Users updated " + room.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "), logLevel: .verbose)
 
                                 if combinedRoomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
                                     currentUser.setupPresenceSubscription(delegate: strongSelf.delegate)
@@ -233,6 +234,7 @@ extension PCUserSubscription {
 
                         if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
                             room.subscription?.delegate?.usersUpdated()
+                            strongSelf.instance.logger.log("Users updated " + room.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "), logLevel: .verbose)
 
                             if combinedRoomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
                                 currentUser.setupPresenceSubscription(delegate: strongSelf.delegate)
@@ -282,6 +284,7 @@ extension PCUserSubscription {
 
             self.currentUser?.roomStore.addOrMerge(room) { room in
                 self.delegate.addedToRoom(room: room)
+                self.instance.logger.log("Added to room: \(room.name)", logLevel: .verbose)
             }
 
             // TODO: Use the soon-to-be-created new version of fetchUsersWithIds from the
@@ -304,6 +307,7 @@ extension PCUserSubscription {
 
                         if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
                             room.subscription?.delegate?.usersUpdated()
+                            strongSelf.instance.logger.log("Users updated " + room.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "), logLevel: .verbose)
                         }
 
                         return
@@ -313,6 +317,7 @@ extension PCUserSubscription {
 
                     if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
                         room.subscription?.delegate?.usersUpdated()
+                        strongSelf.instance.logger.log("Users updated " + room.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "), logLevel: .verbose)
                     }
                 }
             }
@@ -341,6 +346,7 @@ extension PCUserSubscription {
             }
 
             self.delegate.removedFromRoom(room: roomRemovedFrom)
+            self.instance.logger.log("Removed from room: \(roomRemovedFrom.name)", logLevel: .verbose)
         }
     }
 
@@ -368,6 +374,7 @@ extension PCUserSubscription {
 
                 roomToUpdate.updateWithPropertiesOfRoom(room)
                 self.delegate.roomUpdated(room: roomToUpdate)
+                self.instance.logger.log("Room updated: \(room.name)", logLevel: .verbose)
             }
         } catch let err {
             self.instance.logger.log(err.localizedDescription, logLevel: .debug)
@@ -400,6 +407,7 @@ extension PCUserSubscription {
             }
 
             self.delegate.roomDeleted(room: deletedRoom)
+            self.instance.logger.log("Room deleted: \(deletedRoom.name)", logLevel: .verbose)
         }
     }
 
@@ -462,6 +470,8 @@ extension PCUserSubscription {
 
                 strongSelf.delegate.userJoinedRoom(room: room, user: addedOrMergedUser)
                 room.subscription?.delegate?.userJoined(user: addedOrMergedUser)
+                strongSelf.instance.logger.log("User \(user.name ?? user.id) joined room: \(room.name)", logLevel: .verbose)
+                strongSelf.instance.logger.log("\(room.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: ","))", logLevel: .verbose)
             }
         }
     }
@@ -530,6 +540,8 @@ extension PCUserSubscription {
 
                 strongSelf.delegate.userLeftRoom(room: room, user: user)
                 room.subscription?.delegate?.userLeft(user: user)
+                strongSelf.instance.logger.log("User \(user.name ?? user.id) left room: \(room.name)", logLevel: .verbose)
+                strongSelf.instance.logger.log("\(room.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: ","))", logLevel: .verbose)
             }
         }
     }
@@ -573,6 +585,7 @@ extension PCUserSubscription {
 
                 strongSelf.delegate.userStartedTyping(room: room, user: user)
                 room.subscription?.delegate?.userStartedTyping(user: user)
+                strongSelf.instance.logger.log("\(user.name ?? user.id) started typing in room \(room.name)", logLevel: .verbose)
             }
         }
     }
@@ -616,6 +629,7 @@ extension PCUserSubscription {
 
                 strongSelf.delegate.userStoppedTyping(room: room, user: user)
                 room.subscription?.delegate?.userStoppedTyping(user: user)
+                strongSelf.instance.logger.log("\(user.name ?? user.id) stopped typing in room \(room.name)", logLevel: .verbose)
             }
         }
     }
