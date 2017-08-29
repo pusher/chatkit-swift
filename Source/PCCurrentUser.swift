@@ -211,20 +211,15 @@ public final class PCCurrentUser {
     }
 
     fileprivate func updateRoom(roomId: Int, name: String?, isPrivate: Bool?, completionHandler: @escaping ErrorCompletionHandler) {
-
         var userPayload: [String : Any] = [:]
 
-        if let name = name {
-            userPayload["name"] = name
-        }
-
-        if let isPrivate = isPrivate {
-            userPayload["private"] = isPrivate
-        }
-
-        guard !userPayload.isEmpty else {
+        guard name != nil || isPrivate != nil else {
+            completionHandler(nil)
             return
         }
+
+        userPayload["name"] = name
+        userPayload["private"] = isPrivate
 
         guard JSONSerialization.isValidJSONObject(userPayload) else {
             completionHandler(PCError.invalidJSONObjectAsData(userPayload))
@@ -243,10 +238,10 @@ public final class PCCurrentUser {
             using: generalRequest,
             onSuccess: { _ in
                 completionHandler(nil)
-        },
+            },
             onError: { error in
                 completionHandler(error)
-        }
+            }
         )
     }
 
