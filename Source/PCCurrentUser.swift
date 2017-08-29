@@ -211,13 +211,12 @@ public final class PCCurrentUser {
     }
 
     fileprivate func updateRoom(roomId: Int, name: String?, isPrivate: Bool?, completionHandler: @escaping ErrorCompletionHandler) {
-        var userPayload: [String : Any] = [:]
-
         guard name != nil || isPrivate != nil else {
             completionHandler(nil)
             return
         }
 
+        var userPayload: [String : Any] = [:]
         userPayload["name"] = name
         userPayload["private"] = isPrivate
 
