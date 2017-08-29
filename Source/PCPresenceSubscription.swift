@@ -132,8 +132,10 @@ extension PCPresenceSubscription {
                 switch presencePayload.state {
                 case .online:
                     strongSelf.delegate?.userCameOnline(user: user)
+                    strongSelf.instance.logger.log("\(user.name ?? user.id) came online", logLevel: .verbose)
                 case .offline:
                     strongSelf.delegate?.userWentOffline(user: user)
+                    strongSelf.instance.logger.log("\(user.name ?? user.id) came offline", logLevel: .verbose)
                 case .unknown:
                     // This should never be the case
                     strongSelf.instance.logger.log("Somehow the presence state of user \(user.debugDescription) is unknown", logLevel: .debug)
@@ -148,14 +150,8 @@ extension PCPresenceSubscription {
                     }
 
                     switch presencePayload.state {
-                    case .online:
-                        room.subscription?.delegate?.userCameOnlineInRoom(user: user)
-                        strongSelf.instance.logger.log("\(user.name ?? user.id) came online", logLevel: .verbose)
-                        strongSelf.instance.logger.log("\(room.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))", logLevel: .verbose)
-                    case .offline:
-                        room.subscription?.delegate?.userWentOfflineInRoom(user: user)
-                        strongSelf.instance.logger.log("\(user.name ?? user.id) went offline", logLevel: .verbose)
-                        strongSelf.instance.logger.log("\(room.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))", logLevel: .verbose)
+                    case .online: room.subscription?.delegate?.userCameOnlineInRoom(user: user)
+                    case .offline: room.subscription?.delegate?.userWentOfflineInRoom(user: user)
                     default: return
                     }
                 }
