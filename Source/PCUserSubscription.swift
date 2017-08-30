@@ -220,7 +220,7 @@ extension PCUserSubscription {
                             )
                             if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
                                 room.subscription?.delegate?.usersUpdated()
-                                strongSelf.instance.logger.log("Users updated " + room.users.map { "\($0.id), \($0.name ?? ""), \($0.presenceState.rawValue)" }.joined(separator: "; "), logLevel: .verbose)
+                                strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
 
                                 if combinedRoomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
                                     currentUser.setupPresenceSubscription(delegate: strongSelf.delegate)
@@ -234,7 +234,7 @@ extension PCUserSubscription {
 
                         if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
                             room.subscription?.delegate?.usersUpdated()
-                            strongSelf.instance.logger.log("Users updated " + room.users.map { "\($0.id), \($0.name ?? ""), \($0.presenceState.rawValue)" }.joined(separator: "; "), logLevel: .verbose)
+                            strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
 
                             if combinedRoomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
                                 currentUser.setupPresenceSubscription(delegate: strongSelf.delegate)
@@ -307,7 +307,7 @@ extension PCUserSubscription {
 
                         if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
                             room.subscription?.delegate?.usersUpdated()
-                            strongSelf.instance.logger.log("Users updated " + room.users.map { "\($0.id), \($0.name ?? ""), \($0.presenceState.rawValue)" }.joined(separator: "; "), logLevel: .verbose)
+                            strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
                         }
 
                         return
@@ -317,7 +317,7 @@ extension PCUserSubscription {
 
                     if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
                         room.subscription?.delegate?.usersUpdated()
-                        strongSelf.instance.logger.log("Users updated " + room.users.map { "\($0.id), \($0.name ?? ""), \($0.presenceState.rawValue)" }.joined(separator: "; "), logLevel: .verbose)
+                        strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
                     }
                 }
             }
