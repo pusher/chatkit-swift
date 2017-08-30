@@ -132,10 +132,10 @@ extension PCPresenceSubscription {
                 switch presencePayload.state {
                 case .online:
                     strongSelf.delegate?.userCameOnline(user: user)
-                    strongSelf.instance.logger.log("\(user.name ?? user.id) came online", logLevel: .verbose)
+                    strongSelf.instance.logger.log("\(user.displayName) came online", logLevel: .verbose)
                 case .offline:
                     strongSelf.delegate?.userWentOffline(user: user)
-                    strongSelf.instance.logger.log("\(user.name ?? user.id) came offline", logLevel: .verbose)
+                    strongSelf.instance.logger.log("\(user.displayName) came offline", logLevel: .verbose)
                 case .unknown:
                     // This should never be the case
                     strongSelf.instance.logger.log("Somehow the presence state of user \(user.debugDescription) is unknown", logLevel: .debug)

@@ -10,6 +10,12 @@ public final class PCUser {
     public internal(set) var presenceState: PCPresenceState
     public internal(set) var lastSeenAt: String?
 
+    public var displayName: String {
+        get {
+            return self.name ?? self.id
+        }
+    }
+
     public init(
         id: String,
         createdAt: String,

@@ -470,8 +470,7 @@ extension PCUserSubscription {
 
                 strongSelf.delegate.userJoinedRoom(room: room, user: addedOrMergedUser)
                 room.subscription?.delegate?.userJoined(user: addedOrMergedUser)
-                strongSelf.instance.logger.log("User \(user.name ?? user.id) joined room: \(room.name)", logLevel: .verbose)
-                strongSelf.instance.logger.log("\(room.users.map { "\($0.id), \($0.name ?? ""), \($0.presenceState.rawValue)" }.joined(separator: ","))", logLevel: .verbose)
+                strongSelf.instance.logger.log("User \(user.displayName) joined room: \(room.name)", logLevel: .verbose)
             }
         }
     }
@@ -540,8 +539,7 @@ extension PCUserSubscription {
 
                 strongSelf.delegate.userLeftRoom(room: room, user: user)
                 room.subscription?.delegate?.userLeft(user: user)
-                strongSelf.instance.logger.log("User \(user.name ?? user.id) left room: \(room.name)", logLevel: .verbose)
-                strongSelf.instance.logger.log("\(room.users.map { "\($0.id), \($0.name ?? ""), \($0.presenceState.rawValue)" }.joined(separator: ","))", logLevel: .verbose)
+                strongSelf.instance.logger.log("User \(user.displayName) left room: \(room.name)", logLevel: .verbose)
             }
         }
     }
@@ -585,7 +583,7 @@ extension PCUserSubscription {
 
                 strongSelf.delegate.userStartedTyping(room: room, user: user)
                 room.subscription?.delegate?.userStartedTyping(user: user)
-                strongSelf.instance.logger.log("\(user.name ?? user.id) started typing in room \(room.name)", logLevel: .verbose)
+                strongSelf.instance.logger.log("\(user.displayName) started typing in room \(room.name)", logLevel: .verbose)
             }
         }
     }
@@ -629,7 +627,7 @@ extension PCUserSubscription {
 
                 strongSelf.delegate.userStoppedTyping(room: room, user: user)
                 room.subscription?.delegate?.userStoppedTyping(user: user)
-                strongSelf.instance.logger.log("\(user.name ?? user.id) stopped typing in room \(room.name)", logLevel: .verbose)
+                strongSelf.instance.logger.log("\(user.displayName) stopped typing in room \(room.name)", logLevel: .verbose)
             }
         }
     }
