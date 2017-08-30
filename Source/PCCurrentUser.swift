@@ -379,6 +379,7 @@ public final class PCCurrentUser {
 
                     if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
                         room.subscription?.delegate?.usersUpdated()
+                        strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
                     }
 
                     return
@@ -388,6 +389,7 @@ public final class PCCurrentUser {
 
                 if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
                     room.subscription?.delegate?.usersUpdated()
+                    strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
                 }
             }
         }

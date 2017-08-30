@@ -104,6 +104,7 @@ extension PCPresenceSubscription {
 
             strongSelf.roomStore.rooms.forEach { room in
                 room.subscription?.delegate?.usersUpdated()
+                strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
             }
         }
     }
@@ -131,8 +132,10 @@ extension PCPresenceSubscription {
                 switch presencePayload.state {
                 case .online:
                     strongSelf.delegate?.userCameOnline(user: user)
+                    strongSelf.instance.logger.log("\(user.displayName) came online", logLevel: .verbose)
                 case .offline:
                     strongSelf.delegate?.userWentOffline(user: user)
+                    strongSelf.instance.logger.log("\(user.displayName) came offline", logLevel: .verbose)
                 case .unknown:
                     // This should never be the case
                     strongSelf.instance.logger.log("Somehow the presence state of user \(user.debugDescription) is unknown", logLevel: .debug)
@@ -192,6 +195,7 @@ extension PCPresenceSubscription {
         userStore.handleInitialPresencePayloadsAfterRoomJoin(userStates) {
             self.roomStore.rooms.forEach { room in
                 room.subscription?.delegate?.usersUpdated()
+                self.instance.logger.log("Users updated " + room.users.map { "\($0.id), \($0.name ?? ""), \($0.presenceState.rawValue)" }.joined(separator: "; "), logLevel: .verbose)
             }
         }
     }
