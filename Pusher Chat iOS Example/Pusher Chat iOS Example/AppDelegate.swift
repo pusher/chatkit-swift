@@ -18,9 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
+        let instanceId = "v1:api-deneb:2f354c91-269f-4820-93d2-5441219fdd23"
         let pusherChat = ChatManager(
-            instanceId: "v1:api-deneb:luka-chat",
-            tokenProvider: PCTestingTokenProvider(userId: "pusherino", instanceId: "v1:api-deneb:luka-chat"),
+            instanceId: instanceId,
+            tokenProvider: PCTestingTokenProvider(userId: "test", instanceId: instanceId),
             logger: HamLogger(),
             baseClient: PPBaseClient(host: "api-deneb.pusherplatform.io", insecure: true)
         )
