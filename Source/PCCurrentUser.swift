@@ -523,22 +523,22 @@ public final class PCCurrentUser {
     }
 
     func startedTypingIn(roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
-        let eventPayload: [String: Any] = ["name": "typing_start", "data": [:], "user_id": self.id]
+        let eventPayload: [String: Any] = ["name": "typing_start", "user_id": self.id]
         self.typingStateChange(eventPayload: eventPayload, roomId: roomId, completionHandler: completionHandler)
     }
 
     func stoppedTypingIn(roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
-        let eventPayload: [String: Any] = ["name": "typing_stop", "data": [:], "user_id": self.id]
+        let eventPayload: [String: Any] = ["name": "typing_stop", "user_id": self.id]
         self.typingStateChange(eventPayload: eventPayload, roomId: roomId, completionHandler: completionHandler)
     }
 
     public func startedTypingIn(_ room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
-        let eventPayload: [String: Any] = ["name": "typing_start", "data": [:], "user_id": self.id]
+        let eventPayload: [String: Any] = ["name": "typing_start", "user_id": self.id]
         self.typingStateChange(eventPayload: eventPayload, roomId: room.id, completionHandler: completionHandler)
     }
 
     public func stoppedTypingIn(_ room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
-        let eventPayload: [String: Any] = ["name": "typing_stop", "data": [:], "user_id": self.id]
+        let eventPayload: [String: Any] = ["name": "typing_stop", "user_id": self.id]
         self.typingStateChange(eventPayload: eventPayload, roomId: room.id, completionHandler: completionHandler)
     }
 
