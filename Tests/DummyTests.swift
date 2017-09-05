@@ -1,4 +1,4 @@
-import PusherChat
+import PusherChatkit
 import XCTest
 
 class DummyTests: XCTestCase {

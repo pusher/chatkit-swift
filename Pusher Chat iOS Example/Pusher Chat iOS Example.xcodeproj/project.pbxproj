@@ -12,8 +12,8 @@
 		33CC931A1E38E48C003E6325 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC93151E38E48C003E6325 /* AppDelegate.swift */; };
 		33CC931B1E38E48C003E6325 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC93161E38E48C003E6325 /* Assets.xcassets */; };
 		33CC931C1E38E48C003E6325 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC93181E38E48C003E6325 /* ViewController.swift */; };
-		33D710F61EF922B700F2A99A /* PusherChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D710F51EF922B700F2A99A /* PusherChat.framework */; };
 		33D710F81EF922C500F2A99A /* PusherPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D710F71EF922C500F2A99A /* PusherPlatform.framework */; };
+		A12248A71F5EF1C500A5B001 /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A12248A81F5EF1C500A5B001 /* PusherChatkit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,8 +26,8 @@
 		33CC93171E38E48C003E6325 /* Pusher Chat iOS Example.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = "Pusher Chat iOS Example.entitlements"; path = "Pusher Chat iOS Example/Pusher Chat iOS Example.entitlements"; sourceTree = SOURCE_ROOT; };
 		33CC93181E38E48C003E6325 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = "Pusher Chat iOS Example/ViewController.swift"; sourceTree = SOURCE_ROOT; };
 		33CC93191E38E48C003E6325 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Pusher Chat iOS Example/Info.plist"; sourceTree = SOURCE_ROOT; };
-		33D710F51EF922B700F2A99A /* PusherChat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PusherChat.framework; path = "../../../Library/Developer/Xcode/DerivedData/PusherChat-afwvmyafyxwishbqzenwuzuttwkk/Build/Products/Debug-iphonesimulator/PusherChat.framework"; sourceTree = "<group>"; };
 		33D710F71EF922C500F2A99A /* PusherPlatform.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PusherPlatform.framework; path = ../Carthage/Build/iOS/PusherPlatform.framework; sourceTree = "<group>"; };
+		A12248A81F5EF1C500A5B001 /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,8 +35,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A12248A71F5EF1C500A5B001 /* PusherChatkit.framework in Frameworks */,
 				33D710F81EF922C500F2A99A /* PusherPlatform.framework in Frameworks */,
-				33D710F61EF922B700F2A99A /* PusherChat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,8 +46,8 @@
 		2D4332111DF6E0C9008696FD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A12248A81F5EF1C500A5B001 /* PusherChatkit.framework */,
 				33D710F71EF922C500F2A99A /* PusherPlatform.framework */,
-				33D710F51EF922B700F2A99A /* PusherChat.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

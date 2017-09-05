@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import PusherChat
+import PusherChatkit
 import PusherPlatform
 
 @UIApplicationMain
