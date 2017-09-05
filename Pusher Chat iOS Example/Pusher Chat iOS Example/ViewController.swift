@@ -1,5 +1,5 @@
 import UIKit
-import PusherChat
+import PusherChatkit
 import PusherPlatform
 
 class ViewController: UIViewController {
