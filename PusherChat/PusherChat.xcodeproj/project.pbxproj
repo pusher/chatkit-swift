@@ -60,7 +60,7 @@
 		334B9A321ECD98FA007A3D3B /* PCBasicMessageEnricher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCBasicMessageEnricher.swift; sourceTree = "<group>"; };
 		33831C891A9CF61600B124F1 /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		33831C8D1A9CF61600B124F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		33831C941A9CF61600B124F1 /* PusherChatkitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PusherChatkitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		33831C941A9CF61600B124F1 /* PusherChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PusherChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3388D5EE1EAE4DA90072A742 /* ChatManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatManager.swift; sourceTree = "<group>"; };
 		3388D5F01EAE4DD40072A742 /* PCChatManagerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCChatManagerDelegate.swift; sourceTree = "<group>"; };
 		3388D5F21EAE4DFB0072A742 /* PCRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCRoom.swift; sourceTree = "<group>"; };
@@ -109,7 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				33831C891A9CF61600B124F1 /* PusherChatkit.framework */,
-				33831C941A9CF61600B124F1 /* PusherChatkitTests.xctest */,
+				33831C941A9CF61600B124F1 /* PusherChatTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -211,9 +211,9 @@
 			productReference = 33831C891A9CF61600B124F1 /* PusherChatkit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		33831C931A9CF61600B124F1 /* PusherChatkitTests */ = {
+		33831C931A9CF61600B124F1 /* PusherChatTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 33831CA01A9CF61600B124F1 /* Build configuration list for PBXNativeTarget "PusherChatkitTests" */;
+			buildConfigurationList = 33831CA01A9CF61600B124F1 /* Build configuration list for PBXNativeTarget "PusherChatTests" */;
 			buildPhases = (
 				33831C911A9CF61600B124F1 /* Frameworks */,
 				33831C901A9CF61600B124F1 /* Sources */,
@@ -225,9 +225,9 @@
 			dependencies = (
 				33831C971A9CF61600B124F1 /* PBXTargetDependency */,
 			);
-			name = PusherChatkitTests;
+			name = PusherChatTests;
 			productName = PusherSwiftTests;
-			productReference = 33831C941A9CF61600B124F1 /* PusherChatkitTests.xctest */;
+			productReference = 33831C941A9CF61600B124F1 /* PusherChatTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -263,7 +263,7 @@
 			projectRoot = "";
 			targets = (
 				33831C881A9CF61600B124F1 /* PusherChatkit */,
-				33831C931A9CF61600B124F1 /* PusherChatkitTests */,
+				33831C931A9CF61600B124F1 /* PusherChatTests */,
 			);
 		};
 /* End PBXProject section */
@@ -577,7 +577,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.pusher.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = PusherChatkitTests;
+				PRODUCT_NAME = PusherChatTests;
 				SDKROOT = "";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx appletvsimulator appletvos watchsimulator watchos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -625,7 +625,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.pusher.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = PusherChatkitTests;
+				PRODUCT_NAME = PusherChatTests;
 				SDKROOT = "";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx appletvsimulator appletvos watchsimulator watchos";
 				SWIFT_VERSION = 3.0;
@@ -656,7 +656,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		33831CA01A9CF61600B124F1 /* Build configuration list for PBXNativeTarget "PusherChatkitTests" */ = {
+		33831CA01A9CF61600B124F1 /* Build configuration list for PBXNativeTarget "PusherChatTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				33831CA11A9CF61600B124F1 /* Debug */,

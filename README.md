@@ -1,4 +1,4 @@
-# PusherChat (chatkit-swift)
+# PusherChatkit (chatkit-swift)
 
 [![Read the docs](https://img.shields.io/badge/read_the-docs-92A8D1.svg)](https://pusher-mimir-staging-pr-47.herokuapp.com/chat-api/reference/swift/)
 [![Twitter](https://img.shields.io/badge/twitter-@Pusher-blue.svg?style=flat)](http://twitter.com/Pusher)
@@ -19,9 +19,9 @@ Head over to [our documentation](https://pusher-mimir-staging-pr-78.herokuapp.co
 
 ## Credits
 
-PusherChat is owned and maintained by [Pusher](https://pusher.com).
+PusherChatkit is owned and maintained by [Pusher](https://pusher.com).
 
 
 ## License
 
-PusherChat is released under the MIT license. See [LICENSE](https://github.com/pusher/chatkit-swift/blob/master/LICENSE.md) for details.
+PusherChatkit is released under the MIT license. See [LICENSE](https://github.com/pusher/chatkit-swift/blob/master/LICENSE.md) for details.
