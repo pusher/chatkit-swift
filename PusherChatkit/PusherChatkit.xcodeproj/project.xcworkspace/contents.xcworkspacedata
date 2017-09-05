@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/luka/Developer/chatkit-swift/PusherChatkit/PusherChatkit.xcodeproj">
+      location = "self:PusherChatkit/PusherChatkit.xcodeproj">
    </FileRef>
 </Workspace>
