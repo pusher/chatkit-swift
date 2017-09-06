@@ -7,4 +7,4 @@
 
 import PusherPlatform
 
-typealias PCHTTPTokenProvider = PPHTTPEndpointTokenProvider
+public typealias PCHTTPTokenProvider = PPHTTPEndpointTokenProvider
