@@ -32,6 +32,7 @@
 		33AE481E1EAE2D14006C27A6 /* PusherChatkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 33346ABF1EAE1887002C58B8 /* PusherChatkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		33B3DD9F1EF7E2F60050CA02 /* PCTestingTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B3DD9E1EF7E2F60050CA02 /* PCTestingTokenProvider.swift */; };
 		33D2A5AF1E39075100EA7549 /* DummyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D2A5AD1E39074800EA7549 /* DummyTests.swift */; };
+		A14E75AF1F604125009C55DD /* PCHTTPTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E75AE1F604125009C55DD /* PCHTTPTokenProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 		33B3DD9E1EF7E2F60050CA02 /* PCTestingTokenProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCTestingTokenProvider.swift; sourceTree = "<group>"; };
 		33BB99671D21226C00B25C2A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Tests/Info.plist; sourceTree = "<group>"; };
 		33D2A5AD1E39074800EA7549 /* DummyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DummyTests.swift; path = ../Tests/DummyTests.swift; sourceTree = "<group>"; };
+		A14E75AE1F604125009C55DD /* PCHTTPTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCHTTPTokenProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 				33B3DD9E1EF7E2F60050CA02 /* PCTestingTokenProvider.swift */,
 				33831C8C1A9CF61600B124F1 /* Supporting Files */,
 				33346ABF1EAE1887002C58B8 /* PusherChatkit.h */,
+				A14E75AE1F604125009C55DD /* PCHTTPTokenProvider.swift */,
 			);
 			name = Source;
 			path = ../Source;
@@ -301,6 +304,7 @@
 				3336C8171EE046F0005EB69A /* PCUserStoreCore.swift in Sources */,
 				3388D5FD1EAE4EAC0072A742 /* PCUserSubscription.swift in Sources */,
 				334B9A2B1ECC9F7A007A3D3B /* PCGlobalUserStore.swift in Sources */,
+				A14E75AF1F604125009C55DD /* PCHTTPTokenProvider.swift in Sources */,
 				331421351EDD8CDC00D0B6DB /* PCPresenceSubscription.swift in Sources */,
 				3336C8151EE045FE005EB69A /* PCRoomUserStore.swift in Sources */,
 				334B9A2D1ECCA16A007A3D3B /* PCRoomStore.swift in Sources */,
