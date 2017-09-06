@@ -22,9 +22,9 @@ Before building & running in Xcode, install all of the required dependencies wit
 $ gem install cocoapods
 ```
 
-> CocoaPods version 1.3.1 or newer is recommended to build ChatKit.
+> CocoaPods version 1.3.1 or newer is recommended to build Chatkit.
 
-To integrate ChatKit into your Xcode project using CocoaPods, specify it in your `Podfile`:
+To integrate Chatkit into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
@@ -46,7 +46,7 @@ $ pod install
 
 [Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.
 
-> Carthage version 0.25.0 or newer is recommended to build ChatKit.
+> Carthage version 0.25.0 or newer is recommended to build Chatkit.
 
 You can install Carthage with [Homebrew](http://brew.sh/) using the following command:
 
@@ -55,7 +55,7 @@ $ brew update
 $ brew install carthage
 ```
 
-To integrate ChatKit into your Xcode project using Carthage, specify it in your `Cartfile`:
+To integrate Chatkit into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
 github "pusher/chatkit-swift"
