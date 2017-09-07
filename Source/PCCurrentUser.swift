@@ -95,7 +95,7 @@ public final class PCCurrentUser {
 
     public func createRoom(
         name: String,
-        isPrivate: Bool = true,
+        isPrivate: Bool = false,
         addUserIds userIds: [String]? = nil,
         completionHandler: @escaping RoomCompletionHandler
     ) {
