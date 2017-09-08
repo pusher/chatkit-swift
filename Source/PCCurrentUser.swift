@@ -155,13 +155,13 @@ public final class PCCurrentUser {
         self.addUsers([user], to: room, completionHandler: completionHandler)
     }
 
+    public func addUser(id: String, to roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+        self.addOrRemoveUsers(in: roomId, userIds: [id], membershipChange: .add, completionHandler: completionHandler)
+    }
+
     public func addUsers(_ users: [PCUser], to room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
         let userIds = users.map { $0.id }
         self.addUsers(ids: userIds, to: room.id, completionHandler: completionHandler)
-    }
-
-    public func addUser(id: String, to roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
-        self.addOrRemoveUsers(in: roomId, userIds: [id], membershipChange: .add, completionHandler: completionHandler)
     }
 
     public func addUsers(ids: [String], to roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
@@ -172,17 +172,17 @@ public final class PCCurrentUser {
         self.removeUsers([user], from: room, completionHandler: completionHandler)
     }
 
-    public func removeUser(id: String, from room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
-        self.removeUsers(ids: [id], from: room, completionHandler: completionHandler)
+    public func removeUser(id: String, from roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+        self.removeUsers(ids: [id], from: roomId, completionHandler: completionHandler)
     }
 
     public func removeUsers(_ users: [PCUser], from room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
         let userIds = users.map { $0.id }
-        self.removeUsers(ids: userIds, from: room, completionHandler: completionHandler)
+        self.removeUsers(ids: userIds, from: room.id, completionHandler: completionHandler)
     }
 
-    public func removeUsers(ids: [String], from room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
-        self.addOrRemoveUsers(in: room.id, userIds: ids, membershipChange: .remove, completionHandler: completionHandler)
+    public func removeUsers(ids: [String], from roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+        self.addOrRemoveUsers(in: roomId, userIds: ids, membershipChange: .remove, completionHandler: completionHandler)
     }
 
     //MARK: Update Room
