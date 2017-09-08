@@ -31,6 +31,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '10.0'
 use_frameworks!
 
+# Replace `<Your Target Name>` with your app's target name.
 target '<Your Target Name>' do
     pod 'PusherChatkit', '~> 0.2.9'
 end
