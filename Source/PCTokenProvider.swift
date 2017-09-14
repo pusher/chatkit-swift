@@ -1,9 +1,11 @@
 import Foundation
 import PusherPlatform
 
-public final class PCTestingTokenProvider: PPTokenProvider {
+public final class PCTokenProvider: PPTokenProvider {
 
+    public let url: String
     public let userId: String
+
     let internalTokenProvider: PPHTTPEndpointTokenProvider
     public var logger: PPLogger? {
         willSet {
@@ -11,17 +13,15 @@ public final class PCTestingTokenProvider: PPTokenProvider {
         }
     }
 
-    public init(userId: String, instanceId: String) {
+    public init(url: String, userId: String) {
+        self.url = url
         self.userId = userId
 
         let tokenProvider = PPHTTPEndpointTokenProvider(
-            url: "https://chatkit-test-token-provider.herokuapp.com/token",
+            url: url,
             requestInjector: { req -> PPHTTPEndpointTokenProviderRequest in
                 req.addQueryItems(
-                    [
-                        URLQueryItem(name: "user_id", value: userId),
-                        URLQueryItem(name: "instance", value: instanceId),
-                    ]
+                    [URLQueryItem(name: "user_id", value: userId)]
                 )
                 return req
             }
