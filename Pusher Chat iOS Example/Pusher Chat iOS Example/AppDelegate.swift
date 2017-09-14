@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let instanceId = "v1:api-deneb:2f354c91-269f-4820-93d2-5441219fdd23"
         let pusherChat = ChatManager(
             instanceId: instanceId,
-            tokenProvider: PCTokenProvider(userId: "test", url: "https://chatkit-test-token-provider.herokuapp.com/token?instance_id=v1:us1:1234"),
+            tokenProvider: PCTokenProvider(url: "https://chatkit-test-token-provider.herokuapp.com/token?instance_id=v1:us1:1234", userId: "test"),
             logger: HamLogger(),
             baseClient: PPBaseClient(host: "api-deneb.pusherplatform.io", insecure: true)
         )

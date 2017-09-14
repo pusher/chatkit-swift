@@ -3,8 +3,8 @@ import PusherPlatform
 
 public final class PCTokenProvider: PPTokenProvider {
 
-    public let userId: String
     public let url: String
+    public let userId: String
 
     let internalTokenProvider: PPHTTPEndpointTokenProvider
     public var logger: PPLogger? {
@@ -13,9 +13,9 @@ public final class PCTokenProvider: PPTokenProvider {
         }
     }
 
-    public init(userId: String, url: String) {
-        self.userId = userId
+    public init(url: String, userId: String) {
         self.url = url
+        self.userId = userId
 
         let tokenProvider = PPHTTPEndpointTokenProvider(
             url: url,
