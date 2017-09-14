@@ -24,7 +24,7 @@ import PusherPlatform
         logger: PPLogger = PPDefaultLogger(),
         baseClient: PPBaseClient? = nil
     ) {
-        (tokenProvider as? PCTestingTokenProvider)?.logger = logger
+        (tokenProvider as? PCTokenProvider)?.logger = logger
         
         self.instance = Instance(
             instanceId: instanceId,
