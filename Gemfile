@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-gem 'danger'
-gem 'danger-swiftlint'
+gem 'danger', :git => 'git@github.com:danger/danger.git', :branch => 'master'
+gem 'danger-swiftlint', '~> 0.5.1'
