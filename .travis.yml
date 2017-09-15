@@ -3,5 +3,17 @@ osx_image: xcode9
 xcode_project: PusherChatkit.xcworkspace
 xcode_scheme: PusherChatkit
 
+before_install:
+  - brew update
+
+install:
+  - if brew list | grep -q carthage; then
+      echo Carthage installed. Proceed without installing;
+      carthage version;
+    else
+      echo Carthage not installed. Installing using homebrew;
+      brew install carthage;
+    fi
+
 script:
-  - xcodebuild clean build -workspace PusherChatkit.xcworkspace -scheme PusherChatkit -quiet
+  - xcodebuild clean build -workspace PusherChatkit.xcworkspace -scheme PusherChatkit ONLY_ACTIVE_ARCH=NO
