@@ -4,4 +4,4 @@ xcode_project: PusherChatkit.xcworkspace
 xcode_scheme: PusherChatkit
 
 script:
-  - xcodebuild clean build test -project PusherChatkit.xcworkspace -scheme PusherChatkit
+  - xcodebuild clean build -workspace PusherChatkit.xcworkspace -scheme PusherChatkit -quiet
