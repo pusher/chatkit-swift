@@ -4,7 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/pusher/chat-api-swift/compare/0.2.9...HEAD)
+## [Unreleased](https://github.com/pusher/chat-api-swift/compare/0.3.0...HEAD)
+
+## [0.3.0](https://github.com/pusher/chat-api-swift/compare/0.2.9...0.3.0) - 2017-09-18
+## Added
+- Danger
+- Ability to update a room
+- User(s) can be added or removed from the room by providing ids or user objects.
+- Improved logging
+
+## Changed
+- `PULL_REQUEST_TEMPLATE.md` template
+- `PusherChat` -> `PusherChatkit`
+- Newly created room will be set to public as default
+- `PCTestingTokenProvider` -> `PCTokenProvider`
+- `PCTokenProvider` initialization
 
 ## [0.2.9](https://github.com/pusher/chat-api-swift/compare/0.2.8...0.2.9) - 2017-08-02
 ## Changed
