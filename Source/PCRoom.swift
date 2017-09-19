@@ -22,7 +22,7 @@ public final class PCRoom {
         // tableview, or similar?
         // TODO: This will also not work well if references to users are stored by
         // a customer
-        return Array(self.userStore.users).sorted(by: { $0.0.id > $0.1.id })
+        return Array(self.userStore.users).sorted(by: { $0.id > $1.id })
     }
 
     public internal(set) var userStore: PCRoomUserStore
