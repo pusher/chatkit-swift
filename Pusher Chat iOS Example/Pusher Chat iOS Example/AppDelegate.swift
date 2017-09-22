@@ -18,12 +18,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
-        let instanceId = "v1:api-deneb:2f354c91-269f-4820-93d2-5441219fdd23"
+        let baseURL = "https://us1-staging.pusherplatform.io"
+        let path = "services/chatkit_token_provider/v1"
+
+        let instanceId = "v1:us1-staging:ca54d606-a23e-4341-9b6f-a210c65df220"
+        let appId = instanceId.split(separator: ":").last!
+
         let pusherChat = ChatManager(
             instanceId: instanceId,
-            tokenProvider: PCTokenProvider(url: "https://chatkit-test-token-provider.herokuapp.com/token?instance_id=v1:us1:1234", userId: "test"),
-            logger: HamLogger(),
-            baseClient: PPBaseClient(host: "api-deneb.pusherplatform.io", insecure: true)
+            tokenProvider: PCTokenProvider(url: "\(baseURL)/\(path)/\(appId)/token?instance_id=\(instanceId)", userId: "luka"),
+            logger: HamLogger()
         )
 
         self.pusherChat = pusherChat

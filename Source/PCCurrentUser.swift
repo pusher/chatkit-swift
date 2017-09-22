@@ -705,7 +705,7 @@ public final class PCCurrentUser {
                                 strongSelf.instance.logger.log(err!.localizedDescription, logLevel: .debug)
 
                                 if progressCounter.incrementFailedAndCheckIfFinished() {
-                                    completionHandler(messages.underlyingArray.sorted(by: { $0.0.id > $0.1.id }), nil)
+                                    completionHandler(messages.underlyingArray.sorted(by: { $0.id > $1.id }), nil)
                                 }
 
                                 return
@@ -713,7 +713,7 @@ public final class PCCurrentUser {
 
                             messages.append(message)
                             if progressCounter.incrementSuccessAndCheckIfFinished() {
-                                completionHandler(messages.underlyingArray.sorted(by: { $0.0.id > $0.1.id }), nil)
+                                completionHandler(messages.underlyingArray.sorted(by: { $0.id > $1.id }), nil)
                             }
                         }
                     }

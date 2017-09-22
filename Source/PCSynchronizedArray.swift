@@ -4,6 +4,8 @@ public final class PCSynchronizedArray<T> {
     internal var underlyingArray: [T] = []
     private let accessQueue = DispatchQueue(label: "synchronized.array.access", attributes: .concurrent)
 
+    public init() {}
+
     public func append(_ newElement: T, completionHandler: (() -> Void)? = nil) {
         // QoS is userInitiated here, mainly so that when the rooms are received as part
         // of the initial_state for a user subscription they are added to the room store
