@@ -35,7 +35,7 @@ use_frameworks!
 
 # Replace `<Your Target Name>` with your app's target name.
 target '<Your Target Name>' do
-    pod 'PusherChatkit', '~> 0.3.1'
+  pod 'PusherChatkit', '~> 0.3.2'
 end
 ```
 
