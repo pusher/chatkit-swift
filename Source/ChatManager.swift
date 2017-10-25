@@ -79,13 +79,8 @@ import PusherPlatform
         self.instance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
-            //            onOpening: onOpening,
-            //            onOpen: onOpen,
-            //            onResuming: onResuming,
             onEvent: self.userSubscription!.handleEvent,
-            onEnd: { _, _, _ in
-                print("ENDED")
-            },
+            onEnd: { _, _, _ in },
             onError: { error in
                 completionHandler(nil, error)
             }
