@@ -21,12 +21,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let baseURL = "https://us1-staging.pusherplatform.io"
         let path = "services/chatkit_token_provider/v1"
 
-        let instanceId = "v1:us1-staging:ca54d606-a23e-4341-9b6f-a210c65df220"
-        let appId = instanceId.split(separator: ":").last!
+        let instanceLocator = "v1:us1-staging:ca54d606-a23e-4341-9b6f-a210c65df220"
+        let instanceId = instanceLocator.split(separator: ":").last!
 
         let pusherChat = ChatManager(
-            instanceId: instanceId,
-            tokenProvider: PCTokenProvider(url: "\(baseURL)/\(path)/\(appId)/token?instance_id=\(instanceId)", userId: "luka"),
+            instanceLocator: instanceLocator,
+            tokenProvider: PCTokenProvider(url: "\(baseURL)/\(path)/\(instanceId)/token?instance_id=\(instanceLocator)", userId: "luka"),
             logger: HamLogger()
         )
 

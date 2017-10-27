@@ -19,15 +19,15 @@ import PusherPlatform
     }
 
     public init(
-        instanceId: String,
+        instanceLocator: String,
         tokenProvider: PPTokenProvider,
         logger: PPLogger = PPDefaultLogger(),
         baseClient: PPBaseClient? = nil
     ) {
         (tokenProvider as? PCTokenProvider)?.logger = logger
-        
+
         self.instance = Instance(
-            instanceId: instanceId,
+            locator: instanceLocator,
             serviceName: "chatkit",
             serviceVersion: "v1",
             tokenProvider: tokenProvider,
