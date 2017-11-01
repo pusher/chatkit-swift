@@ -1,7 +1,7 @@
 import Foundation
 
 public final class PCTypingIndicatorManager {
-    private var queue = DispatchQueue(label: "com.pusher.chat-api.typing-indicator-manager")
+    private var queue = DispatchQueue(label: "com.pusher.chatkit.typing-indicator-manager")
     public var typingTimeoutTimer: Timer?
     public var typingTimeoutInterval: TimeInterval
     public let roomId: Int

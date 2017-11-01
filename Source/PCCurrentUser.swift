@@ -31,7 +31,7 @@ public final class PCCurrentUser {
     public internal(set) var presenceSubscription: PCPresenceSubscription?
 
     var typingIndicatorManagers: [Int: PCTypingIndicatorManager] = [:]
-    private var typingIndicatorQueue = DispatchQueue(label: "com.pusher.chat-api.typing-indicators")
+    private var typingIndicatorQueue = DispatchQueue(label: "com.pusher.chatkit.typing-indicators")
 
     let instance: Instance
 

@@ -1,6 +1,5 @@
 import UIKit
 import PusherChatkit
-import PusherPlatform
 
 class ViewController: UIViewController {
     @IBOutlet var feedLabel: UILabel!

@@ -142,9 +142,9 @@
 				331F9BD81EBC80FA00C3F678 /* PCPayloadDeserializer.swift */,
 				3397D4C11EC2017000DD5994 /* PCSynchronizedArray.swift */,
 				33B3DD9E1EF7E2F60050CA02 /* PCTokenProvider.swift */,
+				A14E75AE1F604125009C55DD /* PCHTTPTokenProvider.swift */,
 				33831C8C1A9CF61600B124F1 /* Supporting Files */,
 				33346ABF1EAE1887002C58B8 /* PusherChatkit.h */,
-				A14E75AE1F604125009C55DD /* PCHTTPTokenProvider.swift */,
 			);
 			name = Source;
 			path = ../Source;
