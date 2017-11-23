@@ -42,8 +42,10 @@ end
 Then, run the following command:
 
 ```bash
-$ pod install --repo-update
+$ pod install
 ```
+
+> Optionally use `--repo-update` flag to ensure the specs repository is aware of the latest version of PusherChatkit.
 
 ### Carthage
 
