@@ -54,7 +54,7 @@ public final class PCUserSubscription {
             return
         }
 
-        let userId = json["user_id"] as? String
+        let userId = apiEventData["user_id"] as? String
 
         self.instance.logger.log("Received event name: \(eventNameString), and data: \(apiEventData)", logLevel: .verbose)
 
