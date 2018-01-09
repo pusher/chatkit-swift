@@ -87,6 +87,17 @@ import PusherPlatform
         )
     }
 
+    // TODO: Maybe we need some sort of ChatManagerConnectionState?
+
+    public func disconnect() {
+        // End all subscriptions
+        self.userSubscription?.resumableSubscription.end()
+        self.currentUser?.presenceSubscription?.end()
+        self.currentUser?.rooms.forEach { room in
+            room.subscription?.resumableSubscription.end()
+        }
+    }
+
     //    fileprivate func onUserSubscriptionStateChange(newState: ) {
     //        self.delegate?.userSubscriptionStateChanged(from: <#T##PCUserSubscriptionState#>, to: <#T##PCUserSubscriptionState#>)
     //    }
