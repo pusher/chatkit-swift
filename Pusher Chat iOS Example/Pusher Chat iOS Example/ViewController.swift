@@ -31,7 +31,7 @@ class ViewController: UIViewController {
             print(currentUser.rooms.flatMap { String($0.id) }.joined(separator: ", "))
 
             if currentUser.rooms.count != 0 {
-                strongSelf.currentRoom = currentUser.rooms[0]
+                strongSelf.currentRoom = currentUser.rooms.last!
                 currentUser.subscribeToRoom(room: strongSelf.currentRoom!, roomDelegate: strongSelf)
             }
         }
