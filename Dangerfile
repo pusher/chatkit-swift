@@ -1,7 +1,7 @@
 # Sometimes its a README fix, or something like that - which isn't relevant for
 # including in a CHANGELOG for example
 not_declared_trivial = !(github.pr_title.include? "#trivial")
-has_source_changes = !git.modified_files.grep(/Source/).empty?
+has_source_changes = !git.modified_files.grep(/Sources/).empty?
 
 # Changelog entries are required for changes to library files.
 no_changelog_entry = !git.modified_files.include?("CHANGELOG.md")

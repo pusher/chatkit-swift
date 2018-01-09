@@ -44,6 +44,16 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       codeCoverageEnabled = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "33831C931A9CF61600B124F1"
+               BuildableName = "PusherChatkitTests.xctest"
+               BlueprintName = "PusherChatkitTests"
+               ReferencedContainer = "container:PusherChatkit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
