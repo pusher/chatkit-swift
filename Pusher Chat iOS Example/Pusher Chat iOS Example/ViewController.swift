@@ -8,11 +8,24 @@ class ViewController: UIViewController {
     public var pusherChatUser: PCCurrentUser?
     public var currentRoom: PCRoom?
 
+    @IBAction func disconnectButton(_ sender: Any) {
+        print("About to disconnect from Chatkit")
+        delegate.pusherChat?.disconnect()
+    }
+
+    @IBAction func reconnectButton(_ sender: Any) {
+        print("About to reconnect to Chatkit")
+        connectToChatkit()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let delegate = UIApplication.shared.delegate as! AppDelegate
+        delegate = UIApplication.shared.delegate as! AppDelegate
+        connectToChatkit()
+    }
 
+    func connectToChatkit() {
         delegate.pusherChat?.connect(delegate: self) { [weak self] currentUser, error in
             guard error == nil else {
                 print("Error connecting: \(error!)")
