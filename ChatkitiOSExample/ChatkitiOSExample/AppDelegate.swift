@@ -1,14 +1,5 @@
-//
-//  AppDelegate.swift
-//  Pusher Platform iOS Example
-//
-//  Created by Hamilton Chapman on 27/10/2016.
-//  Copyright © 2016 Pusher. All rights reserved.
-//
-
 import UIKit
 import PusherChatkit
-import PusherPlatform
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,25 +8,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     public var pusherChat: ChatManager?
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        let instanceLocator = "YOUR_INSTANCE_LOCATOR"
+        let instanceLocator = "v1:us1:3c4de3a4-d0d3-46ad-beb2-bd45145baedb"
 
         let pusherChat = ChatManager(
             instanceLocator: instanceLocator,
             tokenProvider: PCTokenProvider(
-                url: "YOUR_TEST_TOKEN_PROVIDER_URL",
-                userId: "YOUR_USER_ID"
+                url: "https://us1.pusherplatform.io/services/chatkit_token_provider/v1/3c4de3a4-d0d3-46ad-beb2-bd45145baedb/token?instance_locator=v1:us1:3c4de3a4-d0d3-46ad-beb2-bd45145baedb",
+                userId: "ham"
             ),
             logger: TestLogger()
         )
 
         self.pusherChat = pusherChat
-
         return true
     }
 }
 
-public struct TestLogger: PPLogger {
-    public func log(_ message: @autoclosure @escaping () -> String, logLevel: PPLogLevel) {
+public struct TestLogger: PCLogger {
+    public func log(_ message: @autoclosure @escaping () -> String, logLevel: PCLogLevel) {
         guard logLevel >= .debug else { return }
         print("\(message())")
     }
