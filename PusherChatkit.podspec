@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.source_files = 'Sources/*.swift'
 
-  s.dependency 'PusherPlatform', '~> 0.2.1'
+  s.dependency 'PusherPlatform', '~> 0.3.0'
 
   s.ios.deployment_target = '10.0'
   s.osx.deployment_target = '10.11'
