@@ -547,6 +547,7 @@ public final class PCCurrentUser {
 
     // MARK: Message-related interactions
 
+    @available(*, deprecated: 0.5.0, message: "use sendMessage instead")
     public func addMessage(text: String, to room: PCRoom, completionHandler: @escaping (Int?, Error?) -> Void) {
         let messageObject: [String: Any] = [
             "text": text,
@@ -589,6 +590,190 @@ public final class PCCurrentUser {
             onError: { error in
                 completionHandler(nil, error)
             }
+        )
+    }
+
+    func sendMessage(_ messageObject: [String: Any], roomId: Int, completionHandler: @escaping (Int?, Error?) -> Void) {
+        guard JSONSerialization.isValidJSONObject(messageObject) else {
+            completionHandler(nil, PCError.invalidJSONObjectAsData(messageObject))
+            return
+        }
+
+        guard let data = try? JSONSerialization.data(withJSONObject: messageObject, options: []) else {
+            completionHandler(nil, PCError.failedToJSONSerializeData(messageObject))
+            return
+        }
+
+        let path = "/rooms/\(roomId)/messages"
+        let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
+
+        self.instance.requestWithRetry(
+            using: generalRequest,
+            onSuccess: { data in
+                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
+                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
+                    return
+                }
+
+                guard let messageIdPayload = jsonObject as? [String: Int] else {
+                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
+                    return
+                }
+
+                guard let messageId = messageIdPayload["message_id"] else {
+                    completionHandler(nil, PCMessageError.messageIdKeyMissingInMessageCreationResponse(messageIdPayload))
+                    return
+                }
+
+                completionHandler(messageId, nil)
+            },
+            onError: { error in
+                completionHandler(nil, error)
+            }
+        )
+    }
+
+    func uploadAttachmentAndSendMessage(
+        _ messageObject: [String: Any],
+        attachment: PCAttachmentType,
+        roomId: Int,
+        completionHandler: @escaping (Int?, Error?) -> Void,
+        progressHandler: ((Int64, Int64) -> Void)? = nil
+    ) {
+        var multipartFormData: ((PPMultipartFormData) -> Void)
+        var reqOptions: PPRequestOptions
+
+        switch attachment {
+        case .fileData(let data, let name):
+            multipartFormData = { $0.append(data, withName: "file", fileName: name) }
+            reqOptions = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: "/rooms/\(roomId)/files/\(name)")
+            break
+        case .fileURL(let url, let name):
+            multipartFormData = { $0.append(url, withName: "file", fileName: name) }
+            reqOptions = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: "/rooms/\(roomId)/files/\(name)")
+            break
+        default:
+            sendMessage(messageObject, roomId: roomId, completionHandler: completionHandler)
+            return
+        }
+
+        self.filesInstance.upload(
+            using: reqOptions,
+            multipartFormData: multipartFormData,
+            onSuccess: { data in
+                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
+                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
+                    return
+                }
+
+                guard let uploadPayload = jsonObject as? [String: Any] else {
+                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
+                    return
+                }
+
+                do {
+                    let attachmentUploadResponse = try PCPayloadDeserializer.createAttachmentUploadResponseFromPayload(uploadPayload)
+
+                    var mutableMessageObject = messageObject
+                    mutableMessageObject["attachment"] = [
+                        "resource_link": attachmentUploadResponse.link,
+                        "type": attachmentUploadResponse.type
+                    ]
+
+                    self.sendMessage(mutableMessageObject, roomId: roomId, completionHandler: completionHandler)
+                } catch let err {
+                    completionHandler(nil, err)
+                    self.instance.logger.log("Response from uploading attachment to room \(roomId) was invalid", logLevel: .verbose)
+                    return
+                }
+            },
+            onError: { err in
+                completionHandler(nil, err)
+                self.instance.logger.log("Failed to upload attachment to room \(roomId)", logLevel: .verbose)
+            },
+            progressHandler: progressHandler
+        )
+    }
+
+    public func sendMessage(
+        roomId: Int,
+        text: String? = nil,
+        attachmentType: PCAttachmentType? = nil,
+        completionHandler: @escaping (Int?, Error?) -> Void
+    ) {
+        var messageObject: [String: Any] = [
+            "user_id": self.id
+        ]
+
+        if let text = text {
+            messageObject["text"] = text
+        }
+
+        if let attachmentType = attachmentType {
+            switch attachmentType {
+            case .fileData(_, _), .fileURL(_, _):
+                uploadAttachmentAndSendMessage(
+                    messageObject,
+                    attachment: attachmentType,
+                    roomId: roomId,
+                    completionHandler: completionHandler
+                )
+                break
+            case .link(let url, let type):
+                messageObject["attachment"] = [
+                    "resource_link": url,
+                    "type": type
+                ]
+                sendMessage(messageObject, roomId: roomId, completionHandler: completionHandler)
+                break
+            }
+        }
+    }
+
+    public func fetchAttachment(_ link: String, completionHandler: @escaping (PCFetchedAttachment?, Error?) -> Void) {
+        let options = PPRequestOptions(method: HTTPMethod.GET.rawValue, destination: .absolute(link))
+
+        self.filesInstance.request(
+            using: options,
+            onSuccess: { data in
+                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
+                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
+                    return
+                }
+
+                guard let attachmentPayload = jsonObject as? [String: Any] else {
+                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
+                    return
+                }
+
+                do {
+                    let fetchedAttachment = try PCPayloadDeserializer.createFetchedAttachmentFromPayload(attachmentPayload)
+                    completionHandler(fetchedAttachment, nil)
+                } catch let err {
+                    completionHandler(nil, err)
+                }
+            }
+        )
+    }
+
+    public func downloadAttachment(
+        _ link: String,
+        to destination: PCDownloadFileDestination? = nil,
+        onSuccess: ((URL) -> Void)? = nil,
+        onError: ((Error) -> Void)? = nil,
+        progressHandler: ((Int64, Int64) -> Void)? = nil
+    )  {
+        let reqOptions = PPRequestOptions(
+            method: HTTPMethod.GET.rawValue,
+            destination: .absolute(link),
+            shouldFetchToken: false
+        )
+        self.instance.download(
+            using: reqOptions,
+            to: destination,
+            onSuccess: onSuccess,
+            onError: onError,
+            progressHandler: progressHandler
         )
     }
 
