@@ -5,6 +5,7 @@ import PusherPlatform
     public static let namespace = "chatkit/v1"
 
     public let instance: Instance
+    public let filesInstance: Instance
     public internal(set) var userSubscription: PCUserSubscription?
 
     public var currentUser: PCCurrentUser? {
@@ -24,7 +25,10 @@ import PusherPlatform
         logger: PPLogger = PPDefaultLogger(),
         baseClient: PPBaseClient? = nil
     ) {
-        (tokenProvider as? PCTokenProvider)?.logger = logger
+        let splitInstance = instanceLocator.split(separator: ":")
+        let cluster = splitInstance[1]
+        let sharedBaseClient = baseClient ?? PPBaseClient(host: "\(cluster).pusherplatform.io")
+        sharedBaseClient.logger = logger
 
         self.instance = Instance(
             locator: instanceLocator,
@@ -35,6 +39,16 @@ import PusherPlatform
             logger: logger
         )
 
+        self.filesInstance = Instance(
+            locator: instanceLocator,
+            serviceName: "chatkit_files",
+            serviceVersion: "v1",
+            tokenProvider: tokenProvider,
+            client: baseClient,
+            logger: logger
+        )
+
+        (tokenProvider as? PCTokenProvider)?.logger = logger
         self.userStore = PCGlobalUserStore(instance: self.instance)
     }
 
@@ -61,6 +75,7 @@ import PusherPlatform
 
         self.userSubscription = PCUserSubscription(
             instance: self.instance,
+            filesInstance: self.filesInstance,
             resumableSubscription: resumableSub,
             userStore: self.userStore,
             delegate: delegate,

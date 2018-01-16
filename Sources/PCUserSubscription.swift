@@ -6,6 +6,7 @@ public final class PCUserSubscription {
     // TODO: Do we need to be careful of retain cycles here? e.g. weak instance
 
     let instance: Instance
+    let filesInstance: Instance
     public let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore
     public internal(set) var delegate: PCChatManagerDelegate
@@ -15,12 +16,14 @@ public final class PCUserSubscription {
 
     public init(
         instance: Instance,
+        filesInstance: Instance,
         resumableSubscription: PPResumableSubscription,
         userStore: PCGlobalUserStore,
         delegate: PCChatManagerDelegate,
         connectCompletionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
         self.instance = instance
+        self.filesInstance = filesInstance
         self.resumableSubscription = resumableSubscription
         self.userStore = userStore
         self.delegate = delegate
@@ -122,7 +125,12 @@ extension PCUserSubscription {
         let receivedCurrentUser: PCCurrentUser
 
         do {
-            receivedCurrentUser = try PCPayloadDeserializer.createCurrentUserFromPayload(userPayload, instance: self.instance, userStore: userStore)
+            receivedCurrentUser = try PCPayloadDeserializer.createCurrentUserFromPayload(
+                userPayload,
+                instance: self.instance,
+                filesInstance: self.filesInstance,
+                userStore: userStore
+            )
         } catch let err {
             callConnectCompletionHandlers(
                 currentUser: nil,

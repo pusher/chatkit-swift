@@ -34,6 +34,7 @@ public final class PCCurrentUser {
     private var typingIndicatorQueue = DispatchQueue(label: "com.pusher.chatkit.typing-indicators")
 
     let instance: Instance
+    let filesInstance: Instance
 
     public init(
         id: String,
@@ -44,6 +45,7 @@ public final class PCCurrentUser {
         customData: [String: Any]?,
         rooms: PCSynchronizedArray<PCRoom> = PCSynchronizedArray<PCRoom>(),
         instance: Instance,
+        filesInstance: Instance,
         userStore: PCGlobalUserStore
     ) {
         self.id = id
@@ -54,6 +56,7 @@ public final class PCCurrentUser {
         self.customData = customData
         self.roomStore = PCRoomStore(rooms: rooms, instance: instance)
         self.instance = instance
+        self.filesInstance = filesInstance
         self.userStore = userStore
 
         let allowedCharacterSet = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] ").inverted
