@@ -36,7 +36,7 @@
 		33BA563E200E63DF00FFC587 /* PCFetchedAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BA563D200E63DF00FFC587 /* PCFetchedAttachment.swift */; };
 		33BA5640200E640600FFC587 /* PCAttachmentUploadResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BA563F200E640600FFC587 /* PCAttachmentUploadResponse.swift */; };
 		33D2A5AF1E39075100EA7549 /* DummyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D2A5AD1E39074800EA7549 /* DummyTests.swift */; };
-		A14E75AF1F604125009C55DD /* PCHTTPTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14E75AE1F604125009C55DD /* PCHTTPTokenProvider.swift */; };
+		33E3EBC7200E2368003D888D /* PPTypealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3EBC6200E2368003D888D /* PPTypealiases.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,7 +84,7 @@
 		33BA563F200E640600FFC587 /* PCAttachmentUploadResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCAttachmentUploadResponse.swift; sourceTree = "<group>"; };
 		33BB99671D21226C00B25C2A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Tests/Info.plist; sourceTree = "<group>"; };
 		33D2A5AD1E39074800EA7549 /* DummyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DummyTests.swift; path = ../Tests/DummyTests.swift; sourceTree = "<group>"; };
-		A14E75AE1F604125009C55DD /* PCHTTPTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCHTTPTokenProvider.swift; sourceTree = "<group>"; };
+		33E3EBC6200E2368003D888D /* PPTypealiases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPTypealiases.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,11 +150,11 @@
 				331F9BD81EBC80FA00C3F678 /* PCPayloadDeserializer.swift */,
 				3397D4C11EC2017000DD5994 /* PCSynchronizedArray.swift */,
 				33B3DD9E1EF7E2F60050CA02 /* PCTokenProvider.swift */,
-				A14E75AE1F604125009C55DD /* PCHTTPTokenProvider.swift */,
 				33023E22200CB4A4001937C6 /* PCAttachment.swift */,
 				33BA563B200E634C00FFC587 /* PCAttachmentType.swift */,
 				33BA563D200E63DF00FFC587 /* PCFetchedAttachment.swift */,
 				33BA563F200E640600FFC587 /* PCAttachmentUploadResponse.swift */,
+				33E3EBC6200E2368003D888D /* PPTypealiases.swift */,
 				33831C8C1A9CF61600B124F1 /* Supporting Files */,
 				33346ABF1EAE1887002C58B8 /* PusherChatkit.h */,
 			);
@@ -317,7 +317,6 @@
 				3388D5FD1EAE4EAC0072A742 /* PCUserSubscription.swift in Sources */,
 				33BA5640200E640600FFC587 /* PCAttachmentUploadResponse.swift in Sources */,
 				334B9A2B1ECC9F7A007A3D3B /* PCGlobalUserStore.swift in Sources */,
-				A14E75AF1F604125009C55DD /* PCHTTPTokenProvider.swift in Sources */,
 				33BA563C200E634C00FFC587 /* PCAttachmentType.swift in Sources */,
 				331421351EDD8CDC00D0B6DB /* PCPresenceSubscription.swift in Sources */,
 				3336C8151EE045FE005EB69A /* PCRoomUserStore.swift in Sources */,
@@ -332,6 +331,7 @@
 				339CABD31EC3078200FDFB58 /* PCRoomDelegate.swift in Sources */,
 				3397D4C21EC2017000DD5994 /* PCSynchronizedArray.swift in Sources */,
 				33B3DD9F1EF7E2F60050CA02 /* PCTokenProvider.swift in Sources */,
+				33E3EBC7200E2368003D888D /* PPTypealiases.swift in Sources */,
 				331421331ED33C1400D0B6DB /* PCTypingIndicatorManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
