@@ -2,8 +2,6 @@ import Foundation
 import PusherPlatform
 
 @objc public class ChatManager: NSObject {
-    public static let namespace = "chatkit/v1"
-
     public let instance: Instance
     public let filesInstance: Instance
     public internal(set) var userSubscription: PCUserSubscription?
