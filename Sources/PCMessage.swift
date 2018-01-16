@@ -28,6 +28,12 @@ public final class PCMessage {
     }
 }
 
+extension PCMessage: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "Message - ID: \(self.id) sender: \(self.sender.id) text: \(self.text ?? "none") hasAttachment: \(self.attachment != nil)"
+    }
+}
+
 extension PCMessage: Hashable {
 
     public var hashValue: Int {
