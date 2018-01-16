@@ -73,7 +73,6 @@ struct PCPayloadDeserializer {
             let messageId = messagePayload["id"] as? Int,
             let messageSenderId = messagePayload["user_id"] as? String,
             let messageRoomId = messagePayload["room_id"] as? Int,
-            let messageText = messagePayload["text"] as? String,
             let messageCreatedAt = messagePayload["created_at"] as? String,
             let messageUpdatedAt = messagePayload["updated_at"] as? String
         else {
@@ -84,9 +83,10 @@ struct PCPayloadDeserializer {
             id: messageId,
             senderId: messageSenderId,
             roomId: messageRoomId,
-            text: messageText,
+            text: messagePayload["text"] as? String,
             createdAt: messageCreatedAt,
-            updatedAt: messageUpdatedAt
+            updatedAt: messageUpdatedAt,
+            attachment: createAttachmentFromPayload(messagePayload["attachment"])
         )
     }
 
@@ -104,6 +104,53 @@ struct PCPayloadDeserializer {
             state: state,
             lastSeenAt: payload["last_seen_at"] as? String
         )
+    }
+
+    static func createAttachmentFromPayload(_ payload: Any?) -> PCAttachment? {
+        guard
+            let payload = payload as? [String: Any],
+            let link = payload["resource_link"] as? String,
+            let type = payload["type"] as? String
+        else {
+            return nil
+        }
+
+        guard let urlComponents = URLComponents(string: link), let queryItems = urlComponents.queryItems else {
+            return PCAttachment(fetchRequired: false, link: link, type: type)
+        }
+
+        let fetchRequired = queryItems.contains(where: { $0.name == "chatkit_link" && $0.value == "true" })
+        return PCAttachment(fetchRequired: fetchRequired, link: link, type: type)
+    }
+
+    static func createFetchedAttachmentFromPayload(_ payload: [String: Any]) throws -> PCFetchedAttachment {
+        guard
+            let link = payload["resource_link"] as? String,
+            let ttl = payload["ttl"] as? Int,
+            let file = payload["file"] as? [String: Any],
+            let bytes = file["bytes"] as? Int,
+            let lastModified = file["last_modified"] as? Int,
+            let name = file["name"] as? String
+        else {
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCFetchedAttachment.self), payload: payload)
+        }
+
+        return PCFetchedAttachment(
+            file: PCFetchedAttachmentFile(bytes: bytes, lastModified: lastModified, name: name),
+            link: link,
+            ttl: ttl
+        )
+    }
+
+    static func createAttachmentUploadResponseFromPayload(_ payload: [String: Any]) throws -> PCAttachmentUploadResponse {
+        guard
+            let link = payload["resource_link"] as? String,
+            let type = payload["type"] as? String
+        else {
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCFetchedAttachment.self), payload: payload)
+        }
+
+        return PCAttachmentUploadResponse(link: link, type: type)
     }
 
     fileprivate static func createBasicUserFromPayload(_ payload: [String: Any]) throws -> PCBasicUser {

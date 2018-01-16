@@ -91,6 +91,7 @@ final class PCBasicMessageEnricher {
                 text: basicMessage.text,
                 createdAt: basicMessage.createdAt,
                 updatedAt: basicMessage.updatedAt,
+                attachment: basicMessage.attachment,
                 sender: user,
                 room: self.room
             )

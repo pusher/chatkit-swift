@@ -2,17 +2,19 @@ import Foundation
 
 public final class PCMessage {
     public let id: Int
-    public let text: String
+    public let text: String?
     public let createdAt: String
     public let updatedAt: String
+    public let attachment: PCAttachment?
     public let sender: PCUser
     public let room: PCRoom
 
     public init(
         id: Int,
-        text: String,
+        text: String?,
         createdAt: String,
         updatedAt: String,
+        attachment: PCAttachment?,
         sender: PCUser,
         room: PCRoom
     ) {
@@ -20,6 +22,7 @@ public final class PCMessage {
         self.text = text
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        self.attachment = attachment
         self.sender = sender
         self.room = room
     }
