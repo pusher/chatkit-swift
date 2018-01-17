@@ -31,14 +31,8 @@ class ViewController: UIViewController {
                 print("Error connecting: \(error!)")
                 return
             }
-
             print("Connected!")
-
-            guard
-                let strongSelf = self,
-                let currentUser = currentUser
-                else { return }
-
+            guard let strongSelf = self, let currentUser = currentUser else { return }
             strongSelf.pusherChatUser = currentUser
 
             print(currentUser.rooms.flatMap { String($0.id) }.joined(separator: ", "))
