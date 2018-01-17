@@ -6,40 +6,50 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.4.3...HEAD)
 
+###
+
 ## [0.4.3](https://github.com/pusher/chatkit-swift/compare/0.4.2...0.4.3) - 2018-01-09
-## Added
+
+### Added
 - `ChatManager` has had a `disconnect` function added to it so that you can disconnect from Chatkit.
 
 ## [0.4.2](https://github.com/pusher/chatkit-swift/compare/0.4.1...0.4.2) - 2018-01-06
-## Fixed
+
+### Fixed
 - Correctly access `user_id` in `PCUserSubscription` for typing indicator events. Thanks [@neoighodaro](https://github.com/neoighodaro)!
 
 ## [0.4.1](https://github.com/pusher/chatkit-swift/compare/0.4.0...0.4.1) - 2017-11-01
-## Changed
+
+### Changed
 - Bump `PusherPlatform` dependency to 0.2.1
 
 ## [0.4.0](https://github.com/pusher/chatkit-swift/compare/0.3.2...0.4.0) - 2017-10-27
-## Changed
+
+### Changed
 - `instanceId` parameter renamed to `instanceLocator`
 
 ## [0.3.2](https://github.com/pusher/chatkit-swift/compare/0.3.1...0.3.2) - 2017-10-25
-## Changed
+
+### Changed
 - Allow `PCTokenProvider` to take a `requestInjector`
 - Make `userId` optional when instantiating a `PCTokenProvider`
 - Bump `PusherPlatform` dependency to 0.1.32
 
 ## [0.3.1](https://github.com/pusher/chatkit-swift/compare/0.3.0...0.3.1) - 2017-09-21
-## Added
+
+### Added
 - Swift 4 support
 
 ## [0.3.0](https://github.com/pusher/chatkit-swift/compare/0.2.9...0.3.0) - 2017-09-18
-## Added
+
+### Added
 - Danger
 - Ability to update a room
 - User(s) can be added or removed from the room by providing ids or user objects.
 - Improved logging
 
-## Changed
+
+### Changed
 - `PULL_REQUEST_TEMPLATE.md` template
 - `PusherChat` -> `PusherChatkit`
 - Newly created room will be set to public as default
@@ -47,7 +57,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `PCTokenProvider` initialization
 
 ## [0.2.9](https://github.com/pusher/chatkit-swift/compare/0.2.8...0.2.9) - 2017-08-02
-## Changed
+
+### Changed
 - `PCTestingTokenProvider` parameter name
 - Move to deneb cluster
 
@@ -57,7 +68,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `isPrivate` property in `PCRoom` class
 - Default implementations of `PCRoomDelegate` and `PCChatManagerDelegate` protocol methods
 
-## Changed
+
+### Changed
 - `PCRoomDelegate` delegate methods
 
 ## [0.2.7](https://github.com/pusher/chatkit-swift/compare/0.2.6...0.2.7) - 2017-07-28
