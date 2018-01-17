@@ -1,8 +1,6 @@
 import Foundation
 import PusherPlatform
 
-public typealias PCTokenProviderRequest = PPHTTPEndpointTokenProviderRequest
-
 public final class PCTokenProvider: PPTokenProvider {
     public let url: String
     public let userId: String?

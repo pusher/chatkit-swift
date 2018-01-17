@@ -31,21 +31,35 @@ class ViewController: UIViewController {
                 print("Error connecting: \(error!)")
                 return
             }
-
             print("Connected!")
-
-            guard
-                let strongSelf = self,
-                let currentUser = currentUser
-            else { return }
-
+            guard let strongSelf = self, let currentUser = currentUser else { return }
             strongSelf.pusherChatUser = currentUser
 
             print(currentUser.rooms.flatMap { String($0.id) }.joined(separator: ", "))
 
             if currentUser.rooms.count != 0 {
                 strongSelf.currentRoom = currentUser.rooms.last!
-                currentUser.subscribeToRoom(room: strongSelf.currentRoom!, roomDelegate: strongSelf)
+                currentUser.subscribeToRoom(room: strongSelf.currentRoom!, roomDelegate: strongSelf, messageLimit: 1)
+
+                // Uncomment to send a message to the last room in the currentUser.rooms list, if any
+
+//                let imageName = Bundle.main.path(forResource: "somedog", ofType: "jpg")
+//                let imageURL = URL(fileURLWithPath: imageName!)
+//
+//                print("About to send message")
+//
+//                currentUser.sendMessage(
+//                    roomId: currentUser.rooms.last!.id,
+//                    text: "Just a message with an attachment",
+//                    attachmentType: .fileURL(imageURL, name: "cucas.jpg")
+////                    attachmentType: .link("https://i.giphy.com/RpByGPT5VlZiE.gif", type: "image")
+//                ) { messageId, err in
+//                    guard err == nil else {
+//                        print("Error sending message \(err!.localizedDescription)")
+//                        return
+//                    }
+//                    print("Successfully sent message with ID: \(messageId!)")
+//                }
             }
         }
     }
@@ -53,7 +67,37 @@ class ViewController: UIViewController {
 
 extension ViewController: PCRoomDelegate {
     func newMessage(message: PCMessage) {
-        print("Room sub received message: \(message.text)")
+        print("Room sub received message: \(message.debugDescription)")
+
+        if let attachment = message.attachment {
+            if attachment.fetchRequired {
+                print("Fetch required for attachment")
+                pusherChatUser?.fetchAttachment(attachment.link) { fetchedAttachment, err in
+                    guard err == nil else {
+                        print("Error fetching attachment \(err!.localizedDescription)")
+                        return
+                    }
+
+                    print("Fetched attachment link: \(fetchedAttachment!.link)")
+
+                    self.pusherChatUser?.downloadAttachment(
+                        fetchedAttachment!.link,
+                        to: PCSuggestedDownloadDestination(options: [.createIntermediateDirectories, .removePreviousFile]),
+                        onSuccess: { url in
+                            print("Downloaded successfully to \(url.absoluteString)")
+                        },
+                        onError: { error in
+                            print("Failed to download \(error.localizedDescription)")
+                        },
+                        progressHandler: { bytesReceived, totalBytesToReceive in
+                            print("Download progress: \(bytesReceived) / \(totalBytesToReceive)")
+                        }
+                    )
+                }
+            } else {
+                print("Fetch not required for attachment: \(attachment.link)")
+            }
+        }
     }
 
     func usersUpdated() {

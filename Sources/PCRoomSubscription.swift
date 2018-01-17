@@ -57,7 +57,7 @@ public final class PCRoomSubscription {
                 }
 
                 strongSelf.delegate?.newMessage(message: message)
-                strongSelf.logger.log("Room received new message: \(message.text)", logLevel: .verbose)
+                strongSelf.logger.log("Room received new message: \(message.debugDescription)", logLevel: .verbose)
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)

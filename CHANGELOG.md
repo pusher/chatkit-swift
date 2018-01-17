@@ -6,40 +6,133 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.4.3...HEAD)
 
+### Changed
+- Bump PusherPlatform dependency to 0.3.0
+- `addMessage` on `PCCurrentUser` has been deprecated
+- `text` property on `PCMessage` is now optional, i.e. `String?`
+
+### Added
+- Support for message attachments
+- `sendMessage` on `PCCurrentUser`, which replaces the now deprecated `addMessage`; usage looks like this:
+
+```swift
+currentUser.sendMessage(
+    roomId: roomId,
+    text: "My message text"
+) { messageId, err in
+    guard err == nil else {
+        print("Error sending message \(err!.localizedDescription)")
+        return
+    }
+    print("Successfully sent message with ID: \(messageId!)")
+}
+```
+
+Note that the room's ID is now required as a parameter, not the whole `PCRoom` object as was the case with `addMessage`
+
+- `sendMessage` supports sending messages with an attachment; this looks like:
+
+```swift
+let imageName = Bundle.main.path(forResource: "dog", ofType: "jpg")
+let imageURL = URL(fileURLWithPath: imageName!)
+
+currentUser.sendMessage(
+    roomId: roomId,
+    text: "My message text",
+    attachmentType: .fileURL(imageURL, name: "dog.jpg")
+) { messageId, err in
+    guard err == nil else {
+        print("Error sending message \(err!.localizedDescription)")
+        return
+    }
+    print("Successfully sent message with ID: \(messageId!)")
+}
+```
+
+There are currently 3 different `attachmentTypes` supported, as described in the `PCAttachmentType` enum:
+
+* `.fileData(_: Data, name: String)`: Use this if you have your file as `Data`. The `name` parameter is the name that the file will be given when it is stored by our servers.
+* `.fileURL(_: URL, name: String)`: Use this if you have your file as `Data`. The `name` parameter is the name that the file will be given when it is stored by our servers.
+* `.link(_: String, type: String)`: : Use this if you have a file stored elsewhere that you would like to attach to a message without it being uploaded to and stored by the Chatkit servers. The `type` `parameter` currently needs to be one of `"image"`, `"video"`, `"audio"`, or `"file"`. This will likely eventually be encoded in an `enum` but for now we're leaving it as just a `String` while we finalise the API.
+
+Here's an example of using the `.link(_: String, type: String)` attachment type:
+
+```swift
+currentUser.sendMessage(
+    roomId: roomId,
+    text: "My message text",
+    attachmentType: .link("https://i.giphy.com/RpByGPT5VlZiE.gif", type: "image")
+) { messageId, err in
+    guard err == nil else {
+        print("Error sending message \(err!.localizedDescription)")
+        return
+    }
+    print("Successfully sent message with ID: \(messageId!)")
+}
+```
+
+- Typealiases for useful PusherPlatform types, specifically:
+
+```swift
+public typealias PCHTTPTokenProvider = PPHTTPEndpointTokenProvider
+public typealias PCTokenProviderRequest = PPHTTPEndpointTokenProviderRequest
+public typealias PCLogger = PPLogger
+public typealias PCLogLevel = PPLogLevel
+public typealias PCDefaultLogger = PPDefaultLogger
+public typealias PCDownloadFileDestination = PPDownloadFileDestination
+public typealias PCDownloadOptions = PPDownloadOptions
+public typealias PCRetryStrategy = PPRetryStrategy
+public typealias PCDefaultRetryStrategy = PPDefaultRetryStrategy
+
+public func PCSuggestedDownloadDestination(...) { return PPSuggestedDownloadDestination(...) }
+```
+
+This means that importing PusherPlatform should never need to be done anymore.
+
+- `PCMessage` conforms to `CustomDebugStringConvertible`
+
 ## [0.4.3](https://github.com/pusher/chatkit-swift/compare/0.4.2...0.4.3) - 2018-01-09
-## Added
+
+### Added
 - `ChatManager` has had a `disconnect` function added to it so that you can disconnect from Chatkit.
 
 ## [0.4.2](https://github.com/pusher/chatkit-swift/compare/0.4.1...0.4.2) - 2018-01-06
-## Fixed
+
+### Fixed
 - Correctly access `user_id` in `PCUserSubscription` for typing indicator events. Thanks [@neoighodaro](https://github.com/neoighodaro)!
 
 ## [0.4.1](https://github.com/pusher/chatkit-swift/compare/0.4.0...0.4.1) - 2017-11-01
-## Changed
+
+### Changed
 - Bump `PusherPlatform` dependency to 0.2.1
 
 ## [0.4.0](https://github.com/pusher/chatkit-swift/compare/0.3.2...0.4.0) - 2017-10-27
-## Changed
+
+### Changed
 - `instanceId` parameter renamed to `instanceLocator`
 
 ## [0.3.2](https://github.com/pusher/chatkit-swift/compare/0.3.1...0.3.2) - 2017-10-25
-## Changed
+
+### Changed
 - Allow `PCTokenProvider` to take a `requestInjector`
 - Make `userId` optional when instantiating a `PCTokenProvider`
 - Bump `PusherPlatform` dependency to 0.1.32
 
 ## [0.3.1](https://github.com/pusher/chatkit-swift/compare/0.3.0...0.3.1) - 2017-09-21
-## Added
+
+### Added
 - Swift 4 support
 
 ## [0.3.0](https://github.com/pusher/chatkit-swift/compare/0.2.9...0.3.0) - 2017-09-18
-## Added
+
+### Added
 - Danger
 - Ability to update a room
 - User(s) can be added or removed from the room by providing ids or user objects.
 - Improved logging
 
-## Changed
+
+### Changed
 - `PULL_REQUEST_TEMPLATE.md` template
 - `PusherChat` -> `PusherChatkit`
 - Newly created room will be set to public as default
@@ -47,7 +140,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `PCTokenProvider` initialization
 
 ## [0.2.9](https://github.com/pusher/chatkit-swift/compare/0.2.8...0.2.9) - 2017-08-02
-## Changed
+
+### Changed
 - `PCTestingTokenProvider` parameter name
 - Move to deneb cluster
 
@@ -57,31 +151,38 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `isPrivate` property in `PCRoom` class
 - Default implementations of `PCRoomDelegate` and `PCChatManagerDelegate` protocol methods
 
-## Changed
+
+### Changed
 - `PCRoomDelegate` delegate methods
 
 ## [0.2.7](https://github.com/pusher/chatkit-swift/compare/0.2.6...0.2.7) - 2017-07-28
+
 ### Fixed
 - Update example code
 - Fix path
 
 ## [0.2.6](https://github.com/pusher/chatkit-swift/compare/0.2.5...0.2.6) - 2017-07-26
+
 ### Changed
 - Endpoint from `/users` to `/users_by_ids`
 
 ## [0.2.5](https://github.com/pusher/chatkit-swift/compare/0.2.4...0.2.5) - 2017-07-19
+
 ### Changed
 - Namespace
 
 ## [0.2.4](https://github.com/pusher/chatkit-swift/compare/0.2.3...0.2.4) - 2017-07-18
+
 ### Changed
 - Token provider URL.
 
 ## [0.2.3](https://github.com/pusher/chatkit-swift/compare/0.2.2...0.2.3) - 2017-07-17
+
 ### Removed
 - `eventType`
 
 ## [0.2.2](https://github.com/pusher/chatkit-swift/compare/0.2.0...0.2.2) - 2017-06-29
+
 ### Added
 - Add ability to delete a room
 - Add functionality to add a new user to the room

@@ -5,6 +5,6 @@
       location = "group:PusherChatkit/PusherChatkit.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Pusher Chat iOS Example/Pusher Chat iOS Example.xcodeproj">
+      location = "group:ChatkitiOSExample/ChatkitiOSExample.xcodeproj">
    </FileRef>
 </Workspace>
