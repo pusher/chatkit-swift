@@ -45,6 +45,8 @@ Then, run the following command:
 $ pod install
 ```
 
+> Optionally use `--repo-update` flag to ensure the specs repository is aware of the latest version of PusherChatkit.
+
 ### Carthage
 
 [Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.
