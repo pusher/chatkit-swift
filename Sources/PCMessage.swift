@@ -30,7 +30,7 @@ public final class PCMessage {
 
 extension PCMessage: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "Message - ID: \(self.id) sender: \(self.sender.id) text: \(self.text ?? "none") hasAttachment: \(self.attachment != nil)"
+        return "Message - ID: \(self.id), sender: \(self.sender.id), text: \(self.text ?? "none"), hasAttachment: \(self.attachment != nil)"
     }
 }
 
