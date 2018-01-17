@@ -41,22 +41,25 @@ class ViewController: UIViewController {
                 strongSelf.currentRoom = currentUser.rooms.last!
                 currentUser.subscribeToRoom(room: strongSelf.currentRoom!, roomDelegate: strongSelf, messageLimit: 1)
 
-                let imageName = Bundle.main.path(forResource: "somedog", ofType: "jpg")
-                let imageURL = URL(fileURLWithPath: imageName!)
+                // Uncomment to send a message to the last room in the currentUser.rooms list, if any
 
-                print("About to send message")
-
-                currentUser.sendMessage(
-                    roomId: currentUser.rooms.last!.id,
-                    text: "Just a message with an attachment",
-                    attachmentType: .fileURL(imageURL, name: "cucas.jpg")
-                ) { messageId, err in
-                    guard err == nil else {
-                        print("Error sending message \(err!.localizedDescription)")
-                        return
-                    }
-                    print("Successfully sent message with ID: \(messageId!)")
-                }
+//                let imageName = Bundle.main.path(forResource: "somedog", ofType: "jpg")
+//                let imageURL = URL(fileURLWithPath: imageName!)
+//
+//                print("About to send message")
+//
+//                currentUser.sendMessage(
+//                    roomId: currentUser.rooms.last!.id,
+//                    text: "Just a message with an attachment",
+//                    attachmentType: .fileURL(imageURL, name: "cucas.jpg")
+////                    attachmentType: .link("https://i.giphy.com/RpByGPT5VlZiE.gif", type: "image")
+//                ) { messageId, err in
+//                    guard err == nil else {
+//                        print("Error sending message \(err!.localizedDescription)")
+//                        return
+//                    }
+//                    print("Successfully sent message with ID: \(messageId!)")
+//                }
             }
         }
     }
