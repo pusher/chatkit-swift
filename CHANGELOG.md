@@ -139,6 +139,7 @@ public func PCSuggestedDownloadDestination(...) { return PPSuggestedDownloadDest
 This means that importing PusherPlatform should never need to be done anymore.
 
 - `PCMessage` conforms to `CustomDebugStringConvertible`
+- Added `Date` versions of timestamp properties on: `PCCurrentUser`, `PCUser`, `PCRoom`, and `PCMessage`. For example, if you want a `Date` version of the `createdAt` property of a `PCMessage` you can now call `.createdAtDate` on the relevant `PCMessage` to get a `Date`. Thanks [@nitrag](https://github.com/nitrag) for the suggestion.
 
 ## [0.4.3](https://github.com/pusher/chatkit-swift/compare/0.4.2...0.4.3) - 2018-01-09
 
