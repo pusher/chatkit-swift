@@ -70,6 +70,55 @@ currentUser.sendMessage(
     print("Successfully sent message with ID: \(messageId!)")
 }
 ```
+- `PCMessage`s now have an optional `attachment` property of type `PCAttachment?`. `PCAttachment` looks like this:
+
+```swift
+public struct PCAttachment {
+    public let fetchRequired: Bool
+    public let link: String
+    public let type: String
+}
+```
+
+If `fetchRequired` is `true` then it means that the attachment is stored on the Chatkit servers and you need to make a request to the Chatkit API to fetch a valid link. To do this you can use the `fetchAttachment` function that has been added to the `PCCurrentUser` class. You use that like this:
+
+```swift
+currentUser.fetchAttachment(attachmentLink) { fetchedAttachment, err in
+    guard err == nil else {
+        print("Error fetching attachment \(err!.localizedDescription)")
+        return
+    }
+
+    print("Fetched attachment link: \(fetchedAttachment!.link)")
+}
+```
+
+You can then use the `fetchedAttachment.link` to download the file, if you so wish.
+
+- `downloadAttachment` function added to `PCCurrentUser` to make downloading Chatkit-stored attachments easier. Once you've got the `link` from a `PCFetchedAttachment` you can either use your own download mechanism of choice or you can use the `downloadAttachment` function. Usage of it looks like this:
+
+```swift
+currentUser.downloadAttachment(
+    fetchedAttachment.link,
+    to: myChosenDestination,
+    onSuccess: { url in
+        print("Downloaded successfully to \(url.absoluteString)")
+    },
+    onError: { error in
+        print("Failed to download attachment \(error.localizedDescription)")
+    },
+    progressHandler: { bytesReceived, totalBytesToReceive in
+        print("Download progress: \(bytesReceived) / \(totalBytesToReceive)")
+    }
+)
+```
+
+Here `myChosenDestination` is an object of type `PCDownloadFileDestination`. This is a type based on [Alamofire's `DownloadFileDestination`](https://github.com/Alamofire/Alamofire/blob/master/Documentation/Usage.md#download-file-destination). It lets you specify where you'd like to have the download stored (upon completion).
+
+One option for creating a `PCDownloadFileDestination` is to use the `PCSuggestedDownloadDestination` function, which is again based on an Alamofire construct: `DownloadRequest.suggestedDownloadDestination`. You can provide it a `PPDownloadOptions` object which determines whether or not the process of moving the downloaded file to the specified destination should be allowed to remove any existing files at the same path and if it should be able to create any required intermediate directories. This is expressed as an `OptionSet` with the following options:
+
+* `.createIntermediateDirectories`
+* `.removePreviousFile`
 
 - Typealiases for useful PusherPlatform types, specifically:
 
