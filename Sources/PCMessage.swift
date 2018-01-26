@@ -9,6 +9,15 @@ public final class PCMessage {
     public let sender: PCUser
     public let room: PCRoom
 
+    private lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        return dateFormatter
+    }()
+
+    public var createdAtDate: Date { return self.dateFormatter.date(from: self.createdAt)! }
+    public var updatedAtDate: Date { return self.dateFormatter.date(from: self.updatedAt)! }
+
     public init(
         id: Int,
         text: String?,

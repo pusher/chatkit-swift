@@ -36,6 +36,15 @@ public final class PCCurrentUser {
     let instance: Instance
     let filesInstance: Instance
 
+    private lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        return dateFormatter
+    }()
+
+    public var createdAtDate: Date { return self.dateFormatter.date(from: self.createdAt)! }
+    public var updatedAtDate: Date { return self.dateFormatter.date(from: self.updatedAt)! }
+
     public init(
         id: String,
         createdAt: String,

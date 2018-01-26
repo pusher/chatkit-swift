@@ -10,6 +10,19 @@ public final class PCUser {
     public internal(set) var presenceState: PCPresenceState
     public internal(set) var lastSeenAt: String?
 
+    private lazy var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        return dateFormatter
+    }()
+
+    public var createdAtDate: Date { return self.dateFormatter.date(from: self.createdAt)! }
+    public var updatedAtDate: Date { return self.dateFormatter.date(from: self.updatedAt)! }
+    public var lastSeenAtDate: Date? {
+        guard let lastSeenAt = self.lastSeenAt else { return nil }
+        return self.dateFormatter.date(from: lastSeenAt)!
+    }
+
     public var displayName: String {
         get {
             return self.name ?? self.id
