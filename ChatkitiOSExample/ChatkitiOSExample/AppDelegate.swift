@@ -8,13 +8,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     public var pusherChat: ChatManager?
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        let instanceLocator = "v1:us1:3c4de3a4-d0d3-46ad-beb2-bd45145baedb"
+        let instanceLocator = "YOUR_INSTANCE_LOCATOR"
 
         let pusherChat = ChatManager(
             instanceLocator: instanceLocator,
             tokenProvider: PCTokenProvider(
-                url: "https://us1.pusherplatform.io/services/chatkit_token_provider/v1/3c4de3a4-d0d3-46ad-beb2-bd45145baedb/token?instance_locator=v1:us1:3c4de3a4-d0d3-46ad-beb2-bd45145baedb",
-                userId: "ham"
+                url: "YOUR_TOKEN_PROVIDER_URL",
+                userId: "YOUR_USER_ID"
             ),
             logger: TestLogger()
         )
