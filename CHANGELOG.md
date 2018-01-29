@@ -55,7 +55,7 @@ There are currently 3 different `attachmentTypes` supported, as described in the
 
 * `.fileData(_: Data, name: String)`: Use this if you have your file as `Data`. The `name` parameter is the name that the file will be given when it is stored by our servers.
 * `.fileURL(_: URL, name: String)`: Use this if you have your file as `Data`. The `name` parameter is the name that the file will be given when it is stored by our servers.
-* `.link(_: String, type: String)`: : Use this if you have a file stored elsewhere that you would like to attach to a message without it being uploaded to and stored by the Chatkit servers. The `type` `parameter` currently needs to be one of `"image"`, `"video"`, `"audio"`, or `"file"`. This will likely eventually be encoded in an `enum` but for now we're leaving it as just a `String` while we finalise the API.
+* `.link(_: String, type: String)`: Use this if you have a file stored elsewhere that you would like to attach to a message without it being uploaded to and stored by the Chatkit servers. The `type` `parameter` currently needs to be one of `"image"`, `"video"`, `"audio"`, or `"file"`. This will likely eventually be encoded in an `enum` but for now we're leaving it as just a `String` while we finalise the API.
 
 Here's an example of using the `.link(_: String, type: String)` attachment type:
 
