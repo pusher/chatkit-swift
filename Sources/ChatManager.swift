@@ -110,8 +110,4 @@ import PusherPlatform
             room.subscription?.resumableSubscription.end()
         }
     }
-
-    //    fileprivate func onUserSubscriptionStateChange(newState: ) {
-    //        self.delegate?.userSubscriptionStateChanged(from: <#T##PCUserSubscriptionState#>, to: <#T##PCUserSubscriptionState#>)
-    //    }
 }
