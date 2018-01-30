@@ -786,12 +786,6 @@ public final class PCCurrentUser {
         )
     }
 
-    // TODO: Where should all the makeActiveRoom stuff live?
-
-    public func makeActiveRoom(_ room: PCRoom, delegate: PCRoomDelegate) {
-        self.subscribeToRoom(room: room, roomDelegate: delegate)
-    }
-
     // TODO: Do I need to add a Last-Event-ID option here?
     public func subscribeToRoom(room: PCRoom, roomDelegate: PCRoomDelegate, messageLimit: Int = 20) {
         let path = "/rooms/\(room.id)"
