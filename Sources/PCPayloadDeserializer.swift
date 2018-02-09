@@ -17,14 +17,19 @@ struct PCPayloadDeserializer {
 
     static func createCurrentUserFromPayload(
         _ userPayload: [String: Any],
+        id: String,
+        pathFriendlyId: String,
         instance: Instance,
         filesInstance: Instance,
-        userStore: PCGlobalUserStore
+        cursorsInstance: Instance,
+        userStore: PCGlobalUserStore,
+        connectionCoordinator: PCConnectionCoordinator
     ) throws -> PCCurrentUser {
         let basicUser = try createBasicUserFromPayload(userPayload)
 
         return PCCurrentUser(
-            id: basicUser.id,
+            id: id,
+            pathFriendlyId: pathFriendlyId,
             createdAt: basicUser.createdAt,
             updatedAt: basicUser.updatedAt,
             name: userPayload["name"] as? String,
@@ -32,7 +37,9 @@ struct PCPayloadDeserializer {
             customData: userPayload["custom_data"] as? [String: Any],
             instance: instance,
             filesInstance: filesInstance,
-            userStore: userStore
+            cursorsInstance: cursorsInstance,
+            userStore: userStore,
+            connectionCoordinator: connectionCoordinator
         )
     }
 
@@ -68,7 +75,7 @@ struct PCPayloadDeserializer {
 
     // This returns a PCBasicMessage mainly to signal that it needs to be enriched with
     // information about its associated sender and the room it belongs to
-    static func createMessageFromPayload(_ messagePayload: [String: Any]) throws -> PCBasicMessage {
+    static func createBasicMessageFromPayload(_ messagePayload: [String: Any]) throws -> PCBasicMessage {
         guard
             let messageId = messagePayload["id"] as? Int,
             let messageSenderId = messagePayload["user_id"] as? String,
@@ -151,6 +158,27 @@ struct PCPayloadDeserializer {
         }
 
         return PCAttachmentUploadResponse(link: link, type: type)
+    }
+
+    static func createBasicCursorFromPayload(_ payload: [String: Any]) throws -> PCBasicCursor {
+        guard
+            let cursorTypeInt = payload["cursor_type"] as? Int,
+            let cursorType = PCCursorType(rawValue: cursorTypeInt),
+            let position = payload["position"] as? Int,
+            let userId = payload["user_id"] as? String,
+            let roomId = payload["room_id"] as? Int,
+            let updatedAt = payload["updated_at"] as? String
+        else {
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCBasicCursor.self), payload: payload)
+        }
+
+        return PCBasicCursor(
+            cursorType: cursorType,
+            position: position,
+            roomId: roomId,
+            updatedAt: updatedAt,
+            userId: userId
+        )
     }
 
     fileprivate static func createBasicUserFromPayload(_ payload: [String: Any]) throws -> PCBasicUser {

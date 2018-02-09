@@ -1,8 +1,9 @@
-//
-//  File.swift
-//  PusherChatkit
-//
-//  Created by Hamilton Chapman on 30/01/2018.
-//
-
 import Foundation
+
+public struct PCBasicCursor {
+    public let cursorType: PCCursorType
+    public let position: Int
+    public let roomId: Int
+    public let updatedAt: String
+    public let userId: String
+}

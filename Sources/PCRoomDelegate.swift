@@ -13,6 +13,8 @@ public protocol PCRoomDelegate {
     func userCameOnlineInRoom(user: PCUser)
     func userWentOfflineInRoom(user: PCUser)
 
+    func cursorSet(cursor: PCCursor)
+
     // TODO: This seems like it could instead be `userListUpdated`, or something similar?
     func usersUpdated()
 
@@ -34,5 +36,6 @@ public extension PCRoomDelegate {
     func userLeft(user: PCUser) {}
     func userCameOnlineInRoom(user: PCUser) {}
     func userWentOfflineInRoom(user: PCUser) {}
+    func cursorSet(cursor: PCCursor) {}
     func usersUpdated() {}
 }

@@ -7,27 +7,36 @@ public final class PCUserSubscription {
 
     let instance: Instance
     let filesInstance: Instance
+    let cursorsInstance: Instance
     public let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore
     public internal(set) var delegate: PCChatManagerDelegate
-    public var connectCompletionHandlers: [(PCCurrentUser?, Error?) -> Void]
+    let userId: String
+    let pathFriendlyUserId: String
+    let connectionCoordinator: PCConnectionCoordinator
 
     public var currentUser: PCCurrentUser?
 
     public init(
         instance: Instance,
         filesInstance: Instance,
+        cursorsInstance: Instance,
         resumableSubscription: PPResumableSubscription,
         userStore: PCGlobalUserStore,
         delegate: PCChatManagerDelegate,
-        connectCompletionHandler: @escaping (PCCurrentUser?, Error?) -> Void
+        userId: String,
+        pathFriendlyUserId: String,
+        connectionCoordinator: PCConnectionCoordinator
     ) {
         self.instance = instance
         self.filesInstance = filesInstance
+        self.cursorsInstance = cursorsInstance
         self.resumableSubscription = resumableSubscription
         self.userStore = userStore
         self.delegate = delegate
-        self.connectCompletionHandlers = [connectCompletionHandler]
+        self.userId = userId
+        self.pathFriendlyUserId = pathFriendlyUserId
+        self.connectionCoordinator = connectionCoordinator
     }
 
     public func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
@@ -89,17 +98,19 @@ public final class PCUserSubscription {
         }
     }
 
-    fileprivate func callConnectCompletionHandlers(currentUser: PCCurrentUser?, error: Error?) {
-        for connectCompletionHandler in self.connectCompletionHandlers {
-            connectCompletionHandler(currentUser, error)
-        }
+    fileprivate func informConnectionCoordinatorOfCurrentUserCompletion(currentUser: PCCurrentUser?, error: Error?) {
+        connectionCoordinator.connectionEventCompleted(PCConnectionEvent(currentUser: currentUser, error: error))
+    }
+
+    fileprivate func informConnectionCoordinatorOfInitialUsersFetchCompletion(users: [PCUser]?, error: Error?) {
+        connectionCoordinator.connectionEventCompleted(PCConnectionEvent(users: users, error: error))
     }
 }
 
 extension PCUserSubscription {
     fileprivate func parseInitialStatePayload(_ eventName: PCAPIEventName, data: [String: Any], userStore: PCGlobalUserStore) {
         guard let roomsPayload = data["rooms"] as? [[String: Any]] else {
-            callConnectCompletionHandlers(
+            informConnectionCoordinatorOfCurrentUserCompletion(
                 currentUser: nil,
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "rooms",
@@ -111,7 +122,7 @@ extension PCUserSubscription {
         }
 
         guard let userPayload = data["current_user"] as? [String: Any] else {
-            callConnectCompletionHandlers(
+            informConnectionCoordinatorOfCurrentUserCompletion(
                 currentUser: nil,
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "user",
@@ -127,12 +138,16 @@ extension PCUserSubscription {
         do {
             receivedCurrentUser = try PCPayloadDeserializer.createCurrentUserFromPayload(
                 userPayload,
+                id: self.userId,
+                pathFriendlyId: self.pathFriendlyUserId,
                 instance: self.instance,
                 filesInstance: self.filesInstance,
-                userStore: userStore
+                cursorsInstance: self.cursorsInstance,
+                userStore: userStore,
+                connectionCoordinator: connectionCoordinator
             )
         } catch let err {
-            callConnectCompletionHandlers(
+            informConnectionCoordinatorOfCurrentUserCompletion(
                 currentUser: nil,
                 error: err
             )
@@ -150,16 +165,8 @@ extension PCUserSubscription {
             self.currentUser = receivedCurrentUser
         }
 
-        // If a presenceSubscription already exists then we want to create a new one
-        // to ensure that the most up-to-date state is received, so we first close the
-        // existing subscription, if it was still open
-        if let presSub = self.currentUser?.presenceSubscription {
-            presSub.end()
-            self.currentUser!.presenceSubscription = nil
-        }
-
         guard roomsPayload.count > 0 else {
-            self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
+            self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
             self.currentUser!.setupPresenceSubscription(delegate: self.delegate)
             return
         }
@@ -181,7 +188,7 @@ extension PCUserSubscription {
 
                 self.currentUser!.roomStore.addOrMerge(room) { _ in
                     if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
-                        self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
+                        self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
                         self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: self.currentUser!)
                         if wasExistingCurrentUser {
                             self.reconcileExistingRoomStoreWithRoomsReceivedOnConnection(roomsFromConnection: roomsFromConnection)
@@ -194,7 +201,7 @@ extension PCUserSubscription {
                     logLevel: .debug
                 )
                 if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
-                    self.callConnectCompletionHandlers(currentUser: self.currentUser, error: nil)
+                    self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
                     self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: self.currentUser!)
                     if wasExistingCurrentUser {
                         self.reconcileExistingRoomStoreWithRoomsReceivedOnConnection(roomsFromConnection: roomsFromConnection)
@@ -205,12 +212,13 @@ extension PCUserSubscription {
     }
 
     fileprivate func fetchInitialUserInformationForUserIds(_ userIds: Set<String>, currentUser: PCCurrentUser) {
-        self.userStore.initialFetchOfUsersWithIds(userIds) { _, err in
+        self.userStore.initialFetchOfUsersWithIds(userIds) { users, err in
             guard err == nil else {
                 self.instance.logger.log(
                     "Unable to fetch user information after successful connection: \(err!.localizedDescription)",
                     logLevel: .debug
                 )
+                self.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: nil, error: err!)
                 return
             }
 
@@ -237,10 +245,10 @@ extension PCUserSubscription {
                                 strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
 
                                 if combinedRoomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
+                                    strongSelf.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: nil, error: err!)
                                     currentUser.setupPresenceSubscription(delegate: strongSelf.delegate)
                                 }
                             }
-
                             return
                         }
 
@@ -251,6 +259,7 @@ extension PCUserSubscription {
                             strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
 
                             if combinedRoomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
+                                strongSelf.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: users, error: nil)
                                 currentUser.setupPresenceSubscription(delegate: strongSelf.delegate)
                             }
                         }

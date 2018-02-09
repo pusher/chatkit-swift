@@ -35,6 +35,10 @@ public final class PCCurrentUser {
 
     let instance: Instance
     let filesInstance: Instance
+    let cursorsInstance: Instance
+
+    let connectionCoordinator: PCConnectionCoordinator
+    var pendingRoomSubscriptions: [(room: PCRoom, roomDelegate: PCRoomDelegate, messageLimit: Int?)] = []
 
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -47,6 +51,7 @@ public final class PCCurrentUser {
 
     public init(
         id: String,
+        pathFriendlyId: String,
         createdAt: String,
         updatedAt: String,
         name: String?,
@@ -55,9 +60,12 @@ public final class PCCurrentUser {
         rooms: PCSynchronizedArray<PCRoom> = PCSynchronizedArray<PCRoom>(),
         instance: Instance,
         filesInstance: Instance,
-        userStore: PCGlobalUserStore
+        cursorsInstance: Instance,
+        userStore: PCGlobalUserStore,
+        connectionCoordinator: PCConnectionCoordinator
     ) {
         self.id = id
+        self.pathFriendlyId = pathFriendlyId
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.name = name
@@ -66,12 +74,9 @@ public final class PCCurrentUser {
         self.roomStore = PCRoomStore(rooms: rooms, instance: instance)
         self.instance = instance
         self.filesInstance = filesInstance
+        self.cursorsInstance = cursorsInstance
         self.userStore = userStore
-
-        let allowedCharacterSet = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] ").inverted
-
-        // TODO: When can percent encoding fail?
-        self.pathFriendlyId = id.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? id
+        self.connectionCoordinator = connectionCoordinator
     }
 
     func updateWithPropertiesOf(_ currentUser: PCCurrentUser) {
@@ -81,6 +86,14 @@ public final class PCCurrentUser {
     }
 
     func setupPresenceSubscription(delegate: PCChatManagerDelegate) {
+        // If a presenceSubscription already exists then we want to create a new one
+        // to ensure that the most up-to-date state is received, so we first close the
+        // existing subscription, if it was still open
+        if let presSub = self.presenceSubscription {
+            presSub.end()
+            self.presenceSubscription = nil
+        }
+
         let path = "/users/\(self.id)/presence"
 
         let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
@@ -95,6 +108,7 @@ public final class PCCurrentUser {
             resumableSubscription: resumableSub,
             userStore: self.userStore,
             roomStore: self.roomStore,
+            connectionCoordinator: self.connectionCoordinator,
             delegate: delegate
         )
 
@@ -788,6 +802,22 @@ public final class PCCurrentUser {
 
     // TODO: Do I need to add a Last-Event-ID option here?
     public func subscribeToRoom(room: PCRoom, roomDelegate: PCRoomDelegate, messageLimit: Int = 20) {
+        guard room.currentUserCursor != nil else {
+            // We only get here if the initial cursor fetch hasn't completed yet and so
+            // the currentUserCursor prop for the room is nil (not .unset or .set)
+            pendingRoomSubscriptions.append((room: room, roomDelegate: roomDelegate, messageLimit: messageLimit))
+            self.instance.logger.log(
+                "Room subscription waiting to begin until current user's room cursor has been received",
+                logLevel: .verbose
+            )
+            return
+        }
+
+        self.instance.logger.log(
+            "About to subscribe to room \(room.debugDescription)",
+            logLevel: .verbose
+        )
+
         let path = "/rooms/\(room.id)"
 
         // TODO: What happens if you provide both a message_limit and a Last-Event-ID?
@@ -821,6 +851,42 @@ public final class PCCurrentUser {
             //            onError: { error in
             //                roomDelegate.receivedError(error)
             //            }
+        )
+
+        self.subscribeToCursors(room: room, delegate: roomDelegate)
+    }
+
+    fileprivate func subscribeToCursors(room: PCRoom, delegate: PCRoomDelegate) {
+        let path = "/cursors/\(PCCursorType.read.rawValue)/rooms/\(room.id)"
+
+        let subscribeRequest = PPRequestOptions(
+            method: HTTPMethod.SUBSCRIBE.rawValue,
+            path: path
+        )
+
+        var resumableSub = PPResumableSubscription(
+            instance: self.cursorsInstance,
+            requestOptions: subscribeRequest
+        )
+
+        let basicCursorEnricher = PCBasicCursorEnricher(
+            userStore: self.userStore,
+            room: room,
+            logger: self.cursorsInstance.logger
+        )
+
+        room.cursorSubscription = PCCursorSubscription(
+            delegate: delegate,
+            resumableSubscription: resumableSub,
+            basicCursorEnricher: basicCursorEnricher,
+            handleCursorSet: { room.cursorSetHandler($0, self.id) },
+            logger: self.cursorsInstance.logger
+        )
+
+        self.cursorsInstance.subscribeWithResume(
+            with: &resumableSub,
+            using: subscribeRequest,
+            onEvent: room.cursorSubscription?.handleEvent
         )
     }
 
@@ -863,7 +929,7 @@ public final class PCCurrentUser {
 
                 let messageUserIds = messagesPayload.flatMap { messagePayload -> String? in
                     do {
-                        let basicMessage = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
+                        let basicMessage = try PCPayloadDeserializer.createBasicMessageFromPayload(messagePayload)
                         basicMessages.append(basicMessage)
                         return basicMessage.senderId
                     } catch let err {
@@ -915,6 +981,35 @@ public final class PCCurrentUser {
             }
         )
     }
+
+    public func setCursor(position: Int, roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+        let cursorObject = [ "position": position ]
+
+        guard JSONSerialization.isValidJSONObject(cursorObject) else {
+            completionHandler(PCError.invalidJSONObjectAsData(cursorObject))
+            return
+        }
+
+        guard let data = try? JSONSerialization.data(withJSONObject: cursorObject, options: []) else {
+            completionHandler(PCError.failedToJSONSerializeData(cursorObject))
+            return
+        }
+
+        let path = "/cursors/\(PCCursorType.read.rawValue)/rooms/\(roomId)/users/\(self.pathFriendlyId)"
+        let cursorRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
+
+        self.cursorsInstance.request(
+            using: cursorRequest,
+            onSuccess: { data in
+                self.cursorsInstance.logger.log("Successfully set cursor in room \(roomId)", logLevel: .verbose)
+                completionHandler(nil)
+            },
+            onError: { err in
+                self.cursorsInstance.logger.log("Error setting cursor in room \(roomId): \(err.localizedDescription)", logLevel: .debug)
+                completionHandler(err)
+            }
+        )
+  }
 }
 
 public enum PCMessageError: Error {

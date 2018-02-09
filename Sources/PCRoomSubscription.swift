@@ -43,7 +43,7 @@ public final class PCRoomSubscription {
         }
 
         do {
-            let basicMessage = try PCPayloadDeserializer.createMessageFromPayload(messagePayload)
+            let basicMessage = try PCPayloadDeserializer.createBasicMessageFromPayload(messagePayload)
 
             self.basicMessageEnricher.enrich(basicMessage) { [weak self] message, err in
                 guard let strongSelf = self else {

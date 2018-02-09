@@ -3,38 +3,40 @@ import PusherPlatform
 
 public final class PCTokenProvider: PPTokenProvider {
     public let url: String
-    public let userId: String?
+    public let requestInjector: ((PCTokenProviderRequest) -> PCTokenProviderRequest)?
+    public var userId: String? = nil
 
-    let internalTokenProvider: PPHTTPEndpointTokenProvider
     public var logger: PPLogger? {
         willSet {
             self.internalTokenProvider.logger = newValue
         }
     }
 
-    public init(url: String, userId: String? = nil, requestInjector: ((PCTokenProviderRequest) -> PCTokenProviderRequest)? = nil) {
-        self.url = url
-        self.userId = userId
+    let userIdRequestInjector = { (req: PCTokenProviderRequest, userId: String) -> PCTokenProviderRequest in
+        req.addQueryItems([URLQueryItem(name: "user_id", value: userId)])
+        return req
+    }
 
-        let userIdRequestInjector = { (req: PCTokenProviderRequest) -> PCTokenProviderRequest in
-            req.addQueryItems(
-                [URLQueryItem(name: "user_id", value: userId)]
-            )
-            return req
-        }
-
-        let tokenProvider = PPHTTPEndpointTokenProvider(
+    lazy var internalTokenProvider: PCHTTPTokenProvider = {
+        return PCHTTPTokenProvider(
             url: url,
             requestInjector: { req -> PCTokenProviderRequest in
-                if let customRequestInjector = requestInjector {
-                    return userIdRequestInjector(customRequestInjector(req))
+                guard let userId = self.userId else {
+                    return self.requestInjector != nil ? self.requestInjector!(req) : req
                 }
 
-                return userIdRequestInjector(req)
+                if let customRequestInjector = self.requestInjector {
+                    return self.userIdRequestInjector(customRequestInjector(req), userId)
+                }
+
+                return self.userIdRequestInjector(req, userId)
             }
         )
+    }()
 
-        self.internalTokenProvider = tokenProvider
+    public init(url: String, requestInjector: ((PCTokenProviderRequest) -> PCTokenProviderRequest)? = nil) {
+        self.url = url
+        self.requestInjector = requestInjector
     }
 
     public func fetchToken(completionHandler: @escaping (PPTokenProviderResult) -> Void) {
