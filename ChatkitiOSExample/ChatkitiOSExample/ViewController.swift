@@ -131,6 +131,10 @@ extension ViewController: PCRoomDelegate {
         print("\(user.displayName) went offline")
         print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
     }
+
+    func cursorSet(cursor: PCCursor) {
+        print("Cursor set for \(cursor.user.displayName) at position \(cursor.position)")
+    }
 }
 
 extension ViewController: PCChatManagerDelegate {

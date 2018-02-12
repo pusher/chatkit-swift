@@ -996,7 +996,7 @@ public final class PCCurrentUser {
         }
 
         let path = "/cursors/\(PCCursorType.read.rawValue)/rooms/\(roomId)/users/\(self.pathFriendlyId)"
-        let cursorRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
+        let cursorRequest = PPRequestOptions(method: HTTPMethod.PUT.rawValue, path: path, body: data)
 
         self.cursorsInstance.request(
             using: cursorRequest,
