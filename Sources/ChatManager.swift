@@ -199,7 +199,7 @@ import PusherPlatform
             onEvent: self.userSubscription!.handleEvent,
             onEnd: { _, _, _ in },
             onError: { error in
-                completionHandler(nil, error)
+                self.connectionCoordinator.connectionEventCompleted(PCConnectionEvent(currentUser: nil, error: error))
             }
         )
 
