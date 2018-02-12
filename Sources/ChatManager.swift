@@ -192,8 +192,7 @@ import PusherPlatform
             connectionCoordinator: connectionCoordinator
         )
 
-        // TODO: Fix this stuff
-
+        // TODO: Decide what to do with onEnd
         self.instance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
