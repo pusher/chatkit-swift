@@ -183,7 +183,6 @@ This means that importing PusherPlatform should never need to be done anymore.
 - User(s) can be added or removed from the room by providing ids or user objects.
 - Improved logging
 
-
 ### Changed
 - `PULL_REQUEST_TEMPLATE.md` template
 - `PusherChat` -> `PusherChatkit`
@@ -198,11 +197,11 @@ This means that importing PusherPlatform should never need to be done anymore.
 - Move to deneb cluster
 
 ## [0.2.8](https://github.com/pusher/chatkit-swift/compare/0.2.7...0.2.8) - 2017-08-01
+
 ### Added
 - `avatarURL` property in `PCCurrentUser` class
 - `isPrivate` property in `PCRoom` class
 - Default implementations of `PCRoomDelegate` and `PCChatManagerDelegate` protocol methods
-
 
 ### Changed
 - `PCRoomDelegate` delegate methods
