@@ -173,7 +173,7 @@ struct PCPayloadDeserializer {
         }
 
         return PCBasicCursor(
-            cursorType: cursorType,
+            type: cursorType,
             position: position,
             roomId: roomId,
             updatedAt: updatedAt,

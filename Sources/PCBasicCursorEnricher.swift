@@ -29,7 +29,7 @@ final class PCBasicCursorEnricher {
             }
 
             let cursor = PCCursor(
-                type: basicCursor.cursorType,
+                type: basicCursor.type,
                 position: basicCursor.position,
                 room: strongSelf.room,
                 updatedAt: basicCursor.updatedAt,

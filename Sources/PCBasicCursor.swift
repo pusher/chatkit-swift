@@ -1,7 +1,7 @@
 import Foundation
 
 public struct PCBasicCursor {
-    public let cursorType: PCCursorType
+    public let type: PCCursorType
     public let position: Int
     public let roomId: Int
     public let updatedAt: String
