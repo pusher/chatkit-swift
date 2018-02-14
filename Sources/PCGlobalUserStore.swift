@@ -178,6 +178,7 @@ public final class PCGlobalUserStore {
             },
             onError: { err in
                 self.instance.logger.log("Error fetching user information: \(err.localizedDescription)", logLevel: .debug)
+                completionHandler?(nil, err)
             }
         )
     }

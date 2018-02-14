@@ -1,22 +1,25 @@
 import Foundation
 import PusherPlatform
 
-public final class PCRoomSubscription {
+public final class PCCursorSubscription {
     public var delegate: PCRoomDelegate?
     let resumableSubscription: PPResumableSubscription
+    let basicCursorEnricher: PCBasicCursorEnricher
+    let handleCursorSet: (PCBasicCursor) -> Void
     public var logger: PPLogger
-    let basicMessageEnricher: PCBasicMessageEnricher
 
     init(
         delegate: PCRoomDelegate? = nil,
         resumableSubscription: PPResumableSubscription,
-        logger: PPLogger,
-        basicMessageEnricher: PCBasicMessageEnricher
+        basicCursorEnricher: PCBasicCursorEnricher,
+        handleCursorSet: @escaping (PCBasicCursor) -> Void,
+        logger: PPLogger
     ) {
         self.delegate = delegate
         self.resumableSubscription = resumableSubscription
+        self.basicCursorEnricher = basicCursorEnricher
+        self.handleCursorSet = handleCursorSet
         self.logger = logger
-        self.basicMessageEnricher = basicMessageEnricher
     }
 
     func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
@@ -30,38 +33,38 @@ public final class PCRoomSubscription {
             return
         }
 
-        let expectedEventTypeName = "new_message"
+        let expectedEventTypeName = "cursor_set"
 
         guard eventTypeName == expectedEventTypeName else {
             self.logger.log("Expected event type name to be \(expectedEventTypeName) but got \(eventTypeName)", logLevel: .debug)
             return
         }
 
-        guard let messagePayload = json["data"] as? [String: Any] else {
-            self.logger.log("Missing data for room subscription event: \(json)", logLevel: .debug)
+        guard let basicCursorPayload = json["data"] as? [String: Any] else {
+            self.logger.log("Missing data for cursor subscription event: \(json)", logLevel: .debug)
             return
         }
 
         do {
-            let basicMessage = try PCPayloadDeserializer.createBasicMessageFromPayload(messagePayload)
+            let basicCursor = try PCPayloadDeserializer.createBasicCursorFromPayload(basicCursorPayload)
+            self.handleCursorSet(basicCursor)
 
-            self.basicMessageEnricher.enrich(basicMessage) { [weak self] message, err in
+            self.basicCursorEnricher.enrich(basicCursor) { [weak self] cursor, err in
                 guard let strongSelf = self else {
-                    print("self is nil when enrichment of basicMessage has completed")
+                    print("self is nil when enrichment of basicCursor has completed")
                     return
                 }
 
-                guard let message = message, err == nil else {
+                guard let cursor = cursor, err == nil else {
                     strongSelf.logger.log(err!.localizedDescription, logLevel: .debug)
                     return
                 }
 
-                strongSelf.delegate?.newMessage(message: message)
-                strongSelf.logger.log("Room received new message: \(message.debugDescription)", logLevel: .verbose)
+                strongSelf.delegate?.cursorSet(cursor: cursor)
+                strongSelf.logger.log("Cursor set: \(cursor.debugDescription)", logLevel: .verbose)
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)
-
             // TODO: Should we call the delegate error func?
         }
     }

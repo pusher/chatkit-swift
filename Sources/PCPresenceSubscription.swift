@@ -9,6 +9,7 @@ public final class PCPresenceSubscription {
     public let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore
     public let roomStore: PCRoomStore
+    let connectionCoordinator: PCConnectionCoordinator
     public internal(set) var delegate: PCChatManagerDelegate?
 
     public init(
@@ -16,12 +17,14 @@ public final class PCPresenceSubscription {
         resumableSubscription: PPResumableSubscription,
         userStore: PCGlobalUserStore,
         roomStore: PCRoomStore,
+        connectionCoordinator: PCConnectionCoordinator,
         delegate: PCChatManagerDelegate? = nil
     ) {
         self.instance = instance
         self.resumableSubscription = resumableSubscription
         self.userStore = userStore
         self.roomStore = roomStore
+        self.connectionCoordinator = connectionCoordinator
         self.delegate = delegate
     }
 
@@ -64,6 +67,12 @@ public final class PCPresenceSubscription {
     func end() {
         self.resumableSubscription.end()
     }
+
+    func communicateError(_ error: Error, logLevel: PPLogLevel = .debug) {
+        self.instance.logger.log(error.localizedDescription, logLevel: logLevel)
+        self.connectionCoordinator.connectionEventCompleted(PCConnectionEvent(presenceSubscription: nil, error: error))
+        self.delegate?.error(error: error)
+    }
 }
 
 extension PCPresenceSubscription {
@@ -74,24 +83,22 @@ extension PCPresenceSubscription {
                 apiEventName: eventName,
                 payload: data
             )
-
-            self.instance.logger.log(error.localizedDescription, logLevel: .debug)
-            self.delegate?.error(error: error)
+            communicateError(error)
             return
         }
 
         let userStates = userStatesPayload.flatMap { userStatePayload -> PCPresencePayload? in
             do {
                 return try PCPayloadDeserializer.createPresencePayloadFromPayload(userStatePayload)
-            } catch let err {
-                self.instance.logger.log(err.localizedDescription, logLevel: .debug)
-                self.delegate?.error(error: err)
+            } catch let error {
+                communicateError(error)
                 return nil
             }
         }
 
         guard userStates.count > 0 else {
             self.instance.logger.log("No presence user states to process", logLevel: .verbose)
+            self.connectionCoordinator.connectionEventCompleted(PCConnectionEvent(presenceSubscription: self, error: nil))
             return
         }
 
@@ -106,6 +113,7 @@ extension PCPresenceSubscription {
                 room.subscription?.delegate?.usersUpdated()
                 strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
             }
+            strongSelf.connectionCoordinator.connectionEventCompleted(PCConnectionEvent(presenceSubscription: strongSelf, error: nil))
         }
     }
 

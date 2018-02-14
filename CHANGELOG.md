@@ -6,6 +6,38 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.5.0...HEAD)
 
+### Changed
+
+- `ChatManager` requires a `userId` be provided when it is instantiated
+- `PCTokenProvider` no longer takes a `userId` parameter when it is instantiated
+- The completion handler passed to `connect` of `ChatManager` will now only be called once the following has completed, either successfully or unsuccessfully:
+    * User subscription has been established
+    * Presence subscription has been established
+    * Initial cursors fetch has completed (getting initial values for read cursors of the current user for the rooms that they are a member of)
+    * Initial users fetch has completed (getting initial information about user IDs that were seen in the list of members of the rooms that the current user is a member of)
+
+### Added
+
+- Support for read cursors:
+    * `setCursor` added to `PCCurrentUser`, usage of which looks like:
+
+    ```swift
+    currentUser.setCursor(position: 123, roomId: myRoom.id) { error in
+        guard error == nil else {
+            print("Error setting cursor: \(error!.localizedDescription)")
+            return
+        }
+        print("Succeeded in setting cursor")
+    }
+    ```
+    * `cursorSet` function added to `PCRoomDelegate` so that you can be notified of other members in the room updating their read cursors; the function looks like:
+
+    ```swift
+    func cursorSet(cursor: PCCursor) {
+        print("Cursor set for \(cursor.user.displayName) at position \(cursor.position)")
+    }
+    ```
+
 ## [0.5.0](https://github.com/pusher/chatkit-swift/compare/0.4.3...0.5.0) - 2018-01-26
 
 ### Changed
@@ -183,7 +215,6 @@ This means that importing PusherPlatform should never need to be done anymore.
 - User(s) can be added or removed from the room by providing ids or user objects.
 - Improved logging
 
-
 ### Changed
 - `PULL_REQUEST_TEMPLATE.md` template
 - `PusherChat` -> `PusherChatkit`
@@ -198,11 +229,11 @@ This means that importing PusherPlatform should never need to be done anymore.
 - Move to deneb cluster
 
 ## [0.2.8](https://github.com/pusher/chatkit-swift/compare/0.2.7...0.2.8) - 2017-08-01
+
 ### Added
 - `avatarURL` property in `PCCurrentUser` class
 - `isPrivate` property in `PCRoom` class
 - Default implementations of `PCRoomDelegate` and `PCChatManagerDelegate` protocol methods
-
 
 ### Changed
 - `PCRoomDelegate` delegate methods
