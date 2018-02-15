@@ -12,10 +12,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let pusherChat = ChatManager(
             instanceLocator: instanceLocator,
-            tokenProvider: PCTokenProvider(
-                url: "YOUR_TOKEN_PROVIDER_URL",
-                userId: "YOUR_USER_ID"
-            ),
+            tokenProvider: PCTokenProvider(url: "YOUR_TOKEN_PROVIDER_URL"),
+            userId: "YOUR_USER_ID",
             logger: TestLogger()
         )
 
