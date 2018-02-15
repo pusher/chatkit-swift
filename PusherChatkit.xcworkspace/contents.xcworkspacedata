@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:PusherChatkit/PusherChatkit.xcodeproj">
+      location = "group:PusherChatkit.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:ChatkitiOSExample/ChatkitiOSExample.xcodeproj">
