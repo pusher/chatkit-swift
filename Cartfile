@@ -1,1 +1,6 @@
-github "pusher/pusher-platform-swift" ~> 0.3.1
+github "pusher/pusher-platform-swift" ~> 0.4.0
+
+# you'll need something like this if working locally and you want
+# to test changes to pusher-platform-swift
+
+# git "file:///Users/hami/pusher/pusher-platform-swift" "branch-name"
