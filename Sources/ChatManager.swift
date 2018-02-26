@@ -5,6 +5,7 @@ import PusherPlatform
     public let instance: Instance
     public let filesInstance: Instance
     public let cursorsInstance: Instance
+    public let presenceInstance: Instance
 
     public let userId: String
     public let pathFriendlyUserId: String
@@ -61,6 +62,16 @@ import PusherPlatform
         self.cursorsInstance = Instance(
             locator: instanceLocator,
             serviceName: "chatkit_cursors",
+            serviceVersion: "v1",
+            sdkInfo: sdkInfo,
+            tokenProvider: tokenProvider,
+            client: baseClient,
+            logger: logger
+        )
+
+        self.presenceInstance = Instance(
+            locator: instanceLocator,
+            serviceName: "chatkit_presence",
             serviceVersion: "v1",
             sdkInfo: sdkInfo,
             tokenProvider: tokenProvider,
@@ -189,6 +200,7 @@ import PusherPlatform
             instance: self.instance,
             filesInstance: self.filesInstance,
             cursorsInstance: self.cursorsInstance,
+            presenceInstance: self.presenceInstance,
             resumableSubscription: resumableSub,
             userStore: self.userStore,
             delegate: delegate,
