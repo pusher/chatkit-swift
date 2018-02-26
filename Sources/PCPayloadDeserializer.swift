@@ -22,6 +22,7 @@ struct PCPayloadDeserializer {
         instance: Instance,
         filesInstance: Instance,
         cursorsInstance: Instance,
+        presenceInstance: Instance,
         userStore: PCGlobalUserStore,
         connectionCoordinator: PCConnectionCoordinator
     ) throws -> PCCurrentUser {
@@ -38,6 +39,7 @@ struct PCPayloadDeserializer {
             instance: instance,
             filesInstance: filesInstance,
             cursorsInstance: cursorsInstance,
+            presenceInstance: presenceInstance,
             userStore: userStore,
             connectionCoordinator: connectionCoordinator
         )

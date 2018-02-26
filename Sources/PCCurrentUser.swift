@@ -36,6 +36,7 @@ public final class PCCurrentUser {
     let instance: Instance
     let filesInstance: Instance
     let cursorsInstance: Instance
+    let presenceInstance: Instance
 
     let connectionCoordinator: PCConnectionCoordinator
     var pendingRoomSubscriptions: [(room: PCRoom, roomDelegate: PCRoomDelegate, messageLimit: Int?)] = []
@@ -61,6 +62,7 @@ public final class PCCurrentUser {
         instance: Instance,
         filesInstance: Instance,
         cursorsInstance: Instance,
+        presenceInstance: Instance,
         userStore: PCGlobalUserStore,
         connectionCoordinator: PCConnectionCoordinator
     ) {
@@ -75,6 +77,7 @@ public final class PCCurrentUser {
         self.instance = instance
         self.filesInstance = filesInstance
         self.cursorsInstance = cursorsInstance
+        self.presenceInstance = presenceInstance
         self.userStore = userStore
         self.connectionCoordinator = connectionCoordinator
     }
@@ -99,12 +102,12 @@ public final class PCCurrentUser {
         let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
 
         var resumableSub = PPResumableSubscription(
-            instance: self.instance,
+            instance: self.presenceInstance,
             requestOptions: subscribeRequest
         )
 
         self.presenceSubscription = PCPresenceSubscription(
-            instance: self.instance,
+            instance: self.presenceInstance,
             resumableSubscription: resumableSub,
             userStore: self.userStore,
             roomStore: self.roomStore,
@@ -112,7 +115,7 @@ public final class PCCurrentUser {
             delegate: delegate
         )
 
-        self.instance.subscribeWithResume(
+        self.presenceInstance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
             onEvent: self.presenceSubscription!.handleEvent

@@ -8,6 +8,7 @@ public final class PCUserSubscription {
     let instance: Instance
     let filesInstance: Instance
     let cursorsInstance: Instance
+    let presenceInstance: Instance
     public let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore
     public internal(set) var delegate: PCChatManagerDelegate
@@ -21,6 +22,7 @@ public final class PCUserSubscription {
         instance: Instance,
         filesInstance: Instance,
         cursorsInstance: Instance,
+        presenceInstance: Instance,
         resumableSubscription: PPResumableSubscription,
         userStore: PCGlobalUserStore,
         delegate: PCChatManagerDelegate,
@@ -31,6 +33,7 @@ public final class PCUserSubscription {
         self.instance = instance
         self.filesInstance = filesInstance
         self.cursorsInstance = cursorsInstance
+        self.presenceInstance = presenceInstance
         self.resumableSubscription = resumableSubscription
         self.userStore = userStore
         self.delegate = delegate
@@ -143,6 +146,7 @@ extension PCUserSubscription {
                 instance: self.instance,
                 filesInstance: self.filesInstance,
                 cursorsInstance: self.cursorsInstance,
+                presenceInstance: self.presenceInstance,
                 userStore: userStore,
                 connectionCoordinator: connectionCoordinator
             )
