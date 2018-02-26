@@ -167,6 +167,9 @@ extension PCUserSubscription {
 
         guard roomsPayload.count > 0 else {
             self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
+            // There are no users to fetch information about so we are safe to inform
+            // the connection coordinator of a success immediately
+            self.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: [], error: nil)
             self.currentUser!.setupPresenceSubscription(delegate: self.delegate)
             return
         }
