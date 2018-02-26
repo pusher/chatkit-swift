@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.6.1...HEAD)
+## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.6.2...HEAD)
+
+## [0.6.2](https://github.com/pusher/chatkit-swift/compare/0.6.1...0.6.2) - 2018-02-26
+
+### Fixed
+
+- Ensure connection completion handlers get called even if the connecting user is not a member of any rooms
 
 ## [0.6.1](https://github.com/pusher/chatkit-swift/compare/0.6.0...0.6.1) - 2018-02-26
 
