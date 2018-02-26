@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.6.0...HEAD)
 
+### Changed
+
+- Bump PusherPlatform dependency to 0.4.0
+
+### Added
+
+- Provide SDK info to PusherPlatform's `Instance`s to add SDK info headers to requests
+
 ## [0.6.0](https://github.com/pusher/chatkit-swift/compare/0.5.0...0.6.0) - 2018-02-16
 
 ### Changed
