@@ -15,7 +15,7 @@ public final class PCRoom {
 
     public internal(set) var currentUserCursor: PCBasicCursorState?
 
-    lazy var cursorSetHandler = { (cursor: PCBasicCursor, currentUserId: String) in
+    lazy var newCursorHandler = { (cursor: PCBasicCursor, currentUserId: String) in
         self.cursors[cursor.userId] = cursor
         if cursor.userId == currentUserId {
             self.currentUserCursor = .set(cursor)

@@ -5,20 +5,20 @@ public final class PCCursorSubscription {
     public var delegate: PCRoomDelegate?
     let resumableSubscription: PPResumableSubscription
     let basicCursorEnricher: PCBasicCursorEnricher
-    let handleCursorSet: (PCBasicCursor) -> Void
+    let handleNewCursor: (PCBasicCursor) -> Void
     public var logger: PPLogger
 
     init(
         delegate: PCRoomDelegate? = nil,
         resumableSubscription: PPResumableSubscription,
         basicCursorEnricher: PCBasicCursorEnricher,
-        handleCursorSet: @escaping (PCBasicCursor) -> Void,
+        handleNewCursor: @escaping (PCBasicCursor) -> Void,
         logger: PPLogger
     ) {
         self.delegate = delegate
         self.resumableSubscription = resumableSubscription
         self.basicCursorEnricher = basicCursorEnricher
-        self.handleCursorSet = handleCursorSet
+        self.handleNewCursor = handleNewCursor
         self.logger = logger
     }
 
@@ -33,7 +33,7 @@ public final class PCCursorSubscription {
             return
         }
 
-        let expectedEventTypeName = "cursor_set"
+        let expectedEventTypeName = "new_cursor"
 
         guard eventTypeName == expectedEventTypeName else {
             self.logger.log("Expected event type name to be \(expectedEventTypeName) but got \(eventTypeName)", logLevel: .debug)
@@ -47,7 +47,7 @@ public final class PCCursorSubscription {
 
         do {
             let basicCursor = try PCPayloadDeserializer.createBasicCursorFromPayload(basicCursorPayload)
-            self.handleCursorSet(basicCursor)
+            self.handleNewCursor(basicCursor)
 
             self.basicCursorEnricher.enrich(basicCursor) { [weak self] cursor, err in
                 guard let strongSelf = self else {
@@ -60,8 +60,8 @@ public final class PCCursorSubscription {
                     return
                 }
 
-                strongSelf.delegate?.cursorSet(cursor: cursor)
-                strongSelf.logger.log("Cursor set: \(cursor.debugDescription)", logLevel: .verbose)
+                strongSelf.delegate?.newCursor(cursor: cursor)
+                strongSelf.logger.log("New cursor: \(cursor.debugDescription)", logLevel: .verbose)
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)
