@@ -882,7 +882,7 @@ public final class PCCurrentUser {
             delegate: delegate,
             resumableSubscription: resumableSub,
             basicCursorEnricher: basicCursorEnricher,
-            handleCursorSet: { room.newCursorHandler($0, self.id) },
+            handleNewCursor: { room.newCursorHandler($0, self.id) },
             logger: self.cursorsInstance.logger
         )
 

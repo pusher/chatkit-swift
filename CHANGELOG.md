@@ -16,9 +16,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Test target now works as expected
 
-## Changed
+### Changed
 
-- `cursorSet` renamed to `newCursor` in Room Delegate
+- `cursorSet` renamed to `newCursor` in `PCRoomDelegate`
 
 ## [0.6.3](https://github.com/pusher/chatkit-swift/compare/0.6.2...0.6.3) - 2018-02-26
 
