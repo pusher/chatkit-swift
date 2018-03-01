@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Bump PusherPlatform dependency to 0.4.1
 
+### Fixed
+
+- Test target now works as expected
+
 ## [0.6.3](https://github.com/pusher/chatkit-swift/compare/0.6.2...0.6.3) - 2018-02-26
 
 ### Changed
