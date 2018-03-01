@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3301FDDA2046FD7400AE591A /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33831C891A9CF61600B124F1 /* PusherChatkit.framework */; };
 		33023E23200CB4A4001937C6 /* PCAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33023E22200CB4A4001937C6 /* PCAttachment.swift */; };
 		3314212F1ED32AE700D0B6DB /* PCProgressCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3314212E1ED32AE700D0B6DB /* PCProgressCounter.swift */; };
 		331421311ED32B5F00D0B6DB /* PCBasicUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331421301ED32B5F00D0B6DB /* PCBasicUser.swift */; };
@@ -41,7 +42,7 @@
 		33C5D8F92020842200E826FB /* PCCursorSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C5D8F82020842200E826FB /* PCCursorSubscription.swift */; };
 		33C5D8FB2020854A00E826FB /* PCCursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C5D8FA2020854A00E826FB /* PCCursor.swift */; };
 		33C5D8FD2020AA4C00E826FB /* PCBasicCursorEnricher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C5D8FC2020AA4C00E826FB /* PCBasicCursorEnricher.swift */; };
-		33D2A5AF1E39075100EA7549 /* DummyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D2A5AD1E39074800EA7549 /* DummyTests.swift */; };
+		33D2A5AF1E39075100EA7549 /* ChatManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */; };
 		33E3EBC7200E2368003D888D /* PPTypealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3EBC6200E2368003D888D /* PPTypealiases.swift */; };
 /* End PBXBuildFile section */
 
@@ -95,7 +96,7 @@
 		33C5D8F82020842200E826FB /* PCCursorSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCCursorSubscription.swift; sourceTree = "<group>"; };
 		33C5D8FA2020854A00E826FB /* PCCursor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCCursor.swift; sourceTree = "<group>"; };
 		33C5D8FC2020AA4C00E826FB /* PCBasicCursorEnricher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCBasicCursorEnricher.swift; sourceTree = "<group>"; };
-		33D2A5AD1E39074800EA7549 /* DummyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DummyTests.swift; path = ../Tests/DummyTests.swift; sourceTree = "<group>"; };
+		33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatManagerTests.swift; sourceTree = "<group>"; };
 		33E3EBC6200E2368003D888D /* PPTypealiases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPTypealiases.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3301FDDA2046FD7400AE591A /* PusherChatkit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,7 +193,7 @@
 		33BB995C1D21225B00B25C2A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				33D2A5AD1E39074800EA7549 /* DummyTests.swift */,
+				33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */,
 				33BB99671D21226C00B25C2A /* Info.plist */,
 			);
 			path = Tests;
@@ -212,13 +214,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				33AE481E1EAE2D14006C27A6 /* PusherChatkit.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		33C40CB81C1DFC91008A54E3 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,10 +242,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 33831CA01A9CF61600B124F1 /* Build configuration list for PBXNativeTarget "PusherChatkitTests" */;
 			buildPhases = (
-				33831C911A9CF61600B124F1 /* Frameworks */,
 				33831C901A9CF61600B124F1 /* Sources */,
-				33C40CB81C1DFC91008A54E3 /* Headers */,
+				33831C911A9CF61600B124F1 /* Frameworks */,
 				33831C921A9CF61600B124F1 /* Resources */,
+				3301FDDB204700BE00AE591A /* Copy Carthage Frameworks */,
 			);
 			buildRules = (
 			);
@@ -317,6 +312,24 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3301FDDB204700BE00AE591A /* Copy Carthage Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				PusherPlatform,
+			);
+			name = "Copy Carthage Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "case \"$PLATFORM_NAME\" in\nmacosx) plat=Mac;;\niphone*) plat=iOS;;\nwatch*) plat=watchOS;;\ntv*) plat=tvOS;;\nappletv*) plat=tvOS;;\n*) echo \"error: Unknown PLATFORM_NAME: $PLATFORM_NAME\"; exit 1;;\nesac\nfor (( n = 0; n < SCRIPT_INPUT_FILE_COUNT; n++ )); do\nVAR=SCRIPT_INPUT_FILE_$n\nframework=$(basename \"${!VAR}\")\nexport SCRIPT_INPUT_FILE_$n=\"$SRCROOT\"/Carthage/Build/$plat/\"$framework\".framework\ndone\n\n/usr/local/bin/carthage copy-frameworks || exit\n\nfor (( n = 0; n < SCRIPT_INPUT_FILE_COUNT; n++ )); do\nVAR=SCRIPT_INPUT_FILE_$n\nsource=${!VAR}.dSYM\ndest=${BUILT_PRODUCTS_DIR}/$(basename \"$source\")\nditto \"$source\" \"$dest\" || exit\ndone";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		33831C841A9CF61600B124F1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -363,7 +376,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33D2A5AF1E39075100EA7549 /* DummyTests.swift in Sources */,
+				33D2A5AF1E39075100EA7549 /* ChatManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,6 +393,7 @@
 /* Begin XCBuildConfiguration section */
 		33831C4E1A9CEDF800B124F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 33AE481F1EAE4020006C27A6 /* Carthage.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -423,6 +437,7 @@
 		};
 		33831C4F1A9CEDF800B124F1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 33AE481F1EAE4020006C27A6 /* Carthage.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -465,7 +480,6 @@
 		};
 		33831C9E1A9CF61600B124F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 33AE481F1EAE4020006C27A6 /* Carthage.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -532,7 +546,6 @@
 		};
 		33831C9F1A9CF61600B124F1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 33AE481F1EAE4020006C27A6 /* Carthage.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
@@ -626,7 +639,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = ../Tests/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -675,7 +688,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = ../Tests/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
