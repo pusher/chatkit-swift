@@ -32,4 +32,5 @@ if git.commits.any? { |c| c.message =~ /^Merge branch 'master'/ }
 end
 
 # Run SwiftLint
-swiftlint.lint_files fail_on_error: true
+# Add fail_on_error: true if we want to make linting errors fail the build
+swiftlint.lint_files
