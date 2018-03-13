@@ -132,8 +132,8 @@ extension ViewController: PCRoomDelegate {
         print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
     }
 
-    func cursorSet(cursor: PCCursor) {
-        print("Cursor set for \(cursor.user.displayName) at position \(cursor.position)")
+    func newCursor(cursor: PCCursor) {
+        print("New cursor for \(cursor.user.displayName) at position \(cursor.position)")
     }
 }
 
