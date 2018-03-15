@@ -10,6 +10,7 @@ public typealias PCDownloadFileDestination = PPDownloadFileDestination
 public typealias PCDownloadOptions = PPDownloadOptions
 public typealias PCRetryStrategy = PPRetryStrategy
 public typealias PCDefaultRetryStrategy = PPDefaultRetryStrategy
+public typealias PCBaseClient = PPBaseClient
 
 
 public func PCSuggestedDownloadDestination(
