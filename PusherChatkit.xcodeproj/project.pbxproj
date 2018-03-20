@@ -22,6 +22,7 @@
 		334B9A311ECD98A7007A3D3B /* PCBasicMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334B9A301ECD98A7007A3D3B /* PCBasicMessage.swift */; };
 		334B9A331ECD98FA007A3D3B /* PCBasicMessageEnricher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334B9A321ECD98FA007A3D3B /* PCBasicMessageEnricher.swift */; };
 		3361E7C12028753100F50580 /* PCConnectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3361E7C02028753100F50580 /* PCConnectionCoordinator.swift */; };
+		337C0C9620615A6600BB977A /* TokenProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 337C0C9520615A6600BB977A /* TokenProviderTests.swift */; };
 		3388D5EF1EAE4DA90072A742 /* ChatManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3388D5EE1EAE4DA90072A742 /* ChatManager.swift */; };
 		3388D5F11EAE4DD40072A742 /* PCChatManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3388D5F01EAE4DD40072A742 /* PCChatManagerDelegate.swift */; };
 		3388D5F31EAE4DFB0072A742 /* PCRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3388D5F21EAE4DFB0072A742 /* PCRoom.swift */; };
@@ -72,6 +73,7 @@
 		334B9A301ECD98A7007A3D3B /* PCBasicMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCBasicMessage.swift; sourceTree = "<group>"; };
 		334B9A321ECD98FA007A3D3B /* PCBasicMessageEnricher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCBasicMessageEnricher.swift; sourceTree = "<group>"; };
 		3361E7C02028753100F50580 /* PCConnectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCConnectionCoordinator.swift; sourceTree = "<group>"; };
+		337C0C9520615A6600BB977A /* TokenProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenProviderTests.swift; sourceTree = "<group>"; };
 		33831C891A9CF61600B124F1 /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		33831C8D1A9CF61600B124F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33831C941A9CF61600B124F1 /* PusherChatkitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PusherChatkitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -194,6 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */,
+				337C0C9520615A6600BB977A /* TokenProviderTests.swift */,
 				33BB99671D21226C00B25C2A /* Info.plist */,
 			);
 			path = Tests;
@@ -320,6 +323,7 @@
 			);
 			inputPaths = (
 				PusherPlatform,
+				OHHTTPStubs,
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (
@@ -376,6 +380,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				337C0C9620615A6600BB977A /* TokenProviderTests.swift in Sources */,
 				33D2A5AF1E39075100EA7549 /* ChatManagerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
