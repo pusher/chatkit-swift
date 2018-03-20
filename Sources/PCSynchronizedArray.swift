@@ -7,12 +7,7 @@ public final class PCSynchronizedArray<T> {
     public init() {}
 
     public func append(_ newElement: T, completionHandler: (() -> Void)? = nil) {
-        // QoS is userInitiated here, mainly so that when the rooms are received as part
-        // of the initial_state for a user subscription they are added to the room store
-        // before the connectCompletionHandlers are called, where it would be likely that
-        // the rooms property of the currentUser would be accessed - maybe there's a better
-        // way to ensure ordering by dispatching some part of it on the main queue?
-        self.accessQueue.async(qos: .userInitiated, flags: .barrier) {
+        self.accessQueue.async(flags: .barrier) {
             self.underlyingArray.append(newElement)
 
             DispatchQueue.main.async {
@@ -22,10 +17,7 @@ public final class PCSynchronizedArray<T> {
     }
 
     func appendAndComplete(_ newElement: T, completionHandler: @escaping (T) -> Void) {
-
-        // TODO: Does this need a userInitiated QoS as well?
-
-        self.accessQueue.async(qos: .userInitiated, flags: .barrier) {
+        self.accessQueue.async(flags: .barrier) {
             self.underlyingArray.append(newElement)
 
             DispatchQueue.main.async {
