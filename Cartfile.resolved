@@ -1,1 +1,2 @@
-github "pusher/pusher-platform-swift" "0.4.1"
+github "AliSoftware/OHHTTPStubs" "6.1.0"
+github "pusher/pusher-platform-swift" "0.4.2"

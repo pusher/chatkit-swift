@@ -6,6 +6,11 @@ public final class PCTokenProvider: PPTokenProvider {
     public let requestInjector: ((PCTokenProviderRequest) -> PCTokenProviderRequest)?
     public var userId: String? = nil
 
+    var fetchingToken: Bool = false
+    var queuedTokenRecipients: [(PPTokenProviderResult) -> Void] = []
+
+    let queue = DispatchQueue(label: "com.pusher.chatkit.token-provider")
+
     public var logger: PPLogger? {
         willSet {
             self.internalTokenProvider.logger = newValue
@@ -40,6 +45,24 @@ public final class PCTokenProvider: PPTokenProvider {
     }
 
     public func fetchToken(completionHandler: @escaping (PPTokenProviderResult) -> Void) {
-        self.internalTokenProvider.fetchToken(completionHandler: completionHandler)
+        queue.async {
+            guard !self.fetchingToken else {
+                self.logger?.log(
+                    "Waiting on existing token fetch request to complete before calling completionHandler",
+                    logLevel: .verbose
+                )
+                self.queuedTokenRecipients.append(completionHandler)
+                return
+            }
+
+            self.fetchingToken = true
+
+            self.internalTokenProvider.fetchToken { result in
+                completionHandler(result)
+                self.queuedTokenRecipients.forEach { $0(result) }
+                self.queuedTokenRecipients = []
+                self.fetchingToken = false
+            }
+        }
     }
 }

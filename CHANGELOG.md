@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - `cursorSet` renamed to `newCursor` in `PCRoomDelegate`
+- Bump PusherPlatform dependency to 0.4.2
+- `fetchToken` calls to `PCTokenProvider` are queued if there's an existing request underway
 
 ## [0.6.4](https://github.com/pusher/chatkit-swift/compare/0.6.3...0.6.4) - 2018-03-01
 
