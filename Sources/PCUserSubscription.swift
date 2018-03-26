@@ -185,7 +185,7 @@ extension PCUserSubscription {
                         )
 
                         if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
-                            room.subscription?.delegate?.usersUpdated()
+                            room.subscription?.delegate.usersUpdated()
                             strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
                         }
 
@@ -195,7 +195,7 @@ extension PCUserSubscription {
                     room.userStore.addOrMerge(user)
 
                     if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
-                        room.subscription?.delegate?.usersUpdated()
+                        room.subscription?.delegate.usersUpdated()
                         strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
                     }
                 }
@@ -349,7 +349,7 @@ extension PCUserSubscription {
                 room.userIds.insert(addedOrMergedUser.id)
 
                 strongSelf.delegate.userJoinedRoom(room: room, user: addedOrMergedUser)
-                room.subscription?.delegate?.userJoined(user: addedOrMergedUser)
+                room.subscription?.delegate.userJoined(user: addedOrMergedUser)
                 strongSelf.instance.logger.log("User \(user.displayName) joined room: \(room.name)", logLevel: .verbose)
             }
         }
@@ -419,7 +419,7 @@ extension PCUserSubscription {
                 room.userStore.remove(id: user.id)
 
                 strongSelf.delegate.userLeftRoom(room: room, user: user)
-                room.subscription?.delegate?.userLeft(user: user)
+                room.subscription?.delegate.userLeft(user: user)
                 strongSelf.instance.logger.log("User \(user.displayName) left room: \(room.name)", logLevel: .verbose)
             }
         }
@@ -464,7 +464,7 @@ extension PCUserSubscription {
                 }
 
                 strongSelf.delegate.userStartedTyping(room: room, user: user)
-                room.subscription?.delegate?.userStartedTyping(user: user)
+                room.subscription?.delegate.userStartedTyping(user: user)
                 strongSelf.instance.logger.log("\(user.displayName) started typing in room \(room.name)", logLevel: .verbose)
             }
         }
@@ -509,7 +509,7 @@ extension PCUserSubscription {
                 }
 
                 strongSelf.delegate.userStoppedTyping(room: room, user: user)
-                room.subscription?.delegate?.userStoppedTyping(user: user)
+                room.subscription?.delegate.userStoppedTyping(user: user)
                 strongSelf.instance.logger.log("\(user.displayName) stopped typing in room \(room.name)", logLevel: .verbose)
             }
         }

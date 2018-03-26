@@ -78,7 +78,10 @@ public class PCConnectionEventHandler {
     public let handler: ([PCConnectionEvent]) -> Void
     public let dependencies: Set<PCConnectionEvent>
 
-    public init(handler: @escaping ([PCConnectionEvent]) -> Void, dependencies: Set<PCConnectionEvent>) {
+    public init(
+        handler: @escaping ([PCConnectionEvent]) -> Void,
+        dependencies: Set<PCConnectionEvent>
+    ) {
         self.handler = handler
         self.dependencies = dependencies
     }

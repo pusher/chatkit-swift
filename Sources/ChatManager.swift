@@ -168,22 +168,20 @@ import PusherPlatform
                 )
 
                 var combinedRoomUserIds = Set<String>()
-                var roomsFromConnection = [PCRoom]()
 
                 roomsPayload.forEach { roomPayload in
                     do {
                         let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
                         combinedRoomUserIds.formUnion(room.userIds)
-                        roomsFromConnection.append(room)
 
                         self.currentUser!.roomStore.addOrMerge(room) { _ in
                             if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
                                 self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
                                 self.fetchInitialUserInformationForUserIds(
                                     combinedRoomUserIds,
-                                    userStore: basicCurrentUser.userStore,
-                                    roomStore: basicCurrentUser.roomStore
+                                    userStore: self.currentUser!.userStore,
+                                    roomStore: self.currentUser!.roomStore
                                 )
                             }
                         }
@@ -196,8 +194,8 @@ import PusherPlatform
                             self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
                             self.fetchInitialUserInformationForUserIds(
                                 combinedRoomUserIds,
-                               userStore: basicCurrentUser.userStore,
-                               roomStore: basicCurrentUser.roomStore
+                               userStore: self.currentUser!.userStore,
+                               roomStore: self.currentUser!.roomStore
                             )
                         }
                     }
@@ -270,7 +268,7 @@ import PusherPlatform
                                 logLevel: .debug
                             )
                             if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
-                                room.subscription?.delegate?.usersUpdated()
+                                room.subscription?.delegate.usersUpdated()
                                 strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
 
                                 if combinedRoomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
@@ -283,7 +281,7 @@ import PusherPlatform
                         room.userStore.addOrMerge(user)
 
                         if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
-                            room.subscription?.delegate?.usersUpdated()
+                            room.subscription?.delegate.usersUpdated()
                             strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
 
                             if combinedRoomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {

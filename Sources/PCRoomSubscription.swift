@@ -4,20 +4,16 @@ import PusherPlatform
 public final class PCRoomSubscription {
     let messageSubscription: PCMessageSubscription
     let cursorSubscription: PCCursorSubscription
-
-    // TODO: Maybe the RoomSubscription should just store the delegate?
-    public var delegate: PCRoomDelegate? {
-        get {
-            return messageSubscription.delegate
-        }
-    }
+    public var delegate: PCRoomDelegate
 
     init(
         messageSubscription: PCMessageSubscription,
-        cursorSubscription: PCCursorSubscription
+        cursorSubscription: PCCursorSubscription,
+        delegate: PCRoomDelegate
     ) {
         self.messageSubscription = messageSubscription
         self.cursorSubscription = cursorSubscription
+        self.delegate = delegate
     }
 
     func end() {
