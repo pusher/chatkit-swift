@@ -11,18 +11,6 @@ public final class PCRoom {
     public internal(set) var deletedAt: String?
 
     public internal(set) var subscription: PCRoomSubscription?
-    public internal(set) var cursorSubscription: PCCursorSubscription?
-
-    public internal(set) var currentUserCursor: PCBasicCursorState?
-
-    lazy var newCursorHandler = { (cursor: PCBasicCursor, currentUserId: String) in
-        self.cursors[cursor.userId] = cursor
-        if cursor.userId == currentUserId {
-            self.currentUserCursor = .set(cursor)
-        }
-    }
-
-    public internal(set) var cursors: [String: PCBasicCursor] = [:]
 
     public internal(set) var userIds: Set<String>
 
@@ -95,21 +83,5 @@ extension PCRoom: Hashable {
 extension PCRoom: CustomDebugStringConvertible {
     public var debugDescription: String {
         return "ID: \(self.id) Name: \(self.name) Private: \(self.isPrivate)"
-    }
-}
-
-public enum PCBasicCursorState {
-    case unset
-    case set(PCBasicCursor)
-}
-
-extension PCBasicCursorState: CustomDebugStringConvertible {
-    public var debugDescription: String {
-        switch self {
-        case .unset:
-            return "No cursor has been set yet for the current user"
-        case .set(let basicCursor):
-            return "Cursor set with message ID: \(basicCursor.position), updated at: \(basicCursor.updatedAt)"
-        }
     }
 }

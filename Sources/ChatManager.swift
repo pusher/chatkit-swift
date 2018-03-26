@@ -10,73 +10,53 @@ import PusherPlatform
     public let userId: String
     public let pathFriendlyUserId: String
 
-    public internal(set) var userSubscription: PCUserSubscription?
-
-    public var currentUser: PCCurrentUser? {
-        return self.userSubscription?.currentUser
-    }
-
-    let userStore: PCGlobalUserStore
-
     let connectionCoordinator: PCConnectionCoordinator
-
-    // TODO: Do we need this here? Should it instead just live on the PCCurrentUser?
-    public var users: Set<PCUser> {
-        return self.userStore.users
-    }
+    var currentUser: PCCurrentUser?
 
     public init(
         instanceLocator: String,
         tokenProvider: PPTokenProvider,
         userId: String,
-        logger: PPLogger = PPDefaultLogger(),
-        baseClient: PPBaseClient? = nil
+        logger: PCLogger = PCDefaultLogger(),
+        baseClient: PCBaseClient? = nil
     ) {
         let splitInstance = instanceLocator.split(separator: ":")
         let cluster = splitInstance[1]
-        let sharedBaseClient = baseClient ?? PPBaseClient(host: "\(cluster).pusherplatform.io")
+        let sharedBaseClient = baseClient ?? PCBaseClient(host: "\(cluster).pusherplatform.io")
         sharedBaseClient.logger = logger
 
         let sdkInfo = PPSDKInfo(productName: "chatkit", sdkVersion: "0.6.4")
 
-        self.instance = Instance(
+        let sharedInstanceOptions = PCSharedInstanceOptions(
             locator: instanceLocator,
+            sdkInfo: sdkInfo,
+            tokenProvider: tokenProvider,
+            baseClient: sharedBaseClient,
+            logger: logger
+        )
+
+        self.instance = ChatManager.createInstance(
             serviceName: "chatkit",
             serviceVersion: "v1",
-            sdkInfo: sdkInfo,
-            tokenProvider: tokenProvider,
-            client: baseClient,
-            logger: logger
+            sharedOptions: sharedInstanceOptions
         )
 
-        self.filesInstance = Instance(
-            locator: instanceLocator,
+        self.filesInstance = ChatManager.createInstance(
             serviceName: "chatkit_files",
             serviceVersion: "v1",
-            sdkInfo: sdkInfo,
-            tokenProvider: tokenProvider,
-            client: baseClient,
-            logger: logger
+            sharedOptions: sharedInstanceOptions
         )
 
-        self.cursorsInstance = Instance(
-            locator: instanceLocator,
+        self.cursorsInstance = ChatManager.createInstance(
             serviceName: "chatkit_cursors",
             serviceVersion: "v1",
-            sdkInfo: sdkInfo,
-            tokenProvider: tokenProvider,
-            client: baseClient,
-            logger: logger
+            sharedOptions: sharedInstanceOptions
         )
 
-        self.presenceInstance = Instance(
-            locator: instanceLocator,
+        self.presenceInstance = ChatManager.createInstance(
             serviceName: "chatkit_presence",
             serviceVersion: "v1",
-            sdkInfo: sdkInfo,
-            tokenProvider: tokenProvider,
-            client: baseClient,
-            logger: logger
+            sharedOptions: sharedInstanceOptions
         )
 
         self.connectionCoordinator = PCConnectionCoordinator(logger: logger)
@@ -85,7 +65,7 @@ import PusherPlatform
             tokenProvider.userId = userId
             tokenProvider.logger = logger
         }
-        self.userStore = PCGlobalUserStore(instance: self.instance)
+
         self.userId = userId
 
         let allowedCharacterSet = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] ").inverted
@@ -102,176 +82,223 @@ import PusherPlatform
         completionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
         addConnectCompletionHandler(completionHandler: completionHandler)
+
+        let basicCurrentUser = PCBasicCurrentUser(
+            id: userId,
+            pathFriendlyId: pathFriendlyUserId,
+            instance: instance,
+            filesInstance: filesInstance,
+            cursorsInstance: cursorsInstance,
+            presenceInstance: presenceInstance,
+            connectionCoordinator: connectionCoordinator
+        )
+
+        // TODO: This could be nicer
         connectionCoordinator.connectionEventHandlers.append(
             PCConnectionEventHandler(
-                handler: { [weak self] events in
-                    guard let strongSelf = self else {
-                        print("self is nil when calling connection completion handler")
-                        return
-                    }
-
-                    guard events.count == 2 else {
-                        strongSelf.instance.logger.log(
-                            "Expected 2 events to be provided to connection event handler, but received \(events.count)",
-                            logLevel: .error
-                        )
-                        return
-                    }
-
-                    var currentUser: PCCurrentUser!
-                    var roomIdsToCursors: [Int: PCBasicCursor]!
-
+                handler: { events in
                     for event in events {
                         switch event.result {
-                        case .userSubscriptionInit(let curUser, let error):
-                            guard curUser != nil else {
-                                strongSelf.instance.logger.log(
-                                    "Error when getting current user object from connection event handler when about to set cursors: \(error!.localizedDescription)",
-                                    logLevel: .error
-                                )
-                                return
-                            }
-                            currentUser = curUser!
-                        case .initialCursorsFetch(let idsToCursors, let error):
-                            guard idsToCursors != nil else {
-                                strongSelf.instance.logger.log(
-                                    "Error when getting room ids to basic cursors object from connection event handler when about to set cursors: \(error!.localizedDescription)",
-                                    logLevel: .error
-                                )
-                                return
-                            }
-                            roomIdsToCursors = idsToCursors!
+                        case .userSubscriptionInit(let currentUser, _):
+                            currentUser?.userSubscription = basicCurrentUser.userSubscription
+                            currentUser?.presenceSubscription = basicCurrentUser.presenceSubscription
+                            currentUser?.cursorSubscription = basicCurrentUser.cursorSubscription
                         default:
                             break
                         }
                     }
-
-                    roomIdsToCursors.forEach { roomIdToCursor in
-                        guard let room = currentUser.rooms.first(where: { $0.id == roomIdToCursor.key }) else {
-                            strongSelf.instance.logger.log(
-                                "Received an initial cursor for room \(roomIdToCursor.key) but the current user object didn't know about the room",
-                                logLevel: .debug
-                            )
-                            return
-                        }
-                        strongSelf.instance.logger.log(
-                            "Setting current user's cursor: (\(roomIdToCursor.value), for room \(room.name)",
-                            logLevel: .verbose
-                        )
-                        room.currentUserCursor = .set(roomIdToCursor.value)
-                    }
-
-                    let roomIdsFromCursorsData = roomIdsToCursors.map { $0.key }
-                    currentUser.rooms.filter { !roomIdsFromCursorsData.contains($0.id) }.forEach {
-                        $0.currentUserCursor = .unset
-                    }
-
-                    // TODO: Does this stuff need to be done synchronously?
-                    currentUser.pendingRoomSubscriptions.forEach { roomSubInfo in
-                        strongSelf.instance.logger.log(
-                            "Processing pending room subscription for room: \(roomSubInfo.room.debugDescription)",
-                            logLevel: .verbose
-                        )
-                        if let messageLimit = roomSubInfo.messageLimit {
-                            currentUser.subscribeToRoom(
-                                room: roomSubInfo.room,
-                                roomDelegate: roomSubInfo.roomDelegate,
-                                messageLimit: messageLimit
-                            )
-                        } else {
-                            currentUser.subscribeToRoom(room: roomSubInfo.room, roomDelegate: roomSubInfo.roomDelegate)
-                        }
-                    }
-                    currentUser.pendingRoomSubscriptions = []
                 },
-                dependencies: [PCUserSubscriptionInitEvent, PCInitialCursorsFetchCompletedEvent]
+                dependencies: [
+                    PCUserSubscriptionInitEvent,
+                    PCPresenceSubscriptionInitEvent,
+                    PCCursorSubscriptionInitEvent
+                ]
             )
         )
 
-        let path = "/users"
-        let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
-
-        var resumableSub = PPResumableSubscription(
-            instance: self.instance,
-            requestOptions: subscribeRequest
-        )
-
-        self.userSubscription = PCUserSubscription(
-            instance: self.instance,
-            filesInstance: self.filesInstance,
-            cursorsInstance: self.cursorsInstance,
-            presenceInstance: self.presenceInstance,
-            resumableSubscription: resumableSub,
-            userStore: self.userStore,
+        basicCurrentUser.establishUserSubscription(
             delegate: delegate,
-            userId: userId,
-            pathFriendlyUserId: pathFriendlyUserId,
-            connectionCoordinator: connectionCoordinator
-        )
+            initialStateHandler: { currentUserPayloadTuple in
+                let (roomsPayload, currentUserPayload) = currentUserPayloadTuple
 
-        // TODO: Decide what to do with onEnd
-        self.instance.subscribeWithResume(
-            with: &resumableSub,
-            using: subscribeRequest,
-            onEvent: self.userSubscription!.handleEvent,
-            onEnd: { _, _, _ in },
-            onError: { error in
-                self.connectionCoordinator.connectionEventCompleted(PCConnectionEvent(currentUser: nil, error: error))
-            }
-        )
+                let receivedCurrentUser: PCCurrentUser
 
-        let getCursorsPath = "/cursors/\(PCCursorType.read.rawValue)/users/\(self.pathFriendlyUserId)"
-        let cursorsRequestOptions = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: getCursorsPath)
-
-        self.cursorsInstance.requestWithRetry(
-            using: cursorsRequestOptions,
-            onSuccess: { data in
-                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                    self.connectionCoordinator.connectionEventCompleted(
-                        PCConnectionEvent(roomIdsToBasicCursors: nil, error: PCError.failedToDeserializeJSON(data))
+                do {
+                    receivedCurrentUser = try PCPayloadDeserializer.createCurrentUserFromPayload(
+                        currentUserPayload,
+                        id: self.userId,
+                        pathFriendlyId: self.pathFriendlyUserId,
+                        instance: self.instance,
+                        filesInstance: self.filesInstance,
+                        cursorsInstance: self.cursorsInstance,
+                        presenceInstance: self.presenceInstance,
+                        userStore: basicCurrentUser.userStore,
+                        roomStore: basicCurrentUser.roomStore,
+                        cursorStore: basicCurrentUser.cursorStore,
+                        connectionCoordinator: self.connectionCoordinator
+                    )
+                } catch let err {
+                    self.informConnectionCoordinatorOfCurrentUserCompletion(
+                        currentUser: nil,
+                        error: err
                     )
                     return
                 }
 
-                guard let cursorsPayload = jsonObject as? [[String: Any]] else {
-                    self.connectionCoordinator.connectionEventCompleted(
-                        PCConnectionEvent(roomIdsToBasicCursors: nil, error: PCError.failedToCastJSONObjectToDictionary(jsonObject))
-                    )
+                // If the currentUser property is already set then the assumption is that there was
+                // already a user subscription and so instead of setting the property to a new
+                // PCCurrentUser, we update the existing one to have the most up-to-date state
+                if let currentUser = self.currentUser {
+                    currentUser.updateWithPropertiesOf(receivedCurrentUser)
+                } else {
+                    self.currentUser = receivedCurrentUser
+                }
+
+                guard roomsPayload.count > 0 else {
+                    self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
+                    // There are no users to fetch information about so we are safe to inform
+                    // the connection coordinator of a success immediately
+                    self.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: [], error: nil)
                     return
                 }
 
-                var roomIdsToBasicCursors: [Int: PCBasicCursor] = [:]
-                cursorsPayload.forEach { cursorPayload in
+                let roomsAddedToRoomStoreProgressCounter = PCProgressCounter(
+                    totalCount: roomsPayload.count,
+                    labelSuffix: "roomstore-room-append"
+                )
+
+                var combinedRoomUserIds = Set<String>()
+
+                roomsPayload.forEach { roomPayload in
                     do {
-                        let basicCursor = try PCPayloadDeserializer.createBasicCursorFromPayload(cursorPayload)
-                        roomIdsToBasicCursors[basicCursor.roomId] = basicCursor
+                        let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
+
+                        combinedRoomUserIds.formUnion(room.userIds)
+
+                        self.currentUser!.roomStore.addOrMerge(room) { _ in
+                            if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
+                                self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
+                                self.fetchInitialUserInformationForUserIds(
+                                    combinedRoomUserIds,
+                                    userStore: self.currentUser!.userStore,
+                                    roomStore: self.currentUser!.roomStore
+                                )
+                            }
+                        }
                     } catch let err {
-                        self.instance.logger.log(err.localizedDescription, logLevel: .debug)
+                        self.instance.logger.log(
+                            "Incomplete room payload in initial_state event: \(roomPayload). Error: \(err.localizedDescription)",
+                            logLevel: .debug
+                        )
+                        if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
+                            self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
+                            self.fetchInitialUserInformationForUserIds(
+                                combinedRoomUserIds,
+                               userStore: self.currentUser!.userStore,
+                               roomStore: self.currentUser!.roomStore
+                            )
+                        }
                     }
                 }
-
-                self.connectionCoordinator.connectionEventCompleted(
-                    PCConnectionEvent(roomIdsToBasicCursors: roomIdsToBasicCursors, error: nil)
-                )
-            },
-            onError: { err in
-                self.instance.logger.log("Error fetching initial cursors for user: \(err.localizedDescription)", logLevel: .debug)
-                self.connectionCoordinator.connectionEventCompleted(
-                    PCConnectionEvent(roomIdsToBasicCursors: nil, error: err)
-                )
             }
         )
+
+        basicCurrentUser.establishPresenceSubscription(delegate: delegate)
+        basicCurrentUser.establishCursorSubscription()
     }
 
     // TODO: Maybe we need some sort of ChatManagerConnectionState?
-
     public func disconnect() {
-        // End all subscriptions
-        userSubscription?.resumableSubscription.end()
+        currentUser?.userSubscription?.end()
         currentUser?.presenceSubscription?.end()
+        currentUser?.cursorSubscription?.end()
         currentUser?.rooms.forEach { room in
-            room.subscription?.resumableSubscription.end()
+            room.subscription?.end()
         }
         connectionCoordinator.reset()
+    }
+
+    fileprivate static func createInstance(
+        serviceName: String,
+        serviceVersion: String,
+        sharedOptions options: PCSharedInstanceOptions
+    ) -> Instance {
+        return Instance(
+            locator: options.locator,
+            serviceName: serviceName,
+            serviceVersion: serviceVersion,
+            sdkInfo: options.sdkInfo,
+            tokenProvider: options.tokenProvider,
+            client: options.baseClient,
+            logger: options.logger
+        )
+    }
+
+    fileprivate func fetchInitialUserInformationForUserIds(
+        _ userIds: Set<String>,
+        userStore: PCGlobalUserStore,
+        roomStore: PCRoomStore
+    ) {
+        userStore.initialFetchOfUsersWithIds(userIds) { users, err in
+            guard err == nil else {
+                self.instance.logger.log(
+                    "Unable to fetch user information after successful connection: \(err!.localizedDescription)",
+                    logLevel: .debug
+                )
+                self.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: nil, error: err!)
+                return
+            }
+
+            let combinedRoomUsersProgressCounter = PCProgressCounter(totalCount: roomStore.rooms.count, labelSuffix: "room-users-combined")
+
+            // TODO: This could be a lot more efficient
+            roomStore.rooms.forEach { room in
+                let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users")
+
+                room.userIds.forEach { userId in
+                    userStore.user(id: userId) { [weak self] user, err in
+                        guard let strongSelf = self else {
+                            print("self is nil when user store returns user after initial fetch of users")
+                            return
+                        }
+
+                        guard let user = user, err == nil else {
+                            strongSelf.instance.logger.log(
+                                "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
+                                logLevel: .debug
+                            )
+                            if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
+                                room.subscription?.delegate.usersUpdated()
+                                strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
+
+                                if combinedRoomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
+                                    strongSelf.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: nil, error: err!)
+                                }
+                            }
+                            return
+                        }
+
+                        room.userStore.addOrMerge(user)
+
+                        if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
+                            room.subscription?.delegate.usersUpdated()
+                            strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
+
+                            if combinedRoomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
+                                strongSelf.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: users, error: nil)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fileprivate func informConnectionCoordinatorOfCurrentUserCompletion(currentUser: PCCurrentUser?, error: Error?) {
+        connectionCoordinator.connectionEventCompleted(PCConnectionEvent(currentUser: currentUser, error: error))
+    }
+
+    fileprivate func informConnectionCoordinatorOfInitialUsersFetchCompletion(users: [PCUser]?, error: Error?) {
+        connectionCoordinator.connectionEventCompleted(PCConnectionEvent(users: users, error: error))
     }
 }

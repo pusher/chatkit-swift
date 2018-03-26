@@ -6,11 +6,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.6.4...HEAD)
 
+### Added
+
+`PCBaseClient` is added as a `typealias` for `PPBaseClient`
+
 ### Changed
 
+- `subscribeToRoom` will attempt to join the `PCCurrentUser` to the room if the user is not already a member
+- `PCRoom` no longer stores the cursors that relate to it; they are now all accessed using the `readCursor` function on `PCCurrentUser`, and the return type of this is `PCCursor?` (an optional `PCCursor`)
+- `PCCurrentUser`'s `setCursor` function has been renamed to `setReadCursor`
 - `cursorSet` renamed to `newCursor` in `PCRoomDelegate`
 - Bump PusherPlatform dependency to 0.4.2
 - `fetchToken` calls to `PCTokenProvider` are queued if there's an existing request underway
+
+### Removed
+
+- `ChatManager` no longer stores a reference to the `users` list, nor the `userSubscription`
+- `PCBasicCursorState` has been removed so now if you try to access the read cursors for a given `userId`-`roomId` combination you will either receive a `PCCursor` or `nil`
+- `currentUserCursor` has been removed from `PCRoom`; again, you'll instead need to use the `readCursor` function on `PCCurrentUser`
 
 ## [0.6.4](https://github.com/pusher/chatkit-swift/compare/0.6.3...0.6.4) - 2018-03-01
 

@@ -15,6 +15,7 @@ public final class PCUserSubscription {
     let userId: String
     let pathFriendlyUserId: String
     let connectionCoordinator: PCConnectionCoordinator
+    let initialStateHandler: ((roomsPayload: [[String: Any]], currentUserPayload: [String: Any])) -> Void
 
     public var currentUser: PCCurrentUser?
 
@@ -28,7 +29,8 @@ public final class PCUserSubscription {
         delegate: PCChatManagerDelegate,
         userId: String,
         pathFriendlyUserId: String,
-        connectionCoordinator: PCConnectionCoordinator
+        connectionCoordinator: PCConnectionCoordinator,
+        initialStateHandler: @escaping ((roomsPayload: [[String: Any]], currentUserPayload: [String: Any])) -> Void
     ) {
         self.instance = instance
         self.filesInstance = filesInstance
@@ -40,6 +42,7 @@ public final class PCUserSubscription {
         self.userId = userId
         self.pathFriendlyUserId = pathFriendlyUserId
         self.connectionCoordinator = connectionCoordinator
+        self.initialStateHandler = initialStateHandler
     }
 
     public func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
@@ -101,6 +104,10 @@ public final class PCUserSubscription {
         }
     }
 
+    func end() {
+        self.resumableSubscription.end()
+    }
+
     fileprivate func informConnectionCoordinatorOfCurrentUserCompletion(currentUser: PCCurrentUser?, error: Error?) {
         connectionCoordinator.connectionEventCompleted(PCConnectionEvent(currentUser: currentUser, error: error))
     }
@@ -124,11 +131,11 @@ extension PCUserSubscription {
             return
         }
 
-        guard let userPayload = data["current_user"] as? [String: Any] else {
+        guard let currentUserPayload = data["current_user"] as? [String: Any] else {
             informConnectionCoordinatorOfCurrentUserCompletion(
                 currentUser: nil,
                 error: PCAPIEventError.keyNotPresentInEventPayload(
-                    key: "user",
+                    key: "current_user",
                     apiEventName: eventName,
                     payload: data
                 )
@@ -136,165 +143,7 @@ extension PCUserSubscription {
             return
         }
 
-        let receivedCurrentUser: PCCurrentUser
-
-        do {
-            receivedCurrentUser = try PCPayloadDeserializer.createCurrentUserFromPayload(
-                userPayload,
-                id: self.userId,
-                pathFriendlyId: self.pathFriendlyUserId,
-                instance: self.instance,
-                filesInstance: self.filesInstance,
-                cursorsInstance: self.cursorsInstance,
-                presenceInstance: self.presenceInstance,
-                userStore: userStore,
-                connectionCoordinator: connectionCoordinator
-            )
-        } catch let err {
-            informConnectionCoordinatorOfCurrentUserCompletion(
-                currentUser: nil,
-                error: err
-            )
-            return
-        }
-
-        let wasExistingCurrentUser = self.currentUser != nil
-
-        // If the currentUser property is already set then the assumption is that there was
-        // already a user subscription and so instead of setting the property to a new
-        // PCCurrentUser, we update the existing one to have the most up-to-date state
-        if let currentUser = self.currentUser {
-            currentUser.updateWithPropertiesOf(receivedCurrentUser)
-        } else {
-            self.currentUser = receivedCurrentUser
-        }
-
-        guard roomsPayload.count > 0 else {
-            self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
-            // There are no users to fetch information about so we are safe to inform
-            // the connection coordinator of a success immediately
-            self.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: [], error: nil)
-            self.currentUser!.setupPresenceSubscription(delegate: self.delegate)
-            return
-        }
-
-        let roomsAddedToRoomStoreProgressCounter = PCProgressCounter(
-            totalCount: roomsPayload.count,
-            labelSuffix: "roomstore-room-append"
-        )
-
-        var combinedRoomUserIds = Set<String>()
-        var roomsFromConnection = [PCRoom]()
-
-        roomsPayload.forEach { roomPayload in
-            do {
-                let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-
-                combinedRoomUserIds.formUnion(room.userIds)
-                roomsFromConnection.append(room)
-
-                self.currentUser!.roomStore.addOrMerge(room) { _ in
-                    if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
-                        self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
-                        self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: self.currentUser!)
-                        if wasExistingCurrentUser {
-                            self.reconcileExistingRoomStoreWithRoomsReceivedOnConnection(roomsFromConnection: roomsFromConnection)
-                        }
-                    }
-                }
-            } catch let err {
-                self.instance.logger.log(
-                    "Incomplete room payload in initial_state event: \(roomPayload). Error: \(err.localizedDescription)",
-                    logLevel: .debug
-                )
-                if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
-                    self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
-                    self.fetchInitialUserInformationForUserIds(combinedRoomUserIds, currentUser: self.currentUser!)
-                    if wasExistingCurrentUser {
-                        self.reconcileExistingRoomStoreWithRoomsReceivedOnConnection(roomsFromConnection: roomsFromConnection)
-                    }
-                }
-            }
-        }
-    }
-
-    fileprivate func fetchInitialUserInformationForUserIds(_ userIds: Set<String>, currentUser: PCCurrentUser) {
-        self.userStore.initialFetchOfUsersWithIds(userIds) { users, err in
-            guard err == nil else {
-                self.instance.logger.log(
-                    "Unable to fetch user information after successful connection: \(err!.localizedDescription)",
-                    logLevel: .debug
-                )
-                self.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: nil, error: err!)
-                return
-            }
-
-            let combinedRoomUsersProgressCounter = PCProgressCounter(totalCount: currentUser.roomStore.rooms.count, labelSuffix: "room-users-combined")
-
-            // TODO: This could be a lot more efficient
-            currentUser.roomStore.rooms.forEach { room in
-                let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users")
-
-                room.userIds.forEach { userId in
-                    self.userStore.user(id: userId) { [weak self] user, err in
-                        guard let strongSelf = self else {
-                            print("self is nil when user store returns user after initial fetch of users")
-                            return
-                        }
-
-                        guard let user = user, err == nil else {
-                            strongSelf.instance.logger.log(
-                                "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
-                                logLevel: .debug
-                            )
-                            if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
-                                room.subscription?.delegate?.usersUpdated()
-                                strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
-
-                                if combinedRoomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
-                                    strongSelf.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: nil, error: err!)
-                                    currentUser.setupPresenceSubscription(delegate: strongSelf.delegate)
-                                }
-                            }
-                            return
-                        }
-
-                        room.userStore.addOrMerge(user)
-
-                        if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
-                            room.subscription?.delegate?.usersUpdated()
-                            strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
-
-                            if combinedRoomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
-                                strongSelf.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: users, error: nil)
-                                currentUser.setupPresenceSubscription(delegate: strongSelf.delegate)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    fileprivate func reconcileExistingRoomStoreWithRoomsReceivedOnConnection(roomsFromConnection: [PCRoom]) {
-        guard let currentUser = self.currentUser else {
-            self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
-            self.delegate.error(error: PCError.currentUserIsNil)
-            return
-        }
-
-        let roomStoreRooms = Set<PCRoom>(currentUser.roomStore.rooms.underlyingArray)
-        let mostRecentConnectionRooms = Set<PCRoom>(roomsFromConnection)
-        let noLongerAMemberOfRooms = roomStoreRooms.subtracting(mostRecentConnectionRooms)
-
-        noLongerAMemberOfRooms.forEach { room in
-
-            // TODO: Not sure if this is the best way of communicating that while the subscription
-            // was closed there was an event that meant that the current user is no longer a
-            // member of a given room
-
-            self.delegate.removedFromRoom(room: room)
-        }
+        self.initialStateHandler((roomsPayload: roomsPayload, currentUserPayload: currentUserPayload))
     }
 
     fileprivate func parseAddedToRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
@@ -336,7 +185,7 @@ extension PCUserSubscription {
                         )
 
                         if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
-                            room.subscription?.delegate?.usersUpdated()
+                            room.subscription?.delegate.usersUpdated()
                             strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
                         }
 
@@ -346,7 +195,7 @@ extension PCUserSubscription {
                     room.userStore.addOrMerge(user)
 
                     if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
-                        room.subscription?.delegate?.usersUpdated()
+                        room.subscription?.delegate.usersUpdated()
                         strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
                     }
                 }
@@ -470,6 +319,7 @@ extension PCUserSubscription {
             return
         }
 
+        // TODO: Why not weak self here?
         currentUser.roomStore.room(id: roomId) { room, err in
             guard let room = room, err == nil else {
                 self.instance.logger.log(
@@ -499,7 +349,7 @@ extension PCUserSubscription {
                 room.userIds.insert(addedOrMergedUser.id)
 
                 strongSelf.delegate.userJoinedRoom(room: room, user: addedOrMergedUser)
-                room.subscription?.delegate?.userJoined(user: addedOrMergedUser)
+                room.subscription?.delegate.userJoined(user: addedOrMergedUser)
                 strongSelf.instance.logger.log("User \(user.displayName) joined room: \(room.name)", logLevel: .verbose)
             }
         }
@@ -534,6 +384,7 @@ extension PCUserSubscription {
             return
         }
 
+        // TODO: Why not weak self here?
         currentUser.roomStore.room(id: roomId) { room, err in
             guard let room = room, err == nil else {
                 self.instance.logger.log(
@@ -568,7 +419,7 @@ extension PCUserSubscription {
                 room.userStore.remove(id: user.id)
 
                 strongSelf.delegate.userLeftRoom(room: room, user: user)
-                room.subscription?.delegate?.userLeft(user: user)
+                room.subscription?.delegate.userLeft(user: user)
                 strongSelf.instance.logger.log("User \(user.displayName) left room: \(room.name)", logLevel: .verbose)
             }
         }
@@ -592,6 +443,7 @@ extension PCUserSubscription {
             return
         }
 
+        // TODO: Why not weak self here?
         currentUser.roomStore.room(id: roomId) { room, err in
             guard let room = room, err == nil else {
                 self.instance.logger.log(err!.localizedDescription, logLevel: .error)
@@ -612,7 +464,7 @@ extension PCUserSubscription {
                 }
 
                 strongSelf.delegate.userStartedTyping(room: room, user: user)
-                room.subscription?.delegate?.userStartedTyping(user: user)
+                room.subscription?.delegate.userStartedTyping(user: user)
                 strongSelf.instance.logger.log("\(user.displayName) started typing in room \(room.name)", logLevel: .verbose)
             }
         }
@@ -636,6 +488,7 @@ extension PCUserSubscription {
             return
         }
 
+        // TODO: Why not weak self here?
         currentUser.roomStore.room(id: roomId) { room, err in
             guard let room = room, err == nil else {
                 self.instance.logger.log(err!.localizedDescription, logLevel: .error)
@@ -656,7 +509,7 @@ extension PCUserSubscription {
                 }
 
                 strongSelf.delegate.userStoppedTyping(room: room, user: user)
-                room.subscription?.delegate?.userStoppedTyping(user: user)
+                room.subscription?.delegate.userStoppedTyping(user: user)
                 strongSelf.instance.logger.log("\(user.displayName) stopped typing in room \(room.name)", logLevel: .verbose)
             }
         }

@@ -24,6 +24,8 @@ struct PCPayloadDeserializer {
         cursorsInstance: Instance,
         presenceInstance: Instance,
         userStore: PCGlobalUserStore,
+        roomStore: PCRoomStore,
+        cursorStore: PCCursorStore,
         connectionCoordinator: PCConnectionCoordinator
     ) throws -> PCCurrentUser {
         let basicUser = try createBasicUserFromPayload(userPayload)
@@ -41,6 +43,8 @@ struct PCPayloadDeserializer {
             cursorsInstance: cursorsInstance,
             presenceInstance: presenceInstance,
             userStore: userStore,
+            roomStore: roomStore,
+            cursorStore: cursorStore,
             connectionCoordinator: connectionCoordinator
         )
     }

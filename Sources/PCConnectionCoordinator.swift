@@ -78,7 +78,10 @@ public class PCConnectionEventHandler {
     public let handler: ([PCConnectionEvent]) -> Void
     public let dependencies: Set<PCConnectionEvent>
 
-    public init(handler: @escaping ([PCConnectionEvent]) -> Void, dependencies: Set<PCConnectionEvent>) {
+    public init(
+        handler: @escaping ([PCConnectionEvent]) -> Void,
+        dependencies: Set<PCConnectionEvent>
+    ) {
         self.handler = handler
         self.dependencies = dependencies
     }
@@ -102,8 +105,8 @@ public class PCConnectionEvent {
         self.init(type: .presenceSubscriptionInit, result: .presenceSubscriptionInit(presenceSubscription: presenceSubscription, error: error))
     }
 
-    convenience init(roomIdsToBasicCursors: [Int: PCBasicCursor]?, error: Error?) {
-        self.init(type: .initialCursorsFetch, result: .initialCursorsFetch(roomIdsToBasicCursors: roomIdsToBasicCursors, error: error))
+    convenience init(cursorSubscription: PCCursorSubscription?, error: Error?) {
+        self.init(type: .cursorSubscriptionInit, result: .cursorSubscriptionInit(cursorSubscription: cursorSubscription, error: error))
     }
 
     convenience init(users: [PCUser]?, error: Error?) {
@@ -118,8 +121,8 @@ public class PCConnectionEvent {
         return PCConnectionEvent(type: .presenceSubscriptionInit, result: .presenceSubscriptionInit(presenceSubscription: nil, error: nil))
     }
 
-    fileprivate static func initialCursorsFetchCompleted() -> PCConnectionEvent {
-        return PCConnectionEvent(type: .initialCursorsFetch, result: .initialCursorsFetch(roomIdsToBasicCursors: nil, error: nil))
+    fileprivate static func cursorSubscriptionInit() -> PCConnectionEvent {
+        return PCConnectionEvent(type: .cursorSubscriptionInit, result: .cursorSubscriptionInit(cursorSubscription: nil, error: nil))
     }
 
     fileprivate static func initialUsersFetchCompleted() -> PCConnectionEvent {
@@ -135,13 +138,13 @@ extension PCConnectionEvent: CustomDebugStringConvertible {
 
 public let PCUserSubscriptionInitEvent = PCConnectionEvent.userSubscriptionInit()
 public let PCPresenceSubscriptionInitEvent = PCConnectionEvent.presenceSubscriptionInit()
-public let PCInitialCursorsFetchCompletedEvent = PCConnectionEvent.initialCursorsFetchCompleted()
+public let PCCursorSubscriptionInitEvent = PCConnectionEvent.cursorSubscriptionInit()
 public let PCInitialUsersFetchCompletedEvent = PCConnectionEvent.initialUsersFetchCompleted()
 
 fileprivate let allConnectionEvents: Set<PCConnectionEvent> = [
     PCUserSubscriptionInitEvent,
     PCPresenceSubscriptionInitEvent,
-    PCInitialCursorsFetchCompletedEvent,
+    PCCursorSubscriptionInitEvent,
     PCInitialUsersFetchCompletedEvent
 ]
 
@@ -158,7 +161,7 @@ extension PCConnectionEvent: Hashable {
 public enum PCConnectionEventResult {
     case userSubscriptionInit(currentUser: PCCurrentUser?, error: Error?)
     case presenceSubscriptionInit(presenceSubscription: PCPresenceSubscription?, error: Error?)
-    case initialCursorsFetch(roomIdsToBasicCursors: [Int: PCBasicCursor]?, error: Error?)
+    case cursorSubscriptionInit(cursorSubscription: PCCursorSubscription?, error: Error?)
     case initialUsersFetch(users: [PCUser]?, error: Error?)
 }
 
@@ -166,8 +169,8 @@ extension PCConnectionEventResult: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
         case .userSubscriptionInit(_, let error), .presenceSubscriptionInit(_, let error),
-             .initialCursorsFetch(_, let error), .initialUsersFetch(_, let error):
-            return error == nil ? "non-nil value" : "\(error!.localizedDescription)"
+             .cursorSubscriptionInit(_, let error), .initialUsersFetch(_, let error):
+            return error == nil ? "success" : "\(error!.localizedDescription)"
         }
     }
 }
@@ -175,7 +178,7 @@ extension PCConnectionEventResult: CustomDebugStringConvertible {
 public enum PCConnectionEventType: String {
     case userSubscriptionInit
     case presenceSubscriptionInit
-    case initialCursorsFetch
+    case cursorSubscriptionInit
     case initialUsersFetch
 }
 
@@ -186,7 +189,7 @@ extension PCConnectionEventResult: Hashable {
             return 0
         case .presenceSubscriptionInit(_, _):
             return 1
-        case .initialCursorsFetch(_, _):
+        case .cursorSubscriptionInit(_, _):
             return 2
         case .initialUsersFetch(_, _):
             return 3

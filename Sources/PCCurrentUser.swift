@@ -11,6 +11,7 @@ public final class PCCurrentUser {
 
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
+    let cursorStore: PCCursorStore
 
     public typealias ErrorCompletionHandler = (Error?) -> Void
     public typealias RoomCompletionHandler = (PCRoom?, Error?) -> Void
@@ -28,7 +29,9 @@ public final class PCCurrentUser {
 
     public let pathFriendlyId: String
 
+    public internal(set) var userSubscription: PCUserSubscription?
     public internal(set) var presenceSubscription: PCPresenceSubscription?
+    public internal(set) var cursorSubscription: PCCursorSubscription?
 
     var typingIndicatorManagers: [Int: PCTypingIndicatorManager] = [:]
     private var typingIndicatorQueue = DispatchQueue(label: "com.pusher.chatkit.typing-indicators")
@@ -39,7 +42,6 @@ public final class PCCurrentUser {
     let presenceInstance: Instance
 
     let connectionCoordinator: PCConnectionCoordinator
-    var pendingRoomSubscriptions: [(room: PCRoom, roomDelegate: PCRoomDelegate, messageLimit: Int?)] = []
 
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -58,12 +60,13 @@ public final class PCCurrentUser {
         name: String?,
         avatarURL: String?,
         customData: [String: Any]?,
-        rooms: PCSynchronizedArray<PCRoom> = PCSynchronizedArray<PCRoom>(),
         instance: Instance,
         filesInstance: Instance,
         cursorsInstance: Instance,
         presenceInstance: Instance,
         userStore: PCGlobalUserStore,
+        roomStore: PCRoomStore,
+        cursorStore: PCCursorStore,
         connectionCoordinator: PCConnectionCoordinator
     ) {
         self.id = id
@@ -73,12 +76,13 @@ public final class PCCurrentUser {
         self.name = name
         self.avatarURL = avatarURL
         self.customData = customData
-        self.roomStore = PCRoomStore(rooms: rooms, instance: instance)
         self.instance = instance
         self.filesInstance = filesInstance
         self.cursorsInstance = cursorsInstance
         self.presenceInstance = presenceInstance
         self.userStore = userStore
+        self.roomStore = roomStore
+        self.cursorStore = cursorStore
         self.connectionCoordinator = connectionCoordinator
     }
 
@@ -86,40 +90,6 @@ public final class PCCurrentUser {
         self.updatedAt = currentUser.updatedAt
         self.name = currentUser.name
         self.customData = currentUser.customData
-    }
-
-    func setupPresenceSubscription(delegate: PCChatManagerDelegate) {
-        // If a presenceSubscription already exists then we want to create a new one
-        // to ensure that the most up-to-date state is received, so we first close the
-        // existing subscription, if it was still open
-        if let presSub = self.presenceSubscription {
-            presSub.end()
-            self.presenceSubscription = nil
-        }
-
-        let path = "/users/\(self.id)/presence"
-
-        let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
-
-        var resumableSub = PPResumableSubscription(
-            instance: self.presenceInstance,
-            requestOptions: subscribeRequest
-        )
-
-        self.presenceSubscription = PCPresenceSubscription(
-            instance: self.presenceInstance,
-            resumableSubscription: resumableSub,
-            userStore: self.userStore,
-            roomStore: self.roomStore,
-            connectionCoordinator: self.connectionCoordinator,
-            delegate: delegate
-        )
-
-        self.presenceInstance.subscribeWithResume(
-            with: &resumableSub,
-            using: subscribeRequest,
-            onEvent: self.presenceSubscription!.handleEvent
-        )
     }
 
     public func createRoom(
@@ -355,6 +325,11 @@ public final class PCCurrentUser {
     }
 
     fileprivate func joinRoom(roomId: Int, completionHandler: @escaping RoomCompletionHandler) {
+        if let room = self.rooms.first(where: { $0.id == roomId }) {
+            completionHandler(room, nil)
+            return
+        }
+
         let path = "/users/\(self.pathFriendlyId)/rooms/\(roomId)/join"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
 
@@ -407,7 +382,7 @@ public final class PCCurrentUser {
                     )
 
                     if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
-                        room.subscription?.delegate?.usersUpdated()
+                        room.subscription?.delegate.usersUpdated()
                         strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
                     }
 
@@ -417,7 +392,7 @@ public final class PCCurrentUser {
                 room.userStore.addOrMerge(user)
 
                 if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
-                    room.subscription?.delegate?.usersUpdated()
+                    room.subscription?.delegate.usersUpdated()
                     strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
                 }
             }
@@ -805,22 +780,43 @@ public final class PCCurrentUser {
 
     // TODO: Do I need to add a Last-Event-ID option here?
     public func subscribeToRoom(room: PCRoom, roomDelegate: PCRoomDelegate, messageLimit: Int = 20) {
-        guard room.currentUserCursor != nil else {
-            // We only get here if the initial cursor fetch hasn't completed yet and so
-            // the currentUserCursor prop for the room is nil (not .unset or .set)
-            pendingRoomSubscriptions.append((room: room, roomDelegate: roomDelegate, messageLimit: messageLimit))
-            self.instance.logger.log(
-                "Room subscription waiting to begin until current user's room cursor has been received",
-                logLevel: .verbose
-            )
-            return
-        }
-
         self.instance.logger.log(
             "About to subscribe to room \(room.debugDescription)",
             logLevel: .verbose
         )
 
+        self.joinRoom(roomId: room.id) { innerRoom, err in
+            guard let roomToSubscribeTo = innerRoom, err == nil else {
+                self.instance.logger.log(
+                    "Error joining room as part of room subscription process \(room.debugDescription)",
+                    logLevel: .error
+                )
+                return
+            }
+
+            let messageSub = self.subscribeToRoomMessages(
+                room: roomToSubscribeTo,
+                delegate: roomDelegate,
+                messageLimit: messageLimit
+            )
+            let cursorSub = self.subscribeToRoomCursors(
+                room: roomToSubscribeTo,
+                delegate: roomDelegate
+            )
+
+            room.subscription = PCRoomSubscription(
+                messageSubscription: messageSub,
+                cursorSubscription: cursorSub,
+                delegate: roomDelegate
+            )
+        }
+    }
+
+    fileprivate func subscribeToRoomMessages(
+        room: PCRoom,
+        delegate: PCRoomDelegate,
+        messageLimit: Int
+    ) -> PCMessageSubscription {
         let path = "/rooms/\(room.id)"
 
         // TODO: What happens if you provide both a message_limit and a Last-Event-ID?
@@ -838,28 +834,29 @@ public final class PCCurrentUser {
             requestOptions: subscribeRequest
         )
 
-        room.subscription = PCRoomSubscription(
-            delegate: roomDelegate,
+        let messageSubscription = PCMessageSubscription(
+            delegate: delegate,
             resumableSubscription: resumableSub,
             logger: self.instance.logger,
-            basicMessageEnricher: PCBasicMessageEnricher(userStore: self.userStore, room: room, logger: self.instance.logger)
+            basicMessageEnricher: PCBasicMessageEnricher(
+                userStore: self.userStore,
+                // TODO: This should probably be a room store
+                room: room,
+                logger: self.instance.logger
+            )
         )
 
         self.instance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
-            onEvent: room.subscription?.handleEvent
-
-            // TODO: This will probably be replaced by the state change delegate function, with an associated type, maybe
-            //            onError: { error in
-            //                roomDelegate.receivedError(error)
-            //            }
+            onEvent: messageSubscription.handleEvent
+            // TODO: Should we be handling onError here somehow?
         )
 
-        self.subscribeToCursors(room: room, delegate: roomDelegate)
+        return messageSubscription
     }
 
-    fileprivate func subscribeToCursors(room: PCRoom, delegate: PCRoomDelegate) {
+    fileprivate func subscribeToRoomCursors(room: PCRoom, delegate: PCRoomDelegate) -> PCCursorSubscription {
         let path = "/cursors/\(PCCursorType.read.rawValue)/rooms/\(room.id)"
 
         let subscribeRequest = PPRequestOptions(
@@ -872,25 +869,26 @@ public final class PCCurrentUser {
             requestOptions: subscribeRequest
         )
 
-        let basicCursorEnricher = PCBasicCursorEnricher(
-            userStore: self.userStore,
-            room: room,
-            logger: self.cursorsInstance.logger
-        )
-
-        room.cursorSubscription = PCCursorSubscription(
+        let cursorSubscription = PCCursorSubscription(
             delegate: delegate,
             resumableSubscription: resumableSub,
-            basicCursorEnricher: basicCursorEnricher,
-            handleNewCursor: { room.newCursorHandler($0, self.id) },
-            logger: self.cursorsInstance.logger
+            cursorStore: cursorStore,
+            connectionCoordinator: connectionCoordinator,
+            logger: self.cursorsInstance.logger,
+            initialStateHandler: { err in
+                // TODO: Only consider the room subscription open when both the
+                // room subscription and cursor subscription have opened
+            }
         )
 
         self.cursorsInstance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
-            onEvent: room.cursorSubscription?.handleEvent
+            onEvent: cursorSubscription.handleEvent
+            // TODO: Should we be handling onError here somehow?
         )
+
+        return cursorSubscription
     }
 
     public func fetchMessagesFromRoom(
@@ -985,7 +983,21 @@ public final class PCCurrentUser {
         )
     }
 
-    public func setCursor(position: Int, roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+    public func readCursor(roomId: Int, userId: String? = nil) throws -> PCCursor? {
+        guard let room = self.rooms.filter({ $0.id == roomId }).first else {
+            throw PCCurrentUserError.mustBeMemberOfRoom
+        }
+
+        let userIdToCheck = userId ?? self.id
+
+        if userIdToCheck != self.id && room.subscription == nil {
+            throw PCCurrentUserError.noSubscriptionToRoom(room)
+        }
+
+        return self.cursorStore.getSync(userId: userIdToCheck, roomId: roomId)
+    }
+
+    public func setReadCursor(position: Int, roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
         let cursorObject = [ "position": position ]
 
         guard JSONSerialization.isValidJSONObject(cursorObject) else {
@@ -1015,12 +1027,27 @@ public final class PCCurrentUser {
   }
 }
 
+public enum PCCurrentUserError: Error {
+    case noSubscriptionToRoom(PCRoom)
+    case mustBeMemberOfRoom
+}
+
+extension PCCurrentUserError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case let .noSubscriptionToRoom(room):
+            return "You must be subscribed to room \(room.name) to get read cursors from it"
+        case .mustBeMemberOfRoom:
+            return "You must be a member of a room to get the read cursors for it"
+        }
+    }
+}
+
 public enum PCMessageError: Error {
     case messageIdKeyMissingInMessageCreationResponse([String: Int])
 }
 
 extension PCMessageError: LocalizedError {
-
     public var errorDescription: String? {
         switch self {
         case let .messageIdKeyMissingInMessageCreationResponse(payload):
