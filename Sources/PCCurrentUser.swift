@@ -424,10 +424,6 @@ public final class PCCurrentUser {
 
     // MARK: Room fetching
 
-    public func getJoinedRooms(completionHandler: @escaping RoomsCompletionHandler) {
-        self.getUserRooms(onlyJoinable: false, completionHandler: completionHandler)
-    }
-
     public func getJoinableRooms(completionHandler: @escaping RoomsCompletionHandler) {
         self.getUserRooms(onlyJoinable: true, completionHandler: completionHandler)
     }
@@ -438,12 +434,6 @@ public final class PCCurrentUser {
 
         let joinableQueryItemValue = onlyJoinable ? "true" : "false"
         generalRequest.addQueryItems([URLQueryItem(name: "joinable", value: joinableQueryItemValue)])
-        self.getRooms(request: generalRequest, completionHandler: completionHandler)
-    }
-
-    public func getAllRooms(completionHandler: @escaping RoomsCompletionHandler) {
-        let path = "/rooms"
-        let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
         self.getRooms(request: generalRequest, completionHandler: completionHandler)
     }
 
