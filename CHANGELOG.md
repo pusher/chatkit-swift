@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `ChatManager` no longer stores a reference to the `users` list, nor the `userSubscription`
 - `PCBasicCursorState` has been removed so now if you try to access the read cursors for a given `userId`-`roomId` combination you will either receive a `PCCursor` or `nil`
 - `currentUserCursor` has been removed from `PCRoom`; again, you'll instead need to use the `readCursor` function on `PCCurrentUser`
+- `getAllRooms` has been removed
+- `getJoinedRooms` has been removed
 
 ## [0.6.4](https://github.com/pusher/chatkit-swift/compare/0.6.3...0.6.4) - 2018-03-01
 
