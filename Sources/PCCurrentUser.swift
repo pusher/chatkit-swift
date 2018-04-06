@@ -691,33 +691,36 @@ public final class PCCurrentUser {
         text: String? = nil,
         attachmentType: PCAttachmentType? = nil,
         completionHandler: @escaping (Int?, Error?) -> Void
-    ) {
+        ) {
         var messageObject: [String: Any] = [
             "user_id": self.id
         ]
-
+        
         if let text = text {
             messageObject["text"] = text
         }
-
-        if let attachmentType = attachmentType {
-            switch attachmentType {
-            case .fileData(_, _), .fileURL(_, _):
-                uploadAttachmentAndSendMessage(
-                    messageObject,
-                    attachment: attachmentType,
-                    roomId: roomId,
-                    completionHandler: completionHandler
-                )
-                break
-            case .link(let url, let type):
-                messageObject["attachment"] = [
-                    "resource_link": url,
-                    "type": type
-                ]
-                sendMessage(messageObject, roomId: roomId, completionHandler: completionHandler)
-                break
-            }
+        
+        guard let attachmentType = attachmentType else {
+            sendMessage(messageObject, roomId: roomId, completionHandler: completionHandler)
+            return
+        }
+        
+        switch attachmentType {
+        case .fileData(_, _), .fileURL(_, _):
+            uploadAttachmentAndSendMessage(
+                messageObject,
+                attachment: attachmentType,
+                roomId: roomId,
+                completionHandler: completionHandler
+            )
+            break
+        case .link(let url, let type):
+            messageObject["attachment"] = [
+                "resource_link": url,
+                "type": type
+            ]
+            sendMessage(messageObject, roomId: roomId, completionHandler: completionHandler)
+            break
         }
     }
 
