@@ -112,9 +112,9 @@ public final class PCSynchronizedArray<T> {
         return result
     }
 
-    public func flatMap<ElementOfResult>(_ transform: @escaping (T) -> ElementOfResult?) -> [ElementOfResult] {
+    public func compactMap<ElementOfResult>(_ transform: @escaping (T) -> ElementOfResult?) -> [ElementOfResult] {
         var result = [ElementOfResult]()
-        self.accessQueue.sync { result = self.underlyingArray.flatMap(transform) }
+        self.accessQueue.sync { result = self.underlyingArray.compactMap(transform) }
         return result
     }
 

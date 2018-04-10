@@ -87,7 +87,7 @@ extension PCPresenceSubscription {
             return
         }
 
-        let userStates = userStatesPayload.flatMap { userStatePayload -> PCPresencePayload? in
+        let userStates = userStatesPayload.compactMap { userStatePayload -> PCPresencePayload? in
             do {
                 return try PCPayloadDeserializer.createPresencePayloadFromPayload(userStatePayload)
             } catch let error {
@@ -187,7 +187,7 @@ extension PCPresenceSubscription {
             return
         }
 
-        let userStates = userStatesPayload.flatMap { userStatePayload -> PCPresencePayload? in
+        let userStates = userStatesPayload.compactMap { userStatePayload -> PCPresencePayload? in
             do {
                 return try PCPayloadDeserializer.createPresencePayloadFromPayload(userStatePayload)
             } catch let err {
