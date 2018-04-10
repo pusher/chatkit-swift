@@ -691,11 +691,11 @@ public final class PCCurrentUser {
         text: String? = nil,
         attachmentType: PCAttachmentType? = nil,
         completionHandler: @escaping (Int?, Error?) -> Void
-        ) {
+    ) {
         var messageObject: [String: Any] = [
             "user_id": self.id
         ]
-        
+
         if let text = text {
             messageObject["text"] = text
         }
