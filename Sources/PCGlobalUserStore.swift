@@ -164,7 +164,7 @@ public final class PCGlobalUserStore {
                     return
                 }
 
-                let users = userPayloads.flatMap { userPayload -> PCUser? in
+                let users = userPayloads.compactMap { userPayload -> PCUser? in
                     do {
                         let user = try PCPayloadDeserializer.createUserFromPayload(userPayload)
                         let addedOrUpdatedUser = self.userStoreCore.addOrMerge(user)

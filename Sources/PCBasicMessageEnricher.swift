@@ -70,7 +70,7 @@ final class PCBasicMessageEnricher {
                         return
                     }
 
-                    let basicMessages = basicMessageIds.flatMap { bmId -> PCBasicMessage? in
+                    let basicMessages = basicMessageIds.compactMap { bmId -> PCBasicMessage? in
                         return strongSelf.messagesAwaitingEnrichmentDependentOnUserRetrieval[bmId]
                     }
 

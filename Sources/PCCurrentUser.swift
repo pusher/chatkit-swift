@@ -451,7 +451,7 @@ public final class PCCurrentUser {
                     return
                 }
 
-                let rooms = roomsPayload.flatMap { roomPayload -> PCRoom? in
+                let rooms = roomsPayload.compactMap { roomPayload -> PCRoom? in
                     do {
                         // TODO: Do we need to fetch users in the room here?
                         return try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
@@ -699,25 +699,28 @@ public final class PCCurrentUser {
         if let text = text {
             messageObject["text"] = text
         }
-
-        if let attachmentType = attachmentType {
-            switch attachmentType {
-            case .fileData(_, _), .fileURL(_, _):
-                uploadAttachmentAndSendMessage(
-                    messageObject,
-                    attachment: attachmentType,
-                    roomId: roomId,
-                    completionHandler: completionHandler
-                )
-                break
-            case .link(let url, let type):
-                messageObject["attachment"] = [
-                    "resource_link": url,
-                    "type": type
-                ]
-                sendMessage(messageObject, roomId: roomId, completionHandler: completionHandler)
-                break
-            }
+        
+        guard let attachmentType = attachmentType else {
+            sendMessage(messageObject, roomId: roomId, completionHandler: completionHandler)
+            return
+        }
+        
+        switch attachmentType {
+        case .fileData(_, _), .fileURL(_, _):
+            uploadAttachmentAndSendMessage(
+                messageObject,
+                attachment: attachmentType,
+                roomId: roomId,
+                completionHandler: completionHandler
+            )
+            break
+        case .link(let url, let type):
+            messageObject["attachment"] = [
+                "resource_link": url,
+                "type": type
+            ]
+            sendMessage(messageObject, roomId: roomId, completionHandler: completionHandler)
+            break
         }
     }
 
@@ -918,7 +921,7 @@ public final class PCCurrentUser {
                 let messages = PCSynchronizedArray<PCMessage>()
                 var basicMessages: [PCBasicMessage] = []
 
-                let messageUserIds = messagesPayload.flatMap { messagePayload -> String? in
+                let messageUserIds = messagesPayload.compactMap { messagePayload -> String? in
                     do {
                         let basicMessage = try PCPayloadDeserializer.createBasicMessageFromPayload(messagePayload)
                         basicMessages.append(basicMessage)
