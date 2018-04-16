@@ -103,6 +103,9 @@ import PusherPlatform
                             currentUser?.userSubscription = basicCurrentUser.userSubscription
                             currentUser?.presenceSubscription = basicCurrentUser.presenceSubscription
                             currentUser?.cursorSubscription = basicCurrentUser.cursorSubscription
+
+                            // TODO: This is madness
+                            currentUser?.userSubscription?.currentUser = currentUser
                         default:
                             break
                         }
