@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.7.0...HEAD)
+## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.7.1...HEAD)
+
+## [0.7.1](https://github.com/pusher/chatkit-swift/compare/0.7.0...0.7.1) - 2018-04-16
+
+### Fixed
+
+- Fixed `sendMessage` not working if no `attachment` was provided [@steve228uk](https://github.com/steve228uk)
+- `leaveRoom` no longer recursively calls itself [#74](https://github.com/pusher/chatkit-swift/issues/74)
 
 ## [0.7.0](https://github.com/pusher/chatkit-swift/compare/0.6.4...0.7.0) - 2018-03-26
 
