@@ -25,7 +25,7 @@ import PusherPlatform
         let sharedBaseClient = baseClient ?? PCBaseClient(host: "\(cluster).pusherplatform.io")
         sharedBaseClient.logger = logger
 
-        let sdkInfo = PPSDKInfo(productName: "chatkit", sdkVersion: "0.7.1")
+        let sdkInfo = PPSDKInfo(productName: "chatkit", sdkVersion: "0.7.2")
 
         let sharedInstanceOptions = PCSharedInstanceOptions(
             locator: instanceLocator,
