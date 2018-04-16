@@ -404,7 +404,7 @@ public final class PCCurrentUser {
     }
 
     public func leaveRoom(id roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
-        self.leaveRoom(id: roomId, completionHandler: completionHandler)
+        self.leaveRoom(roomId: roomId, completionHandler: completionHandler)
     }
 
     fileprivate func leaveRoom(roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
