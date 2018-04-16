@@ -35,7 +35,7 @@ class ViewController: UIViewController {
             guard let strongSelf = self, let currentUser = currentUser else { return }
             strongSelf.pusherChatUser = currentUser
 
-            print(currentUser.rooms.flatMap { String($0.id) }.joined(separator: ", "))
+            print(currentUser.rooms.compactMap { String($0.id) }.joined(separator: ", "))
 
             if currentUser.rooms.count != 0 {
                 strongSelf.currentRoom = currentUser.rooms.last!
@@ -155,11 +155,11 @@ extension ViewController: PCChatManagerDelegate {
         print("Room deleted: \(room.name)")
     }
 
-    public func userJoinedRoom(_ room: PCRoom, user: PCUser) {
+    public func userJoinedRoom(room: PCRoom, user: PCUser) {
         print("User \(user.displayName) joined room: \(room.name)")
     }
 
-    public func userLeftRoom(_ room: PCRoom, user: PCUser) {
+    public func userLeftRoom(room: PCRoom, user: PCUser) {
         print("User \(user.displayName) left room: \(room.name)")
     }
 
