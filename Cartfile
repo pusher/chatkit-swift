@@ -1,4 +1,4 @@
-github "pusher/pusher-platform-swift" ~> 0.4.2
+github "pusher/pusher-platform-swift" ~> 0.5.0
 
 # you'll need something like this if working locally and you want
 # to test changes to pusher-platform-swift
