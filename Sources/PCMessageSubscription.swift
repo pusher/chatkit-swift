@@ -2,7 +2,7 @@ import Foundation
 import PusherPlatform
 
 public final class PCMessageSubscription {
-    public var delegate: PCRoomDelegate?
+    public weak var delegate: PCRoomDelegate?
     let resumableSubscription: PPResumableSubscription
     public var logger: PPLogger
     let basicMessageEnricher: PCBasicMessageEnricher

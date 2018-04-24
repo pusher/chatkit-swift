@@ -2,9 +2,9 @@ import Foundation
 import PusherPlatform
 
 public final class PCRoomSubscription {
-    let messageSubscription: PCMessageSubscription
-    let cursorSubscription: PCCursorSubscription
-    public var delegate: PCRoomDelegate
+    weak var messageSubscription: PCMessageSubscription?
+    weak var cursorSubscription: PCCursorSubscription?
+    public weak var delegate: PCRoomDelegate?
 
     init(
         messageSubscription: PCMessageSubscription,
@@ -17,7 +17,10 @@ public final class PCRoomSubscription {
     }
 
     func end() {
-        self.messageSubscription.end()
-        self.cursorSubscription.end()
+        self.messageSubscription?.end()
+        self.cursorSubscription?.end()
+        
+        self.messageSubscription = nil
+        self.cursorSubscription = nil
     }
 }
