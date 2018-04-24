@@ -8,7 +8,7 @@ public final class PCCursorSubscription {
     let cursorStore: PCCursorStore
     let connectionCoordinator: PCConnectionCoordinator
     public var logger: PPLogger
-    let initialStateHandler: (Error?) -> Void
+    var initialStateHandler: ((Error?) -> Void)?
 
     init(
         delegate: PCRoomDelegate? = nil,
@@ -24,6 +24,10 @@ public final class PCCursorSubscription {
         self.connectionCoordinator = connectionCoordinator
         self.logger = logger
         self.initialStateHandler = initialStateHandler
+    }
+
+    deinit {
+        initialStateHandler = nil
     }
 
     func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
@@ -69,12 +73,12 @@ extension PCCursorSubscription {
                 apiEventName: eventName,
                 payload: data
             )
-            initialStateHandler(error)
+            initialStateHandler?(error)
             return
         }
 
         guard cursorsPayload.count > 0 else {
-            initialStateHandler(nil)
+            initialStateHandler?(nil)
             return
         }
 
@@ -85,12 +89,12 @@ extension PCCursorSubscription {
                 let basicCursor = try PCPayloadDeserializer.createBasicCursorFromPayload(cursorPayload)
                 self.cursorStore.set(basicCursor)
                 if cursorsProgressCounter.incrementSuccessAndCheckIfFinished() {
-                    self.initialStateHandler(nil)
+                    self.initialStateHandler?(nil)
                 }
             } catch let err {
                 self.logger.log(err.localizedDescription, logLevel: .debug)
                 if cursorsProgressCounter.incrementFailedAndCheckIfFinished() {
-                    self.initialStateHandler(err)
+                    self.initialStateHandler?(err)
                 }
             }
         }
