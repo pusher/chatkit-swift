@@ -3,7 +3,7 @@ import PusherPlatform
 
 public final class PCCursorSubscription {
     // TODO: Do we still need this?
-    let delegate: PCRoomDelegate?
+    weak var delegate: PCRoomDelegate?
     let resumableSubscription: PPResumableSubscription
     let cursorStore: PCCursorStore
     let connectionCoordinator: PCConnectionCoordinator
