@@ -271,7 +271,7 @@ import PusherPlatform
                                 logLevel: .debug
                             )
                             if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
-                                room.subscription?.delegate.usersUpdated()
+                                room.subscription?.delegate?.usersUpdated()
                                 strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
 
                                 if combinedRoomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
@@ -284,7 +284,7 @@ import PusherPlatform
                         room.userStore.addOrMerge(user)
 
                         if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
-                            room.subscription?.delegate.usersUpdated()
+                            room.subscription?.delegate?.usersUpdated()
                             strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
 
                             if combinedRoomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {

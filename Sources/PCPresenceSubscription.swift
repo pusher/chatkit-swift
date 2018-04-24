@@ -110,7 +110,7 @@ extension PCPresenceSubscription {
             }
 
             strongSelf.roomStore.rooms.forEach { room in
-                room.subscription?.delegate.usersUpdated()
+                room.subscription?.delegate?.usersUpdated()
                 strongSelf.presenceInstance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
             }
             strongSelf.connectionCoordinator.connectionEventCompleted(PCConnectionEvent(presenceSubscription: strongSelf, error: nil))
@@ -161,8 +161,8 @@ extension PCPresenceSubscription {
                     }
 
                     switch presencePayload.state {
-                    case .online: room.subscription?.delegate.userCameOnlineInRoom(user: user)
-                    case .offline: room.subscription?.delegate.userWentOfflineInRoom(user: user)
+                    case .online: room.subscription?.delegate?.userCameOnlineInRoom(user: user)
+                    case .offline: room.subscription?.delegate?.userWentOfflineInRoom(user: user)
                     default: return
                     }
                 }
@@ -205,7 +205,7 @@ extension PCPresenceSubscription {
         // TODO: So much duplication
         userStore.handleInitialPresencePayloadsAfterRoomJoin(userStates) {
             self.roomStore.rooms.forEach { room in
-                room.subscription?.delegate.usersUpdated()
+                room.subscription?.delegate?.usersUpdated()
                 self.presenceInstance.logger.log(
                     "Users updated " + room.users.map { "\($0.id), \($0.name ?? ""), \($0.presenceState.rawValue)" }.joined(separator: "; "),
                     logLevel: .verbose
