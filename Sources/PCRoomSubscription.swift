@@ -4,7 +4,7 @@ import PusherPlatform
 public final class PCRoomSubscription {
     let messageSubscription: PCMessageSubscription
     let cursorSubscription: PCCursorSubscription
-    public var delegate: PCRoomDelegate
+    public weak var delegate: PCRoomDelegate?
 
     init(
         messageSubscription: PCMessageSubscription,

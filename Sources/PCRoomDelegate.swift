@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-public protocol PCRoomDelegate {
+public protocol PCRoomDelegate: NSObjectProtocol {
     func newMessage(message: PCMessage)
 
     func userStartedTyping(user: PCUser)
