@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3301FDDA2046FD7400AE591A /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33831C891A9CF61600B124F1 /* PusherChatkit.framework */; };
 		33023E23200CB4A4001937C6 /* PCAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33023E22200CB4A4001937C6 /* PCAttachment.swift */; };
+		33072A0720923BBC00E85E6B /* PCReadCursorDebouncerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33072A0620923BBC00E85E6B /* PCReadCursorDebouncerManager.swift */; };
 		3314212F1ED32AE700D0B6DB /* PCProgressCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3314212E1ED32AE700D0B6DB /* PCProgressCounter.swift */; };
 		331421311ED32B5F00D0B6DB /* PCBasicUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331421301ED32B5F00D0B6DB /* PCBasicUser.swift */; };
 		331421331ED33C1400D0B6DB /* PCTypingIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331421321ED33C1400D0B6DB /* PCTypingIndicatorManager.swift */; };
@@ -17,6 +18,7 @@
 		331F9BD91EBC80FA00C3F678 /* PCPayloadDeserializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331F9BD81EBC80FA00C3F678 /* PCPayloadDeserializer.swift */; };
 		3336C8151EE045FE005EB69A /* PCRoomUserStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3336C8141EE045FE005EB69A /* PCRoomUserStore.swift */; };
 		3336C8171EE046F0005EB69A /* PCUserStoreCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3336C8161EE046F0005EB69A /* PCUserStoreCore.swift */; };
+		333F8EF120936F1200072799 /* PCDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 333F8EF020936F1200072799 /* PCDefaults.swift */; };
 		334B9A2B1ECC9F7A007A3D3B /* PCGlobalUserStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334B9A2A1ECC9F7A007A3D3B /* PCGlobalUserStore.swift */; };
 		334B9A2D1ECCA16A007A3D3B /* PCRoomStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334B9A2C1ECCA16A007A3D3B /* PCRoomStore.swift */; };
 		334B9A311ECD98A7007A3D3B /* PCBasicMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334B9A301ECD98A7007A3D3B /* PCBasicMessage.swift */; };
@@ -63,6 +65,7 @@
 
 /* Begin PBXFileReference section */
 		33023E22200CB4A4001937C6 /* PCAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCAttachment.swift; sourceTree = "<group>"; };
+		33072A0620923BBC00E85E6B /* PCReadCursorDebouncerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCReadCursorDebouncerManager.swift; sourceTree = "<group>"; };
 		3314212E1ED32AE700D0B6DB /* PCProgressCounter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCProgressCounter.swift; sourceTree = "<group>"; };
 		331421301ED32B5F00D0B6DB /* PCBasicUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCBasicUser.swift; sourceTree = "<group>"; };
 		331421321ED33C1400D0B6DB /* PCTypingIndicatorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCTypingIndicatorManager.swift; sourceTree = "<group>"; };
@@ -72,6 +75,7 @@
 		33346ABF1EAE1887002C58B8 /* PusherChatkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PusherChatkit.h; sourceTree = "<group>"; };
 		3336C8141EE045FE005EB69A /* PCRoomUserStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCRoomUserStore.swift; sourceTree = "<group>"; };
 		3336C8161EE046F0005EB69A /* PCUserStoreCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCUserStoreCore.swift; sourceTree = "<group>"; };
+		333F8EF020936F1200072799 /* PCDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCDefaults.swift; sourceTree = "<group>"; };
 		334B9A2A1ECC9F7A007A3D3B /* PCGlobalUserStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCGlobalUserStore.swift; sourceTree = "<group>"; };
 		334B9A2C1ECCA16A007A3D3B /* PCRoomStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCRoomStore.swift; sourceTree = "<group>"; };
 		334B9A301ECD98A7007A3D3B /* PCBasicMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCBasicMessage.swift; sourceTree = "<group>"; };
@@ -163,6 +167,7 @@
 				3388D5F01EAE4DD40072A742 /* PCChatManagerDelegate.swift */,
 				3388D5F21EAE4DFB0072A742 /* PCRoom.swift */,
 				339CABD21EC3078200FDFB58 /* PCRoomDelegate.swift */,
+				333F8EF020936F1200072799 /* PCDefaults.swift */,
 				3336C8161EE046F0005EB69A /* PCUserStoreCore.swift */,
 				334B9A2A1ECC9F7A007A3D3B /* PCGlobalUserStore.swift */,
 				3336C8141EE045FE005EB69A /* PCRoomUserStore.swift */,
@@ -188,6 +193,7 @@
 				335AD5E5205828F6000D4D08 /* PCCursorStore.swift */,
 				337C0B27205FFC7E00BB977A /* PCSharedInstanceOptions.swift */,
 				33B3DD9E1EF7E2F60050CA02 /* PCTokenProvider.swift */,
+				33072A0620923BBC00E85E6B /* PCReadCursorDebouncerManager.swift */,
 				33E3EBC6200E2368003D888D /* PPTypealiases.swift */,
 				33831C8C1A9CF61600B124F1 /* Supporting Files */,
 				33346ABF1EAE1887002C58B8 /* PusherChatkit.h */,
@@ -373,9 +379,11 @@
 				33023E23200CB4A4001937C6 /* PCAttachment.swift in Sources */,
 				334B9A2D1ECCA16A007A3D3B /* PCRoomStore.swift in Sources */,
 				3388D5F51EAE4E100072A742 /* PCMessage.swift in Sources */,
+				333F8EF120936F1200072799 /* PCDefaults.swift in Sources */,
 				3388D5F71EAE4E330072A742 /* PCCurrentUser.swift in Sources */,
 				337C0B28205FFC7E00BB977A /* PCSharedInstanceOptions.swift in Sources */,
 				3388D5F11EAE4DD40072A742 /* PCChatManagerDelegate.swift in Sources */,
+				33072A0720923BBC00E85E6B /* PCReadCursorDebouncerManager.swift in Sources */,
 				3388D5F31EAE4DFB0072A742 /* PCRoom.swift in Sources */,
 				33C5D8F72020837100E826FB /* PCCursorType.swift in Sources */,
 				335AD5E6205828F7000D4D08 /* PCCursorStore.swift in Sources */,
