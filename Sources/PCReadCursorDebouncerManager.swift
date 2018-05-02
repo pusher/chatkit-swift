@@ -78,7 +78,10 @@ class PCReadCursorDebouncer {
         }
 
         guard let payload = self.sendReadCursorPayload else {
-            print("sendReadCursorPayload is nil so can't set read cursor")
+            currentUser.instance.logger.log(
+                "sendReadCursorPayload is nil so can't set read cursor",
+                logLevel: .debug
+            )
             return
         }
 
