@@ -13,10 +13,6 @@ public final class PCCurrentUser {
     let roomStore: PCRoomStore
     let cursorStore: PCCursorStore
 
-    public typealias ErrorCompletionHandler = (Error?) -> Void
-    public typealias RoomCompletionHandler = (PCRoom?, Error?) -> Void
-    public typealias RoomsCompletionHandler = ([PCRoom]?, Error?) -> Void
-
     // TODO: This should probably be [PCUser] instead, like the users property
     // in PCRoom, or something even simpler
     public var users: Set<PCUser> {
@@ -36,13 +32,6 @@ public final class PCCurrentUser {
     var typingIndicatorManagers: [Int: PCTypingIndicatorManager] = [:]
     private var typingIndicatorQueue = DispatchQueue(label: "com.pusher.chatkit.typing-indicators")
 
-    let instance: Instance
-    let filesInstance: Instance
-    let cursorsInstance: Instance
-    let presenceInstance: Instance
-
-    let connectionCoordinator: PCConnectionCoordinator
-
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -51,6 +40,17 @@ public final class PCCurrentUser {
 
     public var createdAtDate: Date { return self.dateFormatter.date(from: self.createdAt)! }
     public var updatedAtDate: Date { return self.dateFormatter.date(from: self.updatedAt)! }
+
+    let instance: Instance
+    let filesInstance: Instance
+    let cursorsInstance: Instance
+    let presenceInstance: Instance
+
+    let connectionCoordinator: PCConnectionCoordinator
+
+    private lazy var readCursorDebouncerManager: PCReadCursorDebouncerManager = {
+        return PCReadCursorDebouncerManager(currentUser: self)
+    }()
 
     public init(
         id: String,
@@ -96,7 +96,7 @@ public final class PCCurrentUser {
         name: String,
         isPrivate: Bool = false,
         addUserIds userIds: [String]? = nil,
-        completionHandler: @escaping RoomCompletionHandler
+        completionHandler: @escaping PCRoomCompletionHandler
     ) {
         var roomObject: [String: Any] = [
             "name": name,
@@ -150,37 +150,37 @@ public final class PCCurrentUser {
 
     // MARK: Room membership-related interactions
 
-    public func addUser(_ user: PCUser, to room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
+    public func addUser(_ user: PCUser, to room: PCRoom, completionHandler: @escaping PCErrorCompletionHandler) {
         self.addUsers([user], to: room, completionHandler: completionHandler)
     }
 
-    public func addUser(id: String, to roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+    public func addUser(id: String, to roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
         self.addOrRemoveUsers(in: roomId, userIds: [id], membershipChange: .add, completionHandler: completionHandler)
     }
 
-    public func addUsers(_ users: [PCUser], to room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
+    public func addUsers(_ users: [PCUser], to room: PCRoom, completionHandler: @escaping PCErrorCompletionHandler) {
         let userIds = users.map { $0.id }
         self.addUsers(ids: userIds, to: room.id, completionHandler: completionHandler)
     }
 
-    public func addUsers(ids: [String], to roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+    public func addUsers(ids: [String], to roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
         self.addOrRemoveUsers(in: roomId, userIds: ids, membershipChange: .add, completionHandler: completionHandler)
     }
 
-    public func removeUser(_ user: PCUser, from room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
+    public func removeUser(_ user: PCUser, from room: PCRoom, completionHandler: @escaping PCErrorCompletionHandler) {
         self.removeUsers([user], from: room, completionHandler: completionHandler)
     }
 
-    public func removeUser(id: String, from roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+    public func removeUser(id: String, from roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
         self.removeUsers(ids: [id], from: roomId, completionHandler: completionHandler)
     }
 
-    public func removeUsers(_ users: [PCUser], from room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
+    public func removeUsers(_ users: [PCUser], from room: PCRoom, completionHandler: @escaping PCErrorCompletionHandler) {
         let userIds = users.map { $0.id }
         self.removeUsers(ids: userIds, from: room.id, completionHandler: completionHandler)
     }
 
-    public func removeUsers(ids: [String], from roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+    public func removeUsers(ids: [String], from roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
         self.addOrRemoveUsers(in: roomId, userIds: ids, membershipChange: .remove, completionHandler: completionHandler)
     }
 
@@ -193,7 +193,7 @@ public final class PCCurrentUser {
      * - parameter isPrivate: Indicates if a room should be private or public.
      * - parameter completionHandler: Invoked when request failed or completed.
      */
-    public func updateRoom(_ room: PCRoom, name: String? = nil, isPrivate: Bool? = nil, completionHandler: @escaping ErrorCompletionHandler) {
+    public func updateRoom(_ room: PCRoom, name: String? = nil, isPrivate: Bool? = nil, completionHandler: @escaping PCErrorCompletionHandler) {
         self.updateRoom(roomId: room.id, name: name, isPrivate: isPrivate, completionHandler: completionHandler)
     }
 
@@ -205,11 +205,11 @@ public final class PCCurrentUser {
      * - parameter isPrivate: Indicates if a room should be private or public.
      * - parameter completionHandler: Invoked when request failed or completed.
      */
-    public func updateRoom(id: Int, name: String? = nil, isPrivate: Bool? = nil, completionHandler: @escaping ErrorCompletionHandler) {
+    public func updateRoom(id: Int, name: String? = nil, isPrivate: Bool? = nil, completionHandler: @escaping PCErrorCompletionHandler) {
         self.updateRoom(roomId: id, name: name, isPrivate: isPrivate, completionHandler: completionHandler)
     }
 
-    fileprivate func updateRoom(roomId: Int, name: String?, isPrivate: Bool?, completionHandler: @escaping ErrorCompletionHandler) {
+    fileprivate func updateRoom(roomId: Int, name: String?, isPrivate: Bool?, completionHandler: @escaping PCErrorCompletionHandler) {
         guard name != nil || isPrivate != nil else {
             completionHandler(nil)
             return
@@ -250,7 +250,7 @@ public final class PCCurrentUser {
      * - parameter room: The room which should be deleted.
      * - parameter completionHandler: Invoked when request failed or completed.
      */
-    public func deleteRoom(_ room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
+    public func deleteRoom(_ room: PCRoom, completionHandler: @escaping PCErrorCompletionHandler) {
         self.deleteRoom(roomId: room.id, completionHandler: completionHandler)
     }
 
@@ -260,11 +260,11 @@ public final class PCCurrentUser {
      * - parameter id: The id of the room which should be deleted.
      * - parameter completionHandler: Invoked when request failed or completed.
      */
-    public func deleteRoom(id: Int, completionHandler: @escaping ErrorCompletionHandler) {
+    public func deleteRoom(id: Int, completionHandler: @escaping PCErrorCompletionHandler) {
         self.deleteRoom(roomId: id, completionHandler: completionHandler)
     }
 
-    fileprivate func deleteRoom(roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+    fileprivate func deleteRoom(roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
         let path = "/rooms/\(roomId)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.DELETE.rawValue, path: path)
 
@@ -283,7 +283,7 @@ public final class PCCurrentUser {
         in roomId: Int,
         userIds: [String],
         membershipChange: PCUserMembershipChange,
-        completionHandler: @escaping ErrorCompletionHandler
+        completionHandler: @escaping PCErrorCompletionHandler
     ) {
         let userPayload = ["user_ids": userIds]
 
@@ -316,15 +316,15 @@ public final class PCCurrentUser {
         case remove
     }
 
-    public func joinRoom(_ room: PCRoom, completionHandler: @escaping RoomCompletionHandler) {
+    public func joinRoom(_ room: PCRoom, completionHandler: @escaping PCRoomCompletionHandler) {
         self.joinRoom(roomId: room.id, completionHandler: completionHandler)
     }
 
-    public func joinRoom(id: Int, completionHandler: @escaping RoomCompletionHandler) {
+    public func joinRoom(id: Int, completionHandler: @escaping PCRoomCompletionHandler) {
         self.joinRoom(roomId: id, completionHandler: completionHandler)
     }
 
-    fileprivate func joinRoom(roomId: Int, completionHandler: @escaping RoomCompletionHandler) {
+    fileprivate func joinRoom(roomId: Int, completionHandler: @escaping PCRoomCompletionHandler) {
         if let room = self.rooms.first(where: { $0.id == roomId }) {
             completionHandler(room, nil)
             return
@@ -399,15 +399,15 @@ public final class PCCurrentUser {
         }
     }
 
-    public func leaveRoom(_ room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
+    public func leaveRoom(_ room: PCRoom, completionHandler: @escaping PCErrorCompletionHandler) {
         self.leaveRoom(roomId: room.id, completionHandler: completionHandler)
     }
 
-    public func leaveRoom(id roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+    public func leaveRoom(id roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
         self.leaveRoom(roomId: roomId, completionHandler: completionHandler)
     }
 
-    fileprivate func leaveRoom(roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+    fileprivate func leaveRoom(roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
         let path = "/users/\(self.pathFriendlyId)/rooms/\(roomId)/leave"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
 
@@ -424,11 +424,11 @@ public final class PCCurrentUser {
 
     // MARK: Room fetching
 
-    public func getJoinableRooms(completionHandler: @escaping RoomsCompletionHandler) {
+    public func getJoinableRooms(completionHandler: @escaping PCRoomsCompletionHandler) {
         self.getUserRooms(onlyJoinable: true, completionHandler: completionHandler)
     }
 
-    fileprivate func getUserRooms(onlyJoinable: Bool = false, completionHandler: @escaping RoomsCompletionHandler) {
+    fileprivate func getUserRooms(onlyJoinable: Bool = false, completionHandler: @escaping PCRoomsCompletionHandler) {
         let path = "/users/\(self.pathFriendlyId)/rooms"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
@@ -437,7 +437,7 @@ public final class PCCurrentUser {
         self.getRooms(request: generalRequest, completionHandler: completionHandler)
     }
 
-    fileprivate func getRooms(request: PPRequestOptions, completionHandler: @escaping RoomsCompletionHandler) {
+    fileprivate func getRooms(request: PPRequestOptions, completionHandler: @escaping PCRoomsCompletionHandler) {
         self.instance.requestWithRetry(
             using: request,
             onSuccess: { data in
@@ -474,7 +474,7 @@ public final class PCCurrentUser {
     fileprivate func typingStateChange(
         eventPayload: [String: Any],
         roomId: Int,
-        completionHandler: @escaping ErrorCompletionHandler
+        completionHandler: @escaping PCErrorCompletionHandler
     ) {
         guard JSONSerialization.isValidJSONObject(eventPayload) else {
             completionHandler(PCError.invalidJSONObjectAsData(eventPayload))
@@ -516,22 +516,22 @@ public final class PCCurrentUser {
         typingIndicatorManager.typing()
     }
 
-    func startedTypingIn(roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+    func startedTypingIn(roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
         let eventPayload: [String: Any] = ["name": "typing_start", "user_id": self.id]
         self.typingStateChange(eventPayload: eventPayload, roomId: roomId, completionHandler: completionHandler)
     }
 
-    func stoppedTypingIn(roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
+    func stoppedTypingIn(roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
         let eventPayload: [String: Any] = ["name": "typing_stop", "user_id": self.id]
         self.typingStateChange(eventPayload: eventPayload, roomId: roomId, completionHandler: completionHandler)
     }
 
-    public func startedTypingIn(_ room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
+    public func startedTypingIn(_ room: PCRoom, completionHandler: @escaping PCErrorCompletionHandler) {
         let eventPayload: [String: Any] = ["name": "typing_start", "user_id": self.id]
         self.typingStateChange(eventPayload: eventPayload, roomId: room.id, completionHandler: completionHandler)
     }
 
-    public func stoppedTypingIn(_ room: PCRoom, completionHandler: @escaping ErrorCompletionHandler) {
+    public func stoppedTypingIn(_ room: PCRoom, completionHandler: @escaping PCErrorCompletionHandler) {
         let eventPayload: [String: Any] = ["name": "typing_stop", "user_id": self.id]
         self.typingStateChange(eventPayload: eventPayload, roomId: room.id, completionHandler: completionHandler)
     }
@@ -990,8 +990,12 @@ public final class PCCurrentUser {
         return self.cursorStore.getSync(userId: userIdToCheck, roomId: roomId)
     }
 
-    public func setReadCursor(position: Int, roomId: Int, completionHandler: @escaping ErrorCompletionHandler) {
-        let cursorObject = [ "position": position ]
+    public func setReadCursor(position: Int, roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+        readCursorDebouncerManager.set(cursorPosition: position, inRoomId: roomId, completionHandler: completionHandler)
+    }
+
+    func sendReadCursor(position: Int, roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+        let cursorObject = ["position": position]
 
         guard JSONSerialization.isValidJSONObject(cursorObject) else {
             completionHandler(PCError.invalidJSONObjectAsData(cursorObject))
@@ -1017,7 +1021,7 @@ public final class PCCurrentUser {
                 completionHandler(err)
             }
         )
-  }
+    }
 }
 
 public enum PCCurrentUserError: Error {
@@ -1053,3 +1057,7 @@ public enum PCRoomMessageFetchDirection: String {
     case older
     case newer
 }
+
+public typealias PCErrorCompletionHandler = (Error?) -> Void
+public typealias PCRoomCompletionHandler = (PCRoom?, Error?) -> Void
+public typealias PCRoomsCompletionHandler = ([PCRoom]?, Error?) -> Void
