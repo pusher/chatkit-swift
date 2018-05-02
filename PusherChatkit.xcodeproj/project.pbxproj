@@ -44,6 +44,7 @@
 		33BA563C200E634C00FFC587 /* PCAttachmentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BA563B200E634C00FFC587 /* PCAttachmentType.swift */; };
 		33BA563E200E63DF00FFC587 /* PCFetchedAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BA563D200E63DF00FFC587 /* PCFetchedAttachment.swift */; };
 		33BA5640200E640600FFC587 /* PCAttachmentUploadResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BA563F200E640600FFC587 /* PCAttachmentUploadResponse.swift */; };
+		33BC0810209A1765001DB5F9 /* DefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BC080F209A1765001DB5F9 /* DefaultsTests.swift */; };
 		33C5D8F5202082EB00E826FB /* PCBasicCursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C5D8F4202082EB00E826FB /* PCBasicCursor.swift */; };
 		33C5D8F72020837100E826FB /* PCCursorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C5D8F62020837100E826FB /* PCCursorType.swift */; };
 		33C5D8F92020842200E826FB /* PCCursorSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C5D8F82020842200E826FB /* PCCursorSubscription.swift */; };
@@ -105,6 +106,7 @@
 		33BA563D200E63DF00FFC587 /* PCFetchedAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCFetchedAttachment.swift; sourceTree = "<group>"; };
 		33BA563F200E640600FFC587 /* PCAttachmentUploadResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCAttachmentUploadResponse.swift; sourceTree = "<group>"; };
 		33BB99671D21226C00B25C2A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Tests/Info.plist; sourceTree = "<group>"; };
+		33BC080F209A1765001DB5F9 /* DefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsTests.swift; sourceTree = "<group>"; };
 		33C5D8F4202082EB00E826FB /* PCBasicCursor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCBasicCursor.swift; sourceTree = "<group>"; };
 		33C5D8F62020837100E826FB /* PCCursorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCCursorType.swift; sourceTree = "<group>"; };
 		33C5D8F82020842200E826FB /* PCCursorSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCCursorSubscription.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 			children = (
 				33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */,
 				337C0C9520615A6600BB977A /* TokenProviderTests.swift */,
+				33BC080F209A1765001DB5F9 /* DefaultsTests.swift */,
 				33BB99671D21226C00B25C2A /* Info.plist */,
 			);
 			path = Tests;
@@ -406,6 +409,7 @@
 			files = (
 				337C0C9620615A6600BB977A /* TokenProviderTests.swift in Sources */,
 				33D2A5AF1E39075100EA7549 /* ChatManagerTests.swift in Sources */,
+				33BC0810209A1765001DB5F9 /* DefaultsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
