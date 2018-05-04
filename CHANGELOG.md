@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.8.1...HEAD)
+## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.8.2...HEAD)
+
+## [0.8.2](https://github.com/pusher/chatkit-swift/compare/0.8.1...0.8.2) - 2018-05-04
+
+### Changed
+
+- Requests resulting from `setReadCursor` are batched up if made in quick succession
+- File upload path has been updated to include the user ID
 
 ## [0.8.1](https://github.com/pusher/chatkit-swift/compare/0.8.0...0.8.1) - 2018-04-24
 
