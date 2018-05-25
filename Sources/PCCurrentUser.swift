@@ -948,7 +948,7 @@ public final class PCCurrentUser {
                     basicMessages.forEach { basicMessage in
                         messageEnricher.enrich(basicMessage) { [weak self] message, err in
                             guard let strongSelf = self else {
-                                print("self is enrichment of basicMessage has completed")
+                                print("self is nil in enrichment of basicMessage")
                                 return
                             }
 
@@ -962,9 +962,10 @@ public final class PCCurrentUser {
                                 return
                             }
 
-                            messages.append(message)
-                            if progressCounter.incrementSuccessAndCheckIfFinished() {
-                                completionHandler(messages.underlyingArray.sorted(by: { $0.id > $1.id }), nil)
+                            messages.append(message) {
+                                if progressCounter.incrementSuccessAndCheckIfFinished() {
+                                    completionHandler(messages.underlyingArray.sorted(by: { $0.id > $1.id }), nil)
+                                }
                             }
                         }
                     }
