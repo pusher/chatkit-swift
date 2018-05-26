@@ -917,6 +917,11 @@ public final class PCCurrentUser {
                     return
                 }
 
+                guard messagesPayload.count > 0 else {
+                    completionHandler([], nil)
+                    return
+                }
+
                 let progressCounter = PCProgressCounter(totalCount: messagesPayload.count, labelSuffix: "message-enricher")
                 let messages = PCSynchronizedArray<PCMessage>()
                 var basicMessages: [PCBasicMessage] = []
