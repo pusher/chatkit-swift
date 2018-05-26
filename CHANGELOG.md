@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.8.3...HEAD)
+## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.8.4...HEAD)
+
+## [0.8.4](https://github.com/pusher/chatkit-swift/compare/0.8.3...0.8.4) - 2018-05-26
+
+### Fixed
+
+- Ensure that `fetchMessagesFromRoom` calls completion handler even if no messages were fetched
 
 ## [0.8.3](https://github.com/pusher/chatkit-swift/compare/0.8.2...0.8.3) - 2018-05-25
 
