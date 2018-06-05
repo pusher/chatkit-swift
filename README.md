@@ -12,6 +12,10 @@
 ### Minimum Requirements
 * [Xcode](https://itunes.apple.com/us/app/xcode/id497799835) - The easiest way to get Xcode is from the [App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12), but you can also download it from [developer.apple.com](https://developer.apple.com/) if you have an AppleID registered with an Apple Developer account.
 
+* Swift version 4.1 and above
+
+* iOS version 10.0
+
 Before building & running in Xcode, install all of the required dependencies with [Carthage](https://github.com/pusher/chatkit-tutorial-ios#carthage) or [CocoaPods](https://github.com/pusher/chatkit-tutorial-ios#cocoapods).
 
 ## Installation
