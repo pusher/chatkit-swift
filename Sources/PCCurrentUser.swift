@@ -688,18 +688,15 @@ public final class PCCurrentUser {
 
     public func sendMessage(
         roomId: Int,
-        text: String? = nil,
+        text: String,
         attachmentType: PCAttachmentType? = nil,
         completionHandler: @escaping (Int?, Error?) -> Void
     ) {
         var messageObject: [String: Any] = [
-            "user_id": self.id
+            "user_id": self.id,
+            "text": text
         ]
 
-        if let text = text {
-            messageObject["text"] = text
-        }
-        
         guard let attachmentType = attachmentType else {
             sendMessage(messageObject, roomId: roomId, completionHandler: completionHandler)
             return
