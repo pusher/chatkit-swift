@@ -86,6 +86,7 @@ struct PCPayloadDeserializer {
             let messageId = messagePayload["id"] as? Int,
             let messageSenderId = messagePayload["user_id"] as? String,
             let messageRoomId = messagePayload["room_id"] as? Int,
+            let messageText = messagePayload["text"] as? String,
             let messageCreatedAt = messagePayload["created_at"] as? String,
             let messageUpdatedAt = messagePayload["updated_at"] as? String
         else {
@@ -96,7 +97,7 @@ struct PCPayloadDeserializer {
             id: messageId,
             senderId: messageSenderId,
             roomId: messageRoomId,
-            text: messagePayload["text"] as? String,
+            text: messageText,
             createdAt: messageCreatedAt,
             updatedAt: messageUpdatedAt,
             attachment: createAttachmentFromPayload(messagePayload["attachment"])

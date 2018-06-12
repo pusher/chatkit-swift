@@ -538,52 +538,6 @@ public final class PCCurrentUser {
 
     // MARK: Message-related interactions
 
-    @available(*, deprecated: 0.5.0, message: "use sendMessage instead")
-    public func addMessage(text: String, to room: PCRoom, completionHandler: @escaping (Int?, Error?) -> Void) {
-        let messageObject: [String: Any] = [
-            "text": text,
-            "user_id": self.id,
-        ]
-
-        guard JSONSerialization.isValidJSONObject(messageObject) else {
-            completionHandler(nil, PCError.invalidJSONObjectAsData(messageObject))
-            return
-        }
-
-        guard let data = try? JSONSerialization.data(withJSONObject: messageObject, options: []) else {
-            completionHandler(nil, PCError.failedToJSONSerializeData(messageObject))
-            return
-        }
-
-        let path = "/rooms/\(room.id)/messages"
-        let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
-
-        self.instance.requestWithRetry(
-            using: generalRequest,
-            onSuccess: { data in
-                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
-                    return
-                }
-
-                guard let messageIdPayload = jsonObject as? [String: Int] else {
-                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
-                    return
-                }
-
-                guard let messageId = messageIdPayload["message_id"] else {
-                    completionHandler(nil, PCMessageError.messageIdKeyMissingInMessageCreationResponse(messageIdPayload))
-                    return
-                }
-
-                completionHandler(messageId, nil)
-            },
-            onError: { error in
-                completionHandler(nil, error)
-            }
-        )
-    }
-
     func sendMessage(_ messageObject: [String: Any], roomId: Int, completionHandler: @escaping (Int?, Error?) -> Void) {
         guard JSONSerialization.isValidJSONObject(messageObject) else {
             completionHandler(nil, PCError.invalidJSONObjectAsData(messageObject))
@@ -688,18 +642,15 @@ public final class PCCurrentUser {
 
     public func sendMessage(
         roomId: Int,
-        text: String? = nil,
+        text: String,
         attachmentType: PCAttachmentType? = nil,
         completionHandler: @escaping (Int?, Error?) -> Void
     ) {
         var messageObject: [String: Any] = [
-            "user_id": self.id
+            "user_id": self.id,
+            "text": text
         ]
 
-        if let text = text {
-            messageObject["text"] = text
-        }
-        
         guard let attachmentType = attachmentType else {
             sendMessage(messageObject, roomId: roomId, completionHandler: completionHandler)
             return
