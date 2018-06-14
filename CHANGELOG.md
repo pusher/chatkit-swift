@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.8.4...HEAD)
 
+### Changed
+
+- `sendMessage` now requires a value for the `text` parameter
+- All `PCMessage`s must have a `text` property
+
 ## [0.8.4](https://github.com/pusher/chatkit-swift/compare/0.8.3...0.8.4) - 2018-05-26
 
 ### Fixed

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'PusherChatkit'
-  s.version          = '0.8.4'
+  s.version          = '0.9.0'
   s.summary          = 'Pusher Chatkit SDK in Swift'
   s.homepage         = 'https://github.com/pusher/chatkit-swift'
   s.license          = 'MIT'
