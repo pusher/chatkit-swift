@@ -56,6 +56,7 @@
 		33C5D8FD2020AA4C00E826FB /* PCBasicCursorEnricher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C5D8FC2020AA4C00E826FB /* PCBasicCursorEnricher.swift */; };
 		33D2A5AF1E39075100EA7549 /* ChatManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */; };
 		33E3EBC7200E2368003D888D /* PPTypealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3EBC6200E2368003D888D /* PPTypealiases.swift */; };
+		33EE67DD20F5176800B0F0AD /* TokenGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EE67DC20F5176800B0F0AD /* TokenGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,7 +114,7 @@
 		33BA563B200E634C00FFC587 /* PCAttachmentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCAttachmentType.swift; sourceTree = "<group>"; };
 		33BA563D200E63DF00FFC587 /* PCFetchedAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCFetchedAttachment.swift; sourceTree = "<group>"; };
 		33BA563F200E640600FFC587 /* PCAttachmentUploadResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCAttachmentUploadResponse.swift; sourceTree = "<group>"; };
-		33BB99671D21226C00B25C2A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Tests/Info.plist; sourceTree = "<group>"; };
+		33BB99671D21226C00B25C2A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33BC080F209A1765001DB5F9 /* DefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsTests.swift; sourceTree = "<group>"; };
 		33C5D8F4202082EB00E826FB /* PCBasicCursor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCBasicCursor.swift; sourceTree = "<group>"; };
 		33C5D8F62020837100E826FB /* PCCursorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCCursorType.swift; sourceTree = "<group>"; };
@@ -122,6 +123,7 @@
 		33C5D8FC2020AA4C00E826FB /* PCBasicCursorEnricher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCBasicCursorEnricher.swift; sourceTree = "<group>"; };
 		33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatManagerTests.swift; sourceTree = "<group>"; };
 		33E3EBC6200E2368003D888D /* PPTypealiases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPTypealiases.swift; sourceTree = "<group>"; };
+		33EE67DC20F5176800B0F0AD /* TokenGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,16 +225,41 @@
 		33BB995C1D21225B00B25C2A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				33D0394D20F6593200B5D87A /* Config */,
 				339768F420F4ED2F00BCB10B /* UserSubscriptionTests.swift */,
 				333D861720F4A97100734402 /* CurrentUserTests.swift */,
 				33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */,
 				337C0C9520615A6600BB977A /* TokenProviderTests.swift */,
 				33BC080F209A1765001DB5F9 /* DefaultsTests.swift */,
-				339768F220F4CC6700BCB10B /* TestConfig.swift */,
-				339768F620F4EEEC00BCB10B /* Helpers.swift */,
-				33BB99671D21226C00B25C2A /* Info.plist */,
+				33D0394C20F650F900B5D87A /* Helpers */,
+				33D0394E20F6594600B5D87A /* Supporting Files */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		33D0394C20F650F900B5D87A /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				339768F620F4EEEC00BCB10B /* Helpers.swift */,
+				33EE67DC20F5176800B0F0AD /* TokenGenerator.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		33D0394D20F6593200B5D87A /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				339768F220F4CC6700BCB10B /* TestConfig.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		33D0394E20F6594600B5D87A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				33BB99671D21226C00B25C2A /* Info.plist */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		42D29A655054030A9B238900 /* Frameworks */ = {
@@ -357,6 +384,7 @@
 			inputPaths = (
 				PusherPlatform,
 				Mockingjay,
+				CryptoSwift,
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (
@@ -426,6 +454,7 @@
 				339768F520F4ED2F00BCB10B /* UserSubscriptionTests.swift in Sources */,
 				333D861820F4A97200734402 /* CurrentUserTests.swift in Sources */,
 				33BC0810209A1765001DB5F9 /* DefaultsTests.swift in Sources */,
+				33EE67DD20F5176800B0F0AD /* TokenGenerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -690,7 +719,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -739,7 +768,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Tests/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/Supporting Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";

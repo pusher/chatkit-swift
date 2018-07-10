@@ -6,6 +6,36 @@ class UserSubscriptionTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+
+        let deleteResourcesEx = expectation(description: "delete resources")
+        let createRolesEx = expectation(description: "create roles")
+        let createUserEx = expectation(description: "create user")
+
+        deleteInstanceResources() { err in
+            guard err == nil else {
+                fatalError(err!.localizedDescription)
+            }
+            deleteResourcesEx.fulfill()
+
+            createStandardInstanceRoles() { err in
+                guard err == nil else {
+                    fatalError(err!.localizedDescription)
+                }
+                createRolesEx.fulfill()
+            }
+            createUser(id: "ash") { err in
+                guard err == nil else {
+                    fatalError(err!.localizedDescription)
+                }
+                createUserEx.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: 10)
+    }
+
+    override func tearDown() {
+        super.tearDown()
     }
 
     func testThatWeCanConnect() {
