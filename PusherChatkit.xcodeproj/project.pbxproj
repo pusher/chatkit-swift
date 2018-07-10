@@ -57,6 +57,7 @@
 		33D2A5AF1E39075100EA7549 /* ChatManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */; };
 		33E3EBC7200E2368003D888D /* PPTypealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3EBC6200E2368003D888D /* PPTypealiases.swift */; };
 		33EE67DD20F5176800B0F0AD /* TokenGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EE67DC20F5176800B0F0AD /* TokenGenerator.swift */; };
+		F2AA717520F7616000BC01DE /* CursorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AA717420F7616000BC01DE /* CursorTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +125,7 @@
 		33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatManagerTests.swift; sourceTree = "<group>"; };
 		33E3EBC6200E2368003D888D /* PPTypealiases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPTypealiases.swift; sourceTree = "<group>"; };
 		33EE67DC20F5176800B0F0AD /* TokenGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenGenerator.swift; sourceTree = "<group>"; };
+		F2AA717420F7616000BC01DE /* CursorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CursorTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,7 +152,6 @@
 			children = (
 				33831C8B1A9CF61600B124F1 /* Sources */,
 				33BB995C1D21225B00B25C2A /* Tests */,
-				33831C8A1A9CF61600B124F1 /* Products */,
 				42D29A655054030A9B238900 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -162,6 +163,7 @@
 				33831C941A9CF61600B124F1 /* PusherChatkitTests.xctest */,
 			);
 			name = Products;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		33831C8B1A9CF61600B124F1 /* Sources */ = {
@@ -226,13 +228,15 @@
 			isa = PBXGroup;
 			children = (
 				33D0394D20F6593200B5D87A /* Config */,
+				33D0394C20F650F900B5D87A /* Helpers */,
+				33831C8A1A9CF61600B124F1 /* Products */,
+				33D0394E20F6594600B5D87A /* Supporting Files */,
+				F2AA717420F7616000BC01DE /* CursorTests.swift */,
 				339768F420F4ED2F00BCB10B /* UserSubscriptionTests.swift */,
 				333D861720F4A97100734402 /* CurrentUserTests.swift */,
 				33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */,
 				337C0C9520615A6600BB977A /* TokenProviderTests.swift */,
 				33BC080F209A1765001DB5F9 /* DefaultsTests.swift */,
-				33D0394C20F650F900B5D87A /* Helpers */,
-				33D0394E20F6594600B5D87A /* Supporting Files */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -448,6 +452,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				339768F320F4CC6700BCB10B /* TestConfig.swift in Sources */,
+				F2AA717520F7616000BC01DE /* CursorTests.swift in Sources */,
 				339768F720F4EEEC00BCB10B /* Helpers.swift in Sources */,
 				337C0C9620615A6600BB977A /* TokenProviderTests.swift in Sources */,
 				33D2A5AF1E39075100EA7549 /* ChatManagerTests.swift in Sources */,
