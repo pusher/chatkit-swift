@@ -47,8 +47,8 @@ class CurrentUserTests: XCTestCase {
                     "data": {
                         "rooms": [],
                         "current_user": {
-                            "id": "hamtest",
-                            "name": "Ham",
+                            "id": "\(userID)",
+                            "name": "\(userID)",
                             "created_at": "2017-04-13T14:10:04Z",
                             "updated_at": "2017-04-13T14:10:04Z"
                         }
