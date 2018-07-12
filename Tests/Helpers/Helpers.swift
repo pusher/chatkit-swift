@@ -44,7 +44,7 @@ func createUser(
         return
     }
 
-    var request = URLRequest(url: serviceURL(.server, "users"))
+    var request = URLRequest(url: testInstanceServiceURL(.server, "users"))
     request.httpMethod = "POST"
     request.httpBody = data
     request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
@@ -62,7 +62,7 @@ func createUser(
 }
 
 func deleteInstanceResources(completionHandler: @escaping (TestHelperError?) -> Void) {
-    var request = URLRequest(url: serviceURL(.server, "resources"))
+    var request = URLRequest(url: testInstanceServiceURL(.server, "resources"))
     request.httpMethod = "DELETE"
     request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
 
@@ -133,7 +133,7 @@ func createRole(
         return
     }
 
-    var request = URLRequest(url: serviceURL(.authorizer, "roles"))
+    var request = URLRequest(url: testInstanceServiceURL(.authorizer, "roles"))
     request.httpMethod = "POST"
     request.httpBody = data
     request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
@@ -161,19 +161,30 @@ func generateSuperuserToken() -> String {
     return encode(claims: claims)
 }
 
-func serviceURL(_ service: ChatkitService, _ path: String) -> URL {
-    let pathlessURL = URL(string: "https://\(testInstanceCluster).pusherplatform.io/services/\(service.stringValue())/v1/\(testInstanceInstanceID)")!
+func testInstanceServiceURL(_ service: ChatkitService, _ path: String) -> URL {
+    return serviceURL(instanceLocator: testInstanceLocator, service: service, path: path)
+}
+
+func serviceURL(instanceLocator: String, service: ChatkitService, path: String) -> URL {
+    let splitInstanceLocator = instanceLocator.split(separator: ":")
+    let instanceCluster = splitInstanceLocator[1]
+    let instanceID = splitInstanceLocator.last!
+    let pathlessURL = URL(string: "https://\(instanceCluster).pusherplatform.io/services/\(service.stringValue())/v1/\(instanceID)")!
     return pathlessURL.appendingPathComponent(path)
 }
 
 enum ChatkitService {
     case server
     case authorizer
+    case presence
+    case cursors
 
     func stringValue() -> String {
         switch self {
         case .server: return "chatkit"
         case .authorizer: return "chatkit_authorizer"
+        case .presence: return "chatkit_presence"
+        case .cursors: return "chatkit_cursors"
         }
     }
 }
