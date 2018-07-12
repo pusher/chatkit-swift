@@ -5,18 +5,49 @@ import PusherPlatform
 var alice: PCCurrentUser?
 var bob: PCCurrentUser?
 var roomId: Int?
-var doneSetUp = false
 
 class CursorTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        if !doneSetUp {
-            alice = user(id: "alice")
-            bob = user(id: "bob")
-            roomId = createRoom(user: user(id: "alice"), roomName: "mushroom", addUserIds: ["bob"]).id
-            doneSetUp = true
+        let deleteResourcesEx = expectation(description: "delete resources")
+        let createRolesEx = expectation(description: "create roles")
+        let createAliceEx = expectation(description: "create Alice")
+        let createBobEx = expectation(description: "create Bob")
+
+        deleteInstanceResources() { err in
+            guard err == nil else {
+                fatalError(err!.localizedDescription)
+            }
+            deleteResourcesEx.fulfill()
+
+            createStandardInstanceRoles() { err in
+                guard err == nil else {
+                    fatalError(err!.localizedDescription)
+                }
+                createRolesEx.fulfill()
+            }
+
+            createUser(id: "alice") { err in
+                guard err == nil else {
+                    fatalError(err!.localizedDescription)
+                }
+                createAliceEx.fulfill()
+            }
+
+            createUser(id: "bob") { err in
+                guard err == nil else {
+                    fatalError(err!.localizedDescription)
+                }
+                createBobEx.fulfill()
+            }
         }
+
+        waitForExpectations(timeout: 10)
+
+        alice = user(id: "alice")
+        bob = user(id: "bob")
+        roomId = createRoom(user: user(id: "alice"), roomName: "mushroom", addUserIds: ["bob"]).id
     }
 
     func testOwnReadCursorUndefinedIfNotSet() {
@@ -47,14 +78,13 @@ class CursorTests: XCTestCase {
             roomDelegate: aliceRoomDelegate
         )
 
-        // TODO can we wait on the subscription to finish (without sleeping...)?
-        sleep(2)
+        sleep(1)
 
         bob?.setReadCursor(position: 42, roomId: roomId!) { error in
             XCTAssertNil(error)
         }
 
-        waitForExpectations(timeout: 50) // why doesn't this work?
+        waitForExpectations(timeout: 5)
     }
 
     func user(id: String, delegate: PCChatManagerDelegate = TestingChatManagerDelegate()) -> PCCurrentUser {
