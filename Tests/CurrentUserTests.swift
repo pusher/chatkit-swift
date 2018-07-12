@@ -14,15 +14,16 @@
 //
 //    func testSendMessageWithAnAttachment() {
 //        let tokenEndpoint = "https://testing-chatkit.com/token"
+//        let userID = "ash"
 //
 //        let chatManager = ChatManager(
 //            instanceLocator: "v1:test:testing",
 //            tokenProvider: PCTokenProvider(url: tokenEndpoint),
-//            userId: "ash",
+//            userId: userID,
 //            logger: TestLogger()
 //        )
 //
-//        stub({ $0.url!.absoluteString == tokenEndpoint }, { req in
+//        stub({ $0.url!.absoluteString == "\(tokenEndpoint)?user_id=\(userID)" }, { req in
 //            let tokenObj: [String : Any] = [
 //                "access_token": "a.good.token",
 //                "expires_in": 86400
@@ -32,12 +33,7 @@
 //            return .success(response, .content(tokenJSON))
 //        })
 //
-//        
-//
-//        stub({ testReq in
-////            dump(testReq)
-//            return testReq.url!.absoluteString == "https://test.pusherplatform.io/services/chatkit/v1/testing/users"
-//        }) { req in
+//        stub({ $0.url!.absoluteString == "https://test.pusherplatform.io/services/chatkit/v1/testing/users" }) { req in
 //            let initialStateEvent = """
 //                {
 //                    "event_name": "initial_state",
@@ -52,33 +48,23 @@
 //                    },
 //                    "timestamp": "2017-03-23T11:36:42Z"
 //                }
-//            """
+//            """.replacingOccurrences(of: "\n", with: "")
 //
-//            let wrappedInitialStateEvent = "[1, \"\", {}, {\"data\": \(initialStateEvent)}]"
+//            let wrappedInitialStateEvent = "[1, \"\", {}, \(initialStateEvent)]\n"
 //            let initialStateSubEvent = SubscriptionEvent(data: wrappedInitialStateEvent.data(using: .utf8)!, delay: 0.0)
-//
-////            let subEvents = [
-////                SubscriptionEvent(data: "[0, \"xxxxxxxxxxxxxxxxxxxxxxxxxxxx\"]\n".data(using: .utf8)!), // Keep-alive
-////                SubscriptionEvent(data: "[255, 500, {}, {\"error_description\": \"Internal server error\" }]\n".data(using: .utf8)!), // EOS
-////                SubscriptionEvent(data: "[1, \"123\", {}, {\"data\": [1,2,3]}]\n".data(using: .utf8)!) // Data
-////            ]
-//
 //            let res = HTTPURLResponse(url: req.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
 //            return .success(res, .streamSubscription(events: [initialStateSubEvent]))
 //        }
 //
-//        URLSessionConfiguration.mockingjaySwizzleDefaultSessionConfiguration()
+//        let ex = expectation(description: "current user returned upon connection")
 //
 //        chatManager.connect(delegate: TestingChatManagerDelegate()) { currentUser, error in
-//            print(currentUser, error)
+//            XCTAssertNil(error)
+//            XCTAssertNotNil(currentUser)
+//            ex.fulfill()
 //        }
-//
-//        let ex = expectation(description: "testing")
 //
 //        waitForExpectations(timeout: 5)
 //    }
 //
-//    func testSendMessageWithoutAnAttachment() {
-//
-//    }
 //}
