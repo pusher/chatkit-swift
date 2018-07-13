@@ -1,8 +1,8 @@
 import Foundation
 
 let testInstanceLocator = "your:instance:locator"
-let testInstanceTokenProviderURL = "https://token.provider.url"
 let testInstanceKey = "your:key"
+let testInstanceTokenProviderURL = "https://token.provider.url"
 
 let splitInstanceLocator = testInstanceLocator.split(separator: ":")
 let splitInstanceKey = testInstanceKey.split(separator: ":")
