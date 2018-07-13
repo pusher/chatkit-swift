@@ -177,3 +177,61 @@ enum ChatkitService {
         }
     }
 }
+
+func connectAsUser(
+    id: String,
+    delegate: PCChatManagerDelegate = TestingChatManagerDelegate()
+) throws -> PCCurrentUser {
+    var user: PCCurrentUser!
+    var error: Error?
+
+    let group = DispatchGroup()
+    group.enter()
+
+    let chatManager = ChatManager(
+        instanceLocator: testInstanceLocator,
+        tokenProvider: PCTokenProvider(url: testInstanceTokenProviderURL),
+        userId: id,
+        logger: TestLogger()
+    )
+
+    chatManager.connect(delegate: delegate) { u, e in
+        user = u
+        error = e
+        group.leave()
+    }
+
+    group.wait()
+
+    if let e = error {
+        throw e
+    }
+
+    return user
+}
+
+func createRoom(
+    user: PCCurrentUser,
+    roomName: String,
+    addUserIds: [String] = []
+) throws -> PCRoom {
+    var room: PCRoom!
+    var error: Error?
+
+    let group = DispatchGroup()
+    group.enter()
+
+    user.createRoom(name: roomName, addUserIds: addUserIds) { r, e in
+        room = r
+        error = e
+        group.leave()
+    }
+
+    group.wait()
+
+    if let e = error {
+        throw e
+    }
+
+    return room
+}
