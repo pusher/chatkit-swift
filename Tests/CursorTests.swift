@@ -60,9 +60,16 @@ class CursorTests: XCTestCase {
 
         waitForExpectations(timeout: 10)
 
-        alice = user(id: "alice")
-        bob = user(id: "bob")
-        roomId = createRoom(user: user(id: "alice"), roomName: "mushroom", addUserIds: ["bob"]).id
+        alice = try! connectAsUser(id: "alice")
+        bob = try! connectAsUser(id: "bob")
+
+        let room = try! createRoom(
+            user: alice,
+            roomName: "mushroom",
+            addUserIds: ["bob"]
+        )
+
+        roomId = room.id
     }
 
     func testOwnReadCursorUndefinedIfNotSet() {
@@ -149,46 +156,5 @@ class CursorTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 5)
-    }
-
-    func user(id: String, delegate: PCChatManagerDelegate = TestingChatManagerDelegate()) -> PCCurrentUser {
-        var user: PCCurrentUser!
-
-        let ex = expectation(description: "connected as user with ID \(id)")
-
-        let chatManager = ChatManager(
-            instanceLocator: testInstanceLocator,
-            tokenProvider: PCTokenProvider(url: testInstanceTokenProviderURL),
-            userId: id,
-            logger: TestLogger()
-        )
-
-        chatManager.connect(delegate: delegate) { u, error in
-            XCTAssertNil(error)
-            XCTAssertNotNil(u)
-
-            user = u
-            ex.fulfill()
-        }
-
-        waitForExpectations(timeout: 5)
-        return user
-    }
-
-    func createRoom(user: PCCurrentUser, roomName: String, addUserIds: [String] = []) -> PCRoom {
-        var room: PCRoom!
-
-        let ex = expectation(description: "created room with name  \(roomName)")
-
-        user.createRoom(name: roomName, addUserIds: addUserIds) { r, error in
-            XCTAssertNil(error)
-            XCTAssertNotNil(r)
-
-            room = r
-            ex.fulfill()
-        }
-
-        waitForExpectations(timeout: 5)
-        return room
     }
 }
