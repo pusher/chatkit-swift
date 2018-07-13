@@ -24,15 +24,10 @@ class CurrentUserTests: XCTestCase {
             logger: TestLogger()
         )
 
-        stub({ $0.url!.absoluteString == "\(tokenEndpoint)?user_id=\(userID)" }, { req in
-            let tokenObj: [String : Any] = [
-                "access_token": "a.good.token",
-                "expires_in": 86400
-            ]
-            let tokenJSON = try! JSONSerialization.data(withJSONObject: tokenObj, options: [])
-            let response = HTTPURLResponse(url: req.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
-            return .success(response, .content(tokenJSON))
-        })
+        stub(uri("\(tokenEndpoint)?user_id=\(userID)"), json([
+            "access_token": "a.good.token",
+            "expires_in": 86400
+        ]))
 
         let userSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
@@ -40,8 +35,8 @@ class CurrentUserTests: XCTestCase {
             path: "users"
         ).absoluteString
 
-        stub({ $0.url!.absoluteString == userSubscriptionURL }) { req in
-            let initialStateEvent = """
+        stub(uri(userSubscriptionURL)) { req in
+            let initialStateEventData = dataSubscriptionEventFor("""
                 {
                     "event_name": "initial_state",
                     "data": {
@@ -55,12 +50,10 @@ class CurrentUserTests: XCTestCase {
                     },
                     "timestamp": "2017-03-23T11:36:42Z"
                 }
-            """.replacingOccurrences(of: "\n", with: "")
+            """)
 
-            let wrappedInitialStateEvent = "[1, \"\", {}, \(initialStateEvent)]\n"
-            let initialStateSubEvent = SubscriptionEvent(data: wrappedInitialStateEvent.data(using: .utf8)!, delay: 0.0)
-            let res = HTTPURLResponse(url: req.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
-            return .success(res, .streamSubscription(events: [initialStateSubEvent]))
+            let initialStateSubEvent = SubscriptionEvent(data: initialStateEventData, delay: 0.0)
+            return successResponseForRequest(req, withEvents: [initialStateSubEvent])
         }
 
         let presenceSubscriptionURL = serviceURL(
@@ -69,8 +62,8 @@ class CurrentUserTests: XCTestCase {
             path: "users/\(userID)/presence"
         ).absoluteString
 
-        stub({ $0.url!.absoluteString == presenceSubscriptionURL }) { req in
-            let initialStateEvent = """
+        stub(uri(presenceSubscriptionURL)) { req in
+            let initialStateEventData = dataSubscriptionEventFor("""
                 {
                     "event_name": "initial_state",
                     "data": {
@@ -78,12 +71,10 @@ class CurrentUserTests: XCTestCase {
                     },
                     "timestamp": "2017-03-23T11:36:42Z"
                 }
-            """.replacingOccurrences(of: "\n", with: "")
+            """)
 
-            let wrappedInitialStateEvent = "[1, \"\", {}, \(initialStateEvent)]\n"
-            let initialStateSubEvent = SubscriptionEvent(data: wrappedInitialStateEvent.data(using: .utf8)!, delay: 0.0)
-            let res = HTTPURLResponse(url: req.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
-            return .success(res, .streamSubscription(events: [initialStateSubEvent]))
+            let initialStateSubEvent = SubscriptionEvent(data: initialStateEventData, delay: 0.0)
+            return successResponseForRequest(req, withEvents: [initialStateSubEvent])
         }
 
         let cursorsSubscriptionURL = serviceURL(
@@ -92,8 +83,8 @@ class CurrentUserTests: XCTestCase {
             path: "cursors/0/users/\(userID)"
         ).absoluteString
 
-        stub({ $0.url!.absoluteString == cursorsSubscriptionURL }) { req in
-            let initialStateEvent = """
+        stub(uri(cursorsSubscriptionURL)) { req in
+            let initialStateEventData = dataSubscriptionEventFor("""
                 {
                     "event_name": "initial_state",
                     "data": {
@@ -101,12 +92,10 @@ class CurrentUserTests: XCTestCase {
                     },
                     "timestamp": "2017-03-23T11:36:42Z"
                 }
-            """.replacingOccurrences(of: "\n", with: "")
+            """)
 
-            let wrappedInitialStateEvent = "[1, \"\", {}, \(initialStateEvent)]\n"
-            let initialStateSubEvent = SubscriptionEvent(data: wrappedInitialStateEvent.data(using: .utf8)!, delay: 0.0)
-            let res = HTTPURLResponse(url: req.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
-            return .success(res, .streamSubscription(events: [initialStateSubEvent]))
+            let initialStateSubEvent = SubscriptionEvent(data: initialStateEventData, delay: 0.0)
+            return successResponseForRequest(req, withEvents: [initialStateSubEvent])
         }
 
         let usersByIDsURL = serviceURL(
@@ -115,11 +104,7 @@ class CurrentUserTests: XCTestCase {
             path: "users_by_ids"
         ).absoluteString
 
-        stub({ $0.url!.absoluteString == usersByIDsURL }, { req in
-            let tokenJSON = try! JSONSerialization.data(withJSONObject: [], options: [])
-            let response = HTTPURLResponse(url: req.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
-            return .success(response, .content(tokenJSON))
-        })
+        stub(uri(usersByIDsURL), json([]))
 
         let ex = expectation(description: "current user returned upon connection")
 

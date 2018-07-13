@@ -1,5 +1,6 @@
 import Foundation
 import PusherChatkit
+import Mockingjay
 
 enum TestHelperError: Error {
     case generic(String)
@@ -245,4 +246,15 @@ func createRoom(
     }
 
     return room
+}
+
+func dataSubscriptionEventFor(_ eventJSON: String) -> Data {
+    let noNewlineEventString = eventJSON.replacingOccurrences(of: "\n", with: "")
+    let wrappedInitialStateEvent = "[1, \"\", {}, \(noNewlineEventString)]\n"
+    return wrappedInitialStateEvent.data(using: .utf8)!
+}
+
+func successResponseForRequest(_ request: URLRequest, withEvents events: [SubscriptionEvent]) -> Response {
+    let res = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+    return .success(res, .streamSubscription(events: events))
 }
