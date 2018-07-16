@@ -72,6 +72,18 @@ Run `carthage update` to build the framework and drag the built `PusherChatkit.f
 
 Head over to [our documentation](https://docs.pusher.com/chatkit/reference/swift).
 
+## Running tests
+
+Some of the tests require a valid Chatkit instance locator, key, and token provider URL.
+
+To set this up, run the following command:
+
+```bash
+cp Tests/Config/TestConfigExample.swift Tests/Config/TestConfig.swift
+```
+
+Then edit `Tests/Config/TestConfig.swift` to include a valid Chatkit instance locator, key, and token provider URL.
+
 ## Communication
 
 - Found a bug? Please open an [issue](https://github.com/pusher/chatkit-swift/issues).
