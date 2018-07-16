@@ -1,1 +1,2 @@
-github "AliSoftware/OHHTTPStubs" ~> 6.1
+github "hamchapman/Mockingjay" "master"
+github "krzyzanowskim/CryptoSwift"

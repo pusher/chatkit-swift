@@ -1,6 +1,6 @@
 import XCTest
 import PusherPlatform
-import OHHTTPStubs
+import Mockingjay
 @testable import PusherChatkit
 
 class TokenProviderTests: XCTestCase {
@@ -9,23 +9,24 @@ class TokenProviderTests: XCTestCase {
     }
 
     override func tearDown() {
-        OHHTTPStubs.removeAllStubs()
+        MockingjayProtocol.removeAllStubs()
     }
 
     func testTokenProviderQueuesFetchTokenRequestsIfOneIsUnderway() {
         let tokenEndpoint = "https://testing-chatkit.com/token"
         var callCount = 0
 
-        stub(condition: isAbsoluteURLString(tokenEndpoint)) { _ in
+        stub({ $0.url!.absoluteString == tokenEndpoint }, { req in
             let accessToken = callCount > 0 ? "BAD" : "GOOD"
             let tokenObj: [String : Any] = [
                 "access_token": accessToken,
-                "refresh_token": "wedontcareaboutthis",
                 "expires_in": 86400
             ]
+            let tokenJSON = try! JSONSerialization.data(withJSONObject: tokenObj, options: [])
             callCount += 1
-            return OHHTTPStubsResponse(jsonObject: tokenObj, statusCode: 200, headers: nil).requestTime(0.1, responseTime: 0.1)
-        }
+            let response = HTTPURLResponse(url: req.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return .success(response, .content(tokenJSON))
+        })
 
         let tokenProvider = PCTokenProvider(url: tokenEndpoint)
 

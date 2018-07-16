@@ -60,3 +60,5 @@ fastlane/report.xml
 fastlane/screenshots
 
 .swift-version
+
+Tests/Config/TestConfig.swift
