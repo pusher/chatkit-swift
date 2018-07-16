@@ -1,0 +1,110 @@
+import XCTest
+import PusherPlatform
+@testable import PusherChatkit
+
+class TypingIndicatorTests: XCTestCase {
+    var aliceChatManager = newTestChatManager(userId: "alice")
+    var bobChatManager = newTestChatManager(userId: "bob")
+    var roomId: Int!
+
+    override func setUp() {
+        super.setUp()
+
+        let deleteResourcesEx = expectation(description: "delete resources")
+        let createRolesEx = expectation(description: "create roles")
+        let createAliceEx = expectation(description: "create Alice")
+        let createBobEx = expectation(description: "create Bob")
+        let createRoomEx = expectation(description: "create room")
+
+        deleteInstanceResources() { err in
+            guard err == nil else {
+                fatalError(err!.localizedDescription)
+            }
+            deleteResourcesEx.fulfill()
+
+            createStandardInstanceRoles() { err in
+                guard err == nil else {
+                    fatalError(err!.localizedDescription)
+                }
+                createRolesEx.fulfill()
+            }
+
+            createUser(id: "alice") { err in
+                guard err == nil else {
+                    fatalError(err!.localizedDescription)
+                }
+                createAliceEx.fulfill()
+            }
+
+            createUser(id: "bob") { err in
+                guard err == nil else {
+                    fatalError(err!.localizedDescription)
+                }
+                createBobEx.fulfill()
+            }
+
+
+            // TODO the following should really wait until we know both Alice
+            // and Bob exist... for now, sleep!
+            sleep(1)
+
+            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+                guard err == nil else {
+                    fatalError(err!.localizedDescription)
+                }
+                alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+                    guard err == nil else {
+                        fatalError(err!.localizedDescription)
+                    }
+                    self.roomId = room!.id
+                    createRoomEx.fulfill()
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 10)
+    }
+
+    func testChatManagerDelegateTypingHooks() {
+        let startedEx = expectation(description: "notified of Bob starting typing")
+        let stoppedEx = expectation(description: "notified of Bob stopping typing")
+
+        var started: Date!
+
+        let userStartedTyping = { (room: PCRoom, user: PCUser) -> Void in
+            started = Date.init()
+            XCTAssertEqual(room.id, self.roomId)
+            XCTAssertEqual(user.id, "bob")
+            startedEx.fulfill()
+        }
+
+        let userStoppedTyping = { (room: PCRoom, user: PCUser) -> Void in
+            let interval = Date.init().timeIntervalSince(started)
+
+            XCTAssertGreaterThan(interval, 1)
+            XCTAssertLessThan(interval, 5)
+
+            XCTAssertEqual(room.id, self.roomId)
+            XCTAssertEqual(user.id, "bob")
+
+            stoppedEx.fulfill()
+        }
+
+        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate(
+            userStartedTyping: userStartedTyping,
+            userStoppedTyping: userStoppedTyping
+        )) { _alice, err in
+            XCTAssertNil(err)
+            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+                XCTAssertNil(err)
+                bob!.typing(in: bob!.rooms.first(where: { $0.id == self.roomId })!)
+            }
+        }
+
+        waitForExpectations(timeout: 5)
+    }
+
+    func testRoomDelegateTypingHooks() {
+        // TODO
+    }
+}

@@ -6,7 +6,54 @@ enum TestHelperError: Error {
     case generic(String)
 }
 
-class TestingChatManagerDelegate: PCChatManagerDelegate {}
+class TestingChatManagerDelegate: PCChatManagerDelegate {
+    let handleUserStartedTyping: (PCRoom, PCUser) -> Void
+    let handleUserStoppedTyping: (PCRoom, PCUser) -> Void
+
+    init(
+        userStartedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
+        userStoppedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in }
+    ) {
+        handleUserStartedTyping = userStartedTyping
+        handleUserStoppedTyping = userStoppedTyping
+    }
+
+    func userStartedTyping(room: PCRoom, user: PCUser) -> Void {
+        handleUserStartedTyping(room, user)
+    }
+
+    func userStoppedTyping(room: PCRoom, user: PCUser) -> Void {
+        handleUserStoppedTyping(room, user)
+    }
+}
+
+class TestingRoomDelegate: NSObject, PCRoomDelegate {
+    let handleNewCursor: (PCCursor) -> Void
+    let handleUserStartedTyping: (PCUser) -> Void
+    let handleUserStoppedTyping: (PCUser) -> Void
+
+    init(
+        newCursor: @escaping (PCCursor) -> Void = { _ in },
+        userStartedTyping: @escaping (PCUser) -> Void = { _ in },
+        userStoppedTyping: @escaping (PCUser) -> Void = { _ in }
+    ) {
+        handleNewCursor = newCursor
+        handleUserStartedTyping = userStartedTyping
+        handleUserStoppedTyping = userStoppedTyping
+    }
+
+    func newCursor(cursor: PCCursor) -> Void {
+        handleNewCursor(cursor)
+    }
+
+    func userStartedTyping(user: PCUser) -> Void {
+        handleUserStartedTyping(user)
+    }
+
+    func userStoppedTyping(user: PCUser) -> Void {
+        handleUserStoppedTyping(user)
+    }
+}
 
 public struct TestLogger: PCLogger {
     public func log(_ message: @autoclosure @escaping () -> String, logLevel: PCLogLevel) {
@@ -190,62 +237,16 @@ enum ChatkitService {
     }
 }
 
-func connectAsUser(
-    id: String,
+func newTestChatManager(
+    userId: String,
     delegate: PCChatManagerDelegate = TestingChatManagerDelegate()
-) throws -> PCCurrentUser {
-    var user: PCCurrentUser!
-    var error: Error?
-
-    let group = DispatchGroup()
-    group.enter()
-
-    let chatManager = ChatManager(
+) -> ChatManager {
+    return ChatManager(
         instanceLocator: testInstanceLocator,
         tokenProvider: PCTokenProvider(url: testInstanceTokenProviderURL),
-        userId: id,
+        userId: userId,
         logger: TestLogger()
     )
-
-    chatManager.connect(delegate: delegate) { u, e in
-        user = u
-        error = e
-        group.leave()
-    }
-
-    group.wait()
-
-    if let e = error {
-        throw e
-    }
-
-    return user
-}
-
-func createRoom(
-    user: PCCurrentUser,
-    roomName: String,
-    addUserIds: [String] = []
-) throws -> PCRoom {
-    var room: PCRoom!
-    var error: Error?
-
-    let group = DispatchGroup()
-    group.enter()
-
-    user.createRoom(name: roomName, addUserIds: addUserIds) { r, e in
-        room = r
-        error = e
-        group.leave()
-    }
-
-    group.wait()
-
-    if let e = error {
-        throw e
-    }
-
-    return room
 }
 
 func dataSubscriptionEventFor(_ eventJSON: String) -> Data {
