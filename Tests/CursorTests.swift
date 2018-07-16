@@ -2,26 +2,26 @@ import XCTest
 import PusherPlatform
 @testable import PusherChatkit
 
-var alice: PCCurrentUser!
-var bob: PCCurrentUser!
-var roomId: Int!
+class CursorTests: XCTestCase {
+    var alice: PCCurrentUser!
+    var bob: PCCurrentUser!
+    var roomId: Int!
 
-class AliceRoomDelegate: NSObject, PCRoomDelegate {
-    let ex: XCTestExpectation?
+    class AliceRoomDelegate: NSObject, PCRoomDelegate {
+        let ex: XCTestExpectation?
 
-    init(expectation: XCTestExpectation? = nil) {
-        ex = expectation
-    }
+        init(expectation: XCTestExpectation? = nil) {
+            ex = expectation
+        }
 
-    func newCursor(cursor: PCCursor) {
-        XCTAssertEqual(cursor.position, 42)
-        if let e = ex {
-            e.fulfill()
+        func newCursor(cursor: PCCursor) {
+            XCTAssertEqual(cursor.position, 42)
+            if let e = ex {
+                e.fulfill()
+            }
         }
     }
-}
 
-class CursorTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
@@ -86,7 +86,7 @@ class CursorTests: XCTestCase {
             XCTAssertNil(error)
 
             sleep(1) // give the read cursor a chance to propagate down the connection
-            let cursor = try! alice.readCursor(roomId: roomId)
+            let cursor = try! self.alice.readCursor(roomId: self.roomId)
             XCTAssertEqual(cursor?.position, 42)
 
             ex.fulfill()
@@ -120,7 +120,7 @@ class CursorTests: XCTestCase {
             XCTAssertNil(error)
 
             do {
-                let _ = try alice.readCursor(roomId: roomId, userId: "bob")
+                let _ = try self.alice.readCursor(roomId: self.roomId, userId: "bob")
             } catch let error {
                 switch error {
                 case PCCurrentUserError.noSubscriptionToRoom:
@@ -149,7 +149,7 @@ class CursorTests: XCTestCase {
             XCTAssertNil(error)
 
             sleep(1) // give the read cursor a chance to propagate down the connection
-            let cursor = try! alice.readCursor(roomId: roomId, userId: "bob")
+            let cursor = try! self.alice.readCursor(roomId: self.roomId, userId: "bob")
             XCTAssertEqual(cursor?.position, 42)
 
             ex.fulfill()
