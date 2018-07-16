@@ -3,12 +3,15 @@ import PusherPlatform
 @testable import PusherChatkit
 
 class TypingIndicatorTests: XCTestCase {
-    var aliceChatManager = newTestChatManager(userId: "alice")
-    var bobChatManager = newTestChatManager(userId: "bob")
+    var aliceChatManager: ChatManager!
+    var bobChatManager: ChatManager!
     var roomId: Int!
 
     override func setUp() {
         super.setUp()
+
+        aliceChatManager = newTestChatManager(userId: "alice")
+        bobChatManager = newTestChatManager(userId: "bob")
 
         let deleteResourcesEx = expectation(description: "delete resources")
         let createRolesEx = expectation(description: "create roles")
@@ -43,7 +46,6 @@ class TypingIndicatorTests: XCTestCase {
                 createBobEx.fulfill()
             }
 
-
             // TODO the following should really wait until we know both Alice
             // and Bob exist... for now, sleep!
             sleep(1)
@@ -66,8 +68,8 @@ class TypingIndicatorTests: XCTestCase {
     }
 
     func testChatManagerDelegateTypingHooks() {
-        let startedEx = expectation(description: "notified of Bob starting typing")
-        let stoppedEx = expectation(description: "notified of Bob stopping typing")
+        let startedEx = expectation(description: "notified of Bob starting typing (user)")
+        let stoppedEx = expectation(description: "notified of Bob stopping typing (user)")
 
         var started: Date!
 
@@ -105,6 +107,48 @@ class TypingIndicatorTests: XCTestCase {
     }
 
     func testRoomDelegateTypingHooks() {
-        // TODO
+        let startedEx = expectation(description: "notified of Alice starting typing (room)")
+        let stoppedEx = expectation(description: "notified of Alice stopping typing (room)")
+
+        var started: Date!
+
+        let userStartedTyping = { (user: PCUser) -> Void in
+            started = Date.init()
+            XCTAssertEqual(user.id, "alice")
+            startedEx.fulfill()
+        }
+
+        let userStoppedTyping = { (user: PCUser) -> Void in
+            let interval = Date.init().timeIntervalSince(started)
+
+            XCTAssertGreaterThan(interval, 1)
+            XCTAssertLessThan(interval, 5)
+
+            XCTAssertEqual(user.id, "alice")
+
+            stoppedEx.fulfill()
+        }
+
+        let bobRoomDelegate = TestingRoomDelegate(
+            userStartedTyping: userStartedTyping,
+            userStoppedTyping: userStoppedTyping
+        )
+
+        self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            bob!.subscribeToRoom(
+                room: bob!.rooms.first(where: { $0.id == self.roomId })!,
+                roomDelegate: bobRoomDelegate
+            )
+
+            sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
+
+            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+                XCTAssertNil(err)
+                alice!.typing(in: alice!.rooms.first(where: { $0.id == self.roomId })!)
+            }
+        }
+
+        waitForExpectations(timeout: 15)
     }
 }
