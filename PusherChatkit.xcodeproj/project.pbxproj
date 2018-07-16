@@ -228,15 +228,15 @@
 			isa = PBXGroup;
 			children = (
 				33D0394D20F6593200B5D87A /* Config */,
-				33D0394C20F650F900B5D87A /* Helpers */,
-				33831C8A1A9CF61600B124F1 /* Products */,
-				33D0394E20F6594600B5D87A /* Supporting Files */,
-				F2AA717420F7616000BC01DE /* CursorTests.swift */,
-				339768F420F4ED2F00BCB10B /* UserSubscriptionTests.swift */,
-				333D861720F4A97100734402 /* CurrentUserTests.swift */,
 				33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */,
+				333D861720F4A97100734402 /* CurrentUserTests.swift */,
+				339768F420F4ED2F00BCB10B /* UserSubscriptionTests.swift */,
+				F2AA717420F7616000BC01DE /* CursorTests.swift */,
 				337C0C9520615A6600BB977A /* TokenProviderTests.swift */,
 				33BC080F209A1765001DB5F9 /* DefaultsTests.swift */,
+				33D0394C20F650F900B5D87A /* Helpers */,
+				33D0394E20F6594600B5D87A /* Supporting Files */,
+				33831C8A1A9CF61600B124F1 /* Products */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
