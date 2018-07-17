@@ -22,7 +22,7 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
         addedToRoom: @escaping (PCRoom) -> Void = { _ in },
         removedFromRoom: @escaping (PCRoom) -> Void = { _ in },
         roomDeleted: @escaping (PCRoom) -> Void = { _ in }
-        ) {
+    ) {
         handleUserStartedTyping = userStartedTyping
         handleUserStoppedTyping = userStoppedTyping
         handleUserCameOnline = userCameOnline
@@ -88,7 +88,7 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
         userWentOffline: @escaping (PCUser) -> Void = { _ in },
         userJoined: @escaping (PCUser) -> Void = { _ in },
         userLeft: @escaping (PCUser) -> Void = { _ in }
-        ) {
+    ) {
         handleNewCursor = newCursor
         handleUserStartedTyping = userStartedTyping
         handleUserStoppedTyping = userStoppedTyping
