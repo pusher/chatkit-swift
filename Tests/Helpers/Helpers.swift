@@ -9,13 +9,19 @@ enum TestHelperError: Error {
 class TestingChatManagerDelegate: PCChatManagerDelegate {
     let handleUserStartedTyping: (PCRoom, PCUser) -> Void
     let handleUserStoppedTyping: (PCRoom, PCUser) -> Void
+    let handleUserCameOnline: (PCUser) -> Void
+    let handleUserWentOffline: (PCUser) -> Void
 
     init(
         userStartedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
-        userStoppedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in }
+        userStoppedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
+        userCameOnline: @escaping (PCUser) -> Void = { _ in },
+        userWentOffline: @escaping (PCUser) -> Void = { _ in }
     ) {
         handleUserStartedTyping = userStartedTyping
         handleUserStoppedTyping = userStoppedTyping
+        handleUserCameOnline = userCameOnline
+        handleUserWentOffline = userWentOffline
     }
 
     func userStartedTyping(room: PCRoom, user: PCUser) -> Void {
@@ -25,21 +31,35 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
     func userStoppedTyping(room: PCRoom, user: PCUser) -> Void {
         handleUserStoppedTyping(room, user)
     }
+
+    func userCameOnline(user: PCUser) -> Void {
+        handleUserCameOnline(user)
+    }
+
+    func userWentOffline(user: PCUser) -> Void {
+        handleUserWentOffline(user)
+    }
 }
 
 class TestingRoomDelegate: NSObject, PCRoomDelegate {
     let handleNewCursor: (PCCursor) -> Void
     let handleUserStartedTyping: (PCUser) -> Void
     let handleUserStoppedTyping: (PCUser) -> Void
+    let handleUserCameOnline: (PCUser) -> Void
+    let handleUserWentOffline: (PCUser) -> Void
 
     init(
         newCursor: @escaping (PCCursor) -> Void = { _ in },
         userStartedTyping: @escaping (PCUser) -> Void = { _ in },
-        userStoppedTyping: @escaping (PCUser) -> Void = { _ in }
+        userStoppedTyping: @escaping (PCUser) -> Void = { _ in },
+        userCameOnline: @escaping (PCUser) -> Void = { _ in },
+        userWentOffline: @escaping (PCUser) -> Void = { _ in }
     ) {
         handleNewCursor = newCursor
         handleUserStartedTyping = userStartedTyping
         handleUserStoppedTyping = userStoppedTyping
+        handleUserCameOnline = userCameOnline
+        handleUserWentOffline = userWentOffline
     }
 
     func newCursor(cursor: PCCursor) -> Void {
@@ -52,6 +72,14 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
 
     func userStoppedTyping(user: PCUser) -> Void {
         handleUserStoppedTyping(user)
+    }
+
+    func userCameOnline(user: PCUser) -> Void {
+        handleUserCameOnline(user)
+    }
+
+    func userWentOffline(user: PCUser) -> Void {
+        handleUserWentOffline(user)
     }
 }
 
