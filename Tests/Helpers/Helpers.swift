@@ -6,6 +6,65 @@ enum TestHelperError: Error {
     case generic(String)
 }
 
+<<<<<<< HEAD
+=======
+class TestingChatManagerDelegate: PCChatManagerDelegate {
+    let handleUserStartedTyping: (PCRoom, PCUser) -> Void
+    let handleUserStoppedTyping: (PCRoom, PCUser) -> Void
+
+    init(
+        userStartedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
+        userStoppedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in }
+    ) {
+        handleUserStartedTyping = userStartedTyping
+        handleUserStoppedTyping = userStoppedTyping
+    }
+
+    func userStartedTyping(room: PCRoom, user: PCUser) -> Void {
+        handleUserStartedTyping(room, user)
+    }
+
+    func userStoppedTyping(room: PCRoom, user: PCUser) -> Void {
+        handleUserStoppedTyping(room, user)
+    }
+}
+
+class TestingRoomDelegate: NSObject, PCRoomDelegate {
+    let handleNewMessage: (PCMessage) -> Void
+    let handleNewCursor: (PCCursor) -> Void
+    let handleUserStartedTyping: (PCUser) -> Void
+    let handleUserStoppedTyping: (PCUser) -> Void
+
+    init(
+        newMessage: @escaping (PCMessage) -> Void = { _ in },
+        newCursor: @escaping (PCCursor) -> Void = { _ in },
+        userStartedTyping: @escaping (PCUser) -> Void = { _ in },
+        userStoppedTyping: @escaping (PCUser) -> Void = { _ in }
+    ) {
+        handleNewMessage = newMessage
+        handleNewCursor = newCursor
+        handleUserStartedTyping = userStartedTyping
+        handleUserStoppedTyping = userStoppedTyping
+    }
+
+    func newMessage(message: PCMessage) -> Void {
+        handleNewMessage(message)
+    }
+
+    func newCursor(cursor: PCCursor) -> Void {
+        handleNewCursor(cursor)
+    }
+
+    func userStartedTyping(user: PCUser) -> Void {
+        handleUserStartedTyping(user)
+    }
+
+    func userStoppedTyping(user: PCUser) -> Void {
+        handleUserStoppedTyping(user)
+    }
+}
+
+>>>>>>> (non-attachment) message tests
 public struct TestLogger: PCLogger {
     public func log(_ message: @autoclosure @escaping () -> String, logLevel: PCLogLevel) {
         guard logLevel > .debug else { return }
@@ -259,4 +318,14 @@ func dataSubscriptionEventFor(_ eventJSON: String) -> Data {
 func successResponseForRequest(_ request: URLRequest, withEvents events: [SubscriptionEvent]) -> Response {
     let res = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
     return .success(res, .streamSubscription(events: events))
+}
+
+extension Array {
+    func all(fn: (Element) -> Bool) -> Bool {
+        return self.reduce(true) { $0 && fn($1) }
+    }
+
+    func any(fn: (Element) -> Bool) -> Bool {
+        return self.reduce(false) { $0 || fn($1) }
+    }
 }
