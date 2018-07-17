@@ -3,24 +3,11 @@ import PusherPlatform
 @testable import PusherChatkit
 
 class CursorTests: XCTestCase {
+    var aliceChatManager = newTestChatManager(userId: "alice")
+    var bobChatManager = newTestChatManager(userId: "bob")
     var alice: PCCurrentUser!
     var bob: PCCurrentUser!
     var roomId: Int!
-
-    class AliceRoomDelegate: NSObject, PCRoomDelegate {
-        let ex: XCTestExpectation?
-
-        init(expectation: XCTestExpectation? = nil) {
-            ex = expectation
-        }
-
-        func newCursor(cursor: PCCursor) {
-            XCTAssertEqual(cursor.position, 42)
-            if let e = ex {
-                e.fulfill()
-            }
-        }
-    }
 
     override func setUp() {
         super.setUp()
@@ -29,6 +16,9 @@ class CursorTests: XCTestCase {
         let createRolesEx = expectation(description: "create roles")
         let createAliceEx = expectation(description: "create Alice")
         let createBobEx = expectation(description: "create Bob")
+        let connectAliceEx = expectation(description: "connect as Alice")
+        let connectBobEx = expectation(description: "connect as Bob")
+        let createRoomEx = expectation(description: "create room")
 
         deleteInstanceResources() { err in
             guard err == nil else {
@@ -56,20 +46,37 @@ class CursorTests: XCTestCase {
                 }
                 createBobEx.fulfill()
             }
+
+            // TODO the following should really wait until we know both Alice
+            // and Bob exist... for now, sleep!
+            sleep(1)
+
+            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { user, err in
+                guard err == nil else {
+                    fatalError(err!.localizedDescription)
+                }
+                self.alice = user
+                connectAliceEx.fulfill()
+
+                self.alice.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+                    guard err == nil else {
+                        fatalError(err!.localizedDescription)
+                    }
+                    self.roomId = room!.id
+                    createRoomEx.fulfill()
+                }
+            }
+
+            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { user, err in
+                guard err == nil else {
+                    fatalError(err!.localizedDescription)
+                }
+                self.bob = user
+                connectBobEx.fulfill()
+            }
         }
 
         waitForExpectations(timeout: 10)
-
-        alice = try! connectAsUser(id: "alice")
-        bob = try! connectAsUser(id: "bob")
-
-        let room = try! createRoom(
-            user: alice,
-            roomName: "mushroom",
-            addUserIds: ["bob"]
-        )
-
-        roomId = room.id
     }
 
     func testOwnReadCursorUndefinedIfNotSet() {
@@ -98,7 +105,13 @@ class CursorTests: XCTestCase {
     func testNewReadCursorHook() {
         let ex = expectation(description: "received new read cursor")
 
-        let aliceRoomDelegate = AliceRoomDelegate(expectation: ex)
+        let newCursor = { (cursor: PCCursor) -> Void in
+            XCTAssertEqual(cursor.position, 42)
+            ex.fulfill()
+        }
+
+        let aliceRoomDelegate = TestingRoomDelegate(newCursor: newCursor)
+
         alice.subscribeToRoom(
             room: alice.rooms.first(where: { $0.id == roomId })!,
             roomDelegate: aliceRoomDelegate
@@ -137,7 +150,7 @@ class CursorTests: XCTestCase {
     func testGetAnotherUsersReadCursor() {
         let ex = expectation(description: "got another users read cursor")
 
-        let aliceRoomDelegate = AliceRoomDelegate()
+        let aliceRoomDelegate = TestingRoomDelegate()
         alice.subscribeToRoom(
             room: alice.rooms.first(where: { $0.id == roomId })!,
             roomDelegate: aliceRoomDelegate
