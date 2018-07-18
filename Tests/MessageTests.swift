@@ -236,19 +236,98 @@ class MessagesTests: XCTestCase {
         waitForExpectations(timeout: 10)
     }
 
-    func testSendMessageWithMalformedAttachmentFails() {
-        // TODO
-    }
-
     func testSendAndReceiveMessageWithLinkAttachment() {
-        // TODO
+        let veryImportantImage = "https://i.imgur.com/rJbRKLU.gif"
+
+        let ex = expectation(description: "subscribe and receive sent messages")
+
+        let bobRoomDelegate = TestingRoomDelegate(newMessage: { message in
+            XCTAssertEqual(message.text, "see attached")
+            XCTAssertEqual(message.sender.id, "alice")
+            XCTAssertEqual(message.sender.name, "Alice")
+            XCTAssertEqual(message.room.id, self.roomId)
+            XCTAssertEqual(message.room.name, "mushroom")
+            XCTAssertEqual(message.attachment!.link, veryImportantImage)
+            XCTAssertEqual(message.attachment!.type, "image")
+
+            ex.fulfill()
+        })
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.subscribeToRoom(
+                room: bob!.rooms.first(where: { $0.id == self.roomId })!,
+                roomDelegate: bobRoomDelegate,
+                messageLimit: 0
+            )
+
+            sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
+
+            self.aliceChatManager.connect(
+                delegate: TestingChatManagerDelegate()
+            ) { alice, err in
+                alice!.sendMessage(
+                    roomId: self.roomId,
+                    text: "see attached",
+                    attachmentType: .link(veryImportantImage, type: "image")
+                ) { _, err in
+                    XCTAssertNil(err)
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 10)
     }
 
     func testSendAndReceiveMessageWithDataAttachment() {
-        // TODO
-    }
+        let veryImportantImage = Bundle(for: type(of: self))
+            .path(
+                forResource: "very-important-image",
+                ofType: "gif"
+            )!
 
-    func testFetchDataAttachment() {
-        // TODO
+        let ex = expectation(description: "subscribe and receive sent messages")
+
+        let bobRoomDelegate = TestingRoomDelegate(newMessage: { message in
+            XCTAssertEqual(message.text, "see attached")
+            XCTAssertEqual(message.sender.id, "alice")
+            XCTAssertEqual(message.sender.name, "Alice")
+            XCTAssertEqual(message.room.id, self.roomId)
+            XCTAssertEqual(message.room.name, "mushroom")
+            XCTAssertEqual(message.attachment!.type, "image")
+            // TODO assert some more stuff about the attachment (and fetch it?)
+
+            ex.fulfill()
+        })
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.subscribeToRoom(
+                room: bob!.rooms.first(where: { $0.id == self.roomId })!,
+                roomDelegate: bobRoomDelegate,
+                messageLimit: 0
+            )
+
+            sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
+
+            self.aliceChatManager.connect(
+                delegate: TestingChatManagerDelegate()
+            ) { alice, err in
+                alice!.sendMessage(
+                    roomId: self.roomId,
+                    text: "see attached",
+                    attachmentType: .fileURL(
+                        URL(fileURLWithPath: veryImportantImage),
+                        name: "Very Important Image"
+                    )
+                ) { _, err in
+                    XCTAssertNil(err)
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 10)
     }
 }
