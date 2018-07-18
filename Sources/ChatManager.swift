@@ -73,15 +73,11 @@ import PusherPlatform
         self.pathFriendlyUserId = userId.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? userId
     }
 
-    public func addConnectCompletionHandler(completionHandler: @escaping (PCCurrentUser?, Error?) -> Void) {
-        connectionCoordinator.addConnectionCompletionHandler(completionHandler)
-    }
-
     public func connect(
         delegate: PCChatManagerDelegate,
         completionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
-        addConnectCompletionHandler(completionHandler: completionHandler)
+        connectionCoordinator.addConnectionCompletionHandler(completionHandler)
 
         let basicCurrentUser = PCBasicCurrentUser(
             id: userId,
@@ -101,8 +97,11 @@ import PusherPlatform
                         switch event.result {
                         case .userSubscriptionInit(let currentUser, _):
                             currentUser?.userSubscription = basicCurrentUser.userSubscription
+                            basicCurrentUser.userSubscription = nil
                             currentUser?.presenceSubscription = basicCurrentUser.presenceSubscription
+                            basicCurrentUser.presenceSubscription = nil
                             currentUser?.cursorSubscription = basicCurrentUser.cursorSubscription
+                            basicCurrentUser.cursorSubscription = nil
 
                             // TODO: This is madness
                             currentUser?.userSubscription?.currentUser = currentUser
@@ -121,7 +120,7 @@ import PusherPlatform
 
         basicCurrentUser.establishUserSubscription(
             delegate: delegate,
-            initialStateHandler: { currentUserPayloadTuple in
+            initialStateHandler: { [unowned self] currentUserPayloadTuple in
                 let (roomsPayload, currentUserPayload) = currentUserPayloadTuple
 
                 let receivedCurrentUser: PCCurrentUser
@@ -213,10 +212,14 @@ import PusherPlatform
     // TODO: Maybe we need some sort of ChatManagerConnectionState?
     public func disconnect() {
         currentUser?.userSubscription?.end()
+        currentUser?.userSubscription = nil
         currentUser?.presenceSubscription?.end()
+        currentUser?.presenceSubscription = nil
         currentUser?.cursorSubscription?.end()
+        currentUser?.cursorSubscription = nil
         currentUser?.rooms.forEach { room in
             room.subscription?.end()
+            room.subscription = nil
         }
         connectionCoordinator.reset()
     }

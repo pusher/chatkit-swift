@@ -79,6 +79,14 @@ class CursorTests: XCTestCase {
         waitForExpectations(timeout: 10)
     }
 
+    override func tearDown() {
+        aliceChatManager.disconnect()
+        bobChatManager.disconnect()
+        alice = nil
+        bob = nil
+        roomId = nil
+    }
+
     func testOwnReadCursorUndefinedIfNotSet() {
         let cursor = try! alice.readCursor(roomId: roomId)
         XCTAssertNil(cursor)

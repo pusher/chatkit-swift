@@ -68,8 +68,12 @@ public class PCConnectionCoordinator {
     func reset(alreadyInCoordinatorQueue: Bool = false) {
         if alreadyInCoordinatorQueue {
             completedConnectionEvents = []
+            connectionEventHandlers = []
         } else {
-            queue.async { self.completedConnectionEvents = [] }
+            queue.async {
+                self.completedConnectionEvents = []
+                self.connectionEventHandlers = []
+            }
         }
     }
 }

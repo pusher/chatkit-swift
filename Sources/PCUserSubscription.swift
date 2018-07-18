@@ -11,13 +11,13 @@ public final class PCUserSubscription {
     let presenceInstance: Instance
     public let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore
-    public internal(set) var delegate: PCChatManagerDelegate
+    public internal(set) weak var delegate: PCChatManagerDelegate?
     let userId: String
     let pathFriendlyUserId: String
     let connectionCoordinator: PCConnectionCoordinator
     let initialStateHandler: ((roomsPayload: [[String: Any]], currentUserPayload: [String: Any])) -> Void
 
-    public var currentUser: PCCurrentUser?
+    public weak var currentUser: PCCurrentUser?
 
     public init(
         instance: Instance,
@@ -148,7 +148,7 @@ extension PCUserSubscription {
 
     fileprivate func parseAddedToRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomPayload = data["room"] as? [String: Any] else {
-            self.delegate.error(
+            self.delegate?.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room",
                     apiEventName: eventName,
@@ -162,7 +162,7 @@ extension PCUserSubscription {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
             self.currentUser?.roomStore.addOrMerge(room) { room in
-                self.delegate.addedToRoom(room: room)
+                self.delegate?.addedToRoom(room: room)
                 self.instance.logger.log("Added to room: \(room.name)", logLevel: .verbose)
             }
 
@@ -202,13 +202,13 @@ extension PCUserSubscription {
             }
         } catch let err {
             self.instance.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate.error(error: err)
+            self.delegate?.error(error: err)
         }
     }
 
     fileprivate func parseRemovedFromRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomId = data["room_id"] as? Int else {
-            self.delegate.error(
+            self.delegate?.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
@@ -224,14 +224,14 @@ extension PCUserSubscription {
                 return
             }
 
-            self.delegate.removedFromRoom(room: roomRemovedFrom)
+            self.delegate?.removedFromRoom(room: roomRemovedFrom)
             self.instance.logger.log("Removed from room: \(roomRemovedFrom.name)", logLevel: .verbose)
         }
     }
 
     fileprivate func parseRoomUpdatedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomPayload = data["room"] as? [String: Any] else {
-            self.delegate.error(
+            self.delegate?.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room",
                     apiEventName: eventName,
@@ -252,18 +252,18 @@ extension PCUserSubscription {
                 }
 
                 roomToUpdate.updateWithPropertiesOfRoom(room)
-                self.delegate.roomUpdated(room: roomToUpdate)
+                self.delegate?.roomUpdated(room: roomToUpdate)
                 self.instance.logger.log("Room updated: \(room.name)", logLevel: .verbose)
             }
         } catch let err {
             self.instance.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate.error(error: err)
+            self.delegate?.error(error: err)
         }
     }
 
     fileprivate func parseRoomDeletedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomId = data["room_id"] as? Int else {
-            self.delegate.error(
+            self.delegate?.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
@@ -275,7 +275,7 @@ extension PCUserSubscription {
 
         guard let currentUser = self.currentUser else {
             self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
-            self.delegate.error(error: PCError.currentUserIsNil)
+            self.delegate?.error(error: PCError.currentUserIsNil)
             return
         }
 
@@ -285,14 +285,14 @@ extension PCUserSubscription {
                 return
             }
 
-            self.delegate.roomDeleted(room: deletedRoom)
+            self.delegate?.roomDeleted(room: deletedRoom)
             self.instance.logger.log("Room deleted: \(deletedRoom.name)", logLevel: .verbose)
         }
     }
 
     fileprivate func parseUserJoinedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomId = data["room_id"] as? Int else {
-            self.delegate.error(
+            self.delegate?.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
@@ -303,7 +303,7 @@ extension PCUserSubscription {
         }
 
         guard let userId = data["user_id"] as? String else {
-            self.delegate.error(
+            self.delegate?.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "user_id",
                     apiEventName: eventName,
@@ -315,7 +315,7 @@ extension PCUserSubscription {
 
         guard let currentUser = self.currentUser else {
             self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
-            self.delegate.error(error: PCError.currentUserIsNil)
+            self.delegate?.error(error: PCError.currentUserIsNil)
             return
         }
 
@@ -326,7 +326,7 @@ extension PCUserSubscription {
                     "User with id \(userId) joined room with id \(roomId) but no information about the room could be retrieved. Error was: \(err!.localizedDescription)",
                     logLevel: .error
                 )
-                self.delegate.error(error: err!)
+                self.delegate?.error(error: err!)
                 return
             }
 
@@ -341,14 +341,14 @@ extension PCUserSubscription {
                         "User with id \(userId) joined room with id \(roomId) but no information about the user could be retrieved. Error was: \(err!.localizedDescription)",
                         logLevel: .error
                     )
-                    strongSelf.delegate.error(error: err!)
+                    strongSelf.delegate?.error(error: err!)
                     return
                 }
 
                 let addedOrMergedUser = room.userStore.addOrMerge(user)
                 room.userIds.insert(addedOrMergedUser.id)
 
-                strongSelf.delegate.userJoinedRoom(room: room, user: addedOrMergedUser)
+                strongSelf.delegate?.userJoinedRoom(room: room, user: addedOrMergedUser)
                 room.subscription?.delegate?.userJoined(user: addedOrMergedUser)
                 strongSelf.instance.logger.log("User \(user.displayName) joined room: \(room.name)", logLevel: .verbose)
             }
@@ -357,7 +357,7 @@ extension PCUserSubscription {
 
     fileprivate func parseUserLeftPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomId = data["room_id"] as? Int else {
-            self.delegate.error(
+            self.delegate?.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
@@ -368,7 +368,7 @@ extension PCUserSubscription {
         }
 
         guard let userId = data["user_id"] as? String else {
-            self.delegate.error(
+            self.delegate?.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "user_id",
                     apiEventName: eventName,
@@ -380,7 +380,7 @@ extension PCUserSubscription {
 
         guard let currentUser = self.currentUser else {
             self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
-            self.delegate.error(error: PCError.currentUserIsNil)
+            self.delegate?.error(error: PCError.currentUserIsNil)
             return
         }
 
@@ -391,7 +391,7 @@ extension PCUserSubscription {
                     "User with id \(userId) left room with id \(roomId) but no information about the room could be retrieved. Error was: \(err!.localizedDescription)",
                     logLevel: .error
                 )
-                self.delegate.error(error: err!)
+                self.delegate?.error(error: err!)
                 return
             }
 
@@ -406,7 +406,7 @@ extension PCUserSubscription {
                         "User with id \(userId) left room with id \(roomId) but no information about the user could be retrieved. Error was: \(err!.localizedDescription)",
                         logLevel: .error
                     )
-                    strongSelf.delegate.error(error: err!)
+                    strongSelf.delegate?.error(error: err!)
                     return
                 }
 
@@ -418,7 +418,7 @@ extension PCUserSubscription {
 
                 room.userStore.remove(id: user.id)
 
-                strongSelf.delegate.userLeftRoom(room: room, user: user)
+                strongSelf.delegate?.userLeftRoom(room: room, user: user)
                 room.subscription?.delegate?.userLeft(user: user)
                 strongSelf.instance.logger.log("User \(user.displayName) left room: \(room.name)", logLevel: .verbose)
             }
@@ -427,7 +427,7 @@ extension PCUserSubscription {
 
     fileprivate func parseTypingStartPayload(_ eventName: PCAPIEventName, data: [String: Any], userId: String) {
         guard let roomId = data["room_id"] as? Int else {
-            self.delegate.error(
+            self.delegate?.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
@@ -439,7 +439,7 @@ extension PCUserSubscription {
 
         guard let currentUser = self.currentUser else {
             self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
-            self.delegate.error(error: PCError.currentUserIsNil)
+            self.delegate?.error(error: PCError.currentUserIsNil)
             return
         }
 
@@ -447,7 +447,7 @@ extension PCUserSubscription {
         currentUser.roomStore.room(id: roomId) { room, err in
             guard let room = room, err == nil else {
                 self.instance.logger.log(err!.localizedDescription, logLevel: .error)
-                self.delegate.error(error: err!)
+                self.delegate?.error(error: err!)
                 return
             }
 
@@ -459,11 +459,11 @@ extension PCUserSubscription {
 
                 guard let user = user, err == nil else {
                     strongSelf.instance.logger.log(err!.localizedDescription, logLevel: .error)
-                    strongSelf.delegate.error(error: err!)
+                    strongSelf.delegate?.error(error: err!)
                     return
                 }
 
-                strongSelf.delegate.userStartedTyping(room: room, user: user)
+                strongSelf.delegate?.userStartedTyping(room: room, user: user)
                 room.subscription?.delegate?.userStartedTyping(user: user)
                 strongSelf.instance.logger.log("\(user.displayName) started typing in room \(room.name)", logLevel: .verbose)
             }
@@ -472,7 +472,7 @@ extension PCUserSubscription {
 
     fileprivate func parseTypingStopPayload(_ eventName: PCAPIEventName, data: [String: Any], userId: String) {
         guard let roomId = data["room_id"] as? Int else {
-            self.delegate.error(
+            self.delegate?.error(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
                     apiEventName: eventName,
@@ -484,7 +484,7 @@ extension PCUserSubscription {
 
         guard let currentUser = self.currentUser else {
             self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
-            self.delegate.error(error: PCError.currentUserIsNil)
+            self.delegate?.error(error: PCError.currentUserIsNil)
             return
         }
 
@@ -492,7 +492,7 @@ extension PCUserSubscription {
         currentUser.roomStore.room(id: roomId) { room, err in
             guard let room = room, err == nil else {
                 self.instance.logger.log(err!.localizedDescription, logLevel: .error)
-                self.delegate.error(error: err!)
+                self.delegate?.error(error: err!)
                 return
             }
 
@@ -504,11 +504,11 @@ extension PCUserSubscription {
 
                 guard let user = user, err == nil else {
                     strongSelf.instance.logger.log(err!.localizedDescription, logLevel: .error)
-                    strongSelf.delegate.error(error: err!)
+                    strongSelf.delegate?.error(error: err!)
                     return
                 }
 
-                strongSelf.delegate.userStoppedTyping(room: room, user: user)
+                strongSelf.delegate?.userStoppedTyping(room: room, user: user)
                 room.subscription?.delegate?.userStoppedTyping(user: user)
                 strongSelf.instance.logger.log("\(user.displayName) stopped typing in room \(room.name)", logLevel: .verbose)
             }

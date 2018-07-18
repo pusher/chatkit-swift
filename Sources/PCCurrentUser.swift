@@ -793,7 +793,9 @@ public final class PCCurrentUser {
         self.instance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
-            onEvent: messageSubscription.handleEvent
+            onEvent: { [unowned messageSubscription] eventID, headers, data in
+                messageSubscription.handleEvent(eventId: eventID, headers: headers, data: data)
+            }
             // TODO: Should we be handling onError here somehow?
         )
 
@@ -828,7 +830,9 @@ public final class PCCurrentUser {
         self.cursorsInstance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
-            onEvent: cursorSubscription.handleEvent
+            onEvent: { [unowned cursorSubscription] eventID, headers, data in
+                cursorSubscription.handleEvent(eventId: eventID, headers: headers, data: data)
+            }
             // TODO: Should we be handling onError here somehow?
         )
 

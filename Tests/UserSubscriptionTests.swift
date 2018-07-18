@@ -3,6 +3,7 @@ import PusherPlatform
 @testable import PusherChatkit
 
 class UserSubscriptionTests: XCTestCase {
+    var chatManager: ChatManager!
 
     override func setUp() {
         super.setUp()
@@ -36,12 +37,13 @@ class UserSubscriptionTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        chatManager.disconnect()
     }
 
     func testThatWeCanConnect() {
         let tokenEndpoint = testInstanceTokenProviderURL
 
-        let chatManager = ChatManager(
+        chatManager = ChatManager(
             instanceLocator: testInstanceLocator,
             tokenProvider: PCTokenProvider(url: tokenEndpoint),
             userId: "ash",

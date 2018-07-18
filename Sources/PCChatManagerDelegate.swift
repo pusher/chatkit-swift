@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol PCChatManagerDelegate {
+public protocol PCChatManagerDelegate: AnyObject {
     func addedToRoom(room: PCRoom)
     func removedFromRoom(room: PCRoom)
     func roomUpdated(room: PCRoom)

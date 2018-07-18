@@ -249,6 +249,33 @@ func newTestChatManager(
     )
 }
 
+//func createRoom(
+//    user: PCCurrentUser,
+//    roomName: String,
+//    isPrivate: Bool = false,
+//    addUserIDs userIDs: [String] = []
+//) throws -> PCRoom {
+//    var room: PCRoom!
+//    var error: Error?
+//
+//    let group = DispatchGroup()
+//    group.enter()
+//
+//    user.createRoom(name: roomName, isPrivate: isPrivate, addUserIds: userIDs) { r, e in
+//        room = r
+//        error = e
+//        group.leave()
+//    }
+//
+//    group.wait()
+//
+//    if let e = error {
+//        throw e
+//    }
+//
+//    return room
+//}
+
 func dataSubscriptionEventFor(_ eventJSON: String) -> Data {
     let noNewlineEventString = eventJSON.replacingOccurrences(of: "\n", with: "")
     let wrappedInitialStateEvent = "[1, \"\", {}, \(noNewlineEventString)]\n"

@@ -67,6 +67,14 @@ class TypingIndicatorTests: XCTestCase {
         waitForExpectations(timeout: 10)
     }
 
+    override func tearDown() {
+        aliceChatManager.disconnect()
+        aliceChatManager = nil
+        bobChatManager.disconnect()
+        bobChatManager = nil
+        roomId = nil
+    }
+
     func testChatManagerDelegateTypingHooks() {
         let startedEx = expectation(description: "notified of Bob starting typing (user)")
         let stoppedEx = expectation(description: "notified of Bob stopping typing (user)")
@@ -92,12 +100,16 @@ class TypingIndicatorTests: XCTestCase {
             stoppedEx.fulfill()
         }
 
-        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate(
+        let aliceCMDelegate = TestingChatManagerDelegate(
             userStartedTyping: userStartedTyping,
             userStoppedTyping: userStoppedTyping
-        )) { _alice, err in
+        )
+
+        let bobCMDelegate = TestingChatManagerDelegate()
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _alice, err in
             XCTAssertNil(err)
-            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            self.bobChatManager.connect(delegate: bobCMDelegate) { bob, err in
                 XCTAssertNil(err)
                 bob!.typing(in: bob!.rooms.first(where: { $0.id == self.roomId })!)
             }

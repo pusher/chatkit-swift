@@ -4,11 +4,15 @@ import Mockingjay
 @testable import PusherChatkit
 
 class CurrentUserTests: XCTestCase {
+    var chatManager: ChatManager!
+
     override func setUp() {
         super.setUp()
     }
 
     override func tearDown() {
+        super.tearDown()
+        chatManager.disconnect()
         MockingjayProtocol.removeAllStubs()
     }
 
@@ -17,7 +21,7 @@ class CurrentUserTests: XCTestCase {
         let tokenEndpoint = "https://testing-chatkit.com/token"
         let userID = "ash"
 
-        let chatManager = ChatManager(
+        chatManager = ChatManager(
             instanceLocator: instanceLocator,
             tokenProvider: PCTokenProvider(url: tokenEndpoint),
             userId: userID,
