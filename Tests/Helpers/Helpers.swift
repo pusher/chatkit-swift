@@ -74,11 +74,11 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
         handleUserStoppedTyping(user)
     }
 
-    func userCameOnline(user: PCUser) -> Void {
+    func userCameOnlineInRoom(user: PCUser) -> Void {
         handleUserCameOnline(user)
     }
 
-    func userWentOffline(user: PCUser) -> Void {
+    func userWentOfflineInRoom(user: PCUser) -> Void {
         handleUserWentOffline(user)
     }
 }

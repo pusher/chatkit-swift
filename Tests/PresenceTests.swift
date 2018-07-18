@@ -60,16 +60,19 @@ class PresenceTests: XCTestCase {
                     }
                     self.roomId = room!.id
                     createRoomEx.fulfill()
+
+                    sleep(2) // TODO this shouldn't be necessary.
+                    self.aliceChatManager.disconnect()
                 }
             }
         }
 
         waitForExpectations(timeout: 10)
-
-        aliceChatManager.disconnect()
     }
 
     func testChatManagerDelegatePresenceHooks() {
+        sleep(2) // FIXME this is a disgrace
+
         let onlineEx = expectation(description: "notified of Bob coming online (user)")
         let offlineEx = expectation(description: "notified of Bob going offline (user)")
 
@@ -77,6 +80,7 @@ class PresenceTests: XCTestCase {
             XCTAssertEqual(user.id, "bob")
             onlineEx.fulfill()
 
+            sleep(2) // TODO this shouldn't be necessary.
             self.bobChatManager.disconnect()
         }
 
@@ -90,6 +94,7 @@ class PresenceTests: XCTestCase {
             userWentOffline: userWentOffline
         )) { _, err in
             XCTAssertNil(err)
+
             self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
                 XCTAssertNil(err)
             }
@@ -99,6 +104,8 @@ class PresenceTests: XCTestCase {
     }
 
     func testRoomDelegateTypingHooks() {
+        sleep(2) // FIXME this is a disgrace
+
         let onlineEx = expectation(description: "notified of Alice coming online (room)")
         let offlineEx = expectation(description: "notified of Alice going offline (room)")
 
@@ -106,7 +113,8 @@ class PresenceTests: XCTestCase {
             XCTAssertEqual(user.id, "alice")
             onlineEx.fulfill()
 
-            self.bobChatManager.disconnect()
+            sleep(2) // TODO this shouldn't be necessary.
+            self.aliceChatManager.disconnect()
         }
 
         let userWentOffline = { (user: PCUser) -> Void in
@@ -133,6 +141,6 @@ class PresenceTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 15)
+        waitForExpectations(timeout: 10)
     }
 }
