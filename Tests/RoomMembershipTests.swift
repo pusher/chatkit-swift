@@ -342,4 +342,37 @@ class RoomMembershipTests: XCTestCase {
 
         waitForExpectations(timeout: 10)
     }
+
+    // MARK: users property tests
+
+    func testUsersPropertyOfRoomIsProperlyPopulatedAfterSubscribingToRoom() {
+        let usersSetProperly = expectation(description: "users property is correct")
+
+        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+            XCTAssertNil(err)
+            alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+                XCTAssertNil(err)
+
+                let roomToTest = alice!.rooms.first(where: { $0.id == room!.id })!
+
+                alice!.subscribeToRoom(
+                    room: roomToTest,
+                    roomDelegate: TestingRoomDelegate()
+                )
+
+                sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
+
+                let expectedUserIDs = ["alice", "bob"]
+                let sortedUserIDs = roomToTest.users.map { $0.id }.sorted()
+
+                if sortedUserIDs == expectedUserIDs {
+                    usersSetProperly.fulfill()
+                } else {
+                    XCTFail("Room's users are not set correctly. They were \(sortedUserIDs)")
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 10)
+    }
 }

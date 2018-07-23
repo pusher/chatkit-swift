@@ -237,8 +237,6 @@
 			children = (
 				33D0394D20F6593200B5D87A /* Config */,
 				33D0394C20F650F900B5D87A /* Helpers */,
-				33831C8A1A9CF61600B124F1 /* Products */,
-				33D0394E20F6594600B5D87A /* Supporting Files */,
 				F2AA717420F7616000BC01DE /* CursorTests.swift */,
 				F2AA717820F8FBA400BC01DE /* TypingIndicatorTests.swift */,
 				339768F420F4ED2F00BCB10B /* UserSubscriptionTests.swift */,
@@ -248,6 +246,8 @@
 				337C0C9520615A6600BB977A /* TokenProviderTests.swift */,
 				33BC080F209A1765001DB5F9 /* DefaultsTests.swift */,
 				F2665DED20FDEE56002A0A3D /* PresenceTests.swift */,
+				33831C8A1A9CF61600B124F1 /* Products */,
+				33D0394E20F6594600B5D87A /* Supporting Files */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
