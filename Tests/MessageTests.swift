@@ -320,7 +320,7 @@ class MessagesTests: XCTestCase {
                     text: "see attached",
                     attachmentType: .fileURL(
                         URL(fileURLWithPath: veryImportantImage),
-                        name: "Very Important Image"
+                        name: "VeryImportantImage"
                     )
                 ) { _, err in
                     XCTAssertNil(err)
