@@ -2,8 +2,9 @@ import UIKit
 import PusherChatkit
 
 class ViewController: UIViewController {
-    @IBOutlet var feedLabel: UILabel!
     var delegate: AppDelegate!
+
+    var cmDelegate: PCChatManagerDelegate!
 
     public var pusherChatUser: PCCurrentUser?
     public var currentRoom: PCRoom?
@@ -18,6 +19,11 @@ class ViewController: UIViewController {
         connectToChatkit()
     }
 
+    @IBAction func sendMessageButton(_ sender: Any) {
+        print("About to send a message")
+        sendRandomMessage()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,7 +32,9 @@ class ViewController: UIViewController {
     }
 
     func connectToChatkit() {
-        delegate.pusherChat?.connect(delegate: self) { [weak self] currentUser, error in
+        cmDelegate = MyDelegate()
+
+        delegate.pusherChat?.connect(delegate: cmDelegate) { [weak self] currentUser, error in
             guard error == nil else {
                 print("Error connecting: \(error!)")
                 return
@@ -61,6 +69,21 @@ class ViewController: UIViewController {
 //                    print("Successfully sent message with ID: \(messageId!)")
 //                }
             }
+        }
+    }
+
+    func sendRandomMessage() {
+        let messageText = "Some random message \(arc4random_uniform(1001))"
+        self.pusherChatUser!.sendMessage(
+            roomId: currentRoom!.id,
+            text: messageText
+        ) { messageID, err in
+            guard err == nil else {
+                print("Error sending message \(err!.localizedDescription)")
+                return
+            }
+
+            print("Message successfully sent with ID \(messageID!)")
         }
     }
 }
@@ -137,8 +160,7 @@ extension ViewController: PCRoomDelegate {
     }
 }
 
-extension ViewController: PCChatManagerDelegate {
-
+public class MyDelegate: PCChatManagerDelegate {
     public func addedToRoom(room: PCRoom) {
         print("Added to room: \(room.name)")
     }

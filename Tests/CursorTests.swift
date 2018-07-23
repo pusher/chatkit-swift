@@ -3,8 +3,8 @@ import PusherPlatform
 @testable import PusherChatkit
 
 class CursorTests: XCTestCase {
-    var aliceChatManager = newTestChatManager(userId: "alice")
-    var bobChatManager = newTestChatManager(userId: "bob")
+    var aliceChatManager: ChatManager! = newTestChatManager(userId: "alice")
+    var bobChatManager: ChatManager! = newTestChatManager(userId: "bob")
     var alice: PCCurrentUser!
     var bob: PCCurrentUser!
     var roomId: Int!
@@ -81,8 +81,10 @@ class CursorTests: XCTestCase {
 
     override func tearDown() {
         aliceChatManager.disconnect()
-        bobChatManager.disconnect()
+        aliceChatManager = nil
         alice = nil
+        bobChatManager.disconnect()
+        bobChatManager = nil
         bob = nil
         roomId = nil
     }

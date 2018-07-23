@@ -3,20 +3,20 @@ import PusherPlatform
 @testable import PusherChatkit
 
 class RoomMembershipTests: XCTestCase {
-    var aliceChatManager = newTestChatManager(userId: "alice")
-    var bobChatManager = newTestChatManager(userId: "bob")
-    var alice: PCCurrentUser!
-    var bob: PCCurrentUser!
+    var aliceChatManager: ChatManager!
+    var bobChatManager: ChatManager!
+    var roomId: Int!
 
     override func setUp() {
         super.setUp()
+
+        aliceChatManager = newTestChatManager(userId: "alice")
+        bobChatManager = newTestChatManager(userId: "bob")
 
         let deleteResourcesEx = expectation(description: "delete resources")
         let createRolesEx = expectation(description: "create roles")
         let createAliceEx = expectation(description: "create Alice")
         let createBobEx = expectation(description: "create Bob")
-        let connectAliceEx = expectation(description: "connect as Alice")
-        let connectBobEx = expectation(description: "connect as Bob")
 
         deleteInstanceResources() { err in
             guard err == nil else {
@@ -45,182 +45,426 @@ class RoomMembershipTests: XCTestCase {
                 createBobEx.fulfill()
             }
 
-            // TODO the following should really wait until we know both Alice
-            // and Bob exist... for now, sleep!
             sleep(1)
-
-            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { user, err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
-                self.alice = user
-                connectAliceEx.fulfill()
-            }
-
-            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { user, err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
-                self.bob = user
-                connectBobEx.fulfill()
-            }
         }
-
-//        let createRolesEx = expectation(description: "create roles")
-//        let createAliceEx = expectation(description: "create Alice")
-//        let createBobEx = expectation(description: "create Bob")
-//
-//        deleteInstanceResources() { err in
-//            guard err == nil else {
-//                fatalError(err!.localizedDescription)
-//            }
-//
-//            createStandardInstanceRoles() { err in
-//                guard err == nil else {
-//                    fatalError(err!.localizedDescription)
-//                }
-//                createRolesEx.fulfill()
-//            }
-//
-//            createUser(id: "alice") { err in
-//                guard err == nil else {
-//                    fatalError(err!.localizedDescription)
-//                }
-//                createAliceEx.fulfill()
-//            }
-//
-//            createUser(id: "bob") { err in
-//                guard err == nil else {
-//                    fatalError(err!.localizedDescription)
-//                }
-//                createBobEx.fulfill()
-//            }
-//        }
-//
-//        bob = try! connectAsUser(id: "bob")
 
         waitForExpectations(timeout: 10)
     }
 
     override func tearDown() {
         aliceChatManager.disconnect()
+        aliceChatManager = nil
         bobChatManager.disconnect()
-        alice = nil
-        bob = nil
+        bobChatManager = nil
     }
 
+    // MARK: Chat manager delegate tests
+
     func testChatManagerUserJoinedRoomHookWhenUserJoins() {
-        class AliceCMJoinRoomDelegate: NSObject, PCChatManagerDelegate {
-            var ex: XCTestExpectation?
-            var userID: String?
-            var roomID: Int?
-
-            init(exp: XCTestExpectation? = nil, userID: String? = nil, roomID: Int? = nil) {
-                self.ex = exp
-                self.userID = userID
-                self.roomID = roomID
-            }
-
-            func userJoinedRoom(room: PCRoom, user: PCUser) {
-                if let e = ex {
-                    XCTAssertEqual(user.id, userID)
-                    XCTAssertEqual(room.id, roomID)
-                    e.fulfill()
-                }
-            }
-        }
-
-        let ex = expectation(description: "user joined room hook called")
-        let aliceChatManagerDelegate = AliceCMJoinRoomDelegate(exp: ex, userID: bob.id)
-//        alice = try! connectAsUser(id: "alice", delegate: aliceChatManagerDelegate)
-//        let room = try! createRoom(user: alice, roomName: "mushroom")
-        aliceChatManagerDelegate.roomID = room.id
-
+        let userJoinedRoomHookEx = expectation(description: "user joined room hook called")
         let bobJoinedRoomEx = expectation(description: "bob joined room")
 
-        bob.joinRoom(id: room.id) { room, err in
+        let userJoinedRoom = { (room: PCRoom, user: PCUser) -> Void in
+            XCTAssertEqual(user.id, "bob")
+            XCTAssertEqual(room.name, "mushroom")
+            userJoinedRoomHookEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(userJoinedRoom: userJoinedRoom)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             guard err == nil else {
                 XCTFail(err!.localizedDescription)
                 return
             }
-
-            bobJoinedRoomEx.fulfill()
+            alice!.createRoom(name: "mushroom") { room, err in
+                guard err == nil else {
+                    XCTFail(err!.localizedDescription)
+                    return
+                }
+                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+                    guard err == nil else {
+                        XCTFail(err!.localizedDescription)
+                        return
+                    }
+                    bob!.joinRoom(id: room!.id) { room, err in
+                        guard err == nil else {
+                            XCTFail(err!.localizedDescription)
+                            return
+                        }
+                        bobJoinedRoomEx.fulfill()
+                    }
+                }
+            }
         }
 
         waitForExpectations(timeout: 10)
     }
 
     func testChatManagerUserLeftRoomHookWhenUserLeaves() {
-        class AliceCMLeaveRoomDelegate: NSObject, PCChatManagerDelegate {
-            var ex: XCTestExpectation?
-            var userID: String?
-            var roomID: Int?
-
-            init(exp: XCTestExpectation? = nil, userID: String? = nil, roomID: Int? = nil) {
-                self.ex = exp
-                self.userID = userID
-                self.roomID = roomID
-            }
-
-            deinit {
-                print("DEINIt AliceCMLeaveRoomDelegate")
-            }
-
-            func userLeftRoom(room: PCRoom, user: PCUser) {
-                if let e = ex {
-                    XCTAssertEqual(user.id, userID)
-                    XCTAssertEqual(room.id, roomID)
-                    e.fulfill()
-                }
-            }
-        }
-
-        let ex = expectation(description: "user left room hook called")
-        let aliceChatManagerDelegate = AliceCMLeaveRoomDelegate(exp: ex, userID: bob.id)
-        alice = try! connectAsUser(id: "alice", delegate: aliceChatManagerDelegate)
-        let room = try! createRoom(user: alice, roomName: "mushroom", addUserIDs: ["bob"])
-        aliceChatManagerDelegate.roomID = room.id
-
+        let userLeftRoomHookEx = expectation(description: "user left room hook called")
         let bobLeftRoomEx = expectation(description: "bob left room")
 
-        bob.leaveRoom(id: room.id) { err in
+        let userLeftRoom = { (room: PCRoom, user: PCUser) -> Void in
+            XCTAssertEqual(user.id, "bob")
+            XCTAssertEqual(room.name, "mushroom")
+            userLeftRoomHookEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(userLeftRoom: userLeftRoom)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             guard err == nil else {
                 XCTFail(err!.localizedDescription)
                 return
             }
-
-            bobLeftRoomEx.fulfill()
+            alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+                guard err == nil else {
+                    XCTFail(err!.localizedDescription)
+                    return
+                }
+                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+                    guard err == nil else {
+                        XCTFail(err!.localizedDescription)
+                        return
+                    }
+                    bob!.leaveRoom(id: room!.id) { err in
+                        guard err == nil else {
+                            XCTFail(err!.localizedDescription)
+                            return
+                        }
+                        bobLeftRoomEx.fulfill()
+                    }
+                }
+            }
         }
 
         waitForExpectations(timeout: 10)
     }
 
-    func testChatManagerAddedToRoomHookCalledUserAddedInRoomCreation() {
-        class AliceCMAddedToRoomDelegate: NSObject, PCChatManagerDelegate {
-            var ex: XCTestExpectation?
-            var roomID: Int?
+    func testChatManagerAddedToRoomHookCalledWhenSelfAddedInRoomCreation() {
+        let addedToRoomHookEx = expectation(description: "added to room hook called when added as part of room creation")
 
-            init(exp: XCTestExpectation? = nil, roomID: Int? = nil) {
-                self.ex = exp
-                self.roomID = roomID
+        let addedToRoom = { (room: PCRoom) -> Void in
+            XCTAssertEqual(room.name, "mushroom")
+            addedToRoomHookEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(addedToRoom: addedToRoom)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            guard err == nil else {
+                XCTFail(err!.localizedDescription)
+                return
             }
-
-            deinit {
-                print("DEINIt AliceCMAddedToRoomDelegate")
-            }
-
-            func addedToRoom(room: PCRoom) {
-                if let e = ex {
-                    e.fulfill()
+            alice!.createRoom(name: "mushroom") { room, err in
+                guard err == nil else {
+                    XCTFail(err!.localizedDescription)
+                    return
                 }
             }
         }
 
-        let ex = expectation(description: "added to room hook called when added as part of room creation")
-        let aliceChatManagerDelegate = AliceCMAddedToRoomDelegate(exp: ex)
-        alice = try! connectAsUser(id: "alice", delegate: aliceChatManagerDelegate)
-        let room = try! createRoom(user: bob, roomName: "mushroom", addUserIDs: ["alice"])
-        aliceChatManagerDelegate.roomID = room.id
+        waitForExpectations(timeout: 10)
+    }
+
+    func testChatManagerAddedToRoomHookCalledWhenUserAddsAnotherUserInRoomCreation() {
+        let addedToRoomHookEx = expectation(description: "added to room hook called when added as part of room creation")
+        let bobAddAliceEx = expectation(description: "bob added alice to room when creating room")
+
+        let addedToRoom = { (room: PCRoom) -> Void in
+            XCTAssertEqual(room.name, "mushroom")
+            addedToRoomHookEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(addedToRoom: addedToRoom)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            guard err == nil else {
+                XCTFail(err!.localizedDescription)
+                return
+            }
+            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+                guard err == nil else {
+                    XCTFail(err!.localizedDescription)
+                    return
+                }
+                bob!.createRoom(name: "mushroom", addUserIds: ["alice"]) { room, err in
+                    guard err == nil else {
+                        XCTFail(err!.localizedDescription)
+                        return
+                    }
+                    bobAddAliceEx.fulfill()
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 10)
+    }
+
+    func testChatManagerAddedToRoomHookCalledWhenUserAddsAnotherUser() {
+        let addedToRoomHookEx = expectation(description: "added to room hook called")
+        let bobAddAliceEx = expectation(description: "bob added alice to room")
+
+        let addedToRoom = { (room: PCRoom) -> Void in
+            XCTAssertEqual(room.name, "mushroom")
+            addedToRoomHookEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(
+            addedToRoom: addedToRoom
+        )
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            guard err == nil else {
+                XCTFail(err!.localizedDescription)
+                return
+            }
+
+            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+                guard err == nil else {
+                    XCTFail(err!.localizedDescription)
+                    return
+                }
+                bob!.createRoom(name: "mushroom") { room, err in
+                    guard err == nil else {
+                        XCTFail(err!.localizedDescription)
+                        return
+                    }
+                    bob!.addUser(id: "alice", to: room!.id) { err in
+                        guard err == nil else {
+                            XCTFail(err!.localizedDescription)
+                            return
+                        }
+                        bobAddAliceEx.fulfill()
+                    }
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 10)
+    }
+
+    func testChatManagerRemovedFromRoomHookCalledUserRemovedFromRoom() {
+        let removedFromRoomHookEx = expectation(description: "removed from room hook called")
+        let bobRemoveAliceEx = expectation(description: "bob removed alice from room")
+
+        let removedFromRoom = { (room: PCRoom) -> Void in
+            XCTAssertEqual(room.name, "mushroom")
+            removedFromRoomHookEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(
+            removedFromRoom: removedFromRoom
+        )
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            guard err == nil else {
+                XCTFail(err!.localizedDescription)
+                return
+            }
+            alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+                guard err == nil else {
+                    XCTFail(err!.localizedDescription)
+                    return
+                }
+                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+                    guard err == nil else {
+                        XCTFail(err!.localizedDescription)
+                        return
+                    }
+                    bob!.removeUser(id: "alice", from: room!.id) { err in
+                        guard err == nil else {
+                            XCTFail(err!.localizedDescription)
+                            return
+                        }
+                        bobRemoveAliceEx.fulfill()
+                    }
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 10)
+    }
+
+    func testChatManagerRemovedFromRoomHookCalledUserRemovesSelf() {
+        let removedFromRoomHookEx = expectation(description: "removed from room hook called")
+        let aliceRemoveSelfEx = expectation(description: "bob removed alice from room")
+
+        let removedFromRoom = { (room: PCRoom) -> Void in
+            XCTAssertEqual(room.name, "mushroom")
+            removedFromRoomHookEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(
+            removedFromRoom: removedFromRoom
+        )
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            guard err == nil else {
+                XCTFail(err!.localizedDescription)
+                return
+            }
+            alice!.createRoom(name: "mushroom") { room, err in
+                guard err == nil else {
+                    XCTFail(err!.localizedDescription)
+                    return
+                }
+                alice!.removeUser(id: "alice", from: room!.id) { err in
+                    guard err == nil else {
+                        XCTFail(err!.localizedDescription)
+                        return
+                    }
+                    aliceRemoveSelfEx.fulfill()
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 10)
+    }
+
+    func testChatManagerRoomDeletedHookCalled() {
+        let assignAdminRoleEx = expectation(description: "assign alice admin role")
+        let unassignAdminRoleEx = expectation(description: "unassign alice admin role")
+        let roomDeletedHookEx = expectation(description: "room deleted hook called")
+        let deleteRoomEx = expectation(description: "room deleted")
+
+        let roomDeleted = { (room: PCRoom) -> Void in
+            XCTAssertEqual(room.name, "mushroom")
+            roomDeletedHookEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(roomDeleted: roomDeleted)
+
+        assignGlobalRole("admin", toUser: "alice") { err in
+            guard err == nil else {
+                XCTFail(err!.localizedDescription)
+                return
+            }
+            assignAdminRoleEx.fulfill()
+            self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+                guard err == nil else {
+                    XCTFail(err!.localizedDescription)
+                    return
+                }
+                alice!.createRoom(name: "mushroom") { room, err in
+                    guard err == nil else {
+                        XCTFail(err!.localizedDescription)
+                        return
+                    }
+                    alice!.deleteRoom(id: room!.id) { err in
+                        guard err == nil else {
+                            XCTFail(err!.localizedDescription)
+                            return
+                        }
+                        deleteRoomEx.fulfill()
+                        assignGlobalRole("default", toUser: "alice") { err in
+                            guard err == nil else {
+                                XCTFail(err!.localizedDescription)
+                                return
+                            }
+                            unassignAdminRoleEx.fulfill()
+                        }
+                    }
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 10)
+    }
+
+    // MARK: Room delegate tests
+
+    func testRoomDelegateUserJoinedRoomHookWhenUserJoins() {
+        let userJoinedHookEx = expectation(description: "user joined hook called")
+        let bobJoinedRoomEx = expectation(description: "bob joined room")
+
+        let userJoined = { (user: PCUser) -> Void in
+            XCTAssertEqual(user.id, "bob")
+            userJoinedHookEx.fulfill()
+        }
+
+        let aliceRoomDelegate = TestingRoomDelegate(userJoined: userJoined)
+
+        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+            guard err == nil else {
+                XCTFail(err!.localizedDescription)
+                return
+            }
+            alice!.createRoom(name: "mushroom") { room, err in
+                guard err == nil else {
+                    XCTFail(err!.localizedDescription)
+                    return
+                }
+                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+                    guard err == nil else {
+                        XCTFail(err!.localizedDescription)
+                        return
+                    }
+                    alice!.subscribeToRoom(
+                        room: alice!.rooms.first(where: { $0.id == room!.id })!,
+                        roomDelegate: aliceRoomDelegate
+                    )
+
+                    sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
+
+                    bob!.joinRoom(id: room!.id) { room, err in
+                        guard err == nil else {
+                            XCTFail(err!.localizedDescription)
+                            return
+                        }
+                        bobJoinedRoomEx.fulfill()
+                    }
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 1000)
+    }
+
+    func testRoomDelegateUserLeftRoomHookWhenUserLeaves() {
+        let userLeftHookEx = expectation(description: "user left hook called")
+        let bobLeftRoomEx = expectation(description: "bob left room")
+
+        let userLeft = { (user: PCUser) -> Void in
+            XCTAssertEqual(user.id, "bob")
+            userLeftHookEx.fulfill()
+        }
+
+        let aliceRoomDelegate = TestingRoomDelegate(userLeft: userLeft)
+
+        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+            guard err == nil else {
+                XCTFail(err!.localizedDescription)
+                return
+            }
+            alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+                guard err == nil else {
+                    XCTFail(err!.localizedDescription)
+                    return
+                }
+                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+                    guard err == nil else {
+                        XCTFail(err!.localizedDescription)
+                        return
+                    }
+                    alice!.subscribeToRoom(
+                        room: alice!.rooms.first(where: { $0.id == room!.id })!,
+                        roomDelegate: aliceRoomDelegate
+                    )
+
+                    sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
+
+                    bob!.leaveRoom(id: room!.id) { err in
+                        guard err == nil else {
+                            XCTFail(err!.localizedDescription)
+                            return
+                        }
+                        bobLeftRoomEx.fulfill()
+                    }
+                }
+            }
+        }
 
         waitForExpectations(timeout: 10)
     }

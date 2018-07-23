@@ -38,6 +38,7 @@ class UserSubscriptionTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         chatManager.disconnect()
+        chatManager = nil
     }
 
     func testThatWeCanConnect() {

@@ -70,6 +70,14 @@ class PresenceTests: XCTestCase {
         waitForExpectations(timeout: 10)
     }
 
+    override func tearDown() {
+        aliceChatManager.disconnect()
+        aliceChatManager = nil
+        bobChatManager.disconnect()
+        bobChatManager = nil
+        roomId = nil
+    }
+
     func testChatManagerDelegatePresenceHooks() {
         sleep(2) // FIXME this is a disgrace
 
@@ -89,10 +97,12 @@ class PresenceTests: XCTestCase {
             offlineEx.fulfill()
         }
 
-        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate(
+        let aliceCMDelegate = TestingChatManagerDelegate(
             userCameOnline: userCameOnline,
             userWentOffline: userWentOffline
-        )) { _, err in
+        )
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _, err in
             XCTAssertNil(err)
 
             self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
@@ -103,7 +113,7 @@ class PresenceTests: XCTestCase {
         waitForExpectations(timeout: 10)
     }
 
-    func testRoomDelegateTypingHooks() {
+    func testRoomDelegatePresenceHooks() {
         sleep(2) // FIXME this is a disgrace
 
         let onlineEx = expectation(description: "notified of Alice coming online (room)")
