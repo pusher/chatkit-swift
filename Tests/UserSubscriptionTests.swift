@@ -13,21 +13,15 @@ class UserSubscriptionTests: XCTestCase {
         let createUserEx = expectation(description: "create user")
 
         deleteInstanceResources() { err in
-            guard err == nil else {
-                fatalError(err!.localizedDescription)
-            }
+            XCTAssertNil(err)
             deleteResourcesEx.fulfill()
 
             createStandardInstanceRoles() { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createRolesEx.fulfill()
             }
             createUser(id: "ash") { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createUserEx.fulfill()
             }
         }

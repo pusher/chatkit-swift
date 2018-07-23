@@ -21,29 +21,21 @@ class CursorTests: XCTestCase {
         let createRoomEx = expectation(description: "create room")
 
         deleteInstanceResources() { err in
-            guard err == nil else {
-                fatalError(err!.localizedDescription)
-            }
+            XCTAssertNil(err)
             deleteResourcesEx.fulfill()
 
             createStandardInstanceRoles() { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createRolesEx.fulfill()
             }
 
             createUser(id: "alice") { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createAliceEx.fulfill()
             }
 
             createUser(id: "bob") { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createBobEx.fulfill()
             }
 
@@ -52,25 +44,19 @@ class CursorTests: XCTestCase {
             sleep(1)
 
             self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { user, err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 self.alice = user
                 connectAliceEx.fulfill()
 
                 self.alice.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
-                    guard err == nil else {
-                        fatalError(err!.localizedDescription)
-                    }
+                    XCTAssertNil(err)
                     self.roomId = room!.id
                     createRoomEx.fulfill()
                 }
             }
 
             self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { user, err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 self.bob = user
                 connectBobEx.fulfill()
             }

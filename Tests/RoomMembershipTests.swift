@@ -19,29 +19,21 @@ class RoomMembershipTests: XCTestCase {
         let createBobEx = expectation(description: "create Bob")
 
         deleteInstanceResources() { err in
-            guard err == nil else {
-                fatalError(err!.localizedDescription)
-            }
+            XCTAssertNil(err)
             deleteResourcesEx.fulfill()
 
             createStandardInstanceRoles() { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createRolesEx.fulfill()
             }
 
             createUser(id: "alice") { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createAliceEx.fulfill()
             }
 
             createUser(id: "bob") { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createBobEx.fulfill()
             }
 
@@ -73,25 +65,13 @@ class RoomMembershipTests: XCTestCase {
         let aliceCMDelegate = TestingChatManagerDelegate(userJoinedRoom: userJoinedRoom)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
-            guard err == nil else {
-                XCTFail(err!.localizedDescription)
-                return
-            }
+            XCTAssertNil(err)
             alice!.createRoom(name: "mushroom") { room, err in
-                guard err == nil else {
-                    XCTFail(err!.localizedDescription)
-                    return
-                }
+                XCTAssertNil(err)
                 self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
-                    guard err == nil else {
-                        XCTFail(err!.localizedDescription)
-                        return
-                    }
+                    XCTAssertNil(err)
                     bob!.joinRoom(id: room!.id) { room, err in
-                        guard err == nil else {
-                            XCTFail(err!.localizedDescription)
-                            return
-                        }
+                        XCTAssertNil(err)
                         bobJoinedRoomEx.fulfill()
                     }
                 }
@@ -114,25 +94,13 @@ class RoomMembershipTests: XCTestCase {
         let aliceCMDelegate = TestingChatManagerDelegate(userLeftRoom: userLeftRoom)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
-            guard err == nil else {
-                XCTFail(err!.localizedDescription)
-                return
-            }
+            XCTAssertNil(err)
             alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
-                guard err == nil else {
-                    XCTFail(err!.localizedDescription)
-                    return
-                }
+                XCTAssertNil(err)
                 self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
-                    guard err == nil else {
-                        XCTFail(err!.localizedDescription)
-                        return
-                    }
+                    XCTAssertNil(err)
                     bob!.leaveRoom(id: room!.id) { err in
-                        guard err == nil else {
-                            XCTFail(err!.localizedDescription)
-                            return
-                        }
+                        XCTAssertNil(err)
                         bobLeftRoomEx.fulfill()
                     }
                 }
@@ -153,15 +121,9 @@ class RoomMembershipTests: XCTestCase {
         let aliceCMDelegate = TestingChatManagerDelegate(addedToRoom: addedToRoom)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
-            guard err == nil else {
-                XCTFail(err!.localizedDescription)
-                return
-            }
+            XCTAssertNil(err)
             alice!.createRoom(name: "mushroom") { room, err in
-                guard err == nil else {
-                    XCTFail(err!.localizedDescription)
-                    return
-                }
+                XCTAssertNil(err)
             }
         }
 
@@ -180,20 +142,11 @@ class RoomMembershipTests: XCTestCase {
         let aliceCMDelegate = TestingChatManagerDelegate(addedToRoom: addedToRoom)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
-            guard err == nil else {
-                XCTFail(err!.localizedDescription)
-                return
-            }
+            XCTAssertNil(err)
             self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
-                guard err == nil else {
-                    XCTFail(err!.localizedDescription)
-                    return
-                }
+                XCTAssertNil(err)
                 bob!.createRoom(name: "mushroom", addUserIds: ["alice"]) { room, err in
-                    guard err == nil else {
-                        XCTFail(err!.localizedDescription)
-                        return
-                    }
+                    XCTAssertNil(err)
                     bobAddAliceEx.fulfill()
                 }
             }
@@ -211,31 +164,16 @@ class RoomMembershipTests: XCTestCase {
             addedToRoomHookEx.fulfill()
         }
 
-        let aliceCMDelegate = TestingChatManagerDelegate(
-            addedToRoom: addedToRoom
-        )
+        let aliceCMDelegate = TestingChatManagerDelegate(addedToRoom: addedToRoom)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
-            guard err == nil else {
-                XCTFail(err!.localizedDescription)
-                return
-            }
-
+            XCTAssertNil(err)
             self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
-                guard err == nil else {
-                    XCTFail(err!.localizedDescription)
-                    return
-                }
+                XCTAssertNil(err)
                 bob!.createRoom(name: "mushroom") { room, err in
-                    guard err == nil else {
-                        XCTFail(err!.localizedDescription)
-                        return
-                    }
+                    XCTAssertNil(err)
                     bob!.addUser(id: "alice", to: room!.id) { err in
-                        guard err == nil else {
-                            XCTFail(err!.localizedDescription)
-                            return
-                        }
+                        XCTAssertNil(err)
                         bobAddAliceEx.fulfill()
                     }
                 }
@@ -254,30 +192,16 @@ class RoomMembershipTests: XCTestCase {
             removedFromRoomHookEx.fulfill()
         }
 
-        let aliceCMDelegate = TestingChatManagerDelegate(
-            removedFromRoom: removedFromRoom
-        )
+        let aliceCMDelegate = TestingChatManagerDelegate(removedFromRoom: removedFromRoom)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
-            guard err == nil else {
-                XCTFail(err!.localizedDescription)
-                return
-            }
+            XCTAssertNil(err)
             alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
-                guard err == nil else {
-                    XCTFail(err!.localizedDescription)
-                    return
-                }
+                XCTAssertNil(err)
                 self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
-                    guard err == nil else {
-                        XCTFail(err!.localizedDescription)
-                        return
-                    }
+                    XCTAssertNil(err)
                     bob!.removeUser(id: "alice", from: room!.id) { err in
-                        guard err == nil else {
-                            XCTFail(err!.localizedDescription)
-                            return
-                        }
+                        XCTAssertNil(err)
                         bobRemoveAliceEx.fulfill()
                     }
                 }
@@ -296,25 +220,14 @@ class RoomMembershipTests: XCTestCase {
             removedFromRoomHookEx.fulfill()
         }
 
-        let aliceCMDelegate = TestingChatManagerDelegate(
-            removedFromRoom: removedFromRoom
-        )
+        let aliceCMDelegate = TestingChatManagerDelegate(removedFromRoom: removedFromRoom)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
-            guard err == nil else {
-                XCTFail(err!.localizedDescription)
-                return
-            }
+            XCTAssertNil(err)
             alice!.createRoom(name: "mushroom") { room, err in
-                guard err == nil else {
-                    XCTFail(err!.localizedDescription)
-                    return
-                }
+                XCTAssertNil(err)
                 alice!.removeUser(id: "alice", from: room!.id) { err in
-                    guard err == nil else {
-                        XCTFail(err!.localizedDescription)
-                        return
-                    }
+                    XCTAssertNil(err)
                     aliceRemoveSelfEx.fulfill()
                 }
             }
@@ -337,32 +250,17 @@ class RoomMembershipTests: XCTestCase {
         let aliceCMDelegate = TestingChatManagerDelegate(roomDeleted: roomDeleted)
 
         assignGlobalRole("admin", toUser: "alice") { err in
-            guard err == nil else {
-                XCTFail(err!.localizedDescription)
-                return
-            }
+            XCTAssertNil(err)
             assignAdminRoleEx.fulfill()
             self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
-                guard err == nil else {
-                    XCTFail(err!.localizedDescription)
-                    return
-                }
+                XCTAssertNil(err)
                 alice!.createRoom(name: "mushroom") { room, err in
-                    guard err == nil else {
-                        XCTFail(err!.localizedDescription)
-                        return
-                    }
+                    XCTAssertNil(err)
                     alice!.deleteRoom(id: room!.id) { err in
-                        guard err == nil else {
-                            XCTFail(err!.localizedDescription)
-                            return
-                        }
+                        XCTAssertNil(err)
                         deleteRoomEx.fulfill()
                         assignGlobalRole("default", toUser: "alice") { err in
-                            guard err == nil else {
-                                XCTFail(err!.localizedDescription)
-                                return
-                            }
+                            XCTAssertNil(err)
                             unassignAdminRoleEx.fulfill()
                         }
                     }
@@ -387,20 +285,11 @@ class RoomMembershipTests: XCTestCase {
         let aliceRoomDelegate = TestingRoomDelegate(userJoined: userJoined)
 
         self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
-            guard err == nil else {
-                XCTFail(err!.localizedDescription)
-                return
-            }
+            XCTAssertNil(err)
             alice!.createRoom(name: "mushroom") { room, err in
-                guard err == nil else {
-                    XCTFail(err!.localizedDescription)
-                    return
-                }
+                XCTAssertNil(err)
                 self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
-                    guard err == nil else {
-                        XCTFail(err!.localizedDescription)
-                        return
-                    }
+                    XCTAssertNil(err)
                     alice!.subscribeToRoom(
                         room: alice!.rooms.first(where: { $0.id == room!.id })!,
                         roomDelegate: aliceRoomDelegate
@@ -409,10 +298,7 @@ class RoomMembershipTests: XCTestCase {
                     sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
 
                     bob!.joinRoom(id: room!.id) { room, err in
-                        guard err == nil else {
-                            XCTFail(err!.localizedDescription)
-                            return
-                        }
+                        XCTAssertNil(err)
                         bobJoinedRoomEx.fulfill()
                     }
                 }
@@ -434,20 +320,11 @@ class RoomMembershipTests: XCTestCase {
         let aliceRoomDelegate = TestingRoomDelegate(userLeft: userLeft)
 
         self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
-            guard err == nil else {
-                XCTFail(err!.localizedDescription)
-                return
-            }
+            XCTAssertNil(err)
             alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
-                guard err == nil else {
-                    XCTFail(err!.localizedDescription)
-                    return
-                }
+                XCTAssertNil(err)
                 self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
-                    guard err == nil else {
-                        XCTFail(err!.localizedDescription)
-                        return
-                    }
+                    XCTAssertNil(err)
                     alice!.subscribeToRoom(
                         room: alice!.rooms.first(where: { $0.id == room!.id })!,
                         roomDelegate: aliceRoomDelegate
@@ -456,10 +333,7 @@ class RoomMembershipTests: XCTestCase {
                     sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
 
                     bob!.leaveRoom(id: room!.id) { err in
-                        guard err == nil else {
-                            XCTFail(err!.localizedDescription)
-                            return
-                        }
+                        XCTAssertNil(err)
                         bobLeftRoomEx.fulfill()
                     }
                 }

@@ -20,29 +20,21 @@ class PresenceTests: XCTestCase {
         let createRoomEx = expectation(description: "create room")
 
         deleteInstanceResources() { err in
-            guard err == nil else {
-                fatalError(err!.localizedDescription)
-            }
+            XCTAssertNil(err)
             deleteResourcesEx.fulfill()
 
             createStandardInstanceRoles() { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createRolesEx.fulfill()
             }
 
             createUser(id: "alice") { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createAliceEx.fulfill()
             }
 
             createUser(id: "bob") { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createBobEx.fulfill()
             }
 
@@ -51,13 +43,9 @@ class PresenceTests: XCTestCase {
             sleep(1)
 
             self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
-                    guard err == nil else {
-                        fatalError(err!.localizedDescription)
-                    }
+                    XCTAssertNil(err)
                     self.roomId = room!.id
                     createRoomEx.fulfill()
 
