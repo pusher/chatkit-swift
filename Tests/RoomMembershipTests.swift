@@ -305,7 +305,7 @@ class RoomMembershipTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 1000)
+        waitForExpectations(timeout: 10)
     }
 
     func testRoomDelegateUserLeftRoomHookWhenUserLeaves() {
