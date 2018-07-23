@@ -73,16 +73,10 @@ import PusherPlatform
         self.pathFriendlyUserId = userId.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? userId
     }
 
-    public func addConnectCompletionHandler(completionHandler: @escaping (PCCurrentUser?, Error?) -> Void) {
-        connectionCoordinator.addConnectionCompletionHandler(completionHandler)
-    }
-
     public func connect(
         delegate: PCChatManagerDelegate,
         completionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
-        addConnectCompletionHandler(completionHandler: completionHandler)
-
         let basicCurrentUser = PCBasicCurrentUser(
             id: userId,
             pathFriendlyId: pathFriendlyUserId,
@@ -94,34 +88,27 @@ import PusherPlatform
         )
 
         // TODO: This could be nicer
-        connectionCoordinator.connectionEventHandlers.append(
-            PCConnectionEventHandler(
-                handler: { events in
-                    for event in events {
-                        switch event.result {
-                        case .userSubscriptionInit(let currentUser, _):
-                            currentUser?.userSubscription = basicCurrentUser.userSubscription
-                            currentUser?.presenceSubscription = basicCurrentUser.presenceSubscription
-                            currentUser?.cursorSubscription = basicCurrentUser.cursorSubscription
+        // TODO: We don't need to wait for initial user fetch here, but we are
+        // TODO: Do we need to nil out subscriptions on basicCurrentUser no matter what?
+        connectionCoordinator.addConnectionCompletionHandler { cUser, error in
+            guard error == nil, let cu = cUser else {
+                return
+            }
 
-                            // TODO: This is madness
-                            currentUser?.userSubscription?.currentUser = currentUser
-                        default:
-                            break
-                        }
-                    }
-                },
-                dependencies: [
-                    PCUserSubscriptionInitEvent,
-                    PCPresenceSubscriptionInitEvent,
-                    PCCursorSubscriptionInitEvent
-                ]
-            )
-        )
+            cu.userSubscription = basicCurrentUser.userSubscription
+            basicCurrentUser.userSubscription = nil
+            cu.presenceSubscription = basicCurrentUser.presenceSubscription
+            basicCurrentUser.presenceSubscription = nil
+            cu.cursorSubscription = basicCurrentUser.cursorSubscription
+            basicCurrentUser.cursorSubscription = nil
+
+            // TODO: This is madness
+            cu.userSubscription?.currentUser = cu
+        }
 
         basicCurrentUser.establishUserSubscription(
             delegate: delegate,
-            initialStateHandler: { currentUserPayloadTuple in
+            initialStateHandler: { [unowned self] currentUserPayloadTuple in
                 let (roomsPayload, currentUserPayload) = currentUserPayloadTuple
 
                 let receivedCurrentUser: PCCurrentUser
@@ -208,15 +195,22 @@ import PusherPlatform
 
         basicCurrentUser.establishPresenceSubscription(delegate: delegate)
         basicCurrentUser.establishCursorSubscription()
+
+        // TODO: This being here at the end seems necessary but bad
+        connectionCoordinator.addConnectionCompletionHandler(completionHandler)
     }
 
     // TODO: Maybe we need some sort of ChatManagerConnectionState?
     public func disconnect() {
         currentUser?.userSubscription?.end()
+        currentUser?.userSubscription = nil
         currentUser?.presenceSubscription?.end()
+        currentUser?.presenceSubscription = nil
         currentUser?.cursorSubscription?.end()
+        currentUser?.cursorSubscription = nil
         currentUser?.rooms.forEach { room in
             room.subscription?.end()
+            room.subscription = nil
         }
         connectionCoordinator.reset()
     }

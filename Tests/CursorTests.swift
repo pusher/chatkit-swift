@@ -3,8 +3,8 @@ import PusherPlatform
 @testable import PusherChatkit
 
 class CursorTests: XCTestCase {
-    var aliceChatManager = newTestChatManager(userId: "alice")
-    var bobChatManager = newTestChatManager(userId: "bob")
+    var aliceChatManager: ChatManager! = newTestChatManager(userId: "alice")
+    var bobChatManager: ChatManager! = newTestChatManager(userId: "bob")
     var alice: PCCurrentUser!
     var bob: PCCurrentUser!
     var roomId: Int!
@@ -21,29 +21,21 @@ class CursorTests: XCTestCase {
         let createRoomEx = expectation(description: "create room")
 
         deleteInstanceResources() { err in
-            guard err == nil else {
-                fatalError(err!.localizedDescription)
-            }
+            XCTAssertNil(err)
             deleteResourcesEx.fulfill()
 
             createStandardInstanceRoles() { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createRolesEx.fulfill()
             }
 
             createUser(id: "alice") { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createAliceEx.fulfill()
             }
 
             createUser(id: "bob") { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createBobEx.fulfill()
             }
 
@@ -52,31 +44,35 @@ class CursorTests: XCTestCase {
             sleep(1)
 
             self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { user, err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 self.alice = user
                 connectAliceEx.fulfill()
 
                 self.alice.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
-                    guard err == nil else {
-                        fatalError(err!.localizedDescription)
-                    }
+                    XCTAssertNil(err)
                     self.roomId = room!.id
                     createRoomEx.fulfill()
                 }
             }
 
             self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { user, err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 self.bob = user
                 connectBobEx.fulfill()
             }
         }
 
         waitForExpectations(timeout: 10)
+    }
+
+    override func tearDown() {
+        aliceChatManager.disconnect()
+        aliceChatManager = nil
+        alice = nil
+        bobChatManager.disconnect()
+        bobChatManager = nil
+        bob = nil
+        roomId = nil
     }
 
     func testOwnReadCursorUndefinedIfNotSet() {

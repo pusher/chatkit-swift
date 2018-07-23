@@ -10,7 +10,7 @@ public final class PCPresenceSubscription {
     public let userStore: PCGlobalUserStore
     public let roomStore: PCRoomStore
     let connectionCoordinator: PCConnectionCoordinator
-    public internal(set) var delegate: PCChatManagerDelegate?
+    public internal(set) weak var delegate: PCChatManagerDelegate?
 
     public init(
         instance: Instance,

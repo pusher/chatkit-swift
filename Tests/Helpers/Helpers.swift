@@ -6,55 +6,6 @@ enum TestHelperError: Error {
     case generic(String)
 }
 
-class TestingChatManagerDelegate: PCChatManagerDelegate {
-    let handleUserStartedTyping: (PCRoom, PCUser) -> Void
-    let handleUserStoppedTyping: (PCRoom, PCUser) -> Void
-
-    init(
-        userStartedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
-        userStoppedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in }
-    ) {
-        handleUserStartedTyping = userStartedTyping
-        handleUserStoppedTyping = userStoppedTyping
-    }
-
-    func userStartedTyping(room: PCRoom, user: PCUser) -> Void {
-        handleUserStartedTyping(room, user)
-    }
-
-    func userStoppedTyping(room: PCRoom, user: PCUser) -> Void {
-        handleUserStoppedTyping(room, user)
-    }
-}
-
-class TestingRoomDelegate: NSObject, PCRoomDelegate {
-    let handleNewCursor: (PCCursor) -> Void
-    let handleUserStartedTyping: (PCUser) -> Void
-    let handleUserStoppedTyping: (PCUser) -> Void
-
-    init(
-        newCursor: @escaping (PCCursor) -> Void = { _ in },
-        userStartedTyping: @escaping (PCUser) -> Void = { _ in },
-        userStoppedTyping: @escaping (PCUser) -> Void = { _ in }
-    ) {
-        handleNewCursor = newCursor
-        handleUserStartedTyping = userStartedTyping
-        handleUserStoppedTyping = userStoppedTyping
-    }
-
-    func newCursor(cursor: PCCursor) -> Void {
-        handleNewCursor(cursor)
-    }
-
-    func userStartedTyping(user: PCUser) -> Void {
-        handleUserStartedTyping(user)
-    }
-
-    func userStoppedTyping(user: PCUser) -> Void {
-        handleUserStoppedTyping(user)
-    }
-}
-
 public struct TestLogger: PCLogger {
     public func log(_ message: @autoclosure @escaping () -> String, logLevel: PCLogLevel) {
         guard logLevel > .debug else { return }
@@ -198,15 +149,38 @@ func createRole(
     }.resume()
 }
 
-func generateSuperuserToken() -> String {
-    var claims = ClaimSet()
-    claims.issuer = "api_keys/\(testInstanceKeyID)"
-    claims.issuedAt = Date()
-    claims.expiration = Date().addingTimeInterval(TimeInterval(86400))
-    claims["su"] = true
-    claims["instance"] = testInstanceInstanceID
+func assignGlobalRole(
+    _ roleName: String,
+    toUser userID: String,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    let roleObject: [String: Any] = ["name": roleName]
 
-    return encode(claims: claims)
+    guard JSONSerialization.isValidJSONObject(roleObject) else {
+        completionHandler(.generic("Invalid roleObject \(roleObject.debugDescription)"))
+        return
+    }
+
+    guard let data = try? JSONSerialization.data(withJSONObject: roleObject, options: []) else {
+        completionHandler(.generic("Failed to JSON serialize roleObject \(roleObject.debugDescription)"))
+        return
+    }
+
+    var request = URLRequest(url: testInstanceServiceURL(.authorizer, "users/\(userID)/roles"))
+    request.httpMethod = "PUT"
+    request.httpBody = data
+    request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error assigning role: \(error!.localizedDescription)"))
+            return
+        }
+
+        print("Role \(roleName) assigned to \(userID) successfully!")
+        completionHandler(nil)
+    }.resume()
 }
 
 func testInstanceServiceURL(_ service: ChatkitService, _ path: String) -> URL {
@@ -247,6 +221,33 @@ func newTestChatManager(
         userId: userId,
         logger: TestLogger()
     )
+}
+
+func createRoom(
+    user: PCCurrentUser,
+    roomName: String,
+    isPrivate: Bool = false,
+    addUserIDs userIDs: [String] = []
+) throws -> PCRoom {
+    var room: PCRoom!
+    var error: Error?
+
+    let group = DispatchGroup()
+    group.enter()
+
+    user.createRoom(name: roomName, isPrivate: isPrivate, addUserIds: userIDs) { r, e in
+        room = r
+        error = e
+        group.leave()
+    }
+
+    group.wait()
+
+    if let e = error {
+        throw e
+    }
+
+    return room
 }
 
 func dataSubscriptionEventFor(_ eventJSON: String) -> Data {

@@ -136,8 +136,11 @@ public final class PCCurrentUser {
 
                 do {
                     let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-                    self.roomStore.addOrMerge(room) { room in completionHandler(room, nil) }
-                    self.populateRoomUserStore(room)
+                    self.roomStore.addOrMerge(room) { room in
+                        self.populateRoomUserStore(room) { room in
+                            completionHandler(room, nil)
+                        }
+                    }
                 } catch let err {
                     completionHandler(nil, err)
                 }
@@ -348,8 +351,11 @@ public final class PCCurrentUser {
 
                 do {
                     let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-                    self.roomStore.addOrMerge(room) { room in completionHandler(room, nil) }
-                    self.populateRoomUserStore(room)
+                    self.roomStore.addOrMerge(room) { room in
+                        self.populateRoomUserStore(room) { room in
+                            completionHandler(room, nil)
+                        }
+                    }
                 } catch let err {
                     self.instance.logger.log(err.localizedDescription, logLevel: .debug)
                     completionHandler(nil, err)
@@ -362,7 +368,7 @@ public final class PCCurrentUser {
         )
     }
 
-    fileprivate func populateRoomUserStore(_ room: PCRoom) {
+    fileprivate func populateRoomUserStore(_ room: PCRoom, completionHandler: @escaping (PCRoom) -> Void) {
         let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users")
 
         // TODO: Use the soon-to-be-created new version of fetchUsersWithIds from the
@@ -384,6 +390,7 @@ public final class PCCurrentUser {
                     if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
                         room.subscription?.delegate?.usersUpdated()
                         strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
+                        completionHandler(room)
                     }
 
                     return
@@ -394,6 +401,7 @@ public final class PCCurrentUser {
                 if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
                     room.subscription?.delegate?.usersUpdated()
                     strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
+                    completionHandler(room)
                 }
             }
         }
@@ -793,7 +801,9 @@ public final class PCCurrentUser {
         self.instance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
-            onEvent: messageSubscription.handleEvent
+            onEvent: { [unowned messageSubscription] eventID, headers, data in
+                messageSubscription.handleEvent(eventId: eventID, headers: headers, data: data)
+            }
             // TODO: Should we be handling onError here somehow?
         )
 
@@ -828,7 +838,9 @@ public final class PCCurrentUser {
         self.cursorsInstance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
-            onEvent: cursorSubscription.handleEvent
+            onEvent: { [unowned cursorSubscription] eventID, headers, data in
+                cursorSubscription.handleEvent(eventId: eventID, headers: headers, data: data)
+            }
             // TODO: Should we be handling onError here somehow?
         )
 

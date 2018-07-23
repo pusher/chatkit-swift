@@ -9,20 +9,14 @@ public final class PCSynchronizedArray<T> {
     public func append(_ newElement: T, completionHandler: (() -> Void)? = nil) {
         self.accessQueue.async(flags: .barrier) {
             self.underlyingArray.append(newElement)
-
-            DispatchQueue.main.async {
-                completionHandler?()
-            }
+            completionHandler?()
         }
     }
 
     func appendAndComplete(_ newElement: T, completionHandler: @escaping (T) -> Void) {
         self.accessQueue.async(flags: .barrier) {
             self.underlyingArray.append(newElement)
-
-            DispatchQueue.main.async {
-                completionHandler(newElement)
-            }
+            completionHandler(newElement)
         }
     }
 
@@ -34,20 +28,14 @@ public final class PCSynchronizedArray<T> {
             }
 
             let element = self.underlyingArray.remove(at: index)
-
-            DispatchQueue.main.async {
-                completionHandler?(element)
-            }
+            completionHandler?(element)
         }
     }
 
     public func remove(at index: Int, completionHandler: ((T) -> Void)? = nil) {
         self.accessQueue.async(flags: .barrier) {
             let element = self.underlyingArray.remove(at: index)
-
-            DispatchQueue.main.async {
-                completionHandler?(element)
-            }
+            completionHandler?(element)
         }
     }
 
@@ -93,10 +81,7 @@ public final class PCSynchronizedArray<T> {
         self.accessQueue.async(flags: .barrier) {
             guard let index = self.underlyingArray.index(where: predicate) else { return }
             let element = self.underlyingArray.remove(at: index)
-
-            DispatchQueue.main.async {
-                completion?(element)
-            }
+            completion?(element)
         }
     }
 

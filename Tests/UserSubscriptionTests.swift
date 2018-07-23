@@ -3,6 +3,7 @@ import PusherPlatform
 @testable import PusherChatkit
 
 class UserSubscriptionTests: XCTestCase {
+    var chatManager: ChatManager!
 
     override func setUp() {
         super.setUp()
@@ -12,21 +13,15 @@ class UserSubscriptionTests: XCTestCase {
         let createUserEx = expectation(description: "create user")
 
         deleteInstanceResources() { err in
-            guard err == nil else {
-                fatalError(err!.localizedDescription)
-            }
+            XCTAssertNil(err)
             deleteResourcesEx.fulfill()
 
             createStandardInstanceRoles() { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createRolesEx.fulfill()
             }
             createUser(id: "ash") { err in
-                guard err == nil else {
-                    fatalError(err!.localizedDescription)
-                }
+                XCTAssertNil(err)
                 createUserEx.fulfill()
             }
         }
@@ -36,12 +31,14 @@ class UserSubscriptionTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        chatManager.disconnect()
+        chatManager = nil
     }
 
     func testThatWeCanConnect() {
         let tokenEndpoint = testInstanceTokenProviderURL
 
-        let chatManager = ChatManager(
+        chatManager = ChatManager(
             instanceLocator: testInstanceLocator,
             tokenProvider: PCTokenProvider(url: tokenEndpoint),
             userId: "ash",

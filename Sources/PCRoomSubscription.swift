@@ -2,8 +2,8 @@ import Foundation
 import PusherPlatform
 
 public final class PCRoomSubscription {
-    weak var messageSubscription: PCMessageSubscription?
-    weak var cursorSubscription: PCCursorSubscription?
+    var messageSubscription: PCMessageSubscription?
+    var cursorSubscription: PCCursorSubscription?
     public weak var delegate: PCRoomDelegate?
 
     init(

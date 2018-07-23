@@ -59,7 +59,7 @@ public final class PCBasicCurrentUser {
             requestOptions: subscribeRequest
         )
 
-        self.userSubscription = PCUserSubscription(
+        let userSub = PCUserSubscription(
             instance: self.instance,
             filesInstance: self.filesInstance,
             cursorsInstance: self.cursorsInstance,
@@ -73,13 +73,17 @@ public final class PCBasicCurrentUser {
             initialStateHandler: initialStateHandler
         )
 
+        self.userSubscription = userSub
+
         // TODO: Decide what to do with onEnd
         self.instance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
-            onEvent: self.userSubscription!.handleEvent,
+            onEvent: { [unowned userSub] eventID, headers, data in
+                userSub.handleEvent(eventId: eventID, headers: headers, data: data)
+            },
             onEnd: { _, _, _ in },
-            onError: { error in
+            onError: { [unowned self] error in
                 self.connectionCoordinator.connectionEventCompleted(
                     PCConnectionEvent(currentUser: nil, error: error)
                 )
@@ -104,7 +108,7 @@ public final class PCBasicCurrentUser {
             requestOptions: subscribeRequest
         )
 
-        self.presenceSubscription = PCPresenceSubscription(
+        let presenceSub = PCPresenceSubscription(
             instance: self.presenceInstance,
             resumableSubscription: resumableSub,
             userStore: self.userStore,
@@ -113,11 +117,15 @@ public final class PCBasicCurrentUser {
             delegate: delegate
         )
 
+        self.presenceSubscription = presenceSub
+
         self.presenceInstance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
-            onEvent: self.presenceSubscription!.handleEvent,
-            onError: { error in
+            onEvent: { [unowned presenceSub] eventID, headers, data in
+                presenceSub.handleEvent(eventId: eventID, headers: headers, data: data)
+            },
+            onError: { [unowned self] error in
                 self.connectionCoordinator.connectionEventCompleted(
                     PCConnectionEvent(presenceSubscription: nil, error: error)
                 )
@@ -137,12 +145,12 @@ public final class PCBasicCurrentUser {
             requestOptions: cursorSubscriptionRequestOptions
         )
 
-        self.cursorSubscription = PCCursorSubscription(
+        let cursorSub = PCCursorSubscription(
             resumableSubscription: cursorResumableSub,
             cursorStore: cursorStore,
             connectionCoordinator: self.connectionCoordinator,
             logger: self.cursorsInstance.logger,
-            initialStateHandler: { err in
+            initialStateHandler: { [unowned self] err in
                 if let err = err {
                     self.cursorsInstance.logger.log(err.localizedDescription, logLevel: .debug)
                 }
@@ -156,11 +164,15 @@ public final class PCBasicCurrentUser {
             }
         )
 
+        self.cursorSubscription = cursorSub
+
         self.cursorsInstance.subscribeWithResume(
             with: &cursorResumableSub,
             using: cursorSubscriptionRequestOptions,
-            onEvent: self.cursorSubscription!.handleEvent,
-            onError: { error in
+            onEvent: { [unowned cursorSub] eventID, headers, data in
+                cursorSub.handleEvent(eventId: eventID, headers: headers, data: data)
+            },
+            onError: { [unowned self] error in
                 self.connectionCoordinator.connectionEventCompleted(
                     PCConnectionEvent(cursorSubscription: nil, error: error)
                 )

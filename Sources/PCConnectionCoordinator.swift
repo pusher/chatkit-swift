@@ -48,28 +48,34 @@ public class PCConnectionCoordinator {
     }
 
     func addConnectionCompletionHandler(_ handler: @escaping (PCCurrentUser?, Error?) -> Void) {
-        connectionEventHandlers.append(
-            PCConnectionEventHandler(
-                handler: { events in
-                    for event in events {
-                        switch event.result {
-                        case .userSubscriptionInit(let currentUser, let error):
-                            handler(currentUser, error)
-                        default:
-                            break
+        queue.async {
+            self.connectionEventHandlers.append(
+                PCConnectionEventHandler(
+                    handler: { events in
+                        for event in events {
+                            switch event.result {
+                            case .userSubscriptionInit(let currentUser, let error):
+                                handler(currentUser, error)
+                            default:
+                                break
+                            }
                         }
-                    }
-                },
-                dependencies: allConnectionEvents
+                    },
+                    dependencies: allConnectionEvents
+                )
             )
-        )
+        }
     }
 
     func reset(alreadyInCoordinatorQueue: Bool = false) {
         if alreadyInCoordinatorQueue {
             completedConnectionEvents = []
+            connectionEventHandlers = []
         } else {
-            queue.async { self.completedConnectionEvents = [] }
+            queue.async {
+                self.completedConnectionEvents = []
+                self.connectionEventHandlers = []
+            }
         }
     }
 }

@@ -2,7 +2,7 @@ import XCTest
 import PusherPlatform
 @testable import PusherChatkit
 
-class TypingIndicatorTests: XCTestCase {
+class PresenceTests: XCTestCase {
     var aliceChatManager: ChatManager!
     var bobChatManager: ChatManager!
     var roomId: Int!
@@ -48,6 +48,9 @@ class TypingIndicatorTests: XCTestCase {
                     XCTAssertNil(err)
                     self.roomId = room!.id
                     createRoomEx.fulfill()
+
+                    sleep(2) // TODO this shouldn't be necessary.
+                    self.aliceChatManager.disconnect()
                 }
             }
         }
@@ -63,75 +66,63 @@ class TypingIndicatorTests: XCTestCase {
         roomId = nil
     }
 
-    func testChatManagerDelegateTypingHooks() {
-        let startedEx = expectation(description: "notified of Bob starting typing (user)")
-        let stoppedEx = expectation(description: "notified of Bob stopping typing (user)")
+    func testChatManagerDelegatePresenceHooks() {
+        sleep(2) // FIXME this is a disgrace
 
-        var started: Date!
+        let onlineEx = expectation(description: "notified of Bob coming online (user)")
+        let offlineEx = expectation(description: "notified of Bob going offline (user)")
 
-        let userStartedTyping = { (room: PCRoom, user: PCUser) -> Void in
-            started = Date.init()
-            XCTAssertEqual(room.id, self.roomId)
+        let userCameOnline = { (user: PCUser) -> Void in
             XCTAssertEqual(user.id, "bob")
-            startedEx.fulfill()
+            onlineEx.fulfill()
+
+            sleep(2) // TODO this shouldn't be necessary.
+            self.bobChatManager.disconnect()
         }
 
-        let userStoppedTyping = { (room: PCRoom, user: PCUser) -> Void in
-            let interval = Date.init().timeIntervalSince(started)
-
-            XCTAssertGreaterThan(interval, 1)
-            XCTAssertLessThan(interval, 5)
-
-            XCTAssertEqual(room.id, self.roomId)
+        let userWentOffline = { (user: PCUser) -> Void in
             XCTAssertEqual(user.id, "bob")
-
-            stoppedEx.fulfill()
+            offlineEx.fulfill()
         }
 
         let aliceCMDelegate = TestingChatManagerDelegate(
-            userStartedTyping: userStartedTyping,
-            userStoppedTyping: userStoppedTyping
+            userCameOnline: userCameOnline,
+            userWentOffline: userWentOffline
         )
 
-        let bobCMDelegate = TestingChatManagerDelegate()
-
-        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _alice, err in
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _, err in
             XCTAssertNil(err)
-            self.bobChatManager.connect(delegate: bobCMDelegate) { bob, err in
+
+            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
                 XCTAssertNil(err)
-                bob!.typing(in: bob!.rooms.first(where: { $0.id == self.roomId })!)
             }
         }
 
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 10)
     }
 
-    func testRoomDelegateTypingHooks() {
-        let startedEx = expectation(description: "notified of Alice starting typing (room)")
-        let stoppedEx = expectation(description: "notified of Alice stopping typing (room)")
+    func testRoomDelegatePresenceHooks() {
+        sleep(2) // FIXME this is a disgrace
 
-        var started: Date!
+        let onlineEx = expectation(description: "notified of Alice coming online (room)")
+        let offlineEx = expectation(description: "notified of Alice going offline (room)")
 
-        let userStartedTyping = { (user: PCUser) -> Void in
-            started = Date.init()
+        let userCameOnline = { (user: PCUser) -> Void in
             XCTAssertEqual(user.id, "alice")
-            startedEx.fulfill()
+            onlineEx.fulfill()
+
+            sleep(2) // TODO this shouldn't be necessary.
+            self.aliceChatManager.disconnect()
         }
 
-        let userStoppedTyping = { (user: PCUser) -> Void in
-            let interval = Date.init().timeIntervalSince(started)
-
-            XCTAssertGreaterThan(interval, 1)
-            XCTAssertLessThan(interval, 5)
-
+        let userWentOffline = { (user: PCUser) -> Void in
             XCTAssertEqual(user.id, "alice")
-
-            stoppedEx.fulfill()
+            offlineEx.fulfill()
         }
 
         let bobRoomDelegate = TestingRoomDelegate(
-            userStartedTyping: userStartedTyping,
-            userStoppedTyping: userStoppedTyping
+            userCameOnline: userCameOnline,
+            userWentOffline: userWentOffline
         )
 
         self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
@@ -143,12 +134,11 @@ class TypingIndicatorTests: XCTestCase {
 
             sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
 
-            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
                 XCTAssertNil(err)
-                alice!.typing(in: alice!.rooms.first(where: { $0.id == self.roomId })!)
             }
         }
 
-        waitForExpectations(timeout: 15)
+        waitForExpectations(timeout: 10)
     }
 }
