@@ -1,74 +1,77 @@
 import Foundation
+import PusherPlatform
 
-public final class PCTypingIndicatorManager {
-    private var queue = DispatchQueue(label: "com.pusher.chatkit.typing-indicator-manager")
-    public var typingTimeoutTimer: Timer?
-    public var typingTimeoutInterval: TimeInterval
-    public let roomId: Int
-    public internal(set) var isTyping: Bool = false
-    var currentUser: PCCurrentUser
+// TODO are there already a load of constants defined somewhere?
+let TYPING_INDICATOR_TTL = 1.5
+let TYPING_INDICATOR_LEEWAY = 0.5
 
-    public init(
-        typingTimeoutInterval: TimeInterval = 3,
-        roomId: Int,
-        currentUser: PCCurrentUser
+struct UserRoomPair: Hashable {
+    let roomId: Int
+    let userId: String
+}
+
+final class PCTypingIndicatorManager {
+    var lastSentRequests = [Int: Date]()
+    var timers = [UserRoomPair: Timer]()
+
+    let instance: Instance
+
+    init(
+        instance: Instance
     ) {
-        self.typingTimeoutInterval = typingTimeoutInterval
-        self.roomId = roomId
-        self.currentUser = currentUser
+        self.instance = instance
     }
 
-    deinit {
-        self.typingTimeoutTimer?.invalidate()
-    }
+    func sendThrottledRequest(
+        roomId: Int,
+        completionHandler: @escaping PCErrorCompletionHandler
+    ) {
+        let now = Date()
 
-    public func typing() {
-        self.queue.sync {
-            if !self.isTyping {
-                self.isTyping = true
-                self.signalTypingStarted()
-            }
+        let interval = TYPING_INDICATOR_TTL - TYPING_INDICATOR_LEEWAY
 
-            self.typingTimeoutTimer?.invalidate()
-
-            DispatchQueue.main.async { [weak self] in
-                guard let strongSelf = self else {
-                    print("self is nil when about to call stopTyping function")
-                    return
-                }
-
-                strongSelf.typingTimeoutTimer = Timer.scheduledTimer(
-                    timeInterval: strongSelf.typingTimeoutInterval,
-                    target: strongSelf,
-                    selector: #selector(strongSelf.stopTyping),
-                    userInfo: nil,
-                    repeats: false
-                )
-            }
+        if let seen = lastSentRequests[roomId], now.timeIntervalSince(seen) < interval {
+            completionHandler(nil)
+            return
         }
+
+        lastSentRequests[roomId] = now
+
+        instance.requestWithRetry(
+            using: PPRequestOptions(
+                method: HTTPMethod.POST.rawValue,
+                path: "/rooms/\(roomId)/typing_indicators"
+            ),
+            onSuccess: { _ in completionHandler(nil) },
+            onError: completionHandler
+        )
     }
 
-    @objc public func stopTyping() {
-        self.queue.sync {
-            self.isTyping = false
-            self.typingTimeoutTimer?.invalidate()
-            self.signalTypingStopped()
+    func onIsTyping(
+        room: PCRoom,
+        user: PCUser,
+        globalStartHook: ((PCRoom, PCUser) -> Void)?,
+        globalStopHook: ((PCRoom, PCUser) -> Void)?,
+        roomStartHook: ((PCUser) -> Void)?,
+        roomStopHook: ((PCUser) -> Void)?
+    ) {
+        // TODO make access to timers thread safe
+
+        if let timer = timers[UserRoomPair(roomId: room.id, userId: user.id)] {
+            timer.invalidate()
+            timers[UserRoomPair(roomId: room.id, userId: user.id)] = nil
+        } else {
+            globalStartHook?(room, user)
+            roomStartHook?(user)
         }
-    }
 
-    public func signalTypingStarted() {
-        self.currentUser.startedTypingIn(roomId: self.roomId) { err in
-            if let error = err {
-                self.currentUser.instance.logger.log("Error sending typing_start event: \(error.localizedDescription)", logLevel: .debug)
-            }
-        }
-    }
-
-    public func signalTypingStopped() {
-        self.currentUser.stoppedTypingIn(roomId: self.roomId) { err in
-            if let error = err {
-                self.currentUser.instance.logger.log("Error sending typing_stop event: \(error.localizedDescription)", logLevel: .debug)
-            }
+        timers[UserRoomPair(roomId: room.id, userId: user.id)] = Timer.scheduledTimer(
+            withTimeInterval: TYPING_INDICATOR_TTL,
+            repeats: false
+        ) { _ in
+            globalStopHook?(room, user)
+            roomStopHook?(user)
+            self.timers[UserRoomPair(roomId: room.id, userId: user.id)] = nil
         }
     }
 }

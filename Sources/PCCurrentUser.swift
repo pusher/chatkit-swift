@@ -12,6 +12,8 @@ public final class PCCurrentUser {
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
     let cursorStore: PCCursorStore
+    let typingIndicatorManager: PCTypingIndicatorManager
+    let delegate: PCChatManagerDelegate
 
     // TODO: This should probably be [PCUser] instead, like the users property
     // in PCRoom, or something even simpler
@@ -28,12 +30,6 @@ public final class PCCurrentUser {
     public internal(set) var userSubscription: PCUserSubscription?
     public internal(set) var presenceSubscription: PCPresenceSubscription?
     public internal(set) var cursorSubscription: PCCursorSubscription?
-
-    var typingIndicatorManagers: [Int: PCTypingIndicatorManager] = [:]
-    private var typingIndicatorQueue = DispatchQueue(label: "com.pusher.chatkit.typing-indicators")
-    private let roomSubscriptionQueue = DispatchQueue(
-        label: "com.pusher.chatkit.room-subscriptions"
-    )
 
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -70,7 +66,8 @@ public final class PCCurrentUser {
         userStore: PCGlobalUserStore,
         roomStore: PCRoomStore,
         cursorStore: PCCursorStore,
-        connectionCoordinator: PCConnectionCoordinator
+        connectionCoordinator: PCConnectionCoordinator,
+        delegate: PCChatManagerDelegate
     ) {
         self.id = id
         self.pathFriendlyId = pathFriendlyId
@@ -87,6 +84,8 @@ public final class PCCurrentUser {
         self.roomStore = roomStore
         self.cursorStore = cursorStore
         self.connectionCoordinator = connectionCoordinator
+        self.delegate = delegate
+        typingIndicatorManager = PCTypingIndicatorManager(instance: instance)
     }
 
     func updateWithPropertiesOf(_ currentUser: PCCurrentUser) {
@@ -482,69 +481,15 @@ public final class PCCurrentUser {
 
     // MARK: Typing-indicator-related interactions
 
-    fileprivate func typingStateChange(
-        eventPayload: [String: Any],
-        roomId: Int,
-        completionHandler: @escaping PCErrorCompletionHandler
-    ) {
-        guard JSONSerialization.isValidJSONObject(eventPayload) else {
-            completionHandler(PCError.invalidJSONObjectAsData(eventPayload))
-            return
-        }
-
-        guard let data = try? JSONSerialization.data(withJSONObject: eventPayload, options: []) else {
-            completionHandler(PCError.failedToJSONSerializeData(eventPayload))
-            return
-        }
-
-        let path = "/rooms/\(roomId)/events"
-        let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
-
-        self.instance.requestWithRetry(
-            using: generalRequest,
-            onSuccess: { _ in
-                completionHandler(nil)
-            },
-            onError: { error in
-                completionHandler(error)
-            }
+    public func typing(in roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+        typingIndicatorManager.sendThrottledRequest(
+            roomId: roomId,
+            completionHandler: completionHandler
         )
     }
 
-    public func typing(in room: PCRoom, timeoutAfter: TimeInterval = 3) {
-        var typingIndicatorManager: PCTypingIndicatorManager!
-
-        typingIndicatorQueue.sync {
-            if let manager = self.typingIndicatorManagers[room.id] {
-                typingIndicatorManager = manager
-            } else {
-                let manager = PCTypingIndicatorManager(typingTimeoutInterval: timeoutAfter, roomId: room.id, currentUser: self)
-                self.typingIndicatorManagers[room.id] = manager
-                typingIndicatorManager = manager
-            }
-        }
-
-        typingIndicatorManager.typing()
-    }
-
-    func startedTypingIn(roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
-        let eventPayload: [String: Any] = ["name": "typing_start", "user_id": self.id]
-        self.typingStateChange(eventPayload: eventPayload, roomId: roomId, completionHandler: completionHandler)
-    }
-
-    func stoppedTypingIn(roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
-        let eventPayload: [String: Any] = ["name": "typing_stop", "user_id": self.id]
-        self.typingStateChange(eventPayload: eventPayload, roomId: roomId, completionHandler: completionHandler)
-    }
-
-    public func startedTypingIn(_ room: PCRoom, completionHandler: @escaping PCErrorCompletionHandler) {
-        let eventPayload: [String: Any] = ["name": "typing_start", "user_id": self.id]
-        self.typingStateChange(eventPayload: eventPayload, roomId: room.id, completionHandler: completionHandler)
-    }
-
-    public func stoppedTypingIn(_ room: PCRoom, completionHandler: @escaping PCErrorCompletionHandler) {
-        let eventPayload: [String: Any] = ["name": "typing_stop", "user_id": self.id]
-        self.typingStateChange(eventPayload: eventPayload, roomId: room.id, completionHandler: completionHandler)
+    public func typing(in room: PCRoom, completionHandler: @escaping PCErrorCompletionHandler) {
+        typing(in: room.id, completionHandler: completionHandler)
     }
 
     // MARK: Message-related interactions
@@ -666,7 +611,7 @@ public final class PCCurrentUser {
             sendMessage(messageObject, roomId: roomId, completionHandler: completionHandler)
             return
         }
-        
+
         switch attachmentType {
         case .fileData(_, _), .fileURL(_, _):
             uploadAttachmentAndSendMessage(
@@ -844,7 +789,8 @@ public final class PCCurrentUser {
         )
 
         let messageSubscription = PCMessageSubscription(
-            delegate: delegate,
+            delegate: roomDelegate,
+            chatManagerDelegate: self.delegate,
             resumableSubscription: resumableSub,
             logger: self.instance.logger,
             basicMessageEnricher: PCBasicMessageEnricher(
@@ -852,7 +798,10 @@ public final class PCCurrentUser {
                 // TODO: This should probably be a room store
                 room: room,
                 logger: self.instance.logger
-            )
+            ),
+            userStore: userStore,
+            roomStore: roomStore,
+            typingIndicatorManager: typingIndicatorManager
         )
 
         self.instance.subscribeWithResume(

@@ -49,7 +49,7 @@ import PusherPlatform
 
         self.instance = ChatManager.createInstance(
             serviceName: "chatkit",
-            serviceVersion: "v1",
+            serviceVersion: "v2",
             sharedOptions: sharedInstanceOptions
         )
 
@@ -98,7 +98,8 @@ import PusherPlatform
             filesInstance: filesInstance,
             cursorsInstance: cursorsInstance,
             presenceInstance: presenceInstance,
-            connectionCoordinator: connectionCoordinator
+            connectionCoordinator: connectionCoordinator,
+            delegate: delegate
         )
 
         // TODO: This could be nicer
@@ -121,7 +122,6 @@ import PusherPlatform
         }
 
         basicCurrentUser.establishUserSubscription(
-            delegate: delegate,
             initialStateHandler: { [unowned self] currentUserPayloadTuple in
                 let (roomsPayload, currentUserPayload) = currentUserPayloadTuple
 
@@ -139,7 +139,8 @@ import PusherPlatform
                         userStore: basicCurrentUser.userStore,
                         roomStore: basicCurrentUser.roomStore,
                         cursorStore: basicCurrentUser.cursorStore,
-                        connectionCoordinator: self.connectionCoordinator
+                        connectionCoordinator: self.connectionCoordinator,
+                        delegate: basicCurrentUser.delegate
                     )
                 } catch let err {
                     self.informConnectionCoordinatorOfCurrentUserCompletion(
@@ -207,7 +208,7 @@ import PusherPlatform
             }
         )
 
-        basicCurrentUser.establishPresenceSubscription(delegate: delegate)
+        basicCurrentUser.establishPresenceSubscription()
         basicCurrentUser.establishCursorSubscription()
 
         // TODO: This being here at the end seems necessary but bad
