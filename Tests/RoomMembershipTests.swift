@@ -293,13 +293,13 @@ class RoomMembershipTests: XCTestCase {
                     alice!.subscribeToRoom(
                         room: alice!.rooms.first(where: { $0.id == room!.id })!,
                         roomDelegate: aliceRoomDelegate
-                    )
-
-                    sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
-
-                    bob!.joinRoom(id: room!.id) { room, err in
+                    ) { err in
                         XCTAssertNil(err)
-                        bobJoinedRoomEx.fulfill()
+
+                        bob!.joinRoom(id: room!.id) { room, err in
+                            XCTAssertNil(err)
+                            bobJoinedRoomEx.fulfill()
+                        }
                     }
                 }
             }
@@ -328,13 +328,13 @@ class RoomMembershipTests: XCTestCase {
                     alice!.subscribeToRoom(
                         room: alice!.rooms.first(where: { $0.id == room!.id })!,
                         roomDelegate: aliceRoomDelegate
-                    )
-
-                    sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
-
-                    bob!.leaveRoom(id: room!.id) { err in
+                    ) { err in
                         XCTAssertNil(err)
-                        bobLeftRoomEx.fulfill()
+
+                        bob!.leaveRoom(id: room!.id) { err in
+                            XCTAssertNil(err)
+                            bobLeftRoomEx.fulfill()
+                        }
                     }
                 }
             }
@@ -358,17 +358,17 @@ class RoomMembershipTests: XCTestCase {
                 alice!.subscribeToRoom(
                     room: roomToTest,
                     roomDelegate: TestingRoomDelegate()
-                )
+                ) { err in
+                    XCTAssertNil(err)
 
-                sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
+                    let expectedUserIDs = ["alice", "bob"]
+                    let sortedUserIDs = roomToTest.users.map { $0.id }.sorted()
 
-                let expectedUserIDs = ["alice", "bob"]
-                let sortedUserIDs = roomToTest.users.map { $0.id }.sorted()
-
-                if sortedUserIDs == expectedUserIDs {
-                    usersSetProperly.fulfill()
-                } else {
-                    XCTFail("Room's users are not set correctly. They were \(sortedUserIDs)")
+                    if sortedUserIDs == expectedUserIDs {
+                        usersSetProperly.fulfill()
+                    } else {
+                        XCTFail("Room's users are not set correctly. They were \(sortedUserIDs)")
+                    }
                 }
             }
         }

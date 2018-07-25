@@ -111,12 +111,12 @@ class CursorTests: XCTestCase {
         alice.subscribeToRoom(
             room: alice.rooms.first(where: { $0.id == roomId })!,
             roomDelegate: aliceRoomDelegate
-        )
-
-        sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
-
-        bob.setReadCursor(position: 42, roomId: roomId) { error in
+        ) { error in
             XCTAssertNil(error)
+
+            self.bob.setReadCursor(position: 42, roomId: self.roomId) { error in
+                XCTAssertNil(error)
+            }
         }
 
         waitForExpectations(timeout: 5)
@@ -150,19 +150,20 @@ class CursorTests: XCTestCase {
         alice.subscribeToRoom(
             room: alice.rooms.first(where: { $0.id == roomId })!,
             roomDelegate: aliceRoomDelegate
-        )
-
-        sleep(1)
-
-        bob.setReadCursor(position: 42, roomId: roomId) { error in
+        ) { error in
             XCTAssertNil(error)
 
-            sleep(1) // give the read cursor a chance to propagate down the connection
-            let cursor = try! self.alice.readCursor(roomId: self.roomId, userId: "bob")
-            XCTAssertEqual(cursor?.position, 42)
+            self.bob.setReadCursor(position: 42, roomId: self.roomId) { error in
+                XCTAssertNil(error)
 
-            ex.fulfill()
+                sleep(1) // give the read cursor a chance to propagate down the connection
+                let cursor = try! self.alice.readCursor(roomId: self.roomId, userId: "bob")
+                XCTAssertEqual(cursor?.position, 42)
+
+                ex.fulfill()
+            }
         }
+
 
         waitForExpectations(timeout: 5)
     }
