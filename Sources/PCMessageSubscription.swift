@@ -6,44 +6,65 @@ public final class PCMessageSubscription {
     let resumableSubscription: PPResumableSubscription
     public var logger: PPLogger
     let basicMessageEnricher: PCBasicMessageEnricher
+    weak var chatManagerDelegate: PCChatManagerDelegate?
+    let userStore: PCGlobalUserStore
+    let roomStore: PCRoomStore
+    let typingIndicatorManager: PCTypingIndicatorManager
 
     init(
         delegate: PCRoomDelegate? = nil,
+        chatManagerDelegate: PCChatManagerDelegate? = nil,
         resumableSubscription: PPResumableSubscription,
         logger: PPLogger,
-        basicMessageEnricher: PCBasicMessageEnricher
+        basicMessageEnricher: PCBasicMessageEnricher,
+        userStore: PCGlobalUserStore,
+        roomStore: PCRoomStore,
+        typingIndicatorManager: PCTypingIndicatorManager
     ) {
         self.delegate = delegate
+        self.chatManagerDelegate = chatManagerDelegate
         self.resumableSubscription = resumableSubscription
         self.logger = logger
         self.basicMessageEnricher = basicMessageEnricher
+        self.userStore = userStore
+        self.roomStore = roomStore
+        self.typingIndicatorManager = typingIndicatorManager
     }
 
     func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
-            self.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
+            self.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .error)
             return
         }
 
-        guard let eventTypeName = json["event_name"] as? String else {
-            self.logger.log("Event type name missing from room subscription event: \(json)", logLevel: .debug)
+        guard let eventName = json["event_name"] as? String else {
+            self.logger.log(
+                "Event type name missing from room subscription event: \(json)",
+                logLevel: .error
+            )
             return
         }
 
-        let expectedEventTypeName = "new_message"
-
-        guard eventTypeName == expectedEventTypeName else {
-            self.logger.log("Expected event type name to be \(expectedEventTypeName) but got \(eventTypeName)", logLevel: .debug)
+        guard let eventData = json["data"] as? [String: Any] else {
+            self.logger.log("Missing data for room subscription event: \(json)", logLevel: .error)
             return
         }
 
-        guard let messagePayload = json["data"] as? [String: Any] else {
-            self.logger.log("Missing data for room subscription event: \(json)", logLevel: .debug)
+        switch eventName {
+        case "new_message":
+            onNewMessage(data: eventData)
+        case "is_typing":
+            onIsTyping(data: eventData)
+        default:
+            self.logger.log("Unknown message subscription event \(eventName)", logLevel: .error)
             return
         }
+    }
+
+    func onNewMessage(data: [String: Any]) {
 
         do {
-            let basicMessage = try PCPayloadDeserializer.createBasicMessageFromPayload(messagePayload)
+            let basicMessage = try PCPayloadDeserializer.createBasicMessageFromPayload(data)
 
             self.basicMessageEnricher.enrich(basicMessage) { [weak self] message, err in
                 guard let strongSelf = self else {
@@ -63,6 +84,57 @@ public final class PCMessageSubscription {
             self.logger.log(err.localizedDescription, logLevel: .debug)
 
             // TODO: Should we call the delegate error func?
+        }
+    }
+
+    func onIsTyping(data: [String: Any]) {
+        guard let userId = data["user_id"] as? String else {
+            self.logger.log(
+                "user_id missing or not a string \(data)",
+                logLevel: .error
+            )
+            return
+        }
+
+        guard let roomId = data["room_id"] as? Int else {
+            self.logger.log(
+                "room_id missing or not an integer \(data)",
+                logLevel: .error
+            )
+            return
+        }
+
+        roomStore.room(id: roomId) { [weak self] room, err in
+            guard let strongSelf = self else {
+                print("self is nil when handling is_typing event")
+                return
+            }
+
+            guard let room = room, err == nil else {
+                strongSelf.logger.log(err!.localizedDescription, logLevel: .error)
+                return
+            }
+
+            strongSelf.userStore.user(id: userId) { [weak self] user, err in
+                guard let strongSelf = self else {
+                    print("self is nil when handling is_typing event")
+                    return
+                }
+
+                guard let user = user, err == nil else {
+                    strongSelf.logger.log(err!.localizedDescription, logLevel: .error)
+                    return
+                }
+
+                strongSelf.typingIndicatorManager.onIsTyping(
+                    room: room,
+                    user: user,
+                    globalStartHook: strongSelf.chatManagerDelegate?.userStartedTyping,
+                    globalStopHook: strongSelf.chatManagerDelegate?.userStartedTyping,
+                    roomStartHook: strongSelf.delegate?.userStartedTyping,
+                    roomStopHook: strongSelf.delegate?.userStartedTyping
+                )
+            }
         }
     }
 

@@ -87,7 +87,7 @@ class ViewController: UIViewController {
     func sendRandomMessage() {
         let messageText = "Some random message \(arc4random_uniform(1001))"
         self.pusherChatUser!.sendMessage(
-            roomId: currentRoom!.id,
+            roomID: currentRoom!.id,
             text: messageText
         ) { messageID, err in
             guard err == nil else {
@@ -101,36 +101,30 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: PCRoomDelegate {
-    func usersUpdated() {
+    func onUsersUpdated() {
         print("Users updated " + self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
     }
 
-    public func userJoined(user: PCUser) {
+    func onUserJoined(user: PCUser) {
         print("User \(user.displayName) joined room: \(self.currentRoom!.name)")
         print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: ","))
     }
 
-    public func userLeft(user: PCUser) {
+    func onUserLeft(user: PCUser) {
         print("User \(user.displayName) left room: \(self.currentRoom!.name)")
         print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: ","))
     }
 
-    public func userStartedTyping(user: PCUser) {
+    func onUserStartedTyping(user: PCUser) {
         print("\(user.displayName) started typing in room \(self.currentRoom!.name)")
     }
 
-    public func userStoppedTyping(user: PCUser) {
+    func onUserStoppedTyping(user: PCUser) {
         print("\(user.displayName) stopped typing in room \(self.currentRoom!.name)")
     }
 
-    func userCameOnlineInRoom(user: PCUser) {
-        print("\(user.displayName) came online")
-        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
-    }
-
-    func userWentOfflineInRoom(user: PCUser) {
-        print("\(user.displayName) went offline")
-        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
+    func onUserPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {
+        print("\(user.displayName)'s presence state went from \(previous.rawValue) to \(current.rawValue)")
     }
 
     func newCursor(cursor: PCCursor) {

@@ -17,6 +17,7 @@ public final class PCBasicCurrentUser {
     let filesInstance: Instance
     let cursorsInstance: Instance
     let presenceInstance: Instance
+    let delegate: PCChatManagerDelegate
 
     let connectionCoordinator: PCConnectionCoordinator
 
@@ -27,7 +28,8 @@ public final class PCBasicCurrentUser {
         filesInstance: Instance,
         cursorsInstance: Instance,
         presenceInstance: Instance,
-        connectionCoordinator: PCConnectionCoordinator
+        connectionCoordinator: PCConnectionCoordinator,
+        delegate: PCChatManagerDelegate
     ) {
         self.id = id
         self.pathFriendlyId = pathFriendlyId
@@ -36,6 +38,7 @@ public final class PCBasicCurrentUser {
         self.cursorsInstance = cursorsInstance
         self.presenceInstance = presenceInstance
         self.connectionCoordinator = connectionCoordinator
+        self.delegate = delegate
 
         let rooms = PCSynchronizedArray<PCRoom>()
         self.userStore = PCGlobalUserStore(instance: instance)
@@ -48,7 +51,6 @@ public final class PCBasicCurrentUser {
     }
 
     func establishUserSubscription(
-        delegate: PCChatManagerDelegate,
         initialStateHandler: @escaping ((roomsPayload: [[String: Any]], currentUserPayload: [String: Any])) -> Void
     ) {
         let path = "/users"
@@ -66,7 +68,7 @@ public final class PCBasicCurrentUser {
             presenceInstance: self.presenceInstance,
             resumableSubscription: resumableSub,
             userStore: self.userStore,
-            delegate: delegate,
+            delegate: self.delegate,
             userId: id,
             pathFriendlyUserId: pathFriendlyId,
             connectionCoordinator: connectionCoordinator,
@@ -99,7 +101,7 @@ public final class PCBasicCurrentUser {
         )
     }
 
-    func establishPresenceSubscription(delegate: PCChatManagerDelegate) {
+    func establishPresenceSubscription() {
         // If a presenceSubscription already exists then we want to create a new one
         // to ensure that the most up-to-date state is received, so we first close the
         // existing subscription, if it was still open
