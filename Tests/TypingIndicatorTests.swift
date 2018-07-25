@@ -103,7 +103,9 @@ class TypingIndicatorTests: XCTestCase {
                 XCTAssertNil(err)
                 self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
                     XCTAssertNil(err)
-                    bob!.typing(in: bob!.rooms.first(where: { $0.id == self.roomID })!) { _ in }
+                    bob!.typing(in: bob!.rooms.first(where: { $0.id == self.roomId })!) { err in
+                        XCTAssertNil(err)
+                    }
                 }
             }
         }
