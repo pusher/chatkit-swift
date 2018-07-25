@@ -31,6 +31,9 @@ public final class PCCurrentUser {
 
     var typingIndicatorManagers: [Int: PCTypingIndicatorManager] = [:]
     private var typingIndicatorQueue = DispatchQueue(label: "com.pusher.chatkit.typing-indicators")
+    private let roomSubscriptionQueue = DispatchQueue(
+        label: "com.pusher.chatkit.room-subscriptions"
+    )
 
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -742,7 +745,11 @@ public final class PCCurrentUser {
             logLevel: .verbose
         )
 
-        let completionHandler = steppedCompletionHandler(steps: 2, inner: completionHandler)
+        let completionHandler = steppedCompletionHandler(
+            steps: 2,
+            inner: completionHandler,
+            dispatchQueue: roomSubscriptionQueue
+        )
 
         self.joinRoom(roomId: room.id) { innerRoom, err in
             guard let roomToSubscribeTo = innerRoom, err == nil else {
@@ -1045,35 +1052,26 @@ public typealias PCRoomCompletionHandler = (PCRoom?, Error?) -> Void
 public typealias PCRoomsCompletionHandler = ([PCRoom]?, Error?) -> Void
 
 // Takes an `inner` completion handler of type `PCErrorCompletionHandler`,
-// returns another completion handler of the same type that has the following
-// behaviour:
-//
-// - if called with an error, pass the error on to the inner completion handler
-//   immediately
-//
-// - otherwise, don't call the inner completion handler until there have been
-//   `steps` successful calls to the outer one.
-//
-// TODO is something like `DispatchGroup` more idiomatic?
+// returns another completion handler of the same type that calls the inner
+// completion handler after being called itself `steps` times. Returns the last
+// error, if any.
 func steppedCompletionHandler(
     steps: Int,
-    inner: @escaping PCErrorCompletionHandler
+    inner: @escaping PCErrorCompletionHandler,
+    dispatchQueue: DispatchQueue
 ) -> PCErrorCompletionHandler {
-    let lock = DispatchSemaphore(value: 1)
-    var count = 0
+    var error: Error?
 
-    return { error in
-        if error != nil {
-            inner(error)
-            return
-        }
+    let group = DispatchGroup()
 
-        lock.wait()
-        defer { lock.signal() }
-        count += 1
+    for _ in 0..<steps {
+        group.enter()
+    }
 
-        if count >= steps {
-            inner(nil)
-        }
+    group.notify(queue: dispatchQueue) { inner(error) }
+
+    return { err in
+        error = err
+        group.leave()
     }
 }
