@@ -260,3 +260,13 @@ func successResponseForRequest(_ request: URLRequest, withEvents events: [Subscr
     let res = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
     return .success(res, .streamSubscription(events: events))
 }
+
+extension Array {
+    func all(fn: (Element) -> Bool) -> Bool {
+        return self.reduce(true) { $0 && fn($1) }
+    }
+
+    func any(fn: (Element) -> Bool) -> Bool {
+        return self.reduce(false) { $0 || fn($1) }
+    }
+}
