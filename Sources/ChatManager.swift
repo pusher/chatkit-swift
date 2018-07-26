@@ -37,7 +37,7 @@ import PusherPlatform
 
         self.instance = ChatManager.createInstance(
             serviceName: "chatkit",
-            serviceVersion: "v1",
+            serviceVersion: "v2",
             sharedOptions: sharedInstanceOptions
         )
 
@@ -165,15 +165,14 @@ import PusherPlatform
 
                         combinedRoomUserIds.formUnion(room.userIds)
 
-                        self.currentUser!.roomStore.addOrMerge(room) { _ in
-                            if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
-                                self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
-                                self.fetchInitialUserInformationForUserIds(
-                                    combinedRoomUserIds,
-                                    userStore: self.currentUser!.userStore,
-                                    roomStore: self.currentUser!.roomStore
-                                )
-                            }
+                        self.currentUser!.roomStore.addOrMergeSync(room)
+                        if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
+                            self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
+                            self.fetchInitialUserInformationForUserIds(
+                                combinedRoomUserIds,
+                                userStore: self.currentUser!.userStore,
+                                roomStore: self.currentUser!.roomStore
+                            )
                         }
                     } catch let err {
                         self.instance.logger.log(
@@ -184,8 +183,8 @@ import PusherPlatform
                             self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
                             self.fetchInitialUserInformationForUserIds(
                                 combinedRoomUserIds,
-                               userStore: self.currentUser!.userStore,
-                               roomStore: self.currentUser!.roomStore
+                                userStore: self.currentUser!.userStore,
+                                roomStore: self.currentUser!.roomStore
                             )
                         }
                     }
