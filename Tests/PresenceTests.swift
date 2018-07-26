@@ -47,15 +47,13 @@ class PresenceTests: XCTestCase {
                 alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
                     XCTAssertNil(err)
                     self.roomId = room!.id
-                    createRoomEx.fulfill()
-
-                    sleep(2) // TODO this shouldn't be necessary.
                     self.aliceChatManager.disconnect()
+                    createRoomEx.fulfill()
                 }
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 1000)
     }
 
     override func tearDown() {
@@ -90,15 +88,14 @@ class PresenceTests: XCTestCase {
             userWentOffline: userWentOffline
         )
 
-        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _, err in
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { u, err in
             XCTAssertNil(err)
-
             self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
                 XCTAssertNil(err)
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 1000)
     }
 
     func testRoomDelegatePresenceHooks() {

@@ -72,7 +72,7 @@ public class PCConnectionCoordinator {
             completedConnectionEvents = []
             connectionEventHandlers = []
         } else {
-            queue.async {
+            queue.sync {
                 self.completedConnectionEvents = []
                 self.connectionEventHandlers = []
             }

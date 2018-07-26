@@ -13,6 +13,16 @@ import PusherPlatform
     let connectionCoordinator: PCConnectionCoordinator
     var currentUser: PCCurrentUser?
 
+    var logger: PCLogger {
+        didSet {
+            connectionCoordinator.logger = logger
+            instance.logger = logger
+            filesInstance.logger = logger
+            cursorsInstance.logger = logger
+            presenceInstance.logger = logger
+        }
+    }
+
     public init(
         instanceLocator: String,
         tokenProvider: PPTokenProvider,
@@ -24,6 +34,8 @@ import PusherPlatform
         let cluster = splitInstance[1]
         let sharedBaseClient = baseClient ?? PCBaseClient(host: "\(cluster).pusherplatform.io")
         sharedBaseClient.logger = logger
+
+        self.logger = logger
 
         let sdkInfo = PPSDKInfo(productName: "chatkit", sdkVersion: "0.9.0")
 
@@ -77,6 +89,8 @@ import PusherPlatform
         delegate: PCChatManagerDelegate,
         completionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
+        disconnect() // clear things up first
+
         let basicCurrentUser = PCBasicCurrentUser(
             id: userId,
             pathFriendlyId: pathFriendlyUserId,
