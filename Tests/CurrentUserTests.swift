@@ -16,7 +16,7 @@ class CurrentUserTests: XCTestCase {
         MockingjayProtocol.removeAllStubs()
     }
 
-    func testSendMessageWithAnAttachment() {
+    func testConnecting() {
         let instanceLocator = "v1:test:testing"
         let tokenEndpoint = "https://testing-chatkit.com/token"
         let userID = "ash"
