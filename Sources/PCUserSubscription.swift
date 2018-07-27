@@ -84,10 +84,6 @@ public final class PCUserSubscription {
             parseRoomUpdatedPayload(eventName, data: apiEventData)
         case .room_deleted:
             parseRoomDeletedPayload(eventName, data: apiEventData)
-        case .user_joined:
-            parseUserJoinedPayload(eventName, data: apiEventData)
-        case .user_left:
-            parseUserLeftPayload(eventName, data: apiEventData)
         }
     }
 
@@ -97,10 +93,6 @@ public final class PCUserSubscription {
 
     fileprivate func informConnectionCoordinatorOfCurrentUserCompletion(currentUser: PCCurrentUser?, error: Error?) {
         connectionCoordinator.connectionEventCompleted(PCConnectionEvent(currentUser: currentUser, error: error))
-    }
-
-    fileprivate func informConnectionCoordinatorOfInitialUsersFetchCompletion(users: [PCUser]?, error: Error?) {
-        connectionCoordinator.connectionEventCompleted(PCConnectionEvent(users: users, error: error))
     }
 }
 
@@ -276,141 +268,7 @@ extension PCUserSubscription {
             self.instance.logger.log("Room deleted: \(deletedRoom.name)", logLevel: .verbose)
         }
     }
-
-    fileprivate func parseUserJoinedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
-        guard let roomId = data["room_id"] as? Int else {
-            self.delegate?.error(
-                error: PCAPIEventError.keyNotPresentInEventPayload(
-                    key: "room_id",
-                    apiEventName: eventName,
-                    payload: data
-                )
-            )
-            return
-        }
-
-        guard let userId = data["user_id"] as? String else {
-            self.delegate?.error(
-                error: PCAPIEventError.keyNotPresentInEventPayload(
-                    key: "user_id",
-                    apiEventName: eventName,
-                    payload: data
-                )
-            )
-            return
-        }
-
-        guard let currentUser = self.currentUser else {
-            self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
-            self.delegate?.error(error: PCError.currentUserIsNil)
-            return
-        }
-
-        // TODO: Why not weak self here?
-        currentUser.roomStore.room(id: roomId) { room, err in
-            guard let room = room, err == nil else {
-                self.instance.logger.log(
-                    "User with id \(userId) joined room with id \(roomId) but no information about the room could be retrieved. Error was: \(err!.localizedDescription)",
-                    logLevel: .error
-                )
-                self.delegate?.error(error: err!)
-                return
-            }
-
-            currentUser.userStore.user(id: userId) { [weak self] user, err in
-                guard let strongSelf = self else {
-                    print("self is nil when user store returns user after parsing user joined event")
-                    return
-                }
-
-                guard let user = user, err == nil else {
-                    strongSelf.instance.logger.log(
-                        "User with id \(userId) joined room with id \(roomId) but no information about the user could be retrieved. Error was: \(err!.localizedDescription)",
-                        logLevel: .error
-                    )
-                    strongSelf.delegate?.error(error: err!)
-                    return
-                }
-
-                let addedOrMergedUser = room.userStore.addOrMerge(user)
-                room.userIds.insert(addedOrMergedUser.id)
-
-                strongSelf.delegate?.userJoinedRoom(room: room, user: addedOrMergedUser)
-                room.subscription?.delegate?.userJoined(user: addedOrMergedUser)
-                strongSelf.instance.logger.log("User \(user.displayName) joined room: \(room.name)", logLevel: .verbose)
-            }
-        }
-    }
-
-    fileprivate func parseUserLeftPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
-        guard let roomId = data["room_id"] as? Int else {
-            self.delegate?.error(
-                error: PCAPIEventError.keyNotPresentInEventPayload(
-                    key: "room_id",
-                    apiEventName: eventName,
-                    payload: data
-                )
-            )
-            return
-        }
-
-        guard let userId = data["user_id"] as? String else {
-            self.delegate?.error(
-                error: PCAPIEventError.keyNotPresentInEventPayload(
-                    key: "user_id",
-                    apiEventName: eventName,
-                    payload: data
-                )
-            )
-            return
-        }
-
-        guard let currentUser = self.currentUser else {
-            self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
-            self.delegate?.error(error: PCError.currentUserIsNil)
-            return
-        }
-
-        // TODO: Why not weak self here?
-        currentUser.roomStore.room(id: roomId) { room, err in
-            guard let room = room, err == nil else {
-                self.instance.logger.log(
-                    "User with id \(userId) left room with id \(roomId) but no information about the room could be retrieved. Error was: \(err!.localizedDescription)",
-                    logLevel: .error
-                )
-                self.delegate?.error(error: err!)
-                return
-            }
-
-            currentUser.userStore.user(id: userId) { [weak self] user, err in
-                guard let strongSelf = self else {
-                    print("self is nil when user store returns user after parsing user left event")
-                    return
-                }
-
-                guard let user = user, err == nil else {
-                    strongSelf.instance.logger.log(
-                        "User with id \(userId) left room with id \(roomId) but no information about the user could be retrieved. Error was: \(err!.localizedDescription)",
-                        logLevel: .error
-                    )
-                    strongSelf.delegate?.error(error: err!)
-                    return
-                }
-
-                let roomUserIdIndex = room.userIds.index(of: user.id)
-
-                if let indexToRemove = roomUserIdIndex {
-                    room.userIds.remove(at: indexToRemove)
-                }
-
-                room.userStore.remove(id: user.id)
-
-                strongSelf.delegate?.userLeftRoom(room: room, user: user)
-                room.subscription?.delegate?.userLeft(user: user)
-                strongSelf.instance.logger.log("User \(user.displayName) left room: \(room.name)", logLevel: .verbose)
-            }
-        }
-    }
+    
 }
 
 public enum PCAPIEventError: Error {
@@ -472,8 +330,6 @@ public enum PCAPIEventName: String {
     case removed_from_room
     case room_updated
     case room_deleted
-    case user_joined
-    case user_left
 }
 
 public enum PCUserSubscriptionState {

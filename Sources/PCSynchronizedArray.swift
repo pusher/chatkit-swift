@@ -13,6 +13,14 @@ public final class PCSynchronizedArray<T> {
         }
     }
 
+    public func appendSync(_ newElement: T) -> T {
+        self.accessQueue.sync {
+            self.underlyingArray.append(newElement)
+        }
+
+        return newElement
+    }
+
     func appendAndComplete(_ newElement: T, completionHandler: @escaping (T) -> Void) {
         self.accessQueue.async(flags: .barrier) {
             self.underlyingArray.append(newElement)

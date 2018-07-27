@@ -25,6 +25,7 @@
 		334B9A2D1ECCA16A007A3D3B /* PCRoomStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334B9A2C1ECCA16A007A3D3B /* PCRoomStore.swift */; };
 		334B9A311ECD98A7007A3D3B /* PCBasicMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334B9A301ECD98A7007A3D3B /* PCBasicMessage.swift */; };
 		334B9A331ECD98FA007A3D3B /* PCBasicMessageEnricher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334B9A321ECD98FA007A3D3B /* PCBasicMessageEnricher.swift */; };
+		335A9B59210B570700ACFC35 /* PCMembershipSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335A9B58210B570700ACFC35 /* PCMembershipSubscription.swift */; };
 		335AD5E6205828F7000D4D08 /* PCCursorStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335AD5E5205828F6000D4D08 /* PCCursorStore.swift */; };
 		335AD64E205982C1000D4D08 /* PCBasicCurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335AD64D205982C1000D4D08 /* PCBasicCurrentUser.swift */; };
 		335AD8F8205C10AD000D4D08 /* PCMessageSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335AD8F7205C10AD000D4D08 /* PCMessageSubscription.swift */; };
@@ -59,7 +60,9 @@
 		33D2A5AF1E39075100EA7549 /* ChatManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */; };
 		33E3EBC7200E2368003D888D /* PPTypealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3EBC6200E2368003D888D /* PPTypealiases.swift */; };
 		33EE67DD20F5176800B0F0AD /* TokenGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EE67DC20F5176800B0F0AD /* TokenGenerator.swift */; };
+		33F1FC2B210734A90083E05E /* test-image.gif in Resources */ = {isa = PBXBuildFile; fileRef = 33F1FC2A210734A90083E05E /* test-image.gif */; };
 		F2665DEE20FDEE56002A0A3D /* PresenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2665DED20FDEE56002A0A3D /* PresenceTests.swift */; };
+		F2665E0F20FE025D002A0A3D /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2665E0E20FE025C002A0A3D /* MessageTests.swift */; };
 		F2AA717520F7616000BC01DE /* CursorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AA717420F7616000BC01DE /* CursorTests.swift */; };
 		F2AA717920F8FBA400BC01DE /* TypingIndicatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AA717820F8FBA400BC01DE /* TypingIndicatorTests.swift */; };
 /* End PBXBuildFile section */
@@ -93,6 +96,7 @@
 		334B9A2C1ECCA16A007A3D3B /* PCRoomStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCRoomStore.swift; sourceTree = "<group>"; };
 		334B9A301ECD98A7007A3D3B /* PCBasicMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCBasicMessage.swift; sourceTree = "<group>"; };
 		334B9A321ECD98FA007A3D3B /* PCBasicMessageEnricher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCBasicMessageEnricher.swift; sourceTree = "<group>"; };
+		335A9B58210B570700ACFC35 /* PCMembershipSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCMembershipSubscription.swift; sourceTree = "<group>"; };
 		335AD5E5205828F6000D4D08 /* PCCursorStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCCursorStore.swift; sourceTree = "<group>"; };
 		335AD64D205982C1000D4D08 /* PCBasicCurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCBasicCurrentUser.swift; sourceTree = "<group>"; };
 		335AD8F7205C10AD000D4D08 /* PCMessageSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCMessageSubscription.swift; sourceTree = "<group>"; };
@@ -131,7 +135,9 @@
 		33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatManagerTests.swift; sourceTree = "<group>"; };
 		33E3EBC6200E2368003D888D /* PPTypealiases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPTypealiases.swift; sourceTree = "<group>"; };
 		33EE67DC20F5176800B0F0AD /* TokenGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenGenerator.swift; sourceTree = "<group>"; };
+		33F1FC2A210734A90083E05E /* test-image.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "test-image.gif"; sourceTree = "<group>"; };
 		F2665DED20FDEE56002A0A3D /* PresenceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresenceTests.swift; sourceTree = "<group>"; };
+		F2665E0E20FE025C002A0A3D /* MessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
 		F2AA717420F7616000BC01DE /* CursorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CursorTests.swift; sourceTree = "<group>"; };
 		F2AA717820F8FBA400BC01DE /* TypingIndicatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypingIndicatorTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -158,9 +164,9 @@
 		33831C491A9CEDF800B124F1 = {
 			isa = PBXGroup;
 			children = (
+				42D29A655054030A9B238900 /* Frameworks */,
 				33831C8B1A9CF61600B124F1 /* Sources */,
 				33BB995C1D21225B00B25C2A /* Tests */,
-				42D29A655054030A9B238900 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -185,6 +191,7 @@
 				331421341EDD8CDC00D0B6DB /* PCPresenceSubscription.swift */,
 				335AD8F7205C10AD000D4D08 /* PCMessageSubscription.swift */,
 				33C5D8F82020842200E826FB /* PCCursorSubscription.swift */,
+				335A9B58210B570700ACFC35 /* PCMembershipSubscription.swift */,
 				3388D5FA1EAE4E640072A742 /* PCRoomSubscription.swift */,
 				3388D5F01EAE4DD40072A742 /* PCChatManagerDelegate.swift */,
 				3388D5F21EAE4DFB0072A742 /* PCRoom.swift */,
@@ -235,17 +242,19 @@
 		33BB995C1D21225B00B25C2A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				F2665E1020FE4F49002A0A3D /* Assets */,
 				33D0394D20F6593200B5D87A /* Config */,
 				33D0394C20F650F900B5D87A /* Helpers */,
-				F2AA717420F7616000BC01DE /* CursorTests.swift */,
-				F2AA717820F8FBA400BC01DE /* TypingIndicatorTests.swift */,
-				339768F420F4ED2F00BCB10B /* UserSubscriptionTests.swift */,
-				333D861720F4A97100734402 /* CurrentUserTests.swift */,
 				33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */,
+				333D861720F4A97100734402 /* CurrentUserTests.swift */,
+				F2AA717420F7616000BC01DE /* CursorTests.swift */,
+				33BC080F209A1765001DB5F9 /* DefaultsTests.swift */,
+				F2665E0E20FE025C002A0A3D /* MessageTests.swift */,
+				F2665DED20FDEE56002A0A3D /* PresenceTests.swift */,
 				33AF440720FC922F00336710 /* RoomMembershipTests.swift */,
 				337C0C9520615A6600BB977A /* TokenProviderTests.swift */,
-				33BC080F209A1765001DB5F9 /* DefaultsTests.swift */,
-				F2665DED20FDEE56002A0A3D /* PresenceTests.swift */,
+				F2AA717820F8FBA400BC01DE /* TypingIndicatorTests.swift */,
+				339768F420F4ED2F00BCB10B /* UserSubscriptionTests.swift */,
 				33831C8A1A9CF61600B124F1 /* Products */,
 				33D0394E20F6594600B5D87A /* Supporting Files */,
 			);
@@ -283,6 +292,14 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F2665E1020FE4F49002A0A3D /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				33F1FC2A210734A90083E05E /* test-image.gif */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -386,6 +403,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33F1FC2B210734A90083E05E /* test-image.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,6 +444,7 @@
 				334B9A331ECD98FA007A3D3B /* PCBasicMessageEnricher.swift in Sources */,
 				3388D5F91EAE4E4A0072A742 /* PCUser.swift in Sources */,
 				331F9BD91EBC80FA00C3F678 /* PCPayloadDeserializer.swift in Sources */,
+				335A9B59210B570700ACFC35 /* PCMembershipSubscription.swift in Sources */,
 				3336C8171EE046F0005EB69A /* PCUserStoreCore.swift in Sources */,
 				3388D5FD1EAE4EAC0072A742 /* PCUserSubscription.swift in Sources */,
 				33BA5640200E640600FFC587 /* PCAttachmentUploadResponse.swift in Sources */,
@@ -463,6 +482,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2665E0F20FE025D002A0A3D /* MessageTests.swift in Sources */,
 				339768F320F4CC6700BCB10B /* TestConfig.swift in Sources */,
 				F2AA717520F7616000BC01DE /* CursorTests.swift in Sources */,
 				339768F720F4EEEC00BCB10B /* Helpers.swift in Sources */,

@@ -28,6 +28,16 @@ public final class PCRoomStore {
         }
     }
 
+    @discardableResult
+    func addOrMergeSync(_ room: PCRoom) -> PCRoom {
+        if let existingRoom = self.rooms.first(where: { $0.id == room.id }) {
+            existingRoom.updateWithPropertiesOfRoom(room)
+            return existingRoom
+        } else {
+            return self.rooms.appendSync(room)
+        }
+    }
+
     func remove(id: Int, completionHandler: ((PCRoom?) -> Void)? = nil) {
         return self.rooms.remove(where: { $0.id == id }, completionHandler: completionHandler)
     }

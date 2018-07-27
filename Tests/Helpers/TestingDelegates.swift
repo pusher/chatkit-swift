@@ -22,7 +22,7 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
         addedToRoom: @escaping (PCRoom) -> Void = { _ in },
         removedFromRoom: @escaping (PCRoom) -> Void = { _ in },
         roomDeleted: @escaping (PCRoom) -> Void = { _ in }
-        ) {
+    ) {
         handleUserStartedTyping = userStartedTyping
         handleUserStoppedTyping = userStoppedTyping
         handleUserCameOnline = userCameOnline
@@ -79,6 +79,7 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
     let handleUserWentOffline: (PCUser) -> Void
     let handleUserJoined: (PCUser) -> Void
     let handleUserLeft: (PCUser) -> Void
+    let handleNewMessage: (PCMessage) -> Void
 
     init(
         newCursor: @escaping (PCCursor) -> Void = { _ in },
@@ -87,8 +88,9 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
         userCameOnline: @escaping (PCUser) -> Void = { _ in },
         userWentOffline: @escaping (PCUser) -> Void = { _ in },
         userJoined: @escaping (PCUser) -> Void = { _ in },
-        userLeft: @escaping (PCUser) -> Void = { _ in }
-        ) {
+        userLeft: @escaping (PCUser) -> Void = { _ in },
+        newMessage: @escaping (PCMessage) -> Void = { _ in }
+    ) {
         handleNewCursor = newCursor
         handleUserStartedTyping = userStartedTyping
         handleUserStoppedTyping = userStoppedTyping
@@ -96,6 +98,7 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
         handleUserWentOffline = userWentOffline
         handleUserJoined = userJoined
         handleUserLeft = userLeft
+        handleNewMessage = newMessage
     }
 
     func newCursor(cursor: PCCursor) -> Void {
@@ -124,5 +127,9 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
 
     func userLeft(user: PCUser) {
         handleUserLeft(user)
+    }
+
+    func newMessage(message: PCMessage) {
+        handleNewMessage(message)
     }
 }

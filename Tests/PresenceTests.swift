@@ -47,10 +47,8 @@ class PresenceTests: XCTestCase {
                 alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
                     XCTAssertNil(err)
                     self.roomId = room!.id
-                    createRoomEx.fulfill()
-
-                    sleep(2) // TODO this shouldn't be necessary.
                     self.aliceChatManager.disconnect()
+                    createRoomEx.fulfill()
                 }
             }
         }
@@ -90,9 +88,8 @@ class PresenceTests: XCTestCase {
             userWentOffline: userWentOffline
         )
 
-        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _, err in
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { u, err in
             XCTAssertNil(err)
-
             self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
                 XCTAssertNil(err)
             }
@@ -130,12 +127,12 @@ class PresenceTests: XCTestCase {
             bob!.subscribeToRoom(
                 room: bob!.rooms.first(where: { $0.id == self.roomId })!,
                 roomDelegate: bobRoomDelegate
-            )
-
-            sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
-
-            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
+            ) { err in
                 XCTAssertNil(err)
+
+                self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
+                    XCTAssertNil(err)
+                }
             }
         }
 
