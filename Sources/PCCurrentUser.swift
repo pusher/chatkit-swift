@@ -746,7 +746,7 @@ public final class PCCurrentUser {
         )
 
         let completionHandler = steppedCompletionHandler(
-            steps: 2,
+            steps: 3,
             inner: completionHandler,
             dispatchQueue: roomSubscriptionQueue
         )
@@ -771,10 +771,16 @@ public final class PCCurrentUser {
                 delegate: roomDelegate,
                 completionHandler: completionHandler
             )
+            let membershipSub = self.subscribeToRoomMemberships(
+                room: roomToSubscribeTo,
+                delegate: roomDelegate,
+                completionHandler: completionHandler
+            )
 
             room.subscription = PCRoomSubscription(
                 messageSubscription: messageSub,
                 cursorSubscription: cursorSub,
+                membershipSubscription: membershipSub,
                 delegate: roomDelegate
             )
         }
@@ -865,6 +871,45 @@ public final class PCCurrentUser {
         )
 
         return cursorSubscription
+    }
+
+    fileprivate func subscribeToRoomMemberships(
+        room: PCRoom,
+        delegate: PCRoomDelegate,
+        completionHandler: @escaping PCErrorCompletionHandler
+    ) -> PCMembershipSubscription {
+        let path = "/rooms/\(room.id)/memberships"
+
+        let subscribeRequest = PPRequestOptions(
+            method: HTTPMethod.SUBSCRIBE.rawValue,
+            path: path
+        )
+
+        var resumableSub = PPResumableSubscription(
+            instance: self.instance,
+            requestOptions: subscribeRequest
+        )
+
+        let membershipSubscription = PCMembershipSubscription(
+            roomId: room.id,
+            delegate: delegate,
+            resumableSubscription: resumableSub,
+            userStore: self.userStore,
+            roomStore: self.roomStore,
+            logger: self.instance.logger,
+            initialStateHandler: completionHandler
+        )
+
+        self.instance.subscribeWithResume(
+            with: &resumableSub,
+            using: subscribeRequest,
+            onEvent: { [unowned membershipSubscription] eventID, headers, data in
+                membershipSubscription.handleEvent(eventId: eventID, headers: headers, data: data)
+            },
+            onError: completionHandler
+        )
+
+        return membershipSubscription
     }
 
     public func fetchMessagesFromRoom(

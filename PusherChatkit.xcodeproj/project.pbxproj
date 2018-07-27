@@ -25,6 +25,7 @@
 		334B9A2D1ECCA16A007A3D3B /* PCRoomStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334B9A2C1ECCA16A007A3D3B /* PCRoomStore.swift */; };
 		334B9A311ECD98A7007A3D3B /* PCBasicMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334B9A301ECD98A7007A3D3B /* PCBasicMessage.swift */; };
 		334B9A331ECD98FA007A3D3B /* PCBasicMessageEnricher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334B9A321ECD98FA007A3D3B /* PCBasicMessageEnricher.swift */; };
+		335A9B59210B570700ACFC35 /* PCMembershipSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335A9B58210B570700ACFC35 /* PCMembershipSubscription.swift */; };
 		335AD5E6205828F7000D4D08 /* PCCursorStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335AD5E5205828F6000D4D08 /* PCCursorStore.swift */; };
 		335AD64E205982C1000D4D08 /* PCBasicCurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335AD64D205982C1000D4D08 /* PCBasicCurrentUser.swift */; };
 		335AD8F8205C10AD000D4D08 /* PCMessageSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335AD8F7205C10AD000D4D08 /* PCMessageSubscription.swift */; };
@@ -95,6 +96,7 @@
 		334B9A2C1ECCA16A007A3D3B /* PCRoomStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCRoomStore.swift; sourceTree = "<group>"; };
 		334B9A301ECD98A7007A3D3B /* PCBasicMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCBasicMessage.swift; sourceTree = "<group>"; };
 		334B9A321ECD98FA007A3D3B /* PCBasicMessageEnricher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCBasicMessageEnricher.swift; sourceTree = "<group>"; };
+		335A9B58210B570700ACFC35 /* PCMembershipSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCMembershipSubscription.swift; sourceTree = "<group>"; };
 		335AD5E5205828F6000D4D08 /* PCCursorStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCCursorStore.swift; sourceTree = "<group>"; };
 		335AD64D205982C1000D4D08 /* PCBasicCurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCBasicCurrentUser.swift; sourceTree = "<group>"; };
 		335AD8F7205C10AD000D4D08 /* PCMessageSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCMessageSubscription.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				331421341EDD8CDC00D0B6DB /* PCPresenceSubscription.swift */,
 				335AD8F7205C10AD000D4D08 /* PCMessageSubscription.swift */,
 				33C5D8F82020842200E826FB /* PCCursorSubscription.swift */,
+				335A9B58210B570700ACFC35 /* PCMembershipSubscription.swift */,
 				3388D5FA1EAE4E640072A742 /* PCRoomSubscription.swift */,
 				3388D5F01EAE4DD40072A742 /* PCChatManagerDelegate.swift */,
 				3388D5F21EAE4DFB0072A742 /* PCRoom.swift */,
@@ -441,6 +444,7 @@
 				334B9A331ECD98FA007A3D3B /* PCBasicMessageEnricher.swift in Sources */,
 				3388D5F91EAE4E4A0072A742 /* PCUser.swift in Sources */,
 				331F9BD91EBC80FA00C3F678 /* PCPayloadDeserializer.swift in Sources */,
+				335A9B59210B570700ACFC35 /* PCMembershipSubscription.swift in Sources */,
 				3336C8171EE046F0005EB69A /* PCUserStoreCore.swift in Sources */,
 				3388D5FD1EAE4EAC0072A742 /* PCUserSubscription.swift in Sources */,
 				33BA5640200E640600FFC587 /* PCAttachmentUploadResponse.swift in Sources */,
