@@ -101,13 +101,12 @@ class TypingIndicatorTests: XCTestCase {
             alice!.subscribeToRoom(
                 room: alice!.rooms.first(where: { $0.id == self.roomId })!,
                 roomDelegate: TestingRoomDelegate()
-            )
-
-            sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
-
-            self.bobChatManager.connect(delegate: bobCMDelegate) { bob, err in
+            ) { err in
                 XCTAssertNil(err)
-                bob!.typing(in: bob!.rooms.first(where: { $0.id == self.roomId })!) { _ in }
+                self.bobChatManager.connect(delegate: bobCMDelegate) { bob, err in
+                    XCTAssertNil(err)
+                    bob!.typing(in: bob!.rooms.first(where: { $0.id == self.roomId })!) { _ in }
+                }
             }
         }
 
@@ -153,7 +152,9 @@ class TypingIndicatorTests: XCTestCase {
                     delegate: TestingChatManagerDelegate()
                 ) { alice, err in
                     XCTAssertNil(err)
-                    alice!.typing(in: alice!.rooms.first(where: { $0.id == self.roomId })!)
+                    alice!.typing(in: alice!.rooms.first(where: { $0.id == self.roomId })!) { err in
+                        XCTAssertNil(err)
+                    }
                 }
             }
         }

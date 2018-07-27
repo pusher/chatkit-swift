@@ -31,6 +31,10 @@ public final class PCCurrentUser {
     public internal(set) var presenceSubscription: PCPresenceSubscription?
     public internal(set) var cursorSubscription: PCCursorSubscription?
 
+    private let roomSubscriptionQueue = DispatchQueue(
+        label: "com.pusher.chatkit.room-subscriptions"
+    )
+
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
