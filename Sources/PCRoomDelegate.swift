@@ -18,11 +18,6 @@ public protocol PCRoomDelegate: NSObjectProtocol {
     // TODO: This seems like it could instead be `userListUpdated`, or something similar?
     func usersUpdated()
 
-    // TODO: I don't think we'll want this - it could be handled by the state change - i.e. changed
-    // to .failed, potentially with an associated error value
-
-    // func error(error: Error)
-
     // TODO: Make all of this work, and probably duplicate in PCChatManagerDelegate
 
     //    func subscriptionStateChanged(from: PPResumableSubscriptionState, to: PPResumableSubscriptionState)
