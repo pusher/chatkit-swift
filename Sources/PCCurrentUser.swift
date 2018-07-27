@@ -730,8 +730,9 @@ public final class PCCurrentUser {
             logLevel: .verbose
         )
 
+<<<<<<< HEAD
         let progressCounter = PCProgressCounter(
-            totalCount: 2,
+            totalCount: 3,
             labelSuffix: "subscribe-to-room-\(UUID().uuidString)"
         )
 
@@ -771,6 +772,11 @@ public final class PCCurrentUser {
                 delegate: delegate,
                 completionHandler: combinedCompletionHandler
             )
+            let membershipSub = self.subscribeToRoomMemberships(
+                room: roomToSubscribeTo,
+                delegate: roomDelegate,
+                completionHandler: completionHandler
+            )
 
             if room.subscription != nil {
                 room.subscription!.end()
@@ -780,6 +786,7 @@ public final class PCCurrentUser {
             room.subscription = PCRoomSubscription(
                 messageSubscription: messageSub,
                 cursorSubscription: cursorSub,
+                membershipSubscription: membershipSub,
                 delegate: delegate
             )
         }
@@ -873,6 +880,45 @@ public final class PCCurrentUser {
         )
 
         return cursorSubscription
+    }
+
+    fileprivate func subscribeToRoomMemberships(
+        room: PCRoom,
+        delegate: PCRoomDelegate,
+        completionHandler: @escaping PCErrorCompletionHandler
+    ) -> PCMembershipSubscription {
+        let path = "/rooms/\(room.id)/memberships"
+
+        let subscribeRequest = PPRequestOptions(
+            method: HTTPMethod.SUBSCRIBE.rawValue,
+            path: path
+        )
+
+        var resumableSub = PPResumableSubscription(
+            instance: self.instance,
+            requestOptions: subscribeRequest
+        )
+
+        let membershipSubscription = PCMembershipSubscription(
+            roomId: room.id,
+            delegate: delegate,
+            resumableSubscription: resumableSub,
+            userStore: self.userStore,
+            roomStore: self.roomStore,
+            logger: self.instance.logger,
+            initialStateHandler: completionHandler
+        )
+
+        self.instance.subscribeWithResume(
+            with: &resumableSub,
+            using: subscribeRequest,
+            onEvent: { [unowned membershipSubscription] eventID, headers, data in
+                membershipSubscription.handleEvent(eventId: eventID, headers: headers, data: data)
+            },
+            onError: completionHandler
+        )
+
+        return membershipSubscription
     }
 
     public func fetchMessagesFromRoom(

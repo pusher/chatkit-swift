@@ -36,7 +36,8 @@ class CurrentUserTests: XCTestCase {
         let userSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .server,
-            path: "users"
+            path: "users",
+            version: "v2"
         ).absoluteString
 
         stub(uri(userSubscriptionURL)) { req in
@@ -101,14 +102,6 @@ class CurrentUserTests: XCTestCase {
             let initialStateSubEvent = SubscriptionEvent(data: initialStateEventData, delay: 0.0)
             return successResponseForRequest(req, withEvents: [initialStateSubEvent])
         }
-
-        let usersByIDsURL = serviceURL(
-            instanceLocator: instanceLocator,
-            service: .server,
-            path: "users_by_ids"
-        ).absoluteString
-
-        stub(uri(usersByIDsURL), json([]))
 
         let ex = expectation(description: "current user returned upon connection")
 
