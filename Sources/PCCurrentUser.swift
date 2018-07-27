@@ -846,6 +846,7 @@ public final class PCCurrentUser {
         let membershipSubscription = PCMembershipSubscription(
             roomId: room.id,
             delegate: delegate,
+            chatManagerDelegate: self.delegate,
             resumableSubscription: resumableSub,
             userStore: self.userStore,
             roomStore: self.roomStore,

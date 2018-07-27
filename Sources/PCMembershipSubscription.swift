@@ -8,12 +8,14 @@ public final class PCMembershipSubscription {
     public let roomStore: PCRoomStore
     public var logger: PPLogger
     var initialStateHandler: (Error?) -> Void
+    weak var chatManagerDelegate: PCChatManagerDelegate?
 
     let roomId: Int
 
     init(
         roomId: Int,
         delegate: PCRoomDelegate? = nil,
+        chatManagerDelegate: PCChatManagerDelegate? = nil,
         resumableSubscription: PPResumableSubscription,
         userStore: PCGlobalUserStore,
         roomStore: PCRoomStore,
@@ -22,6 +24,7 @@ public final class PCMembershipSubscription {
     ) {
         self.roomId = roomId
         self.delegate = delegate
+        self.chatManagerDelegate = chatManagerDelegate
         self.resumableSubscription = resumableSubscription
         self.userStore = userStore
         self.roomStore = roomStore
@@ -159,8 +162,8 @@ extension PCMembershipSubscription {
                 let addedOrMergedUser = room.userStore.addOrMerge(user)
                 room.userIds.insert(addedOrMergedUser.id)
 
-                // TODO Call ChatManagerDelegate userJoined here
                 strongSelf.delegate?.userJoined(user: addedOrMergedUser)
+                strongSelf.chatManagerDelegate?.userJoinedRoom(room: room, user: user)
                 strongSelf.logger.log("User \(user.displayName) joined room: \(room.name)", logLevel: .verbose)
             }
         }
@@ -214,8 +217,8 @@ extension PCMembershipSubscription {
 
                 room.userStore.remove(id: user.id)
 
-                // TODO Call ChatManagerDelegate userJoined here
                 strongSelf.delegate?.userLeft(user: user)
+                strongSelf.chatManagerDelegate?.userLeftRoom(room: room, user: user)
                 strongSelf.logger.log("User \(user.displayName) left room: \(room.name)", logLevel: .verbose)
             }
         }
