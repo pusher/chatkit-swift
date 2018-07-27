@@ -31,6 +31,9 @@ public final class PCCurrentUser {
 
     var typingIndicatorManagers: [Int: PCTypingIndicatorManager] = [:]
     private var typingIndicatorQueue = DispatchQueue(label: "com.pusher.chatkit.typing-indicators")
+    private let roomSubscriptionQueue = DispatchQueue(
+        label: "com.pusher.chatkit.room-subscriptions"
+    )
 
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -731,10 +734,21 @@ public final class PCCurrentUser {
     }
 
     // TODO: Do I need to add a Last-Event-ID option here?
-    public func subscribeToRoom(room: PCRoom, roomDelegate: PCRoomDelegate, messageLimit: Int = 20) {
+    public func subscribeToRoom(
+        room: PCRoom,
+        roomDelegate: PCRoomDelegate,
+        messageLimit: Int = 20,
+        completionHandler: @escaping PCErrorCompletionHandler
+    ) {
         self.instance.logger.log(
             "About to subscribe to room \(room.debugDescription)",
             logLevel: .verbose
+        )
+
+        let completionHandler = steppedCompletionHandler(
+            steps: 2,
+            inner: completionHandler,
+            dispatchQueue: roomSubscriptionQueue
         )
 
         self.joinRoom(roomId: room.id) { innerRoom, err in
@@ -749,11 +763,13 @@ public final class PCCurrentUser {
             let messageSub = self.subscribeToRoomMessages(
                 room: roomToSubscribeTo,
                 delegate: roomDelegate,
-                messageLimit: messageLimit
+                messageLimit: messageLimit,
+                completionHandler: completionHandler
             )
             let cursorSub = self.subscribeToRoomCursors(
                 room: roomToSubscribeTo,
-                delegate: roomDelegate
+                delegate: roomDelegate,
+                completionHandler: completionHandler
             )
 
             room.subscription = PCRoomSubscription(
@@ -767,7 +783,8 @@ public final class PCCurrentUser {
     fileprivate func subscribeToRoomMessages(
         room: PCRoom,
         delegate: PCRoomDelegate,
-        messageLimit: Int
+        messageLimit: Int,
+        completionHandler: @escaping PCErrorCompletionHandler
     ) -> PCMessageSubscription {
         let path = "/rooms/\(room.id)"
 
@@ -801,16 +818,22 @@ public final class PCCurrentUser {
         self.instance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
+            onOpen: { completionHandler(nil) },
             onEvent: { [unowned messageSubscription] eventID, headers, data in
                 messageSubscription.handleEvent(eventId: eventID, headers: headers, data: data)
-            }
-            // TODO: Should we be handling onError here somehow?
+            },
+            onError: completionHandler
+
         )
 
         return messageSubscription
     }
 
-    fileprivate func subscribeToRoomCursors(room: PCRoom, delegate: PCRoomDelegate) -> PCCursorSubscription {
+    fileprivate func subscribeToRoomCursors(
+        room: PCRoom,
+        delegate: PCRoomDelegate,
+        completionHandler: @escaping PCErrorCompletionHandler
+    ) -> PCCursorSubscription {
         let path = "/cursors/\(PCCursorType.read.rawValue)/rooms/\(room.id)"
 
         let subscribeRequest = PPRequestOptions(
@@ -829,10 +852,7 @@ public final class PCCurrentUser {
             cursorStore: cursorStore,
             connectionCoordinator: connectionCoordinator,
             logger: self.cursorsInstance.logger,
-            initialStateHandler: { err in
-                // TODO: Only consider the room subscription open when both the
-                // room subscription and cursor subscription have opened
-            }
+            initialStateHandler: completionHandler
         )
 
         self.cursorsInstance.subscribeWithResume(
@@ -840,8 +860,8 @@ public final class PCCurrentUser {
             using: subscribeRequest,
             onEvent: { [unowned cursorSubscription] eventID, headers, data in
                 cursorSubscription.handleEvent(eventId: eventID, headers: headers, data: data)
-            }
-            // TODO: Should we be handling onError here somehow?
+            },
+            onError: completionHandler
         )
 
         return cursorSubscription
@@ -1030,3 +1050,28 @@ public enum PCRoomMessageFetchDirection: String {
 public typealias PCErrorCompletionHandler = (Error?) -> Void
 public typealias PCRoomCompletionHandler = (PCRoom?, Error?) -> Void
 public typealias PCRoomsCompletionHandler = ([PCRoom]?, Error?) -> Void
+
+// Takes an `inner` completion handler of type `PCErrorCompletionHandler`,
+// returns another completion handler of the same type that calls the inner
+// completion handler after being called itself `steps` times. Returns the last
+// error, if any.
+func steppedCompletionHandler(
+    steps: Int,
+    inner: @escaping PCErrorCompletionHandler,
+    dispatchQueue: DispatchQueue
+) -> PCErrorCompletionHandler {
+    var error: Error?
+
+    let group = DispatchGroup()
+
+    for _ in 0..<steps {
+        group.enter()
+    }
+
+    group.notify(queue: dispatchQueue) { inner(error) }
+
+    return { err in
+        error = err
+        group.leave()
+    }
+}

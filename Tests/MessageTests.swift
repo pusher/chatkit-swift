@@ -161,7 +161,10 @@ class MessagesTests: XCTestCase {
 
             bob!.subscribeToRoom(
                 room: bob!.rooms.first(where: { $0.id == self.roomId })!,
-                roomDelegate: bobRoomDelegate
+                roomDelegate: bobRoomDelegate,
+                completionHandler: { err in
+                    XCTAssertNil(err)
+                }
             )
         }
 
@@ -191,7 +194,10 @@ class MessagesTests: XCTestCase {
             bob!.subscribeToRoom(
                 room: bob!.rooms.first(where: { $0.id == self.roomId })!,
                 roomDelegate: bobRoomDelegate,
-                messageLimit: 2
+                messageLimit: 2,
+                completionHandler: { err in
+                    XCTAssertNil(err)
+                }
             )
         }
 
@@ -221,24 +227,25 @@ class MessagesTests: XCTestCase {
             bob!.subscribeToRoom(
                 room: bob!.rooms.first(where: { $0.id == self.roomId })!,
                 roomDelegate: bobRoomDelegate,
-                messageLimit: 0
+                messageLimit: 0,
+                completionHandler: { err in
+                    XCTAssertNil(err)
+
+                    self.aliceChatManager.connect(
+                        delegate: TestingChatManagerDelegate()
+                    ) { alice, err in
+                        alice!.sendMessage(roomId: self.roomId, text: "yo") { _, err in
+                            XCTAssertNil(err)
+                        }
+
+                        usleep(200000) // TODO do this properly when we have promises
+
+                        alice!.sendMessage(roomId: self.roomId, text: "yooo") { _, err in
+                            XCTAssertNil(err)
+                        }
+                    }
+                }
             )
-
-            sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
-
-            self.aliceChatManager.connect(
-                delegate: TestingChatManagerDelegate()
-            ) { alice, err in
-                alice!.sendMessage(roomId: self.roomId, text: "yo") { _, err in
-                    XCTAssertNil(err)
-                }
-
-                usleep(200000) // TODO do this properly when we have promises
-
-                alice!.sendMessage(roomId: self.roomId, text: "yooo") { _, err in
-                    XCTAssertNil(err)
-                }
-            }
         }
 
         waitForExpectations(timeout: 10)
@@ -267,22 +274,23 @@ class MessagesTests: XCTestCase {
             bob!.subscribeToRoom(
                 room: bob!.rooms.first(where: { $0.id == self.roomId })!,
                 roomDelegate: bobRoomDelegate,
-                messageLimit: 0
-            )
-
-            sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
-
-            self.aliceChatManager.connect(
-                delegate: TestingChatManagerDelegate()
-            ) { alice, err in
-                alice!.sendMessage(
-                    roomId: self.roomId,
-                    text: "see attached",
-                    attachmentType: .link(veryImportantImage, type: "image")
-                ) { _, err in
+                messageLimit: 0,
+                completionHandler: { err in
                     XCTAssertNil(err)
+
+                    self.aliceChatManager.connect(
+                        delegate: TestingChatManagerDelegate()
+                    ) { alice, err in
+                        alice!.sendMessage(
+                            roomId: self.roomId,
+                            text: "see attached",
+                            attachmentType: .link(veryImportantImage, type: "image")
+                        ) { _, err in
+                            XCTAssertNil(err)
+                        }
+                    }
                 }
-            }
+            )
         }
 
         waitForExpectations(timeout: 10)
@@ -319,15 +327,17 @@ class MessagesTests: XCTestCase {
 //            bob!.subscribeToRoom(
 //                room: bob!.rooms.first(where: { $0.id == self.roomId })!,
 //                roomDelegate: bobRoomDelegate,
-//                messageLimit: 0
+//                messageLimit: 0,
+//                completionHandler: { err in
+//                    XCTAssertNil(err)
+//
+//                }
 //            )
 //
 //            let filesUploadSessionTestConfig = URLSessionConfiguration.ephemeral
 ////            filesUploadSessionTestConfig.identifier = "com.pusher.chatkit.files-upload-test.\(UUID().uuidString)"
 //            filesUploadSessionTestConfig.httpAdditionalHeaders = self.aliceChatManager.filesInstance.client.sdkInfoHeaders
 //            self.aliceChatManager.filesInstance.client.uploadURLSession = URLSession(configuration: filesUploadSessionTestConfig)
-//
-//            sleep(1) // TODO remove once we can wait on the completion of subscribeToRoom
 //
 //            self.aliceChatManager.connect(
 //                delegate: TestingChatManagerDelegate()
