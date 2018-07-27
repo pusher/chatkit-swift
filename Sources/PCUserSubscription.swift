@@ -98,10 +98,6 @@ public final class PCUserSubscription {
     fileprivate func informConnectionCoordinatorOfCurrentUserCompletion(currentUser: PCCurrentUser?, error: Error?) {
         connectionCoordinator.connectionEventCompleted(PCConnectionEvent(currentUser: currentUser, error: error))
     }
-
-    fileprivate func informConnectionCoordinatorOfInitialUsersFetchCompletion(users: [PCUser]?, error: Error?) {
-        connectionCoordinator.connectionEventCompleted(PCConnectionEvent(users: users, error: error))
-    }
 }
 
 extension PCUserSubscription {

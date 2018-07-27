@@ -166,9 +166,6 @@ import PusherPlatform
 
                 guard roomsPayload.count > 0 else {
                     self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
-                    // There are no users to fetch information about so we are safe to inform
-                    // the connection coordinator of a success immediately
-                    self.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: [], error: nil)
                     return
                 }
 
@@ -188,11 +185,6 @@ import PusherPlatform
                         self.currentUser!.roomStore.addOrMergeSync(room)
                         if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
                             self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
-                            self.fetchInitialUserInformationForUserIds(
-                                combinedRoomUserIds,
-                                userStore: self.currentUser!.userStore,
-                                roomStore: self.currentUser!.roomStore
-                            )
                         }
                     } catch let err {
                         self.instance.logger.log(
@@ -201,11 +193,6 @@ import PusherPlatform
                         )
                         if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
                             self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
-                            self.fetchInitialUserInformationForUserIds(
-                                combinedRoomUserIds,
-                                userStore: self.currentUser!.userStore,
-                                roomStore: self.currentUser!.roomStore
-                            )
                         }
                     }
                 }
@@ -250,71 +237,7 @@ import PusherPlatform
         )
     }
 
-    fileprivate func fetchInitialUserInformationForUserIds(
-        _ userIds: Set<String>,
-        userStore: PCGlobalUserStore,
-        roomStore: PCRoomStore
-    ) {
-        userStore.initialFetchOfUsersWithIds(userIds) { users, err in
-            guard err == nil else {
-                self.instance.logger.log(
-                    "Unable to fetch user information after successful connection: \(err!.localizedDescription)",
-                    logLevel: .debug
-                )
-                self.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: nil, error: err!)
-                return
-            }
-
-            let combinedRoomUsersProgressCounter = PCProgressCounter(totalCount: roomStore.rooms.count, labelSuffix: "room-users-combined")
-
-            // TODO: This could be a lot more efficient
-            roomStore.rooms.forEach { room in
-                let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIds.count, labelSuffix: "room-users")
-
-                room.userIds.forEach { userId in
-                    userStore.user(id: userId) { [weak self] user, err in
-                        guard let strongSelf = self else {
-                            print("self is nil when user store returns user after initial fetch of users")
-                            return
-                        }
-
-                        guard let user = user, err == nil else {
-                            strongSelf.instance.logger.log(
-                                "Unable to add user with id \(userId) to room \(room.name): \(err!.localizedDescription)",
-                                logLevel: .debug
-                            )
-                            if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
-                                room.subscription?.delegate?.usersUpdated()
-                                strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
-
-                                if combinedRoomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
-                                    strongSelf.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: nil, error: err!)
-                                }
-                            }
-                            return
-                        }
-
-                        room.userStore.addOrMerge(user)
-
-                        if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
-                            room.subscription?.delegate?.usersUpdated()
-                            strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
-
-                            if combinedRoomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
-                                strongSelf.informConnectionCoordinatorOfInitialUsersFetchCompletion(users: users, error: nil)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     fileprivate func informConnectionCoordinatorOfCurrentUserCompletion(currentUser: PCCurrentUser?, error: Error?) {
         connectionCoordinator.connectionEventCompleted(PCConnectionEvent(currentUser: currentUser, error: error))
-    }
-
-    fileprivate func informConnectionCoordinatorOfInitialUsersFetchCompletion(users: [PCUser]?, error: Error?) {
-        connectionCoordinator.connectionEventCompleted(PCConnectionEvent(users: users, error: error))
     }
 }
