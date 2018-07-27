@@ -68,11 +68,18 @@ class RoomMembershipTests: XCTestCase {
             XCTAssertNil(err)
             alice!.createRoom(name: "mushroom") { room, err in
                 XCTAssertNil(err)
-                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+                alice!.subscribeToRoom(
+                    room: room!, roomDelegate: TestingRoomDelegate()
+                ) { err in
                     XCTAssertNil(err)
-                    bob!.joinRoom(id: room!.id) { room, err in
+                    self.bobChatManager.connect(
+                        delegate: TestingChatManagerDelegate()
+                    ) { bob, err in
                         XCTAssertNil(err)
-                        bobJoinedRoomEx.fulfill()
+                        bob!.joinRoom(id: room!.id) { room, err in
+                            XCTAssertNil(err)
+                            bobJoinedRoomEx.fulfill()
+                        }
                     }
                 }
             }
@@ -97,11 +104,18 @@ class RoomMembershipTests: XCTestCase {
             XCTAssertNil(err)
             alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
                 XCTAssertNil(err)
-                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+                alice!.subscribeToRoom(
+                    room: room!, roomDelegate: TestingRoomDelegate()
+                ) { err in
                     XCTAssertNil(err)
-                    bob!.leaveRoom(id: room!.id) { err in
+                    self.bobChatManager.connect(
+                        delegate: TestingChatManagerDelegate()
+                    ) { bob, err in
                         XCTAssertNil(err)
-                        bobLeftRoomEx.fulfill()
+                        bob!.leaveRoom(id: room!.id) { err in
+                            XCTAssertNil(err)
+                            bobLeftRoomEx.fulfill()
+                        }
                     }
                 }
             }
