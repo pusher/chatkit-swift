@@ -187,11 +187,11 @@ func testInstanceServiceURL(_ service: ChatkitService, _ path: String) -> URL {
     return serviceURL(instanceLocator: testInstanceLocator, service: service, path: path)
 }
 
-func serviceURL(instanceLocator: String, service: ChatkitService, path: String) -> URL {
+func serviceURL(instanceLocator: String, service: ChatkitService, path: String, version: String = "v1") -> URL {
     let splitInstanceLocator = instanceLocator.split(separator: ":")
     let instanceCluster = splitInstanceLocator[1]
     let instanceID = splitInstanceLocator.last!
-    let pathlessURL = URL(string: "https://\(instanceCluster).pusherplatform.io/services/\(service.stringValue())/v1/\(instanceID)")!
+    let pathlessURL = URL(string: "https://\(instanceCluster).pusherplatform.io/services/\(service.stringValue())/\(version)/\(instanceID)")!
     return pathlessURL.appendingPathComponent(path)
 }
 
