@@ -71,7 +71,7 @@ final class PCTypingIndicatorManager {
             after: .seconds(TYPING_INDICATOR_TTL)
         ) { [weak self] _ in
             guard let strongSelf = self else {
-                print("self is nil when about to call signal typing has stopped")
+                print("self is nil when about to signal typing has stopped")
                 return
             }
 
