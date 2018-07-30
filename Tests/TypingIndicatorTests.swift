@@ -64,6 +64,8 @@ class TypingIndicatorTests: XCTestCase {
     }
 
     func testChatManagerDelegateTypingHooks() {
+        let aliceChatManager = newTestChatManager(userId: "alice")
+
         let startedEx = expectation(description: "notified of Bob starting typing (user)")
         let stoppedEx = expectation(description: "notified of Bob stopping typing (user)")
 
@@ -93,7 +95,7 @@ class TypingIndicatorTests: XCTestCase {
             userStoppedTyping: userStoppedTyping
         )
 
-        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+        aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
 
             alice!.subscribeToRoom(
@@ -159,6 +161,6 @@ class TypingIndicatorTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 15)
+        waitForExpectations(timeout: 10)
     }
 }
