@@ -64,22 +64,20 @@ class TypingIndicatorTests: XCTestCase {
     }
 
     func testChatManagerDelegateTypingHooks() {
-        let aliceChatManager = newTestChatManager(userId: "alice")
-
         let startedEx = expectation(description: "notified of Bob starting typing (user)")
         let stoppedEx = expectation(description: "notified of Bob stopping typing (user)")
 
         var started: Date!
 
         let userStartedTyping = { (room: PCRoom, user: PCUser) -> Void in
-            started = Date.init()
+            started = Date()
             XCTAssertEqual(room.id, self.roomId)
             XCTAssertEqual(user.id, "bob")
             startedEx.fulfill()
         }
 
         let userStoppedTyping = { (room: PCRoom, user: PCUser) -> Void in
-            let interval = Date.init().timeIntervalSince(started)
+            let interval = Date().timeIntervalSince(started)
 
             XCTAssertGreaterThan(interval, 1)
             XCTAssertLessThan(interval, 5)
@@ -95,7 +93,7 @@ class TypingIndicatorTests: XCTestCase {
             userStoppedTyping: userStoppedTyping
         )
 
-        aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
 
             alice!.subscribeToRoom(
@@ -120,13 +118,13 @@ class TypingIndicatorTests: XCTestCase {
         var started: Date!
 
         let userStartedTyping = { (user: PCUser) -> Void in
-            started = Date.init()
+            started = Date()
             XCTAssertEqual(user.id, "alice")
             startedEx.fulfill()
         }
 
         let userStoppedTyping = { (user: PCUser) -> Void in
-            let interval = Date.init().timeIntervalSince(started)
+            let interval = Date().timeIntervalSince(started)
 
             XCTAssertGreaterThan(interval, 1)
             XCTAssertLessThan(interval, 5)
