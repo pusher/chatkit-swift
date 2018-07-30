@@ -734,7 +734,6 @@ public final class PCCurrentUser {
             logLevel: .verbose
         )
 
-<<<<<<< HEAD
         let progressCounter = PCProgressCounter(
             totalCount: 3,
             labelSuffix: "subscribe-to-room-\(UUID().uuidString)"
@@ -778,7 +777,7 @@ public final class PCCurrentUser {
             )
             let membershipSub = self.subscribeToRoomMemberships(
                 room: roomToSubscribeTo,
-                delegate: roomDelegate,
+                delegate: delegate,
                 completionHandler: completionHandler
             )
 
@@ -819,6 +818,7 @@ public final class PCCurrentUser {
         )
 
         let messageSubscription = PCMessageSubscription(
+            roomId: room.id,
             delegate: delegate,
             chatManagerDelegate: self.delegate,
             resumableSubscription: resumableSub,
