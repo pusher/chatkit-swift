@@ -13,7 +13,7 @@ public final class PCCurrentUser {
     let roomStore: PCRoomStore
     let cursorStore: PCCursorStore
     let typingIndicatorManager: PCTypingIndicatorManager
-    let delegate: PCChatManagerDelegate
+    var delegate: PCChatManagerDelegate
 
     // TODO: This should probably be [PCUser] instead, like the users property
     // in PCRoom, or something even simpler
@@ -89,13 +89,15 @@ public final class PCCurrentUser {
         self.cursorStore = cursorStore
         self.connectionCoordinator = connectionCoordinator
         self.delegate = delegate
-        typingIndicatorManager = PCTypingIndicatorManager(instance: instance)
+        self.typingIndicatorManager = PCTypingIndicatorManager(instance: instance)
     }
 
     func updateWithPropertiesOf(_ currentUser: PCCurrentUser) {
         self.updatedAt = currentUser.updatedAt
         self.name = currentUser.name
+        self.avatarURL = currentUser.avatarURL
         self.customData = currentUser.customData
+        self.delegate = currentUser.delegate
     }
 
     public func createRoom(
