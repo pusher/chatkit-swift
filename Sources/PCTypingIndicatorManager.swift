@@ -1,7 +1,6 @@
 import Foundation
 import PusherPlatform
 
-// TODO are there already a load of constants defined somewhere?
 let TYPING_INDICATOR_TTL = 1.5
 let TYPING_INDICATOR_LEEWAY = 0.5
 
