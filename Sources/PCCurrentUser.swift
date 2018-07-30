@@ -605,7 +605,7 @@ public final class PCCurrentUser {
     public func sendMessage(
         roomId: Int,
         text: String,
-        attachmentType: PCAttachmentType? = nil,
+        attachment: PCAttachmentType? = nil,
         completionHandler: @escaping (Int?, Error?) -> Void
     ) {
         var messageObject: [String: Any] = [
@@ -613,16 +613,16 @@ public final class PCCurrentUser {
             "text": text
         ]
 
-        guard let attachmentType = attachmentType else {
+        guard let attachment = attachment else {
             sendMessage(messageObject, roomId: roomId, completionHandler: completionHandler)
             return
         }
-        
-        switch attachmentType {
+
+        switch attachment {
         case .fileData(_, _), .fileURL(_, _):
             uploadAttachmentAndSendMessage(
                 messageObject,
-                attachment: attachmentType,
+                attachment: attachment,
                 roomId: roomId,
                 completionHandler: completionHandler
             )
