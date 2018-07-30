@@ -1013,7 +1013,12 @@ public final class PCCurrentUser {
 
                             messages.append(message) {
                                 if progressCounter.incrementSuccessAndCheckIfFinished() {
-                                    completionHandler(messages.underlyingArray.sorted(by: { $0.id > $1.id }), nil)
+                                    completionHandler(
+                                        messages.underlyingArray.sorted(
+                                            by: { $0.id < $1.id }
+                                        ),
+                                        nil
+                                    )
                                 }
                             }
                         }
