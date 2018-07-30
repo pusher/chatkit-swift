@@ -1,7 +1,6 @@
 import Foundation
 import PusherPlatform
 
-// TODO are there already a load of constants defined somewhere?
 let TYPING_INDICATOR_TTL = 1.5
 let TYPING_INDICATOR_LEEWAY = 0.5
 
@@ -55,20 +54,18 @@ final class PCTypingIndicatorManager {
         roomStartHook: ((PCUser) -> Void)?,
         roomStopHook: ((PCUser) -> Void)?
     ) {
-        // TODO make access to timers thread safe
-
-        if let timer = timers[UserRoomPair(roomId: room.id, userId: user.id)] {
-            timer.invalidate()
-            timers[UserRoomPair(roomId: room.id, userId: user.id)] = nil
-        } else {
-            globalStartHook?(room, user)
-            roomStartHook?(user)
-        }
-
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else {
                 print("self is nil when setting read cursor timer")
                 return
+            }
+
+            if let timer = strongSelf.timers[UserRoomPair(roomId: room.id, userId: user.id)] {
+                timer.invalidate()
+                strongSelf.timers[UserRoomPair(roomId: room.id, userId: user.id)] = nil
+            } else {
+                globalStartHook?(room, user)
+                roomStartHook?(user)
             }
 
             strongSelf.timers[UserRoomPair(roomId: room.id, userId: user.id)] = Timer.scheduledTimer(
