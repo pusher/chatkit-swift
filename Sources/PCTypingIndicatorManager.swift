@@ -65,13 +65,20 @@ final class PCTypingIndicatorManager {
             roomStartHook?(user)
         }
 
-        timers[UserRoomPair(roomId: room.id, userId: user.id)] = Timer.scheduledTimer(
-            withTimeInterval: TYPING_INDICATOR_TTL,
-            repeats: false
-        ) { _ in
-            globalStopHook?(room, user)
-            roomStopHook?(user)
-            self.timers[UserRoomPair(roomId: room.id, userId: user.id)] = nil
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else {
+                print("self is nil when setting read cursor timer")
+                return
+            }
+
+            strongSelf.timers[UserRoomPair(roomId: room.id, userId: user.id)] = Timer.scheduledTimer(
+                withTimeInterval: TYPING_INDICATOR_TTL,
+                repeats: false
+            ) { _ in
+                globalStopHook?(room, user)
+                roomStopHook?(user)
+                strongSelf.timers[UserRoomPair(roomId: room.id, userId: user.id)] = nil
+            }
         }
     }
 }

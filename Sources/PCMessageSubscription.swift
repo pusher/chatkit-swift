@@ -10,8 +10,10 @@ public final class PCMessageSubscription {
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
     let typingIndicatorManager: PCTypingIndicatorManager
+    let roomId: Int
 
     init(
+        roomId: Int,
         delegate: PCRoomDelegate? = nil,
         chatManagerDelegate: PCChatManagerDelegate? = nil,
         resumableSubscription: PPResumableSubscription,
@@ -21,6 +23,7 @@ public final class PCMessageSubscription {
         roomStore: PCRoomStore,
         typingIndicatorManager: PCTypingIndicatorManager
     ) {
+        self.roomId = roomId
         self.delegate = delegate
         self.chatManagerDelegate = chatManagerDelegate
         self.resumableSubscription = resumableSubscription
@@ -96,14 +99,6 @@ public final class PCMessageSubscription {
             return
         }
 
-        guard let roomId = data["room_id"] as? Int else {
-            self.logger.log(
-                "room_id missing or not an integer \(data)",
-                logLevel: .error
-            )
-            return
-        }
-
         roomStore.room(id: roomId) { [weak self] room, err in
             guard let strongSelf = self else {
                 print("self is nil when handling is_typing event")
@@ -130,9 +125,9 @@ public final class PCMessageSubscription {
                     room: room,
                     user: user,
                     globalStartHook: strongSelf.chatManagerDelegate?.userStartedTyping,
-                    globalStopHook: strongSelf.chatManagerDelegate?.userStartedTyping,
+                    globalStopHook: strongSelf.chatManagerDelegate?.userStoppedTyping,
                     roomStartHook: strongSelf.delegate?.userStartedTyping,
-                    roomStopHook: strongSelf.delegate?.userStartedTyping
+                    roomStopHook: strongSelf.delegate?.userStoppedTyping
                 )
             }
         }
