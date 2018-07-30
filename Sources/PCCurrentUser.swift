@@ -799,7 +799,8 @@ public final class PCCurrentUser {
         )
 
         let messageSubscription = PCMessageSubscription(
-            delegate: roomDelegate,
+            roomId: room.id,
+            delegate: delegate,
             chatManagerDelegate: self.delegate,
             resumableSubscription: resumableSub,
             logger: self.instance.logger,
