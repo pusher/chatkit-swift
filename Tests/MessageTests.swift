@@ -86,7 +86,7 @@ class MessagesTests: XCTestCase {
 
                 XCTAssertEqual(
                     messages!.map { $0.text },
-                    ["ho", "hi", "hey", "hello"]
+                    ["hello", "hey", "hi", "ho"]
                 )
 
                 XCTAssert(messages!.all { $0.sender.id == "alice" })
@@ -113,7 +113,7 @@ class MessagesTests: XCTestCase {
             ) { messages, err in
                 XCTAssertNil(err)
 
-                XCTAssertEqual(messages!.map { $0.text }, ["ho", "hi"])
+                XCTAssertEqual(messages!.map { $0.text }, ["hi", "ho"])
                 XCTAssert(messages!.all { $0.sender.id == "alice" })
                 XCTAssert(messages!.all { $0.sender.name == "Alice" })
                 XCTAssert(messages!.all { $0.room.id == self.roomId })
@@ -125,7 +125,7 @@ class MessagesTests: XCTestCase {
                 ) { messages, err in
                     XCTAssertNil(err)
 
-                    XCTAssertEqual(messages!.map { $0.text }, ["hey", "hello"])
+                    XCTAssertEqual(messages!.map { $0.text }, ["hello", "hey"])
                     XCTAssert(messages!.all { $0.sender.id == "alice" })
                     XCTAssert(messages!.all { $0.sender.name == "Alice" })
                     XCTAssert(messages!.all { $0.room.id == self.roomId })
@@ -142,10 +142,10 @@ class MessagesTests: XCTestCase {
     func testSubscribeToRoomAndFetchInitial() {
         let ex = expectation(description: "subscribe and get initial messages")
 
-        var expectedMessageTexts = ["ho", "hi", "hey", "hello"]
+        var expectedMessageTexts = ["hello", "hey", "hi", "ho"]
 
         let bobRoomDelegate = TestingRoomDelegate(newMessage: { message in
-            XCTAssertEqual(message.text, expectedMessageTexts.popLast()!)
+            XCTAssertEqual(message.text, expectedMessageTexts.removeFirst())
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
             XCTAssertEqual(message.room.id, self.roomId)
