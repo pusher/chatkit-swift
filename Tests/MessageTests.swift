@@ -284,7 +284,7 @@ class MessagesTests: XCTestCase {
                         alice!.sendMessage(
                             roomId: self.roomId,
                             text: "see attached",
-                            attachmentType: .link(veryImportantImage, type: "image")
+                            attachment: .link(veryImportantImage, type: "image")
                         ) { _, err in
                             XCTAssertNil(err)
                         }
@@ -345,7 +345,7 @@ class MessagesTests: XCTestCase {
 //                alice!.sendMessage(
 //                    roomId: self.roomId,
 //                    text: "see attached",
-//                    attachmentType: .fileURL(
+//                    attachment: .fileURL(
 //                        URL(fileURLWithPath: veryImportantImage),
 //                        name: "test-image.gif"
 //                    )

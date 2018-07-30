@@ -48,6 +48,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - `sendMessage` now requires a value for the `text` parameter
 - All `PCMessage`s must have a `text` property
+- `sendMessage` paramer `attachmentType` renamed to `attachment`
 
 ## [0.8.4](https://github.com/pusher/chatkit-swift/compare/0.8.3...0.8.4) - 2018-05-26
 
