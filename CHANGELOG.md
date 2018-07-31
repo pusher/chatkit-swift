@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `subscribeToRoom` now has a (required) completion handler of type
   `PCErrorCompletionHandler`
 - `sendMessage` parameter `attachmentType` renamed to `attachment`
+- The ordering of messages returned by `fetchMessagesFromRoom` is now from
+  oldest to newest
 
 ## [0.8.4](https://github.com/pusher/chatkit-swift/compare/0.8.3...0.8.4) - 2018-05-26
 
