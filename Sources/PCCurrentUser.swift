@@ -13,7 +13,12 @@ public final class PCCurrentUser {
     let roomStore: PCRoomStore
     let cursorStore: PCCursorStore
     let typingIndicatorManager: PCTypingIndicatorManager
-    var delegate: PCChatManagerDelegate
+    var delegate: PCChatManagerDelegate {
+        didSet {
+            userSubscription?.delegate = delegate
+            userPresenceSubscripitons.forEach { ($0.value).delegate = delegate }
+        }
+    }
 
     // TODO: This should probably be [PCUser] instead, like the users property
     // in PCRoom, or something even simpler
@@ -55,6 +60,8 @@ public final class PCCurrentUser {
         return PCReadCursorDebouncerManager(currentUser: self)
     }()
 
+    public internal(set) var userPresenceSubscripitons = PCSynchronizedDictionary<String, PCUserPresenceSubscription>()
+
     public init(
         id: String,
         pathFriendlyId: String,
@@ -90,6 +97,8 @@ public final class PCCurrentUser {
         self.connectionCoordinator = connectionCoordinator
         self.delegate = delegate
         self.typingIndicatorManager = PCTypingIndicatorManager(instance: instance)
+
+        self.userStore.onUserStoredHooks.append(subscribeToUserPresence)
     }
 
     func updateWithPropertiesOf(_ currentUser: PCCurrentUser) {
@@ -1010,6 +1019,54 @@ public final class PCCurrentUser {
             onError: { err in
                 self.cursorsInstance.logger.log("Error setting cursor in room \(roomId): \(err.localizedDescription)", logLevel: .debug)
                 completionHandler(err)
+            }
+        )
+    }
+
+    fileprivate func subscribeToUserPresence(user: PCUser) {
+        guard user.id != self.id else {
+            return // don't subscribe to own presence
+        }
+
+        guard self.userPresenceSubscripitons[user.id] == nil else {
+            return // already subscribed to presence for user
+        }
+
+        let path = "/users/\(user.pathFriendlyID)"
+
+        let subscribeRequest = PPRequestOptions(
+            method: HTTPMethod.SUBSCRIBE.rawValue,
+            path: path
+        )
+
+        var resumableSub = PPResumableSubscription(
+            instance: self.presenceInstance,
+            requestOptions: subscribeRequest
+        )
+
+        let userPresenceSubscription = PCUserPresenceSubscription(
+            userID: user.id,
+            resumableSubscription: resumableSub,
+            userStore: self.userStore,
+            roomStore: self.roomStore,
+            logger: self.presenceInstance.logger,
+            delegate: delegate
+        )
+
+        self.userPresenceSubscripitons[user.id] = userPresenceSubscription
+
+        self.presenceInstance.subscribeWithResume(
+            with: &resumableSub,
+            using: subscribeRequest,
+            onEvent: { [unowned userPresenceSubscription] eventID, headers, data in
+                userPresenceSubscription.handleEvent(eventId: eventID, headers: headers, data: data)
+            },
+            onError: { err in
+                // TODO: What to do with an error? Just log?
+                self.cursorsInstance.logger.log(
+                    "Error with user presence subscription for user with ID \(user.id): \(err.localizedDescription)",
+                    logLevel: .error
+                )
             }
         )
     }

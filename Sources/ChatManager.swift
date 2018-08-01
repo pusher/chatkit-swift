@@ -67,7 +67,7 @@ import PusherPlatform
 
         self.presenceInstance = ChatManager.createInstance(
             serviceName: "chatkit_presence",
-            serviceVersion: "v1",
+            serviceVersion: "v2",
             sharedOptions: sharedInstanceOptions
         )
 
@@ -79,10 +79,7 @@ import PusherPlatform
         }
 
         self.userId = userId
-
-        let allowedCharacterSet = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] ").inverted
-        // TODO: When can percent encoding fail?
-        self.pathFriendlyUserId = userId.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? userId
+        self.pathFriendlyUserId = pathFriendlyUserID(userId)
     }
 
     public func connect(
@@ -213,6 +210,10 @@ import PusherPlatform
             room.subscription?.end()
             room.subscription = nil
         }
+        currentUser?.userPresenceSubscripitons.forEach { uPSub in
+            uPSub.value.end()
+            let _ = currentUser?.userPresenceSubscripitons.removeValue(forKey: uPSub.key)
+        }
         connectionCoordinator.reset()
     }
 
@@ -235,4 +236,10 @@ import PusherPlatform
     fileprivate func informConnectionCoordinatorOfCurrentUserCompletion(currentUser: PCCurrentUser?, error: Error?) {
         connectionCoordinator.connectionEventCompleted(PCConnectionEvent(currentUser: currentUser, error: error))
     }
+}
+
+func pathFriendlyUserID(_ userID: String) -> String {
+    let allowedCharacterSet = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] ").inverted
+    // TODO: When can percent encoding fail?
+    return userID.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? userID
 }
