@@ -62,7 +62,7 @@ class MessagesTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     override func tearDown() {
@@ -98,7 +98,7 @@ class MessagesTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testFetchMessagesPaginated() {
@@ -136,7 +136,7 @@ class MessagesTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testSubscribeToRoomAndFetchInitial() {
@@ -168,7 +168,7 @@ class MessagesTests: XCTestCase {
             )
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testSubscribeToRoomAndFetchLastTwoMessagesOnly() {
@@ -201,7 +201,7 @@ class MessagesTests: XCTestCase {
             )
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testSubscribeToRoomAndReceiveSentMessages() {
@@ -248,7 +248,7 @@ class MessagesTests: XCTestCase {
             )
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testSendAndReceiveMessageWithLinkAttachment() {
@@ -293,7 +293,7 @@ class MessagesTests: XCTestCase {
             )
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     // TODO: This fails because of some problem with the upload never working.
@@ -355,6 +355,6 @@ class MessagesTests: XCTestCase {
 //            }
 //        }
 //
-//        waitForExpectations(timeout: 10)
+//        waitForExpectations(timeout: 15)
 //    }
 }
