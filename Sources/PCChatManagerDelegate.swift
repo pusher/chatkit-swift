@@ -12,8 +12,7 @@ public protocol PCChatManagerDelegate: AnyObject {
     func userStoppedTyping(room: PCRoom, user: PCUser)
     func userJoinedRoom(room: PCRoom, user: PCUser)
     func userLeftRoom(room: PCRoom, user: PCUser)
-    func userCameOnline(user: PCUser)
-    func userWentOffline(user: PCUser)
+    func userPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser)
 
     // TODO: Is this the best way of communicating errors? What errors are
     // communicated using this?
@@ -29,7 +28,6 @@ public extension PCChatManagerDelegate {
     func userStoppedTyping(room: PCRoom, user: PCUser) {}
     func userJoinedRoom(room: PCRoom, user: PCUser) {}
     func userLeftRoom(room: PCRoom, user: PCUser) {}
-    func userCameOnline(user: PCUser) {}
-    func userWentOffline(user: PCUser) {}
+    func userPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {}
     func error(error: Error) {}
 }

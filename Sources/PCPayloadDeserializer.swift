@@ -107,19 +107,16 @@ struct PCPayloadDeserializer {
     }
 
     static func createPresencePayloadFromPayload(_ payload: [String: Any]) throws -> PCPresencePayload {
-        guard
-            let userId = payload["user_id"] as? String,
-            let stateString = payload["state"] as? String,
-            let state = PCPresenceState(rawValue: stateString)
+        guard let stateString = payload["state"] as? String,
+              let state = PCPresenceState(rawValue: stateString)
         else {
-            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCPresencePayload.self), payload: payload)
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(
+                type: String(describing: PCPresencePayload.self),
+                payload: payload
+            )
         }
 
-        return PCPresencePayload(
-            userId: userId,
-            state: state,
-            lastSeenAt: payload["last_seen_at"] as? String
-        )
+        return PCPresencePayload(state: state)
     }
 
     static func createAttachmentFromPayload(_ payload: Any?) -> PCAttachment? {

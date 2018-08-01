@@ -64,22 +64,12 @@ class CurrentUserTests: XCTestCase {
         let presenceSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .presence,
-            path: "users/\(userID)/presence"
+            path: "users/\(userID)/register",
+            version: "v2"
         ).absoluteString
 
         stub(uri(presenceSubscriptionURL)) { req in
-            let initialStateEventData = dataSubscriptionEventFor("""
-                {
-                    "event_name": "initial_state",
-                    "data": {
-                      "user_states": []
-                    },
-                    "timestamp": "2017-03-23T11:36:42Z"
-                }
-            """)
-
-            let initialStateSubEvent = SubscriptionEvent(data: initialStateEventData, delay: 0.0)
-            return successResponseForRequest(req, withEvents: [initialStateSubEvent])
+            return successResponseForRequest(req, withEvents: [])
         }
 
         let cursorsSubscriptionURL = serviceURL(
