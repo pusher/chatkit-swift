@@ -2,7 +2,7 @@ import Foundation
 
 public final class PCSynchronizedArray<T> {
     internal var underlyingArray: [T] = []
-    private let accessQueue = DispatchQueue(label: "synchronized.array.access", attributes: .concurrent)
+    private let accessQueue = DispatchQueue(label: "synchronized.array.access.\(UUID().uuidString)", attributes: .concurrent)
 
     public init() {}
 

@@ -95,14 +95,13 @@ public final class PCBasicCurrentUser {
 
     func establishPresenceSubscription() {
         // If a presenceSubscription already exists then we want to create a new one
-        // to ensure that the most up-to-date state is received, so we first close the
-        // existing subscription, if it was still open
+        // so we first close the existing subscription, if it was still open
         if let presSub = self.presenceSubscription {
             presSub.end()
             self.presenceSubscription = nil
         }
 
-        let path = "/users/\(self.pathFriendlyId)/presence"
+        let path = "/users/\(self.pathFriendlyId)/register"
         let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
 
         var resumableSub = PPResumableSubscription(
@@ -110,22 +109,16 @@ public final class PCBasicCurrentUser {
             requestOptions: subscribeRequest
         )
 
-        let presenceSub = PCPresenceSubscription(
-            instance: self.presenceInstance,
-            resumableSubscription: resumableSub,
-            userStore: self.userStore,
-            roomStore: self.roomStore,
-            connectionCoordinator: self.connectionCoordinator,
-            delegate: delegate
-        )
-
+        let presenceSub = PCPresenceSubscription(resumableSubscription: resumableSub)
         self.presenceSubscription = presenceSub
 
         self.presenceInstance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
-            onEvent: { [unowned presenceSub] eventID, headers, data in
-                presenceSub.handleEvent(eventId: eventID, headers: headers, data: data)
+            onOpen: { [unowned self, unowned presenceSub] in
+                self.connectionCoordinator.connectionEventCompleted(
+                    PCConnectionEvent(presenceSubscription: presenceSub, error: nil)
+                )
             },
             onError: { [unowned self] error in
                 self.connectionCoordinator.connectionEventCompleted(
