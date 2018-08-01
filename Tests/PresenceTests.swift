@@ -64,7 +64,7 @@ class PresenceTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     override func tearDown() {
@@ -111,7 +111,7 @@ class PresenceTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testRoomDelegatePresenceHooks() {
@@ -148,6 +148,6 @@ class PresenceTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 }
