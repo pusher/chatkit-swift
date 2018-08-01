@@ -52,7 +52,7 @@ class TypingIndicatorTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     override func tearDown() {
@@ -108,7 +108,7 @@ class TypingIndicatorTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testRoomDelegateTypingHooks() {
@@ -157,6 +157,6 @@ class TypingIndicatorTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 }
