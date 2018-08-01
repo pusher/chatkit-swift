@@ -16,9 +16,6 @@ public protocol PCRoomDelegate: NSObjectProtocol {
 
     // TODO: This seems like it could instead be `userListUpdated`, or something similar?
     func usersUpdated()
-
-    // TODO: Make all of this work, and probably duplicate in PCChatManagerDelegate
-//    func subscriptionStateChanged(from: PPResumableSubscriptionState, to: PPResumableSubscriptionState)
 }
 
 public extension PCRoomDelegate {
