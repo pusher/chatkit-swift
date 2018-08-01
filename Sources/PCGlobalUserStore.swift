@@ -9,10 +9,12 @@ public final class PCGlobalUserStore {
 
     public internal(set) var userStoreCore: PCUserStoreCore
     let instance: Instance
+    var onUserStoredHooks: [(PCUser) -> Void]
 
     init(userStoreCore: PCUserStoreCore = PCUserStoreCore(), instance: Instance) {
         self.userStoreCore = userStoreCore
         self.instance = instance
+        self.onUserStoredHooks = []
     }
 
     public func user(id: String, completionHandler: @escaping (PCUser?, Error?) -> Void) {
@@ -20,7 +22,11 @@ public final class PCGlobalUserStore {
     }
 
     func addOrMerge(_ user: PCUser) -> PCUser {
-        return self.userStoreCore.addOrMerge(user)
+        let storedUser = self.userStoreCore.addOrMerge(user)
+        self.onUserStoredHooks.forEach { hook in
+            hook(storedUser)
+        }
+        return storedUser
     }
 
     func remove(id: String) -> PCUser? {
@@ -43,7 +49,7 @@ public final class PCGlobalUserStore {
                     return
                 }
 
-                let userToReturn = strongSelf.userStoreCore.addOrMerge(user)
+                let userToReturn = strongSelf.addOrMerge(user)
                 completionHandler(userToReturn, nil)
             }
         }
@@ -79,44 +85,6 @@ public final class PCGlobalUserStore {
                 completionHandler(nil, err)
             }
         )
-    }
-
-    func handleInitialPresencePayloadsAfterRoomJoin(_ payloads: [PCPresencePayload], completionHandler: @escaping () -> Void) {
-        let roomJoinedPresenceProgressCounter = PCProgressCounter(totalCount: payloads.count, labelSuffix: "room-joined-presence-payload")
-        self.handleInitialPresencePayloads(payloads, progressCounter: roomJoinedPresenceProgressCounter, completionHandler: completionHandler)
-    }
-
-    func handleInitialPresencePayloads(_ payloads: [PCPresencePayload], completionHandler: @escaping () -> Void) {
-        let initialPresenceProgressCounter = PCProgressCounter(totalCount: payloads.count, labelSuffix: "initial-presence-payload")
-        self.handleInitialPresencePayloads(payloads, progressCounter: initialPresenceProgressCounter, completionHandler: completionHandler)
-    }
-    
-    private func handleInitialPresencePayloads(_ payloads: [PCPresencePayload], progressCounter: PCProgressCounter, completionHandler: @escaping () -> Void) {
-        let presenceProgressCounter = progressCounter
-        
-        payloads.forEach { payload in
-            self.user(id: payload.userId) { [weak self] user, err in
-                guard let strongSelf = self else {
-                    print("self is nil when user store returns user when handling intitial presence payload event")
-                    return
-                }
-
-                guard let user = user, err == nil else {
-                    strongSelf.instance.logger.log(err!.localizedDescription, logLevel: .error)
-                    if presenceProgressCounter.incrementFailedAndCheckIfFinished() {
-                        completionHandler()
-                    }
-
-                    return
-                }
-
-                user.updatePresenceInfoIfAppropriate(newInfoPayload: payload)
-
-                if presenceProgressCounter.incrementSuccessAndCheckIfFinished() {
-                    completionHandler()
-                }
-            }
-        }
     }
 
     // TODO: Need a version of this that first checks the userStore for any of the userIds
@@ -167,7 +135,7 @@ public final class PCGlobalUserStore {
                 let users = userPayloads.compactMap { userPayload -> PCUser? in
                     do {
                         let user = try PCPayloadDeserializer.createUserFromPayload(userPayload)
-                        let addedOrUpdatedUser = self.userStoreCore.addOrMerge(user)
+                        let addedOrUpdatedUser = self.addOrMerge(user)
                         return addedOrUpdatedUser
                     } catch let err {
                         self.instance.logger.log("Error fetching user information: \(err.localizedDescription)", logLevel: .debug)

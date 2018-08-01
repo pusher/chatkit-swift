@@ -43,7 +43,7 @@ func createUser(
         return
     }
 
-    var request = URLRequest(url: testInstanceServiceURL(.server, "users"))
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v2", "users"))
     request.httpMethod = "POST"
     request.httpBody = data
     request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
@@ -55,13 +55,13 @@ func createUser(
             return
         }
 
-        print("User \(id) created successfully!")
+        TestLogger().log("User \(id) created successfully!", logLevel: .debug)
         completionHandler(nil)
     }.resume()
 }
 
 func deleteInstanceResources(completionHandler: @escaping (TestHelperError?) -> Void) {
-    var request = URLRequest(url: testInstanceServiceURL(.server, "resources"))
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v2", "resources"))
     request.httpMethod = "DELETE"
     request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
 
@@ -71,7 +71,7 @@ func deleteInstanceResources(completionHandler: @escaping (TestHelperError?) -> 
             return
         }
 
-        print("Instance resources deleted successfully!")
+        TestLogger().log("Instance resources deleted successfully!", logLevel: .debug)
         completionHandler(nil)
     }.resume()
 }
@@ -132,7 +132,7 @@ func createRole(
         return
     }
 
-    var request = URLRequest(url: testInstanceServiceURL(.authorizer, "roles"))
+    var request = URLRequest(url: testInstanceServiceURL(.authorizer, "v1", "roles"))
     request.httpMethod = "POST"
     request.httpBody = data
     request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
@@ -144,7 +144,7 @@ func createRole(
             return
         }
 
-        print("Role \(name) created successfully!")
+        TestLogger().log("Role \(name) created successfully!", logLevel: .debug)
         completionHandler(nil)
     }.resume()
 }
@@ -166,7 +166,7 @@ func assignGlobalRole(
         return
     }
 
-    var request = URLRequest(url: testInstanceServiceURL(.authorizer, "users/\(userID)/roles"))
+    var request = URLRequest(url: testInstanceServiceURL(.authorizer, "v1", "users/\(userID)/roles"))
     request.httpMethod = "PUT"
     request.httpBody = data
     request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
@@ -178,12 +178,12 @@ func assignGlobalRole(
             return
         }
 
-        print("Role \(roleName) assigned to \(userID) successfully!")
+        TestLogger().log("Role \(roleName) assigned to \(userID) successfully!", logLevel: .debug)
         completionHandler(nil)
     }.resume()
 }
 
-func testInstanceServiceURL(_ service: ChatkitService, _ path: String) -> URL {
+func testInstanceServiceURL(_ service: ChatkitService, _ version: String = "v1", _ path: String) -> URL {
     return serviceURL(instanceLocator: testInstanceLocator, service: service, path: path)
 }
 
