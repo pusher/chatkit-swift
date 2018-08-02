@@ -40,7 +40,7 @@ class RoomMembershipTests: XCTestCase {
             sleep(1)
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     override func tearDown() {
@@ -85,7 +85,7 @@ class RoomMembershipTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testChatManagerUserLeftRoomHookWhenUserLeaves() {
@@ -121,7 +121,7 @@ class RoomMembershipTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testChatManagerAddedToRoomHookCalledWhenSelfAddedInRoomCreation() {
@@ -141,7 +141,7 @@ class RoomMembershipTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testChatManagerAddedToRoomHookCalledWhenUserAddsAnotherUserInRoomCreation() {
@@ -166,7 +166,7 @@ class RoomMembershipTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testChatManagerAddedToRoomHookCalledWhenUserAddsAnotherUser() {
@@ -194,7 +194,7 @@ class RoomMembershipTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testChatManagerRemovedFromRoomHookCalledUserRemovedFromRoom() {
@@ -222,7 +222,7 @@ class RoomMembershipTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testChatManagerRemovedFromRoomHookCalledUserRemovesSelf() {
@@ -247,7 +247,7 @@ class RoomMembershipTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testChatManagerRoomDeletedHookCalled() {
@@ -282,7 +282,7 @@ class RoomMembershipTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     // MARK: Room delegate tests
@@ -319,7 +319,7 @@ class RoomMembershipTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     func testRoomDelegateUserLeftRoomHookWhenUserLeaves() {
@@ -354,7 +354,7 @@ class RoomMembershipTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     // MARK: users property tests
@@ -387,6 +387,6 @@ class RoomMembershipTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 }

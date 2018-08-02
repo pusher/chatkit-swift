@@ -10,6 +10,10 @@ public final class PCUser {
     public internal(set) var presenceState: PCPresenceState
     public internal(set) var lastSeenAt: String?
 
+    public lazy var pathFriendlyID: String = {
+        return pathFriendlyUserID(self.id)
+    }()
+
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -60,7 +64,6 @@ public final class PCUser {
     func updatePresenceInfoIfAppropriate(newInfoPayload: PCPresencePayload) {
         if newInfoPayload.state != .unknown {
             self.presenceState = newInfoPayload.state
-            self.lastSeenAt = newInfoPayload.lastSeenAt
         }
     }
 }
