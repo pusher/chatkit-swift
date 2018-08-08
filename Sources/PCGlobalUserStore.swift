@@ -100,11 +100,9 @@ public final class PCGlobalUserStore {
             return
         }
 
-        let userIdsString = userIds.joined(separator: ",")
-
         let path = "/users_by_ids"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
-        generalRequest.addQueryItems([URLQueryItem(name: "user_ids", value: userIdsString)])
+        generalRequest.addQueryItems(userIds.map{URLQueryItem(name: "id", value: $0)})
 
         // We want this to complete quickly, whether it succeeds or not
         generalRequest.retryStrategy = PPDefaultRetryStrategy(maxNumberOfAttempts: 1)
