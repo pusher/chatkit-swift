@@ -4,14 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.8.4...HEAD)
+## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.10.0...HEAD)
+
+## [0.10.0](https://github.com/pusher/chatkit-swift/compare/0.9.0...0.10.0) - 2018-08-09
+
+### Changed
+
+- `subscribeToRoom` now has a (required) completion handler of type `PCErrorCompletionHandler`
+
+### Added
+
+- There is now a version of `subscribeToRoom` that takes a `roomID` in place of a `PCRoom`
+
+## [0.9.0](https://github.com/pusher/chatkit-swift/compare/0.8.4...0.9.0) - 2018-06-14
 
 ### Changed
 
 - `sendMessage` now requires a value for the `text` parameter
 - All `PCMessage`s must have a `text` property
-- `subscribeToRoom` now has a (required) completion handler of type
-  `PCErrorCompletionHandler`
 
 ## [0.8.4](https://github.com/pusher/chatkit-swift/compare/0.8.3...0.8.4) - 2018-05-26
 
@@ -65,7 +75,7 @@ Authored by: [@steve228uk](https://github.com/steve228uk)
 
 ### Added
 
-`PCBaseClient` added as a `typealias` for `PPBaseClient`
+- `PCBaseClient` added as a `typealias` for `PPBaseClient`
 
 ### Changed
 

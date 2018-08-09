@@ -37,7 +37,7 @@ import PusherPlatform
 
         self.logger = logger
 
-        let sdkInfo = PPSDKInfo(productName: "chatkit", sdkVersion: "0.9.0")
+        let sdkInfo = PPSDKInfo(productName: "chatkit", sdkVersion: "0.10.0")
 
         let sharedInstanceOptions = PCSharedInstanceOptions(
             locator: instanceLocator,
