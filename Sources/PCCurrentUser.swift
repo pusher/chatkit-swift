@@ -733,10 +733,50 @@ public final class PCCurrentUser {
         )
     }
 
-    // TODO: Do I need to add a Last-Event-ID option here?
     public func subscribeToRoom(
         room: PCRoom,
         roomDelegate: PCRoomDelegate,
+        messageLimit: Int = 20,
+        completionHandler: @escaping PCErrorCompletionHandler
+    ) {
+        self.subscribeToRoom(
+            room,
+            delegate: roomDelegate,
+            messageLimit: messageLimit,
+            completionHandler: completionHandler
+        )
+    }
+
+    // TODO: Do we need a Last-Event-ID option here? Probably yes if we get to the point
+    // of supporting offline or caching, or someone wants to do that themselves, then
+    // offering this as a point to hook into would be an optimisation opportunity
+    public func subscribeToRoom(
+        id roomID: Int,
+        roomDelegate: PCRoomDelegate,
+        messageLimit: Int = 20,
+        completionHandler: @escaping PCErrorCompletionHandler
+    ) {
+        self.roomStore.room(id: roomID) { r, err in
+            guard err == nil, let room = r else {
+                self.instance.logger.log(
+                    "Error getting room from room store as part of room subscription process \(err!.localizedDescription)",
+                    logLevel: .error
+                )
+                completionHandler(err)
+                return
+            }
+            self.subscribeToRoom(
+                room,
+                delegate: roomDelegate,
+                messageLimit: messageLimit,
+                completionHandler: completionHandler
+            )
+        }
+    }
+
+    fileprivate func subscribeToRoom(
+        _ room: PCRoom,
+        delegate: PCRoomDelegate,
         messageLimit: Int = 20,
         completionHandler: @escaping PCErrorCompletionHandler
     ) {
@@ -762,20 +802,20 @@ public final class PCCurrentUser {
 
             let messageSub = self.subscribeToRoomMessages(
                 room: roomToSubscribeTo,
-                delegate: roomDelegate,
+                delegate: delegate,
                 messageLimit: messageLimit,
                 completionHandler: completionHandler
             )
             let cursorSub = self.subscribeToRoomCursors(
                 room: roomToSubscribeTo,
-                delegate: roomDelegate,
+                delegate: delegate,
                 completionHandler: completionHandler
             )
 
             room.subscription = PCRoomSubscription(
                 messageSubscription: messageSub,
                 cursorSubscription: cursorSub,
-                delegate: roomDelegate
+                delegate: delegate
             )
         }
     }
