@@ -771,11 +771,6 @@ public final class PCCurrentUser {
                 delegate: delegate,
                 completionHandler: completionHandler
             )
-            let membershipSub = self.subscribeToRoomMemberships(
-                room: roomToSubscribeTo,
-                delegate: delegate,
-                completionHandler: completionHandler
-            )
 
             room.subscription = PCRoomSubscription(
                 messageSubscription: messageSub,
