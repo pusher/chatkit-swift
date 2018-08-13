@@ -102,20 +102,6 @@ extension PCUserPresenceSubscription {
                     current: presencePayload.state,
                     user: user
                 )
-
-                // TODO: Could check if any room is active to speed this up? Or keep a better
-                // map of user_ids to rooms
-                strongSelf.roomStore.rooms.forEach { room in
-                    guard room.users.contains(user) else {
-                        return
-                    }
-
-                    room.subscription?.delegate?.userPresenceChanged(
-                        previous: previousPresenceState,
-                        current: presencePayload.state,
-                        user: user
-                    )
-                }
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)

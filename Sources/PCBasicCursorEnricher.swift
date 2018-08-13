@@ -2,8 +2,8 @@ import Foundation
 import PusherPlatform
 
 final class PCBasicCursorEnricher {
-    public let userStore: PCGlobalUserStore
-    public let roomStore: PCRoomStore
+    public unowned let userStore: PCGlobalUserStore
+    public unowned let roomStore: PCRoomStore
     let logger: PPLogger
 
     init(userStore: PCGlobalUserStore, roomStore: PCRoomStore, logger: PPLogger) {

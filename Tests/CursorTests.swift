@@ -55,13 +55,13 @@ class CursorTests: XCTestCase {
                     XCTAssertNil(err)
                     self.roomID = room!.id
                     createRoomEx.fulfill()
-                }
-            }
 
-            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { b, err in
-                XCTAssertNil(err)
-                self.bob = b
-                connectBobEx.fulfill()
+                    self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { b, err in
+                        XCTAssertNil(err)
+                        self.bob = b
+                        connectBobEx.fulfill()
+                    }
+                }
             }
         }
 
@@ -109,38 +109,11 @@ class CursorTests: XCTestCase {
             ex.fulfill()
         }
 
-        let aliceRoomDelegate = TestingRoomDelegate(newCursor: newCursor)
+        let aliceDelegate = TestingChatManagerDelegate(newCursor: newCursor)
+        self.alice.delegate = aliceDelegate
 
-        alice.subscribeToRoom(
-            room: alice.rooms.first(where: { $0.id == roomID })!,
-            roomDelegate: aliceRoomDelegate
-        ) { error in
+        self.bob.setReadCursor(position: 42, roomID: self.roomID) { error in
             XCTAssertNil(error)
-
-            self.bob.setReadCursor(position: 42, roomID: self.roomID) { error in
-                XCTAssertNil(error)
-            }
-        }
-
-        waitForExpectations(timeout: 15)
-    }
-
-    func testGetAnotherUsersReadCursorBeforeSubscribingFails() {
-        let ex = expectation(description: "get another users read cursor fails")
-
-        bob.setReadCursor(position: 42, roomID: roomID) { error in
-            XCTAssertNil(error)
-
-            do {
-                let _ = try self.alice.readCursor(roomID: self.roomID, userID: "bob")
-            } catch let error {
-                switch error {
-                case PCCurrentUserError.noSubscriptionToRoom:
-                    ex.fulfill()
-                default:
-                    XCTFail()
-                }
-            }
         }
 
         waitForExpectations(timeout: 15)
@@ -149,24 +122,15 @@ class CursorTests: XCTestCase {
     func testGetAnotherUsersReadCursor() {
         let ex = expectation(description: "got another users read cursor")
 
-        let aliceRoomDelegate = TestingRoomDelegate()
-        alice.subscribeToRoom(
-            room: alice.rooms.first(where: { $0.id == roomID })!,
-            roomDelegate: aliceRoomDelegate
-        ) { error in
+        self.bob.setReadCursor(position: 42, roomID: self.roomID) { error in
             XCTAssertNil(error)
 
-            self.bob.setReadCursor(position: 42, roomID: self.roomID) { error in
-                XCTAssertNil(error)
+            sleep(1) // give the read cursor a chance to propagate down the connection
+            let cursor = try! self.alice.readCursor(roomID: self.roomID, userID: "bob")
+            XCTAssertEqual(cursor?.position, 42)
 
-                sleep(1) // give the read cursor a chance to propagate down the connection
-                let cursor = try! self.alice.readCursor(roomID: self.roomID, userID: "bob")
-                XCTAssertEqual(cursor?.position, 42)
-
-                ex.fulfill()
-            }
+            ex.fulfill()
         }
-
 
         waitForExpectations(timeout: 15)
     }

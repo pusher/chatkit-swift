@@ -20,6 +20,7 @@ public final class PCBasicCurrentUser {
     let delegate: PCChatManagerDelegate
 
     let connectionCoordinator: PCConnectionCoordinator
+    let delegate: PCChatManagerDelegate
 
     public init(
         id: String,

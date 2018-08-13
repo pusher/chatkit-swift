@@ -28,6 +28,10 @@ public final class PCUser {
         }
     }
 
+    public lazy var pathFriendlyID: String = {
+        return pathFriendlyVersion(of: self.id)
+    }()
+
     public init(
         id: String,
         createdAt: String,

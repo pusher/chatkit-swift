@@ -20,6 +20,15 @@ public final class PCCurrentUser {
         }
     }
 
+    let typingIndicatorManager: PCTypingIndicatorManager
+    var delegate: PCChatManagerDelegate {
+        didSet {
+            userSubscription?.delegate = delegate
+            userPresenceSubscripitons.forEach { ($0.value).delegate = delegate }
+            rooms.forEach { $0.subscription?.delegate = delegate }
+        }
+    }
+
     // TODO: This should probably be [PCUser] instead, like the users property
     // in PCRoom, or something even simpler
     public var users: Set<PCUser> {
@@ -32,12 +41,18 @@ public final class PCCurrentUser {
 
     public let pathFriendlyID: String
 
+    public var messageLimit: Int
+
     public internal(set) var userSubscription: PCUserSubscription?
     public internal(set) var presenceSubscription: PCPresenceSubscription?
     public internal(set) var cursorSubscription: PCCursorSubscription?
 
     private let roomSubscriptionQueue = DispatchQueue(
         label: "com.pusher.chatkit.room-subscriptions"
+    )
+
+    fileprivate let roomSubscriptionsQueue = DispatchQueue(
+        label: "com.pusher.chatkit.room-subscriptions-on-connect"
     )
 
     private lazy var dateFormatter: DateFormatter = {
@@ -78,7 +93,8 @@ public final class PCCurrentUser {
         roomStore: PCRoomStore,
         cursorStore: PCCursorStore,
         connectionCoordinator: PCConnectionCoordinator,
-        delegate: PCChatManagerDelegate
+        delegate: PCChatManagerDelegate,
+        messageLimit: Int
     ) {
         self.id = id
         self.pathFriendlyID = pathFriendlyID
@@ -96,13 +112,40 @@ public final class PCCurrentUser {
         self.cursorStore = cursorStore
         self.connectionCoordinator = connectionCoordinator
         self.delegate = delegate
+        self.messageLimit = messageLimit
         self.typingIndicatorManager = PCTypingIndicatorManager(instance: instance)
 
-        self.userStore.onUserStoredHooks.append(subscribeToUserPresence)
+        self.userStore.onUserStoredHooks.append { [weak self] user in
+            guard let strongSelf = self else {
+                print("self is nil when calling onUserStoredHooks")
+                return
+            }
+            strongSelf.subscribeToUserPresence(user: user)
+        }
+        self.roomStore.preCompletionHooks.append { [weak self] room, completionHandler in
+            guard let strongSelf = self else {
+                print("self is nil when calling roomStore preCompletionHooks")
+                return
+            }
+            strongSelf.subscribeToRoom(
+                room,
+                messageLimit: messageLimit,
+                completionHandler: { err in
+                    if err != nil {
+                        strongSelf.instance.logger.log(
+                            "Error subscribing to room: \(err!.localizedDescription)",
+                            logLevel: .error
+                        )
+                    }
+                    completionHandler()
+                }
+            )
+        }
     }
 
     func updateWithPropertiesOf(_ currentUser: PCCurrentUser) {
         self.updatedAt = currentUser.updatedAt
+        self.avatarURL = currentUser.avatarURL
         self.name = currentUser.name
         self.avatarURL = currentUser.avatarURL
         self.customData = currentUser.customData
@@ -405,8 +448,6 @@ public final class PCCurrentUser {
                     )
 
                     if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
-                        room.subscription?.delegate?.usersUpdated()
-                        strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
                         completionHandler(room)
                     }
 
@@ -416,8 +457,6 @@ public final class PCCurrentUser {
                 room.userStore.addOrMerge(user)
 
                 if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
-                    room.subscription?.delegate?.usersUpdated()
-                    strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
                     completionHandler(room)
                 }
             }
@@ -496,15 +535,15 @@ public final class PCCurrentUser {
 
     // MARK: Typing-indicator-related interactions
 
-    public func typing(in roomID: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+    public func typing(inRoomID roomID: Int, completionHandler: @escaping PCErrorCompletionHandler) {
         typingIndicatorManager.sendThrottledRequest(
             roomID: roomID,
             completionHandler: completionHandler
         )
     }
 
-    public func typing(in room: PCRoom, completionHandler: @escaping PCErrorCompletionHandler) {
-        typing(in: room.id, completionHandler: completionHandler)
+    public func typing(inRoom room: PCRoom, completionHandler: @escaping PCErrorCompletionHandler) {
+        typing(inRoomID: room.id, completionHandler: completionHandler)
     }
 
     // MARK: Message-related interactions
@@ -693,15 +732,47 @@ public final class PCCurrentUser {
         )
     }
 
-    public func subscribeToRoom(
-        room: PCRoom,
-        roomDelegate: PCRoomDelegate,
+    func subscribeToAllRooms() {
+        let completionHandler = { [weak self] (err: Error?) in
+            guard let strongSelf = self else {
+                print("self is nil when calling completionHandler of subscribeToAllRooms")
+                return
+            }
+
+            guard err == nil else {
+                strongSelf.instance.logger.log(
+                    "Error subscribing to room: \(err!.localizedDescription)",
+                    logLevel: .error
+                )
+                strongSelf.connectionCoordinator.connectionEventCompleted(PCConnectionEvent(error: err))
+                return
+            }
+            strongSelf.instance.logger.log("Subscribed to all rooms", logLevel: .verbose)
+            strongSelf.connectionCoordinator.connectionEventCompleted(PCConnectionEvent(error: nil))
+        }
+
+        let overallCompletionHandler = steppedCompletionHandler(
+            steps: self.rooms.count,
+            inner: completionHandler,
+            dispatchQueue: roomSubscriptionsQueue
+        )
+
+        self.rooms.forEach { room in
+            self.subscribeToRoom(
+                room,
+                messageLimit: self.messageLimit,
+                completionHandler: overallCompletionHandler
+            )
+        }
+    }
+
+    public func subscribe(
+        toRoom room: PCRoom,
         messageLimit: Int = 20,
         completionHandler: @escaping PCErrorCompletionHandler
     ) {
         self.subscribeToRoom(
             room,
-            delegate: roomDelegate,
             messageLimit: messageLimit,
             completionHandler: completionHandler
         )
@@ -710,9 +781,8 @@ public final class PCCurrentUser {
     // TODO: Do we need a Last-Event-ID option here? Probably yes if we get to the point
     // of supporting offline or caching, or someone wants to do that themselves, then
     // offering this as a point to hook into would be an optimisation opportunity
-    public func subscribeToRoom(
-        id roomID: Int,
-        roomDelegate: PCRoomDelegate,
+    public func subscribe(
+        toRoomID roomID: Int,
         messageLimit: Int = 20,
         completionHandler: @escaping PCErrorCompletionHandler
     ) {
@@ -727,7 +797,6 @@ public final class PCCurrentUser {
             }
             self.subscribeToRoom(
                 room,
-                delegate: roomDelegate,
                 messageLimit: messageLimit,
                 completionHandler: completionHandler
             )
@@ -736,10 +805,18 @@ public final class PCCurrentUser {
 
     fileprivate func subscribeToRoom(
         _ room: PCRoom,
-        delegate: PCRoomDelegate,
         messageLimit: Int = 20,
         completionHandler: @escaping PCErrorCompletionHandler
     ) {
+        guard room.subscription == nil else {
+            self.instance.logger.log(
+                "Already subscribed to room \(room.debugDescription)",
+                logLevel: .verbose
+            )
+            completionHandler(nil)
+            return
+        }
+
         self.instance.logger.log(
             "About to subscribe to room \(room.debugDescription)",
             logLevel: .verbose
@@ -751,7 +828,7 @@ public final class PCCurrentUser {
             dispatchQueue: roomSubscriptionQueue
         )
 
-        self.joinRoom(roomID: room.id) { innerRoom, err in
+        self.joinRoom(roomID: room.id) { [unowned self] innerRoom, err in
             guard let roomToSubscribeTo = innerRoom, err == nil else {
                 self.instance.logger.log(
                     "Error joining room as part of room subscription process \(room.debugDescription)",
@@ -762,13 +839,18 @@ public final class PCCurrentUser {
 
             let messageSub = self.subscribeToRoomMessages(
                 room: roomToSubscribeTo,
-                delegate: delegate,
+                delegate: self.delegate,
                 messageLimit: messageLimit,
                 completionHandler: completionHandler
             )
             let cursorSub = self.subscribeToRoomCursors(
                 room: roomToSubscribeTo,
-                delegate: delegate,
+                delegate: self.delegate,
+                completionHandler: completionHandler
+            )
+            let membershipSub = self.subscribeToRoomMemberships(
+                room: roomToSubscribeTo,
+                delegate: self.delegate,
                 completionHandler: completionHandler
             )
 
@@ -776,14 +858,14 @@ public final class PCCurrentUser {
                 messageSubscription: messageSub,
                 cursorSubscription: cursorSub,
                 membershipSubscription: membershipSub,
-                delegate: delegate
+                delegate: self.delegate
             )
         }
     }
 
     fileprivate func subscribeToRoomMessages(
         room: PCRoom,
-        delegate: PCRoomDelegate,
+        delegate: PCChatManagerDelegate,
         messageLimit: Int,
         completionHandler: @escaping PCErrorCompletionHandler
     ) -> PCMessageSubscription {
@@ -837,7 +919,7 @@ public final class PCCurrentUser {
 
     fileprivate func subscribeToRoomCursors(
         room: PCRoom,
-        delegate: PCRoomDelegate,
+        delegate: PCChatManagerDelegate,
         completionHandler: @escaping PCErrorCompletionHandler
     ) -> PCCursorSubscription {
         let path = "/cursors/\(PCCursorType.read.rawValue)/rooms/\(room.id)"
@@ -875,7 +957,7 @@ public final class PCCurrentUser {
 
     fileprivate func subscribeToRoomMemberships(
         room: PCRoom,
-        delegate: PCRoomDelegate,
+        delegate: PCChatManagerDelegate,
         completionHandler: @escaping PCErrorCompletionHandler
     ) -> PCMembershipSubscription {
         let path = "/rooms/\(room.id)/memberships"
@@ -893,7 +975,6 @@ public final class PCCurrentUser {
         let membershipSubscription = PCMembershipSubscription(
             roomID: room.id,
             delegate: delegate,
-            chatManagerDelegate: self.delegate,
             resumableSubscription: resumableSub,
             userStore: self.userStore,
             roomStore: self.roomStore,
@@ -990,7 +1071,12 @@ public final class PCCurrentUser {
                                 strongSelf.instance.logger.log(err!.localizedDescription, logLevel: .debug)
 
                                 if progressCounter.incrementFailedAndCheckIfFinished() {
-                                    completionHandler(messages.underlyingArray.sorted(by: { $0.id > $1.id }), nil)
+                                    completionHandler(
+                                        messages.underlyingArray.sorted(
+                                            by: { $0.id < $1.id }
+                                        ),
+                                        nil
+                                    )
                                 }
 
                                 return
@@ -1149,28 +1235,3 @@ public enum PCRoomMessageFetchDirection: String {
 public typealias PCErrorCompletionHandler = (Error?) -> Void
 public typealias PCRoomCompletionHandler = (PCRoom?, Error?) -> Void
 public typealias PCRoomsCompletionHandler = ([PCRoom]?, Error?) -> Void
-
-// Takes an `inner` completion handler of type `PCErrorCompletionHandler`,
-// returns another completion handler of the same type that calls the inner
-// completion handler after being called itself `steps` times. Returns the last
-// error, if any.
-func steppedCompletionHandler(
-    steps: Int,
-    inner: @escaping PCErrorCompletionHandler,
-    dispatchQueue: DispatchQueue
-) -> PCErrorCompletionHandler {
-    var error: Error?
-
-    let group = DispatchGroup()
-
-    for _ in 0..<steps {
-        group.enter()
-    }
-
-    group.notify(queue: dispatchQueue) { inner(error) }
-
-    return { err in
-        error = err
-        group.leave()
-    }
-}

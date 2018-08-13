@@ -103,6 +103,7 @@ class TypingIndicatorTests: XCTestCase {
                 roomDelegate: TestingRoomDelegate()
             ) { err in
                 XCTAssertNil(err)
+<<<<<<< HEAD
                 self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
                     XCTAssertNil(err)
                     bob!.typing(in: bob!.rooms.first(where: { $0.id == self.roomId })!) { err in
@@ -158,6 +159,9 @@ class TypingIndicatorTests: XCTestCase {
                         XCTAssertNil(err)
                     }
                 }
+=======
+                bob!.typing(inRoom: bob!.rooms.first(where: { $0.id == self.roomID })!) { _ in }
+>>>>>>> Cleanup tests and use ID instead of Id everywhere
             }
         }
 
