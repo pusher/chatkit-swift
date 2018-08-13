@@ -17,14 +17,6 @@ public final class PCCurrentUser {
         didSet {
             userSubscription?.delegate = delegate
             userPresenceSubscripitons.forEach { ($0.value).delegate = delegate }
-        }
-    }
-
-    let typingIndicatorManager: PCTypingIndicatorManager
-    var delegate: PCChatManagerDelegate {
-        didSet {
-            userSubscription?.delegate = delegate
-            userPresenceSubscripitons.forEach { ($0.value).delegate = delegate }
             rooms.forEach { $0.subscription?.delegate = delegate }
         }
     }
@@ -889,7 +881,6 @@ public final class PCCurrentUser {
         let messageSubscription = PCMessageSubscription(
             roomID: room.id,
             delegate: delegate,
-            chatManagerDelegate: self.delegate,
             resumableSubscription: resumableSub,
             logger: self.instance.logger,
             basicMessageEnricher: PCBasicMessageEnricher(

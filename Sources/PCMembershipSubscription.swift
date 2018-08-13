@@ -78,7 +78,7 @@ extension PCMembershipSubscription {
     ) {
         guard let userIDs = data["user_ids"] as? [String] else {
             self.logger.log(
-                "user_states key not present in initial_state payload",
+                "user_ids key not present in initial_state payload",
                 logLevel: .error
             )
             return

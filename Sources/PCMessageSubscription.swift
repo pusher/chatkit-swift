@@ -24,7 +24,6 @@ public final class PCMessageSubscription {
     ) {
         self.roomID = roomID
         self.delegate = delegate
-        self.chatManagerDelegate = chatManagerDelegate
         self.resumableSubscription = resumableSubscription
         self.logger = logger
         self.basicMessageEnricher = basicMessageEnricher

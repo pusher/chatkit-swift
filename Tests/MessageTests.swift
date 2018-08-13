@@ -165,7 +165,7 @@ class MessagesTests: XCTestCase {
         var expectedMessageTexts = ["hello", "hey", "hi", "ho"]
 
         let bobDelegate = TestingChatManagerDelegate(newMessage: { message in
-            XCTAssertEqual(message.text, expectedMessageTexts.popLast()!)
+            XCTAssertEqual(message.text, expectedMessageTexts.removeFirst())
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
             XCTAssertEqual(message.room.id, self.roomID)
@@ -213,7 +213,7 @@ class MessagesTests: XCTestCase {
         var expectedMessageTexts = ["yooo", "yo"]
 
         let bobDelegate = TestingChatManagerDelegate(newMessage: { message in
-            XCTAssertEqual(message.text, expectedMessageTexts.removeFirst()!)
+            XCTAssertEqual(message.text, expectedMessageTexts.removeFirst())
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
             XCTAssertEqual(message.room.id, self.roomID)

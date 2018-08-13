@@ -109,14 +109,8 @@ class PresenceTests: XCTestCase {
 
         aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
-            alice!.subscribeToRoom(
-                room: alice!.rooms.first(where: { $0.id == self.roomID })!,
-                roomDelegate: TestingRoomDelegate()
-            ) { err in
+            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
                 XCTAssertNil(err)
-                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
-                    XCTAssertNil(err)
-                }
             }
         }
 

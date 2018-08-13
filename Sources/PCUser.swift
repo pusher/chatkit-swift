@@ -9,10 +9,6 @@ public final class PCUser {
     public let customData: [String: Any]?
     public internal(set) var presenceState: PCPresenceState
 
-    public lazy var pathFriendlyID: String = {
-        return pathFriendlyVersion(of: self.id)
-    }()
-
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
