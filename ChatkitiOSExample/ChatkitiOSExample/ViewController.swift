@@ -35,7 +35,16 @@ class ViewController: UIViewController {
     }
 
     func connectToChatkit() {
-        cmDelegate = MyDelegate(currentUser: pusherChatUser)
+        cmDelegate = MyDelegate(
+            currentUser: pusherChatUser,
+            onMessageReceivedHandler: { message in
+                self.messages.append(message)
+
+                DispatchQueue.main.async {
+                    self.messagesTableView.reloadData()
+                }
+            }
+        )
 
         delegate.pusherChat?.connect(delegate: cmDelegate, messageLimit: 1) { [weak self] currentUser, error in
             guard error == nil else {
@@ -50,21 +59,11 @@ class ViewController: UIViewController {
 
             if currentUser.rooms.count != 0 {
                 strongSelf.currentRoom = currentUser.rooms.last!
-                currentUser.subscribeToRoom(
-                    room: strongSelf.currentRoom!,
-                    roomDelegate: strongSelf,
-                    messageLimit: 1
-                ) { err in
-                    guard err == nil else {
-                        print("Error subscribing to room: \(strongSelf.currentRoom!.debugDescription)")
-                        return
-                    }
-
-                    // Uncomment to send a message to the last room in the currentUser.rooms list, if any
-
+//                    Uncomment to send a message to the last room in the currentUser.rooms list, if any
+//
 //                    let imageName = Bundle.main.path(forResource: "somedog", ofType: "jpg")
 //                    let imageURL = URL(fileURLWithPath: imageName!)
-
+//
 //                    print("About to send message")
 //                    currentUser.sendMessage(
 //                        roomId: currentUser.rooms.last!.id,
@@ -77,7 +76,7 @@ class ViewController: UIViewController {
 //                            return
 //                        }
 //                    }
-                }
+//                }
             }
         }
     }
@@ -100,9 +99,11 @@ class ViewController: UIViewController {
 
 public class MyDelegate: PCChatManagerDelegate {
     public weak var cUser: PCCurrentUser?
+    let onMessageReceivedHandler: (PCMessage) -> Void
 
-    public init(currentUser: PCCurrentUser?) {
+    public init(currentUser: PCCurrentUser?, onMessageReceivedHandler: @escaping (PCMessage) -> Void) {
         self.cUser = currentUser
+        self.onMessageReceivedHandler = onMessageReceivedHandler
     }
 
     public func addedToRoom(_ room: PCRoom) {
@@ -148,11 +149,7 @@ public class MyDelegate: PCChatManagerDelegate {
     public func newMessage(_ message: PCMessage) {
         print("Room sub received message: \(message.debugDescription)")
 
-        self.messages.append(message)
-
-        DispatchQueue.main.async {
-            self.messagesTableView.reloadData()
-        }
+        onMessageReceivedHandler(message)
 
         // Uncomment to test fetching message attachments, if present
         // if let attachment = message.attachment {

@@ -8,9 +8,8 @@ public final class PCMessageSubscription {
     public var logger: PPLogger
     let basicMessageEnricher: PCBasicMessageEnricher
     let userStore: PCGlobalUserStore
-    let roomStore: PCRoomStore
     let typingIndicatorManager: PCTypingIndicatorManager
-    let roomID: Int
+    let roomStore: PCRoomStore
 
     init(
         roomID: Int,
