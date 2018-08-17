@@ -8,14 +8,19 @@ class PresenceTests: XCTestCase {
     var charlieChatManager: ChatManager!
     var roomID: Int!
 
+    let uniqueAlice = "alice-\(UUID().uuidString)"
+    let uniqueBob = "bob-\(UUID().uuidString)"
+
     override func setUp() {
         super.setUp()
 
         // We use a third user, Charlie, to create a room so that Charlie's
-        // presence state isn't lingering around and messing up the tests
+        // presence state isn't lingering around and messing up the tests.
+        // This is also the reason we use unique suffixed IDs for Alice and
+        // Bob; to avoid lingering presence states.
 
-        aliceChatManager = newTestChatManager(userID: "alice")
-        bobChatManager = newTestChatManager(userID: "bob")
+        aliceChatManager = newTestChatManager(userID: uniqueAlice)
+        bobChatManager = newTestChatManager(userID: uniqueBob)
         charlieChatManager = newTestChatManager(userID: "charlie")
 
         let deleteResourcesEx = expectation(description: "delete resources")
@@ -34,12 +39,12 @@ class PresenceTests: XCTestCase {
                 createRolesEx.fulfill()
             }
 
-            createUser(id: "alice") { err in
+            createUser(id: self.uniqueAlice) { err in
                 XCTAssertNil(err)
                 createAliceEx.fulfill()
             }
 
-            createUser(id: "bob") { err in
+            createUser(id: self.uniqueBob) { err in
                 XCTAssertNil(err)
                 createBobEx.fulfill()
             }
@@ -55,7 +60,7 @@ class PresenceTests: XCTestCase {
 
             self.charlieChatManager.connect(delegate: TestingChatManagerDelegate()) { charlie, err in
                 XCTAssertNil(err)
-                charlie!.createRoom(name: "mushroom", addUserIDs: ["alice", "bob"]) { room, err in
+                charlie!.createRoom(name: "mushroom", addUserIDs: [self.uniqueAlice, self.uniqueBob]) { room, err in
                     XCTAssertNil(err)
                     self.roomID = room!.id
                     self.charlieChatManager.disconnect()
@@ -84,7 +89,7 @@ class PresenceTests: XCTestCase {
 
         let userPresenceChanged = { (previous: PCPresenceState, current: PCPresenceState, user: PCUser) -> Void in
             guard user.id != "charlie" else { return }
-            XCTAssertEqual(user.id, "bob")
+            XCTAssertEqual(user.id, self.uniqueBob)
 
             if case .unknown = previous, case .offline = current {
                 initialPresenceEx.fulfill()
@@ -121,7 +126,7 @@ class PresenceTests: XCTestCase {
 
         let userPresenceChanged = { (previous: PCPresenceState, current: PCPresenceState, user: PCUser) -> Void in
             guard user.id != "charlie" else { return }
-            XCTAssertEqual(user.id, "alice")
+            XCTAssertEqual(user.id, self.uniqueAlice)
 
             if case .unknown = previous, case .offline = current {
                 initialPresenceEx.fulfill()

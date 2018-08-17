@@ -163,7 +163,7 @@ extension PCMembershipSubscription {
                 room.userIDs.insert(addedOrMergedUser.id)
 
                 strongSelf.delegate?.userJoined(user: addedOrMergedUser)
-                strongSelf.chatManagerDelegate?.userJoinedRoom(room: room, user: user)
+                strongSelf.chatManagerDelegate?.userJoinedRoom(room, user: user)
                 strongSelf.logger.log("User \(user.displayName) joined room: \(room.name)", logLevel: .verbose)
             }
         }
@@ -218,7 +218,7 @@ extension PCMembershipSubscription {
                 room.userStore.remove(id: user.id)
 
                 strongSelf.delegate?.userLeft(user: user)
-                strongSelf.chatManagerDelegate?.userLeftRoom(room: room, user: user)
+                strongSelf.chatManagerDelegate?.userLeftRoom(room, user: user)
                 strongSelf.logger.log("User \(user.displayName) left room: \(room.name)", logLevel: .verbose)
             }
         }

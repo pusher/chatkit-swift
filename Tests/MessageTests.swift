@@ -50,19 +50,39 @@ class MessagesTests: XCTestCase {
                     self.roomID = room!.id
                     createRoomEx.fulfill()
 
-                    for t in ["hello", "hey", "hi", "ho"] {
-                        alice!.sendMessage(roomID: self.roomID, text: t) { _, err in
-                            XCTAssertNil(err)
-                        }
-                        usleep(200000) // TODO do this properly when we have promises
-                    }
-
-                    sendMessagesEx.fulfill()
+                    let messages = ["hello", "hey", "hi", "ho"]
+                    self.sendOrderedMessages(
+                        messages: messages,
+                        from: alice!,
+                        toRoomID: self.roomID
+                    ) { sendMessagesEx.fulfill() }
                 }
             }
         }
 
         waitForExpectations(timeout: 15)
+    }
+
+    fileprivate func sendOrderedMessages(
+        messages: [String],
+        from user: PCCurrentUser,
+        toRoomID roomID: Int,
+        completionHandler: @escaping () -> Void
+    ) {
+        guard let message = messages.first else {
+            completionHandler()
+            return
+        }
+
+        user.sendMessage(roomID: roomID, text: message) { [messages] _, err in
+            XCTAssertNil(err)
+            self.sendOrderedMessages(
+                messages: Array(messages.dropFirst()),
+                from: user,
+                toRoomID: roomID,
+                completionHandler: completionHandler
+            )
+        }
     }
 
     override func tearDown() {
@@ -234,15 +254,12 @@ class MessagesTests: XCTestCase {
                     self.aliceChatManager.connect(
                         delegate: TestingChatManagerDelegate()
                     ) { alice, err in
-                        alice!.sendMessage(roomID: self.roomID, text: "yo") { _, err in
-                            XCTAssertNil(err)
-                        }
-
-                        usleep(200000) // TODO do this properly when we have promises
-
-                        alice!.sendMessage(roomID: self.roomID, text: "yooo") { _, err in
-                            XCTAssertNil(err)
-                        }
+                        let messages = ["yo", "yooo"]
+                        self.sendOrderedMessages(
+                            messages: messages,
+                            from: alice!,
+                            toRoomID: self.roomID
+                        ) {}
                     }
                 }
             )
