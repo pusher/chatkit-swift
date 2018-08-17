@@ -141,7 +141,7 @@ extension PCUserSubscription {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
             self.currentUser?.roomStore.addOrMerge(room) { room in
-                self.delegate?.addedToRoom(room: room)
+                self.delegate?.addedToRoom(room)
                 self.instance.logger.log("Added to room: \(room.name)", logLevel: .verbose)
             }
 
@@ -203,7 +203,7 @@ extension PCUserSubscription {
                 return
             }
 
-            self.delegate?.removedFromRoom(room: roomRemovedFrom)
+            self.delegate?.removedFromRoom(roomRemovedFrom)
             self.instance.logger.log("Removed from room: \(roomRemovedFrom.name)", logLevel: .verbose)
         }
     }

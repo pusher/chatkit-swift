@@ -2,7 +2,6 @@ import Foundation
 import PusherPlatform
 
 public final class PCUserPresenceSubscription {
-
     public let userID: String
     public let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore

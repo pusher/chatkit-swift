@@ -3,14 +3,17 @@ import PusherPlatform
 @testable import PusherChatkit
 
 class CursorTests: XCTestCase {
-    var aliceChatManager: ChatManager! = newTestChatManager(userID: "alice")
-    var bobChatManager: ChatManager! = newTestChatManager(userID: "bob")
+    var aliceChatManager: ChatManager!
+    var bobChatManager: ChatManager!
     var alice: PCCurrentUser!
     var bob: PCCurrentUser!
     var roomID: Int!
 
     override func setUp() {
         super.setUp()
+
+        aliceChatManager = newTestChatManager(userID: "alice")
+        bobChatManager = newTestChatManager(userID: "bob")
 
         let deleteResourcesEx = expectation(description: "delete resources")
         let createRolesEx = expectation(description: "create roles")
@@ -43,9 +46,9 @@ class CursorTests: XCTestCase {
             // and Bob exist... for now, sleep!
             sleep(1)
 
-            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { user, err in
+            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { a, err in
                 XCTAssertNil(err)
-                self.alice = user
+                self.alice = a
                 connectAliceEx.fulfill()
 
                 self.alice.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
@@ -55,9 +58,9 @@ class CursorTests: XCTestCase {
                 }
             }
 
-            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { user, err in
+            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { b, err in
                 XCTAssertNil(err)
-                self.bob = user
+                self.bob = b
                 connectBobEx.fulfill()
             }
         }

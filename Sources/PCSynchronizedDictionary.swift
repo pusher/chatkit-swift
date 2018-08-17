@@ -41,7 +41,7 @@ public final class PCSynchronizedDictionary<KeyType:Hashable, ValueType>: Expres
     subscript(key: KeyType) -> ValueType? {
         get {
             var value: ValueType?
-            queue.sync { value = self.underlyingDictionary[key] }
+            queue.sync(flags: .barrier) { value = self.underlyingDictionary[key] }
             return value
         }
 
@@ -58,5 +58,11 @@ public final class PCSynchronizedDictionary<KeyType:Hashable, ValueType>: Expres
             oldValue = self.underlyingDictionary.removeValue(forKey: key)
         }
         return oldValue
+    }
+
+    func removeAll() {
+        queue.sync(flags: .barrier) {
+            self.underlyingDictionary.removeAll()
+        }
     }
 }

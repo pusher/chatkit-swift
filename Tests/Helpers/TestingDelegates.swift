@@ -31,11 +31,11 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
         handleRoomDeleted = roomDeleted
     }
 
-    func userStartedTyping(room: PCRoom, user: PCUser) -> Void {
+    func userStartedTyping(inRoom room: PCRoom, user: PCUser) -> Void {
         handleUserStartedTyping(room, user)
     }
 
-    func userStoppedTyping(room: PCRoom, user: PCUser) -> Void {
+    func userStoppedTyping(inRoom room: PCRoom, user: PCUser) -> Void {
         handleUserStoppedTyping(room, user)
     }
 
@@ -43,19 +43,19 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
         handleUserPresenceChanged(previous, current, user)
     }
 
-    func userJoinedRoom(room: PCRoom, user: PCUser) {
+    func userJoinedRoom(_ room: PCRoom, user: PCUser) {
         handleUserJoinedRoom(room, user)
     }
 
-    func userLeftRoom(room: PCRoom, user: PCUser) {
+    func userLeftRoom(_ room: PCRoom, user: PCUser) {
         handleUserLeftRoom(room, user)
     }
 
-    func addedToRoom(room: PCRoom) {
+    func addedToRoom(_ room: PCRoom) {
         handleAddedToRoom(room)
     }
 
-    func removedFromRoom(room: PCRoom) {
+    func removedFromRoom(_ room: PCRoom) {
         handleRemovedFromRoom(room)
     }
 

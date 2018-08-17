@@ -78,7 +78,7 @@ import PusherPlatform
         }
 
         self.userID = userID
-        self.pathFriendlyUserID = pathFriendlyUserID(userID)
+        self.pathFriendlyUserID = pathFriendlyVersion(of: userID)
     }
 
     public func connect(
@@ -118,7 +118,12 @@ import PusherPlatform
         }
 
         basicCurrentUser.establishUserSubscription(
-            initialStateHandler: { [unowned self] currentUserPayloadTuple in
+            initialStateHandler: { [weak self] currentUserPayloadTuple in
+                guard let strongSelf = self else {
+                    print("self is nil in initialStateHandler for userSubscription")
+                    return
+                }
+
                 let (roomsPayload, currentUserPayload) = currentUserPayloadTuple
 
                 let receivedCurrentUser: PCCurrentUser
@@ -126,20 +131,20 @@ import PusherPlatform
                 do {
                     receivedCurrentUser = try PCPayloadDeserializer.createCurrentUserFromPayload(
                         currentUserPayload,
-                        id: self.userID,
-                        pathFriendlyID: self.pathFriendlyUserID,
-                        instance: self.instance,
-                        filesInstance: self.filesInstance,
-                        cursorsInstance: self.cursorsInstance,
-                        presenceInstance: self.presenceInstance,
+                        id: strongSelf.userID,
+                        pathFriendlyID: strongSelf.pathFriendlyUserID,
+                        instance: strongSelf.instance,
+                        filesInstance: strongSelf.filesInstance,
+                        cursorsInstance: strongSelf.cursorsInstance,
+                        presenceInstance: strongSelf.presenceInstance,
                         userStore: basicCurrentUser.userStore,
                         roomStore: basicCurrentUser.roomStore,
                         cursorStore: basicCurrentUser.cursorStore,
-                        connectionCoordinator: self.connectionCoordinator,
+                        connectionCoordinator: strongSelf.connectionCoordinator,
                         delegate: basicCurrentUser.delegate
                     )
                 } catch let err {
-                    self.informConnectionCoordinatorOfCurrentUserCompletion(
+                    strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(
                         currentUser: nil,
                         error: err
                     )
@@ -149,14 +154,14 @@ import PusherPlatform
                 // If the currentUser property is already set then the assumption is that there was
                 // already a user subscription and so instead of setting the property to a new
                 // PCCurrentUser, we update the existing one to have the most up-to-date state
-                if let currentUser = self.currentUser {
+                if let currentUser = strongSelf.currentUser {
                     currentUser.updateWithPropertiesOf(receivedCurrentUser)
                 } else {
-                    self.currentUser = receivedCurrentUser
+                    strongSelf.currentUser = receivedCurrentUser
                 }
 
                 guard roomsPayload.count > 0 else {
-                    self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
+                    strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
                     return
                 }
 
@@ -173,17 +178,17 @@ import PusherPlatform
 
                         combinedRoomUserIDs.formUnion(room.userIDs)
 
-                        self.currentUser!.roomStore.addOrMergeSync(room)
+                        strongSelf.currentUser!.roomStore.addOrMergeSync(room)
                         if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
-                            self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
+                            strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
                         }
                     } catch let err {
-                        self.instance.logger.log(
+                        strongSelf.instance.logger.log(
                             "Incomplete room payload in initial_state event: \(roomPayload). Error: \(err.localizedDescription)",
                             logLevel: .debug
                         )
                         if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
-                            self.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: self.currentUser, error: nil)
+                            strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
                         }
                     }
                 }
@@ -209,10 +214,8 @@ import PusherPlatform
             room.subscription?.end()
             room.subscription = nil
         }
-        currentUser?.userPresenceSubscripitons.forEach { uPSub in
-            uPSub.value.end()
-            let _ = currentUser?.userPresenceSubscripitons.removeValue(forKey: uPSub.key)
-        }
+        currentUser?.userPresenceSubscripitons.forEach { $0.value.end() }
+        currentUser?.userPresenceSubscripitons.removeAll()
         connectionCoordinator.reset()
     }
 
@@ -236,8 +239,8 @@ import PusherPlatform
     }
 }
 
-func pathFriendlyUserID(_ userID: String) -> String {
+func pathFriendlyVersion(of component: String) -> String {
     let allowedCharacterSet = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] ").inverted
     // TODO: When can percent encoding fail?
-    return userID.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? userID
+    return component.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? component
 }

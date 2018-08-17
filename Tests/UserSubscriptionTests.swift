@@ -53,6 +53,6 @@ class UserSubscriptionTests: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 15)
     }
 }

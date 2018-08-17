@@ -178,11 +178,11 @@ extension ViewController: PCRoomDelegate {
 }
 
 public class MyDelegate: PCChatManagerDelegate {
-    public func addedToRoom(room: PCRoom) {
+    public func addedToRoom(_ room: PCRoom) {
         print("Added to room: \(room.name)")
     }
 
-    public func removedFromRoom(room: PCRoom) {
+    public func removedFromRoom(_ room: PCRoom) {
         print("Removed from room: \(room.name)")
     }
 
@@ -194,11 +194,11 @@ public class MyDelegate: PCChatManagerDelegate {
         print("Room deleted: \(room.name)")
     }
 
-    public func userJoinedRoom(room: PCRoom, user: PCUser) {
+    public func userJoinedRoom(_ room: PCRoom, user: PCUser) {
         print("User \(user.displayName) joined room: \(room.name)")
     }
 
-    public func userLeftRoom(room: PCRoom, user: PCUser) {
+    public func userLeftRoom(_ room: PCRoom, user: PCUser) {
         print("User \(user.displayName) left room: \(room.name)")
     }
 
@@ -210,11 +210,11 @@ public class MyDelegate: PCChatManagerDelegate {
         print("User \(user.displayName) went online")
     }
 
-    public func userStartedTyping(room: PCRoom, user: PCUser) {
+    public func userStartedTyping(inRoom room: PCRoom, user: PCUser) {
         print("\(user.displayName) started typing in room \(room.name)")
     }
 
-    public func userStoppedTyping(room: PCRoom, user: PCUser) {
+    public func userStoppedTyping(inRoom room: PCRoom, user: PCUser) {
         print("\(user.displayName) stopped typing in room \(room.name)")
     }
 
