@@ -7,9 +7,12 @@
 [![CocoaPods](https://img.shields.io/cocoapods/v/PusherChatkit.svg)](https://cocoapods.org/pods/PusherChatkit)
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/pusher/chatkit-swift/blob/master/LICENSE.md)
 
+Find out more about Chatkit [here](https://pusher.com/chatkit).
+
 ## Building and Running
 
 ### Minimum Requirements
+
 * [Xcode](https://itunes.apple.com/us/app/xcode/id497799835) - The easiest way to get Xcode is from the [App Store](https://itunes.apple.com/us/app/xcode/id497799835?mt=12), but you can also download it from [developer.apple.com](https://developer.apple.com/) if you have an AppleID registered with an Apple Developer account.
 
 * Swift version 4.1 and above
