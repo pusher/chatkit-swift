@@ -87,14 +87,14 @@ public final class PCGlobalUserStore {
         )
     }
 
-    // TODO: Need a version of this that first checks the userStore for any of the userIds
-    // provided and then only makes a request to fetch the user information for the userIds
+    // TODO: Need a version of this that first checks the userStore for any of the userIDs
+    // provided and then only makes a request to fetch the user information for the userIDs
     // that aren't known about. This would be used in the createRoom callback and the
     // addedToRoom parsing function
 
-    // This will do the de-duping of userIds
-    func fetchUsersWithIds(_ userIds: Set<String>, completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
-        guard userIds.count > 0 else {
+    // This will do the de-duping of userIDs
+    func fetchUsersWithIDs(_ userIDs: Set<String>, completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
+        guard userIDs.count > 0 else {
             self.instance.logger.log("Requested to fetch users for a list of user ids which was empty", logLevel: .debug)
             completionHandler?([], nil)
             return
@@ -102,7 +102,7 @@ public final class PCGlobalUserStore {
 
         let path = "/users_by_ids"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
-        generalRequest.addQueryItems(userIds.map{URLQueryItem(name: "id", value: $0)})
+        generalRequest.addQueryItems(userIDs.map{URLQueryItem(name: "id", value: $0)})
 
         // We want this to complete quickly, whether it succeeds or not
         generalRequest.retryStrategy = PPDefaultRetryStrategy(maxNumberOfAttempts: 1)
@@ -149,7 +149,7 @@ public final class PCGlobalUserStore {
         )
     }
 
-    func initialFetchOfUsersWithIds(_ userIds: Set<String>, completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
-        self.fetchUsersWithIds(userIds, completionHandler: completionHandler)
+    func initialFetchOfUsersWithIDs(_ userIDs: Set<String>, completionHandler: (([PCUser]?, Error?) -> Void)? = nil) {
+        self.fetchUsersWithIDs(userIDs, completionHandler: completionHandler)
     }
 }

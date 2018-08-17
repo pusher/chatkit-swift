@@ -6,7 +6,7 @@ class PresenceTests: XCTestCase {
     var aliceChatManager: ChatManager!
     var bobChatManager: ChatManager!
     var charlieChatManager: ChatManager!
-    var roomId: Int!
+    var roomID: Int!
 
     override func setUp() {
         super.setUp()
@@ -14,9 +14,9 @@ class PresenceTests: XCTestCase {
         // We use a third user, Charlie, to create a room so that Charlie's
         // presence state isn't lingering around and messing up the tests
 
-        aliceChatManager = newTestChatManager(userId: "alice")
-        bobChatManager = newTestChatManager(userId: "bob")
-        charlieChatManager = newTestChatManager(userId: "charlie")
+        aliceChatManager = newTestChatManager(userID: "alice")
+        bobChatManager = newTestChatManager(userID: "bob")
+        charlieChatManager = newTestChatManager(userID: "charlie")
 
         let deleteResourcesEx = expectation(description: "delete resources")
         let createRolesEx = expectation(description: "create roles")
@@ -55,9 +55,9 @@ class PresenceTests: XCTestCase {
 
             self.charlieChatManager.connect(delegate: TestingChatManagerDelegate()) { charlie, err in
                 XCTAssertNil(err)
-                charlie!.createRoom(name: "mushroom", addUserIds: ["alice", "bob"]) { room, err in
+                charlie!.createRoom(name: "mushroom", addUserIDs: ["alice", "bob"]) { room, err in
                     XCTAssertNil(err)
-                    self.roomId = room!.id
+                    self.roomID = room!.id
                     self.charlieChatManager.disconnect()
                     createRoomEx.fulfill()
                 }
@@ -74,7 +74,7 @@ class PresenceTests: XCTestCase {
         bobChatManager = nil
         charlieChatManager.disconnect()
         charlieChatManager = nil
-        roomId = nil
+        roomID = nil
     }
 
     func testChatManagerDelegatePresenceHooks() {
@@ -101,7 +101,7 @@ class PresenceTests: XCTestCase {
         aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
             alice!.subscribeToRoom(
-                room: alice!.rooms.first(where: { $0.id == self.roomId })!,
+                room: alice!.rooms.first(where: { $0.id == self.roomID })!,
                 roomDelegate: TestingRoomDelegate()
             ) { err in
                 XCTAssertNil(err)
@@ -138,7 +138,7 @@ class PresenceTests: XCTestCase {
         self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
             XCTAssertNil(err)
             bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomId })!,
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
                 roomDelegate: bobRoomDelegate
             ) { err in
                 XCTAssertNil(err)

@@ -10,10 +10,10 @@ public final class PCMembershipSubscription {
     var initialStateHandler: (Error?) -> Void
     weak var chatManagerDelegate: PCChatManagerDelegate?
 
-    let roomId: Int
+    let roomID: Int
 
     init(
-        roomId: Int,
+        roomID: Int,
         delegate: PCRoomDelegate? = nil,
         chatManagerDelegate: PCChatManagerDelegate? = nil,
         resumableSubscription: PPResumableSubscription,
@@ -22,7 +22,7 @@ public final class PCMembershipSubscription {
         logger: PPLogger,
         initialStateHandler: @escaping (Error?) -> Void
     ) {
-        self.roomId = roomId
+        self.roomID = roomID
         self.delegate = delegate
         self.chatManagerDelegate = chatManagerDelegate
         self.resumableSubscription = resumableSubscription
@@ -32,7 +32,7 @@ public final class PCMembershipSubscription {
         self.initialStateHandler = initialStateHandler
     }
 
-    func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
+    func handleEvent(eventID _: String, headers _: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
             self.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
             return
@@ -79,7 +79,7 @@ extension PCMembershipSubscription {
         _ eventName: PCMembershipEventName,
         data: [String: Any]
     ) {
-        guard let userIds = data["user_ids"] as? [String] else {
+        guard let userIDs = data["user_ids"] as? [String] else {
             self.logger.log(
                 "user_states key not present in initial_state payload",
                 logLevel: .error
@@ -87,7 +87,7 @@ extension PCMembershipSubscription {
             return
         }
 
-        self.roomStore.room(id: roomId) { [weak self] room, err in
+        self.roomStore.room(id: roomID) { [weak self] room, err in
             guard let strongSelf = self else {
                 print("self is nil when user store returns user after parsing initial state event")
                 return
@@ -98,7 +98,7 @@ extension PCMembershipSubscription {
                 return
             }
 
-            strongSelf.userStore.fetchUsersWithIds(Set<String>(userIds)) { [weak self] users, err in
+            strongSelf.userStore.fetchUsersWithIDs(Set<String>(userIDs)) { [weak self] users, err in
                 guard let strongSelf = self else {
                     print("self is nil when user store returns user after parsing initial state event")
                     return
@@ -111,7 +111,7 @@ extension PCMembershipSubscription {
 
                 users.forEach { user in
                     let addedOrMergedUser = room.userStore.addOrMerge(user)
-                    room.userIds.insert(addedOrMergedUser.id)
+                    room.userIDs.insert(addedOrMergedUser.id)
                 }
 
                 strongSelf.initialStateHandler(nil)
@@ -123,7 +123,7 @@ extension PCMembershipSubscription {
         _ eventName: PCMembershipEventName,
         data: [String: Any]
     ) {
-        guard let userId = data["user_id"] as? String else {
+        guard let userID = data["user_id"] as? String else {
             self.logger.log(
                 "user_id key not present in user_joined payload",
                 logLevel: .error
@@ -131,7 +131,7 @@ extension PCMembershipSubscription {
             return
         }
 
-        self.roomStore.room(id: roomId) { [weak self] room, err in
+        self.roomStore.room(id: roomID) { [weak self] room, err in
             guard let strongSelf = self else {
                 print("self is nil when user store returns user after parsing user joined event")
                 return
@@ -139,13 +139,13 @@ extension PCMembershipSubscription {
 
             guard let room = room, err == nil else {
                 strongSelf.logger.log(
-                    "User with id \(userId) joined room with id \(strongSelf.roomId) but no information about the room could be retrieved. Error was: \(err!.localizedDescription)",
+                    "User with id \(userID) joined room with id \(strongSelf.roomID) but no information about the room could be retrieved. Error was: \(err!.localizedDescription)",
                     logLevel: .error
                 )
                 return
             }
 
-            strongSelf.userStore.user(id: userId) { [weak self] user, err in
+            strongSelf.userStore.user(id: userID) { [weak self] user, err in
                 guard let strongSelf = self else {
                     print("self is nil when user store returns user after parsing user joined event")
                     return
@@ -153,14 +153,14 @@ extension PCMembershipSubscription {
 
                 guard let user = user, err == nil else {
                     strongSelf.logger.log(
-                        "User with id \(userId) joined room with id \(strongSelf.roomId) but no information about the user could be retrieved. Error was: \(err!.localizedDescription)",
+                        "User with id \(userID) joined room with id \(strongSelf.roomID) but no information about the user could be retrieved. Error was: \(err!.localizedDescription)",
                         logLevel: .error
                     )
                     return
                 }
 
                 let addedOrMergedUser = room.userStore.addOrMerge(user)
-                room.userIds.insert(addedOrMergedUser.id)
+                room.userIDs.insert(addedOrMergedUser.id)
 
                 strongSelf.delegate?.userJoined(user: addedOrMergedUser)
                 strongSelf.chatManagerDelegate?.userJoinedRoom(room: room, user: user)
@@ -173,7 +173,7 @@ extension PCMembershipSubscription {
         _ eventName: PCMembershipEventName,
         data: [String: Any]
     ) {
-        guard let userId = data["user_id"] as? String else {
+        guard let userID = data["user_id"] as? String else {
             self.logger.log(
                 "user_id key not present in user_left payload",
                 logLevel: .error
@@ -181,7 +181,7 @@ extension PCMembershipSubscription {
             return
         }
 
-        self.roomStore.room(id: roomId) { [weak self] room, err in
+        self.roomStore.room(id: roomID) { [weak self] room, err in
             guard let strongSelf = self else {
                 print("self is nil when user store returns user after parsing user left event")
                 return
@@ -189,13 +189,13 @@ extension PCMembershipSubscription {
 
             guard let room = room, err == nil else {
                 strongSelf.logger.log(
-                    "User with id \(userId) left room with id \(strongSelf.roomId) but no information about the room could be retrieved. Error was: \(err!.localizedDescription)",
+                    "User with id \(userID) left room with id \(strongSelf.roomID) but no information about the room could be retrieved. Error was: \(err!.localizedDescription)",
                     logLevel: .error
                 )
                 return
             }
 
-            strongSelf.userStore.user(id: userId) { [weak self] user, err in
+            strongSelf.userStore.user(id: userID) { [weak self] user, err in
                 guard let strongSelf = self else {
                     print("self is nil when user store returns user after parsing user left event")
                     return
@@ -203,16 +203,16 @@ extension PCMembershipSubscription {
 
                 guard let user = user, err == nil else {
                     strongSelf.logger.log(
-                        "User with id \(userId) left room with id \(strongSelf.roomId) but no information about the user could be retrieved. Error was: \(err!.localizedDescription)",
+                        "User with id \(userID) left room with id \(strongSelf.roomID) but no information about the user could be retrieved. Error was: \(err!.localizedDescription)",
                         logLevel: .error
                     )
                     return
                 }
 
-                let roomUserIdIndex = room.userIds.index(of: user.id)
+                let roomUserIDIndex = room.userIDs.index(of: user.id)
 
-                if let indexToRemove = roomUserIdIndex {
-                    room.userIds.remove(at: indexToRemove)
+                if let indexToRemove = roomUserIDIndex {
+                    room.userIDs.remove(at: indexToRemove)
                 }
 
                 room.userStore.remove(id: user.id)

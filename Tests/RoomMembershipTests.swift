@@ -5,13 +5,13 @@ import PusherPlatform
 class RoomMembershipTests: XCTestCase {
     var aliceChatManager: ChatManager!
     var bobChatManager: ChatManager!
-    var roomId: Int!
+    var roomID: Int!
 
     override func setUp() {
         super.setUp()
 
-        aliceChatManager = newTestChatManager(userId: "alice")
-        bobChatManager = newTestChatManager(userId: "bob")
+        aliceChatManager = newTestChatManager(userID: "alice")
+        bobChatManager = newTestChatManager(userID: "bob")
 
         let deleteResourcesEx = expectation(description: "delete resources")
         let createRolesEx = expectation(description: "create roles")
@@ -102,7 +102,7 @@ class RoomMembershipTests: XCTestCase {
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
-            alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+            alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
                 XCTAssertNil(err)
                 alice!.subscribeToRoom(
                     room: room!, roomDelegate: TestingRoomDelegate()
@@ -159,7 +159,7 @@ class RoomMembershipTests: XCTestCase {
             XCTAssertNil(err)
             self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
                 XCTAssertNil(err)
-                bob!.createRoom(name: "mushroom", addUserIds: ["alice"]) { room, err in
+                bob!.createRoom(name: "mushroom", addUserIDs: ["alice"]) { room, err in
                     XCTAssertNil(err)
                     bobAddAliceEx.fulfill()
                 }
@@ -210,7 +210,7 @@ class RoomMembershipTests: XCTestCase {
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
-            alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+            alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
                 XCTAssertNil(err)
                 self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
                     XCTAssertNil(err)
@@ -335,7 +335,7 @@ class RoomMembershipTests: XCTestCase {
 
         self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
             XCTAssertNil(err)
-            alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+            alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
                 XCTAssertNil(err)
                 self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
                     XCTAssertNil(err)
@@ -364,7 +364,7 @@ class RoomMembershipTests: XCTestCase {
 
         self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
             XCTAssertNil(err)
-            alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+            alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
                 XCTAssertNil(err)
 
                 let roomToTest = alice!.rooms.first(where: { $0.id == room!.id })!

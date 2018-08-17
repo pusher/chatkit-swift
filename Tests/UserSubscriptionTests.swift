@@ -41,7 +41,7 @@ class UserSubscriptionTests: XCTestCase {
         chatManager = ChatManager(
             instanceLocator: testInstanceLocator,
             tokenProvider: PCTokenProvider(url: tokenEndpoint),
-            userId: "ash",
+            userID: "ash",
             logger: TestLogger()
         )
 
