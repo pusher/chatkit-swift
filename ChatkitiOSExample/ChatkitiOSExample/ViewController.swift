@@ -105,51 +105,6 @@ public class MyDelegate: PCChatManagerDelegate {
         self.cUser = currentUser
     }
 
-    func newCursor(cursor: PCCursor) {
-        print("New cursor for \(cursor.user.displayName) at position \(cursor.position)")
-    }
-
-    func newMessage(message: PCMessage) {
-        print("Received message: \(message.debugDescription)")
-
-        self.messages.append(message)
-
-        DispatchQueue.main.async {
-            self.messagesTableView.reloadData()
-        }
-
-        // Uncomment to test fetching message attachments, if present
-        //        if let attachment = message.attachment {
-        //            if attachment.fetchRequired {
-        //                print("Fetch required for attachment")
-        //                pusherChatUser?.fetchAttachment(attachment.link) { fetchedAttachment, err in
-        //                    guard err == nil else {
-        //                        print("Error fetching attachment \(err!.localizedDescription)")
-        //                        return
-        //                    }
-        //
-        //                    print("Fetched attachment link: \(fetchedAttachment!.link)")
-        //
-        //                    self.pusherChatUser?.downloadAttachment(
-        //                        fetchedAttachment!.link,
-        //                        to: PCSuggestedDownloadDestination(options: [.createIntermediateDirectories, .removePreviousFile]),
-        //                        onSuccess: { url in
-        //                            print("Downloaded successfully to \(url.absoluteString)")
-        //                        },
-        //                        onError: { error in
-        //                            print("Failed to download \(error.localizedDescription)")
-        //                        },
-        //                        progressHandler: { bytesReceived, totalBytesToReceive in
-        //                            print("Download progress: \(bytesReceived) / \(totalBytesToReceive)")
-        //                        }
-        //                    )
-        //                }
-        //            } else {
-        //                print("Fetch not required for attachment: \(attachment.link)")
-        //            }
-        //        }
-    }
-
     public func addedToRoom(_ room: PCRoom) {
         print("Added to room: \(room.name)")
     }
@@ -193,35 +148,42 @@ public class MyDelegate: PCChatManagerDelegate {
     public func newMessage(_ message: PCMessage) {
         print("Room sub received message: \(message.debugDescription)")
 
-        if let attachment = message.attachment {
-            if attachment.fetchRequired {
-                print("Fetch required for attachment")
-                cUser!.fetchAttachment(attachment.link) { fetchedAttachment, err in
-                    guard err == nil else {
-                        print("Error fetching attachment \(err!.localizedDescription)")
-                        return
-                    }
+        self.messages.append(message)
 
-                    print("Fetched attachment link: \(fetchedAttachment!.link)")
-
-                    self.cUser!.downloadAttachment(
-                        fetchedAttachment!.link,
-                        to: PCSuggestedDownloadDestination(options: [.createIntermediateDirectories, .removePreviousFile]),
-                        onSuccess: { url in
-                            print("Downloaded successfully to \(url.absoluteString)")
-                        },
-                        onError: { error in
-                            print("Failed to download \(error.localizedDescription)")
-                        },
-                        progressHandler: { bytesReceived, totalBytesToReceive in
-                            print("Download progress: \(bytesReceived) / \(totalBytesToReceive)")
-                        }
-                    )
-                }
-            } else {
-                print("Fetch not required for attachment: \(attachment.link)")
-            }
+        DispatchQueue.main.async {
+            self.messagesTableView.reloadData()
         }
+
+        // Uncomment to test fetching message attachments, if present
+        // if let attachment = message.attachment {
+        //     if attachment.fetchRequired {
+        //         print("Fetch required for attachment")
+        //         cUser!.fetchAttachment(attachment.link) { fetchedAttachment, err in
+        //             guard err == nil else {
+        //                 print("Error fetching attachment \(err!.localizedDescription)")
+        //                 return
+        //             }
+
+        //             print("Fetched attachment link: \(fetchedAttachment!.link)")
+
+        //             self.cUser!.downloadAttachment(
+        //                 fetchedAttachment!.link,
+        //                 to: PCSuggestedDownloadDestination(options: [.createIntermediateDirectories, .removePreviousFile]),
+        //                 onSuccess: { url in
+        //                     print("Downloaded successfully to \(url.absoluteString)")
+        //                 },
+        //                 onError: { error in
+        //                     print("Failed to download \(error.localizedDescription)")
+        //                 },
+        //                 progressHandler: { bytesReceived, totalBytesToReceive in
+        //                     print("Download progress: \(bytesReceived) / \(totalBytesToReceive)")
+        //                 }
+        //             )
+        //         }
+        //     } else {
+        //         print("Fetch not required for attachment: \(attachment.link)")
+        //     }
+        // }
     }
 
     public func newCursor(_ cursor: PCCursor) {
