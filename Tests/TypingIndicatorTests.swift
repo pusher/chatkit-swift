@@ -5,13 +5,13 @@ import PusherPlatform
 class TypingIndicatorTests: XCTestCase {
     var aliceChatManager: ChatManager!
     var bobChatManager: ChatManager!
-    var roomId: Int!
+    var roomID: Int!
 
     override func setUp() {
         super.setUp()
 
-        aliceChatManager = newTestChatManager(userId: "alice")
-        bobChatManager = newTestChatManager(userId: "bob")
+        aliceChatManager = newTestChatManager(userID: "alice")
+        bobChatManager = newTestChatManager(userID: "bob")
 
         let deleteResourcesEx = expectation(description: "delete resources")
         let createRolesEx = expectation(description: "create roles")
@@ -44,9 +44,9 @@ class TypingIndicatorTests: XCTestCase {
 
             self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
                 XCTAssertNil(err)
-                alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+                alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
                     XCTAssertNil(err)
-                    self.roomId = room!.id
+                    self.roomID = room!.id
                     createRoomEx.fulfill()
                 }
             }
@@ -60,7 +60,7 @@ class TypingIndicatorTests: XCTestCase {
         aliceChatManager = nil
         bobChatManager.disconnect()
         bobChatManager = nil
-        roomId = nil
+        roomID = nil
     }
 
     func testChatManagerDelegateTypingHooks() {
@@ -71,7 +71,7 @@ class TypingIndicatorTests: XCTestCase {
 
         let userStartedTyping = { (room: PCRoom, user: PCUser) -> Void in
             started = Date()
-            XCTAssertEqual(room.id, self.roomId)
+            XCTAssertEqual(room.id, self.roomID)
             XCTAssertEqual(user.id, "bob")
             startedEx.fulfill()
         }
@@ -82,7 +82,7 @@ class TypingIndicatorTests: XCTestCase {
             XCTAssertGreaterThan(interval, 1)
             XCTAssertLessThan(interval, 5)
 
-            XCTAssertEqual(room.id, self.roomId)
+            XCTAssertEqual(room.id, self.roomID)
             XCTAssertEqual(user.id, "bob")
 
             stoppedEx.fulfill()
@@ -97,13 +97,13 @@ class TypingIndicatorTests: XCTestCase {
             XCTAssertNil(err)
 
             alice!.subscribeToRoom(
-                room: alice!.rooms.first(where: { $0.id == self.roomId })!,
+                room: alice!.rooms.first(where: { $0.id == self.roomID })!,
                 roomDelegate: TestingRoomDelegate()
             ) { err in
                 XCTAssertNil(err)
                 self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
                     XCTAssertNil(err)
-                    bob!.typing(in: bob!.rooms.first(where: { $0.id == self.roomId })!) { _ in }
+                    bob!.typing(in: bob!.rooms.first(where: { $0.id == self.roomID })!) { _ in }
                 }
             }
         }
@@ -142,7 +142,7 @@ class TypingIndicatorTests: XCTestCase {
         self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
             XCTAssertNil(err)
             bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomId })!,
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
                 roomDelegate: bobRoomDelegate
             ) { err in
                 XCTAssertNil(err)
@@ -150,7 +150,7 @@ class TypingIndicatorTests: XCTestCase {
                     delegate: TestingChatManagerDelegate()
                 ) { alice, err in
                     XCTAssertNil(err)
-                    alice!.typing(in: alice!.rooms.first(where: { $0.id == self.roomId })!) { err in
+                    alice!.typing(in: alice!.rooms.first(where: { $0.id == self.roomID })!) { err in
                         XCTAssertNil(err)
                     }
                 }

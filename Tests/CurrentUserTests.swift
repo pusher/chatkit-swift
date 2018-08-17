@@ -24,7 +24,7 @@ class CurrentUserTests: XCTestCase {
         chatManager = ChatManager(
             instanceLocator: instanceLocator,
             tokenProvider: PCTokenProvider(url: tokenEndpoint),
-            userId: userID,
+            userID: userID,
             logger: TestLogger()
         )
 

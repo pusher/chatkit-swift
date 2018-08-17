@@ -212,13 +212,13 @@ enum ChatkitService {
 }
 
 func newTestChatManager(
-    userId: String,
+    userID: String,
     delegate: PCChatManagerDelegate = TestingChatManagerDelegate()
 ) -> ChatManager {
     return ChatManager(
         instanceLocator: testInstanceLocator,
         tokenProvider: PCTokenProvider(url: testInstanceTokenProviderURL),
-        userId: userId,
+        userID: userID,
         logger: TestLogger()
     )
 }
@@ -235,7 +235,7 @@ func createRoom(
     let group = DispatchGroup()
     group.enter()
 
-    user.createRoom(name: roomName, isPrivate: isPrivate, addUserIds: userIDs) { r, e in
+    user.createRoom(name: roomName, isPrivate: isPrivate, addUserIDs: userIDs) { r, e in
         room = r
         error = e
         group.leave()

@@ -18,7 +18,7 @@ struct PCPayloadDeserializer {
     static func createCurrentUserFromPayload(
         _ userPayload: [String: Any],
         id: String,
-        pathFriendlyId: String,
+        pathFriendlyID: String,
         instance: Instance,
         filesInstance: Instance,
         cursorsInstance: Instance,
@@ -33,7 +33,7 @@ struct PCPayloadDeserializer {
 
         return PCCurrentUser(
             id: id,
-            pathFriendlyId: pathFriendlyId,
+            pathFriendlyID: pathFriendlyID,
             createdAt: basicUser.createdAt,
             updatedAt: basicUser.updatedAt,
             name: userPayload["name"] as? String,
@@ -53,31 +53,31 @@ struct PCPayloadDeserializer {
 
     static func createRoomFromPayload(_ roomPayload: [String: Any]) throws -> PCRoom {
         guard
-            let roomId = roomPayload["id"] as? Int,
+            let roomID = roomPayload["id"] as? Int,
             let roomName = roomPayload["name"] as? String,
             let isPrivate = roomPayload["private"] as? Bool,
-            let roomCreatorUserId = roomPayload["created_by_id"] as? String,
+            let roomCreatorUserID = roomPayload["created_by_id"] as? String,
             let roomCreatedAt = roomPayload["created_at"] as? String,
             let roomUpdatedAt = roomPayload["updated_at"] as? String
         else {
             throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCRoom.self), payload: roomPayload)
         }
 
-        var memberUserIdsSet: Set<String>?
+        var memberUserIDsSet: Set<String>?
 
-        if let memberUserIds = roomPayload["member_user_ids"] as? [String] {
-            memberUserIdsSet = Set<String>(memberUserIds)
+        if let memberUserIDs = roomPayload["member_user_ids"] as? [String] {
+            memberUserIDsSet = Set<String>(memberUserIDs)
         }
 
         return PCRoom(
-            id: roomId,
+            id: roomID,
             name: roomName,
             isPrivate: isPrivate,
-            createdByUserId: roomCreatorUserId,
+            createdByUserID: roomCreatorUserID,
             createdAt: roomCreatedAt,
             updatedAt: roomUpdatedAt,
             deletedAt: roomPayload["deleted_at"] as? String,
-            userIds: memberUserIdsSet
+            userIDs: memberUserIDsSet
         )
     }
 
@@ -85,9 +85,9 @@ struct PCPayloadDeserializer {
     // information about its associated sender and the room it belongs to
     static func createBasicMessageFromPayload(_ messagePayload: [String: Any]) throws -> PCBasicMessage {
         guard
-            let messageId = messagePayload["id"] as? Int,
-            let messageSenderId = messagePayload["user_id"] as? String,
-            let messageRoomId = messagePayload["room_id"] as? Int,
+            let messageID = messagePayload["id"] as? Int,
+            let messageSenderID = messagePayload["user_id"] as? String,
+            let messageRoomID = messagePayload["room_id"] as? Int,
             let messageText = messagePayload["text"] as? String,
             let messageCreatedAt = messagePayload["created_at"] as? String,
             let messageUpdatedAt = messagePayload["updated_at"] as? String
@@ -96,9 +96,9 @@ struct PCPayloadDeserializer {
         }
 
         return PCBasicMessage(
-            id: messageId,
-            senderId: messageSenderId,
-            roomId: messageRoomId,
+            id: messageID,
+            senderID: messageSenderID,
+            roomID: messageRoomID,
             text: messageText,
             createdAt: messageCreatedAt,
             updatedAt: messageUpdatedAt,
@@ -171,8 +171,8 @@ struct PCPayloadDeserializer {
             let cursorTypeInt = payload["cursor_type"] as? Int,
             let cursorType = PCCursorType(rawValue: cursorTypeInt),
             let position = payload["position"] as? Int,
-            let userId = payload["user_id"] as? String,
-            let roomId = payload["room_id"] as? Int,
+            let userID = payload["user_id"] as? String,
+            let roomID = payload["room_id"] as? Int,
             let updatedAt = payload["updated_at"] as? String
         else {
             throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCBasicCursor.self), payload: payload)
@@ -181,22 +181,22 @@ struct PCPayloadDeserializer {
         return PCBasicCursor(
             type: cursorType,
             position: position,
-            roomId: roomId,
+            roomID: roomID,
             updatedAt: updatedAt,
-            userId: userId
+            userID: userID
         )
     }
 
     fileprivate static func createBasicUserFromPayload(_ payload: [String: Any]) throws -> PCBasicUser {
         guard
-            let userId = payload["id"] as? String,
+            let userID = payload["id"] as? String,
             let createdAt = payload["created_at"] as? String,
             let updatedAt = payload["updated_at"] as? String
         else {
             throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCUser.self), payload: payload)
         }
 
-        return PCBasicUser(id: userId, createdAt: createdAt, updatedAt: updatedAt)
+        return PCBasicUser(id: userID, createdAt: createdAt, updatedAt: updatedAt)
     }
 }
 

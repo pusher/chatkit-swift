@@ -5,13 +5,13 @@ import PusherPlatform
 class MessagesTests: XCTestCase {
     var aliceChatManager: ChatManager!
     var bobChatManager: ChatManager!
-    var roomId: Int!
+    var roomID: Int!
 
     override func setUp() {
         super.setUp()
 
-        aliceChatManager = newTestChatManager(userId: "alice")
-        bobChatManager = newTestChatManager(userId: "bob")
+        aliceChatManager = newTestChatManager(userID: "alice")
+        bobChatManager = newTestChatManager(userID: "bob")
 
         let deleteResourcesEx = expectation(description: "delete resources")
         let createRolesEx = expectation(description: "create roles")
@@ -45,13 +45,13 @@ class MessagesTests: XCTestCase {
 
             self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
                 XCTAssertNil(err)
-                alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+                alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
                     XCTAssertNil(err)
-                    self.roomId = room!.id
+                    self.roomID = room!.id
                     createRoomEx.fulfill()
 
                     for t in ["hello", "hey", "hi", "ho"] {
-                        alice!.sendMessage(roomId: self.roomId, text: t) { _, err in
+                        alice!.sendMessage(roomID: self.roomID, text: t) { _, err in
                             XCTAssertNil(err)
                         }
                         usleep(200000) // TODO do this properly when we have promises
@@ -70,7 +70,7 @@ class MessagesTests: XCTestCase {
         aliceChatManager = nil
         bobChatManager.disconnect()
         bobChatManager = nil
-        roomId = nil
+        roomID = nil
     }
 
     func testFetchMessages() {
@@ -80,7 +80,7 @@ class MessagesTests: XCTestCase {
             XCTAssertNil(err)
 
             bob!.fetchMessagesFromRoom(
-                bob!.rooms.first(where: { $0.id == self.roomId })!
+                bob!.rooms.first(where: { $0.id == self.roomID })!
             ) { messages, err in
                 XCTAssertNil(err)
 
@@ -91,7 +91,7 @@ class MessagesTests: XCTestCase {
 
                 XCTAssert(messages!.all { $0.sender.id == "alice" })
                 XCTAssert(messages!.all { $0.sender.name == "Alice" })
-                XCTAssert(messages!.all { $0.room.id == self.roomId })
+                XCTAssert(messages!.all { $0.room.id == self.roomID })
                 XCTAssert(messages!.all { $0.room.name == "mushroom" })
 
                 ex.fulfill()
@@ -108,7 +108,7 @@ class MessagesTests: XCTestCase {
             XCTAssertNil(err)
 
             bob!.fetchMessagesFromRoom(
-                bob!.rooms.first(where: { $0.id == self.roomId })!,
+                bob!.rooms.first(where: { $0.id == self.roomID })!,
                 limit: 2
             ) { messages, err in
                 XCTAssertNil(err)
@@ -116,19 +116,19 @@ class MessagesTests: XCTestCase {
                 XCTAssertEqual(messages!.map { $0.text }, ["hi", "ho"])
                 XCTAssert(messages!.all { $0.sender.id == "alice" })
                 XCTAssert(messages!.all { $0.sender.name == "Alice" })
-                XCTAssert(messages!.all { $0.room.id == self.roomId })
+                XCTAssert(messages!.all { $0.room.id == self.roomID })
                 XCTAssert(messages!.all { $0.room.name == "mushroom" })
 
                 bob!.fetchMessagesFromRoom(
-                    bob!.rooms.first(where: { $0.id == self.roomId })!,
-                    initialId: String(messages!.map { $0.id }.min()!)
+                    bob!.rooms.first(where: { $0.id == self.roomID })!,
+                    initialID: String(messages!.map { $0.id }.min()!)
                 ) { messages, err in
                     XCTAssertNil(err)
 
                     XCTAssertEqual(messages!.map { $0.text }, ["hello", "hey"])
                     XCTAssert(messages!.all { $0.sender.id == "alice" })
                     XCTAssert(messages!.all { $0.sender.name == "Alice" })
-                    XCTAssert(messages!.all { $0.room.id == self.roomId })
+                    XCTAssert(messages!.all { $0.room.id == self.roomID })
                     XCTAssert(messages!.all { $0.room.name == "mushroom" })
 
                     ex.fulfill()
@@ -148,7 +148,7 @@ class MessagesTests: XCTestCase {
             XCTAssertEqual(message.text, expectedMessageTexts.removeFirst())
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
-            XCTAssertEqual(message.room.id, self.roomId)
+            XCTAssertEqual(message.room.id, self.roomID)
             XCTAssertEqual(message.room.name, "mushroom")
 
             if expectedMessageTexts.isEmpty {
@@ -160,7 +160,7 @@ class MessagesTests: XCTestCase {
             XCTAssertNil(err)
 
             bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomId })!,
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
                 roomDelegate: bobRoomDelegate,
                 completionHandler: { err in
                     XCTAssertNil(err)
@@ -180,7 +180,7 @@ class MessagesTests: XCTestCase {
             XCTAssertEqual(message.text, expectedMessageTexts.popLast()!)
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
-            XCTAssertEqual(message.room.id, self.roomId)
+            XCTAssertEqual(message.room.id, self.roomID)
             XCTAssertEqual(message.room.name, "mushroom")
 
             if expectedMessageTexts.isEmpty {
@@ -192,7 +192,7 @@ class MessagesTests: XCTestCase {
             XCTAssertNil(err)
 
             bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomId })!,
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
                 roomDelegate: bobRoomDelegate,
                 messageLimit: 2,
                 completionHandler: { err in
@@ -213,7 +213,7 @@ class MessagesTests: XCTestCase {
             XCTAssertEqual(message.text, expectedMessageTexts.popLast()!)
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
-            XCTAssertEqual(message.room.id, self.roomId)
+            XCTAssertEqual(message.room.id, self.roomID)
             XCTAssertEqual(message.room.name, "mushroom")
 
             if expectedMessageTexts.isEmpty {
@@ -225,7 +225,7 @@ class MessagesTests: XCTestCase {
             XCTAssertNil(err)
 
             bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomId })!,
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
                 roomDelegate: bobRoomDelegate,
                 messageLimit: 0,
                 completionHandler: { err in
@@ -234,13 +234,13 @@ class MessagesTests: XCTestCase {
                     self.aliceChatManager.connect(
                         delegate: TestingChatManagerDelegate()
                     ) { alice, err in
-                        alice!.sendMessage(roomId: self.roomId, text: "yo") { _, err in
+                        alice!.sendMessage(roomID: self.roomID, text: "yo") { _, err in
                             XCTAssertNil(err)
                         }
 
                         usleep(200000) // TODO do this properly when we have promises
 
-                        alice!.sendMessage(roomId: self.roomId, text: "yooo") { _, err in
+                        alice!.sendMessage(roomID: self.roomID, text: "yooo") { _, err in
                             XCTAssertNil(err)
                         }
                     }
@@ -260,7 +260,7 @@ class MessagesTests: XCTestCase {
             XCTAssertEqual(message.text, "see attached")
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
-            XCTAssertEqual(message.room.id, self.roomId)
+            XCTAssertEqual(message.room.id, self.roomID)
             XCTAssertEqual(message.room.name, "mushroom")
             XCTAssertEqual(message.attachment!.link, veryImportantImage)
             XCTAssertEqual(message.attachment!.type, "image")
@@ -272,7 +272,7 @@ class MessagesTests: XCTestCase {
             XCTAssertNil(err)
 
             bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomId })!,
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
                 roomDelegate: bobRoomDelegate,
                 messageLimit: 0,
                 completionHandler: { err in
@@ -282,7 +282,7 @@ class MessagesTests: XCTestCase {
                         delegate: TestingChatManagerDelegate()
                     ) { alice, err in
                         alice!.sendMessage(
-                            roomId: self.roomId,
+                            roomID: self.roomID,
                             text: "see attached",
                             attachment: .link(veryImportantImage, type: "image")
                         ) { _, err in
@@ -313,7 +313,7 @@ class MessagesTests: XCTestCase {
 //            XCTAssertEqual(message.text, "see attached")
 //            XCTAssertEqual(message.sender.id, "alice")
 //            XCTAssertEqual(message.sender.name, "Alice")
-//            XCTAssertEqual(message.room.id, self.roomId)
+//            XCTAssertEqual(message.room.id, self.roomID)
 //            XCTAssertEqual(message.room.name, "mushroom")
 //            XCTAssertEqual(message.attachment!.type, "image")
 //            // TODO assert some more stuff about the attachment (and fetch it?)
@@ -325,7 +325,7 @@ class MessagesTests: XCTestCase {
 //            XCTAssertNil(err)
 //
 //            bob!.subscribeToRoom(
-//                room: bob!.rooms.first(where: { $0.id == self.roomId })!,
+//                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
 //                roomDelegate: bobRoomDelegate,
 //                messageLimit: 0,
 //                completionHandler: { err in
@@ -343,7 +343,7 @@ class MessagesTests: XCTestCase {
 //                delegate: TestingChatManagerDelegate()
 //            ) { alice, err in
 //                alice!.sendMessage(
-//                    roomId: self.roomId,
+//                    roomID: self.roomID,
 //                    text: "see attached",
 //                    attachment: .fileURL(
 //                        URL(fileURLWithPath: veryImportantImage),

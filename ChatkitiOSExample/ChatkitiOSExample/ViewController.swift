@@ -70,8 +70,8 @@ class ViewController: UIViewController {
 //                        roomId: currentUser.rooms.last!.id,
 //                        text: "Just a message with an attachment",
 //                        attachment: .fileURL(imageURL, name: "somedog.jpg")
-//    //                    attachment: .link("https://i.giphy.com/RpByGPT5VlZiE.gif", type: "image")
-//                    ) { messageId, err in
+////                        attachment: .link("https://i.giphy.com/RpByGPT5VlZiE.gif", type: "image")
+//                    ) { messageID, err in
 //                        guard err == nil else {
 //                            print("Error sending message \(err!.localizedDescription)")
 //                            return

@@ -10,10 +10,10 @@ public final class PCMessageSubscription {
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
     let typingIndicatorManager: PCTypingIndicatorManager
-    let roomId: Int
+    let roomID: Int
 
     init(
-        roomId: Int,
+        roomID: Int,
         delegate: PCRoomDelegate? = nil,
         chatManagerDelegate: PCChatManagerDelegate? = nil,
         resumableSubscription: PPResumableSubscription,
@@ -23,7 +23,7 @@ public final class PCMessageSubscription {
         roomStore: PCRoomStore,
         typingIndicatorManager: PCTypingIndicatorManager
     ) {
-        self.roomId = roomId
+        self.roomID = roomID
         self.delegate = delegate
         self.chatManagerDelegate = chatManagerDelegate
         self.resumableSubscription = resumableSubscription
@@ -34,7 +34,7 @@ public final class PCMessageSubscription {
         self.typingIndicatorManager = typingIndicatorManager
     }
 
-    func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
+    func handleEvent(eventID _: String, headers _: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
             self.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .error)
             return
@@ -91,7 +91,7 @@ public final class PCMessageSubscription {
     }
 
     func onIsTyping(data: [String: Any]) {
-        guard let userId = data["user_id"] as? String else {
+        guard let userID = data["user_id"] as? String else {
             self.logger.log(
                 "user_id missing or not a string \(data)",
                 logLevel: .error
@@ -99,7 +99,7 @@ public final class PCMessageSubscription {
             return
         }
 
-        roomStore.room(id: roomId) { [weak self] room, err in
+        roomStore.room(id: roomID) { [weak self] room, err in
             guard let strongSelf = self else {
                 print("self is nil when handling is_typing event")
                 return
@@ -110,7 +110,7 @@ public final class PCMessageSubscription {
                 return
             }
 
-            strongSelf.userStore.user(id: userId) { [weak self] user, err in
+            strongSelf.userStore.user(id: userID) { [weak self] user, err in
                 guard let strongSelf = self else {
                     print("self is nil when handling is_typing event")
                     return

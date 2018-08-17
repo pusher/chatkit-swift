@@ -7,8 +7,8 @@ import PusherPlatform
     public let cursorsInstance: Instance
     public let presenceInstance: Instance
 
-    public let userId: String
-    public let pathFriendlyUserId: String
+    public let userID: String
+    public let pathFriendlyUserID: String
 
     let connectionCoordinator: PCConnectionCoordinator
     var currentUser: PCCurrentUser?
@@ -28,7 +28,7 @@ import PusherPlatform
     public init(
         instanceLocator: String,
         tokenProvider: PPTokenProvider,
-        userId: String,
+        userID: String,
         logger: PCLogger = PCDefaultLogger(),
         baseClient: PCBaseClient? = nil
     ) {
@@ -75,12 +75,12 @@ import PusherPlatform
         self.connectionCoordinator = PCConnectionCoordinator(logger: logger)
 
         if let tokenProvider = tokenProvider as? PCTokenProvider {
-            tokenProvider.userId = userId
+            tokenProvider.userID = userID
             tokenProvider.logger = logger
         }
 
-        self.userId = userId
-        self.pathFriendlyUserId = pathFriendlyUserID(userId)
+        self.userID = userID
+        self.pathFriendlyUserID = pathFriendlyUserID(userID)
     }
 
     public func connect(
@@ -89,9 +89,9 @@ import PusherPlatform
     ) {
         disconnect() // clear things up first
 
-        self.basicCurrentUser = PCBasicCurrentUser(
-            id: userId,
-            pathFriendlyId: pathFriendlyUserId,
+        let basicCurrentUser = PCBasicCurrentUser(
+            id: userID,
+            pathFriendlyID: pathFriendlyUserID,
             instance: instance,
             filesInstance: filesInstance,
             cursorsInstance: cursorsInstance,
@@ -132,8 +132,8 @@ import PusherPlatform
                 do {
                     receivedCurrentUser = try PCPayloadDeserializer.createCurrentUserFromPayload(
                         currentUserPayload,
-                        id: self.userId,
-                        pathFriendlyId: self.pathFriendlyUserId,
+                        id: self.userID,
+                        pathFriendlyID: self.pathFriendlyUserID,
                         instance: self.instance,
                         filesInstance: self.filesInstance,
                         cursorsInstance: self.cursorsInstance,
@@ -171,13 +171,13 @@ import PusherPlatform
                     labelSuffix: "roomstore-room-append"
                 )
 
-                var combinedRoomUserIds = Set<String>()
+                var combinedRoomUserIDs = Set<String>()
 
                 roomsPayload.forEach { roomPayload in
                     do {
                         let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
-                        combinedRoomUserIds.formUnion(room.userIds)
+                        combinedRoomUserIDs.formUnion(room.userIDs)
 
                         self.currentUser!.roomStore.addOrMergeSync(room)
                         if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
