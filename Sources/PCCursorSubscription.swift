@@ -3,7 +3,7 @@ import PusherPlatform
 
 public final class PCCursorSubscription {
     // TODO: Do we still need this?
-    weak var delegate: PCRoomDelegate?
+    weak var delegate: PCChatManagerDelegate?
     let resumableSubscription: PPResumableSubscription
     let cursorStore: PCCursorStore
     let connectionCoordinator: PCConnectionCoordinator
@@ -11,7 +11,7 @@ public final class PCCursorSubscription {
     var initialStateHandler: ((Error?) -> Void)?
 
     init(
-        delegate: PCRoomDelegate? = nil,
+        delegate: PCChatManagerDelegate? = nil,
         resumableSubscription: PPResumableSubscription,
         cursorStore: PCCursorStore,
         connectionCoordinator: PCConnectionCoordinator,
@@ -113,7 +113,7 @@ extension PCCursorSubscription {
                 }
 
                 self.logger.log("New cursor: \(cursor.debugDescription)", logLevel: .verbose)
-                self.delegate?.newCursor(cursor: cursor)
+                self.delegate?.newCursor(cursor)
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)

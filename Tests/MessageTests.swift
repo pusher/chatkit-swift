@@ -164,7 +164,7 @@ class MessagesTests: XCTestCase {
 
         var expectedMessageTexts = ["hello", "hey", "hi", "ho"]
 
-        let bobRoomDelegate = TestingRoomDelegate(newMessage: { message in
+        let bobDelegate = TestingChatManagerDelegate(newMessage: { message in
             XCTAssertEqual(message.text, expectedMessageTexts.removeFirst())
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
@@ -176,16 +176,8 @@ class MessagesTests: XCTestCase {
             }
         })
 
-        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+        bobChatManager.connect(delegate: bobDelegate) { bob, err in
             XCTAssertNil(err)
-
-            bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
-                roomDelegate: bobRoomDelegate,
-                completionHandler: { err in
-                    XCTAssertNil(err)
-                }
-            )
         }
 
         waitForExpectations(timeout: 15)
@@ -196,7 +188,7 @@ class MessagesTests: XCTestCase {
 
         var expectedMessageTexts = ["ho", "hi"]
 
-        let bobRoomDelegate = TestingRoomDelegate(newMessage: { message in
+        let bobDelegate = TestingChatManagerDelegate(newMessage: { message in
             XCTAssertEqual(message.text, expectedMessageTexts.popLast()!)
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
@@ -208,17 +200,8 @@ class MessagesTests: XCTestCase {
             }
         })
 
-        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+        bobChatManager.connect(delegate: bobDelegate, messageLimit: 2) { bob, err in
             XCTAssertNil(err)
-
-            bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
-                roomDelegate: bobRoomDelegate,
-                messageLimit: 2,
-                completionHandler: { err in
-                    XCTAssertNil(err)
-                }
-            )
         }
 
         waitForExpectations(timeout: 15)
@@ -229,8 +212,8 @@ class MessagesTests: XCTestCase {
 
         var expectedMessageTexts = ["yooo", "yo"]
 
-        let bobRoomDelegate = TestingRoomDelegate(newMessage: { message in
-            XCTAssertEqual(message.text, expectedMessageTexts.popLast()!)
+        let bobDelegate = TestingChatManagerDelegate(newMessage: { message in
+            XCTAssertEqual(message.text, expectedMessageTexts.removeFirst())
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
             XCTAssertEqual(message.room.id, self.roomID)
@@ -241,28 +224,15 @@ class MessagesTests: XCTestCase {
             }
         })
 
-        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+        bobChatManager.connect(delegate: bobDelegate, messageLimit: 0) { bob, err in
             XCTAssertNil(err)
-
-            bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
-                roomDelegate: bobRoomDelegate,
-                messageLimit: 0,
-                completionHandler: { err in
-                    XCTAssertNil(err)
-
-                    self.aliceChatManager.connect(
-                        delegate: TestingChatManagerDelegate()
-                    ) { alice, err in
-                        let messages = ["yo", "yooo"]
-                        self.sendOrderedMessages(
-                            messages: messages,
-                            from: alice!,
-                            toRoomID: self.roomID
-                        ) {}
-                    }
-                }
-            )
+            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+                self.sendOrderedMessages(
+                    messages: ["yooo", "yo"],
+                    from: alice!,
+                    toRoomID: self.roomID
+                ) {}
+            }
         }
 
         waitForExpectations(timeout: 15)
@@ -273,7 +243,7 @@ class MessagesTests: XCTestCase {
 
         let ex = expectation(description: "subscribe and receive sent messages")
 
-        let bobRoomDelegate = TestingRoomDelegate(newMessage: { message in
+        let bobDelegate = TestingChatManagerDelegate(newMessage: { message in
             XCTAssertEqual(message.text, "see attached")
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
@@ -285,29 +255,20 @@ class MessagesTests: XCTestCase {
             ex.fulfill()
         })
 
-        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+        bobChatManager.connect(delegate: bobDelegate, messageLimit: 0) { bob, err in
             XCTAssertNil(err)
 
-            bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
-                roomDelegate: bobRoomDelegate,
-                messageLimit: 0,
-                completionHandler: { err in
+            self.aliceChatManager.connect(
+                delegate: TestingChatManagerDelegate()
+            ) { alice, err in
+                alice!.sendMessage(
+                    roomID: self.roomID,
+                    text: "see attached",
+                    attachment: .link(veryImportantImage, type: "image")
+                ) { _, err in
                     XCTAssertNil(err)
-
-                    self.aliceChatManager.connect(
-                        delegate: TestingChatManagerDelegate()
-                    ) { alice, err in
-                        alice!.sendMessage(
-                            roomID: self.roomID,
-                            text: "see attached",
-                            attachment: .link(veryImportantImage, type: "image")
-                        ) { _, err in
-                            XCTAssertNil(err)
-                        }
-                    }
                 }
-            )
+            }
         }
 
         waitForExpectations(timeout: 15)
@@ -326,7 +287,7 @@ class MessagesTests: XCTestCase {
 //
 //        let ex = expectation(description: "subscribe and receive sent messages")
 //
-//        let bobRoomDelegate = TestingRoomDelegate(newMessage: { message in
+//        let bobDelegate = TestingRoomDelegate(newMessage: { message in
 //            XCTAssertEqual(message.text, "see attached")
 //            XCTAssertEqual(message.sender.id, "alice")
 //            XCTAssertEqual(message.sender.name, "Alice")
@@ -338,18 +299,8 @@ class MessagesTests: XCTestCase {
 //            ex.fulfill()
 //        })
 //
-//        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+//        bobChatManager.connect(delegate: bobDelegate) { bob, err in
 //            XCTAssertNil(err)
-//
-//            bob!.subscribeToRoom(
-//                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
-//                roomDelegate: bobRoomDelegate,
-//                messageLimit: 0,
-//                completionHandler: { err in
-//                    XCTAssertNil(err)
-//
-//                }
-//            )
 //
 //            let filesUploadSessionTestConfig = URLSessionConfiguration.ephemeral
 ////            filesUploadSessionTestConfig.identifier = "com.pusher.chatkit.files-upload-test.\(UUID().uuidString)"

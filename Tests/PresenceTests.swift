@@ -60,7 +60,11 @@ class PresenceTests: XCTestCase {
 
             self.charlieChatManager.connect(delegate: TestingChatManagerDelegate()) { charlie, err in
                 XCTAssertNil(err)
-                charlie!.createRoom(name: "mushroom", addUserIDs: [self.uniqueAlice, self.uniqueBob]) { room, err in
+
+                charlie!.createRoom(
+                    name: "mushroom",
+                    addUserIDs: [self.uniqueAlice, self.uniqueBob]
+                ) { room, err in
                     XCTAssertNil(err)
                     self.roomID = room!.id
                     self.charlieChatManager.disconnect()
@@ -105,51 +109,8 @@ class PresenceTests: XCTestCase {
 
         aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
-            alice!.subscribeToRoom(
-                room: alice!.rooms.first(where: { $0.id == self.roomID })!,
-                roomDelegate: TestingRoomDelegate()
-            ) { err in
+            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
                 XCTAssertNil(err)
-                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
-                    XCTAssertNil(err)
-                }
-            }
-        }
-
-        waitForExpectations(timeout: 15)
-    }
-
-    func testRoomDelegatePresenceHooks() {
-        let initialPresenceEx = expectation(description: "notified of Alice initially being offline (room)")
-        let onlineEx = expectation(description: "notified of Alice coming online (room)")
-        let offlineEx = expectation(description: "notified of Alice going offline (room)")
-
-        let userPresenceChanged = { (previous: PCPresenceState, current: PCPresenceState, user: PCUser) -> Void in
-            guard user.id != "charlie" else { return }
-            XCTAssertEqual(user.id, self.uniqueAlice)
-
-            if case .unknown = previous, case .offline = current {
-                initialPresenceEx.fulfill()
-            } else if case .offline = previous, case .online = current {
-                onlineEx.fulfill()
-                self.aliceChatManager.disconnect()
-            } else if case .online = previous, case .offline = current {
-                offlineEx.fulfill()
-            }
-        }
-
-        let bobRoomDelegate = TestingRoomDelegate(userPresenceChanged: userPresenceChanged)
-
-        self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
-            XCTAssertNil(err)
-            bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
-                roomDelegate: bobRoomDelegate
-            ) { err in
-                XCTAssertNil(err)
-                self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
-                    XCTAssertNil(err)
-                }
             }
         }
 

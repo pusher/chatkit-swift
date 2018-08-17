@@ -83,6 +83,7 @@ import PusherPlatform
 
     public func connect(
         delegate: PCChatManagerDelegate,
+        messageLimit: Int = 20,
         completionHandler: @escaping (PCCurrentUser?, Error?) -> Void
     ) {
         disconnect() // clear things up first
@@ -141,7 +142,8 @@ import PusherPlatform
                         roomStore: basicCurrentUser.roomStore,
                         cursorStore: basicCurrentUser.cursorStore,
                         connectionCoordinator: strongSelf.connectionCoordinator,
-                        delegate: basicCurrentUser.delegate
+                        delegate: basicCurrentUser.delegate,
+                        messageLimit: messageLimit
                     )
                 } catch let err {
                     strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(
@@ -161,7 +163,11 @@ import PusherPlatform
                 }
 
                 guard roomsPayload.count > 0 else {
-                    strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
+                    strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(
+                        currentUser: strongSelf.currentUser,
+                        error: nil
+                    )
+                    strongSelf.connectionCoordinator.connectionEventCompleted(PCConnectionEvent(error: nil))
                     return
                 }
 
@@ -170,17 +176,17 @@ import PusherPlatform
                     labelSuffix: "roomstore-room-append"
                 )
 
-                var combinedRoomUserIDs = Set<String>()
-
                 roomsPayload.forEach { roomPayload in
                     do {
                         let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-
-                        combinedRoomUserIDs.formUnion(room.userIDs)
-
-                        strongSelf.currentUser!.roomStore.addOrMergeSync(room)
-                        if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
-                            strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
+                        strongSelf.currentUser!.roomStore.addOrMerge(room) { _ in
+                            if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
+                                strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(
+                                    currentUser: strongSelf.currentUser,
+                                    error: nil
+                                )
+                                strongSelf.currentUser!.subscribeToAllRooms()
+                            }
                         }
                     } catch let err {
                         strongSelf.instance.logger.log(
@@ -188,7 +194,11 @@ import PusherPlatform
                             logLevel: .debug
                         )
                         if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
-                            strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
+                            strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(
+                                currentUser: strongSelf.currentUser,
+                                error: nil
+                            )
+                            strongSelf.currentUser!.subscribeToAllRooms()
                         }
                     }
                 }

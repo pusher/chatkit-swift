@@ -4,7 +4,6 @@ import PusherPlatform
 public final class PCUserSubscription {
 
     // TODO: Do we need to be careful of retain cycles here? e.g. weak instance
-
     let instance: Instance
     let filesInstance: Instance
     let cursorsInstance: Instance
@@ -137,45 +136,50 @@ extension PCUserSubscription {
             return
         }
 
+        guard let currentUser = self.currentUser else {
+            self.instance.logger.log("currentUser property not set on PCUserSubscription", logLevel: .error)
+            self.delegate?.error(error: PCError.currentUserIsNil)
+            return
+        }
+
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
+            currentUser.roomStore.addOrMerge(room) { workingRoom in
+                // TODO: Use the soon-to-be-created new version of fetchUsersWithIDs from the
+                // userStore
 
-            self.currentUser?.roomStore.addOrMerge(room) { room in
-                self.delegate?.addedToRoom(room)
-                self.instance.logger.log("Added to room: \(room.name)", logLevel: .verbose)
-            }
+                let roomUsersProgressCounter = PCProgressCounter(
+                    totalCount: workingRoom.userIDs.count,
+                    labelSuffix: "room-users"
+                )
 
-            // TODO: Use the soon-to-be-created new version of fetchUsersWithIDs from the
-            // userStore
-
-            let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIDs.count, labelSuffix: "room-users")
-
-            room.userIDs.forEach { userID in
-                self.userStore.user(id: userID) { [weak self] user, err in
-                    guard let strongSelf = self else {
-                        print("self is nil when user store returns user after parsing added to room event")
-                        return
-                    }
-
-                    guard let user = user, err == nil else {
-                        strongSelf.instance.logger.log(
-                            "Unable to add user with id \(userID) to room \(room.name): \(err!.localizedDescription)",
-                            logLevel: .debug
-                        )
-
-                        if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
-                            room.subscription?.delegate?.usersUpdated()
-                            strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
+                workingRoom.userIDs.forEach { userID in
+                    self.userStore.user(id: userID) { [weak self] user, err in
+                        guard let strongSelf = self else {
+                            print("self is nil when user store returns user after parsing added to room event")
+                            return
                         }
 
-                        return
-                    }
+                        guard let user = user, err == nil else {
+                            strongSelf.instance.logger.log(
+                                "Unable to add user with id \(userID) to room \(workingRoom.name): \(err!.localizedDescription)",
+                                logLevel: .debug
+                            )
 
-                    room.userStore.addOrMerge(user)
+                            if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
+                                strongSelf.delegate?.addedToRoom(workingRoom)
+                                strongSelf.instance.logger.log("Added to room: \(workingRoom.name)", logLevel: .verbose)
+                            }
 
-                    if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
-                        room.subscription?.delegate?.usersUpdated()
-                        strongSelf.instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
+                            return
+                        }
+
+                        workingRoom.userStore.addOrMerge(user)
+
+                        if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
+                            strongSelf.delegate?.addedToRoom(workingRoom)
+                            strongSelf.instance.logger.log("Added to room: \(workingRoom.name)", logLevel: .verbose)
+                        }
                     }
                 }
             }

@@ -17,9 +17,9 @@ public final class PCBasicCurrentUser {
     let filesInstance: Instance
     let cursorsInstance: Instance
     let presenceInstance: Instance
-    let delegate: PCChatManagerDelegate
 
     let connectionCoordinator: PCConnectionCoordinator
+    let delegate: PCChatManagerDelegate
 
     public init(
         id: String,

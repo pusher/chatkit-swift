@@ -27,7 +27,8 @@ struct PCPayloadDeserializer {
         roomStore: PCRoomStore,
         cursorStore: PCCursorStore,
         connectionCoordinator: PCConnectionCoordinator,
-        delegate: PCChatManagerDelegate
+        delegate: PCChatManagerDelegate,
+        messageLimit: Int
     ) throws -> PCCurrentUser {
         let basicUser = try createBasicUserFromPayload(userPayload)
 
@@ -47,7 +48,8 @@ struct PCPayloadDeserializer {
             roomStore: roomStore,
             cursorStore: cursorStore,
             connectionCoordinator: connectionCoordinator,
-            delegate: delegate
+            delegate: delegate,
+            messageLimit: messageLimit
         )
     }
 

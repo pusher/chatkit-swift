@@ -35,9 +35,18 @@ class ViewController: UIViewController {
     }
 
     func connectToChatkit() {
-        cmDelegate = MyDelegate()
+        cmDelegate = MyDelegate(
+            currentUser: pusherChatUser,
+            onMessageReceivedHandler: { message in
+                self.messages.append(message)
 
-        delegate.pusherChat?.connect(delegate: cmDelegate) { [weak self] currentUser, error in
+                DispatchQueue.main.async {
+                    self.messagesTableView.reloadData()
+                }
+            }
+        )
+
+        delegate.pusherChat?.connect(delegate: cmDelegate, messageLimit: 1) { [weak self] currentUser, error in
             guard error == nil else {
                 print("Error connecting: \(error!)")
                 return
@@ -50,21 +59,11 @@ class ViewController: UIViewController {
 
             if currentUser.rooms.count != 0 {
                 strongSelf.currentRoom = currentUser.rooms.last!
-                currentUser.subscribeToRoom(
-                    room: strongSelf.currentRoom!,
-                    roomDelegate: strongSelf,
-                    messageLimit: 1
-                ) { err in
-                    guard err == nil else {
-                        print("Error subscribing to room: \(strongSelf.currentRoom!.debugDescription)")
-                        return
-                    }
-
-                    // Uncomment to send a message to the last room in the currentUser.rooms list, if any
-
+//                    Uncomment to send a message to the last room in the currentUser.rooms list, if any
+//
 //                    let imageName = Bundle.main.path(forResource: "somedog", ofType: "jpg")
 //                    let imageURL = URL(fileURLWithPath: imageName!)
-
+//
 //                    print("About to send message")
 //                    currentUser.sendMessage(
 //                        roomId: currentUser.rooms.last!.id,
@@ -77,7 +76,7 @@ class ViewController: UIViewController {
 //                            return
 //                        }
 //                    }
-                }
+//                }
             }
         }
     }
@@ -98,86 +97,15 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: PCRoomDelegate {
-    func usersUpdated() {
-        print("Users updated " + self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
-    }
-
-    public func userJoined(user: PCUser) {
-        print("User \(user.displayName) joined room: \(self.currentRoom!.name)")
-        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: ","))
-    }
-
-    public func userLeft(user: PCUser) {
-        print("User \(user.displayName) left room: \(self.currentRoom!.name)")
-        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: ","))
-    }
-
-    public func userStartedTyping(user: PCUser) {
-        print("\(user.displayName) started typing in room \(self.currentRoom!.name)")
-    }
-
-    public func userStoppedTyping(user: PCUser) {
-        print("\(user.displayName) stopped typing in room \(self.currentRoom!.name)")
-    }
-
-    func userCameOnlineInRoom(user: PCUser) {
-        print("\(user.displayName) came online")
-        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
-    }
-
-    func userWentOfflineInRoom(user: PCUser) {
-        print("\(user.displayName) went offline")
-        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
-    }
-
-    func newCursor(cursor: PCCursor) {
-        print("New cursor for \(cursor.user.displayName) at position \(cursor.position)")
-    }
-
-    func newMessage(message: PCMessage) {
-        print("Received message: \(message.debugDescription)")
-
-        self.messages.append(message)
-
-        DispatchQueue.main.async {
-            self.messagesTableView.reloadData()
-        }
-
-        // Uncomment to test fetching message attachments, if present
-        //        if let attachment = message.attachment {
-        //            if attachment.fetchRequired {
-        //                print("Fetch required for attachment")
-        //                pusherChatUser?.fetchAttachment(attachment.link) { fetchedAttachment, err in
-        //                    guard err == nil else {
-        //                        print("Error fetching attachment \(err!.localizedDescription)")
-        //                        return
-        //                    }
-        //
-        //                    print("Fetched attachment link: \(fetchedAttachment!.link)")
-        //
-        //                    self.pusherChatUser?.downloadAttachment(
-        //                        fetchedAttachment!.link,
-        //                        to: PCSuggestedDownloadDestination(options: [.createIntermediateDirectories, .removePreviousFile]),
-        //                        onSuccess: { url in
-        //                            print("Downloaded successfully to \(url.absoluteString)")
-        //                        },
-        //                        onError: { error in
-        //                            print("Failed to download \(error.localizedDescription)")
-        //                        },
-        //                        progressHandler: { bytesReceived, totalBytesToReceive in
-        //                            print("Download progress: \(bytesReceived) / \(totalBytesToReceive)")
-        //                        }
-        //                    )
-        //                }
-        //            } else {
-        //                print("Fetch not required for attachment: \(attachment.link)")
-        //            }
-        //        }
-    }
-}
-
 public class MyDelegate: PCChatManagerDelegate {
+    public weak var cUser: PCCurrentUser?
+    let onMessageReceivedHandler: (PCMessage) -> Void
+
+    public init(currentUser: PCCurrentUser?, onMessageReceivedHandler: @escaping (PCMessage) -> Void) {
+        self.cUser = currentUser
+        self.onMessageReceivedHandler = onMessageReceivedHandler
+    }
+
     public func addedToRoom(_ room: PCRoom) {
         print("Added to room: \(room.name)")
     }
@@ -216,6 +144,47 @@ public class MyDelegate: PCChatManagerDelegate {
 
     public func userStoppedTyping(inRoom room: PCRoom, user: PCUser) {
         print("\(user.displayName) stopped typing in room \(room.name)")
+    }
+
+    public func newMessage(_ message: PCMessage) {
+        print("Room sub received message: \(message.debugDescription)")
+
+        onMessageReceivedHandler(message)
+
+        // Uncomment to test fetching message attachments, if present
+        // if let attachment = message.attachment {
+        //     if attachment.fetchRequired {
+        //         print("Fetch required for attachment")
+        //         cUser!.fetchAttachment(attachment.link) { fetchedAttachment, err in
+        //             guard err == nil else {
+        //                 print("Error fetching attachment \(err!.localizedDescription)")
+        //                 return
+        //             }
+
+        //             print("Fetched attachment link: \(fetchedAttachment!.link)")
+
+        //             self.cUser!.downloadAttachment(
+        //                 fetchedAttachment!.link,
+        //                 to: PCSuggestedDownloadDestination(options: [.createIntermediateDirectories, .removePreviousFile]),
+        //                 onSuccess: { url in
+        //                     print("Downloaded successfully to \(url.absoluteString)")
+        //                 },
+        //                 onError: { error in
+        //                     print("Failed to download \(error.localizedDescription)")
+        //                 },
+        //                 progressHandler: { bytesReceived, totalBytesToReceive in
+        //                     print("Download progress: \(bytesReceived) / \(totalBytesToReceive)")
+        //                 }
+        //             )
+        //         }
+        //     } else {
+        //         print("Fetch not required for attachment: \(attachment.link)")
+        //     }
+        // }
+    }
+
+    public func newCursor(_ cursor: PCCursor) {
+        print("New cursor for \(cursor.user.displayName) at position \(cursor.position)")
     }
 
     public func error(error: Error) {

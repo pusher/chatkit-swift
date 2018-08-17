@@ -15,9 +15,7 @@ final class PCTypingIndicatorManager {
 
     let instance: Instance
 
-    init(
-        instance: Instance
-    ) {
+    init(instance: Instance) {
         self.instance = instance
     }
 
@@ -26,7 +24,6 @@ final class PCTypingIndicatorManager {
         completionHandler: @escaping PCErrorCompletionHandler
     ) {
         let now = Date()
-
         let interval = TYPING_INDICATOR_TTL - TYPING_INDICATOR_LEEWAY
 
         if let seen = lastSentRequests[roomID], now.timeIntervalSince(seen) < interval {
@@ -49,10 +46,8 @@ final class PCTypingIndicatorManager {
     func onIsTyping(
         room: PCRoom,
         user: PCUser,
-        globalStartHook: ((PCRoom, PCUser) -> Void)?,
-        globalStopHook: ((PCRoom, PCUser) -> Void)?,
-        roomStartHook: ((PCUser) -> Void)?,
-        roomStopHook: ((PCUser) -> Void)?
+        startHook: ((PCRoom, PCUser) -> Void)?,
+        stopHook: ((PCRoom, PCUser) -> Void)?
     ) {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else {
@@ -64,16 +59,15 @@ final class PCTypingIndicatorManager {
                 timer.invalidate()
                 strongSelf.timers[UserRoomPair(roomID: room.id, userID: user.id)] = nil
             } else {
-                globalStartHook?(room, user)
-                roomStartHook?(user)
+                startHook?(room, user)
             }
 
             strongSelf.timers[UserRoomPair(roomID: room.id, userID: user.id)] = Timer.scheduledTimer(
                 withTimeInterval: TYPING_INDICATOR_TTL,
                 repeats: false
             ) { _ in
-                globalStopHook?(room, user)
-                roomStopHook?(user)
+                stopHook?(room, user)
+                strongSelf.timers[UserRoomPair(roomID: room.id, userID: user.id)]?.invalidate()
                 strongSelf.timers[UserRoomPair(roomID: room.id, userID: user.id)] = nil
             }
         }

@@ -6,13 +6,14 @@ public protocol PCChatManagerDelegate: AnyObject {
     func roomUpdated(room: PCRoom)
     func roomDeleted(room: PCRoom)
 
-    // These _can_ be implemented as part of the PCUserSubscriptionDelegate, but
-    // the primary usage is intended at the Room level (see PCRoomDelegate)
     func userStartedTyping(inRoom room: PCRoom, user: PCUser)
     func userStoppedTyping(inRoom room: PCRoom, user: PCUser)
     func userJoinedRoom(_ room: PCRoom, user: PCUser)
     func userLeftRoom(_ room: PCRoom, user: PCUser)
     func userPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser)
+
+    func newMessage(_ message: PCMessage)
+    func newCursor(_ cursor: PCCursor)
 
     // TODO: Is this the best way of communicating errors? What errors are
     // communicated using this?
@@ -29,5 +30,7 @@ public extension PCChatManagerDelegate {
     func userJoinedRoom(_ room: PCRoom, user: PCUser) {}
     func userLeftRoom(_ room: PCRoom, user: PCUser) {}
     func userPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {}
+    func newMessage(_ message: PCMessage) {}
+    func newCursor(_ cursor: PCCursor) {}
     func error(error: Error) {}
 }

@@ -10,6 +10,8 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
     let handleAddedToRoom: (PCRoom) -> Void
     let handleRemovedFromRoom: (PCRoom) -> Void
     let handleRoomDeleted: (PCRoom) -> Void
+    let handleNewMessage: (PCMessage) -> Void
+    let handleNewCursor: (PCCursor) -> Void
 
     init(
         userStartedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
@@ -19,7 +21,9 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
         userLeftRoom: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
         addedToRoom: @escaping (PCRoom) -> Void = { _ in },
         removedFromRoom: @escaping (PCRoom) -> Void = { _ in },
-        roomDeleted: @escaping (PCRoom) -> Void = { _ in }
+        roomDeleted: @escaping (PCRoom) -> Void = { _ in },
+        newMessage: @escaping (PCMessage) -> Void = { _ in },
+        newCursor: @escaping (PCCursor) -> Void = { _ in }
     ) {
         handleUserStartedTyping = userStartedTyping
         handleUserStoppedTyping = userStoppedTyping
@@ -29,6 +33,8 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
         handleAddedToRoom = addedToRoom
         handleRemovedFromRoom = removedFromRoom
         handleRoomDeleted = roomDeleted
+        handleNewMessage = newMessage
+        handleNewCursor = newCursor
     }
 
     func userStartedTyping(inRoom room: PCRoom, user: PCUser) -> Void {
@@ -62,60 +68,12 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
     func roomDeleted(room: PCRoom) {
         handleRoomDeleted(room)
     }
-}
 
-class TestingRoomDelegate: NSObject, PCRoomDelegate {
-    let handleNewCursor: (PCCursor) -> Void
-    let handleUserStartedTyping: (PCUser) -> Void
-    let handleUserStoppedTyping: (PCUser) -> Void
-    let handleUserPresenceChanged: (PCPresenceState, PCPresenceState, PCUser) -> Void
-    let handleUserJoined: (PCUser) -> Void
-    let handleUserLeft: (PCUser) -> Void
-    let handleNewMessage: (PCMessage) -> Void
-
-    init(
-        newCursor: @escaping (PCCursor) -> Void = { _ in },
-        userStartedTyping: @escaping (PCUser) -> Void = { _ in },
-        userStoppedTyping: @escaping (PCUser) -> Void = { _ in },
-        userPresenceChanged: @escaping (PCPresenceState, PCPresenceState, PCUser) -> Void = { _, _, _ in },
-        userJoined: @escaping (PCUser) -> Void = { _ in },
-        userLeft: @escaping (PCUser) -> Void = { _ in },
-        newMessage: @escaping (PCMessage) -> Void = { _ in }
-    ) {
-        handleNewCursor = newCursor
-        handleUserStartedTyping = userStartedTyping
-        handleUserStoppedTyping = userStoppedTyping
-        handleUserPresenceChanged = userPresenceChanged
-        handleUserJoined = userJoined
-        handleUserLeft = userLeft
-        handleNewMessage = newMessage
-    }
-
-    func newCursor(cursor: PCCursor) -> Void {
-        handleNewCursor(cursor)
-    }
-
-    func userStartedTyping(user: PCUser) -> Void {
-        handleUserStartedTyping(user)
-    }
-
-    func userStoppedTyping(user: PCUser) -> Void {
-        handleUserStoppedTyping(user)
-    }
-
-    func userPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {
-        handleUserPresenceChanged(previous, current, user)
-    }
-
-    func userJoined(user: PCUser) {
-        handleUserJoined(user)
-    }
-
-    func userLeft(user: PCUser) {
-        handleUserLeft(user)
-    }
-
-    func newMessage(message: PCMessage) {
+    func newMessage(_ message: PCMessage) {
         handleNewMessage(message)
+    }
+
+    func newCursor(_ cursor: PCCursor) {
+        handleNewCursor(cursor)
     }
 }

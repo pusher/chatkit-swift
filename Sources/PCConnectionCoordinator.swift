@@ -115,6 +115,10 @@ public class PCConnectionEvent {
         self.init(type: .cursorSubscriptionInit, result: .cursorSubscriptionInit(cursorSubscription: cursorSubscription, error: error))
     }
 
+    convenience init(error: Error?) {
+        self.init(type: .roomSubscriptionsInit, result: .roomSubscriptionsInit(error: error))
+    }
+
     fileprivate static func userSubscriptionInit() -> PCConnectionEvent {
         return PCConnectionEvent(type: .userSubscriptionInit, result: .userSubscriptionInit(currentUser: nil, error: nil))
     }
@@ -125,6 +129,10 @@ public class PCConnectionEvent {
 
     fileprivate static func cursorSubscriptionInit() -> PCConnectionEvent {
         return PCConnectionEvent(type: .cursorSubscriptionInit, result: .cursorSubscriptionInit(cursorSubscription: nil, error: nil))
+    }
+
+    fileprivate static func roomSubscriptionsInit() -> PCConnectionEvent {
+        return PCConnectionEvent(type: .roomSubscriptionsInit, result: .roomSubscriptionsInit(error: nil))
     }
 }
 
@@ -137,11 +145,13 @@ extension PCConnectionEvent: CustomDebugStringConvertible {
 public let PCUserSubscriptionInitEvent = PCConnectionEvent.userSubscriptionInit()
 public let PCPresenceSubscriptionInitEvent = PCConnectionEvent.presenceSubscriptionInit()
 public let PCCursorSubscriptionInitEvent = PCConnectionEvent.cursorSubscriptionInit()
+public let PCRoomSubscriptionsInitEvent = PCConnectionEvent.roomSubscriptionsInit()
 
 fileprivate let allConnectionEvents: Set<PCConnectionEvent> = [
     PCUserSubscriptionInitEvent,
     PCPresenceSubscriptionInitEvent,
-    PCCursorSubscriptionInitEvent
+    PCCursorSubscriptionInitEvent,
+    PCRoomSubscriptionsInitEvent
 ]
 
 extension PCConnectionEvent: Hashable {
@@ -158,13 +168,14 @@ public enum PCConnectionEventResult {
     case userSubscriptionInit(currentUser: PCCurrentUser?, error: Error?)
     case presenceSubscriptionInit(presenceSubscription: PCPresenceSubscription?, error: Error?)
     case cursorSubscriptionInit(cursorSubscription: PCCursorSubscription?, error: Error?)
+    case roomSubscriptionsInit(error: Error?)
 }
 
 extension PCConnectionEventResult: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
         case .userSubscriptionInit(_, let error), .presenceSubscriptionInit(_, let error),
-             .cursorSubscriptionInit(_, let error):
+             .cursorSubscriptionInit(_, let error), .roomSubscriptionsInit(let error):
             return error == nil ? "success" : "\(error!.localizedDescription)"
         }
     }
@@ -174,6 +185,7 @@ public enum PCConnectionEventType: String {
     case userSubscriptionInit
     case presenceSubscriptionInit
     case cursorSubscriptionInit
+    case roomSubscriptionsInit
 }
 
 extension PCConnectionEventResult: Hashable {
@@ -185,6 +197,8 @@ extension PCConnectionEventResult: Hashable {
             return 1
         case .cursorSubscriptionInit(_, _):
             return 2
+        case .roomSubscriptionsInit(_):
+            return 3
         }
     }
 

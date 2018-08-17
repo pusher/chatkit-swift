@@ -2,20 +2,18 @@ import Foundation
 import PusherPlatform
 
 public final class PCMembershipSubscription {
-    public weak var delegate: PCRoomDelegate?
     let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore
     public let roomStore: PCRoomStore
     public var logger: PPLogger
     var initialStateHandler: (Error?) -> Void
-    weak var chatManagerDelegate: PCChatManagerDelegate?
+    weak var delegate: PCChatManagerDelegate?
 
     let roomID: Int
 
     init(
         roomID: Int,
-        delegate: PCRoomDelegate? = nil,
-        chatManagerDelegate: PCChatManagerDelegate? = nil,
+        delegate: PCChatManagerDelegate? = nil,
         resumableSubscription: PPResumableSubscription,
         userStore: PCGlobalUserStore,
         roomStore: PCRoomStore,
@@ -24,7 +22,6 @@ public final class PCMembershipSubscription {
     ) {
         self.roomID = roomID
         self.delegate = delegate
-        self.chatManagerDelegate = chatManagerDelegate
         self.resumableSubscription = resumableSubscription
         self.userStore = userStore
         self.roomStore = roomStore
@@ -81,7 +78,7 @@ extension PCMembershipSubscription {
     ) {
         guard let userIDs = data["user_ids"] as? [String] else {
             self.logger.log(
-                "user_states key not present in initial_state payload",
+                "user_ids key not present in initial_state payload",
                 logLevel: .error
             )
             return
@@ -162,8 +159,7 @@ extension PCMembershipSubscription {
                 let addedOrMergedUser = room.userStore.addOrMerge(user)
                 room.userIDs.insert(addedOrMergedUser.id)
 
-                strongSelf.delegate?.userJoined(user: addedOrMergedUser)
-                strongSelf.chatManagerDelegate?.userJoinedRoom(room, user: user)
+                strongSelf.delegate?.userJoinedRoom(room, user: user)
                 strongSelf.logger.log("User \(user.displayName) joined room: \(room.name)", logLevel: .verbose)
             }
         }
@@ -217,8 +213,7 @@ extension PCMembershipSubscription {
 
                 room.userStore.remove(id: user.id)
 
-                strongSelf.delegate?.userLeft(user: user)
-                strongSelf.chatManagerDelegate?.userLeftRoom(room, user: user)
+                strongSelf.delegate?.userLeftRoom(room, user: user)
                 strongSelf.logger.log("User \(user.displayName) left room: \(room.name)", logLevel: .verbose)
             }
         }

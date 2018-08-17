@@ -2,20 +2,18 @@ import Foundation
 import PusherPlatform
 
 public final class PCMessageSubscription {
-    public weak var delegate: PCRoomDelegate?
+    let roomID: Int
+    public weak var delegate: PCChatManagerDelegate?
     let resumableSubscription: PPResumableSubscription
     public var logger: PPLogger
     let basicMessageEnricher: PCBasicMessageEnricher
-    weak var chatManagerDelegate: PCChatManagerDelegate?
     let userStore: PCGlobalUserStore
-    let roomStore: PCRoomStore
     let typingIndicatorManager: PCTypingIndicatorManager
-    let roomID: Int
+    let roomStore: PCRoomStore
 
     init(
         roomID: Int,
-        delegate: PCRoomDelegate? = nil,
-        chatManagerDelegate: PCChatManagerDelegate? = nil,
+        delegate: PCChatManagerDelegate? = nil,
         resumableSubscription: PPResumableSubscription,
         logger: PPLogger,
         basicMessageEnricher: PCBasicMessageEnricher,
@@ -25,7 +23,6 @@ public final class PCMessageSubscription {
     ) {
         self.roomID = roomID
         self.delegate = delegate
-        self.chatManagerDelegate = chatManagerDelegate
         self.resumableSubscription = resumableSubscription
         self.logger = logger
         self.basicMessageEnricher = basicMessageEnricher
@@ -80,7 +77,7 @@ public final class PCMessageSubscription {
                     return
                 }
 
-                strongSelf.delegate?.newMessage(message: message)
+                strongSelf.delegate?.newMessage(message)
                 strongSelf.logger.log("Room received new message: \(message.debugDescription)", logLevel: .verbose)
             }
         } catch let err {
@@ -124,10 +121,8 @@ public final class PCMessageSubscription {
                 strongSelf.typingIndicatorManager.onIsTyping(
                     room: room,
                     user: user,
-                    globalStartHook: strongSelf.chatManagerDelegate?.userStartedTyping,
-                    globalStopHook: strongSelf.chatManagerDelegate?.userStoppedTyping,
-                    roomStartHook: strongSelf.delegate?.userStartedTyping,
-                    roomStopHook: strongSelf.delegate?.userStoppedTyping
+                    startHook: strongSelf.delegate?.userStartedTyping,
+                    stopHook: strongSelf.delegate?.userStoppedTyping
                 )
             }
         }
@@ -137,4 +132,3 @@ public final class PCMessageSubscription {
         self.resumableSubscription.end()
     }
 }
-

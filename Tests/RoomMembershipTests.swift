@@ -68,18 +68,13 @@ class RoomMembershipTests: XCTestCase {
             XCTAssertNil(err)
             alice!.createRoom(name: "mushroom") { room, err in
                 XCTAssertNil(err)
-                alice!.subscribeToRoom(
-                    room: room!, roomDelegate: TestingRoomDelegate()
-                ) { err in
+                self.bobChatManager.connect(
+                    delegate: TestingChatManagerDelegate()
+                ) { bob, err in
                     XCTAssertNil(err)
-                    self.bobChatManager.connect(
-                        delegate: TestingChatManagerDelegate()
-                    ) { bob, err in
+                    bob!.joinRoom(id: room!.id) { room, err in
                         XCTAssertNil(err)
-                        bob!.joinRoom(id: room!.id) { room, err in
-                            XCTAssertNil(err)
-                            bobJoinedRoomEx.fulfill()
-                        }
+                        bobJoinedRoomEx.fulfill()
                     }
                 }
             }
@@ -104,18 +99,13 @@ class RoomMembershipTests: XCTestCase {
             XCTAssertNil(err)
             alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
                 XCTAssertNil(err)
-                alice!.subscribeToRoom(
-                    room: room!, roomDelegate: TestingRoomDelegate()
-                ) { err in
+                self.bobChatManager.connect(
+                    delegate: TestingChatManagerDelegate()
+                ) { bob, err in
                     XCTAssertNil(err)
-                    self.bobChatManager.connect(
-                        delegate: TestingChatManagerDelegate()
-                    ) { bob, err in
+                    bob!.leaveRoom(id: room!.id) { err in
                         XCTAssertNil(err)
-                        bob!.leaveRoom(id: room!.id) { err in
-                            XCTAssertNil(err)
-                            bobLeftRoomEx.fulfill()
-                        }
+                        bobLeftRoomEx.fulfill()
                     }
                 }
             }
@@ -285,77 +275,6 @@ class RoomMembershipTests: XCTestCase {
         waitForExpectations(timeout: 15)
     }
 
-    // MARK: Room delegate tests
-
-    func testRoomDelegateUserJoinedRoomHookWhenUserJoins() {
-        let userJoinedHookEx = expectation(description: "user joined hook called")
-        let bobJoinedRoomEx = expectation(description: "bob joined room")
-
-        let userJoined = { (user: PCUser) -> Void in
-            XCTAssertEqual(user.id, "bob")
-            userJoinedHookEx.fulfill()
-        }
-
-        let aliceRoomDelegate = TestingRoomDelegate(userJoined: userJoined)
-
-        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
-            XCTAssertNil(err)
-            alice!.createRoom(name: "mushroom") { room, err in
-                XCTAssertNil(err)
-                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
-                    XCTAssertNil(err)
-                    alice!.subscribeToRoom(
-                        room: alice!.rooms.first(where: { $0.id == room!.id })!,
-                        roomDelegate: aliceRoomDelegate
-                    ) { err in
-                        XCTAssertNil(err)
-
-                        bob!.joinRoom(id: room!.id) { room, err in
-                            XCTAssertNil(err)
-                            bobJoinedRoomEx.fulfill()
-                        }
-                    }
-                }
-            }
-        }
-
-        waitForExpectations(timeout: 15)
-    }
-
-    func testRoomDelegateUserLeftRoomHookWhenUserLeaves() {
-        let userLeftHookEx = expectation(description: "user left hook called")
-        let bobLeftRoomEx = expectation(description: "bob left room")
-
-        let userLeft = { (user: PCUser) -> Void in
-            XCTAssertEqual(user.id, "bob")
-            userLeftHookEx.fulfill()
-        }
-
-        let aliceRoomDelegate = TestingRoomDelegate(userLeft: userLeft)
-
-        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
-            XCTAssertNil(err)
-            alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
-                XCTAssertNil(err)
-                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
-                    XCTAssertNil(err)
-                    alice!.subscribeToRoom(
-                        room: alice!.rooms.first(where: { $0.id == room!.id })!,
-                        roomDelegate: aliceRoomDelegate
-                    ) { err in
-                        XCTAssertNil(err)
-
-                        bob!.leaveRoom(id: room!.id) { err in
-                            XCTAssertNil(err)
-                            bobLeftRoomEx.fulfill()
-                        }
-                    }
-                }
-            }
-        }
-
-        waitForExpectations(timeout: 15)
-    }
 
     // MARK: users property tests
 
@@ -368,21 +287,13 @@ class RoomMembershipTests: XCTestCase {
                 XCTAssertNil(err)
 
                 let roomToTest = alice!.rooms.first(where: { $0.id == room!.id })!
+                let expectedUserIDs = ["alice", "bob"]
+                let sortedUserIDs = roomToTest.users.map { $0.id }.sorted()
 
-                alice!.subscribeToRoom(
-                    room: roomToTest,
-                    roomDelegate: TestingRoomDelegate()
-                ) { err in
-                    XCTAssertNil(err)
-
-                    let expectedUserIDs = ["alice", "bob"]
-                    let sortedUserIDs = roomToTest.users.map { $0.id }.sorted()
-
-                    if sortedUserIDs == expectedUserIDs {
-                        usersSetProperly.fulfill()
-                    } else {
-                        XCTFail("Room's users are not set correctly. They were \(sortedUserIDs)")
-                    }
+                if sortedUserIDs == expectedUserIDs {
+                    usersSetProperly.fulfill()
+                } else {
+                    XCTFail("Room's users are not set correctly. They were \(sortedUserIDs)")
                 }
             }
         }

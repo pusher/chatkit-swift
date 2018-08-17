@@ -4,7 +4,7 @@ import PusherPlatform
 public final class PCCursorStore {
     public let instance: Instance
     let roomStore: PCRoomStore
-    let userStore: PCGlobalUserStore
+    unowned let userStore: PCGlobalUserStore
     let basicCursorEnricher: PCBasicCursorEnricher
 
     public var cursors: [String: PCCursor] = [:]
