@@ -2,12 +2,13 @@ import UIKit
 import PusherChatkit
 
 class ViewController: UIViewController {
+    @IBOutlet weak var messagesTableView: UITableView!
+
     var delegate: AppDelegate!
-
     var cmDelegate: PCChatManagerDelegate!
-
-    public var pusherChatUser: PCCurrentUser?
-    public var currentRoom: PCRoom?
+    var pusherChatUser: PCCurrentUser?
+    var currentRoom: PCRoom?
+    var messages = [PCMessage]()
 
     @IBAction func disconnectButton(_ sender: Any) {
         print("About to disconnect from Chatkit")
@@ -27,7 +28,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        delegate = UIApplication.shared.delegate as! AppDelegate
+        delegate = (UIApplication.shared.delegate as! AppDelegate)
+        messagesTableView.delegate = self
+        messagesTableView.dataSource = self
         connectToChatkit()
     }
 
@@ -47,27 +50,36 @@ class ViewController: UIViewController {
 
             if currentUser.rooms.count != 0 {
                 strongSelf.currentRoom = currentUser.rooms.last!
-                currentUser.subscribeToRoom(room: strongSelf.currentRoom!, roomDelegate: strongSelf, messageLimit: 1)
+                currentUser.subscribeToRoom(
+                    room: strongSelf.currentRoom!,
+                    roomDelegate: strongSelf,
+                    messageLimit: 1
+                ) { err in
+                    guard err == nil else {
+                        print("Error subscribing to room: \(strongSelf.currentRoom!.debugDescription)")
+                        return
+                    }
 
-                // Uncomment to send a message to the last room in the currentUser.rooms list, if any
+                    // Uncomment to send a message to the last room in the currentUser.rooms list, if any
 
-//                let imageName = Bundle.main.path(forResource: "somedog", ofType: "jpg")
-//                let imageURL = URL(fileURLWithPath: imageName!)
+//                    let imageName = Bundle.main.path(forResource: "somedog", ofType: "jpg")
+//                    let imageURL = URL(fileURLWithPath: imageName!)
 //
-//                print("About to send message")
+//                    print("About to send message")
 //
-//                currentUser.sendMessage(
-//                    roomId: currentUser.rooms.last!.id,
-//                    text: "Just a message with an attachment",
-//                    attachmentType: .fileURL(imageURL, name: "cucas.jpg")
-////                    attachmentType: .link("https://i.giphy.com/RpByGPT5VlZiE.gif", type: "image")
-//                ) { messageId, err in
-//                    guard err == nil else {
-//                        print("Error sending message \(err!.localizedDescription)")
-//                        return
+//                    currentUser.sendMessage(
+//                        roomId: currentUser.rooms.last!.id,
+//                        text: "Just a message with an attachment",
+//                        attachmentType: .fileURL(imageURL, name: "cucas.jpg")
+//    //                    attachmentType: .link("https://i.giphy.com/RpByGPT5VlZiE.gif", type: "image")
+//                    ) { messageId, err in
+//                        guard err == nil else {
+//                            print("Error sending message \(err!.localizedDescription)")
+//                            return
+//                        }
+//                        print("Successfully sent message with ID: \(messageId!)")
 //                    }
-//                    print("Successfully sent message with ID: \(messageId!)")
-//                }
+                }
             }
         }
     }
@@ -89,40 +101,6 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: PCRoomDelegate {
-    func newMessage(message: PCMessage) {
-        print("Room sub received message: \(message.debugDescription)")
-
-        if let attachment = message.attachment {
-            if attachment.fetchRequired {
-                print("Fetch required for attachment")
-                pusherChatUser?.fetchAttachment(attachment.link) { fetchedAttachment, err in
-                    guard err == nil else {
-                        print("Error fetching attachment \(err!.localizedDescription)")
-                        return
-                    }
-
-                    print("Fetched attachment link: \(fetchedAttachment!.link)")
-
-                    self.pusherChatUser?.downloadAttachment(
-                        fetchedAttachment!.link,
-                        to: PCSuggestedDownloadDestination(options: [.createIntermediateDirectories, .removePreviousFile]),
-                        onSuccess: { url in
-                            print("Downloaded successfully to \(url.absoluteString)")
-                        },
-                        onError: { error in
-                            print("Failed to download \(error.localizedDescription)")
-                        },
-                        progressHandler: { bytesReceived, totalBytesToReceive in
-                            print("Download progress: \(bytesReceived) / \(totalBytesToReceive)")
-                        }
-                    )
-                }
-            } else {
-                print("Fetch not required for attachment: \(attachment.link)")
-            }
-        }
-    }
-
     func usersUpdated() {
         print("Users updated " + self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
     }
@@ -157,6 +135,47 @@ extension ViewController: PCRoomDelegate {
 
     func newCursor(cursor: PCCursor) {
         print("New cursor for \(cursor.user.displayName) at position \(cursor.position)")
+    }
+
+    func newMessage(message: PCMessage) {
+        print("Received message: \(message.debugDescription)")
+
+        self.messages.append(message)
+
+        DispatchQueue.main.async {
+            self.messagesTableView.reloadData()
+        }
+
+        // Uncomment to test fetching message attachments, if present
+        //        if let attachment = message.attachment {
+        //            if attachment.fetchRequired {
+        //                print("Fetch required for attachment")
+        //                pusherChatUser?.fetchAttachment(attachment.link) { fetchedAttachment, err in
+        //                    guard err == nil else {
+        //                        print("Error fetching attachment \(err!.localizedDescription)")
+        //                        return
+        //                    }
+        //
+        //                    print("Fetched attachment link: \(fetchedAttachment!.link)")
+        //
+        //                    self.pusherChatUser?.downloadAttachment(
+        //                        fetchedAttachment!.link,
+        //                        to: PCSuggestedDownloadDestination(options: [.createIntermediateDirectories, .removePreviousFile]),
+        //                        onSuccess: { url in
+        //                            print("Downloaded successfully to \(url.absoluteString)")
+        //                        },
+        //                        onError: { error in
+        //                            print("Failed to download \(error.localizedDescription)")
+        //                        },
+        //                        progressHandler: { bytesReceived, totalBytesToReceive in
+        //                            print("Download progress: \(bytesReceived) / \(totalBytesToReceive)")
+        //                        }
+        //                    )
+        //                }
+        //            } else {
+        //                print("Fetch not required for attachment: \(attachment.link)")
+        //            }
+        //        }
     }
 }
 
@@ -203,5 +222,22 @@ public class MyDelegate: PCChatManagerDelegate {
 
     public func error(error: Error) {
         print("Error: \(error.localizedDescription)")
+    }
+}
+
+extension ViewController: UITableViewDelegate {}
+
+extension ViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return messages.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MessageCell", for: indexPath)
+        let message = messages.reversed()[indexPath.row]
+        let senderDisplayName = message.sender.displayName
+        let messageText = message.text
+        cell.textLabel?.text = "\(senderDisplayName): \(messageText)"
+        return cell
     }
 }
