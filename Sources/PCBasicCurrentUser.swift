@@ -3,7 +3,7 @@ import PusherPlatform
 
 public final class PCBasicCurrentUser {
     public let id: String
-    public let pathFriendlyId: String
+    public let pathFriendlyID: String
 
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
@@ -23,7 +23,7 @@ public final class PCBasicCurrentUser {
 
     public init(
         id: String,
-        pathFriendlyId: String,
+        pathFriendlyID: String,
         instance: Instance,
         filesInstance: Instance,
         cursorsInstance: Instance,
@@ -32,7 +32,7 @@ public final class PCBasicCurrentUser {
         delegate: PCChatManagerDelegate
     ) {
         self.id = id
-        self.pathFriendlyId = pathFriendlyId
+        self.pathFriendlyID = pathFriendlyID
         self.instance = instance
         self.filesInstance = filesInstance
         self.cursorsInstance = cursorsInstance
@@ -69,8 +69,8 @@ public final class PCBasicCurrentUser {
             resumableSubscription: resumableSub,
             userStore: self.userStore,
             delegate: self.delegate,
-            userId: id,
-            pathFriendlyUserId: pathFriendlyId,
+            userID: id,
+            pathFriendlyUserID: pathFriendlyID,
             connectionCoordinator: connectionCoordinator,
             initialStateHandler: initialStateHandler
         )
@@ -82,7 +82,7 @@ public final class PCBasicCurrentUser {
             with: &resumableSub,
             using: subscribeRequest,
             onEvent: { [unowned userSub] eventID, headers, data in
-                userSub.handleEvent(eventId: eventID, headers: headers, data: data)
+                userSub.handleEvent(eventID: eventID, headers: headers, data: data)
             },
             onEnd: { _, _, _ in },
             onError: { [unowned self] error in
@@ -101,7 +101,7 @@ public final class PCBasicCurrentUser {
             self.presenceSubscription = nil
         }
 
-        let path = "/users/\(self.pathFriendlyId)/register"
+        let path = "/users/\(self.pathFriendlyID)/register"
         let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
 
         var resumableSub = PPResumableSubscription(
@@ -129,7 +129,7 @@ public final class PCBasicCurrentUser {
     }
 
     func establishCursorSubscription() {
-        let userCursorSubscriptionPath = "/cursors/\(PCCursorType.read.rawValue)/users/\(self.pathFriendlyId)"
+        let userCursorSubscriptionPath = "/cursors/\(PCCursorType.read.rawValue)/users/\(self.pathFriendlyID)"
         let cursorSubscriptionRequestOptions = PPRequestOptions(
             method: HTTPMethod.SUBSCRIBE.rawValue,
             path: userCursorSubscriptionPath
@@ -165,7 +165,7 @@ public final class PCBasicCurrentUser {
             with: &cursorResumableSub,
             using: cursorSubscriptionRequestOptions,
             onEvent: { [unowned cursorSub] eventID, headers, data in
-                cursorSub.handleEvent(eventId: eventID, headers: headers, data: data)
+                cursorSub.handleEvent(eventID: eventID, headers: headers, data: data)
             },
             onError: { [unowned self] error in
                 self.connectionCoordinator.connectionEventCompleted(

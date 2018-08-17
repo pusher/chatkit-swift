@@ -5,8 +5,8 @@ let TYPING_INDICATOR_TTL = 1.5
 let TYPING_INDICATOR_LEEWAY = 0.5
 
 struct UserRoomPair: Hashable {
-    let roomId: Int
-    let userId: String
+    let roomID: Int
+    let userID: String
 }
 
 final class PCTypingIndicatorManager {
@@ -22,24 +22,24 @@ final class PCTypingIndicatorManager {
     }
 
     func sendThrottledRequest(
-        roomId: Int,
+        roomID: Int,
         completionHandler: @escaping PCErrorCompletionHandler
     ) {
         let now = Date()
 
         let interval = TYPING_INDICATOR_TTL - TYPING_INDICATOR_LEEWAY
 
-        if let seen = lastSentRequests[roomId], now.timeIntervalSince(seen) < interval {
+        if let seen = lastSentRequests[roomID], now.timeIntervalSince(seen) < interval {
             completionHandler(nil)
             return
         }
 
-        lastSentRequests[roomId] = now
+        lastSentRequests[roomID] = now
 
         instance.requestWithRetry(
             using: PPRequestOptions(
                 method: HTTPMethod.POST.rawValue,
-                path: "/rooms/\(roomId)/typing_indicators"
+                path: "/rooms/\(roomID)/typing_indicators"
             ),
             onSuccess: { _ in completionHandler(nil) },
             onError: completionHandler
@@ -60,21 +60,21 @@ final class PCTypingIndicatorManager {
                 return
             }
 
-            if let timer = strongSelf.timers[UserRoomPair(roomId: room.id, userId: user.id)] {
+            if let timer = strongSelf.timers[UserRoomPair(roomID: room.id, userID: user.id)] {
                 timer.invalidate()
-                strongSelf.timers[UserRoomPair(roomId: room.id, userId: user.id)] = nil
+                strongSelf.timers[UserRoomPair(roomID: room.id, userID: user.id)] = nil
             } else {
                 globalStartHook?(room, user)
                 roomStartHook?(user)
             }
 
-            strongSelf.timers[UserRoomPair(roomId: room.id, userId: user.id)] = Timer.scheduledTimer(
+            strongSelf.timers[UserRoomPair(roomID: room.id, userID: user.id)] = Timer.scheduledTimer(
                 withTimeInterval: TYPING_INDICATOR_TTL,
                 repeats: false
             ) { _ in
                 globalStopHook?(room, user)
                 roomStopHook?(user)
-                strongSelf.timers[UserRoomPair(roomId: room.id, userId: user.id)] = nil
+                strongSelf.timers[UserRoomPair(roomID: room.id, userID: user.id)] = nil
             }
         }
     }

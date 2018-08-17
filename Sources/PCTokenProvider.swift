@@ -4,7 +4,7 @@ import PusherPlatform
 public final class PCTokenProvider: PPTokenProvider {
     public let url: String
     public let requestInjector: ((PCTokenProviderRequest) -> PCTokenProviderRequest)?
-    public var userId: String? = nil
+    public var userID: String? = nil
 
     var fetchingToken: Bool = false
     var queuedTokenRecipients: [(PPTokenProviderResult) -> Void] = []
@@ -17,8 +17,8 @@ public final class PCTokenProvider: PPTokenProvider {
         }
     }
 
-    let userIdRequestInjector = { (req: PCTokenProviderRequest, userId: String) -> PCTokenProviderRequest in
-        req.addQueryItems([URLQueryItem(name: "user_id", value: userId)])
+    let userIDRequestInjector = { (req: PCTokenProviderRequest, userID: String) -> PCTokenProviderRequest in
+        req.addQueryItems([URLQueryItem(name: "user_id", value: userID)])
         return req
     }
 
@@ -26,15 +26,15 @@ public final class PCTokenProvider: PPTokenProvider {
         return PCHTTPTokenProvider(
             url: url,
             requestInjector: { req -> PCTokenProviderRequest in
-                guard let userId = self.userId else {
+                guard let userID = self.userID else {
                     return self.requestInjector != nil ? self.requestInjector!(req) : req
                 }
 
                 if let customRequestInjector = self.requestInjector {
-                    return self.userIdRequestInjector(customRequestInjector(req), userId)
+                    return self.userIDRequestInjector(customRequestInjector(req), userID)
                 }
 
-                return self.userIdRequestInjector(req, userId)
+                return self.userIDRequestInjector(req, userID)
             }
         )
     }()

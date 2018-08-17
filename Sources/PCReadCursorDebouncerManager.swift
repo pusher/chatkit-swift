@@ -1,26 +1,26 @@
 import Foundation
 
 class PCReadCursorDebouncerManager {
-    private var roomIdsToDebouncers: [Int: PCReadCursorDebouncer] = [:]
+    private var roomIDsToDebouncers: [Int: PCReadCursorDebouncer] = [:]
     private weak var currentUser: PCCurrentUser?
 
     init(currentUser: PCCurrentUser) {
         self.currentUser = currentUser
     }
 
-    func set(cursorPosition position: Int, inRoomId roomId: Int, completionHandler: @escaping PCErrorCompletionHandler) {
-        if let debouncer = roomIdsToDebouncers[roomId] {
+    func set(cursorPosition position: Int, inRoomID roomID: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+        if let debouncer = roomIDsToDebouncers[roomID] {
             debouncer.set(position: position, completionHandler: completionHandler)
         } else {
-            let debouncer = PCReadCursorDebouncer(roomId: roomId, currentUser: currentUser)
-            roomIdsToDebouncers[roomId] = debouncer
+            let debouncer = PCReadCursorDebouncer(roomID: roomID, currentUser: currentUser)
+            roomIDsToDebouncers[roomID] = debouncer
             debouncer.set(position: position, completionHandler: completionHandler)
         }
     }
 }
 
 class PCReadCursorDebouncer {
-    private var roomId: Int
+    private var roomID: Int
     private weak var currentUser: PCCurrentUser?
     private var interval: TimeInterval
     private var timer: Timer?
@@ -28,11 +28,11 @@ class PCReadCursorDebouncer {
     private var sendReadCursorPayload: (position: Int, completionHandlers: [PCErrorCompletionHandler])? = nil
 
     init(
-        roomId: Int,
+        roomID: Int,
         currentUser: PCCurrentUser?,
         intervalMilliseconds: Int = PCDefaults.readCursorDebounceIntervalMilliseconds
     ) {
-        self.roomId = roomId
+        self.roomID = roomID
         self.currentUser = currentUser
         self.interval = Double(intervalMilliseconds  / 1000)
     }
@@ -89,7 +89,7 @@ class PCReadCursorDebouncer {
 
         currentUser.sendReadCursor(
             position: payload.position,
-            roomId: roomId,
+            roomID: roomID,
             completionHandler: { error in
                 completionHandlersToCall.forEach { $0(error) }
             }
