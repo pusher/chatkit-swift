@@ -39,8 +39,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `sendMessage` now requires a value for the `text` parameter
 - All `PCMessage`s must have a `text` property
 - `sendMessage` parameter `attachmentType` renamed to `attachment`
-- The ordering of messages returned by `fetchMessagesFromRoom` is now from
-  oldest to newest
+- The ordering of messages returned by `fetchMessagesFromRoom` is now from oldest to newest
 
 ## [0.8.4](https://github.com/pusher/chatkit-swift/compare/0.8.3...0.8.4) - 2018-05-26
 
