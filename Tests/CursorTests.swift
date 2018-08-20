@@ -62,7 +62,7 @@ class CursorTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     override func tearDown() {
@@ -95,7 +95,7 @@ class CursorTests: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 15)
     }
 
     func testNewReadCursorHook() {
@@ -119,7 +119,7 @@ class CursorTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 15)
     }
 
     func testGetAnotherUsersReadCursorBeforeSubscribingFails() {
@@ -140,7 +140,7 @@ class CursorTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 15)
     }
 
     func testGetAnotherUsersReadCursor() {
@@ -165,6 +165,6 @@ class CursorTests: XCTestCase {
         }
 
 
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 15)
     }
 }
