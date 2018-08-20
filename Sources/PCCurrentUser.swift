@@ -853,8 +853,7 @@ public final class PCCurrentUser {
             method: HTTPMethod.SUBSCRIBE.rawValue,
             path: path,
             queryItems: [
-                URLQueryItem(name: "user_id", value: self.id),
-                URLQueryItem(name: "message_limit", value: String(messageLimit)),
+                URLQueryItem(name: "message_limit", value: String(messageLimit))
             ]
         )
 
