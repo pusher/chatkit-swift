@@ -1109,28 +1109,3 @@ public enum PCRoomMessageFetchDirection: String {
 public typealias PCErrorCompletionHandler = (Error?) -> Void
 public typealias PCRoomCompletionHandler = (PCRoom?, Error?) -> Void
 public typealias PCRoomsCompletionHandler = ([PCRoom]?, Error?) -> Void
-
-// Takes an `inner` completion handler of type `PCErrorCompletionHandler`,
-// returns another completion handler of the same type that calls the inner
-// completion handler after being called itself `steps` times. Returns the last
-// error, if any.
-func steppedCompletionHandler(
-    steps: Int,
-    inner: @escaping PCErrorCompletionHandler,
-    dispatchQueue: DispatchQueue
-) -> PCErrorCompletionHandler {
-    var error: Error?
-
-    let group = DispatchGroup()
-
-    for _ in 0..<steps {
-        group.enter()
-    }
-
-    group.notify(queue: dispatchQueue) { inner(error) }
-
-    return { err in
-        error = err
-        group.leave()
-    }
-}
