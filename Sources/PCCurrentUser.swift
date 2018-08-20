@@ -785,11 +785,26 @@ public final class PCCurrentUser {
             logLevel: .verbose
         )
 
-        let completionHandler = steppedCompletionHandler(
-            steps: 2,
-            inner: completionHandler,
-            dispatchQueue: roomSubscriptionQueue
+        let progressCounter = PCProgressCounter(
+            totalCount: 2,
+            labelSuffix: "subscribe-to-room-\(UUID().uuidString)"
         )
+
+        let combinedCompletionHandler = { [logger = self.instance.logger] (err: Error?) in
+            guard err == nil else {
+                logger.log(
+                    "Error when establishing room subscription: \(err!.localizedDescription)",
+                    logLevel: .error
+                )
+                if progressCounter.incrementFailedAndCheckIfFinished() {
+                    completionHandler(err)
+                }
+                return
+            }
+            if progressCounter.incrementSuccessAndCheckIfFinished() {
+                completionHandler(nil)
+            }
+        }
 
         self.joinRoom(roomId: room.id) { innerRoom, err in
             guard let roomToSubscribeTo = innerRoom, err == nil else {
@@ -804,13 +819,18 @@ public final class PCCurrentUser {
                 room: roomToSubscribeTo,
                 delegate: delegate,
                 messageLimit: messageLimit,
-                completionHandler: completionHandler
+                completionHandler: combinedCompletionHandler
             )
             let cursorSub = self.subscribeToRoomCursors(
                 room: roomToSubscribeTo,
                 delegate: delegate,
-                completionHandler: completionHandler
+                completionHandler: combinedCompletionHandler
             )
+
+            if room.subscription != nil {
+                room.subscription!.end()
+                room.subscription = nil
+            }
 
             room.subscription = PCRoomSubscription(
                 messageSubscription: messageSub,
