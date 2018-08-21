@@ -785,11 +785,26 @@ public final class PCCurrentUser {
             logLevel: .verbose
         )
 
-        let completionHandler = steppedCompletionHandler(
-            steps: 2,
-            inner: completionHandler,
-            dispatchQueue: roomSubscriptionQueue
+        let progressCounter = PCProgressCounter(
+            totalCount: 2,
+            labelSuffix: "subscribe-to-room-\(UUID().uuidString)"
         )
+
+        let combinedCompletionHandler = { [logger = self.instance.logger] (err: Error?) in
+            guard err == nil else {
+                logger.log(
+                    "Error when establishing room subscription: \(err!.localizedDescription)",
+                    logLevel: .error
+                )
+                if progressCounter.incrementFailedAndCheckIfFinished() {
+                    completionHandler(err)
+                }
+                return
+            }
+            if progressCounter.incrementSuccessAndCheckIfFinished() {
+                completionHandler(nil)
+            }
+        }
 
         self.joinRoom(roomId: room.id) { innerRoom, err in
             guard let roomToSubscribeTo = innerRoom, err == nil else {
@@ -804,13 +819,18 @@ public final class PCCurrentUser {
                 room: roomToSubscribeTo,
                 delegate: delegate,
                 messageLimit: messageLimit,
-                completionHandler: completionHandler
+                completionHandler: combinedCompletionHandler
             )
             let cursorSub = self.subscribeToRoomCursors(
                 room: roomToSubscribeTo,
                 delegate: delegate,
-                completionHandler: completionHandler
+                completionHandler: combinedCompletionHandler
             )
+
+            if room.subscription != nil {
+                room.subscription!.end()
+                room.subscription = nil
+            }
 
             room.subscription = PCRoomSubscription(
                 messageSubscription: messageSub,
@@ -833,8 +853,7 @@ public final class PCCurrentUser {
             method: HTTPMethod.SUBSCRIBE.rawValue,
             path: path,
             queryItems: [
-                URLQueryItem(name: "user_id", value: self.id),
-                URLQueryItem(name: "message_limit", value: String(messageLimit)),
+                URLQueryItem(name: "message_limit", value: String(messageLimit))
             ]
         )
 
@@ -1090,28 +1109,3 @@ public enum PCRoomMessageFetchDirection: String {
 public typealias PCErrorCompletionHandler = (Error?) -> Void
 public typealias PCRoomCompletionHandler = (PCRoom?, Error?) -> Void
 public typealias PCRoomsCompletionHandler = ([PCRoom]?, Error?) -> Void
-
-// Takes an `inner` completion handler of type `PCErrorCompletionHandler`,
-// returns another completion handler of the same type that calls the inner
-// completion handler after being called itself `steps` times. Returns the last
-// error, if any.
-func steppedCompletionHandler(
-    steps: Int,
-    inner: @escaping PCErrorCompletionHandler,
-    dispatchQueue: DispatchQueue
-) -> PCErrorCompletionHandler {
-    var error: Error?
-
-    let group = DispatchGroup()
-
-    for _ in 0..<steps {
-        group.enter()
-    }
-
-    group.notify(queue: dispatchQueue) { inner(error) }
-
-    return { err in
-        error = err
-        group.leave()
-    }
-}
