@@ -1,8 +1,9 @@
 import Foundation
+import PusherPlatform
 
 public final class PCTypingIndicatorManager {
     private var queue = DispatchQueue(label: "com.pusher.chatkit.typing-indicator-manager")
-    public var typingTimeoutTimer: Timer?
+    var typingTimeoutTimer: PPRepeater?
     public var typingTimeoutInterval: TimeInterval
     public let roomId: Int
     public internal(set) var isTyping: Bool = false
@@ -19,7 +20,7 @@ public final class PCTypingIndicatorManager {
     }
 
     deinit {
-        self.typingTimeoutTimer?.invalidate()
+        self.typingTimeoutTimer = nil
     }
 
     public func typing() {
@@ -29,21 +30,17 @@ public final class PCTypingIndicatorManager {
                 self.signalTypingStarted()
             }
 
-            self.typingTimeoutTimer?.invalidate()
+            self.typingTimeoutTimer = nil
 
-            DispatchQueue.main.async { [weak self] in
+            self.typingTimeoutTimer = PPRepeater.once(
+                after: .seconds(typingTimeoutInterval)
+            ) { [weak self] _ in
                 guard let strongSelf = self else {
                     print("self is nil when about to call stopTyping function")
                     return
                 }
 
-                strongSelf.typingTimeoutTimer = Timer.scheduledTimer(
-                    timeInterval: strongSelf.typingTimeoutInterval,
-                    target: strongSelf,
-                    selector: #selector(strongSelf.stopTyping),
-                    userInfo: nil,
-                    repeats: false
-                )
+                strongSelf.stopTyping()
             }
         }
     }
@@ -51,7 +48,7 @@ public final class PCTypingIndicatorManager {
     @objc public func stopTyping() {
         self.queue.sync {
             self.isTyping = false
-            self.typingTimeoutTimer?.invalidate()
+            self.typingTimeoutTimer = nil
             self.signalTypingStopped()
         }
     }

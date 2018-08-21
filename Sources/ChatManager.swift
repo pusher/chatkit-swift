@@ -32,16 +32,15 @@ import PusherPlatform
     ) {
         let splitInstance = instanceLocator.split(separator: ":")
         let cluster = splitInstance[1]
-        let sharedBaseClient = baseClient ?? PCBaseClient(host: "\(cluster).pusherplatform.io")
-        sharedBaseClient.logger = logger
 
         self.logger = logger
 
         let sdkInfo = PPSDKInfo(productName: "chatkit", sdkVersion: "0.10.0")
+        let sharedBaseClient = baseClient ?? PCBaseClient(host: "\(cluster).pusherplatform.io", sdkInfo: sdkInfo)
+        sharedBaseClient.logger = logger
 
         let sharedInstanceOptions = PCSharedInstanceOptions(
             locator: instanceLocator,
-            sdkInfo: sdkInfo,
             tokenProvider: tokenProvider,
             baseClient: sharedBaseClient,
             logger: logger
@@ -238,9 +237,8 @@ import PusherPlatform
             locator: options.locator,
             serviceName: serviceName,
             serviceVersion: serviceVersion,
-            sdkInfo: options.sdkInfo,
-            tokenProvider: options.tokenProvider,
             client: options.baseClient,
+            tokenProvider: options.tokenProvider,
             logger: options.logger
         )
     }

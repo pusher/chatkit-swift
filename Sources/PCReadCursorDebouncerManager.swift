@@ -1,4 +1,5 @@
 import Foundation
+import PusherPlatform
 
 class PCReadCursorDebouncerManager {
     private var roomIdsToDebouncers: [Int: PCReadCursorDebouncer] = [:]
@@ -23,7 +24,7 @@ class PCReadCursorDebouncer {
     private var roomId: Int
     private weak var currentUser: PCCurrentUser?
     private var interval: TimeInterval
-    private var timer: Timer?
+    private var timer: PPRepeater?
 
     private var sendReadCursorPayload: (position: Int, completionHandlers: [PCErrorCompletionHandler])? = nil
 
@@ -38,7 +39,6 @@ class PCReadCursorDebouncer {
     }
 
     deinit {
-        self.timer?.invalidate()
         self.timer = nil
     }
 
@@ -55,19 +55,15 @@ class PCReadCursorDebouncer {
 
         guard timer == nil else { return }
 
-        DispatchQueue.main.async { [weak self] in
+        self.timer = PPRepeater.once(
+            after: .seconds(interval)
+        ) { [weak self] _ in
             guard let strongSelf = self else {
                 print("self is nil when setting read cursor timer")
                 return
             }
 
-            strongSelf.timer = Timer.scheduledTimer(
-                timeInterval: strongSelf.interval,
-                target: strongSelf,
-                selector: #selector(strongSelf.sendReadCursor),
-                userInfo: nil,
-                repeats: false
-            )
+            strongSelf.sendReadCursor()
         }
     }
 
