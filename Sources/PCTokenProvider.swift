@@ -17,6 +17,8 @@ public final class PCTokenProvider: PPTokenProvider {
         }
     }
 
+    let retryStrategy: PCRetryStrategy
+
     let userIdRequestInjector = { (req: PCTokenProviderRequest, userId: String) -> PCTokenProviderRequest in
         req.addQueryItems([URLQueryItem(name: "user_id", value: userId)])
         return req
@@ -35,13 +37,19 @@ public final class PCTokenProvider: PPTokenProvider {
                 }
 
                 return self.userIdRequestInjector(req, userId)
-            }
+            },
+            retryStrategy: retryStrategy
         )
     }()
 
-    public init(url: String, requestInjector: ((PCTokenProviderRequest) -> PCTokenProviderRequest)? = nil) {
+    public init(
+        url: String,
+        requestInjector: ((PCTokenProviderRequest) -> PCTokenProviderRequest)? = nil,
+        retryStrategy: PCRetryStrategy = PCDefaultRetryStrategy()
+    ) {
         self.url = url
         self.requestInjector = requestInjector
+        self.retryStrategy = retryStrategy
     }
 
     public func fetchToken(completionHandler: @escaping (PPTokenProviderResult) -> Void) {
