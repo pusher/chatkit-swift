@@ -87,6 +87,14 @@ public final class PCBasicCurrentUser {
                 self.connectionCoordinator.connectionEventCompleted(
                     PCConnectionEvent(currentUser: nil, error: error)
                 )
+                // We also need to complete the initial user fetch connection event
+                // otherwise the connection completion handler won't be called. We
+                // use the same error as the user subscription error as it is
+                // essentially still the error that is causing the initial user
+                // fetch to fail
+                self.connectionCoordinator.connectionEventCompleted(
+                    PCConnectionEvent(users: nil, error: error)
+                )
             }
         )
     }
