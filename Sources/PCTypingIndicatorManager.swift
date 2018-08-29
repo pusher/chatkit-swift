@@ -57,16 +57,15 @@ final class PCTypingIndicatorManager {
         roomStartHook: ((PCUser) -> Void)?,
         roomStopHook: ((PCUser) -> Void)?
     ) {
-        // TODO make access to timers thread safe
-
-        if let timer = timers[UserRoomPair(roomId: room.id, userId: user.id)] {
-            timers[UserRoomPair(roomId: room.id, userId: user.id)] = nil
+        // TODO: make access to timers thread safe
+        if let _ = timers[UserRoomPair(roomID: room.id, userID: user.id)] {
+            timers[UserRoomPair(roomID: room.id, userID: user.id)] = nil
         } else {
             globalStartHook?(room, user)
             roomStartHook?(user)
         }
 
-        timers[UserRoomPair(roomId: room.id, userId: user.id)] = PPRepeater.once(
+        timers[UserRoomPair(roomID: room.id, userID: user.id)] = PPRepeater.once(
             after: .seconds(TYPING_INDICATOR_TTL)
         ) { [weak self] _ in
             guard let strongSelf = self else {
