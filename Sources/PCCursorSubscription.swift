@@ -113,7 +113,7 @@ extension PCCursorSubscription {
                 }
 
                 self.logger.log("New cursor: \(cursor.debugDescription)", logLevel: .verbose)
-                self.delegate?.newCursor(cursor: cursor)
+                self.delegate?.onNewCursor(cursor)
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)

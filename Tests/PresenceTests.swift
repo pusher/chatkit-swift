@@ -87,7 +87,7 @@ class PresenceTests: XCTestCase {
         let onlineEx = expectation(description: "notified of Bob coming online (user)")
         let offlineEx = expectation(description: "notified of Bob going offline (user)")
 
-        let userPresenceChanged = { (previous: PCPresenceState, current: PCPresenceState, user: PCUser) -> Void in
+        let onUserPresenceChanged = { (previous: PCPresenceState, current: PCPresenceState, user: PCUser) -> Void in
             guard user.id != "charlie" else { return }
             XCTAssertEqual(user.id, self.uniqueBob)
 
@@ -101,7 +101,7 @@ class PresenceTests: XCTestCase {
             }
         }
 
-        let aliceCMDelegate = TestingChatManagerDelegate(userPresenceChanged: userPresenceChanged)
+        let aliceCMDelegate = TestingChatManagerDelegate(onUserPresenceChanged: onUserPresenceChanged)
 
         aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
@@ -124,7 +124,7 @@ class PresenceTests: XCTestCase {
         let onlineEx = expectation(description: "notified of Alice coming online (room)")
         let offlineEx = expectation(description: "notified of Alice going offline (room)")
 
-        let userPresenceChanged = { (previous: PCPresenceState, current: PCPresenceState, user: PCUser) -> Void in
+        let onUserPresenceChanged = { (previous: PCPresenceState, current: PCPresenceState, user: PCUser) -> Void in
             guard user.id != "charlie" else { return }
             XCTAssertEqual(user.id, self.uniqueAlice)
 
@@ -138,7 +138,7 @@ class PresenceTests: XCTestCase {
             }
         }
 
-        let bobRoomDelegate = TestingRoomDelegate(userPresenceChanged: userPresenceChanged)
+        let bobRoomDelegate = TestingRoomDelegate(onUserPresenceChanged: onUserPresenceChanged)
 
         self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
             XCTAssertNil(err)

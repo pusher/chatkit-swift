@@ -164,7 +164,7 @@ class MessagesTests: XCTestCase {
 
         var expectedMessageTexts = ["hello", "hey", "hi", "ho"]
 
-        let bobRoomDelegate = TestingRoomDelegate(newMessage: { message in
+        let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
             XCTAssertEqual(message.text, expectedMessageTexts.removeFirst())
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
@@ -196,7 +196,7 @@ class MessagesTests: XCTestCase {
 
         var expectedMessageTexts = ["ho", "hi"]
 
-        let bobRoomDelegate = TestingRoomDelegate(newMessage: { message in
+        let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
             XCTAssertEqual(message.text, expectedMessageTexts.popLast()!)
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
@@ -229,7 +229,7 @@ class MessagesTests: XCTestCase {
 
         var expectedMessageTexts = ["yooo", "yo"]
 
-        let bobRoomDelegate = TestingRoomDelegate(newMessage: { message in
+        let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
             XCTAssertEqual(message.text, expectedMessageTexts.popLast()!)
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
@@ -273,7 +273,7 @@ class MessagesTests: XCTestCase {
 
         let ex = expectation(description: "subscribe and receive sent messages")
 
-        let bobRoomDelegate = TestingRoomDelegate(newMessage: { message in
+        let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
             XCTAssertEqual(message.text, "see attached")
             XCTAssertEqual(message.sender.id, "alice")
             XCTAssertEqual(message.sender.name, "Alice")
@@ -326,7 +326,7 @@ class MessagesTests: XCTestCase {
 //
 //        let ex = expectation(description: "subscribe and receive sent messages")
 //
-//        let bobRoomDelegate = TestingRoomDelegate(newMessage: { message in
+//        let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
 //            XCTAssertEqual(message.text, "see attached")
 //            XCTAssertEqual(message.sender.id, "alice")
 //            XCTAssertEqual(message.sender.name, "Alice")

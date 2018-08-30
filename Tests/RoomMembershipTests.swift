@@ -56,13 +56,13 @@ class RoomMembershipTests: XCTestCase {
         let userJoinedRoomHookEx = expectation(description: "user joined room hook called")
         let bobJoinedRoomEx = expectation(description: "bob joined room")
 
-        let userJoinedRoom = { (room: PCRoom, user: PCUser) -> Void in
+        let onUserJoinedRoom = { (room: PCRoom, user: PCUser) -> Void in
             XCTAssertEqual(user.id, "bob")
             XCTAssertEqual(room.name, "mushroom")
             userJoinedRoomHookEx.fulfill()
         }
 
-        let aliceCMDelegate = TestingChatManagerDelegate(userJoinedRoom: userJoinedRoom)
+        let aliceCMDelegate = TestingChatManagerDelegate(onUserJoinedRoom: onUserJoinedRoom)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
@@ -92,13 +92,13 @@ class RoomMembershipTests: XCTestCase {
         let userLeftRoomHookEx = expectation(description: "user left room hook called")
         let bobLeftRoomEx = expectation(description: "bob left room")
 
-        let userLeftRoom = { (room: PCRoom, user: PCUser) -> Void in
+        let onUserLeftRoom = { (room: PCRoom, user: PCUser) -> Void in
             XCTAssertEqual(user.id, "bob")
             XCTAssertEqual(room.name, "mushroom")
             userLeftRoomHookEx.fulfill()
         }
 
-        let aliceCMDelegate = TestingChatManagerDelegate(userLeftRoom: userLeftRoom)
+        let aliceCMDelegate = TestingChatManagerDelegate(onUserLeftRoom: onUserLeftRoom)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
@@ -127,12 +127,12 @@ class RoomMembershipTests: XCTestCase {
     func testChatManagerAddedToRoomHookCalledWhenSelfAddedInRoomCreation() {
         let addedToRoomHookEx = expectation(description: "added to room hook called when added as part of room creation")
 
-        let addedToRoom = { (room: PCRoom) -> Void in
+        let onAddedToRoom = { (room: PCRoom) -> Void in
             XCTAssertEqual(room.name, "mushroom")
             addedToRoomHookEx.fulfill()
         }
 
-        let aliceCMDelegate = TestingChatManagerDelegate(addedToRoom: addedToRoom)
+        let aliceCMDelegate = TestingChatManagerDelegate(onAddedToRoom: onAddedToRoom)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
@@ -148,12 +148,12 @@ class RoomMembershipTests: XCTestCase {
         let addedToRoomHookEx = expectation(description: "added to room hook called when added as part of room creation")
         let bobAddAliceEx = expectation(description: "bob added alice to room when creating room")
 
-        let addedToRoom = { (room: PCRoom) -> Void in
+        let onAddedToRoom = { (room: PCRoom) -> Void in
             XCTAssertEqual(room.name, "mushroom")
             addedToRoomHookEx.fulfill()
         }
 
-        let aliceCMDelegate = TestingChatManagerDelegate(addedToRoom: addedToRoom)
+        let aliceCMDelegate = TestingChatManagerDelegate(onAddedToRoom: onAddedToRoom)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
@@ -173,12 +173,12 @@ class RoomMembershipTests: XCTestCase {
         let addedToRoomHookEx = expectation(description: "added to room hook called")
         let bobAddAliceEx = expectation(description: "bob added alice to room")
 
-        let addedToRoom = { (room: PCRoom) -> Void in
+        let onAddedToRoom = { (room: PCRoom) -> Void in
             XCTAssertEqual(room.name, "mushroom")
             addedToRoomHookEx.fulfill()
         }
 
-        let aliceCMDelegate = TestingChatManagerDelegate(addedToRoom: addedToRoom)
+        let aliceCMDelegate = TestingChatManagerDelegate(onAddedToRoom: onAddedToRoom)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
@@ -201,12 +201,12 @@ class RoomMembershipTests: XCTestCase {
         let removedFromRoomHookEx = expectation(description: "removed from room hook called")
         let bobRemoveAliceEx = expectation(description: "bob removed alice from room")
 
-        let removedFromRoom = { (room: PCRoom) -> Void in
+        let onRemovedFromRoom = { (room: PCRoom) -> Void in
             XCTAssertEqual(room.name, "mushroom")
             removedFromRoomHookEx.fulfill()
         }
 
-        let aliceCMDelegate = TestingChatManagerDelegate(removedFromRoom: removedFromRoom)
+        let aliceCMDelegate = TestingChatManagerDelegate(onRemovedFromRoom: onRemovedFromRoom)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
@@ -229,12 +229,12 @@ class RoomMembershipTests: XCTestCase {
         let removedFromRoomHookEx = expectation(description: "removed from room hook called")
         let aliceRemoveSelfEx = expectation(description: "bob removed alice from room")
 
-        let removedFromRoom = { (room: PCRoom) -> Void in
+        let onRemovedFromRoom = { (room: PCRoom) -> Void in
             XCTAssertEqual(room.name, "mushroom")
             removedFromRoomHookEx.fulfill()
         }
 
-        let aliceCMDelegate = TestingChatManagerDelegate(removedFromRoom: removedFromRoom)
+        let aliceCMDelegate = TestingChatManagerDelegate(onRemovedFromRoom: onRemovedFromRoom)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
@@ -256,12 +256,12 @@ class RoomMembershipTests: XCTestCase {
         let roomDeletedHookEx = expectation(description: "room deleted hook called")
         let deleteRoomEx = expectation(description: "room deleted")
 
-        let roomDeleted = { (room: PCRoom) -> Void in
+        let onRoomDeleted = { (room: PCRoom) -> Void in
             XCTAssertEqual(room.name, "mushroom")
             roomDeletedHookEx.fulfill()
         }
 
-        let aliceCMDelegate = TestingChatManagerDelegate(roomDeleted: roomDeleted)
+        let aliceCMDelegate = TestingChatManagerDelegate(onRoomDeleted: onRoomDeleted)
 
         assignGlobalRole("admin", toUser: "alice") { err in
             XCTAssertNil(err)
@@ -291,12 +291,12 @@ class RoomMembershipTests: XCTestCase {
         let userJoinedHookEx = expectation(description: "user joined hook called")
         let bobJoinedRoomEx = expectation(description: "bob joined room")
 
-        let userJoined = { (user: PCUser) -> Void in
+        let onUserJoined = { (user: PCUser) -> Void in
             XCTAssertEqual(user.id, "bob")
             userJoinedHookEx.fulfill()
         }
 
-        let aliceRoomDelegate = TestingRoomDelegate(userJoined: userJoined)
+        let aliceRoomDelegate = TestingRoomDelegate(onUserJoined: onUserJoined)
 
         self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
             XCTAssertNil(err)
@@ -326,12 +326,12 @@ class RoomMembershipTests: XCTestCase {
         let userLeftHookEx = expectation(description: "user left hook called")
         let bobLeftRoomEx = expectation(description: "bob left room")
 
-        let userLeft = { (user: PCUser) -> Void in
+        let onUserLeft = { (user: PCUser) -> Void in
             XCTAssertEqual(user.id, "bob")
             userLeftHookEx.fulfill()
         }
 
-        let aliceRoomDelegate = TestingRoomDelegate(userLeft: userLeft)
+        let aliceRoomDelegate = TestingRoomDelegate(onUserLeft: onUserLeft)
 
         self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
             XCTAssertNil(err)
