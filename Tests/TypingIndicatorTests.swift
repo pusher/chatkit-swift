@@ -69,14 +69,14 @@ class TypingIndicatorTests: XCTestCase {
 
         var started: Date!
 
-        let userStartedTyping = { (room: PCRoom, user: PCUser) -> Void in
+        let onUserStartedTyping = { (room: PCRoom, user: PCUser) -> Void in
             started = Date()
             XCTAssertEqual(room.id, self.roomID)
             XCTAssertEqual(user.id, "bob")
             startedEx.fulfill()
         }
 
-        let userStoppedTyping = { (room: PCRoom, user: PCUser) -> Void in
+        let onUserStoppedTyping = { (room: PCRoom, user: PCUser) -> Void in
             let interval = Date().timeIntervalSince(started)
 
             XCTAssertGreaterThan(interval, 1)
@@ -89,8 +89,8 @@ class TypingIndicatorTests: XCTestCase {
         }
 
         let aliceCMDelegate = TestingChatManagerDelegate(
-            userStartedTyping: userStartedTyping,
-            userStoppedTyping: userStoppedTyping
+            onUserStartedTyping: onUserStartedTyping,
+            onUserStoppedTyping: onUserStoppedTyping
         )
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
@@ -117,13 +117,13 @@ class TypingIndicatorTests: XCTestCase {
 
         var started: Date!
 
-        let userStartedTyping = { (user: PCUser) -> Void in
+        let onUserStartedTyping = { (user: PCUser) -> Void in
             started = Date()
             XCTAssertEqual(user.id, "alice")
             startedEx.fulfill()
         }
 
-        let userStoppedTyping = { (user: PCUser) -> Void in
+        let onUserStoppedTyping = { (user: PCUser) -> Void in
             let interval = Date().timeIntervalSince(started)
 
             XCTAssertGreaterThan(interval, 1)
@@ -135,8 +135,8 @@ class TypingIndicatorTests: XCTestCase {
         }
 
         let bobRoomDelegate = TestingRoomDelegate(
-            userStartedTyping: userStartedTyping,
-            userStoppedTyping: userStoppedTyping
+            onUserStartedTyping: onUserStartedTyping,
+            onUserStoppedTyping: onUserStoppedTyping
         )
 
         self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in

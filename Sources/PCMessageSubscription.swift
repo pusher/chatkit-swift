@@ -80,7 +80,7 @@ public final class PCMessageSubscription {
                     return
                 }
 
-                strongSelf.delegate?.newMessage(message: message)
+                strongSelf.delegate?.onMessage(message)
                 strongSelf.logger.log("Room received new message: \(message.debugDescription)", logLevel: .verbose)
             }
         } catch let err {
@@ -124,10 +124,10 @@ public final class PCMessageSubscription {
                 strongSelf.typingIndicatorManager.onIsTyping(
                     room: room,
                     user: user,
-                    globalStartHook: strongSelf.chatManagerDelegate?.userStartedTyping,
-                    globalStopHook: strongSelf.chatManagerDelegate?.userStoppedTyping,
-                    roomStartHook: strongSelf.delegate?.userStartedTyping,
-                    roomStopHook: strongSelf.delegate?.userStoppedTyping
+                    globalStartHook: strongSelf.chatManagerDelegate?.onUserStartedTyping,
+                    globalStopHook: strongSelf.chatManagerDelegate?.onUserStoppedTyping,
+                    roomStartHook: strongSelf.delegate?.onUserStartedTyping,
+                    roomStopHook: strongSelf.delegate?.onUserStoppedTyping
                 )
             }
         }

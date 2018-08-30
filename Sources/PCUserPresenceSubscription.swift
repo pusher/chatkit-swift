@@ -97,7 +97,7 @@ extension PCUserPresenceSubscription {
                     )
                 }
 
-                strongSelf.delegate?.userPresenceChanged(
+                strongSelf.delegate?.onUserPresenceChanged(
                     previous: previousPresenceState,
                     current: presencePayload.state,
                     user: user
@@ -110,7 +110,7 @@ extension PCUserPresenceSubscription {
                         return
                     }
 
-                    room.subscription?.delegate?.userPresenceChanged(
+                    room.subscription?.delegate?.onUserPresenceChanged(
                         previous: previousPresenceState,
                         current: presencePayload.state,
                         user: user
@@ -119,7 +119,7 @@ extension PCUserPresenceSubscription {
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)
-            self.delegate?.error(error: err)
+            self.delegate?.onError(error: err)
         }
     }
 }
