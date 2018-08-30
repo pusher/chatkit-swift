@@ -70,7 +70,7 @@ class ViewController: UIViewController {
 //                    currentUser.sendMessage(
 //                        roomId: currentUser.rooms.last!.id,
 //                        text: "Just a message with an attachment",
-//                        attachmentType: .fileURL(imageURL, name: "somdog.jpg")
+//                        attachmentType: .fileURL(imageURL, name: "somedog.jpg")
 //    //                    attachmentType: .link("https://i.giphy.com/RpByGPT5VlZiE.gif", type: "image")
 //                    ) { messageId, err in
 //                        guard err == nil else {
