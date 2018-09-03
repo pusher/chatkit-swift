@@ -16,6 +16,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Bump PusherPlatform dependency to 0.6.2
 
+### Changed
+
+#### Breaking
+
+- All `PCChatManagerDelegate` and `PCRoomDelegate` functions are now prefixed with `on`, e.g. `userJoined` has become `onUserJoined`
+- `PCRoomDelegate`'s `newMessage` function has had the `new` prefix removed to make it clearer that it is the function that gets called when a new message is received over the room subscription (including historical messages), so in conjunction with the change above it is now `onMessage`
+- All mentions (mainly relevant to function parameter names) of anything that was previously `Id` is now `ID`, e.g. `roomId` is now `roomID`
+- `sendMessage` parameter `attachmentType` renamed to `attachment`
+- The ordering of messages returned by `fetchMessagesFromRoom` is now from oldest to newest
+- Room members are only populated once you have subscribed to a room
+
+### Removed
+
+- `lastSeenAt` is no longer available on `PCUser` objects
+
 ## [0.10.2](https://github.com/pusher/chatkit-swift/compare/0.10.1...0.10.2) - 2018-08-22
 
 ### Added
@@ -48,8 +63,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - `sendMessage` now requires a value for the `text` parameter
 - All `PCMessage`s must have a `text` property
-- `sendMessage` parameter `attachmentType` renamed to `attachment`
-- The ordering of messages returned by `fetchMessagesFromRoom` is now from oldest to newest
 
 ## [0.8.4](https://github.com/pusher/chatkit-swift/compare/0.8.3...0.8.4) - 2018-05-26
 
