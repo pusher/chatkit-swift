@@ -4,7 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.10.2...HEAD)
+## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.10.3...HEAD)
+
+## [0.10.3](https://github.com/pusher/chatkit-swift/compare/0.10.2...0.10.3) - 2018-09-10
+
+### Fixed
+
+- No longer crashes if disconnect is called midway through a successful connection process
+
+### Changed
+
+- Bump PusherPlatform dependency to 0.6.2
 
 ## [0.10.2](https://github.com/pusher/chatkit-swift/compare/0.10.1...0.10.2) - 2018-08-22
 
