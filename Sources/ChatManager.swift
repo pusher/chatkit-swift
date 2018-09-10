@@ -13,6 +13,8 @@ import PusherPlatform
     let connectionCoordinator: PCConnectionCoordinator
     var currentUser: PCCurrentUser?
 
+    var basicCurrentUser: PCBasicCurrentUser?
+
     var logger: PCLogger {
         didSet {
             connectionCoordinator.logger = logger
@@ -90,7 +92,7 @@ import PusherPlatform
     ) {
         disconnect() // clear things up first
 
-        let basicCurrentUser = PCBasicCurrentUser(
+        self.basicCurrentUser = PCBasicCurrentUser(
             id: userId,
             pathFriendlyId: pathFriendlyUserId,
             instance: instance,
@@ -108,20 +110,24 @@ import PusherPlatform
                 return
             }
 
-            cu.userSubscription = basicCurrentUser.userSubscription
-            basicCurrentUser.userSubscription = nil
-            cu.presenceSubscription = basicCurrentUser.presenceSubscription
-            basicCurrentUser.presenceSubscription = nil
-            cu.cursorSubscription = basicCurrentUser.cursorSubscription
-            basicCurrentUser.cursorSubscription = nil
+            cu.userSubscription = self.basicCurrentUser?.userSubscription
+            self.basicCurrentUser?.userSubscription = nil
+            cu.presenceSubscription = self.basicCurrentUser?.presenceSubscription
+            self.basicCurrentUser?.presenceSubscription = nil
+            cu.cursorSubscription = self.basicCurrentUser?.cursorSubscription
+            self.basicCurrentUser?.cursorSubscription = nil
 
             // TODO: This is madness
             cu.userSubscription?.currentUser = cu
         }
 
-        basicCurrentUser.establishUserSubscription(
+        basicCurrentUser!.establishUserSubscription(
             delegate: delegate,
             initialStateHandler: { [unowned self] currentUserPayloadTuple in
+                guard let basicCurrentUser = self.basicCurrentUser else {
+                    return
+                }
+
                 let (roomsPayload, currentUserPayload) = currentUserPayloadTuple
 
                 let receivedCurrentUser: PCCurrentUser
@@ -206,8 +212,8 @@ import PusherPlatform
             }
         )
 
-        basicCurrentUser.establishPresenceSubscription(delegate: delegate)
-        basicCurrentUser.establishCursorSubscription()
+        basicCurrentUser!.establishPresenceSubscription(delegate: delegate)
+        basicCurrentUser!.establishCursorSubscription()
 
         // TODO: This being here at the end seems necessary but bad
         connectionCoordinator.addConnectionCompletionHandler(completionHandler)
@@ -226,6 +232,7 @@ import PusherPlatform
             room.subscription = nil
         }
         connectionCoordinator.reset()
+        basicCurrentUser = nil
     }
 
     fileprivate static func createInstance(
