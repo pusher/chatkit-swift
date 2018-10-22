@@ -2,14 +2,14 @@ import Foundation
 import PusherPlatform
 
 class PCReadCursorDebouncerManager {
-    private var roomIDsToDebouncers: [Int: PCReadCursorDebouncer] = [:]
+    private var roomIDsToDebouncers: [String: PCReadCursorDebouncer] = [:]
     private weak var currentUser: PCCurrentUser?
 
     init(currentUser: PCCurrentUser) {
         self.currentUser = currentUser
     }
 
-    func set(cursorPosition position: Int, inRoomID roomID: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+    func set(cursorPosition position: Int, inRoomID roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
         if let debouncer = roomIDsToDebouncers[roomID] {
             debouncer.set(position: position, completionHandler: completionHandler)
         } else {
@@ -21,7 +21,7 @@ class PCReadCursorDebouncerManager {
 }
 
 class PCReadCursorDebouncer {
-    private var roomID: Int
+    private var roomID: String
     private weak var currentUser: PCCurrentUser?
     private var interval: TimeInterval
     private var timer: PPRepeater?
@@ -29,7 +29,7 @@ class PCReadCursorDebouncer {
     private var sendReadCursorPayload: (position: Int, completionHandlers: [PCErrorCompletionHandler])? = nil
 
     init(
-        roomID: Int,
+        roomID: String,
         currentUser: PCCurrentUser?,
         intervalMilliseconds: Int = PCDefaults.readCursorDebounceIntervalMilliseconds
     ) {

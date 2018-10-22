@@ -10,10 +10,10 @@ public final class PCMessageSubscription {
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
     let typingIndicatorManager: PCTypingIndicatorManager
-    let roomID: Int
+    let roomID: String
 
     init(
-        roomID: Int,
+        roomID: String,
         delegate: PCRoomDelegate? = nil,
         chatManagerDelegate: PCChatManagerDelegate? = nil,
         resumableSubscription: PPResumableSubscription,

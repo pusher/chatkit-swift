@@ -10,10 +10,10 @@ public final class PCMembershipSubscription {
     var initialStateHandler: (Error?) -> Void
     weak var chatManagerDelegate: PCChatManagerDelegate?
 
-    let roomID: Int
+    let roomID: String
 
     init(
-        roomID: Int,
+        roomID: String,
         delegate: PCRoomDelegate? = nil,
         chatManagerDelegate: PCChatManagerDelegate? = nil,
         resumableSubscription: PPResumableSubscription,

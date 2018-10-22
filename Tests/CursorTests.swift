@@ -7,7 +7,7 @@ class CursorTests: XCTestCase {
     var bobChatManager: ChatManager!
     var alice: PCCurrentUser!
     var bob: PCCurrentUser!
-    var roomID: Int!
+    var roomID: String!
 
     override func setUp() {
         super.setUp()

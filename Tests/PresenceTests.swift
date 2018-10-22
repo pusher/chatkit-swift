@@ -6,7 +6,7 @@ class PresenceTests: XCTestCase {
     var aliceChatManager: ChatManager!
     var bobChatManager: ChatManager!
     var charlieChatManager: ChatManager!
-    var roomID: Int!
+    var roomID: String!
 
     let uniqueAlice = "alice-\(UUID().uuidString)"
     let uniqueBob = "bob-\(UUID().uuidString)"
