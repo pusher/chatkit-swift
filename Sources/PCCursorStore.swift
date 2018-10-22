@@ -20,11 +20,11 @@ public final class PCCursorStore {
         )
     }
 
-    public func get(userID: String, roomID: Int, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
+    public func get(userID: String, roomID: String, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
         self.findOrGetCursor(userID: userID, roomID: roomID, completionHandler: completionHandler)
     }
 
-    public func getSync(userID: String, roomID: Int) -> PCCursor? {
+    public func getSync(userID: String, roomID: String) -> PCCursor? {
         return self.cursors.first(where: { $0.key == key(userID, roomID) })?.value
     }
 
@@ -43,11 +43,11 @@ public final class PCCursorStore {
         }
     }
 
-    fileprivate func set(userID: String, roomID: Int, cursor: PCCursor) {
+    fileprivate func set(userID: String, roomID: String, cursor: PCCursor) {
         self.cursors[key(userID, roomID)] = cursor
     }
 
-    func findOrGetCursor(userID: String, roomID: Int, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
+    func findOrGetCursor(userID: String, roomID: String, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
         if let cursorObj = self.cursors.first(where: { $0.key == key(userID, roomID) }) {
             completionHandler(cursorObj.value, nil)
         } else {
@@ -63,7 +63,7 @@ public final class PCCursorStore {
         }
     }
 
-    func getCursor(userID: String, roomID: Int, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
+    func getCursor(userID: String, roomID: String, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
         let path = "/cursors/\(PCCursorType.read.rawValue)/rooms/\(roomID)/users/\(userID)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
@@ -105,7 +105,7 @@ public final class PCCursorStore {
         )
     }
 
-    fileprivate func key(_ userID: String, _ roomID: Int) -> String {
+    fileprivate func key(_ userID: String, _ roomID: String) -> String {
         return "\(userID)/\(roomID)"
     }
 }

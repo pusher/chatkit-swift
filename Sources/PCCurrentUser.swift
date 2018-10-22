@@ -174,7 +174,7 @@ public final class PCCurrentUser {
         self.addUsers([user], to: room, completionHandler: completionHandler)
     }
 
-    public func addUser(id: String, to roomID: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+    public func addUser(id: String, to roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
         self.addOrRemoveUsers(in: roomID, userIDs: [id], membershipChange: .add, completionHandler: completionHandler)
     }
 
@@ -183,7 +183,7 @@ public final class PCCurrentUser {
         self.addUsers(ids: userIDs, to: room.id, completionHandler: completionHandler)
     }
 
-    public func addUsers(ids: [String], to roomID: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+    public func addUsers(ids: [String], to roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
         self.addOrRemoveUsers(in: roomID, userIDs: ids, membershipChange: .add, completionHandler: completionHandler)
     }
 
@@ -191,7 +191,7 @@ public final class PCCurrentUser {
         self.removeUsers([user], from: room, completionHandler: completionHandler)
     }
 
-    public func removeUser(id: String, from roomID: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+    public func removeUser(id: String, from roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
         self.removeUsers(ids: [id], from: roomID, completionHandler: completionHandler)
     }
 
@@ -200,7 +200,7 @@ public final class PCCurrentUser {
         self.removeUsers(ids: userIDs, from: room.id, completionHandler: completionHandler)
     }
 
-    public func removeUsers(ids: [String], from roomID: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+    public func removeUsers(ids: [String], from roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
         self.addOrRemoveUsers(in: roomID, userIDs: ids, membershipChange: .remove, completionHandler: completionHandler)
     }
 
@@ -225,11 +225,11 @@ public final class PCCurrentUser {
      * - parameter isPrivate: Indicates if a room should be private or public.
      * - parameter completionHandler: Invoked when request failed or completed.
      */
-    public func updateRoom(id: Int, name: String? = nil, isPrivate: Bool? = nil, completionHandler: @escaping PCErrorCompletionHandler) {
+    public func updateRoom(id: String, name: String? = nil, isPrivate: Bool? = nil, completionHandler: @escaping PCErrorCompletionHandler) {
         self.updateRoom(roomID: id, name: name, isPrivate: isPrivate, completionHandler: completionHandler)
     }
 
-    fileprivate func updateRoom(roomID: Int, name: String?, isPrivate: Bool?, completionHandler: @escaping PCErrorCompletionHandler) {
+    fileprivate func updateRoom(roomID: String, name: String?, isPrivate: Bool?, completionHandler: @escaping PCErrorCompletionHandler) {
         guard name != nil || isPrivate != nil else {
             completionHandler(nil)
             return
@@ -280,11 +280,11 @@ public final class PCCurrentUser {
      * - parameter id: The id of the room which should be deleted.
      * - parameter completionHandler: Invoked when request failed or completed.
      */
-    public func deleteRoom(id: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+    public func deleteRoom(id: String, completionHandler: @escaping PCErrorCompletionHandler) {
         self.deleteRoom(roomID: id, completionHandler: completionHandler)
     }
 
-    fileprivate func deleteRoom(roomID: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+    fileprivate func deleteRoom(roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
         let path = "/rooms/\(roomID)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.DELETE.rawValue, path: path)
 
@@ -300,7 +300,7 @@ public final class PCCurrentUser {
     }
 
     fileprivate func addOrRemoveUsers(
-        in roomID: Int,
+        in roomID: String,
         userIDs: [String],
         membershipChange: PCUserMembershipChange,
         completionHandler: @escaping PCErrorCompletionHandler
@@ -340,11 +340,11 @@ public final class PCCurrentUser {
         self.joinRoom(roomID: room.id, completionHandler: completionHandler)
     }
 
-    public func joinRoom(id: Int, completionHandler: @escaping PCRoomCompletionHandler) {
+    public func joinRoom(id: String, completionHandler: @escaping PCRoomCompletionHandler) {
         self.joinRoom(roomID: id, completionHandler: completionHandler)
     }
 
-    fileprivate func joinRoom(roomID: Int, completionHandler: @escaping PCRoomCompletionHandler) {
+    fileprivate func joinRoom(roomID: String, completionHandler: @escaping PCRoomCompletionHandler) {
         if let room = self.rooms.first(where: { $0.id == roomID }) {
             completionHandler(room, nil)
             return
@@ -428,11 +428,11 @@ public final class PCCurrentUser {
         self.leaveRoom(roomID: room.id, completionHandler: completionHandler)
     }
 
-    public func leaveRoom(id roomID: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+    public func leaveRoom(id roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
         self.leaveRoom(roomID: roomID, completionHandler: completionHandler)
     }
 
-    fileprivate func leaveRoom(roomID: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+    fileprivate func leaveRoom(roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
         let path = "/users/\(self.pathFriendlyID)/rooms/\(roomID)/leave"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
 
@@ -496,7 +496,7 @@ public final class PCCurrentUser {
 
     // MARK: Typing-indicator-related interactions
 
-    public func typing(in roomID: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+    public func typing(in roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
         typingIndicatorManager.sendThrottledRequest(
             roomID: roomID,
             completionHandler: completionHandler
@@ -509,7 +509,7 @@ public final class PCCurrentUser {
 
     // MARK: Message-related interactions
 
-    func sendMessage(_ messageObject: [String: Any], roomID: Int, completionHandler: @escaping (Int?, Error?) -> Void) {
+    func sendMessage(_ messageObject: [String: Any], roomID: String, completionHandler: @escaping (Int?, Error?) -> Void) {
         guard JSONSerialization.isValidJSONObject(messageObject) else {
             completionHandler(nil, PCError.invalidJSONObjectAsData(messageObject))
             return
@@ -552,7 +552,7 @@ public final class PCCurrentUser {
     func uploadAttachmentAndSendMessage(
         _ messageObject: [String: Any],
         attachment: PCAttachmentType,
-        roomID: Int,
+        roomID: String,
         completionHandler: @escaping (Int?, Error?) -> Void,
         progressHandler: ((Int64, Int64) -> Void)? = nil
     ) {
@@ -612,7 +612,7 @@ public final class PCCurrentUser {
     }
 
     public func sendMessage(
-        roomID: Int,
+        roomID: String,
         text: String,
         attachment: PCAttachmentType? = nil,
         completionHandler: @escaping (Int?, Error?) -> Void
@@ -711,7 +711,7 @@ public final class PCCurrentUser {
     // of supporting offline or caching, or someone wants to do that themselves, then
     // offering this as a point to hook into would be an optimisation opportunity
     public func subscribeToRoom(
-        id roomID: Int,
+        id roomID: String,
         roomDelegate: PCRoomDelegate,
         messageLimit: Int = 20,
         completionHandler: @escaping PCErrorCompletionHandler
@@ -1040,7 +1040,7 @@ public final class PCCurrentUser {
         )
     }
 
-    public func readCursor(roomID: Int, userID: String? = nil) throws -> PCCursor? {
+    public func readCursor(roomID: String, userID: String? = nil) throws -> PCCursor? {
         guard let room = self.rooms.filter({ $0.id == roomID }).first else {
             throw PCCurrentUserError.mustBeMemberOfRoom
         }
@@ -1054,11 +1054,11 @@ public final class PCCurrentUser {
         return self.cursorStore.getSync(userID: userIDToCheck, roomID: roomID)
     }
 
-    public func setReadCursor(position: Int, roomID: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+    public func setReadCursor(position: Int, roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
         readCursorDebouncerManager.set(cursorPosition: position, inRoomID: roomID, completionHandler: completionHandler)
     }
 
-    func sendReadCursor(position: Int, roomID: Int, completionHandler: @escaping PCErrorCompletionHandler) {
+    func sendReadCursor(position: Int, roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
         let cursorObject = ["position": position]
 
         guard JSONSerialization.isValidJSONObject(cursorObject) else {

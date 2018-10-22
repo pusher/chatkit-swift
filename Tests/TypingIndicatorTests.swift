@@ -5,7 +5,7 @@ import PusherPlatform
 class TypingIndicatorTests: XCTestCase {
     var aliceChatManager: ChatManager!
     var bobChatManager: ChatManager!
-    var roomID: Int!
+    var roomID: String!
 
     override func setUp() {
         super.setUp()

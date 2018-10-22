@@ -186,7 +186,7 @@ extension PCUserSubscription {
     }
 
     fileprivate func parseRemovedFromRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
-        guard let roomID = data["room_id"] as? Int else {
+        guard let roomID = data["room_id"] as? String else {
             self.delegate?.onError(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",
@@ -241,7 +241,7 @@ extension PCUserSubscription {
     }
 
     fileprivate func parseRoomDeletedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
-        guard let roomID = data["room_id"] as? Int else {
+        guard let roomID = data["room_id"] as? String else {
             self.delegate?.onError(
                 error: PCAPIEventError.keyNotPresentInEventPayload(
                     key: "room_id",

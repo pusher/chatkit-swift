@@ -2,7 +2,7 @@ import Foundation
 import PusherPlatform
 
 public final class PCRoom {
-    public let id: Int
+    public let id: String
     public internal(set) var name: String
     public private(set) var isPrivate: Bool
     public let createdByUserID: String
@@ -41,7 +41,7 @@ public final class PCRoom {
     }
 
     public init(
-        id: Int,
+        id: String,
         name: String,
         isPrivate: Bool,
         createdByUserID: String,
@@ -72,7 +72,7 @@ public final class PCRoom {
 
 extension PCRoom: Hashable {
     public var hashValue: Int {
-        return self.id
+        return self.id.hashValue
     }
 
     public static func ==(_ lhs: PCRoom, _ rhs: PCRoom) -> Bool {

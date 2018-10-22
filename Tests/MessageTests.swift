@@ -5,7 +5,7 @@ import PusherPlatform
 class MessagesTests: XCTestCase {
     var aliceChatManager: ChatManager!
     var bobChatManager: ChatManager!
-    var roomID: Int!
+    var roomID: String!
 
     override func setUp() {
         super.setUp()
@@ -66,7 +66,7 @@ class MessagesTests: XCTestCase {
     fileprivate func sendOrderedMessages(
         messages: [String],
         from user: PCCurrentUser,
-        toRoomID roomID: Int,
+        toRoomID roomID: String,
         completionHandler: @escaping () -> Void
     ) {
         guard let message = messages.first else {

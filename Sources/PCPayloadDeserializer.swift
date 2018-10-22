@@ -53,7 +53,7 @@ struct PCPayloadDeserializer {
 
     static func createRoomFromPayload(_ roomPayload: [String: Any]) throws -> PCRoom {
         guard
-            let roomID = roomPayload["id"] as? Int,
+            let roomID = roomPayload["id"] as? String,
             let roomName = roomPayload["name"] as? String,
             let isPrivate = roomPayload["private"] as? Bool,
             let roomCreatorUserID = roomPayload["created_by_id"] as? String,
@@ -87,7 +87,7 @@ struct PCPayloadDeserializer {
         guard
             let messageID = messagePayload["id"] as? Int,
             let messageSenderID = messagePayload["user_id"] as? String,
-            let messageRoomID = messagePayload["room_id"] as? Int,
+            let messageRoomID = messagePayload["room_id"] as? String,
             let messageText = messagePayload["text"] as? String,
             let messageCreatedAt = messagePayload["created_at"] as? String,
             let messageUpdatedAt = messagePayload["updated_at"] as? String
@@ -172,7 +172,7 @@ struct PCPayloadDeserializer {
             let cursorType = PCCursorType(rawValue: cursorTypeInt),
             let position = payload["position"] as? Int,
             let userID = payload["user_id"] as? String,
-            let roomID = payload["room_id"] as? Int,
+            let roomID = payload["room_id"] as? String,
             let updatedAt = payload["updated_at"] as? String
         else {
             throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCBasicCursor.self), payload: payload)

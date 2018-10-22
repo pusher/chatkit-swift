@@ -5,12 +5,12 @@ let TYPING_INDICATOR_TTL = 1.5
 let TYPING_INDICATOR_LEEWAY = 0.5
 
 struct UserRoomPair: Hashable {
-    let roomID: Int
+    let roomID: String
     let userID: String
 }
 
 final class PCTypingIndicatorManager {
-    var lastSentRequests = [Int: Date]()
+    var lastSentRequests = [String: Date]()
     var timers = [UserRoomPair: PPRepeater]()
     let instance: Instance
 
@@ -26,7 +26,7 @@ final class PCTypingIndicatorManager {
     }
 
     func sendThrottledRequest(
-        roomID: Int,
+        roomID: String,
         completionHandler: @escaping PCErrorCompletionHandler
     ) {
         let now = Date()
