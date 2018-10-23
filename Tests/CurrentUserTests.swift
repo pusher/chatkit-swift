@@ -75,7 +75,8 @@ class CurrentUserTests: XCTestCase {
         let cursorsSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .cursors,
-            path: "cursors/0/users/\(userID)"
+            path: "cursors/0/users/\(userID)",
+            version: "v2"
         ).absoluteString
 
         stub(uri(cursorsSubscriptionURL)) { req in

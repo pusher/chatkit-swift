@@ -62,7 +62,7 @@ import PusherPlatform
 
         self.cursorsInstance = ChatManager.createInstance(
             serviceName: "chatkit_cursors",
-            serviceVersion: "v1",
+            serviceVersion: "v2",
             sharedOptions: sharedInstanceOptions
         )
 
