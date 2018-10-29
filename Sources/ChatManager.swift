@@ -89,7 +89,7 @@ import PusherPlatform
     ) {
         disconnect() // clear things up first
 
-        let basicCurrentUser = PCBasicCurrentUser(
+        self.basicCurrentUser = PCBasicCurrentUser(
             id: userID,
             pathFriendlyID: pathFriendlyUserID,
             instance: instance,
@@ -119,7 +119,7 @@ import PusherPlatform
             cu.userSubscription?.currentUser = cu
         }
 
-        basicCurrentUser.establishUserSubscription(
+        basicCurrentUser!.establishUserSubscription(
             initialStateHandler: { [weak self] currentUserPayloadTuple in
                 guard let strongSelf = self else {
                     print("self is nil in initialStateHandler for userSubscription")
@@ -139,11 +139,11 @@ import PusherPlatform
                         filesInstance: strongSelf.filesInstance,
                         cursorsInstance: strongSelf.cursorsInstance,
                         presenceInstance: strongSelf.presenceInstance,
-                        userStore: basicCurrentUser.userStore,
-                        roomStore: basicCurrentUser.roomStore,
-                        cursorStore: basicCurrentUser.cursorStore,
+                        userStore: strongSelf.basicCurrentUser!.userStore,
+                        roomStore: strongSelf.basicCurrentUser!.roomStore,
+                        cursorStore: strongSelf.basicCurrentUser!.cursorStore,
                         connectionCoordinator: strongSelf.connectionCoordinator,
-                        delegate: basicCurrentUser.delegate
+                        delegate: strongSelf.basicCurrentUser!.delegate
                     )
                 } catch let err {
                     strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(
@@ -197,8 +197,8 @@ import PusherPlatform
             }
         )
 
-        basicCurrentUser.establishPresenceSubscription()
-        basicCurrentUser.establishCursorSubscription()
+        basicCurrentUser!.establishPresenceSubscription()
+        basicCurrentUser!.establishCursorSubscription()
 
         // TODO: This being here at the end seems necessary but bad
         connectionCoordinator.addConnectionCompletionHandler(completionHandler)
