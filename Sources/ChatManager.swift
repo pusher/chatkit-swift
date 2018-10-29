@@ -197,8 +197,8 @@ import PusherPlatform
             }
         )
 
-        basicCurrentUser!.establishPresenceSubscription()
-        basicCurrentUser!.establishCursorSubscription()
+        basicCurrentUser.establishPresenceSubscription()
+        basicCurrentUser.establishCursorSubscription()
 
         // TODO: This being here at the end seems necessary but bad
         connectionCoordinator.addConnectionCompletionHandler(completionHandler)
