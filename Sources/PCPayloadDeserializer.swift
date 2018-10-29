@@ -128,31 +128,7 @@ struct PCPayloadDeserializer {
             return nil
         }
 
-        guard let urlComponents = URLComponents(string: link), let queryItems = urlComponents.queryItems else {
-            return PCAttachment(fetchRequired: false, link: link, type: type)
-        }
-
-        let fetchRequired = queryItems.contains(where: { $0.name == "chatkit_link" && $0.value == "true" })
-        return PCAttachment(fetchRequired: fetchRequired, link: link, type: type)
-    }
-
-    static func createFetchedAttachmentFromPayload(_ payload: [String: Any]) throws -> PCFetchedAttachment {
-        guard
-            let link = payload["resource_link"] as? String,
-            let ttl = payload["ttl"] as? Int,
-            let file = payload["file"] as? [String: Any],
-            let bytes = file["bytes"] as? Int,
-            let lastModified = file["last_modified"] as? Int,
-            let name = file["name"] as? String
-        else {
-            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCFetchedAttachment.self), payload: payload)
-        }
-
-        return PCFetchedAttachment(
-            file: PCFetchedAttachmentFile(bytes: bytes, lastModified: lastModified, name: name),
-            link: link,
-            ttl: ttl
-        )
+        return PCAttachment(link: link, type: type)
     }
 
     static func createAttachmentUploadResponseFromPayload(_ payload: [String: Any]) throws -> PCAttachmentUploadResponse {
@@ -160,7 +136,7 @@ struct PCPayloadDeserializer {
             let link = payload["resource_link"] as? String,
             let type = payload["type"] as? String
         else {
-            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCFetchedAttachment.self), payload: payload)
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCAttachmentUploadResponse.self), payload: payload)
         }
 
         return PCAttachmentUploadResponse(link: link, type: type)

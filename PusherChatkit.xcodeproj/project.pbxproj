@@ -51,7 +51,6 @@
 		33BA3013210F4D5C000E0832 /* PCUserPresenceSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BA3012210F4D5C000E0832 /* PCUserPresenceSubscription.swift */; };
 		33BA301521106416000E0832 /* PCSynchronizedDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BA301421106416000E0832 /* PCSynchronizedDictionary.swift */; };
 		33BA563C200E634C00FFC587 /* PCAttachmentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BA563B200E634C00FFC587 /* PCAttachmentType.swift */; };
-		33BA563E200E63DF00FFC587 /* PCFetchedAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BA563D200E63DF00FFC587 /* PCFetchedAttachment.swift */; };
 		33BA5640200E640600FFC587 /* PCAttachmentUploadResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BA563F200E640600FFC587 /* PCAttachmentUploadResponse.swift */; };
 		33BC0810209A1765001DB5F9 /* DefaultsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BC080F209A1765001DB5F9 /* DefaultsTests.swift */; };
 		33C5D8F5202082EB00E826FB /* PCBasicCursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C5D8F4202082EB00E826FB /* PCBasicCursor.swift */; };
@@ -127,7 +126,6 @@
 		33BA3012210F4D5C000E0832 /* PCUserPresenceSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCUserPresenceSubscription.swift; sourceTree = "<group>"; };
 		33BA301421106416000E0832 /* PCSynchronizedDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCSynchronizedDictionary.swift; sourceTree = "<group>"; };
 		33BA563B200E634C00FFC587 /* PCAttachmentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCAttachmentType.swift; sourceTree = "<group>"; };
-		33BA563D200E63DF00FFC587 /* PCFetchedAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCFetchedAttachment.swift; sourceTree = "<group>"; };
 		33BA563F200E640600FFC587 /* PCAttachmentUploadResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCAttachmentUploadResponse.swift; sourceTree = "<group>"; };
 		33BB99671D21226C00B25C2A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		33BC080F209A1765001DB5F9 /* DefaultsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsTests.swift; sourceTree = "<group>"; };
@@ -216,7 +214,6 @@
 				331F9BD81EBC80FA00C3F678 /* PCPayloadDeserializer.swift */,
 				33023E22200CB4A4001937C6 /* PCAttachment.swift */,
 				33BA563B200E634C00FFC587 /* PCAttachmentType.swift */,
-				33BA563D200E63DF00FFC587 /* PCFetchedAttachment.swift */,
 				33BA563F200E640600FFC587 /* PCAttachmentUploadResponse.swift */,
 				33C5D8F4202082EB00E826FB /* PCBasicCursor.swift */,
 				33C5D8FA2020854A00E826FB /* PCCursor.swift */,
@@ -475,7 +472,6 @@
 				3314212F1ED32AE700D0B6DB /* PCProgressCounter.swift in Sources */,
 				33BA3013210F4D5C000E0832 /* PCUserPresenceSubscription.swift in Sources */,
 				335AD8F8205C10AD000D4D08 /* PCMessageSubscription.swift in Sources */,
-				33BA563E200E63DF00FFC587 /* PCFetchedAttachment.swift in Sources */,
 				339CABD31EC3078200FDFB58 /* PCRoomDelegate.swift in Sources */,
 				33C5D8FB2020854A00E826FB /* PCCursor.swift in Sources */,
 				3397D4C21EC2017000DD5994 /* PCSynchronizedArray.swift in Sources */,

@@ -646,32 +646,6 @@ public final class PCCurrentUser {
         }
     }
 
-    public func fetchAttachment(_ link: String, completionHandler: @escaping (PCFetchedAttachment?, Error?) -> Void) {
-        let options = PPRequestOptions(method: HTTPMethod.GET.rawValue, destination: .absolute(link))
-
-        self.filesInstance.request(
-            using: options,
-            onSuccess: { data in
-                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
-                    return
-                }
-
-                guard let attachmentPayload = jsonObject as? [String: Any] else {
-                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
-                    return
-                }
-
-                do {
-                    let fetchedAttachment = try PCPayloadDeserializer.createFetchedAttachmentFromPayload(attachmentPayload)
-                    completionHandler(fetchedAttachment, nil)
-                } catch let err {
-                    completionHandler(nil, err)
-                }
-            }
-        )
-    }
-
     public func downloadAttachment(
         _ link: String,
         to destination: PCDownloadFileDestination? = nil,
