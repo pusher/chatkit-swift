@@ -138,36 +138,23 @@ extension ViewController: PCRoomDelegate {
             self.messagesTableView.reloadData()
         }
 
-        // Uncomment to test fetching message attachments, if present
-        //        if let attachment = message.attachment {
-        //            if attachment.fetchRequired {
-        //                print("Fetch required for attachment")
-        //                pusherChatUser?.fetchAttachment(attachment.link) { fetchedAttachment, err in
-        //                    guard err == nil else {
-        //                        print("Error fetching attachment \(err!.localizedDescription)")
-        //                        return
-        //                    }
-        //
-        //                    print("Fetched attachment link: \(fetchedAttachment!.link)")
-        //
-        //                    self.pusherChatUser?.downloadAttachment(
-        //                        fetchedAttachment!.link,
-        //                        to: PCSuggestedDownloadDestination(options: [.createIntermediateDirectories, .removePreviousFile]),
-        //                        onSuccess: { url in
-        //                            print("Downloaded successfully to \(url.absoluteString)")
-        //                        },
-        //                        onError: { error in
-        //                            print("Failed to download \(error.localizedDescription)")
-        //                        },
-        //                        progressHandler: { bytesReceived, totalBytesToReceive in
-        //                            print("Download progress: \(bytesReceived) / \(totalBytesToReceive)")
-        //                        }
-        //                    )
-        //                }
-        //            } else {
-        //                print("Fetch not required for attachment: \(attachment.link)")
-        //            }
-        //        }
+//        Uncomment to test fetching message attachments, if present
+
+//        if let attachment = message.attachment {
+//            self.pusherChatUser?.downloadAttachment(
+//                attachment.link,
+//                to: PCSuggestedDownloadDestination(options: [.createIntermediateDirectories, .removePreviousFile]),
+//                onSuccess: { url in
+//                    print("Downloaded successfully to \(url.absoluteString)")
+//                },
+//                onError: { error in
+//                    print("Failed to download \(error.localizedDescription)")
+//                },
+//                progressHandler: { bytesReceived, totalBytesToReceive in
+//                    print("Download progress: \(bytesReceived) / \(totalBytesToReceive)")
+//                }
+//            )
+//        }
     }
 }
 
