@@ -1,35 +1,33 @@
 import Foundation
 
 public protocol PCChatManagerDelegate: AnyObject {
-    func addedToRoom(room: PCRoom)
-    func removedFromRoom(room: PCRoom)
-    func roomUpdated(room: PCRoom)
-    func roomDeleted(room: PCRoom)
+    func onAddedToRoom(_ room: PCRoom)
+    func onRemovedFromRoom(_ room: PCRoom)
+    func onRoomUpdated(room: PCRoom)
+    func onRoomDeleted(room: PCRoom)
 
-    // These _can_ be implemented as part of the PCUserSubscriptionDelegate, but
+    // These _can_ be implemented as part of the PCChatManagerDelegate, but
     // the primary usage is intended at the Room level (see PCRoomDelegate)
-    func userStartedTyping(room: PCRoom, user: PCUser)
-    func userStoppedTyping(room: PCRoom, user: PCUser)
-    func userJoinedRoom(room: PCRoom, user: PCUser)
-    func userLeftRoom(room: PCRoom, user: PCUser)
-    func userCameOnline(user: PCUser)
-    func userWentOffline(user: PCUser)
+    func onUserStartedTyping(inRoom room: PCRoom, user: PCUser)
+    func onUserStoppedTyping(inRoom room: PCRoom, user: PCUser)
+    func onUserJoinedRoom(_ room: PCRoom, user: PCUser)
+    func onUserLeftRoom(_ room: PCRoom, user: PCUser)
+    func onUserPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser)
 
     // TODO: Is this the best way of communicating errors? What errors are
     // communicated using this?
-    func error(error: Error)
+    func onError(error: Error)
 }
 
 public extension PCChatManagerDelegate {
-    func addedToRoom(room: PCRoom) {}
-    func removedFromRoom(room: PCRoom) {}
-    func roomUpdated(room: PCRoom) {}
-    func roomDeleted(room: PCRoom) {}
-    func userStartedTyping(room: PCRoom, user: PCUser) {}
-    func userStoppedTyping(room: PCRoom, user: PCUser) {}
-    func userJoinedRoom(room: PCRoom, user: PCUser) {}
-    func userLeftRoom(room: PCRoom, user: PCUser) {}
-    func userCameOnline(user: PCUser) {}
-    func userWentOffline(user: PCUser) {}
-    func error(error: Error) {}
+    func onAddedToRoom(_ room: PCRoom) {}
+    func onRemovedFromRoom(_ room: PCRoom) {}
+    func onRoomUpdated(room: PCRoom) {}
+    func onRoomDeleted(room: PCRoom) {}
+    func onUserStartedTyping(inRoom: PCRoom, user: PCUser) {}
+    func onUserStoppedTyping(inRoom: PCRoom, user: PCUser) {}
+    func onUserJoinedRoom(_ room: PCRoom, user: PCUser) {}
+    func onUserLeftRoom(_ room: PCRoom, user: PCUser) {}
+    func onUserPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {}
+    func onError(error: Error) {}
 }

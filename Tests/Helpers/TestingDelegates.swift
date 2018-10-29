@@ -4,8 +4,7 @@ import PusherChatkit
 class TestingChatManagerDelegate: PCChatManagerDelegate {
     let handleUserStartedTyping: (PCRoom, PCUser) -> Void
     let handleUserStoppedTyping: (PCRoom, PCUser) -> Void
-    let handleUserCameOnline: (PCUser) -> Void
-    let handleUserWentOffline: (PCUser) -> Void
+    let handleUserPresenceChanged: (PCPresenceState, PCPresenceState, PCUser) -> Void
     let handleUserJoinedRoom: (PCRoom, PCUser) -> Void
     let handleUserLeftRoom: (PCRoom, PCUser) -> Void
     let handleAddedToRoom: (PCRoom) -> Void
@@ -13,60 +12,54 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
     let handleRoomDeleted: (PCRoom) -> Void
 
     init(
-        userStartedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
-        userStoppedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
-        userCameOnline: @escaping (PCUser) -> Void = { _ in },
-        userWentOffline: @escaping (PCUser) -> Void = { _ in },
-        userJoinedRoom: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
-        userLeftRoom: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
-        addedToRoom: @escaping (PCRoom) -> Void = { _ in },
-        removedFromRoom: @escaping (PCRoom) -> Void = { _ in },
-        roomDeleted: @escaping (PCRoom) -> Void = { _ in }
+        onUserStartedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
+        onUserStoppedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
+        onUserPresenceChanged: @escaping (PCPresenceState, PCPresenceState, PCUser) -> Void = { _, _, _ in },
+        onUserJoinedRoom: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
+        onUserLeftRoom: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
+        onAddedToRoom: @escaping (PCRoom) -> Void = { _ in },
+        onRemovedFromRoom: @escaping (PCRoom) -> Void = { _ in },
+        onRoomDeleted: @escaping (PCRoom) -> Void = { _ in }
     ) {
-        handleUserStartedTyping = userStartedTyping
-        handleUserStoppedTyping = userStoppedTyping
-        handleUserCameOnline = userCameOnline
-        handleUserWentOffline = userWentOffline
-        handleUserJoinedRoom = userJoinedRoom
-        handleUserLeftRoom = userLeftRoom
-        handleAddedToRoom = addedToRoom
-        handleRemovedFromRoom = removedFromRoom
-        handleRoomDeleted = roomDeleted
+        handleUserStartedTyping = onUserStartedTyping
+        handleUserStoppedTyping = onUserStoppedTyping
+        handleUserPresenceChanged = onUserPresenceChanged
+        handleUserJoinedRoom = onUserJoinedRoom
+        handleUserLeftRoom = onUserLeftRoom
+        handleAddedToRoom = onAddedToRoom
+        handleRemovedFromRoom = onRemovedFromRoom
+        handleRoomDeleted = onRoomDeleted
     }
 
-    func userStartedTyping(room: PCRoom, user: PCUser) -> Void {
+    func onUserStartedTyping(inRoom room: PCRoom, user: PCUser) -> Void {
         handleUserStartedTyping(room, user)
     }
 
-    func userStoppedTyping(room: PCRoom, user: PCUser) -> Void {
+    func onUserStoppedTyping(inRoom room: PCRoom, user: PCUser) -> Void {
         handleUserStoppedTyping(room, user)
     }
 
-    func userCameOnline(user: PCUser) -> Void {
-        handleUserCameOnline(user)
+    func onUserPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {
+        handleUserPresenceChanged(previous, current, user)
     }
 
-    func userWentOffline(user: PCUser) -> Void {
-        handleUserWentOffline(user)
-    }
-
-    func userJoinedRoom(room: PCRoom, user: PCUser) {
+    func onUserJoinedRoom(_ room: PCRoom, user: PCUser) {
         handleUserJoinedRoom(room, user)
     }
 
-    func userLeftRoom(room: PCRoom, user: PCUser) {
+    func onUserLeftRoom(_ room: PCRoom, user: PCUser) {
         handleUserLeftRoom(room, user)
     }
 
-    func addedToRoom(room: PCRoom) {
+    func onAddedToRoom(_ room: PCRoom) {
         handleAddedToRoom(room)
     }
 
-    func removedFromRoom(room: PCRoom) {
+    func onRemovedFromRoom(_ room: PCRoom) {
         handleRemovedFromRoom(room)
     }
 
-    func roomDeleted(room: PCRoom) {
+    func onRoomDeleted(room: PCRoom) {
         handleRoomDeleted(room)
     }
 }
@@ -75,61 +68,54 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
     let handleNewCursor: (PCCursor) -> Void
     let handleUserStartedTyping: (PCUser) -> Void
     let handleUserStoppedTyping: (PCUser) -> Void
-    let handleUserCameOnline: (PCUser) -> Void
-    let handleUserWentOffline: (PCUser) -> Void
+    let handleUserPresenceChanged: (PCPresenceState, PCPresenceState, PCUser) -> Void
     let handleUserJoined: (PCUser) -> Void
     let handleUserLeft: (PCUser) -> Void
     let handleNewMessage: (PCMessage) -> Void
 
     init(
-        newCursor: @escaping (PCCursor) -> Void = { _ in },
-        userStartedTyping: @escaping (PCUser) -> Void = { _ in },
-        userStoppedTyping: @escaping (PCUser) -> Void = { _ in },
-        userCameOnline: @escaping (PCUser) -> Void = { _ in },
-        userWentOffline: @escaping (PCUser) -> Void = { _ in },
-        userJoined: @escaping (PCUser) -> Void = { _ in },
-        userLeft: @escaping (PCUser) -> Void = { _ in },
-        newMessage: @escaping (PCMessage) -> Void = { _ in }
+        onNewCursor: @escaping (PCCursor) -> Void = { _ in },
+        onUserStartedTyping: @escaping (PCUser) -> Void = { _ in },
+        onUserStoppedTyping: @escaping (PCUser) -> Void = { _ in },
+        onUserPresenceChanged: @escaping (PCPresenceState, PCPresenceState, PCUser) -> Void = { _, _, _ in },
+        onUserJoined: @escaping (PCUser) -> Void = { _ in },
+        onUserLeft: @escaping (PCUser) -> Void = { _ in },
+        onMessage: @escaping (PCMessage) -> Void = { _ in }
     ) {
-        handleNewCursor = newCursor
-        handleUserStartedTyping = userStartedTyping
-        handleUserStoppedTyping = userStoppedTyping
-        handleUserCameOnline = userCameOnline
-        handleUserWentOffline = userWentOffline
-        handleUserJoined = userJoined
-        handleUserLeft = userLeft
-        handleNewMessage = newMessage
+        handleNewCursor = onNewCursor
+        handleUserStartedTyping = onUserStartedTyping
+        handleUserStoppedTyping = onUserStoppedTyping
+        handleUserPresenceChanged = onUserPresenceChanged
+        handleUserJoined = onUserJoined
+        handleUserLeft = onUserLeft
+        handleNewMessage = onMessage
     }
 
-    func newCursor(cursor: PCCursor) -> Void {
+    func onNewCursor(_ cursor: PCCursor) -> Void {
         handleNewCursor(cursor)
     }
 
-    func userStartedTyping(user: PCUser) -> Void {
+    func onUserStartedTyping(user: PCUser) -> Void {
         handleUserStartedTyping(user)
     }
 
-    func userStoppedTyping(user: PCUser) -> Void {
+    func onUserStoppedTyping(user: PCUser) -> Void {
         handleUserStoppedTyping(user)
     }
 
-    func userCameOnlineInRoom(user: PCUser) -> Void {
-        handleUserCameOnline(user)
+    func onUserPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {
+        handleUserPresenceChanged(previous, current, user)
     }
 
-    func userWentOfflineInRoom(user: PCUser) -> Void {
-        handleUserWentOffline(user)
-    }
-
-    func userJoined(user: PCUser) {
+    func onUserJoined(user: PCUser) {
         handleUserJoined(user)
     }
 
-    func userLeft(user: PCUser) {
+    func onUserLeft(user: PCUser) {
         handleUserLeft(user)
     }
 
-    func newMessage(message: PCMessage) {
+    func onMessage(_ message: PCMessage) {
         handleNewMessage(message)
     }
 }

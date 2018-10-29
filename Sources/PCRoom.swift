@@ -2,17 +2,17 @@ import Foundation
 import PusherPlatform
 
 public final class PCRoom {
-    public let id: Int
+    public let id: String
     public internal(set) var name: String
     public private(set) var isPrivate: Bool
-    public let createdByUserId: String
+    public let createdByUserID: String
     public let createdAt: String
     public internal(set) var updatedAt: String
     public internal(set) var deletedAt: String?
 
     public internal(set) var subscription: PCRoomSubscription?
 
-    public internal(set) var userIds: Set<String>
+    public internal(set) var userIDs: Set<String>
 
     // TODO: Should each Room instead have access to the user store and then the users
     // property would become a func with a completion handler that queried the user store
@@ -41,23 +41,23 @@ public final class PCRoom {
     }
 
     public init(
-        id: Int,
+        id: String,
         name: String,
         isPrivate: Bool,
-        createdByUserId: String,
+        createdByUserID: String,
         createdAt: String,
         updatedAt: String,
         deletedAt: String? = nil,
-        userIds: Set<String>? = nil
+        userIDs: Set<String>? = nil
     ) {
         self.id = id
         self.name = name
         self.isPrivate = isPrivate
-        self.createdByUserId = createdByUserId
+        self.createdByUserID = createdByUserID
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
-        self.userIds = userIds ?? []
+        self.userIDs = userIDs ?? []
         self.userStore = PCRoomUserStore()
     }
 
@@ -66,13 +66,13 @@ public final class PCRoom {
         self.isPrivate = room.isPrivate
         self.updatedAt = room.updatedAt
         self.deletedAt = room.deletedAt
-        self.userIds = room.userIds
+        self.userIDs = room.userIDs
     }
 }
 
 extension PCRoom: Hashable {
     public var hashValue: Int {
-        return self.id
+        return self.id.hashValue
     }
 
     public static func ==(_ lhs: PCRoom, _ rhs: PCRoom) -> Bool {

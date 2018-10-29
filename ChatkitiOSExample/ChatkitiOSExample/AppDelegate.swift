@@ -7,13 +7,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     public var pusherChat: ChatManager?
 
-    func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let instanceLocator = "YOUR_INSTANCE_LOCATOR"
 
         let pusherChat = ChatManager(
             instanceLocator: instanceLocator,
             tokenProvider: PCTokenProvider(url: "YOUR_TOKEN_PROVIDER_URL"),
-            userId: "YOUR_USER_ID",
+            userID: "YOUR_USER_ID",
             logger: TestLogger()
         )
 

@@ -3,7 +3,7 @@ import PusherPlatform
 
 public final class PCBasicCurrentUser {
     public let id: String
-    public let pathFriendlyId: String
+    public let pathFriendlyID: String
 
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
@@ -17,25 +17,28 @@ public final class PCBasicCurrentUser {
     let filesInstance: Instance
     let cursorsInstance: Instance
     let presenceInstance: Instance
+    let delegate: PCChatManagerDelegate
 
     let connectionCoordinator: PCConnectionCoordinator
 
     public init(
         id: String,
-        pathFriendlyId: String,
+        pathFriendlyID: String,
         instance: Instance,
         filesInstance: Instance,
         cursorsInstance: Instance,
         presenceInstance: Instance,
-        connectionCoordinator: PCConnectionCoordinator
+        connectionCoordinator: PCConnectionCoordinator,
+        delegate: PCChatManagerDelegate
     ) {
         self.id = id
-        self.pathFriendlyId = pathFriendlyId
+        self.pathFriendlyID = pathFriendlyID
         self.instance = instance
         self.filesInstance = filesInstance
         self.cursorsInstance = cursorsInstance
         self.presenceInstance = presenceInstance
         self.connectionCoordinator = connectionCoordinator
+        self.delegate = delegate
 
         let rooms = PCSynchronizedArray<PCRoom>()
         self.userStore = PCGlobalUserStore(instance: instance)
@@ -48,7 +51,6 @@ public final class PCBasicCurrentUser {
     }
 
     func establishUserSubscription(
-        delegate: PCChatManagerDelegate,
         initialStateHandler: @escaping ((roomsPayload: [[String: Any]], currentUserPayload: [String: Any])) -> Void
     ) {
         let path = "/users"
@@ -66,9 +68,9 @@ public final class PCBasicCurrentUser {
             presenceInstance: self.presenceInstance,
             resumableSubscription: resumableSub,
             userStore: self.userStore,
-            delegate: delegate,
-            userId: id,
-            pathFriendlyUserId: pathFriendlyId,
+            delegate: self.delegate,
+            userID: id,
+            pathFriendlyUserID: pathFriendlyID,
             connectionCoordinator: connectionCoordinator,
             initialStateHandler: initialStateHandler
         )
@@ -80,35 +82,26 @@ public final class PCBasicCurrentUser {
             with: &resumableSub,
             using: subscribeRequest,
             onEvent: { [unowned userSub] eventID, headers, data in
-                userSub.handleEvent(eventId: eventID, headers: headers, data: data)
+                userSub.handleEvent(eventID: eventID, headers: headers, data: data)
             },
             onEnd: { _, _, _ in },
             onError: { [unowned self] error in
                 self.connectionCoordinator.connectionEventCompleted(
                     PCConnectionEvent(currentUser: nil, error: error)
                 )
-                // We also need to complete the initial user fetch connection event
-                // otherwise the connection completion handler won't be called. We
-                // use the same error as the user subscription error as it is
-                // essentially still the error that is causing the initial user
-                // fetch to fail
-                self.connectionCoordinator.connectionEventCompleted(
-                    PCConnectionEvent(users: nil, error: error)
-                )
             }
         )
     }
 
-    func establishPresenceSubscription(delegate: PCChatManagerDelegate) {
+    func establishPresenceSubscription() {
         // If a presenceSubscription already exists then we want to create a new one
-        // to ensure that the most up-to-date state is received, so we first close the
-        // existing subscription, if it was still open
+        // so we first close the existing subscription, if it was still open
         if let presSub = self.presenceSubscription {
             presSub.end()
             self.presenceSubscription = nil
         }
 
-        let path = "/users/\(self.pathFriendlyId)/presence"
+        let path = "/users/\(self.pathFriendlyID)/register"
         let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
 
         var resumableSub = PPResumableSubscription(
@@ -116,22 +109,16 @@ public final class PCBasicCurrentUser {
             requestOptions: subscribeRequest
         )
 
-        let presenceSub = PCPresenceSubscription(
-            instance: self.presenceInstance,
-            resumableSubscription: resumableSub,
-            userStore: self.userStore,
-            roomStore: self.roomStore,
-            connectionCoordinator: self.connectionCoordinator,
-            delegate: delegate
-        )
-
+        let presenceSub = PCPresenceSubscription(resumableSubscription: resumableSub)
         self.presenceSubscription = presenceSub
 
         self.presenceInstance.subscribeWithResume(
             with: &resumableSub,
             using: subscribeRequest,
-            onEvent: { [unowned presenceSub] eventID, headers, data in
-                presenceSub.handleEvent(eventId: eventID, headers: headers, data: data)
+            onOpen: { [unowned self, unowned presenceSub] in
+                self.connectionCoordinator.connectionEventCompleted(
+                    PCConnectionEvent(presenceSubscription: presenceSub, error: nil)
+                )
             },
             onError: { [unowned self] error in
                 self.connectionCoordinator.connectionEventCompleted(
@@ -142,7 +129,7 @@ public final class PCBasicCurrentUser {
     }
 
     func establishCursorSubscription() {
-        let userCursorSubscriptionPath = "/cursors/\(PCCursorType.read.rawValue)/users/\(self.pathFriendlyId)"
+        let userCursorSubscriptionPath = "/cursors/\(PCCursorType.read.rawValue)/users/\(self.pathFriendlyID)"
         let cursorSubscriptionRequestOptions = PPRequestOptions(
             method: HTTPMethod.SUBSCRIBE.rawValue,
             path: userCursorSubscriptionPath
@@ -178,7 +165,7 @@ public final class PCBasicCurrentUser {
             with: &cursorResumableSub,
             using: cursorSubscriptionRequestOptions,
             onEvent: { [unowned cursorSub] eventID, headers, data in
-                cursorSub.handleEvent(eventId: eventID, headers: headers, data: data)
+                cursorSub.handleEvent(eventID: eventID, headers: headers, data: data)
             },
             onError: { [unowned self] error in
                 self.connectionCoordinator.connectionEventCompleted(

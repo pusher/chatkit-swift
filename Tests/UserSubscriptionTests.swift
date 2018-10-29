@@ -26,7 +26,7 @@ class UserSubscriptionTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     override func tearDown() {
@@ -41,7 +41,7 @@ class UserSubscriptionTests: XCTestCase {
         chatManager = ChatManager(
             instanceLocator: testInstanceLocator,
             tokenProvider: PCTokenProvider(url: tokenEndpoint),
-            userId: "ash",
+            userID: "ash",
             logger: TestLogger()
         )
 
@@ -53,6 +53,6 @@ class UserSubscriptionTests: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 15)
     }
 }

@@ -5,18 +5,29 @@ import PusherPlatform
 class PresenceTests: XCTestCase {
     var aliceChatManager: ChatManager!
     var bobChatManager: ChatManager!
-    var roomId: Int!
+    var charlieChatManager: ChatManager!
+    var roomID: String!
+
+    let uniqueAlice = "alice-\(UUID().uuidString)"
+    let uniqueBob = "bob-\(UUID().uuidString)"
 
     override func setUp() {
         super.setUp()
 
-        aliceChatManager = newTestChatManager(userId: "alice")
-        bobChatManager = newTestChatManager(userId: "bob")
+        // We use a third user, Charlie, to create a room so that Charlie's
+        // presence state isn't lingering around and messing up the tests.
+        // This is also the reason we use unique suffixed IDs for Alice and
+        // Bob; to avoid lingering presence states.
+
+        aliceChatManager = newTestChatManager(userID: uniqueAlice)
+        bobChatManager = newTestChatManager(userID: uniqueBob)
+        charlieChatManager = newTestChatManager(userID: "charlie")
 
         let deleteResourcesEx = expectation(description: "delete resources")
         let createRolesEx = expectation(description: "create roles")
         let createAliceEx = expectation(description: "create Alice")
         let createBobEx = expectation(description: "create Bob")
+        let createCharlieEx = expectation(description: "create Charlie")
         let createRoomEx = expectation(description: "create room")
 
         deleteInstanceResources() { err in
@@ -28,32 +39,37 @@ class PresenceTests: XCTestCase {
                 createRolesEx.fulfill()
             }
 
-            createUser(id: "alice") { err in
+            createUser(id: self.uniqueAlice) { err in
                 XCTAssertNil(err)
                 createAliceEx.fulfill()
             }
 
-            createUser(id: "bob") { err in
+            createUser(id: self.uniqueBob) { err in
                 XCTAssertNil(err)
                 createBobEx.fulfill()
             }
 
-            // TODO the following should really wait until we know both Alice
-            // and Bob exist... for now, sleep!
+            createUser(id: "charlie") { err in
+                XCTAssertNil(err)
+                createCharlieEx.fulfill()
+            }
+
+            // TODO the following should really wait until we know Alice, Bob,
+            // and Charlie exist... for now, sleep!
             sleep(1)
 
-            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+            self.charlieChatManager.connect(delegate: TestingChatManagerDelegate()) { charlie, err in
                 XCTAssertNil(err)
-                alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+                charlie!.createRoom(name: "mushroom", addUserIDs: [self.uniqueAlice, self.uniqueBob]) { room, err in
                     XCTAssertNil(err)
-                    self.roomId = room!.id
-                    self.aliceChatManager.disconnect()
+                    self.roomID = room!.id
+                    self.charlieChatManager.disconnect()
                     createRoomEx.fulfill()
                 }
             }
         }
 
-        waitForExpectations(timeout: 1000)
+        waitForExpectations(timeout: 15)
     }
 
     override func tearDown() {
@@ -61,81 +77,82 @@ class PresenceTests: XCTestCase {
         aliceChatManager = nil
         bobChatManager.disconnect()
         bobChatManager = nil
-        roomId = nil
+        charlieChatManager.disconnect()
+        charlieChatManager = nil
+        roomID = nil
     }
 
     func testChatManagerDelegatePresenceHooks() {
-        sleep(2) // FIXME this is a disgrace
-
+        let initialPresenceEx = expectation(description: "notified of Bob initially being offline (user)")
         let onlineEx = expectation(description: "notified of Bob coming online (user)")
         let offlineEx = expectation(description: "notified of Bob going offline (user)")
 
-        let userCameOnline = { (user: PCUser) -> Void in
-            XCTAssertEqual(user.id, "bob")
-            onlineEx.fulfill()
+        let onUserPresenceChanged = { (previous: PCPresenceState, current: PCPresenceState, user: PCUser) -> Void in
+            guard user.id != "charlie" else { return }
+            XCTAssertEqual(user.id, self.uniqueBob)
 
-            sleep(2) // TODO this shouldn't be necessary.
-            self.bobChatManager.disconnect()
-        }
-
-        let userWentOffline = { (user: PCUser) -> Void in
-            XCTAssertEqual(user.id, "bob")
-            offlineEx.fulfill()
-        }
-
-        let aliceCMDelegate = TestingChatManagerDelegate(
-            userCameOnline: userCameOnline,
-            userWentOffline: userWentOffline
-        )
-
-        self.aliceChatManager.connect(delegate: aliceCMDelegate) { u, err in
-            XCTAssertNil(err)
-            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
-                XCTAssertNil(err)
+            if case .unknown = previous, case .offline = current {
+                initialPresenceEx.fulfill()
+            } else if case .offline = previous, case .online = current {
+                onlineEx.fulfill()
+                self.bobChatManager.disconnect()
+            } else if case .online = previous, case .offline = current {
+                offlineEx.fulfill()
             }
         }
 
-        waitForExpectations(timeout: 1000)
+        let aliceCMDelegate = TestingChatManagerDelegate(onUserPresenceChanged: onUserPresenceChanged)
+
+        aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            alice!.subscribeToRoom(
+                room: alice!.rooms.first(where: { $0.id == self.roomID })!,
+                roomDelegate: TestingRoomDelegate()
+            ) { err in
+                XCTAssertNil(err)
+                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
+                    XCTAssertNil(err)
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 15)
     }
 
     func testRoomDelegatePresenceHooks() {
-        sleep(2) // FIXME this is a disgrace
-
+        let initialPresenceEx = expectation(description: "notified of Alice initially being offline (room)")
         let onlineEx = expectation(description: "notified of Alice coming online (room)")
         let offlineEx = expectation(description: "notified of Alice going offline (room)")
 
-        let userCameOnline = { (user: PCUser) -> Void in
-            XCTAssertEqual(user.id, "alice")
-            onlineEx.fulfill()
+        let onUserPresenceChanged = { (previous: PCPresenceState, current: PCPresenceState, user: PCUser) -> Void in
+            guard user.id != "charlie" else { return }
+            XCTAssertEqual(user.id, self.uniqueAlice)
 
-            sleep(2) // TODO this shouldn't be necessary.
-            self.aliceChatManager.disconnect()
+            if case .unknown = previous, case .offline = current {
+                initialPresenceEx.fulfill()
+            } else if case .offline = previous, case .online = current {
+                onlineEx.fulfill()
+                self.aliceChatManager.disconnect()
+            } else if case .online = previous, case .offline = current {
+                offlineEx.fulfill()
+            }
         }
 
-        let userWentOffline = { (user: PCUser) -> Void in
-            XCTAssertEqual(user.id, "alice")
-            offlineEx.fulfill()
-        }
-
-        let bobRoomDelegate = TestingRoomDelegate(
-            userCameOnline: userCameOnline,
-            userWentOffline: userWentOffline
-        )
+        let bobRoomDelegate = TestingRoomDelegate(onUserPresenceChanged: onUserPresenceChanged)
 
         self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
             XCTAssertNil(err)
             bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomId })!,
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
                 roomDelegate: bobRoomDelegate
             ) { err in
                 XCTAssertNil(err)
-
                 self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
                     XCTAssertNil(err)
                 }
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 }

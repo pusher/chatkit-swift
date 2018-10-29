@@ -7,12 +7,12 @@ final class PCBasicMessageEnricher {
     let logger: PPLogger
 
     fileprivate var completionOrderList: [Int] = []
-    fileprivate var messageIdToCompletionHandlers: [Int: (PCMessage?, Error?) -> Void] = [:]
+    fileprivate var messageIDToCompletionHandlers: [Int: (PCMessage?, Error?) -> Void] = [:]
     fileprivate var enrichedMessagesAwaitingCompletionCalls: [Int: PCMessageEnrichmentResult] = [:]
     fileprivate let messageEnrichmentQueue = DispatchQueue(label: "com.pusher.chatkit.message-enrichment")
 
-    fileprivate var userIdsBeingRetrieved: [String] = []
-    fileprivate var userIdsToBasicMessageIds: [String: [Int]] = [:]
+    fileprivate var userIDsBeingRetrieved: [String] = []
+    fileprivate var userIDsToBasicMessageIDs: [String: [Int]] = [:]
     fileprivate var messagesAwaitingEnrichmentDependentOnUserRetrieval: [Int: PCBasicMessage] = [:]
     fileprivate let userRetrievalQueue = DispatchQueue(label: "com.pusher.chatkit.user-retrieval")
 
@@ -23,30 +23,30 @@ final class PCBasicMessageEnricher {
     }
 
     func enrich(_ basicMessage: PCBasicMessage, completionHandler: @escaping (PCMessage?, Error?) -> Void) {
-        let basicMessageId = basicMessage.id
-        let basicMessageSenderId = basicMessage.senderId
+        let basicMessageID = basicMessage.id
+        let basicMessageSenderID = basicMessage.senderID
 
         messageEnrichmentQueue.async(flags: .barrier) {
-            self.completionOrderList.append(basicMessageId)
-            self.messageIdToCompletionHandlers[basicMessageId] = completionHandler
+            self.completionOrderList.append(basicMessageID)
+            self.messageIDToCompletionHandlers[basicMessageID] = completionHandler
         }
 
         userRetrievalQueue.async(flags: .barrier) {
-            if self.userIdsToBasicMessageIds[basicMessageSenderId] == nil {
-                self.userIdsToBasicMessageIds[basicMessageSenderId] = [basicMessageId]
+            if self.userIDsToBasicMessageIDs[basicMessageSenderID] == nil {
+                self.userIDsToBasicMessageIDs[basicMessageSenderID] = [basicMessageID]
             } else {
-                self.userIdsToBasicMessageIds[basicMessageSenderId]!.append(basicMessageId)
+                self.userIDsToBasicMessageIDs[basicMessageSenderID]!.append(basicMessageID)
             }
 
-            self.messagesAwaitingEnrichmentDependentOnUserRetrieval[basicMessageId] = basicMessage
+            self.messagesAwaitingEnrichmentDependentOnUserRetrieval[basicMessageID] = basicMessage
 
-            if self.userIdsBeingRetrieved.contains(basicMessageSenderId) {
+            if self.userIDsBeingRetrieved.contains(basicMessageSenderID) {
                 return
             } else {
-                self.userIdsBeingRetrieved.append(basicMessageSenderId)
+                self.userIDsBeingRetrieved.append(basicMessageSenderID)
             }
 
-            self.userStore.user(id: basicMessage.senderId) { [weak self] user, err in
+            self.userStore.user(id: basicMessage.senderID) { [weak self] user, err in
                 guard let strongSelf = self else {
                     print("self is nil when user store returns user while enriching messages")
                     return
@@ -54,15 +54,15 @@ final class PCBasicMessageEnricher {
 
                 guard let user = user, err == nil else {
                     strongSelf.logger.log(
-                        "Unable to find user with id \(basicMessage.senderId), associated with message \(basicMessageId). Error: \(err!.localizedDescription)",
+                        "Unable to find user with id \(basicMessage.senderID), associated with message \(basicMessageID). Error: \(err!.localizedDescription)",
                         logLevel: .debug
                     )
-                    strongSelf.callCompletionHandlersForEnrichedMessagesWithIdsLessThanOrEqualTo(id: basicMessageId, result: .error(err!))
+                    strongSelf.callCompletionHandlersForEnrichedMessagesWithIDsLessThanOrEqualTo(id: basicMessageID, result: .error(err!))
                     return
                 }
 
                 strongSelf.userRetrievalQueue.async(flags: .barrier) {
-                    guard let basicMessageIds = strongSelf.userIdsToBasicMessageIds[basicMessageSenderId] else {
+                    guard let basicMessageIDs = strongSelf.userIDsToBasicMessageIDs[basicMessageSenderID] else {
                         strongSelf.logger.log(
                             "Fetched user information for user with id \(user.id) but no messages needed information for this user",
                             logLevel: .verbose
@@ -70,14 +70,14 @@ final class PCBasicMessageEnricher {
                         return
                     }
 
-                    let basicMessages = basicMessageIds.compactMap { bmId -> PCBasicMessage? in
-                        return strongSelf.messagesAwaitingEnrichmentDependentOnUserRetrieval[bmId]
+                    let basicMessages = basicMessageIDs.compactMap { bmID -> PCBasicMessage? in
+                        return strongSelf.messagesAwaitingEnrichmentDependentOnUserRetrieval[bmID]
                     }
 
                     strongSelf.enrichMessagesWithUser(user, messages: basicMessages)
 
-                    if let indexToRemove = strongSelf.userIdsBeingRetrieved.index(of: basicMessageSenderId) {
-                        strongSelf.userIdsBeingRetrieved.remove(at: indexToRemove)
+                    if let indexToRemove = strongSelf.userIDsBeingRetrieved.index(of: basicMessageSenderID) {
+                        strongSelf.userIDsBeingRetrieved.remove(at: indexToRemove)
                     }
                 }
             }
@@ -95,22 +95,22 @@ final class PCBasicMessageEnricher {
                 sender: user,
                 room: self.room
             )
-            self.callCompletionHandlersForEnrichedMessagesWithIdsLessThanOrEqualTo(id: basicMessage.id, result: .success(message))
+            self.callCompletionHandlersForEnrichedMessagesWithIDsLessThanOrEqualTo(id: basicMessage.id, result: .success(message))
         }
     }
 
-    fileprivate func callCompletionHandlersForEnrichedMessagesWithIdsLessThanOrEqualTo(id: Int, result: PCMessageEnrichmentResult) {
+    fileprivate func callCompletionHandlersForEnrichedMessagesWithIDsLessThanOrEqualTo(id: Int, result: PCMessageEnrichmentResult) {
 
         // TODO: There may well be ways to make this faster
         self.messageEnrichmentQueue.async(flags: .barrier) {
-            guard let nextIdToComplete = self.completionOrderList.first else {
+            guard let nextIDToComplete = self.completionOrderList.first else {
                 self.logger.log("Message with id \(id) enriched but message enricher doesn't know about enriching it", logLevel: .debug)
                 return
             }
 
             self.enrichedMessagesAwaitingCompletionCalls[id] = result
 
-            guard id == nextIdToComplete else {
+            guard id == nextIDToComplete else {
                 // If the message id received isn't the next to have its completionHandler called
                 // then return as we've already stored the result so it can be used later
                 self.logger.log(
@@ -121,15 +121,15 @@ final class PCBasicMessageEnricher {
             }
 
             repeat {
-                let messageId = self.completionOrderList.first!
+                let messageID = self.completionOrderList.first!
 
-                guard let completionHandler = self.messageIdToCompletionHandlers[messageId] else {
-                    self.logger.log("Completion handler not stored for message id \(messageId)", logLevel: .debug)
+                guard let completionHandler = self.messageIDToCompletionHandlers[messageID] else {
+                    self.logger.log("Completion handler not stored for message id \(messageID)", logLevel: .debug)
                     return
                 }
 
-                guard let result = self.enrichedMessagesAwaitingCompletionCalls[messageId] else {
-                    self.logger.log("Enrichment result not stored for message id \(messageId)", logLevel: .debug)
+                guard let result = self.enrichedMessagesAwaitingCompletionCalls[messageID] else {
+                    self.logger.log("Enrichment result not stored for message id \(messageID)", logLevel: .debug)
                     return
                 }
 
@@ -141,8 +141,8 @@ final class PCBasicMessageEnricher {
                 }
 
                 self.completionOrderList.removeFirst()
-                self.messageIdToCompletionHandlers.removeValue(forKey: messageId)
-                self.enrichedMessagesAwaitingCompletionCalls.removeValue(forKey: messageId)
+                self.messageIDToCompletionHandlers.removeValue(forKey: messageID)
+                self.enrichedMessagesAwaitingCompletionCalls.removeValue(forKey: messageID)
             } while self.completionOrderList.first != nil && self.enrichedMessagesAwaitingCompletionCalls[self.completionOrderList.first!] != nil
         }
     }

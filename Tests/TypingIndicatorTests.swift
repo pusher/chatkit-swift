@@ -5,13 +5,13 @@ import PusherPlatform
 class TypingIndicatorTests: XCTestCase {
     var aliceChatManager: ChatManager!
     var bobChatManager: ChatManager!
-    var roomId: Int!
+    var roomID: String!
 
     override func setUp() {
         super.setUp()
 
-        aliceChatManager = newTestChatManager(userId: "alice")
-        bobChatManager = newTestChatManager(userId: "bob")
+        aliceChatManager = newTestChatManager(userID: "alice")
+        bobChatManager = newTestChatManager(userID: "bob")
 
         let deleteResourcesEx = expectation(description: "delete resources")
         let createRolesEx = expectation(description: "create roles")
@@ -44,15 +44,15 @@ class TypingIndicatorTests: XCTestCase {
 
             self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
                 XCTAssertNil(err)
-                alice!.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+                alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
                     XCTAssertNil(err)
-                    self.roomId = room!.id
+                    self.roomID = room!.id
                     createRoomEx.fulfill()
                 }
             }
         }
 
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 15)
     }
 
     override func tearDown() {
@@ -60,7 +60,7 @@ class TypingIndicatorTests: XCTestCase {
         aliceChatManager = nil
         bobChatManager.disconnect()
         bobChatManager = nil
-        roomId = nil
+        roomID = nil
     }
 
     func testChatManagerDelegateTypingHooks() {
@@ -69,41 +69,46 @@ class TypingIndicatorTests: XCTestCase {
 
         var started: Date!
 
-        let userStartedTyping = { (room: PCRoom, user: PCUser) -> Void in
-            started = Date.init()
-            XCTAssertEqual(room.id, self.roomId)
+        let onUserStartedTyping = { (room: PCRoom, user: PCUser) -> Void in
+            started = Date()
+            XCTAssertEqual(room.id, self.roomID)
             XCTAssertEqual(user.id, "bob")
             startedEx.fulfill()
         }
 
-        let userStoppedTyping = { (room: PCRoom, user: PCUser) -> Void in
-            let interval = Date.init().timeIntervalSince(started)
+        let onUserStoppedTyping = { (room: PCRoom, user: PCUser) -> Void in
+            let interval = Date().timeIntervalSince(started)
 
             XCTAssertGreaterThan(interval, 1)
             XCTAssertLessThan(interval, 5)
 
-            XCTAssertEqual(room.id, self.roomId)
+            XCTAssertEqual(room.id, self.roomID)
             XCTAssertEqual(user.id, "bob")
 
             stoppedEx.fulfill()
         }
 
         let aliceCMDelegate = TestingChatManagerDelegate(
-            userStartedTyping: userStartedTyping,
-            userStoppedTyping: userStoppedTyping
+            onUserStartedTyping: onUserStartedTyping,
+            onUserStoppedTyping: onUserStoppedTyping
         )
 
-        let bobCMDelegate = TestingChatManagerDelegate()
-
-        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _alice, err in
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
-            self.bobChatManager.connect(delegate: bobCMDelegate) { bob, err in
+
+            alice!.subscribeToRoom(
+                room: alice!.rooms.first(where: { $0.id == self.roomID })!,
+                roomDelegate: TestingRoomDelegate()
+            ) { err in
                 XCTAssertNil(err)
-                bob!.typing(in: bob!.rooms.first(where: { $0.id == self.roomId })!)
+                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+                    XCTAssertNil(err)
+                    bob!.typing(in: bob!.rooms.first(where: { $0.id == self.roomID })!) { _ in }
+                }
             }
         }
 
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 15)
     }
 
     func testRoomDelegateTypingHooks() {
@@ -112,14 +117,14 @@ class TypingIndicatorTests: XCTestCase {
 
         var started: Date!
 
-        let userStartedTyping = { (user: PCUser) -> Void in
-            started = Date.init()
+        let onUserStartedTyping = { (user: PCUser) -> Void in
+            started = Date()
             XCTAssertEqual(user.id, "alice")
             startedEx.fulfill()
         }
 
-        let userStoppedTyping = { (user: PCUser) -> Void in
-            let interval = Date.init().timeIntervalSince(started)
+        let onUserStoppedTyping = { (user: PCUser) -> Void in
+            let interval = Date().timeIntervalSince(started)
 
             XCTAssertGreaterThan(interval, 1)
             XCTAssertLessThan(interval, 5)
@@ -130,23 +135,24 @@ class TypingIndicatorTests: XCTestCase {
         }
 
         let bobRoomDelegate = TestingRoomDelegate(
-            userStartedTyping: userStartedTyping,
-            userStoppedTyping: userStoppedTyping
+            onUserStartedTyping: onUserStartedTyping,
+            onUserStoppedTyping: onUserStoppedTyping
         )
 
         self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
             XCTAssertNil(err)
             bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomId })!,
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
                 roomDelegate: bobRoomDelegate
             ) { err in
                 XCTAssertNil(err)
-
                 self.aliceChatManager.connect(
                     delegate: TestingChatManagerDelegate()
                 ) { alice, err in
                     XCTAssertNil(err)
-                    alice!.typing(in: alice!.rooms.first(where: { $0.id == self.roomId })!)
+                    alice!.typing(in: alice!.rooms.first(where: { $0.id == self.roomID })!) { err in
+                        XCTAssertNil(err)
+                    }
                 }
             }
         }

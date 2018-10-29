@@ -11,7 +11,7 @@ class ChatManagerTests: XCTestCase {
         let chatManager = ChatManager(
             instanceLocator: "v1:test:test",
             tokenProvider: dummyTokenProvider,
-            userId: "testinator"
+            userID: "testinator"
         )
 
         let sdkProductName = "chatkit"

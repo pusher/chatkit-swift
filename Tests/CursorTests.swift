@@ -3,14 +3,17 @@ import PusherPlatform
 @testable import PusherChatkit
 
 class CursorTests: XCTestCase {
-    var aliceChatManager: ChatManager! = newTestChatManager(userId: "alice")
-    var bobChatManager: ChatManager! = newTestChatManager(userId: "bob")
+    var aliceChatManager: ChatManager!
+    var bobChatManager: ChatManager!
     var alice: PCCurrentUser!
     var bob: PCCurrentUser!
-    var roomId: Int!
+    var roomID: String!
 
     override func setUp() {
         super.setUp()
+
+        aliceChatManager = newTestChatManager(userID: "alice")
+        bobChatManager = newTestChatManager(userID: "bob")
 
         let deleteResourcesEx = expectation(description: "delete resources")
         let createRolesEx = expectation(description: "create roles")
@@ -43,21 +46,21 @@ class CursorTests: XCTestCase {
             // and Bob exist... for now, sleep!
             sleep(1)
 
-            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { user, err in
+            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { a, err in
                 XCTAssertNil(err)
-                self.alice = user
+                self.alice = a
                 connectAliceEx.fulfill()
 
-                self.alice.createRoom(name: "mushroom", addUserIds: ["bob"]) { room, err in
+                self.alice.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
                     XCTAssertNil(err)
-                    self.roomId = room!.id
+                    self.roomID = room!.id
                     createRoomEx.fulfill()
                 }
             }
 
-            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { user, err in
+            self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { b, err in
                 XCTAssertNil(err)
-                self.bob = user
+                self.bob = b
                 connectBobEx.fulfill()
             }
         }
@@ -72,11 +75,11 @@ class CursorTests: XCTestCase {
         bobChatManager.disconnect()
         bobChatManager = nil
         bob = nil
-        roomId = nil
+        roomID = nil
     }
 
     func testOwnReadCursorUndefinedIfNotSet() {
-        let cursor = try! alice.readCursor(roomId: roomId)
+        let cursor = try! alice.readCursor(roomID: roomID)
         XCTAssertNil(cursor)
     }
 
@@ -85,11 +88,11 @@ class CursorTests: XCTestCase {
     func testGetOwnReadCursor() {
         let ex = expectation(description: "got own read cursor")
 
-        alice.setReadCursor(position: 42, roomId: roomId) { error in
+        alice.setReadCursor(position: 42, roomID: roomID) { error in
             XCTAssertNil(error)
 
             sleep(1) // give the read cursor a chance to propagate down the connection
-            let cursor = try! self.alice.readCursor(roomId: self.roomId)
+            let cursor = try! self.alice.readCursor(roomID: self.roomID)
             XCTAssertEqual(cursor?.position, 42)
 
             ex.fulfill()
@@ -101,20 +104,20 @@ class CursorTests: XCTestCase {
     func testNewReadCursorHook() {
         let ex = expectation(description: "received new read cursor")
 
-        let newCursor = { (cursor: PCCursor) -> Void in
+        let onNewCursor = { (cursor: PCCursor) -> Void in
             XCTAssertEqual(cursor.position, 42)
             ex.fulfill()
         }
 
-        let aliceRoomDelegate = TestingRoomDelegate(newCursor: newCursor)
+        let aliceRoomDelegate = TestingRoomDelegate(onNewCursor: onNewCursor)
 
         alice.subscribeToRoom(
-            room: alice.rooms.first(where: { $0.id == roomId })!,
+            room: alice.rooms.first(where: { $0.id == roomID })!,
             roomDelegate: aliceRoomDelegate
         ) { error in
             XCTAssertNil(error)
 
-            self.bob.setReadCursor(position: 42, roomId: self.roomId) { error in
+            self.bob.setReadCursor(position: 42, roomID: self.roomID) { error in
                 XCTAssertNil(error)
             }
         }
@@ -125,11 +128,11 @@ class CursorTests: XCTestCase {
     func testGetAnotherUsersReadCursorBeforeSubscribingFails() {
         let ex = expectation(description: "get another users read cursor fails")
 
-        bob.setReadCursor(position: 42, roomId: roomId) { error in
+        bob.setReadCursor(position: 42, roomID: roomID) { error in
             XCTAssertNil(error)
 
             do {
-                let _ = try self.alice.readCursor(roomId: self.roomId, userId: "bob")
+                let _ = try self.alice.readCursor(roomID: self.roomID, userID: "bob")
             } catch let error {
                 switch error {
                 case PCCurrentUserError.noSubscriptionToRoom:
@@ -148,16 +151,16 @@ class CursorTests: XCTestCase {
 
         let aliceRoomDelegate = TestingRoomDelegate()
         alice.subscribeToRoom(
-            room: alice.rooms.first(where: { $0.id == roomId })!,
+            room: alice.rooms.first(where: { $0.id == roomID })!,
             roomDelegate: aliceRoomDelegate
         ) { error in
             XCTAssertNil(error)
 
-            self.bob.setReadCursor(position: 42, roomId: self.roomId) { error in
+            self.bob.setReadCursor(position: 42, roomID: self.roomID) { error in
                 XCTAssertNil(error)
 
                 sleep(1) // give the read cursor a chance to propagate down the connection
-                let cursor = try! self.alice.readCursor(roomId: self.roomId, userId: "bob")
+                let cursor = try! self.alice.readCursor(roomID: self.roomID, userID: "bob")
                 XCTAssertEqual(cursor?.position, 42)
 
                 ex.fulfill()

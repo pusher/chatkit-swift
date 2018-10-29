@@ -64,20 +64,18 @@ class ViewController: UIViewController {
 
 //                    let imageName = Bundle.main.path(forResource: "somedog", ofType: "jpg")
 //                    let imageURL = URL(fileURLWithPath: imageName!)
-//
+
 //                    print("About to send message")
-//
 //                    currentUser.sendMessage(
 //                        roomId: currentUser.rooms.last!.id,
 //                        text: "Just a message with an attachment",
-//                        attachmentType: .fileURL(imageURL, name: "somedog.jpg")
-//    //                    attachmentType: .link("https://i.giphy.com/RpByGPT5VlZiE.gif", type: "image")
-//                    ) { messageId, err in
+//                        attachment: .fileURL(imageURL, name: "somedog.jpg")
+////                        attachment: .link("https://i.giphy.com/RpByGPT5VlZiE.gif", type: "image")
+//                    ) { messageID, err in
 //                        guard err == nil else {
 //                            print("Error sending message \(err!.localizedDescription)")
 //                            return
 //                        }
-//                        print("Successfully sent message with ID: \(messageId!)")
 //                    }
                 }
             }
@@ -87,7 +85,7 @@ class ViewController: UIViewController {
     func sendRandomMessage() {
         let messageText = "Some random message \(arc4random_uniform(1001))"
         self.pusherChatUser!.sendMessage(
-            roomId: currentRoom!.id,
+            roomID: currentRoom!.id,
             text: messageText
         ) { messageID, err in
             guard err == nil else {
@@ -101,43 +99,37 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: PCRoomDelegate {
-    func usersUpdated() {
+    func onUsersUpdated() {
         print("Users updated " + self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
     }
 
-    public func userJoined(user: PCUser) {
+    func onUserJoined(user: PCUser) {
         print("User \(user.displayName) joined room: \(self.currentRoom!.name)")
         print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: ","))
     }
 
-    public func userLeft(user: PCUser) {
+    func onUserLeft(user: PCUser) {
         print("User \(user.displayName) left room: \(self.currentRoom!.name)")
         print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: ","))
     }
 
-    public func userStartedTyping(user: PCUser) {
+    func onUserStartedTyping(user: PCUser) {
         print("\(user.displayName) started typing in room \(self.currentRoom!.name)")
     }
 
-    public func userStoppedTyping(user: PCUser) {
+    func onUserStoppedTyping(user: PCUser) {
         print("\(user.displayName) stopped typing in room \(self.currentRoom!.name)")
     }
 
-    func userCameOnlineInRoom(user: PCUser) {
-        print("\(user.displayName) came online")
-        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
+    func onUserPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {
+        print("\(user.displayName)'s presence state went from \(previous.rawValue) to \(current.rawValue)")
     }
 
-    func userWentOfflineInRoom(user: PCUser) {
-        print("\(user.displayName) went offline")
-        print(self.currentRoom!.users.map { "\($0.id), \($0.name!), \($0.presenceState.rawValue)" }.joined(separator: "; "))
-    }
-
-    func newCursor(cursor: PCCursor) {
+    func onNewCursor(_ cursor: PCCursor) {
         print("New cursor for \(cursor.user.displayName) at position \(cursor.position)")
     }
 
-    func newMessage(message: PCMessage) {
+    func onMessage(_ message: PCMessage) {
         print("Received message: \(message.debugDescription)")
 
         self.messages.append(message)
@@ -146,81 +138,64 @@ extension ViewController: PCRoomDelegate {
             self.messagesTableView.reloadData()
         }
 
-        // Uncomment to test fetching message attachments, if present
-        //        if let attachment = message.attachment {
-        //            if attachment.fetchRequired {
-        //                print("Fetch required for attachment")
-        //                pusherChatUser?.fetchAttachment(attachment.link) { fetchedAttachment, err in
-        //                    guard err == nil else {
-        //                        print("Error fetching attachment \(err!.localizedDescription)")
-        //                        return
-        //                    }
-        //
-        //                    print("Fetched attachment link: \(fetchedAttachment!.link)")
-        //
-        //                    self.pusherChatUser?.downloadAttachment(
-        //                        fetchedAttachment!.link,
-        //                        to: PCSuggestedDownloadDestination(options: [.createIntermediateDirectories, .removePreviousFile]),
-        //                        onSuccess: { url in
-        //                            print("Downloaded successfully to \(url.absoluteString)")
-        //                        },
-        //                        onError: { error in
-        //                            print("Failed to download \(error.localizedDescription)")
-        //                        },
-        //                        progressHandler: { bytesReceived, totalBytesToReceive in
-        //                            print("Download progress: \(bytesReceived) / \(totalBytesToReceive)")
-        //                        }
-        //                    )
-        //                }
-        //            } else {
-        //                print("Fetch not required for attachment: \(attachment.link)")
-        //            }
-        //        }
+//        Uncomment to test fetching message attachments, if present
+
+//        if let attachment = message.attachment {
+//            self.pusherChatUser?.downloadAttachment(
+//                attachment.link,
+//                to: PCSuggestedDownloadDestination(options: [.createIntermediateDirectories, .removePreviousFile]),
+//                onSuccess: { url in
+//                    print("Downloaded successfully to \(url.absoluteString)")
+//                },
+//                onError: { error in
+//                    print("Failed to download \(error.localizedDescription)")
+//                },
+//                progressHandler: { bytesReceived, totalBytesToReceive in
+//                    print("Download progress: \(bytesReceived) / \(totalBytesToReceive)")
+//                }
+//            )
+//        }
     }
 }
 
 public class MyDelegate: PCChatManagerDelegate {
-    public func addedToRoom(room: PCRoom) {
+    public func onAddedToRoom(_ room: PCRoom) {
         print("Added to room: \(room.name)")
     }
 
-    public func removedFromRoom(room: PCRoom) {
+    public func onRemovedFromRoom(_ room: PCRoom) {
         print("Removed from room: \(room.name)")
     }
 
-    public func roomUpdated(room: PCRoom) {
+    public func onRoomUpdated(room: PCRoom) {
         print("Room updated: \(room.name)")
     }
 
-    public func roomDeleted(room: PCRoom) {
+    public func onRoomDeleted(room: PCRoom) {
         print("Room deleted: \(room.name)")
     }
 
-    public func userJoinedRoom(room: PCRoom, user: PCUser) {
+    public func onUserJoinedRoom(_ room: PCRoom, user: PCUser) {
         print("User \(user.displayName) joined room: \(room.name)")
     }
 
-    public func userLeftRoom(room: PCRoom, user: PCUser) {
+    public func onUserLeftRoom(_ room: PCRoom, user: PCUser) {
         print("User \(user.displayName) left room: \(room.name)")
     }
 
-    public func userCameOnline(user: PCUser) {
-        print("User \(user.displayName) came online")
+    public func onUserPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {
+        print("\(user.displayName)'s presence state went from \(previous.rawValue) to \(current.rawValue)")
     }
 
-    public func userWentOffline(user: PCUser) {
-        print("User \(user.displayName) went online")
-    }
-
-    public func userStartedTyping(room: PCRoom, user: PCUser) {
+    public func onUserStartedTyping(inRoom room: PCRoom, user: PCUser) {
         print("\(user.displayName) started typing in room \(room.name)")
     }
 
-    public func userStoppedTyping(room: PCRoom, user: PCUser) {
+    public func onUserStoppedTyping(inRoom room: PCRoom, user: PCUser) {
         print("\(user.displayName) stopped typing in room \(room.name)")
     }
 
-    public func error(error: Error) {
+    public func onError(error: Error) {
         print("Error: \(error.localizedDescription)")
     }
 }

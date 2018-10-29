@@ -30,7 +30,7 @@ public final class PCCursorSubscription {
         initialStateHandler = nil
     }
 
-    func handleEvent(eventId _: String, headers _: [String: String], data: Any) {
+    func handleEvent(eventID _: String, headers _: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
             self.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
             return
@@ -65,7 +65,7 @@ public final class PCCursorSubscription {
 }
 
 extension PCCursorSubscription {
-    
+
     fileprivate func parseInitialStatePayload(_ eventName: PCCursorEventName, data: [String: Any]) {
         guard let cursorsPayload = data["cursors"] as? [[String: Any]] else {
             let error = PCCursorsEventError.keyNotPresentInEventPayload(
@@ -113,7 +113,7 @@ extension PCCursorSubscription {
                 }
 
                 self.logger.log("New cursor: \(cursor.debugDescription)", logLevel: .verbose)
-                self.delegate?.newCursor(cursor: cursor)
+                self.delegate?.onNewCursor(cursor)
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)

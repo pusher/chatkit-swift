@@ -8,7 +8,10 @@ public final class PCUser {
     public var avatarURL: String?
     public let customData: [String: Any]?
     public internal(set) var presenceState: PCPresenceState
-    public internal(set) var lastSeenAt: String?
+
+    public lazy var pathFriendlyID: String = {
+        return pathFriendlyVersion(of: self.id)
+    }()
 
     private lazy var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -18,10 +21,6 @@ public final class PCUser {
 
     public var createdAtDate: Date { return self.dateFormatter.date(from: self.createdAt)! }
     public var updatedAtDate: Date { return self.dateFormatter.date(from: self.updatedAt)! }
-    public var lastSeenAtDate: Date? {
-        guard let lastSeenAt = self.lastSeenAt else { return nil }
-        return self.dateFormatter.date(from: lastSeenAt)!
-    }
 
     public var displayName: String {
         get {
@@ -44,14 +43,12 @@ public final class PCUser {
         self.avatarURL = avatarURL
         self.customData = customData
         self.presenceState = .unknown
-        self.lastSeenAt = nil
     }
 
     // TODO: Could use inout?
     func updateWithPropertiesOfUser(_ user: PCUser) -> PCUser {
         if user.presenceState != .unknown {
             self.presenceState = user.presenceState
-            self.lastSeenAt = user.lastSeenAt
         }
 
         return self
@@ -60,7 +57,6 @@ public final class PCUser {
     func updatePresenceInfoIfAppropriate(newInfoPayload: PCPresencePayload) {
         if newInfoPayload.state != .unknown {
             self.presenceState = newInfoPayload.state
-            self.lastSeenAt = newInfoPayload.lastSeenAt
         }
     }
 }

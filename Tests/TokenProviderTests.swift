@@ -59,6 +59,6 @@ class TokenProviderTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 1.0)
+        waitForExpectations(timeout: 1)
     }
 }

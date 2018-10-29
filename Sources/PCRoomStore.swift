@@ -11,7 +11,7 @@ public final class PCRoomStore {
         self.instance = instance
     }
 
-    public func room(id: Int, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
+    public func room(id: String, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
         self.findOrGetRoom(id: id, completionHandler: completionHandler)
     }
 
@@ -28,11 +28,21 @@ public final class PCRoomStore {
         }
     }
 
-    func remove(id: Int, completionHandler: ((PCRoom?) -> Void)? = nil) {
+    @discardableResult
+    func addOrMergeSync(_ room: PCRoom) -> PCRoom {
+        if let existingRoom = self.rooms.first(where: { $0.id == room.id }) {
+            existingRoom.updateWithPropertiesOfRoom(room)
+            return existingRoom
+        } else {
+            return self.rooms.appendSync(room)
+        }
+    }
+
+    func remove(id: String, completionHandler: ((PCRoom?) -> Void)? = nil) {
         return self.rooms.remove(where: { $0.id == id }, completionHandler: completionHandler)
     }
 
-    func findOrGetRoom(id: Int, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
+    func findOrGetRoom(id: String, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
         if let room = self.rooms.first(where: { $0.id == id }) {
             completionHandler(room, nil)
         } else {
@@ -48,7 +58,7 @@ public final class PCRoomStore {
         }
     }
 
-    func getRoom(id: Int, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
+    func getRoom(id: String, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
         let path = "/rooms/\(id)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 

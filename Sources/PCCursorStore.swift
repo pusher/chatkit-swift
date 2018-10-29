@@ -20,12 +20,12 @@ public final class PCCursorStore {
         )
     }
 
-    public func get(userId: String, roomId: Int, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
-        self.findOrGetCursor(userId: userId, roomId: roomId, completionHandler: completionHandler)
+    public func get(userID: String, roomID: String, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
+        self.findOrGetCursor(userID: userID, roomID: roomID, completionHandler: completionHandler)
     }
 
-    public func getSync(userId: String, roomId: Int) -> PCCursor? {
-        return self.cursors.first(where: { $0.key == key(userId, roomId) })?.value
+    public func getSync(userID: String, roomID: String) -> PCCursor? {
+        return self.cursors.first(where: { $0.key == key(userID, roomID) })?.value
     }
 
     public func set(_ basicCursor: PCBasicCursor, completionHandler: ((PCCursor?, Error?) -> Void)? = nil) {
@@ -38,20 +38,20 @@ public final class PCCursorStore {
                 completionHandler?(nil, err!)
                 return
             }
-            self.set(userId: basicCursor.userId, roomId: basicCursor.roomId, cursor: cursor)
+            self.set(userID: basicCursor.userID, roomID: basicCursor.roomID, cursor: cursor)
             completionHandler?(cursor, nil)
         }
     }
 
-    fileprivate func set(userId: String, roomId: Int, cursor: PCCursor) {
-        self.cursors[key(userId, roomId)] = cursor
+    fileprivate func set(userID: String, roomID: String, cursor: PCCursor) {
+        self.cursors[key(userID, roomID)] = cursor
     }
 
-    func findOrGetCursor(userId: String, roomId: Int, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
-        if let cursorObj = self.cursors.first(where: { $0.key == key(userId, roomId) }) {
+    func findOrGetCursor(userID: String, roomID: String, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
+        if let cursorObj = self.cursors.first(where: { $0.key == key(userID, roomID) }) {
             completionHandler(cursorObj.value, nil)
         } else {
-            self.getCursor(userId: userId, roomId: roomId) { cursor, err in
+            self.getCursor(userID: userID, roomID: roomID) { cursor, err in
                 guard err == nil else {
                     self.instance.logger.log(err!.localizedDescription, logLevel: .error)
                     completionHandler(nil, err!)
@@ -63,8 +63,8 @@ public final class PCCursorStore {
         }
     }
 
-    func getCursor(userId: String, roomId: Int, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
-        let path = "/cursors/\(PCCursorType.read.rawValue)/rooms/\(roomId)/users/\(userId)"
+    func getCursor(userID: String, roomID: String, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
+        let path = "/cursors/\(PCCursorType.read.rawValue)/rooms/\(roomID)/users/\(userID)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
         self.instance.requestWithRetry(
@@ -105,7 +105,7 @@ public final class PCCursorStore {
         )
     }
 
-    fileprivate func key(_ userId: String, _ roomId: Int) -> String {
-        return "\(userId)/\(roomId)"
+    fileprivate func key(_ userID: String, _ roomID: String) -> String {
+        return "\(userID)/\(roomID)"
     }
 }

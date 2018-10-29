@@ -6,6 +6,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.10.3...HEAD)
 
+### Changed
+
+#### Breaking
+
+- All `PCChatManagerDelegate` and `PCRoomDelegate` functions are now prefixed with `on`, e.g. `userJoined` has become `onUserJoined`
+- `PCRoomDelegate`'s `newMessage` function has had the `new` prefix removed to make it clearer that it is the function that gets called when a new message is received over the room subscription (including historical messages), so in conjunction with the change above it is now `onMessage`
+- All mentions (mainly relevant to function parameter names) of anything that was previously `Id` is now `ID`, e.g. `roomId` is now `roomID`
+- `sendMessage` parameter `attachmentType` renamed to `attachment`
+- The ordering of messages returned by `fetchMessagesFromRoom` is now from oldest to newest
+- Room members are only populated once you have subscribed to a room
+- Message attachments no longer have the `fetchRequired` property because you can no always directly use an attachment's link
+
+### Removed
+
+- `lastSeenAt` is no longer available on `PCUser` objects
+- `fetchAttachment` as it's no longer required (you can use the attachment's link directly)
+
 ## [0.10.3](https://github.com/pusher/chatkit-swift/compare/0.10.2...0.10.3) - 2018-09-10
 
 ### Fixed

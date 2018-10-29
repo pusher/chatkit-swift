@@ -2,7 +2,7 @@ import Foundation
 
 public final class PCSynchronizedArray<T> {
     internal var underlyingArray: [T] = []
-    private let accessQueue = DispatchQueue(label: "synchronized.array.access", attributes: .concurrent)
+    private let accessQueue = DispatchQueue(label: "synchronized.array.access.\(UUID().uuidString)", attributes: .concurrent)
 
     public init() {}
 
@@ -11,6 +11,14 @@ public final class PCSynchronizedArray<T> {
             self.underlyingArray.append(newElement)
             completionHandler?()
         }
+    }
+
+    public func appendSync(_ newElement: T) -> T {
+        self.accessQueue.sync {
+            self.underlyingArray.append(newElement)
+        }
+
+        return newElement
     }
 
     func appendAndComplete(_ newElement: T, completionHandler: @escaping (T) -> Void) {
