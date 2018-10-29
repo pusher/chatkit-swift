@@ -125,11 +125,11 @@ extension ViewController: PCRoomDelegate {
         print("\(user.displayName)'s presence state went from \(previous.rawValue) to \(current.rawValue)")
     }
 
-    func newCursor(cursor: PCCursor) {
+    func onNewCursor(_ cursor: PCCursor) {
         print("New cursor for \(cursor.user.displayName) at position \(cursor.position)")
     }
 
-    func newMessage(message: PCMessage) {
+    func onMessage(_ message: PCMessage) {
         print("Received message: \(message.debugDescription)")
 
         self.messages.append(message)
@@ -172,47 +172,43 @@ extension ViewController: PCRoomDelegate {
 }
 
 public class MyDelegate: PCChatManagerDelegate {
-    public func addedToRoom(_ room: PCRoom) {
+    public func onAddedToRoom(_ room: PCRoom) {
         print("Added to room: \(room.name)")
     }
 
-    public func removedFromRoom(_ room: PCRoom) {
+    public func onRemovedFromRoom(_ room: PCRoom) {
         print("Removed from room: \(room.name)")
     }
 
-    public func roomUpdated(room: PCRoom) {
+    public func onRoomUpdated(room: PCRoom) {
         print("Room updated: \(room.name)")
     }
 
-    public func roomDeleted(room: PCRoom) {
+    public func onRoomDeleted(room: PCRoom) {
         print("Room deleted: \(room.name)")
     }
 
-    public func userJoinedRoom(_ room: PCRoom, user: PCUser) {
+    public func onUserJoinedRoom(_ room: PCRoom, user: PCUser) {
         print("User \(user.displayName) joined room: \(room.name)")
     }
 
-    public func userLeftRoom(_ room: PCRoom, user: PCUser) {
+    public func onUserLeftRoom(_ room: PCRoom, user: PCUser) {
         print("User \(user.displayName) left room: \(room.name)")
     }
 
-    public func userCameOnline(user: PCUser) {
-        print("User \(user.displayName) came online")
+    public func onUserPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {
+        print("\(user.displayName)'s presence state went from \(previous.rawValue) to \(current.rawValue)")
     }
 
-    public func userWentOffline(user: PCUser) {
-        print("User \(user.displayName) went online")
-    }
-
-    public func userStartedTyping(inRoom room: PCRoom, user: PCUser) {
+    public func onUserStartedTyping(inRoom room: PCRoom, user: PCUser) {
         print("\(user.displayName) started typing in room \(room.name)")
     }
 
-    public func userStoppedTyping(inRoom room: PCRoom, user: PCUser) {
+    public func onUserStoppedTyping(inRoom room: PCRoom, user: PCUser) {
         print("\(user.displayName) stopped typing in room \(room.name)")
     }
 
-    public func error(error: Error) {
+    public func onError(error: Error) {
         print("Error: \(error.localizedDescription)")
     }
 }
