@@ -6,16 +6,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.10.3...HEAD)
 
-## [0.10.3](https://github.com/pusher/chatkit-swift/compare/0.10.2...0.10.3) - 2018-09-10
-
-### Fixed
-
-- No longer crashes if disconnect is called midway through a successful connection process
-
-### Changed
-
-- Bump PusherPlatform dependency to 0.6.2
-
 ### Changed
 
 #### Breaking
@@ -26,10 +16,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `sendMessage` parameter `attachmentType` renamed to `attachment`
 - The ordering of messages returned by `fetchMessagesFromRoom` is now from oldest to newest
 - Room members are only populated once you have subscribed to a room
+- Message attachments no longer have the `fetchRequired` property because you can no always directly use an attachment's link
 
 ### Removed
 
 - `lastSeenAt` is no longer available on `PCUser` objects
+- `fetchAttachment` as it's no longer required (you can use the attachment's link directly)
+
+## [0.10.3](https://github.com/pusher/chatkit-swift/compare/0.10.2...0.10.3) - 2018-09-10
+
+### Fixed
+
+- No longer crashes if disconnect is called midway through a successful connection process
+
+### Changed
+
+- Bump PusherPlatform dependency to 0.6.2
 
 ## [0.10.2](https://github.com/pusher/chatkit-swift/compare/0.10.1...0.10.2) - 2018-08-22
 
