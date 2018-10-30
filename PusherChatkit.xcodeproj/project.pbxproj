@@ -62,6 +62,7 @@
 		33E3EBC7200E2368003D888D /* PPTypealiases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33E3EBC6200E2368003D888D /* PPTypealiases.swift */; };
 		33EE67DD20F5176800B0F0AD /* TokenGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EE67DC20F5176800B0F0AD /* TokenGenerator.swift */; };
 		33F1FC2B210734A90083E05E /* test-image.gif in Resources */ = {isa = PBXBuildFile; fileRef = 33F1FC2A210734A90083E05E /* test-image.gif */; };
+		3704959A21876E3200DFC497 /* PCPresenceStateChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3704959921876E3200DFC497 /* PCPresenceStateChange.swift */; };
 		F2665DEE20FDEE56002A0A3D /* PresenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2665DED20FDEE56002A0A3D /* PresenceTests.swift */; };
 		F2665E0F20FE025D002A0A3D /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2665E0E20FE025C002A0A3D /* MessageTests.swift */; };
 		F2AA717520F7616000BC01DE /* CursorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AA717420F7616000BC01DE /* CursorTests.swift */; };
@@ -138,6 +139,7 @@
 		33E3EBC6200E2368003D888D /* PPTypealiases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPTypealiases.swift; sourceTree = "<group>"; };
 		33EE67DC20F5176800B0F0AD /* TokenGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenGenerator.swift; sourceTree = "<group>"; };
 		33F1FC2A210734A90083E05E /* test-image.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "test-image.gif"; sourceTree = "<group>"; };
+		3704959921876E3200DFC497 /* PCPresenceStateChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCPresenceStateChange.swift; sourceTree = "<group>"; };
 		F2665DED20FDEE56002A0A3D /* PresenceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresenceTests.swift; sourceTree = "<group>"; };
 		F2665E0E20FE025C002A0A3D /* MessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
 		F2AA717420F7616000BC01DE /* CursorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CursorTests.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				3336C8141EE045FE005EB69A /* PCRoomUserStore.swift */,
 				334B9A2C1ECCA16A007A3D3B /* PCRoomStore.swift */,
 				331421361EDDA91A00D0B6DB /* PCPresencePayload.swift */,
+				3704959921876E3200DFC497 /* PCPresenceStateChange.swift */,
 				3388D5F81EAE4E4A0072A742 /* PCUser.swift */,
 				331421301ED32B5F00D0B6DB /* PCBasicUser.swift */,
 				3388D5F41EAE4E100072A742 /* PCMessage.swift */,
@@ -474,6 +477,7 @@
 				335AD8F8205C10AD000D4D08 /* PCMessageSubscription.swift in Sources */,
 				339CABD31EC3078200FDFB58 /* PCRoomDelegate.swift in Sources */,
 				33C5D8FB2020854A00E826FB /* PCCursor.swift in Sources */,
+				3704959A21876E3200DFC497 /* PCPresenceStateChange.swift in Sources */,
 				3397D4C21EC2017000DD5994 /* PCSynchronizedArray.swift in Sources */,
 				33B3DD9F1EF7E2F60050CA02 /* PCTokenProvider.swift in Sources */,
 				33E3EBC7200E2368003D888D /* PPTypealiases.swift in Sources */,
@@ -777,8 +781,8 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx appletvsimulator appletvos watchsimulator watchos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
-				TVOS_DEPLOYMENT_TARGET = 9.2;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 			};
 			name = Debug;
 		};
@@ -824,9 +828,9 @@
 				SDKROOT = "";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx appletvsimulator appletvos watchsimulator watchos";
 				SWIFT_VERSION = 4.2;
-				TVOS_DEPLOYMENT_TARGET = 9.2;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
 				VALIDATE_PRODUCT = YES;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+				WATCHOS_DEPLOYMENT_TARGET = 3.0;
 			};
 			name = Release;
 		};

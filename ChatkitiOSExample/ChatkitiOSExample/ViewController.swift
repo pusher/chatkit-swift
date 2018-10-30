@@ -121,8 +121,8 @@ extension ViewController: PCRoomDelegate {
         print("\(user.displayName) stopped typing in room \(self.currentRoom!.name)")
     }
 
-    func onUserPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {
-        print("\(user.displayName)'s presence state went from \(previous.rawValue) to \(current.rawValue)")
+    public func onPresenceChanged(stateChange: PCPresenceStateChange, user: PCUser) {
+        print("\(user.displayName)'s presence state went from \(stateChange.previous.rawValue) to \(stateChange.current.rawValue)")
     }
 
     func onNewCursor(_ cursor: PCCursor) {
@@ -183,8 +183,8 @@ public class MyDelegate: PCChatManagerDelegate {
         print("User \(user.displayName) left room: \(room.name)")
     }
 
-    public func onUserPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {
-        print("\(user.displayName)'s presence state went from \(previous.rawValue) to \(current.rawValue)")
+    public func onPresenceChanged(stateChange: PCPresenceStateChange, user: PCUser) {
+        print("\(user.displayName)'s presence state went from \(stateChange.previous.rawValue) to \(stateChange.current.rawValue)")
     }
 
     public func onUserStartedTyping(inRoom room: PCRoom, user: PCUser) {

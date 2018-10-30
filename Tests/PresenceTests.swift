@@ -87,21 +87,21 @@ class PresenceTests: XCTestCase {
         let onlineEx = expectation(description: "notified of Bob coming online (user)")
         let offlineEx = expectation(description: "notified of Bob going offline (user)")
 
-        let onUserPresenceChanged = { (previous: PCPresenceState, current: PCPresenceState, user: PCUser) -> Void in
+        let onPresenceChanged = { (stateChange: PCPresenceStateChange, user: PCUser) -> Void in
             guard user.id != "charlie" else { return }
             XCTAssertEqual(user.id, self.uniqueBob)
 
-            if case .unknown = previous, case .offline = current {
+            if case .unknown = stateChange.previous, case .offline = stateChange.current {
                 initialPresenceEx.fulfill()
-            } else if case .offline = previous, case .online = current {
+            } else if case .offline = stateChange.previous, case .online = stateChange.current {
                 onlineEx.fulfill()
                 self.bobChatManager.disconnect()
-            } else if case .online = previous, case .offline = current {
+            } else if case .online = stateChange.previous, case .offline = stateChange.current {
                 offlineEx.fulfill()
             }
         }
 
-        let aliceCMDelegate = TestingChatManagerDelegate(onUserPresenceChanged: onUserPresenceChanged)
+        let aliceCMDelegate = TestingChatManagerDelegate(onPresenceChanged: onPresenceChanged)
 
         aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
@@ -124,21 +124,21 @@ class PresenceTests: XCTestCase {
         let onlineEx = expectation(description: "notified of Alice coming online (room)")
         let offlineEx = expectation(description: "notified of Alice going offline (room)")
 
-        let onUserPresenceChanged = { (previous: PCPresenceState, current: PCPresenceState, user: PCUser) -> Void in
+        let onPresenceChanged = { (stateChange: PCPresenceStateChange, user: PCUser) -> Void in
             guard user.id != "charlie" else { return }
             XCTAssertEqual(user.id, self.uniqueAlice)
 
-            if case .unknown = previous, case .offline = current {
+            if case .unknown = stateChange.previous, case .offline = stateChange.current {
                 initialPresenceEx.fulfill()
-            } else if case .offline = previous, case .online = current {
+            } else if case .offline = stateChange.previous, case .online = stateChange.current {
                 onlineEx.fulfill()
                 self.aliceChatManager.disconnect()
-            } else if case .online = previous, case .offline = current {
+            } else if case .online = stateChange.previous, case .offline = stateChange.current {
                 offlineEx.fulfill()
             }
         }
 
-        let bobRoomDelegate = TestingRoomDelegate(onUserPresenceChanged: onUserPresenceChanged)
+        let bobRoomDelegate = TestingRoomDelegate(onPresenceChanged: onPresenceChanged)
 
         self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
             XCTAssertNil(err)

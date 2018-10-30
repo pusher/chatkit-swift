@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/pusher/chatkit-swift/compare/0.10.3...HEAD)
+## [Unreleased](https://github.com/pusher/chatkit-swift/compare/1.0.0...HEAD)
+
+## [1.0.0](https://github.com/pusher/chatkit-swift/compare/0.10.3...1.0.0) - 2018-10-29
 
 ### Changed
 
@@ -22,6 +24,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - `lastSeenAt` is no longer available on `PCUser` objects
 - `fetchAttachment` as it's no longer required (you can use the attachment's link directly)
+- `userCameOnline` and `userWentOffline` (replaced by `onPresenceChanged`)
+
+### Added
+
+- `onPresenceChanged` (replacing `userCameOnline` and `userWentOffline`)
 
 ## [0.10.3](https://github.com/pusher/chatkit-swift/compare/0.10.2...0.10.3) - 2018-09-10
 

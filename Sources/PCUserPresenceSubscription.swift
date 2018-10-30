@@ -97,9 +97,11 @@ extension PCUserPresenceSubscription {
                     )
                 }
 
-                strongSelf.delegate?.onUserPresenceChanged(
-                    previous: previousPresenceState,
-                    current: presencePayload.state,
+                strongSelf.delegate?.onPresenceChanged(
+                    stateChange: PCPresenceStateChange(
+                        previous: previousPresenceState,
+                        current: presencePayload.state
+                    ),
                     user: user
                 )
 
@@ -110,9 +112,11 @@ extension PCUserPresenceSubscription {
                         return
                     }
 
-                    room.subscription?.delegate?.onUserPresenceChanged(
-                        previous: previousPresenceState,
-                        current: presencePayload.state,
+                    room.subscription?.delegate?.onPresenceChanged(
+                        stateChange: PCPresenceStateChange(
+                            previous: previousPresenceState,
+                            current: presencePayload.state
+                        ),
                         user: user
                     )
                 }

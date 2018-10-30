@@ -12,7 +12,7 @@ public protocol PCRoomDelegate: NSObjectProtocol {
     func onUserJoined(user: PCUser)
     func onUserLeft(user: PCUser)
 
-    func onUserPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser)
+    func onPresenceChanged(stateChange: PCPresenceStateChange, user: PCUser)
 
     // TODO: This should be unnecessary
     func onUsersUpdated()
@@ -25,6 +25,6 @@ public extension PCRoomDelegate {
     func onUserStoppedTyping(user: PCUser) {}
     func onUserJoined(user: PCUser) {}
     func onUserLeft(user: PCUser) {}
-    func onUserPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {}
+    func onPresenceChanged(stateChange: PCPresenceStateChange, user: PCUser) {}
     func onUsersUpdated() {}
 }

@@ -4,7 +4,7 @@ import PusherChatkit
 class TestingChatManagerDelegate: PCChatManagerDelegate {
     let handleUserStartedTyping: (PCRoom, PCUser) -> Void
     let handleUserStoppedTyping: (PCRoom, PCUser) -> Void
-    let handleUserPresenceChanged: (PCPresenceState, PCPresenceState, PCUser) -> Void
+    let handlePresenceChanged: (PCPresenceStateChange, PCUser) -> Void
     let handleUserJoinedRoom: (PCRoom, PCUser) -> Void
     let handleUserLeftRoom: (PCRoom, PCUser) -> Void
     let handleAddedToRoom: (PCRoom) -> Void
@@ -14,7 +14,7 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
     init(
         onUserStartedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
         onUserStoppedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
-        onUserPresenceChanged: @escaping (PCPresenceState, PCPresenceState, PCUser) -> Void = { _, _, _ in },
+        onPresenceChanged: @escaping (PCPresenceStateChange, PCUser) -> Void = { _, _ in },
         onUserJoinedRoom: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
         onUserLeftRoom: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
         onAddedToRoom: @escaping (PCRoom) -> Void = { _ in },
@@ -23,7 +23,7 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
     ) {
         handleUserStartedTyping = onUserStartedTyping
         handleUserStoppedTyping = onUserStoppedTyping
-        handleUserPresenceChanged = onUserPresenceChanged
+        handlePresenceChanged = onPresenceChanged
         handleUserJoinedRoom = onUserJoinedRoom
         handleUserLeftRoom = onUserLeftRoom
         handleAddedToRoom = onAddedToRoom
@@ -39,8 +39,8 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
         handleUserStoppedTyping(room, user)
     }
 
-    func onUserPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {
-        handleUserPresenceChanged(previous, current, user)
+    func onPresenceChanged(stateChange: PCPresenceStateChange, user: PCUser) {
+        handlePresenceChanged(stateChange, user)
     }
 
     func onUserJoinedRoom(_ room: PCRoom, user: PCUser) {
@@ -68,7 +68,7 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
     let handleNewCursor: (PCCursor) -> Void
     let handleUserStartedTyping: (PCUser) -> Void
     let handleUserStoppedTyping: (PCUser) -> Void
-    let handleUserPresenceChanged: (PCPresenceState, PCPresenceState, PCUser) -> Void
+    let handlePresenceChanged: (PCPresenceStateChange, PCUser) -> Void
     let handleUserJoined: (PCUser) -> Void
     let handleUserLeft: (PCUser) -> Void
     let handleNewMessage: (PCMessage) -> Void
@@ -77,7 +77,7 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
         onNewCursor: @escaping (PCCursor) -> Void = { _ in },
         onUserStartedTyping: @escaping (PCUser) -> Void = { _ in },
         onUserStoppedTyping: @escaping (PCUser) -> Void = { _ in },
-        onUserPresenceChanged: @escaping (PCPresenceState, PCPresenceState, PCUser) -> Void = { _, _, _ in },
+        onPresenceChanged: @escaping (PCPresenceStateChange, PCUser) -> Void = { _, _ in },
         onUserJoined: @escaping (PCUser) -> Void = { _ in },
         onUserLeft: @escaping (PCUser) -> Void = { _ in },
         onMessage: @escaping (PCMessage) -> Void = { _ in }
@@ -85,7 +85,7 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
         handleNewCursor = onNewCursor
         handleUserStartedTyping = onUserStartedTyping
         handleUserStoppedTyping = onUserStoppedTyping
-        handleUserPresenceChanged = onUserPresenceChanged
+        handlePresenceChanged = onPresenceChanged
         handleUserJoined = onUserJoined
         handleUserLeft = onUserLeft
         handleNewMessage = onMessage
@@ -103,8 +103,8 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
         handleUserStoppedTyping(user)
     }
 
-    func onUserPresenceChanged(previous: PCPresenceState, current: PCPresenceState, user: PCUser) {
-        handleUserPresenceChanged(previous, current, user)
+    func onPresenceChanged(stateChange: PCPresenceStateChange, user: PCUser) {
+        handlePresenceChanged(stateChange, user)
     }
 
     func onUserJoined(user: PCUser) {
