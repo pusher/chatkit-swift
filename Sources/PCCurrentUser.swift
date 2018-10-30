@@ -16,7 +16,7 @@ public final class PCCurrentUser {
     var delegate: PCChatManagerDelegate {
         didSet {
             userSubscription?.delegate = delegate
-            userPresenceSubscripitons.forEach { ($0.value).delegate = delegate }
+            userPresenceSubscriptions.forEach { ($0.value).delegate = delegate }
         }
     }
 
@@ -60,7 +60,7 @@ public final class PCCurrentUser {
         return PCReadCursorDebouncerManager(currentUser: self)
     }()
 
-    public internal(set) var userPresenceSubscripitons = PCSynchronizedDictionary<String, PCUserPresenceSubscription>()
+    public internal(set) var userPresenceSubscriptions = PCSynchronizedDictionary<String, PCUserPresenceSubscription>()
 
     public init(
         id: String,
@@ -1066,7 +1066,7 @@ public final class PCCurrentUser {
             return // don't subscribe to own presence
         }
 
-        guard self.userPresenceSubscripitons[user.id] == nil else {
+        guard self.userPresenceSubscriptions[user.id] == nil else {
             return // already subscribed to presence for user
         }
 
@@ -1091,7 +1091,7 @@ public final class PCCurrentUser {
             delegate: delegate
         )
 
-        self.userPresenceSubscripitons[user.id] = userPresenceSubscription
+        self.userPresenceSubscriptions[user.id] = userPresenceSubscription
 
         self.presenceInstance.subscribeWithResume(
             with: &resumableSub,
