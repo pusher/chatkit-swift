@@ -216,8 +216,8 @@ import PusherPlatform
             room.subscription?.end()
             room.subscription = nil
         }
-        currentUser?.userPresenceSubscripitons.forEach { $0.value.end() }
-        currentUser?.userPresenceSubscripitons.removeAll()
+        currentUser?.userPresenceSubscriptions.forEach { $0.value.end() }
+        currentUser?.userPresenceSubscriptions.removeAll()
         connectionCoordinator.reset()
         basicCurrentUser = nil
     }
