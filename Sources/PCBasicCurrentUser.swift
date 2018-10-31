@@ -13,6 +13,7 @@ public final class PCBasicCurrentUser {
     public internal(set) var presenceSubscription: PCPresenceSubscription?
     public internal(set) var cursorSubscription: PCCursorSubscription?
 
+    private let chatkitBeamsTokenProviderInstance: Instance
     let instance: Instance
     let filesInstance: Instance
     let cursorsInstance: Instance
@@ -25,6 +26,7 @@ public final class PCBasicCurrentUser {
         id: String,
         pathFriendlyID: String,
         instance: Instance,
+        chatkitBeamsTokenProviderInstance: Instance,
         filesInstance: Instance,
         cursorsInstance: Instance,
         presenceInstance: Instance,
@@ -34,6 +36,7 @@ public final class PCBasicCurrentUser {
         self.id = id
         self.pathFriendlyID = pathFriendlyID
         self.instance = instance
+        self.chatkitBeamsTokenProviderInstance = chatkitBeamsTokenProviderInstance
         self.filesInstance = filesInstance
         self.cursorsInstance = cursorsInstance
         self.presenceInstance = presenceInstance

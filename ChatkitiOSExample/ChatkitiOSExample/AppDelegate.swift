@@ -18,7 +18,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
 
         self.pusherChat = pusherChat
+
+        // Initiate the registration process with Apple Push Notification service.
+        ChatManager.registerForRemoteNotifications()
+
         return true
+    }
+
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        // Register device token with Pusher Beams service.
+        ChatManager.registerDeviceToken(deviceToken)
     }
 }
 
