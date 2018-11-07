@@ -71,6 +71,16 @@ github "pusher/chatkit-swift"
 
 Run `carthage update` to build the framework and drag the built `PusherChatkit.framework` and `PusherPlatform.framework` into your Xcode project.
 
+## Deprecated versions
+
+ Versions of the library below
+ [1.0.0](https://github.com/pusher/chatkit-swift/releases/tag/1.0.0) are
+ deprecated and support for them will soon be dropped.
+
+ It is highly recommended that you upgrade to the latest version if you're on
+ an older version. To view a list of changes, please refer to the
+ [CHANGELOG](CHANGELOG.md).
+
 ## Getting started
 
 Head over to [our documentation](https://docs.pusher.com/chatkit/reference/swift).
