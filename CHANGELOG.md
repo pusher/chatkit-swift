@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - The ordering of messages returned by `fetchMessagesFromRoom` is now from oldest to newest
 - Room members are only populated once you have subscribed to a room
 - Message attachments no longer have the `fetchRequired` property because you can no always directly use an attachment's link
+- `startedTypingIn` and `stoppedTypingIn` have both been removed. Use `typing(in: ...)` instead
 
 ### Removed
 
