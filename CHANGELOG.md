@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Room members are only populated once you have subscribed to a room
 - Message attachments no longer have the `fetchRequired` property because you can no always directly use an attachment's link
 - `startedTypingIn` and `stoppedTypingIn` have both been removed. Use `typing(in: ...)` instead
+- Room IDs are now represented using `String`s instead of `Int`s
 
 ### Removed
 
