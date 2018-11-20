@@ -10,6 +10,7 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
     let handleAddedToRoom: (PCRoom) -> Void
     let handleRemovedFromRoom: (PCRoom) -> Void
     let handleRoomDeleted: (PCRoom) -> Void
+    let handleRoomUpdated: (PCRoom) -> Void
 
     init(
         onUserStartedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
@@ -19,7 +20,8 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
         onUserLeftRoom: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
         onAddedToRoom: @escaping (PCRoom) -> Void = { _ in },
         onRemovedFromRoom: @escaping (PCRoom) -> Void = { _ in },
-        onRoomDeleted: @escaping (PCRoom) -> Void = { _ in }
+        onRoomDeleted: @escaping (PCRoom) -> Void = { _ in },
+        onRoomUpdated: @escaping (PCRoom) -> Void = { _ in }
     ) {
         handleUserStartedTyping = onUserStartedTyping
         handleUserStoppedTyping = onUserStoppedTyping
@@ -29,6 +31,7 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
         handleAddedToRoom = onAddedToRoom
         handleRemovedFromRoom = onRemovedFromRoom
         handleRoomDeleted = onRoomDeleted
+        handleRoomUpdated = onRoomUpdated
     }
 
     func onUserStartedTyping(inRoom room: PCRoom, user: PCUser) -> Void {
@@ -61,6 +64,10 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
 
     func onRoomDeleted(room: PCRoom) {
         handleRoomDeleted(room)
+    }
+
+    func onRoomUpdated(room: PCRoom) {
+        handleRoomUpdated(room)
     }
 }
 

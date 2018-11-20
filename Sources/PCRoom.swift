@@ -8,6 +8,7 @@ public final class PCRoom {
     public let createdByUserID: String
     public let createdAt: String
     public internal(set) var updatedAt: String
+    public internal(set) var customData: [String: Any]?
 
     public internal(set) var subscription: PCRoomSubscription?
 
@@ -42,6 +43,7 @@ public final class PCRoom {
         createdByUserID: String,
         createdAt: String,
         updatedAt: String,
+        customData: [String: Any]? = nil,
         userIDs: Set<String>? = nil
     ) {
         self.id = id
@@ -50,6 +52,7 @@ public final class PCRoom {
         self.createdByUserID = createdByUserID
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        self.customData = customData
         self.userIDs = userIDs ?? []
         self.userStore = PCRoomUserStore()
     }
@@ -58,6 +61,7 @@ public final class PCRoom {
         self.name = room.name
         self.isPrivate = room.isPrivate
         self.updatedAt = room.updatedAt
+        self.customData = room.customData
         self.userIDs = room.userIDs
     }
 }
