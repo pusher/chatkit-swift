@@ -116,7 +116,7 @@ class PresenceTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 15)
+        waitForExpectations(timeout: 20)
     }
 
     func testRoomDelegatePresenceHooks() {
@@ -153,6 +153,6 @@ class PresenceTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 15)
+        waitForExpectations(timeout: 20)
     }
 }

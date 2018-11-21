@@ -123,12 +123,13 @@ struct PCPayloadDeserializer {
         guard
             let payload = payload as? [String: Any],
             let link = payload["resource_link"] as? String,
-            let type = payload["type"] as? String
+            let type = payload["type"] as? String,
+            let name = payload["name"] as? String
         else {
             return nil
         }
 
-        return PCAttachment(link: link, type: type)
+        return PCAttachment(link: link, type: type, name: name)
     }
 
     static func createAttachmentUploadResponseFromPayload(_ payload: [String: Any]) throws -> PCAttachmentUploadResponse {

@@ -603,11 +603,13 @@ public final class PCCurrentUser {
         switch attachment {
         case .fileData(let data, let name):
             multipartFormData = { $0.append(data, withName: "file", fileName: name) }
-            reqOptions = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: "/rooms/\(roomID)/users/\(pathFriendlyID)/files/\(name)")
+            let pathSafeName = pathFriendlyVersion(of: name)
+            reqOptions = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: "/rooms/\(roomID)/users/\(pathFriendlyID)/files/\(pathSafeName)")
             break
         case .fileURL(let url, let name):
             multipartFormData = { $0.append(url, withName: "file", fileName: name) }
-            reqOptions = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: "/rooms/\(roomID)/users/\(pathFriendlyID)/files/\(name)")
+            let pathSafeName = pathFriendlyVersion(of: name)
+            reqOptions = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: "/rooms/\(roomID)/users/\(pathFriendlyID)/files/\(pathSafeName)")
             break
         default:
             sendMessage(messageObject, roomID: roomID, completionHandler: completionHandler)

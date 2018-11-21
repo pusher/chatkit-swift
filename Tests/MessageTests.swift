@@ -281,6 +281,7 @@ class MessagesTests: XCTestCase {
             XCTAssertEqual(message.room.name, "mushroom")
             XCTAssertEqual(message.attachment!.link, veryImportantImage)
             XCTAssertEqual(message.attachment!.type, "image")
+            XCTAssertEqual(message.attachment!.name, "rJbRKLU.gif")
 
             ex.fulfill()
         })
@@ -313,65 +314,115 @@ class MessagesTests: XCTestCase {
         waitForExpectations(timeout: 15)
     }
 
-    // TODO: This fails because of some problem with the upload never working.
-    // Seeing as files is still in beta (and it works in the example app) it
-    // seems safe to ignore this for now
+    // Unsure why this doesn't work on iOS but it does work for macOS. Uploading
+    // using the same method as is used here works in the iOS example app, so I
+    // think it must be some test-specific oddity
+    #if os(macOS)
+    func testSendAndReceiveMessageWithDataAttachment() {
+        let bundle = Bundle(for: type(of: self))
+        let veryImportantImage = bundle.path(
+            forResource: "test-image",
+            ofType: "gif"
+        )!
 
-//    func testSendAndReceiveMessageWithDataAttachment() {
-//        let veryImportantImage = Bundle(for: type(of: self))
-//            .path(
-//                forResource: "test-image",
-//                ofType: "gif"
-//            )!
-//
-//        let ex = expectation(description: "subscribe and receive sent messages")
-//
-//        let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
-//            XCTAssertEqual(message.text, "see attached")
-//            XCTAssertEqual(message.sender.id, "alice")
-//            XCTAssertEqual(message.sender.name, "Alice")
-//            XCTAssertEqual(message.room.id, self.roomID)
-//            XCTAssertEqual(message.room.name, "mushroom")
-//            XCTAssertEqual(message.attachment!.type, "image")
-//            // TODO assert some more stuff about the attachment (and fetch it?)
-//
-//            ex.fulfill()
-//        })
-//
-//        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
-//            XCTAssertNil(err)
-//
-//            bob!.subscribeToRoom(
-//                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
-//                roomDelegate: bobRoomDelegate,
-//                messageLimit: 0,
-//                completionHandler: { err in
-//                    XCTAssertNil(err)
-//
-//                }
-//            )
-//
-//            let filesUploadSessionTestConfig = URLSessionConfiguration.ephemeral
-////            filesUploadSessionTestConfig.identifier = "com.pusher.chatkit.files-upload-test.\(UUID().uuidString)"
-//            filesUploadSessionTestConfig.httpAdditionalHeaders = self.aliceChatManager.filesInstance.client.sdkInfoHeaders
-//            self.aliceChatManager.filesInstance.client.uploadURLSession = URLSession(configuration: filesUploadSessionTestConfig)
-//
-//            self.aliceChatManager.connect(
-//                delegate: TestingChatManagerDelegate()
-//            ) { alice, err in
-//                alice!.sendMessage(
-//                    roomID: self.roomID,
-//                    text: "see attached",
-//                    attachment: .fileURL(
-//                        URL(fileURLWithPath: veryImportantImage),
-//                        name: "test-image.gif"
-//                    )
-//                ) { _, err in
-//                    XCTAssertNil(err)
-//                }
-//            }
-//        }
-//
-//        waitForExpectations(timeout: 15)
-//    }
+        let ex = expectation(description: "subscribe and receive sent messages")
+
+        let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
+            XCTAssertEqual(message.text, "see attached")
+            XCTAssertEqual(message.sender.id, "alice")
+            XCTAssertEqual(message.sender.name, "Alice")
+            XCTAssertEqual(message.room.id, self.roomID)
+            XCTAssertEqual(message.room.name, "mushroom")
+            XCTAssertEqual(message.attachment!.type, "image")
+            XCTAssertEqual(message.attachment!.name, "test-image.gif")
+
+            ex.fulfill()
+        })
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.subscribeToRoom(
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
+                roomDelegate: bobRoomDelegate,
+                messageLimit: 0,
+                completionHandler: { err in
+                    XCTAssertNil(err)
+                }
+            )
+
+            self.aliceChatManager.connect(
+                delegate: TestingChatManagerDelegate()
+            ) { alice, err in
+                alice!.sendMessage(
+                    roomID: self.roomID,
+                    text: "see attached",
+                    attachment: .fileURL(
+                        URL(fileURLWithPath: veryImportantImage),
+                        name: "test-image.gif"
+                    )
+                ) { _, err in
+                    XCTAssertNil(err)
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 25)
+    }
+
+    func testSendAndReceiveMessageWithDataAttachmentThatHasAHorribleName() {
+        let bundle = Bundle(for: type(of: self))
+        // The resource is written with colons here in place of the slashes that
+        // show as being in the filename if you look at it in Finder. This is a
+        // weird macOS <-> Unix oddity
+        let testFilePath = bundle.path(
+            forResource: "lol ? wut ?&..",
+            ofType: "json"
+        )!
+
+        let ex = expectation(description: "subscribe and receive sent messages")
+
+        let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
+            XCTAssertEqual(message.text, "see attached")
+            XCTAssertEqual(message.sender.id, "alice")
+            XCTAssertEqual(message.sender.name, "Alice")
+            XCTAssertEqual(message.room.id, self.roomID)
+            XCTAssertEqual(message.room.name, "mushroom")
+            XCTAssertEqual(message.attachment!.type, "file")
+            XCTAssertEqual(message.attachment!.name, "lol ? wut ?&...json")
+
+            ex.fulfill()
+        })
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.subscribeToRoom(
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
+                roomDelegate: bobRoomDelegate,
+                messageLimit: 0,
+                completionHandler: { err in
+                    XCTAssertNil(err)
+                }
+            )
+
+            self.aliceChatManager.connect(
+                delegate: TestingChatManagerDelegate()
+            ) { alice, err in
+                alice!.sendMessage(
+                    roomID: self.roomID,
+                    text: "see attached",
+                    attachment: .fileURL(
+                        URL(fileURLWithPath: testFilePath),
+                        name: "lol ? wut ?&...json"
+                    )
+                ) { _, err in
+                    XCTAssertNil(err)
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 25)
+    }
+    #endif
 }
