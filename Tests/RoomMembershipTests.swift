@@ -285,6 +285,66 @@ class RoomMembershipTests: XCTestCase {
         waitForExpectations(timeout: 15)
     }
 
+    func testChatManagerRoomUpdatedHookCalled() {
+        let assignAdminRoleEx = expectation(description: "assign alice admin role")
+        let unassignAdminRoleEx = expectation(description: "unassign alice admin role")
+        let roomCreatedEx = expectation(description: "room created")
+        let roomUpdatedHookEx = expectation(description: "room updated hook called")
+        let updateRoomEx = expectation(description: "room updated")
+
+        let onRoomUpdated = { (room: PCRoom) -> Void in
+            XCTAssertEqual(room.name, "balloon")
+            XCTAssertFalse(room.isPrivate)
+            XCTAssertEqual(room.customData!.keys.count, 2)
+            XCTAssertEqual((room.customData!["different"] as! String), "custom stuff")
+            XCTAssertEqual(room.customData!["and"] as! [String: String], ["nested": "stuff"])
+            roomUpdatedHookEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(onRoomUpdated: onRoomUpdated)
+
+        assignGlobalRole("admin", toUser: "alice") { err in
+            XCTAssertNil(err)
+            assignAdminRoleEx.fulfill()
+            self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+                XCTAssertNil(err)
+                alice!.createRoom(
+                    name: "mushroom",
+                    isPrivate: true,
+                    addUserIDs: ["bob"],
+                    customData: ["testing": "some custom data", "and more": 123]
+                ) { room, err in
+                    XCTAssertNil(err)
+                    XCTAssertNotNil(room)
+                    XCTAssertEqual(room!.name, "mushroom")
+                    XCTAssertTrue(room!.isPrivate)
+                    let expectedUserIDs = ["alice", "bob"]
+                    let sortedUserIDs = room!.users.map { $0.id }.sorted()
+                    XCTAssertEqual(sortedUserIDs, expectedUserIDs)
+                    XCTAssertEqual(room!.customData!.keys.count, 2)
+                    XCTAssertEqual((room!.customData!["testing"] as! String), "some custom data")
+                    XCTAssertEqual(room!.customData!["and more"] as! Int, 123)
+                    roomCreatedEx.fulfill()
+                    alice!.updateRoom(
+                        id: room!.id,
+                        name: "balloon",
+                        isPrivate: false,
+                        customData: ["different": "custom stuff", "and": ["nested": "stuff"]]
+                    ) { err in
+                        XCTAssertNil(err)
+                        updateRoomEx.fulfill()
+                        assignGlobalRole("default", toUser: "alice") { err in
+                            XCTAssertNil(err)
+                            unassignAdminRoleEx.fulfill()
+                        }
+                    }
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
     // MARK: Room delegate tests
 
     func testRoomDelegateUserJoinedRoomHookWhenUserJoins() {

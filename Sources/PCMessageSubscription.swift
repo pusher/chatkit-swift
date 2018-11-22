@@ -65,7 +65,6 @@ public final class PCMessageSubscription {
     }
 
     func onNewMessage(data: [String: Any]) {
-
         do {
             let basicMessage = try PCPayloadDeserializer.createBasicMessageFromPayload(data)
 
@@ -137,4 +136,3 @@ public final class PCMessageSubscription {
         self.resumableSubscription.end()
     }
 }
-

@@ -113,6 +113,7 @@ public final class PCCurrentUser {
         name: String,
         isPrivate: Bool = false,
         addUserIDs userIDs: [String]? = nil,
+        customData: [String: Any]? = nil,
         completionHandler: @escaping PCRoomCompletionHandler
     ) {
         var roomObject: [String: Any] = [
@@ -123,6 +124,10 @@ public final class PCCurrentUser {
 
         if userIDs != nil && userIDs!.count > 0 {
             roomObject["user_ids"] = userIDs
+        }
+
+        if customData != nil {
+            roomObject["custom_data"] = customData!
         }
 
         guard JSONSerialization.isValidJSONObject(roomObject) else {
@@ -211,10 +216,23 @@ public final class PCCurrentUser {
      * - parameter room: The room which should be updated.
      * - parameter name: Name of the room.
      * - parameter isPrivate: Indicates if a room should be private or public.
+     * - parameter customData: Optional custom data associated with a room.
      * - parameter completionHandler: Invoked when request failed or completed.
      */
-    public func updateRoom(_ room: PCRoom, name: String? = nil, isPrivate: Bool? = nil, completionHandler: @escaping PCErrorCompletionHandler) {
-        self.updateRoom(roomID: room.id, name: name, isPrivate: isPrivate, completionHandler: completionHandler)
+    public func updateRoom(
+        _ room: PCRoom,
+        name: String? = nil,
+        isPrivate: Bool? = nil,
+        customData: [String: Any]? = nil,
+        completionHandler: @escaping PCErrorCompletionHandler
+    ) {
+        self.updateRoom(
+            roomID: room.id,
+            name: name,
+            isPrivate: isPrivate,
+            customData: customData,
+            completionHandler: completionHandler
+        )
     }
 
     /**
@@ -223,29 +241,52 @@ public final class PCCurrentUser {
      * - parameter id: The id of the room which should be updated.
      * - parameter name: Name of the room.
      * - parameter isPrivate: Indicates if a room should be private or public.
+     * - parameter customData: Optional custom data associated with a room.
      * - parameter completionHandler: Invoked when request failed or completed.
      */
-    public func updateRoom(id: String, name: String? = nil, isPrivate: Bool? = nil, completionHandler: @escaping PCErrorCompletionHandler) {
-        self.updateRoom(roomID: id, name: name, isPrivate: isPrivate, completionHandler: completionHandler)
+    public func updateRoom(
+        id: String,
+        name: String? = nil,
+        isPrivate: Bool? = nil,
+        customData: [String: Any]? = nil,
+        completionHandler: @escaping PCErrorCompletionHandler
+    ) {
+        self.updateRoom(
+            roomID: id,
+            name: name,
+            isPrivate: isPrivate,
+            customData: customData,
+            completionHandler: completionHandler
+        )
     }
 
-    fileprivate func updateRoom(roomID: String, name: String?, isPrivate: Bool?, completionHandler: @escaping PCErrorCompletionHandler) {
-        guard name != nil || isPrivate != nil else {
+    fileprivate func updateRoom(
+        roomID: String,
+        name: String?,
+        isPrivate: Bool?,
+        customData: [String: Any]?,
+        completionHandler: @escaping PCErrorCompletionHandler
+    ) {
+        guard name != nil || isPrivate != nil || customData != nil else {
             completionHandler(nil)
             return
         }
 
-        var userPayload: [String : Any] = [:]
-        userPayload["name"] = name
-        userPayload["private"] = isPrivate
+        var roomPayload: [String: Any] = [:]
+        roomPayload["name"] = name
+        roomPayload["private"] = isPrivate
 
-        guard JSONSerialization.isValidJSONObject(userPayload) else {
-            completionHandler(PCError.invalidJSONObjectAsData(userPayload))
+        if customData != nil {
+            roomPayload["custom_data"] = customData
+        }
+
+        guard JSONSerialization.isValidJSONObject(roomPayload) else {
+            completionHandler(PCError.invalidJSONObjectAsData(roomPayload))
             return
         }
 
-        guard let data = try? JSONSerialization.data(withJSONObject: userPayload, options: []) else {
-            completionHandler(PCError.failedToJSONSerializeData(userPayload))
+        guard let data = try? JSONSerialization.data(withJSONObject: roomPayload, options: []) else {
+            completionHandler(PCError.failedToJSONSerializeData(roomPayload))
             return
         }
 

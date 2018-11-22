@@ -76,7 +76,7 @@ struct PCPayloadDeserializer {
             createdByUserID: roomCreatorUserID,
             createdAt: roomCreatedAt,
             updatedAt: roomUpdatedAt,
-            deletedAt: roomPayload["deleted_at"] as? String,
+            customData: roomPayload["custom_data"] as? [String: Any],
             userIDs: memberUserIDsSet
         )
     }
