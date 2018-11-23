@@ -74,6 +74,18 @@ public final class PCRoom {
         self.userIDs = room.userIDs
         self.deletedAt = room.deletedAt
     }
+
+    func deepEqual(to room: PCRoom) -> Bool {
+        return
+            self.name == room.name &&
+            self.isPrivate == room.isPrivate &&
+            (
+                (self.customData == nil && room.customData == nil) ||
+                (self.customData != nil && room.customData != nil &&
+                    (self.customData! as NSDictionary).isEqual(to: room.customData!)
+                )
+            )
+    }
 }
 
 extension PCRoom: Hashable {
@@ -89,5 +101,18 @@ extension PCRoom: Hashable {
 extension PCRoom: CustomDebugStringConvertible {
     public var debugDescription: String {
         return "ID: \(self.id) Name: \(self.name) Private: \(self.isPrivate)"
+    }
+}
+
+extension PCRoom {
+    func copy() -> PCRoom {
+        return PCRoom(
+            id: self.id,
+            name: self.name,
+            isPrivate: self.isPrivate,
+            createdByUserID: self.createdByUserID,
+            createdAt: self.createdAt,
+            updatedAt: self.updatedAt
+        )
     }
 }

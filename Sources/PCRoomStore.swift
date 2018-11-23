@@ -42,6 +42,10 @@ public final class PCRoomStore {
         return self.rooms.remove(where: { $0.id == id }, completionHandler: completionHandler)
     }
 
+    func removeSync(id: String) -> PCRoom? {
+        return self.rooms.removeSync(where: { $0.id == id })
+    }
+
     func findOrGetRoom(id: String, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
         if let room = self.rooms.first(where: { $0.id == id }) {
             completionHandler(room, nil)

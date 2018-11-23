@@ -170,10 +170,17 @@ import NotificationCenter
                     return
                 }
 
+                var existingRooms: [PCRoom] = []
+
                 // If the currentUser property is already set then the assumption is that there was
                 // already a user subscription and so instead of setting the property to a new
                 // PCCurrentUser, we update the existing one to have the most up-to-date state
                 if let currentUser = strongSelf.currentUser {
+                    // We need to take a copies of the rooms so that when we make the comparisions
+                    // of received rooms to pre-existing rooms we aren't actually just comparing
+                    // the same rooms (as PCRoom is a class and we have reference semantics)
+                    let roomsCopy = currentUser.rooms.map { $0.copy() }
+                    existingRooms = roomsCopy
                     currentUser.updateWithPropertiesOf(receivedCurrentUser)
                 } else {
                     strongSelf.currentUser = receivedCurrentUser
@@ -190,6 +197,7 @@ import NotificationCenter
                 )
 
                 var combinedRoomUserIDs = Set<String>()
+                var newRooms: [PCRoom] = []
 
                 roomsPayload.forEach { roomPayload in
                     do {
@@ -197,8 +205,15 @@ import NotificationCenter
 
                         combinedRoomUserIDs.formUnion(room.userIDs)
 
-                        strongSelf.currentUser!.roomStore.addOrMergeSync(room)
+                        let addedOrMergedRoom = strongSelf.currentUser!.roomStore.addOrMergeSync(room)
+                        newRooms.append(addedOrMergedRoom)
                         if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
+                            strongSelf.reconcileRoomsIfNecessary(
+                                old: existingRooms,
+                                new: newRooms,
+                                roomStore: strongSelf.currentUser!.roomStore,
+                                delegate: delegate
+                            )
                             strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
                         }
                     } catch let err {
@@ -207,6 +222,12 @@ import NotificationCenter
                             logLevel: .debug
                         )
                         if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
+                            strongSelf.reconcileRoomsIfNecessary(
+                                old: existingRooms,
+                                new: newRooms,
+                                roomStore: strongSelf.currentUser!.roomStore,
+                                delegate: delegate
+                            )
                             strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
                         }
                     }
@@ -219,6 +240,35 @@ import NotificationCenter
 
         // TODO: This being here at the end seems necessary but bad
         connectionCoordinator.addConnectionCompletionHandler(completionHandler)
+    }
+
+    private func reconcileRoomsIfNecessary(
+        old: [PCRoom],
+        new: [PCRoom],
+        roomStore: PCRoomStore,
+        delegate: PCChatManagerDelegate
+    ) {
+        let oldSet = Set(old)
+        let newSet = Set(new)
+
+        let roomsRemovedFrom = oldSet.subtracting(new)
+        let roomsAddedTo = newSet.subtracting(old)
+
+        roomsRemovedFrom.forEach { room in
+            let removedRoom = roomStore.removeSync(id: room.id)
+            if removedRoom != nil {
+                delegate.onRemovedFromRoom(room)
+            }
+        }
+        roomsAddedTo.forEach(delegate.onAddedToRoom)
+
+        let sharedRooms = newSet.intersection(oldSet)
+
+        sharedRooms.forEach { room in
+            if let oldRoom = oldSet.first(where: { $0.id == room.id }), !room.deepEqual(to: oldRoom) {
+                delegate.onRoomUpdated(room: room)
+            }
+        }
     }
 
     // TODO: Maybe we need some sort of ChatManagerConnectionState?

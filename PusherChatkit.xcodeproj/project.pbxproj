@@ -67,6 +67,7 @@
 		37DEF4D621A4835900F924EC /* lol ? wut ?&...json in Resources */ = {isa = PBXBuildFile; fileRef = 37DEF4D521A4835900F924EC /* lol ? wut ?&...json */; };
 		37DEF4D721A485F400F924EC /* lol ? wut ?&...json in Resources */ = {isa = PBXBuildFile; fileRef = 37DEF4D521A4835900F924EC /* lol ? wut ?&...json */; };
 		A14B8C3C2191AD1D0039AD5D /* ChatkitBeamsTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14B8C3B2191AD1D0039AD5D /* ChatkitBeamsTokenProvider.swift */; };
+		3762F45321A6ED20009D81CF /* ReconnectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3762F45221A6ED20009D81CF /* ReconnectionTests.swift */; };
 		F2665DEE20FDEE56002A0A3D /* PresenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2665DED20FDEE56002A0A3D /* PresenceTests.swift */; };
 		F2665E0F20FE025D002A0A3D /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2665E0E20FE025C002A0A3D /* MessageTests.swift */; };
 		F2AA717520F7616000BC01DE /* CursorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AA717420F7616000BC01DE /* CursorTests.swift */; };
@@ -148,6 +149,7 @@
 		37DEF4D521A4835900F924EC /* lol ? wut ?&...json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "lol ? wut ?&...json"; sourceTree = "<group>"; };
 		A14B8C3B2191AD1D0039AD5D /* ChatkitBeamsTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatkitBeamsTokenProvider.swift; sourceTree = "<group>"; };
 		A14F52F82189C1F200D4C284 /* PushNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushNotifications.framework; path = Carthage/Build/iOS/PushNotifications.framework; sourceTree = "<group>"; };
+		3762F45221A6ED20009D81CF /* ReconnectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReconnectionTests.swift; sourceTree = "<group>"; };
 		F2665DED20FDEE56002A0A3D /* PresenceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresenceTests.swift; sourceTree = "<group>"; };
 		F2665E0E20FE025C002A0A3D /* MessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
 		F2AA717420F7616000BC01DE /* CursorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CursorTests.swift; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 				33BC080F209A1765001DB5F9 /* DefaultsTests.swift */,
 				F2665E0E20FE025C002A0A3D /* MessageTests.swift */,
 				F2665DED20FDEE56002A0A3D /* PresenceTests.swift */,
+				3762F45221A6ED20009D81CF /* ReconnectionTests.swift */,
 				37DEF4D121A456C200F924EC /* RoomTests.swift */,
 				33AF440720FC922F00336710 /* RoomMembershipTests.swift */,
 				337C0C9520615A6600BB977A /* TokenProviderTests.swift */,
@@ -510,6 +513,7 @@
 				339768F320F4CC6700BCB10B /* TestConfig.swift in Sources */,
 				F2AA717520F7616000BC01DE /* CursorTests.swift in Sources */,
 				339768F720F4EEEC00BCB10B /* Helpers.swift in Sources */,
+				3762F45321A6ED20009D81CF /* ReconnectionTests.swift in Sources */,
 				337C0C9620615A6600BB977A /* TokenProviderTests.swift in Sources */,
 				331853B121060AA90070540C /* TestingDelegates.swift in Sources */,
 				F2AA717920F8FBA400BC01DE /* TypingIndicatorTests.swift in Sources */,
