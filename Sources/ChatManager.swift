@@ -305,10 +305,7 @@ extension ChatManager {
     }
     #endif
     /**
-     Log out user and remove all subscriptions.
-
-     Remove user and all subscriptions set from both client and server.
-     Device is now in a fresh state, ready for new subscriptions or user being set.
+     Disable push notifications service.
      */
     public static func disablePushNotifications() {
         pushNotifications.clearAllState { (error) in
