@@ -16,6 +16,7 @@ private struct ChatkitBeamsToken: Decodable {
 
     func fetchToken(userId: String, completionHandler completion: @escaping (String, Error?) -> Void) {
         let request = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: "/beams-tokens")
+        request.addQueryItems([URLQueryItem(name: "user_id", value: userId)])
         self.instance.request(using: request, onSuccess: { (data) in
             guard let token = try? JSONDecoder().decode(ChatkitBeamsToken.self, from: data).token else {
                 return completion("", PCTokenProviderError.failedToDeserializeJSON(data))
