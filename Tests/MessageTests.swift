@@ -372,9 +372,7 @@ class MessagesTests: XCTestCase {
 
     func testSendAndReceiveMessageWithDataAttachmentThatHasAHorribleName() {
         let bundle = Bundle(for: type(of: self))
-        // The resource is written with colons here in place of the slashes that
-        // show as being in the filename if you look at it in Finder. This is a
-        // weird macOS <-> Unix oddity
+
         let testFilePath = bundle.path(
             forResource: "lol ? wut ?&..",
             ofType: "json"
