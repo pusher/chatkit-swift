@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 #if os(iOS) || os(macOS)
-import PushNotifications
+import BeamsChatkit
 #endif
 #if os(iOS)
 import UserNotifications

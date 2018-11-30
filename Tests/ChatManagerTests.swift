@@ -1,7 +1,7 @@
 import XCTest
 import PusherPlatform
 #if os(iOS) || os(macOS)
-import PushNotifications
+import BeamsChatkit
 #endif
 @testable import PusherChatkit
 
