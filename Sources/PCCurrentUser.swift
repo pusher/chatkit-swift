@@ -1,5 +1,8 @@
 import Foundation
 import PusherPlatform
+#if os(iOS) || os(macOS)
+import PushNotifications
+#endif
 
 public final class PCCurrentUser {
     public let id: String
@@ -49,6 +52,7 @@ public final class PCCurrentUser {
     public var createdAtDate: Date { return self.dateFormatter.date(from: self.createdAt)! }
     public var updatedAtDate: Date { return self.dateFormatter.date(from: self.updatedAt)! }
 
+    private let chatkitBeamsTokenProviderInstance: Instance
     let instance: Instance
     let filesInstance: Instance
     let cursorsInstance: Instance
@@ -71,6 +75,7 @@ public final class PCCurrentUser {
         avatarURL: String?,
         customData: [String: Any]?,
         instance: Instance,
+        chatkitBeamsTokenProviderInstance: Instance,
         filesInstance: Instance,
         cursorsInstance: Instance,
         presenceInstance: Instance,
@@ -88,6 +93,7 @@ public final class PCCurrentUser {
         self.avatarURL = avatarURL
         self.customData = customData
         self.instance = instance
+        self.chatkitBeamsTokenProviderInstance = chatkitBeamsTokenProviderInstance
         self.filesInstance = filesInstance
         self.cursorsInstance = cursorsInstance
         self.presenceInstance = presenceInstance
@@ -1190,3 +1196,54 @@ public enum PCRoomMessageFetchDirection: String {
 public typealias PCErrorCompletionHandler = (Error?) -> Void
 public typealias PCRoomCompletionHandler = (PCRoom?, Error?) -> Void
 public typealias PCRoomsCompletionHandler = ([PCRoom]?, Error?) -> Void
+
+#if os(iOS) || os(macOS)
+// MARK: Beams
+
+private let pushNotifications: PushNotifications = PushNotifications.shared
+
+extension PCCurrentUser {
+    /**
+     Start PushNotifications service.
+     */
+    public func enablePushNotifications() {
+        let chatkitBeamsTokenProvider = ChatkitBeamsTokenProvider(instance: self.chatkitBeamsTokenProviderInstance)
+
+        pushNotifications.start(instanceId: self.instance.id, tokenProvider: chatkitBeamsTokenProvider)
+        pushNotifications.clearAllState { (error) in
+            guard error == nil else {
+                return self.instance.logger.log("Error occured while clearing the state: \(error!)", logLevel: .error)
+            }
+
+            self.setUser()
+        }
+    }
+
+    private func setUser() {
+        do {
+            try pushNotifications.setUserId(self.id, completion: { (error) in
+                guard error == nil else {
+                    return self.instance.logger.log("Error occured while setting the user: \(error!)", logLevel: .error)
+                }
+
+                self.instance.logger.log("Push Notifications service enabled 🎉", logLevel: .debug)
+            })
+        }
+        catch UserValidationtError.userAlreadyExists {
+            self.instance.logger.log("User already exists.", logLevel: .error)
+        }
+        catch UserValidationtError.beamsTokenProviderNotSetException {
+            self.instance.logger.log("Beams Token Provider not set.", logLevel: .error)
+        }
+        catch TokenProviderError.error(let error) {
+            self.instance.logger.log("\(error)", logLevel: .error)
+        }
+        catch PCTokenProviderError.failedToDeserializeJSON(let error) {
+            self.instance.logger.log("Failed to deserialize JSON: \(error)", logLevel: .error)
+        }
+        catch {
+            self.instance.logger.log("Unexpected error: \(error)", logLevel: .error)
+        }
+    }
+}
+#endif

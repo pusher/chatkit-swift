@@ -1,7 +1,16 @@
 import Foundation
 import PusherPlatform
+#if os(iOS) || os(macOS)
+import PushNotifications
+#endif
+#if os(iOS)
+import UserNotifications
+#elseif os(macOS)
+import NotificationCenter
+#endif
 
 @objc public class ChatManager: NSObject {
+    private let chatkitBeamsTokenProviderInstance: Instance
     public let instance: Instance
     public let filesInstance: Instance
     public let cursorsInstance: Instance
@@ -37,7 +46,7 @@ import PusherPlatform
 
         self.logger = logger
 
-        let sdkInfo = PPSDKInfo(productName: "chatkit", sdkVersion: "1.1.0")
+        let sdkInfo = PPSDKInfo(productName: "chatkit", sdkVersion: "1.2.0")
         let sharedBaseClient = baseClient ?? PCBaseClient(host: "\(cluster).pusherplatform.io", sdkInfo: sdkInfo)
         sharedBaseClient.logger = logger
 
@@ -51,6 +60,12 @@ import PusherPlatform
         self.instance = ChatManager.createInstance(
             serviceName: "chatkit",
             serviceVersion: "v2",
+            sharedOptions: sharedInstanceOptions
+        )
+
+        self.chatkitBeamsTokenProviderInstance = ChatManager.createInstance(
+            serviceName: "chatkit_beams_token_provider",
+            serviceVersion: "v1",
             sharedOptions: sharedInstanceOptions
         )
 
@@ -93,6 +108,7 @@ import PusherPlatform
             id: userID,
             pathFriendlyID: pathFriendlyUserID,
             instance: instance,
+            chatkitBeamsTokenProviderInstance: chatkitBeamsTokenProviderInstance,
             filesInstance: filesInstance,
             cursorsInstance: cursorsInstance,
             presenceInstance: presenceInstance,
@@ -136,6 +152,7 @@ import PusherPlatform
                         id: strongSelf.userID,
                         pathFriendlyID: strongSelf.pathFriendlyUserID,
                         instance: strongSelf.instance,
+                        chatkitBeamsTokenProviderInstance: strongSelf.chatkitBeamsTokenProviderInstance,
                         filesInstance: strongSelf.filesInstance,
                         cursorsInstance: strongSelf.cursorsInstance,
                         presenceInstance: strongSelf.presenceInstance,
@@ -247,3 +264,60 @@ func pathFriendlyVersion(of component: String) -> String {
     // TODO: When can percent encoding fail?
     return component.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? component
 }
+
+
+#if os(iOS) || os(macOS)
+// MARK: Beams
+private let pushNotifications: PushNotifications = PushNotifications.shared
+
+extension ChatManager {
+    /**
+     Register device token with PushNotifications service.
+
+     - Parameter deviceToken: A token that identifies the device to APNs.
+     */
+    public static func registerDeviceToken(_ deviceToken: Data) {
+        pushNotifications.registerDeviceToken(deviceToken)
+    }
+    /**
+     Register to receive remote notifications via Apple Push Notification service.
+
+     Convenience method is using `.alert`, `.sound`, and `.badge` as default authorization options.
+
+     - SeeAlso:  `registerForRemoteNotifications(options:)`
+     */
+    public static func registerForRemoteNotifications() {
+        pushNotifications.registerForRemoteNotifications()
+    }
+    #if os(iOS)
+    /**
+     Register to receive remote notifications via Apple Push Notification service.
+
+     - Parameter options: The authorization options your app is requesting. You may combine the available constants to request authorization for multiple items. Request only the authorization options that you plan to use. For a list of possible values, see [UNAuthorizationOptions](https://developer.apple.com/documentation/usernotifications/unauthorizationoptions).
+     */
+    public static func registerForRemoteNotifications(options: UNAuthorizationOptions) {
+        pushNotifications.registerForRemoteNotifications(options: options)
+    }
+    #elseif os(macOS)
+    /**
+     Register to receive remote notifications via Apple Push Notification service.
+
+     - Parameter options: A bit mask specifying the types of notifications the app accepts. See [NSApplication.RemoteNotificationType](https://developer.apple.com/documentation/appkit/nsapplication.remotenotificationtype) for valid bit-mask values.
+     */
+    public static func registerForRemoteNotifications(options: NSApplication.RemoteNotificationType) {
+        pushNotifications.registerForRemoteNotifications(options: options)
+    }
+    #endif
+    /**
+     Disable push notifications service.
+     */
+    public static func disablePushNotifications() {
+        pushNotifications.clearAllState { (error) in
+            guard error == nil else {
+                let logger = PCDefaultLogger()
+                return logger.log("Error occured while clearing the state: \(error!)", logLevel: .error)
+            }
+        }
+    }
+}
+#endif

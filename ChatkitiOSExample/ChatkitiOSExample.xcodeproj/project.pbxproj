@@ -16,6 +16,7 @@
 		33FD74ED200E09A8001D8185 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33FD74EB200E09A8001D8185 /* Main.storyboard */; };
 		33FD74EF200E09A8001D8185 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33FD74EE200E09A8001D8185 /* Assets.xcassets */; };
 		33FD74F2200E09A8001D8185 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33FD74F0200E09A8001D8185 /* LaunchScreen.storyboard */; };
+		A1C023802189CA11004C1728 /* PushNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1C0237F2189CA11004C1728 /* PushNotifications.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,6 +45,8 @@
 		33FD74EE200E09A8001D8185 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		33FD74F1200E09A8001D8185 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33FD74F3200E09A8001D8185 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A1C0237F2189CA11004C1728 /* PushNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushNotifications.framework; path = ../Carthage/Build/iOS/PushNotifications.framework; sourceTree = "<group>"; };
+		A1C023812189CB2E004C1728 /* ChatkitiOSExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChatkitiOSExample.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1C023802189CA11004C1728 /* PushNotifications.framework in Frameworks */,
 				33BA563A200E473A00FFC587 /* PusherPlatform.framework in Frameworks */,
 				33E3EBC1200E1562003D888D /* PusherChatkit.framework in Frameworks */,
 			);
@@ -62,6 +66,7 @@
 		33E3EBBE200E0C98003D888D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A1C0237F2189CA11004C1728 /* PushNotifications.framework */,
 				33BA5639200E473A00FFC587 /* PusherPlatform.framework */,
 				33E3EBC0200E0C98003D888D /* PusherChatkit.framework */,
 			);
@@ -88,6 +93,7 @@
 		33FD74E6200E09A8001D8185 /* ChatkitiOSExample */ = {
 			isa = PBXGroup;
 			children = (
+				A1C023812189CB2E004C1728 /* ChatkitiOSExample.entitlements */,
 				33FD74E7200E09A8001D8185 /* AppDelegate.swift */,
 				33FD74E9200E09A8001D8185 /* ViewController.swift */,
 				33FD74EB200E09A8001D8185 /* Main.storyboard */,
@@ -136,6 +142,11 @@
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -179,6 +190,7 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/../Carthage/Build/iOS/PusherPlatform.framework",
+				"$(SRCROOT)/../Carthage/Build/iOS/PushNotifications.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (
@@ -338,6 +350,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ChatkitiOSExample/ChatkitiOSExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = H7FL434D9W;
 				INFOPLIST_FILE = ChatkitiOSExample/Info.plist;
@@ -353,6 +366,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ChatkitiOSExample/ChatkitiOSExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = H7FL434D9W;
 				INFOPLIST_FILE = ChatkitiOSExample/Info.plist;

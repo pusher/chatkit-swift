@@ -1,5 +1,8 @@
 import XCTest
 import PusherPlatform
+#if os(iOS) || os(macOS)
+import PushNotifications
+#endif
 @testable import PusherChatkit
 
 class ChatManagerTests: XCTestCase {
@@ -15,7 +18,7 @@ class ChatManagerTests: XCTestCase {
         )
 
         let sdkProductName = "chatkit"
-        let sdkVersion = "1.1.0"
+        let sdkVersion = "1.2.0"
         let sdkLanguage = "swift"
 
         let baseClientHeaders = chatManager.instance.client.generalRequestURLSession.configuration.httpAdditionalHeaders as! [String: String]

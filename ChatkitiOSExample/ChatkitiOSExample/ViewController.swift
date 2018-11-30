@@ -46,6 +46,9 @@ class ViewController: UIViewController {
             guard let strongSelf = self, let currentUser = currentUser else { return }
             strongSelf.pusherChatUser = currentUser
 
+            // Enable Push Notifications service.
+            strongSelf.pusherChatUser?.enablePushNotifications()
+
             print(currentUser.rooms.compactMap { String($0.id) }.joined(separator: ", "))
 
             if currentUser.rooms.count != 0 {
