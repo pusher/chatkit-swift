@@ -67,7 +67,6 @@
 		37DEF4D621A4835900F924EC /* lol ? wut ?&...json in Resources */ = {isa = PBXBuildFile; fileRef = 37DEF4D521A4835900F924EC /* lol ? wut ?&...json */; };
 		37DEF4D721A485F400F924EC /* lol ? wut ?&...json in Resources */ = {isa = PBXBuildFile; fileRef = 37DEF4D521A4835900F924EC /* lol ? wut ?&...json */; };
 		A14B8C3C2191AD1D0039AD5D /* ChatkitBeamsTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14B8C3B2191AD1D0039AD5D /* ChatkitBeamsTokenProvider.swift */; };
-		A14F52F92189C1F200D4C284 /* PushNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14F52F82189C1F200D4C284 /* PushNotifications.framework */; };
 		F2665DEE20FDEE56002A0A3D /* PresenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2665DED20FDEE56002A0A3D /* PresenceTests.swift */; };
 		F2665E0F20FE025D002A0A3D /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2665E0E20FE025C002A0A3D /* MessageTests.swift */; };
 		F2AA717520F7616000BC01DE /* CursorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2AA717420F7616000BC01DE /* CursorTests.swift */; };
@@ -161,7 +160,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3301FDDA2046FD7400AE591A /* PusherChatkit.framework in Frameworks */,
-				A14F52F92189C1F200D4C284 /* PushNotifications.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,14 +439,13 @@
 				PusherPlatform,
 				Mockingjay,
 				CryptoSwift,
-				PushNotifications,
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "case \"$PLATFORM_NAME\" in\nmacosx) plat=Mac;;\niphone*) plat=iOS;;\nwatch*) plat=watchOS;;\ntv*) plat=tvOS;;\nappletv*) plat=tvOS;;\n*) echo \"error: Unknown PLATFORM_NAME: $PLATFORM_NAME\"; exit 1;;\nesac\nfor (( n = 0; n < SCRIPT_INPUT_FILE_COUNT; n++ )); do\nVAR=SCRIPT_INPUT_FILE_$n\nframework=$(basename \"${!VAR}\")\nexport SCRIPT_INPUT_FILE_$n=\"$SRCROOT\"/Carthage/Build/$plat/\"$framework\".framework\ndone\n\n/usr/local/bin/carthage copy-frameworks || exit\n\nfor (( n = 0; n < SCRIPT_INPUT_FILE_COUNT; n++ )); do\nVAR=SCRIPT_INPUT_FILE_$n\nsource=${!VAR}.dSYM\ndest=${BUILT_PRODUCTS_DIR}/$(basename \"$source\")\nditto \"$source\" \"$dest\" || exit\ndone\n";
+			shellScript = "case \"$PLATFORM_NAME\" in\nmacosx) plat=Mac;;\niphone*) plat=iOS;;\nwatch*) plat=watchOS;;\ntv*) plat=tvOS;;\nappletv*) plat=tvOS;;\n*) echo \"error: Unknown PLATFORM_NAME: $PLATFORM_NAME\"; exit 1;;\nesac\n\nif [[ $plat != \"tvOS\" ]] && [[ $plat != \"watchOS\" ]]\nthen\nexport SCRIPT_INPUT_FILE_$SCRIPT_INPUT_FILE_COUNT=\"PushNotifications\"\nexport SCRIPT_INPUT_FILE_COUNT=$(($SCRIPT_INPUT_FILE_COUNT+1))\nfi\n\nfor (( n = 0; n < SCRIPT_INPUT_FILE_COUNT; n++ )); do\nVAR=SCRIPT_INPUT_FILE_$n\nframework=$(basename \"${!VAR}\")\nexport SCRIPT_INPUT_FILE_$n=\"$SRCROOT\"/Carthage/Build/$plat/\"$framework\".framework\ndone\n\n/usr/local/bin/carthage copy-frameworks || exit\n\nfor (( n = 0; n < SCRIPT_INPUT_FILE_COUNT; n++ )); do\nVAR=SCRIPT_INPUT_FILE_$n\nsource=${!VAR}.dSYM\ndest=${BUILT_PRODUCTS_DIR}/$(basename \"$source\")\nditto \"$source\" \"$dest\" || exit\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

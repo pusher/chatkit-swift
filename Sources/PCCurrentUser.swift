@@ -1,6 +1,8 @@
 import Foundation
 import PusherPlatform
+#if os(iOS) || os(macOS)
 import PushNotifications
+#endif
 
 public final class PCCurrentUser {
     public let id: String
@@ -1195,7 +1197,8 @@ public typealias PCErrorCompletionHandler = (Error?) -> Void
 public typealias PCRoomCompletionHandler = (PCRoom?, Error?) -> Void
 public typealias PCRoomsCompletionHandler = ([PCRoom]?, Error?) -> Void
 
-//MARK: Beams
+#if os(iOS) || os(macOS)
+// MARK: Beams
 
 private let pushNotifications: PushNotifications = PushNotifications.shared
 
@@ -1243,3 +1246,4 @@ extension PCCurrentUser {
         }
     }
 }
+#endif

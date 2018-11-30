@@ -1,6 +1,8 @@
 import Foundation
 import PusherPlatform
+#if os(iOS) || os(macOS)
 import PushNotifications
+#endif
 #if os(iOS)
 import UserNotifications
 #elseif os(macOS)
@@ -263,7 +265,9 @@ func pathFriendlyVersion(of component: String) -> String {
     return component.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? component
 }
 
-//MARK: Beams
+
+#if os(iOS) || os(macOS)
+// MARK: Beams
 private let pushNotifications: PushNotifications = PushNotifications.shared
 
 extension ChatManager {
@@ -316,3 +320,4 @@ extension ChatManager {
         }
     }
 }
+#endif

@@ -1,5 +1,6 @@
 import Foundation
 import PusherPlatform
+#if os(iOS) || os(macOS)
 import PushNotifications
 
 private struct ChatkitBeamsToken: Decodable {
@@ -28,3 +29,4 @@ private struct ChatkitBeamsToken: Decodable {
         }
     }
 }
+#endif
