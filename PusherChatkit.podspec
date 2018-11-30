@@ -12,6 +12,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Sources/*.swift'
 
   s.dependency 'PusherPlatform', '~> 0.6.2'
+  s.dependency 'BeamsChatkit', '~> 1.2.0'
 
   s.ios.deployment_target = '10.0'
   s.osx.deployment_target = '10.11'

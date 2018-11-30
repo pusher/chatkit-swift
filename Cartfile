@@ -1,5 +1,5 @@
 github "pusher/pusher-platform-swift" ~> 0.6.2
-github "pusher/push-notifications-swift" "users-implementation"
+github "pusher/beams-chatkit-swift" ~> 1.2.0
 
 # you'll need something like this if working locally and you want
 # to test changes to pusher-platform-swift
