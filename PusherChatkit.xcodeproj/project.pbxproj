@@ -238,9 +238,9 @@
 				3397D4C11EC2017000DD5994 /* PCSynchronizedArray.swift */,
 				33BA301421106416000E0832 /* PCSynchronizedDictionary.swift */,
 				33E3EBC6200E2368003D888D /* PPTypealiases.swift */,
+				A14B8C3B2191AD1D0039AD5D /* ChatkitBeamsTokenProvider.swift */,
 				33831C8C1A9CF61600B124F1 /* Supporting Files */,
 				33346ABF1EAE1887002C58B8 /* PusherChatkit.h */,
-				A14B8C3B2191AD1D0039AD5D /* ChatkitBeamsTokenProvider.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";

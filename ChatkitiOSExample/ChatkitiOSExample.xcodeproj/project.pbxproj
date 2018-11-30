@@ -8,25 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		33BA563A200E473A00FFC587 /* PusherPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33BA5639200E473A00FFC587 /* PusherPlatform.framework */; };
-		33E3EBC1200E1562003D888D /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33E3EBC0200E0C98003D888D /* PusherChatkit.framework */; };
-		33E3EBC2200E1562003D888D /* PusherChatkit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 33E3EBC0200E0C98003D888D /* PusherChatkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		33E3EBC5200E1837003D888D /* somedog.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 33E3EBC4200E1837003D888D /* somedog.jpg */; };
 		33FD74E8200E09A8001D8185 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FD74E7200E09A8001D8185 /* AppDelegate.swift */; };
 		33FD74EA200E09A8001D8185 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FD74E9200E09A8001D8185 /* ViewController.swift */; };
 		33FD74ED200E09A8001D8185 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33FD74EB200E09A8001D8185 /* Main.storyboard */; };
 		33FD74EF200E09A8001D8185 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33FD74EE200E09A8001D8185 /* Assets.xcassets */; };
 		33FD74F2200E09A8001D8185 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33FD74F0200E09A8001D8185 /* LaunchScreen.storyboard */; };
-		A1C023802189CA11004C1728 /* PushNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1C0237F2189CA11004C1728 /* PushNotifications.framework */; };
+		372FCCEB21B1A4430062936A /* BeamsChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 372FCCEA21B1A4430062936A /* BeamsChatkit.framework */; };
+		37EFE8BD21B1A53400C09893 /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C6095D21B1A4FF00862CC9 /* PusherChatkit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		33E3EBC3200E1562003D888D /* Embed Frameworks */ = {
+		372FCCF921B1A4C30062936A /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				33E3EBC2200E1562003D888D /* PusherChatkit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -36,7 +34,6 @@
 /* Begin PBXFileReference section */
 		33BA5639200E473A00FFC587 /* PusherPlatform.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PusherPlatform.framework; path = ../Carthage/Build/iOS/PusherPlatform.framework; sourceTree = "<group>"; };
 		33E3EBBB200E0C41003D888D /* Carthage.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Carthage.xcconfig; sourceTree = "<group>"; };
-		33E3EBC0200E0C98003D888D /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		33E3EBC4200E1837003D888D /* somedog.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = somedog.jpg; sourceTree = "<group>"; };
 		33FD74E4200E09A8001D8185 /* ChatkitiOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatkitiOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33FD74E7200E09A8001D8185 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -45,7 +42,8 @@
 		33FD74EE200E09A8001D8185 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		33FD74F1200E09A8001D8185 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33FD74F3200E09A8001D8185 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A1C0237F2189CA11004C1728 /* PushNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushNotifications.framework; path = ../Carthage/Build/iOS/PushNotifications.framework; sourceTree = "<group>"; };
+		372FCCEA21B1A4430062936A /* BeamsChatkit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BeamsChatkit.framework; path = ../Carthage/Build/iOS/BeamsChatkit.framework; sourceTree = "<group>"; };
+		37C6095D21B1A4FF00862CC9 /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1C023812189CB2E004C1728 /* ChatkitiOSExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChatkitiOSExample.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -54,9 +52,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1C023802189CA11004C1728 /* PushNotifications.framework in Frameworks */,
+				372FCCEB21B1A4430062936A /* BeamsChatkit.framework in Frameworks */,
+				37EFE8BD21B1A53400C09893 /* PusherChatkit.framework in Frameworks */,
 				33BA563A200E473A00FFC587 /* PusherPlatform.framework in Frameworks */,
-				33E3EBC1200E1562003D888D /* PusherChatkit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,9 +64,9 @@
 		33E3EBBE200E0C98003D888D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A1C0237F2189CA11004C1728 /* PushNotifications.framework */,
+				37C6095D21B1A4FF00862CC9 /* PusherChatkit.framework */,
+				372FCCEA21B1A4430062936A /* BeamsChatkit.framework */,
 				33BA5639200E473A00FFC587 /* PusherPlatform.framework */,
-				33E3EBC0200E0C98003D888D /* PusherChatkit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -117,7 +115,7 @@
 				33FD74E1200E09A8001D8185 /* Frameworks */,
 				33FD74E2200E09A8001D8185 /* Resources */,
 				33E3EBBD200E0C82003D888D /* Copy Carthage Frameworks */,
-				33E3EBC3200E1562003D888D /* Embed Frameworks */,
+				372FCCF921B1A4C30062936A /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -190,14 +188,14 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/../Carthage/Build/iOS/PusherPlatform.framework",
-				"$(SRCROOT)/../Carthage/Build/iOS/PushNotifications.framework",
+				"$(SRCROOT)/../Carthage/Build/iOS/BeamsChatkit.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
