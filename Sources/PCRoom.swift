@@ -8,6 +8,7 @@ public final class PCRoom {
     public let createdByUserID: String
     public let createdAt: String
     public internal(set) var updatedAt: String
+    public internal(set) var deletedAt: String?
     public internal(set) var customData: [String: Any]?
 
     public internal(set) var subscription: PCRoomSubscription?
@@ -35,6 +36,12 @@ public final class PCRoom {
 
     public var createdAtDate: Date { return self.dateFormatter.date(from: self.createdAt)! }
     public var updatedAtDate: Date { return self.dateFormatter.date(from: self.updatedAt)! }
+    public var deletedAtDate: Date? {
+        guard let deletedAt = self.deletedAt else {
+            return nil
+        }
+        return self.dateFormatter.date(from: deletedAt)!
+    }
 
     public init(
         id: String,
@@ -44,7 +51,8 @@ public final class PCRoom {
         createdAt: String,
         updatedAt: String,
         customData: [String: Any]? = nil,
-        userIDs: Set<String>? = nil
+        userIDs: Set<String>? = nil,
+        deletedAt: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -52,6 +60,7 @@ public final class PCRoom {
         self.createdByUserID = createdByUserID
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
         self.customData = customData
         self.userIDs = userIDs ?? []
         self.userStore = PCRoomUserStore()
@@ -63,6 +72,7 @@ public final class PCRoom {
         self.updatedAt = room.updatedAt
         self.customData = room.customData
         self.userIDs = room.userIDs
+        self.deletedAt = room.deletedAt
     }
 }
 
