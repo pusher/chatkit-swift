@@ -36,6 +36,12 @@ public final class PCRoom {
 
     public var createdAtDate: Date { return self.dateFormatter.date(from: self.createdAt)! }
     public var updatedAtDate: Date { return self.dateFormatter.date(from: self.updatedAt)! }
+    public var deletedAtDate: Date? {
+        guard let deletedAt = self.deletedAt else {
+            return nil
+        }
+        return self.dateFormatter.date(from: deletedAt)!
+    }
 
     public init(
         id: String,
