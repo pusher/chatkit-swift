@@ -1,4 +1,4 @@
 github "hamchapman/Mockingjay" "90156b01840e39549a451f97fc5b611ecf060d8f"
 github "krzyzanowskim/CryptoSwift" "0.13.1"
-github "pusher/beams-chatkit-swift" "1.2.2"
+github "pusher/beams-chatkit-swift" "1.2.3"
 github "pusher/pusher-platform-swift" "0.6.2"
