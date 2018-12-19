@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-- Push notifications now won't not work if `registerDeviceToken` is called before successfully connecting to Chatkit
+- Push notifications now work if `registerDeviceToken` is called before successfully connecting to Chatkit
 
 ## [1.2.1](https://github.com/pusher/chatkit-swift/compare/1.2.0...1.2.1) - 2018-11-30
 
