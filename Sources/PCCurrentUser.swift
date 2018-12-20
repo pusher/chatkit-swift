@@ -1210,18 +1210,20 @@ extension PCCurrentUser {
         let chatkitBeamsTokenProvider = ChatkitBeamsTokenProvider(instance: self.chatkitBeamsTokenProviderInstance)
 
         pushNotifications.start(instanceId: self.instance.id, tokenProvider: chatkitBeamsTokenProvider)
-        pushNotifications.clearAllState { (error) in
+        pushNotifications.clearAllState { error in
             guard error == nil else {
                 return self.instance.logger.log("Error occured while clearing the state: \(error!)", logLevel: .error)
             }
 
             self.setUser()
         }
+
+        ChatManager.registerForRemoteNotifications()
     }
 
     private func setUser() {
         do {
-            try pushNotifications.setUserId(self.id, completion: { (error) in
+            try pushNotifications.setUserId(self.id, completion: { error in
                 guard error == nil else {
                     return self.instance.logger.log("Error occured while setting the user: \(error!)", logLevel: .error)
                 }
