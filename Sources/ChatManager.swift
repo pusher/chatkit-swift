@@ -46,7 +46,7 @@ import NotificationCenter
 
         self.logger = logger
 
-        let sdkInfo = PPSDKInfo(productName: "chatkit", sdkVersion: "1.2.2")
+        let sdkInfo = PPSDKInfo(productName: "chatkit", sdkVersion: "1.2.3")
         let sharedBaseClient = baseClient ?? PCBaseClient(host: "\(cluster).pusherplatform.io", sdkInfo: sdkInfo)
         sharedBaseClient.logger = logger
 
