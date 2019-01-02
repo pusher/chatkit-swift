@@ -7,7 +7,7 @@ public final class PCCursorStore {
     let userStore: PCGlobalUserStore
     let basicCursorEnricher: PCBasicCursorEnricher
 
-    public var cursors: [String: PCCursor] = [:]
+    public var cursors: [PCCursorKey: PCCursor] = [:]
 
     public init(instance: Instance, roomStore: PCRoomStore, userStore: PCGlobalUserStore) {
         self.instance = instance
@@ -105,7 +105,12 @@ public final class PCCursorStore {
         )
     }
 
-    fileprivate func key(_ userID: String, _ roomID: String) -> String {
-        return "\(userID)/\(roomID)"
+    fileprivate func key(_ userID: String, _ roomID: String) -> PCCursorKey {
+        return PCCursorKey(userID: userID, roomID: roomID)
     }
+}
+
+public struct PCCursorKey: Hashable {
+    let userID: String
+    let roomID: String
 }
