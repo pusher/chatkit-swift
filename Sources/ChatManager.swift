@@ -171,16 +171,16 @@ import NotificationCenter
                 }
 
                 var existingRooms: [PCRoom] = []
+                let alreadyHadCurrentUser = strongSelf.currentUser != nil
 
                 // If the currentUser property is already set then the assumption is that there was
                 // already a user subscription and so instead of setting the property to a new
                 // PCCurrentUser, we update the existing one to have the most up-to-date state
                 if let currentUser = strongSelf.currentUser {
-                    // We need to take a copies of the rooms so that when we make the comparisions
+                    // We need to take copies of the rooms so that when we make the comparisons
                     // of received rooms to pre-existing rooms we aren't actually just comparing
                     // the same rooms (as PCRoom is a class and we have reference semantics)
-                    let roomsCopy = currentUser.rooms.map { $0.copy() }
-                    existingRooms = roomsCopy
+                    existingRooms = currentUser.rooms.map { $0.copy() }
                     currentUser.updateWithPropertiesOf(receivedCurrentUser)
                 } else {
                     strongSelf.currentUser = receivedCurrentUser
@@ -188,6 +188,14 @@ import NotificationCenter
 
                 guard roomsPayload.count > 0 else {
                     strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
+                    if alreadyHadCurrentUser {
+                        strongSelf.reconcileRoomsIfNecessary(
+                            old: existingRooms,
+                            new: [],
+                            roomStore: strongSelf.currentUser!.roomStore,
+                            delegate: delegate
+                        )
+                    }
                     return
                 }
 
@@ -208,13 +216,15 @@ import NotificationCenter
                         let addedOrMergedRoom = strongSelf.currentUser!.roomStore.addOrMergeSync(room)
                         newRooms.append(addedOrMergedRoom)
                         if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
-                            strongSelf.reconcileRoomsIfNecessary(
-                                old: existingRooms,
-                                new: newRooms,
-                                roomStore: strongSelf.currentUser!.roomStore,
-                                delegate: delegate
-                            )
                             strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
+                            if alreadyHadCurrentUser {
+                                strongSelf.reconcileRoomsIfNecessary(
+                                    old: existingRooms,
+                                    new: newRooms,
+                                    roomStore: strongSelf.currentUser!.roomStore,
+                                    delegate: delegate
+                                )
+                            }
                         }
                     } catch let err {
                         strongSelf.instance.logger.log(
@@ -222,13 +232,15 @@ import NotificationCenter
                             logLevel: .debug
                         )
                         if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
-                            strongSelf.reconcileRoomsIfNecessary(
-                                old: existingRooms,
-                                new: newRooms,
-                                roomStore: strongSelf.currentUser!.roomStore,
-                                delegate: delegate
-                            )
                             strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
+                            if alreadyHadCurrentUser {
+                                strongSelf.reconcileRoomsIfNecessary(
+                                    old: existingRooms,
+                                    new: newRooms,
+                                    roomStore: strongSelf.currentUser!.roomStore,
+                                    delegate: delegate
+                                )
+                            }
                         }
                     }
                 }
@@ -251,8 +263,8 @@ import NotificationCenter
         let oldSet = Set(old)
         let newSet = Set(new)
 
-        let roomsRemovedFrom = oldSet.subtracting(new)
-        let roomsAddedTo = newSet.subtracting(old)
+        let roomsRemovedFrom = oldSet.subtracting(newSet)
+        let roomsAddedTo = newSet.subtracting(oldSet)
 
         roomsRemovedFrom.forEach { room in
             let removedRoom = roomStore.removeSync(id: room.id)
