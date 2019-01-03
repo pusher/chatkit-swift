@@ -60,6 +60,64 @@ func createUser(
     }.resume()
 }
 
+func updateUser(
+    id: String,
+    name: String? = nil,
+    avatarURL: String? = nil,
+    customData: [String: Any]? = nil,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    var userObject = [String: Any]()
+
+    if name != nil {
+        userObject["name"] = name!
+    }
+
+    if avatarURL != nil {
+        userObject["avatar_url"] = avatarURL!
+    }
+
+    if customData != nil {
+        userObject["custom_data"] = customData!
+    }
+
+    guard JSONSerialization.isValidJSONObject(userObject) else {
+        completionHandler(.generic("Invalid userObject \(userObject.debugDescription)"))
+        return
+    }
+
+    guard let data = try? JSONSerialization.data(withJSONObject: userObject, options: []) else {
+        completionHandler(.generic("Failed to JSON serialize userObject \(userObject.debugDescription)"))
+        return
+    }
+
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v2", "users/\(id)"))
+    request.httpMethod = "PUT"
+    request.httpBody = data
+    request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error updating user: \(error!.localizedDescription)"))
+            return
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            completionHandler(.generic("Error updating user"))
+            return
+        }
+
+        if 200..<300 ~= httpResponse.statusCode {
+            TestLogger().log("User \(id) updated successfully!", logLevel: .debug)
+            completionHandler(nil)
+        } else {
+            let errorDesc = error?.localizedDescription ?? "no error"
+            completionHandler(.generic("Error updating user: status \(httpResponse.statusCode), error: \(errorDesc)"))
+        }
+    }.resume()
+}
+
 func deleteInstanceResources(completionHandler: @escaping (TestHelperError?) -> Void) {
     var request = URLRequest(url: testInstanceServiceURL(.server, "v2", "resources"))
     request.httpMethod = "DELETE"
