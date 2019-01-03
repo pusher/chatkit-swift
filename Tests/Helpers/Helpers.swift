@@ -242,7 +242,7 @@ func assignGlobalRole(
 }
 
 func testInstanceServiceURL(_ service: ChatkitService, _ version: String = "v1", _ path: String) -> URL {
-    return serviceURL(instanceLocator: testInstanceLocator, service: service, path: path)
+    return serviceURL(instanceLocator: testInstanceLocator, service: service, path: path, version: version)
 }
 
 func serviceURL(instanceLocator: String, service: ChatkitService, path: String, version: String = "v1") -> URL {
