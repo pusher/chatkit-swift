@@ -62,7 +62,6 @@ public final class PCUser {
 }
 
 extension PCUser: Hashable {
-
     public var hashValue: Int {
         return self.id.hashValue
     }
@@ -73,8 +72,20 @@ extension PCUser: Hashable {
 }
 
 extension PCUser: CustomDebugStringConvertible {
-
     public var debugDescription: String {
         return "ID: \(self.id) Name: \(self.name ?? "nil")"
+    }
+}
+
+extension PCUser {
+    func copy() -> PCUser {
+        return PCUser(
+            id: self.id,
+            createdAt: self.createdAt,
+            updatedAt: self.updatedAt,
+            name: self.name,
+            avatarURL: self.avatarURL,
+            customData: self.customData
+        )
     }
 }
