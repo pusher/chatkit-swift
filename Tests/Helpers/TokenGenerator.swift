@@ -15,6 +15,14 @@ func generateSuperuserToken(sub: String? = nil) -> String {
     return encode(claims: claims)
 }
 
+func generateToken(userID: String) -> String {
+    var claims = ClaimSet()
+    claims.issuer = "api_keys/\(testInstanceKeyID)"
+    claims.issuedAt = Date()
+    claims.expiration = Date().addingTimeInterval(TimeInterval(86400))
+    claims["instance"] = testInstanceInstanceID
+    claims["sub"] = userID
+
     return encode(claims: claims)
 }
 
