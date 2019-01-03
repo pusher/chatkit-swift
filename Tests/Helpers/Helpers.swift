@@ -282,30 +282,121 @@ func newTestChatManager(
 }
 
 func createRoom(
-    user: PCCurrentUser,
-    roomName: String,
-    isPrivate: Bool = false,
-    addUserIDs userIDs: [String] = []
-) throws -> PCRoom {
-    var room: PCRoom!
-    var error: Error?
+    creatorID: String,
+    name: String,
+    isPrivate: Bool? = nil,
+    customData: [String: Any]? = nil,
+    addUserIDs userIDs: [String]? = nil,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    var roomObject: [String: Any] = ["name": name]
 
-    let group = DispatchGroup()
-    group.enter()
-
-    user.createRoom(name: roomName, isPrivate: isPrivate, addUserIDs: userIDs) { r, e in
-        room = r
-        error = e
-        group.leave()
+    if isPrivate != nil {
+        roomObject["private"] = isPrivate!
     }
 
-    group.wait()
-
-    if let e = error {
-        throw e
+    if customData != nil {
+        roomObject["custom_data"] = customData!
     }
 
-    return room
+    if userIDs != nil && userIDs!.count > 0 {
+        roomObject["user_ids"] = userIDs
+    }
+
+    guard JSONSerialization.isValidJSONObject(roomObject) else {
+        completionHandler(.generic("Invalid roomObject \(roomObject.debugDescription)"))
+        return
+    }
+
+    guard let data = try? JSONSerialization.data(withJSONObject: roomObject, options: []) else {
+        completionHandler(.generic("Failed to JSON serialize roomObject \(roomObject.debugDescription)"))
+        return
+    }
+
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v2", "rooms"))
+    request.httpMethod = "POST"
+    request.httpBody = data
+    request.addValue("Bearer \(generateSuperuserToken(sub: creatorID))", forHTTPHeaderField: "Authorization")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error creating room: \(error!.localizedDescription)"))
+            return
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            completionHandler(.generic("Error creating room"))
+            return
+        }
+
+        if 200..<300 ~= httpResponse.statusCode {
+            TestLogger().log("Room created successfully!", logLevel: .debug)
+            completionHandler(nil)
+        } else {
+            let errorDesc = error?.localizedDescription ?? "no error"
+            completionHandler(.generic("Error creating room: status \(httpResponse.statusCode), error: \(errorDesc)"))
+        }
+    }.resume()
+}
+
+
+func updateRoom(
+    id: String,
+    name: String? = nil,
+    isPrivate: Bool? = nil,
+    customData: [String: Any]? = nil,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    var roomObject = [String: Any]()
+
+    if name != nil {
+        roomObject["name"] = name!
+    }
+
+    if isPrivate != nil {
+        roomObject["private"] = isPrivate!
+    }
+
+    if customData != nil {
+        roomObject["custom_data"] = customData!
+    }
+
+    guard JSONSerialization.isValidJSONObject(roomObject) else {
+        completionHandler(.generic("Invalid roomObject \(roomObject.debugDescription)"))
+        return
+    }
+
+    guard let data = try? JSONSerialization.data(withJSONObject: roomObject, options: []) else {
+        completionHandler(.generic("Failed to JSON serialize roomObject \(roomObject.debugDescription)"))
+        return
+    }
+
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v2", "rooms/\(id)"))
+    request.httpMethod = "PUT"
+    request.httpBody = data
+    request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error updating room: \(error!.localizedDescription)"))
+            return
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            completionHandler(.generic("Error updating room"))
+            return
+        }
+
+        if 200..<300 ~= httpResponse.statusCode {
+            TestLogger().log("Room \(id) updated successfully!", logLevel: .debug)
+            completionHandler(nil)
+        } else {
+            let errorDesc = error?.localizedDescription ?? "no error"
+            completionHandler(.generic("Error updating room: status \(httpResponse.statusCode), error: \(errorDesc)"))
+        }
+    }.resume()
 }
 
 func dataSubscriptionEventFor(_ eventJSON: String) -> Data {
