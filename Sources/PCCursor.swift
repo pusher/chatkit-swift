@@ -35,3 +35,15 @@ extension PCCursor: CustomDebugStringConvertible {
         return "Type: \(type.debugDescription), Position: \(position), Room: \(room.id), User: \(user.id), Updated At: \(updatedAt)"
     }
 }
+
+extension PCCursor {
+    func copy() -> PCCursor {
+        return PCCursor(
+            type: self.type,
+            position: self.position,
+            room: self.room,
+            updatedAt: self.updatedAt,
+            user: self.user
+        )
+    }
+}
