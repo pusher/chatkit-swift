@@ -190,7 +190,7 @@ func createRole(
         return
     }
 
-    var request = URLRequest(url: testInstanceServiceURL(.authorizer, "v1", "roles"))
+    var request = URLRequest(url: testInstanceServiceURL(.authorizer, "v2", "roles"))
     request.httpMethod = "POST"
     request.httpBody = data
     request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
@@ -224,7 +224,7 @@ func assignGlobalRole(
         return
     }
 
-    var request = URLRequest(url: testInstanceServiceURL(.authorizer, "v1", "users/\(userID)/roles"))
+    var request = URLRequest(url: testInstanceServiceURL(.authorizer, "v2", "users/\(userID)/roles"))
     request.httpMethod = "PUT"
     request.httpBody = data
     request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
