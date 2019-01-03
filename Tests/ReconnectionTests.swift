@@ -27,7 +27,12 @@ class ReconnectionTests: XCTestCase {
                 createRolesEx.fulfill()
             }
 
-            createUser(id: "alice") { err in
+            createUser(
+                id: "alice",
+                name: "Alice Smith",
+                avatarURL: "https://alice.avatar.com",
+                customData: ["custom": "data"]
+            ) { err in
                 XCTAssertNil(err)
                 createAliceEx.fulfill()
             }
@@ -50,124 +55,139 @@ class ReconnectionTests: XCTestCase {
         bobChatManager = nil
     }
 
-    // MARK: Chat manager delegate tests
+    // MARK: PCCurrentUser properties are updated if they've been changed
 
-    func testAppropriateChatManagerDelegateFunctionsAreCalledWhenReconnectingAndRoomStateHasChanged() {
-        let addedToRoomMushroomEx = expectation(description: "added to room mushroom")
-        let addedToRoomOldRoomEx = expectation(description: "added to room old room")
+    func testCurrentUserPropertiesAreUpdatedIfChangedWhileClientIsBrieflyDisconnected() {
+        let aliceUpdatedEx = expectation(description: "alice updated")
+        let aliceConnectedEx = expectation(description: "alice connected")
+        let currentUserUpdatedEx = expectation(description: "current user object updated successfully")
 
-        let aliceRemovedEx = expectation(description: "alice removed from old room room")
-        let alicedAddedEx = expectation(description: "alice added to new room room")
-        let mushroomRoomUpdatedEx = expectation(description: "mushroom room updated")
-
-        let removedFromRoomEx = expectation(description: "removed from room hook called")
-        let addedToRoomEx = expectation(description: "added to room hook called")
-        let roomUpdatedEx = expectation(description: "room updated hook called")
-
-        let onAddedToRoom = { (room: PCRoom) -> Void in
-            switch room.name {
-            case "new room":
-                addedToRoomEx.fulfill()
-            case "old room":
-                addedToRoomOldRoomEx.fulfill()
-            case "mushroom":
-                addedToRoomMushroomEx.fulfill()
-            default:
-                break
-            }
-        }
-
-        let onRemovedFromRoom = { (room: PCRoom) -> Void in
-            if room.name == "old room" {
-                removedFromRoomEx.fulfill()
-            }
-        }
-
-        let onRoomUpdated = { (room: PCRoom) -> Void in
-            if room.name == "new shroom" {
-                XCTAssertEqual(room.name, "new shroom")
-                XCTAssertTrue(room.isPrivate)
-                XCTAssertEqual(room.customData!["hello"] as! String, "world")
-                roomUpdatedEx.fulfill()
-            }
-        }
-
-        let aliceCMDelegate = TestingChatManagerDelegate(
-            onAddedToRoom: onAddedToRoom,
-            onRemovedFromRoom: onRemovedFromRoom,
-            onRoomUpdated: onRoomUpdated
-        )
-
-        var bob: PCCurrentUser!
-
-        let bobsRoomMutationFun = { (roomToUpdateID: String, roomToRemoveFromID: String) -> Void in
-            assignGlobalRole("admin", toUser: "bob") { err in
-                XCTAssertNil(err)
-                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { b, err in
-                    XCTAssertNil(err)
-                    bob = b
-                    bob.removeUser(id: "alice", from: roomToRemoveFromID) { err in
-                        XCTAssertNil(err)
-                        aliceRemovedEx.fulfill()
-                    }
-                    bob.createRoom(name: "new room", addUserIDs: ["alice"]) { room, err in
-                        XCTAssertNil(err)
-                        alicedAddedEx.fulfill()
-                    }
-                    bob.updateRoom(
-                        id: roomToUpdateID,
-                        name: "new shroom",
-                        isPrivate: true,
-                        customData: ["hello": "world"]
-                    ) { err in
-                        XCTAssertNil(err)
-                        assignGlobalRole("default", toUser: "bob") { err in
-                            XCTAssertNil(err)
-                            mushroomRoomUpdatedEx.fulfill()
-                        }
-                    }
-                }
-            }
-        }
+        var aliceCurrentUser: PCCurrentUser!
+        let aliceCMDelegate = TestingChatManagerDelegate()
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
-            alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { mushroomRoom, err in
+            aliceCurrentUser = alice!
+            XCTAssertEqual(aliceCurrentUser.name!, "Alice Smith")
+            XCTAssertEqual(aliceCurrentUser.avatarURL!, "https://alice.avatar.com")
+            XCTAssertEqual(aliceCurrentUser.customData!.keys.count, 1)
+            XCTAssertEqual(aliceCurrentUser.customData!["custom"] as! String, "data")
+            aliceConnectedEx.fulfill()
+        }
+        wait(for: [aliceConnectedEx], timeout: 15)
+        self.aliceChatManager.disconnect()
+
+        updateUser(
+            id: "alice",
+            name: "New Improved Alice",
+            avatarURL: "https://new.alice.avatar",
+            customData: ["some": "custom DATA"]
+        ) { err in
+            XCTAssertNil(err)
+            aliceUpdatedEx.fulfill()
+        }
+        wait(for: [aliceUpdatedEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            XCTAssertEqual(aliceCurrentUser.name!, "New Improved Alice")
+            XCTAssertEqual(aliceCurrentUser.avatarURL!, "https://new.alice.avatar")
+            XCTAssertEqual(aliceCurrentUser.customData!.keys.count, 1)
+            XCTAssertEqual(aliceCurrentUser.customData!["some"] as! String, "custom DATA")
+            currentUserUpdatedEx.fulfill()
+        }
+
+        wait(for: [currentUserUpdatedEx], timeout: 15)
+    }
+
+    // MARK: User subscription reconciliation
+
+    func testOnRemovedFromRoomIsCalledIfCurrentUserHasBeenRemovedFromARoomBetweenConnections() {
+        let addedToRoomEx = expectation(description: "alice added to room")
+        let roomCreatedEx = expectation(description: "room created")
+        let aliceRemovedFromRoomEx = expectation(description: "alice removed from room")
+        let removedFromRoomEx = expectation(description: "removed from room hook called")
+
+        let roomName = "testroom"
+
+        let onRemovedFromRoom = { (room: PCRoom) -> Void in
+            guard room.name == roomName else {
+                XCTFail("onRemovedFromRoom called for a different room")
+                return
+            }
+            removedFromRoomEx.fulfill()
+        }
+
+        let onAddedToRoom = { (room: PCRoom) -> Void in
+            guard room.name == roomName else {
+                XCTFail("onAddedToRoom called for a different room")
+                return
+            }
+            addedToRoomEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(
+            onAddedToRoom: onAddedToRoom,
+            onRemovedFromRoom: onRemovedFromRoom
+        )
+
+        var roomID: String!
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            alice!.createRoom(name: roomName, addUserIDs: ["bob"]) { room, err in
                 XCTAssertNil(err)
-                alice!.createRoom(name: "old room", addUserIDs: ["bob"]) { oldRoomRoom, err in
-                    XCTAssertNil(err)
-                    self.wait(for: [addedToRoomMushroomEx, addedToRoomOldRoomEx], timeout: 10)
-                    self.aliceChatManager.disconnect()
-
-                    bobsRoomMutationFun(mushroomRoom!.id, oldRoomRoom!.id)
-                    self.wait(for: [aliceRemovedEx, alicedAddedEx, mushroomRoomUpdatedEx], timeout: 15)
-
-                    self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
-                        XCTAssertNil(err)
-                        XCTAssertEqual(alice!.rooms.count, 2, "alice has the wrong number of rooms")
-                    }
-                }
+                roomID = room!.id
+                roomCreatedEx.fulfill()
             }
         }
 
-        wait(for: [removedFromRoomEx, addedToRoomEx, roomUpdatedEx], timeout: 15)
-    }
+        wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+        self.aliceChatManager.disconnect()
 
-    func testOnRoomUpdateDelegateFunctionIsCalledWhenReconnectingAndARoomsCustomDataHasBeenMutatedBetweenConnections() {
-        let addedToRoomMushroomEx = expectation(description: "added to room mushroom")
-        let mushroomRoomUpdatedEx = expectation(description: "mushroom room updated")
-        let roomUpdatedEx = expectation(description: "room updated hook called")
-
-        let onAddedToRoom = { (room: PCRoom) -> Void in
-            XCTAssertEqual(room.name, "mushroom")
-            addedToRoomMushroomEx.fulfill()
+        self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            bob!.removeUser(id: "alice", from: roomID) { err in
+                XCTAssertNil(err)
+                aliceRemovedFromRoomEx.fulfill()
+            }
         }
 
+        wait(for: [aliceRemovedFromRoomEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            XCTAssertEqual(alice!.rooms.count, 0, "alice has the wrong number of rooms")
+        }
+
+        wait(for: [removedFromRoomEx], timeout: 15)
+    }
+
+    func testOnRoomUpdatedIsCalledIfARoomHasItsPrivacyChangedBetweenConnections() {
+        let addedToRoomEx = expectation(description: "alice added to room")
+        let roomCreatedEx = expectation(description: "room created")
+        let roomUpdatedEx = expectation(description: "room updated")
+        let onRoomUpdatedCalledEx = expectation(description: "room updated hook called")
+
+        let roomName = "testroom"
+
         let onRoomUpdated = { (room: PCRoom) -> Void in
-            XCTAssertEqual(room.name, "mushroom")
-            XCTAssertFalse(room.isPrivate)
-            XCTAssertEqual(room.customData!["new custom data"] as! String, "counts as an update")
-            roomUpdatedEx.fulfill()
+            guard room.name == roomName else {
+                XCTFail("onRoomUpdated called for a different room")
+                return
+            }
+
+            if room.isPrivate {
+                onRoomUpdatedCalledEx.fulfill()
+            }
+        }
+
+        let onAddedToRoom = { (room: PCRoom) -> Void in
+            guard room.name == roomName else {
+                XCTFail("onAddedToRoom called for a different room")
+                return
+            }
+            addedToRoomEx.fulfill()
         }
 
         let aliceCMDelegate = TestingChatManagerDelegate(
@@ -175,49 +195,382 @@ class ReconnectionTests: XCTestCase {
             onRoomUpdated: onRoomUpdated
         )
 
-        var bob: PCCurrentUser!
+        var roomID: String!
 
-        let bobsRoomMutationFun = { (roomToUpdateID: String) -> Void in
-            assignGlobalRole("admin", toUser: "bob") { err in
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            alice!.createRoom(name: roomName, isPrivate: false) { room, err in
                 XCTAssertNil(err)
-                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { b, err in
-                    XCTAssertNil(err)
-                    bob = b
-                    bob.updateRoom(
-                        id: roomToUpdateID,
-                        customData: ["new custom data": "counts as an update"]
-                    ) { err in
-                        XCTAssertNil(err)
-                        assignGlobalRole("default", toUser: "bob") { err in
-                            XCTAssertNil(err)
-                            mushroomRoomUpdatedEx.fulfill()
-                        }
-                    }
-                }
+                roomID = room!.id
+                roomCreatedEx.fulfill()
             }
         }
+
+        wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+        self.aliceChatManager.disconnect()
+
+        updateRoom(id: roomID, isPrivate: true) { err in
+            XCTAssertNil(err)
+            roomUpdatedEx.fulfill()
+        }
+
+        wait(for: [roomUpdatedEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+        }
+
+        wait(for: [onRoomUpdatedCalledEx], timeout: 15)
+    }
+
+    func testOnRoomUpdatedIsCalledIfARoomHasItsNameChangedBetweenConnections() {
+        let addedToRoomEx = expectation(description: "alice added to room")
+        let roomCreatedEx = expectation(description: "room created")
+        let roomUpdatedEx = expectation(description: "room updated")
+        let onRoomUpdatedCalledEx = expectation(description: "room updated hook called")
+
+        let roomName = "testroom"
+        let newRoomName = "newname"
+
+        let onRoomUpdated = { (room: PCRoom) -> Void in
+            guard room.name == newRoomName else {
+                XCTFail("onRoomUpdated called for a different room")
+                return
+            }
+            onRoomUpdatedCalledEx.fulfill()
+        }
+
+        let onAddedToRoom = { (room: PCRoom) -> Void in
+            guard room.name == roomName else {
+                XCTFail("onAddedToRoom called for a different room")
+                return
+            }
+            addedToRoomEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(
+            onAddedToRoom: onAddedToRoom,
+            onRoomUpdated: onRoomUpdated
+        )
+
+        var roomID: String!
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            alice!.createRoom(name: roomName) { room, err in
+                XCTAssertNil(err)
+                roomID = room!.id
+                roomCreatedEx.fulfill()
+            }
+        }
+
+        wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+        self.aliceChatManager.disconnect()
+
+        updateRoom(id: roomID, name: newRoomName) { err in
+            XCTAssertNil(err)
+            roomUpdatedEx.fulfill()
+        }
+
+        wait(for: [roomUpdatedEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+        }
+
+        wait(for: [onRoomUpdatedCalledEx], timeout: 15)
+    }
+
+    func testOnRoomUpdatedIsCalledIfARoomHasCustomDataAddedBetweenConnections() {
+        let addedToRoomEx = expectation(description: "alice added to room")
+        let roomCreatedEx = expectation(description: "room created")
+        let roomUpdatedEx = expectation(description: "room updated")
+        let onRoomUpdatedCalledEx = expectation(description: "room updated hook called")
+
+        let roomName = "testroom"
+
+        let onRoomUpdated = { (room: PCRoom) -> Void in
+            guard room.name == roomName else {
+                XCTFail("onRoomUpdated called for a different room")
+                return
+            }
+            XCTAssertEqual(room.customData!["some"] as! String, "custom data", "room custom data be present")
+            onRoomUpdatedCalledEx.fulfill()
+        }
+
+        let onAddedToRoom = { (room: PCRoom) -> Void in
+            guard room.name == roomName else {
+                XCTFail("onAddedToRoom called for a different room")
+                return
+            }
+            addedToRoomEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(
+            onAddedToRoom: onAddedToRoom,
+            onRoomUpdated: onRoomUpdated
+        )
+
+        var roomID: String!
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            alice!.createRoom(name: roomName) { room, err in
+                XCTAssertNil(err)
+                roomID = room!.id
+                roomCreatedEx.fulfill()
+            }
+        }
+
+        wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+        self.aliceChatManager.disconnect()
+
+        updateRoom(id: roomID, customData: ["some": "custom data"]) { err in
+            XCTAssertNil(err)
+            roomUpdatedEx.fulfill()
+        }
+
+        wait(for: [roomUpdatedEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+        }
+
+        wait(for: [onRoomUpdatedCalledEx], timeout: 15)
+    }
+
+    func testOnRoomUpdatedIsCalledIfARoomHasCustomDataRemovedBetweenConnections() {
+        let addedToRoomEx = expectation(description: "alice added to room")
+        let roomCreatedEx = expectation(description: "room created")
+        let roomUpdatedEx = expectation(description: "room updated")
+        let onRoomUpdatedCalledEx = expectation(description: "room updated hook called")
+
+        let roomName = "testroom"
+
+        let onRoomUpdated = { (room: PCRoom) -> Void in
+            guard room.name == roomName else {
+                XCTFail("onRoomUpdated called for a different room")
+                return
+            }
+            XCTAssertEqual(room.customData!.keys.count, 0, "room custom data should be empty")
+            onRoomUpdatedCalledEx.fulfill()
+        }
+
+        let onAddedToRoom = { (room: PCRoom) -> Void in
+            guard room.name == roomName else {
+                XCTFail("onAddedToRoom called for a different room")
+                return
+            }
+            addedToRoomEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(
+            onAddedToRoom: onAddedToRoom,
+            onRoomUpdated: onRoomUpdated
+        )
+
+        var roomID: String!
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            alice!.createRoom(name: roomName, customData: ["some": "custom data"]) { room, err in
+                XCTAssertNil(err)
+                roomID = room!.id
+                roomCreatedEx.fulfill()
+            }
+        }
+
+        wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+        self.aliceChatManager.disconnect()
+
+        updateRoom(id: roomID, customData: [:]) { err in
+            XCTAssertNil(err)
+            roomUpdatedEx.fulfill()
+        }
+
+        wait(for: [roomUpdatedEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+        }
+
+        wait(for: [onRoomUpdatedCalledEx], timeout: 15)
+    }
+
+    func testOnRoomUpdatedIsCalledIfARoomHasCustomDataMutatedBetweenConnections() {
+        let addedToRoomEx = expectation(description: "alice added to room")
+        let roomCreatedEx = expectation(description: "room created")
+        let roomUpdatedEx = expectation(description: "room updated")
+        let onRoomUpdatedCalledEx = expectation(description: "room updated hook called")
+
+        let roomName = "testroom"
+
+        let onRoomUpdated = { (room: PCRoom) -> Void in
+            guard room.name == roomName else {
+                XCTFail("onRoomUpdated called for a different room")
+                return
+            }
+            XCTAssertEqual(room.customData!.keys.count, 2, "room custom data should have 2 keys")
+            XCTAssertEqual(room.customData!["hello"] as! String, "world")
+            XCTAssertEqual(room.customData!["chicken"] as! [String], ["curry"])
+            onRoomUpdatedCalledEx.fulfill()
+        }
+
+        let onAddedToRoom = { (room: PCRoom) -> Void in
+            guard room.name == roomName else {
+                XCTFail("onAddedToRoom called for a different room")
+                return
+            }
+            addedToRoomEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(
+            onAddedToRoom: onAddedToRoom,
+            onRoomUpdated: onRoomUpdated
+        )
+
+        var roomID: String!
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            alice!.createRoom(name: roomName, customData: ["some": "custom data"]) { room, err in
+                XCTAssertNil(err)
+                roomID = room!.id
+                roomCreatedEx.fulfill()
+            }
+        }
+
+        wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+        self.aliceChatManager.disconnect()
+
+        updateRoom(id: roomID, customData: ["hello": "world", "chicken": ["curry"]]) { err in
+            XCTAssertNil(err)
+            roomUpdatedEx.fulfill()
+        }
+
+        wait(for: [roomUpdatedEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+        }
+
+        wait(for: [onRoomUpdatedCalledEx], timeout: 15)
+    }
+
+    func testOnRoomUpdatedIsCalledIfARoomHasCustomDataMutatedAndItsNameAndPrivacyChangedBetweenConnections() {
+        let addedToRoomEx = expectation(description: "alice added to room")
+        let roomCreatedEx = expectation(description: "room created")
+        let roomUpdatedEx = expectation(description: "room updated")
+        let onRoomUpdatedCalledEx = expectation(description: "room updated hook called")
+
+        let roomName = "testroom"
+        let newRoomName = "newname"
+
+        let onRoomUpdated = { (room: PCRoom) -> Void in
+            guard room.name == newRoomName else {
+                XCTFail("onRoomUpdated called for a different room")
+                return
+            }
+            XCTAssertTrue(room.isPrivate)
+            XCTAssertEqual(room.customData!.keys.count, 2, "room custom data should have 2 keys")
+            XCTAssertEqual(room.customData!["hello"] as! String, "world")
+            XCTAssertEqual(room.customData!["chicken"] as! [String], ["curry"])
+            onRoomUpdatedCalledEx.fulfill()
+        }
+
+        let onAddedToRoom = { (room: PCRoom) -> Void in
+            guard room.name == roomName else {
+                XCTFail("onAddedToRoom called for a different room")
+                return
+            }
+            addedToRoomEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(
+            onAddedToRoom: onAddedToRoom,
+            onRoomUpdated: onRoomUpdated
+        )
+
+        var roomID: String!
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
             alice!.createRoom(
-                name: "mushroom",
-                addUserIDs: ["bob"],
-                customData: ["hello": "world"]
-            ) { mushroomRoom, err in
+                name: roomName,
+                isPrivate: false,
+                customData: ["some": "custom data"]
+            ) { room, err in
                 XCTAssertNil(err)
-                self.wait(for: [addedToRoomMushroomEx], timeout: 10)
-                self.aliceChatManager.disconnect()
-
-                bobsRoomMutationFun(mushroomRoom!.id)
-                self.wait(for: [mushroomRoomUpdatedEx], timeout: 15)
-
-                self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
-                    XCTAssertNil(err)
-                    XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
-                }
+                roomID = room!.id
+                roomCreatedEx.fulfill()
             }
         }
 
+        wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+        self.aliceChatManager.disconnect()
+
+        updateRoom(
+            id: roomID,
+            name: newRoomName,
+            isPrivate: true,
+            customData: ["hello": "world", "chicken": ["curry"]]
+        ) { err in
+            XCTAssertNil(err)
+            roomUpdatedEx.fulfill()
+        }
+
         wait(for: [roomUpdatedEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+        }
+
+        wait(for: [onRoomUpdatedCalledEx], timeout: 15)
+    }
+
+    func testOnAddedToRoomIsCalledIfCurrentUserHasBeenAddedToARoomBetweenConnections() {
+        let roomCreatedEx = expectation(description: "room created")
+        let connectedSuccessfullyEx = expectation(description: "alice connected successfully")
+        let onAddedToRoomCalledEx = expectation(description: "added to room hook called")
+
+        let roomName = "testroom"
+
+        let onAddedToRoom = { (room: PCRoom) -> Void in
+            guard room.name == roomName else {
+                XCTFail("onAddedToRoom called for a different room")
+                return
+            }
+            onAddedToRoomCalledEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(onAddedToRoom: onAddedToRoom)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            connectedSuccessfullyEx.fulfill()
+        }
+
+        wait(for: [connectedSuccessfullyEx], timeout: 15)
+        self.aliceChatManager.disconnect()
+
+        createRoom(creatorID: "bob", name: roomName, addUserIDs: ["alice"]) { err in
+            XCTAssertNil(err)
+            roomCreatedEx.fulfill()
+        }
+
+        wait(for: [roomCreatedEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+        }
+
+        wait(for: [onAddedToRoomCalledEx], timeout: 15)
     }
 }
