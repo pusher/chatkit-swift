@@ -1,13 +1,19 @@
 import Foundation
 import CryptoSwift
 
-func generateSuperuserToken() -> String {
+func generateSuperuserToken(sub: String? = nil) -> String {
     var claims = ClaimSet()
     claims.issuer = "api_keys/\(testInstanceKeyID)"
     claims.issuedAt = Date()
     claims.expiration = Date().addingTimeInterval(TimeInterval(86400))
     claims["su"] = true
     claims["instance"] = testInstanceInstanceID
+    if let sub = sub {
+        claims["sub"] = sub
+    }
+
+    return encode(claims: claims)
+}
 
     return encode(claims: claims)
 }
