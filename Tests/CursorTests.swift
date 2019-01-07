@@ -104,12 +104,12 @@ class CursorTests: XCTestCase {
     func testNewReadCursorHook() {
         let ex = expectation(description: "received new read cursor")
 
-        let onNewCursor = { (cursor: PCCursor) -> Void in
+        let onNewReadCursor = { (cursor: PCCursor) -> Void in
             XCTAssertEqual(cursor.position, 42)
             ex.fulfill()
         }
 
-        let aliceRoomDelegate = TestingRoomDelegate(onNewCursor: onNewCursor)
+        let aliceRoomDelegate = TestingRoomDelegate(onNewReadCursor: onNewReadCursor)
 
         alice.subscribeToRoom(
             room: alice.rooms.first(where: { $0.id == roomID })!,
