@@ -12,8 +12,8 @@ public final class PCRoom {
     public internal(set) var customData: [String: Any]?
 
     public internal(set) var subscription: PCRoomSubscription?
-
     public internal(set) var userIDs: Set<String>
+    var subscriptionPreviouslyEstablished = false
 
     // TODO: Should each Room instead have access to the user store and then the users
     // property would become a func with a completion handler that queried the user store
