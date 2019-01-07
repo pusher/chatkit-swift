@@ -7,7 +7,7 @@ public final class PCMembershipSubscription {
     public let userStore: PCGlobalUserStore
     public let roomStore: PCRoomStore
     public var logger: PPLogger
-    var initialStateHandler: (Error?) -> Void
+    var initialStateHandler: (InitialStateResult<PCUser>) -> Void
     weak var chatManagerDelegate: PCChatManagerDelegate?
 
     let roomID: String
@@ -20,7 +20,7 @@ public final class PCMembershipSubscription {
         userStore: PCGlobalUserStore,
         roomStore: PCRoomStore,
         logger: PPLogger,
-        initialStateHandler: @escaping (Error?) -> Void
+        initialStateHandler: @escaping (InitialStateResult<PCUser>) -> Void
     ) {
         self.roomID = roomID
         self.delegate = delegate
@@ -94,7 +94,7 @@ extension PCMembershipSubscription {
             }
 
             guard let room = room, err == nil else {
-                strongSelf.initialStateHandler(err!)
+                strongSelf.initialStateHandler(.error(err!))
                 return
             }
 
@@ -105,16 +105,18 @@ extension PCMembershipSubscription {
                 }
 
                 guard let users = users, err == nil else {
-                    strongSelf.initialStateHandler(err!)
+                    strongSelf.initialStateHandler(.error(err!))
                     return
                 }
+
+                let existingUsers = room.userStore.users.map { $0.copy() }
 
                 users.forEach { user in
                     let addedOrMergedUser = room.userStore.addOrMerge(user)
                     room.userIDs.insert(addedOrMergedUser.id)
                 }
 
-                strongSelf.initialStateHandler(nil)
+                strongSelf.initialStateHandler(.success(existing: existingUsers, new: users))
             }
         }
     }

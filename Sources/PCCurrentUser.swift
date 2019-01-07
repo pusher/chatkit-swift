@@ -955,7 +955,27 @@ public final class PCCurrentUser {
             userStore: self.userStore,
             roomStore: self.roomStore,
             logger: self.instance.logger,
-            initialStateHandler: completionHandler
+            initialStateHandler: { [weak self, weak delegate] result in
+                switch result {
+                case .error(let err):
+                    completionHandler(err)
+                case .success(let existing, let new):
+                    completionHandler(nil)
+                    self?.reconcileMemberships(
+                        new: new,
+                        old: existing,
+                        onUserJoinedHook: { user in
+                            self?.delegate.onUserJoinedRoom(room, user: user)
+                            delegate?.onUserJoined(user: user)
+                        },
+                        onUserLeftHook: { user in
+                            room.removeUser(id: user.id)
+                            self?.delegate.onUserLeftRoom(room, user: user)
+                            delegate?.onUserLeft(user: user)
+                        }
+                    )
+                }
+            }
         )
 
         self.instance.subscribeWithResume(
@@ -1166,6 +1186,25 @@ public final class PCCurrentUser {
                 )
             }
         )
+    }
+
+    fileprivate func reconcileMemberships(
+        new: [PCUser],
+        old: [PCUser],
+        onUserJoinedHook: ((PCUser) -> Void)?,
+        onUserLeftHook: ((PCUser) -> Void)?
+    ) {
+        let oldSet = Set(old)
+        let newSet = Set(new)
+
+        let newMembers = newSet.subtracting(oldSet)
+        let membersRemoved = oldSet.subtracting(newSet)
+
+        newMembers.forEach { onUserJoinedHook?($0) }
+
+        membersRemoved.forEach { m in
+            onUserLeftHook?(m)
+        }
     }
 }
 
