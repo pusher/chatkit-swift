@@ -576,7 +576,7 @@ class ReconnectionTests: XCTestCase {
 
     // MARK: User cursors subscription reconciliation
 
-    func testOnNewReadCursorInIsCalledIfCurrentUserHasTheirCursorUpdatedBetweenConnections() {
+    func testOnNewReadCursorIsCalledIfCurrentUserHasTheirCursorUpdatedBetweenConnections() {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
         let subscribedToRoomEx = expectation(description: "subscribe to room")
@@ -660,11 +660,11 @@ class ReconnectionTests: XCTestCase {
         wait(for: [onNewReadCursorCalledEx], timeout: 15)
     }
 
-    func testOnNewReadCursorInIsCalledIfCurrentUserHasACursorSetBetweenConnections() {
+    func testOnNewReadCursorIsCalledIfCurrentUserHasACursorSetBetweenConnections() {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
         let subscribedToRoomEx = expectation(description: "subscribe to room")
-        let cursorSeteEx = expectation(description: "cursor set")
+        let cursorSetEx = expectation(description: "cursor set")
         let onNewReadCursorCalledEx = expectation(description: "new cursor hook called")
 
         let roomName = "testroom"
@@ -721,9 +721,9 @@ class ReconnectionTests: XCTestCase {
             position: 100
         ) { err in
             XCTAssertNil(err)
-            cursorSeteEx.fulfill()
+            cursorSetEx.fulfill()
         }
-        wait(for: [cursorSeteEx], timeout: 15)
+        wait(for: [cursorSetEx], timeout: 15)
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
