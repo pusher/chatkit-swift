@@ -75,6 +75,16 @@ public final class PCRoom {
         self.deletedAt = room.deletedAt
     }
 
+    func removeUser(id: String) {
+        let roomUserIDIndex = userIDs.index(of: id)
+
+        if let indexToRemove = roomUserIDIndex {
+            userIDs.remove(at: indexToRemove)
+        }
+
+        userStore.remove(id: id)
+    }
+
     func deepEqual(to room: PCRoom) -> Bool {
         return
             self.name == room.name &&

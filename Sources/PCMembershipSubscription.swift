@@ -209,13 +209,7 @@ extension PCMembershipSubscription {
                     return
                 }
 
-                let roomUserIDIndex = room.userIDs.index(of: user.id)
-
-                if let indexToRemove = roomUserIDIndex {
-                    room.userIDs.remove(at: indexToRemove)
-                }
-
-                room.userStore.remove(id: user.id)
+                room.removeUser(id: user.id)
 
                 strongSelf.delegate?.onUserLeft(user: user)
                 strongSelf.chatManagerDelegate?.onUserLeftRoom(room, user: user)
