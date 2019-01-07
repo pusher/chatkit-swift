@@ -2,27 +2,26 @@ import Foundation
 import PusherPlatform
 
 public final class PCCursorSubscription {
-    // TODO: Do we still need this?
-    weak var delegate: PCRoomDelegate?
     let resumableSubscription: PPResumableSubscription
     let cursorStore: PCCursorStore
     let connectionCoordinator: PCConnectionCoordinator
     public var logger: PPLogger
-    var initialStateHandler: ((Error?) -> Void)?
+    var onNewReadCursorHook: ((PCCursor) -> Void)?
+    var initialStateHandler: ((CursorsInitialStateResult) -> Void)?
 
     init(
-        delegate: PCRoomDelegate? = nil,
         resumableSubscription: PPResumableSubscription,
         cursorStore: PCCursorStore,
         connectionCoordinator: PCConnectionCoordinator,
         logger: PPLogger,
-        initialStateHandler: @escaping (Error?) -> Void
+        onNewReadCursorHook: ((PCCursor) -> Void)? = nil,
+        initialStateHandler: @escaping (CursorsInitialStateResult) -> Void
     ) {
-        self.delegate = delegate
         self.resumableSubscription = resumableSubscription
         self.cursorStore = cursorStore
         self.connectionCoordinator = connectionCoordinator
         self.logger = logger
+        self.onNewReadCursorHook = onNewReadCursorHook
         self.initialStateHandler = initialStateHandler
     }
 
@@ -73,12 +72,17 @@ extension PCCursorSubscription {
                 apiEventName: eventName,
                 payload: data
             )
-            initialStateHandler?(error)
+            initialStateHandler?(.error(error))
             return
         }
 
+        let existingCursors = self.cursorStore.cursors.reduce(into: []) { res, cursorKeyValuePair in
+            res.append(cursorKeyValuePair.value.copy())
+        }
+        var newCursors: [PCCursor] = []
+
         guard cursorsPayload.count > 0 else {
-            initialStateHandler?(nil)
+            initialStateHandler?(.success(existing: existingCursors, new: newCursors))
             return
         }
 
@@ -87,14 +91,26 @@ extension PCCursorSubscription {
         cursorsPayload.forEach { cursorPayload in
             do {
                 let basicCursor = try PCPayloadDeserializer.createBasicCursorFromPayload(cursorPayload)
-                self.cursorStore.set(basicCursor)
-                if cursorsProgressCounter.incrementSuccessAndCheckIfFinished() {
-                    self.initialStateHandler?(nil)
+                self.cursorStore.set(basicCursor) { cursor, err in
+                    if err == nil, let cursor = cursor {
+                        newCursors.append(cursor)
+                        if cursorsProgressCounter.incrementSuccessAndCheckIfFinished() {
+                            self.initialStateHandler?(.success(existing: existingCursors, new: newCursors))
+                        }
+                    } else if let err = err {
+                        if cursorsProgressCounter.incrementFailedAndCheckIfFinished() {
+                            self.initialStateHandler?(.error(err))
+                        }
+                    } else {
+                        if cursorsProgressCounter.incrementFailedAndCheckIfFinished() {
+                            self.initialStateHandler?(.success(existing: existingCursors, new: newCursors))
+                        }
+                    }
                 }
             } catch let err {
                 self.logger.log(err.localizedDescription, logLevel: .debug)
                 if cursorsProgressCounter.incrementFailedAndCheckIfFinished() {
-                    self.initialStateHandler?(err)
+                    self.initialStateHandler?(.error(err))
                 }
             }
         }
@@ -113,7 +129,7 @@ extension PCCursorSubscription {
                 }
 
                 self.logger.log("New cursor: \(cursor.debugDescription)", logLevel: .verbose)
-                self.delegate?.onNewCursor(cursor)
+                self.onNewReadCursorHook?(cursor)
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)
@@ -140,4 +156,9 @@ extension PCCursorsEventError: LocalizedError {
             return "\(key) missing in \(apiEventName.rawValue) API event payload: \(payload)"
         }
     }
+}
+
+enum CursorsInitialStateResult {
+    case error(Error)
+    case success(existing: [PCCursor], new: [PCCursor])
 }

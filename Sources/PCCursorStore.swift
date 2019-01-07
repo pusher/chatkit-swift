@@ -25,7 +25,7 @@ public final class PCCursorStore {
     }
 
     public func getSync(userID: String, roomID: String) -> PCCursor? {
-        return self.cursors.first(where: { $0.key == key(userID, roomID) })?.value
+        return self.cursors.first(where: { $0.key == cursorKey(userID, roomID) })?.value
     }
 
     public func set(_ basicCursor: PCBasicCursor, completionHandler: ((PCCursor?, Error?) -> Void)? = nil) {
@@ -44,11 +44,11 @@ public final class PCCursorStore {
     }
 
     fileprivate func set(userID: String, roomID: String, cursor: PCCursor) {
-        self.cursors[key(userID, roomID)] = cursor
+        self.cursors[cursorKey(userID, roomID)] = cursor
     }
 
     func findOrGetCursor(userID: String, roomID: String, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
-        if let cursorObj = self.cursors.first(where: { $0.key == key(userID, roomID) }) {
+        if let cursorObj = self.cursors.first(where: { $0.key == cursorKey(userID, roomID) }) {
             completionHandler(cursorObj.value, nil)
         } else {
             self.getCursor(userID: userID, roomID: roomID) { cursor, err in
@@ -105,7 +105,7 @@ public final class PCCursorStore {
         )
     }
 
-    fileprivate func key(_ userID: String, _ roomID: String) -> PCCursorKey {
+    private func cursorKey(_ userID: String, _ roomID: String) -> PCCursorKey {
         return PCCursorKey(userID: userID, roomID: roomID)
     }
 }

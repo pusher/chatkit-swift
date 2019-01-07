@@ -248,7 +248,23 @@ import NotificationCenter
         )
 
         basicCurrentUser!.establishPresenceSubscription()
-        basicCurrentUser!.establishCursorSubscription()
+        basicCurrentUser!.establishCursorSubscription(
+            initialStateHandler: { result in
+                if let currentUser = self.currentUser {
+                    switch result {
+                    case .error(_):
+                        return
+                    case .success(let existing, let new):
+                        self.reconcileCursors(
+                            new: new,
+                            old: existing,
+                            cursorStore: currentUser.cursorStore,
+                            onNewReadCursorHook: currentUser.delegate.onNewReadCursor
+                        )
+                    }
+                }
+            }
+        )
 
         // TODO: This being here at the end seems necessary but bad
         connectionCoordinator.addConnectionCompletionHandler(completionHandler)
@@ -279,6 +295,34 @@ import NotificationCenter
         sharedRooms.forEach { room in
             if let oldRoom = oldSet.first(where: { $0.id == room.id }), !room.deepEqual(to: oldRoom) {
                 delegate.onRoomUpdated(room: room)
+            }
+        }
+    }
+
+    private func reconcileCursors(
+        new: [PCCursor],
+        old: [PCCursor],
+        cursorStore: PCCursorStore,
+        onNewReadCursorHook: ((PCCursor) -> Void)?
+    ) {
+        let oldSet = Set(old)
+        let newSet = Set(new)
+
+        let newCursors = newSet.subtracting(oldSet)
+
+        newCursors.forEach { c in onNewReadCursorHook?(c) }
+
+        let commonCursors = newSet.intersection(oldSet)
+
+        commonCursors.forEach { cursor in
+            let oldCursor = oldSet.first(where: {
+                $0.type == cursor.type &&
+                    $0.room == cursor.room &&
+                    $0.user == cursor.user
+            })
+
+            if let _ = oldCursor, cursor != oldCursor {
+                onNewReadCursorHook?(cursor)
             }
         }
     }

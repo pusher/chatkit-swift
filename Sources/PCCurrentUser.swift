@@ -900,12 +900,22 @@ public final class PCCurrentUser {
         )
 
         let cursorSubscription = PCCursorSubscription(
-            delegate: delegate,
             resumableSubscription: resumableSub,
             cursorStore: cursorStore,
             connectionCoordinator: connectionCoordinator,
             logger: self.cursorsInstance.logger,
-            initialStateHandler: completionHandler
+            onNewReadCursorHook: { cursor in
+                delegate.onNewReadCursor(cursor)
+                self.delegate.onNewReadCursor(cursor)
+            },
+            initialStateHandler: { result in
+                switch result {
+                case .error(let err):
+                    completionHandler(err)
+                case .success(let existing, let new):
+                    completionHandler(nil)
+                }
+            }
         )
 
         self.cursorsInstance.subscribeWithResume(

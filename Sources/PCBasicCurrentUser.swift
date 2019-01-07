@@ -131,7 +131,7 @@ public final class PCBasicCurrentUser {
         )
     }
 
-    func establishCursorSubscription() {
+    func establishCursorSubscription(initialStateHandler: @escaping (CursorsInitialStateResult) -> Void) {
         let userCursorSubscriptionPath = "/cursors/\(PCCursorType.read.rawValue)/users/\(self.pathFriendlyID)"
         let cursorSubscriptionRequestOptions = PPRequestOptions(
             method: HTTPMethod.SUBSCRIBE.rawValue,
@@ -148,17 +148,25 @@ public final class PCBasicCurrentUser {
             cursorStore: cursorStore,
             connectionCoordinator: self.connectionCoordinator,
             logger: self.cursorsInstance.logger,
-            initialStateHandler: { [unowned self] err in
-                if let err = err {
+            initialStateHandler: { [unowned self] result in
+                switch result {
+                case .error(let err):
                     self.cursorsInstance.logger.log(err.localizedDescription, logLevel: .debug)
+
+                    // TODO: Should the connection coordinator get the error here?
+                    // Do we care if a single (in this weird case, only the last to be received)
+                    // basic cursor can't be enriched with information about its room and/or user?
+                    // We probably just want to log something
+                    self.connectionCoordinator.connectionEventCompleted(
+                        PCConnectionEvent(cursorSubscription: self.cursorSubscription, error: nil)
+                    )
+                case .success(_, _):
+                    self.connectionCoordinator.connectionEventCompleted(
+                        PCConnectionEvent(cursorSubscription: self.cursorSubscription, error: nil)
+                    )
+
+                    initialStateHandler(result)
                 }
-                // TODO: Should the connection coordinator get the error here?
-                // Do we care if a single (in this weird case, only the last to be received)
-                // basic cursor can't be enriched with information about its room and/or user?
-                // We probably just want to log something
-                self.connectionCoordinator.connectionEventCompleted(
-                    PCConnectionEvent(cursorSubscription: self.cursorSubscription, error: nil)
-                )
             }
         )
 
