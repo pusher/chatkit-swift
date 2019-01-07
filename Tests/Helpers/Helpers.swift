@@ -445,6 +445,82 @@ func setReadCursor(
     }.resume()
 }
 
+func addUserToRoom(
+    roomID: String,
+    userID: String,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    addOrRemoveUsers(
+        roomID: roomID,
+        userIDs: [userID],
+        membershipChange: .add,
+        completionHandler: completionHandler
+    )
+}
+
+func removeUserFromRoom(
+    roomID: String,
+    userID: String,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    addOrRemoveUsers(
+        roomID: roomID,
+        userIDs: [userID],
+        membershipChange: .remove,
+        completionHandler: completionHandler
+    )
+}
+
+fileprivate enum PCUserMembershipChange: String {
+    case add
+    case remove
+}
+
+fileprivate func addOrRemoveUsers(
+    roomID: String,
+    userIDs: [String],
+    membershipChange: PCUserMembershipChange,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    let userPayload = ["user_ids": userIDs]
+
+    guard JSONSerialization.isValidJSONObject(userPayload) else {
+        completionHandler(.generic("Invalid userPayload \(userPayload.debugDescription)"))
+        return
+    }
+
+    guard let data = try? JSONSerialization.data(withJSONObject: userPayload, options: []) else {
+        completionHandler(.generic("Failed to JSON serialize userPayload \(userPayload.debugDescription)"))
+        return
+    }
+
+    let path = "/rooms/\(roomID)/users/\(membershipChange.rawValue)"
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v2", path))
+    request.httpMethod = "PUT"
+    request.httpBody = data
+    request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error making room membership change: \(error!.localizedDescription)"))
+            return
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            completionHandler(.generic("Error making room membership change"))
+            return
+        }
+
+        if 200..<300 ~= httpResponse.statusCode {
+            TestLogger().log("Room membership change completed successfully!", logLevel: .debug)
+            completionHandler(nil)
+        } else {
+            let errorDesc = error?.localizedDescription ?? "no error"
+            completionHandler(.generic("Error making room membership change: status \(httpResponse.statusCode), error: \(errorDesc)"))
+        }
+    }.resume()
+}
 
 func dataSubscriptionEventFor(_ eventJSON: String) -> Data {
     let noNewlineEventString = eventJSON.replacingOccurrences(of: "\n", with: "")
