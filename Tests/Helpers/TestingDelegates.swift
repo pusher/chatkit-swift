@@ -11,6 +11,7 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
     let handleRemovedFromRoom: (PCRoom) -> Void
     let handleRoomDeleted: (PCRoom) -> Void
     let handleRoomUpdated: (PCRoom) -> Void
+    let handleNewReadCursor: (PCCursor) -> Void
 
     init(
         onUserStartedTyping: @escaping (PCRoom, PCUser) -> Void = { _, _ in },
@@ -21,7 +22,8 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
         onAddedToRoom: @escaping (PCRoom) -> Void = { _ in },
         onRemovedFromRoom: @escaping (PCRoom) -> Void = { _ in },
         onRoomDeleted: @escaping (PCRoom) -> Void = { _ in },
-        onRoomUpdated: @escaping (PCRoom) -> Void = { _ in }
+        onRoomUpdated: @escaping (PCRoom) -> Void = { _ in },
+        onNewReadCursor: @escaping (PCCursor) -> Void = { _ in }
     ) {
         handleUserStartedTyping = onUserStartedTyping
         handleUserStoppedTyping = onUserStoppedTyping
@@ -32,6 +34,7 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
         handleRemovedFromRoom = onRemovedFromRoom
         handleRoomDeleted = onRoomDeleted
         handleRoomUpdated = onRoomUpdated
+        handleNewReadCursor = onNewReadCursor
     }
 
     func onUserStartedTyping(inRoom room: PCRoom, user: PCUser) -> Void {
@@ -69,10 +72,14 @@ class TestingChatManagerDelegate: PCChatManagerDelegate {
     func onRoomUpdated(room: PCRoom) {
         handleRoomUpdated(room)
     }
+
+    func onNewReadCursor(_ cursor: PCCursor) {
+        handleNewReadCursor(cursor)
+    }
 }
 
 class TestingRoomDelegate: NSObject, PCRoomDelegate {
-    let handleNewCursor: (PCCursor) -> Void
+    let handleNewReadCursor: (PCCursor) -> Void
     let handleUserStartedTyping: (PCUser) -> Void
     let handleUserStoppedTyping: (PCUser) -> Void
     let handlePresenceChanged: (PCPresenceStateChange, PCUser) -> Void
@@ -81,7 +88,7 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
     let handleNewMessage: (PCMessage) -> Void
 
     init(
-        onNewCursor: @escaping (PCCursor) -> Void = { _ in },
+        onNewReadCursor: @escaping (PCCursor) -> Void = { _ in },
         onUserStartedTyping: @escaping (PCUser) -> Void = { _ in },
         onUserStoppedTyping: @escaping (PCUser) -> Void = { _ in },
         onPresenceChanged: @escaping (PCPresenceStateChange, PCUser) -> Void = { _, _ in },
@@ -89,7 +96,7 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
         onUserLeft: @escaping (PCUser) -> Void = { _ in },
         onMessage: @escaping (PCMessage) -> Void = { _ in }
     ) {
-        handleNewCursor = onNewCursor
+        handleNewReadCursor = onNewReadCursor
         handleUserStartedTyping = onUserStartedTyping
         handleUserStoppedTyping = onUserStoppedTyping
         handlePresenceChanged = onPresenceChanged
@@ -98,8 +105,8 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
         handleNewMessage = onMessage
     }
 
-    func onNewCursor(_ cursor: PCCursor) -> Void {
-        handleNewCursor(cursor)
+    func onNewReadCursor(_ cursor: PCCursor) -> Void {
+        handleNewReadCursor(cursor)
     }
 
     func onUserStartedTyping(user: PCUser) -> Void {
