@@ -588,7 +588,7 @@ class ReconnectionTests: XCTestCase {
 
         let onNewReadCursor = { (cursor: PCCursor) -> Void in
             guard cursor.room.name == roomName else {
-                XCTFail("onNewCursor called for a different room")
+                XCTFail("onNewReadCursor called for a different room")
                 return
             }
 
@@ -671,7 +671,7 @@ class ReconnectionTests: XCTestCase {
 
         let onNewReadCursor = { (cursor: PCCursor) -> Void in
             guard cursor.room.name == roomName else {
-                XCTFail("onNewCursor called for a different room")
+                XCTFail("onNewReadCursor called for a different room")
                 return
             }
 
