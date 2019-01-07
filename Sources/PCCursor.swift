@@ -36,6 +36,20 @@ extension PCCursor: CustomDebugStringConvertible {
     }
 }
 
+extension PCCursor: Hashable {
+    public var hashValue: Int {
+        return self.type.hashValue ^ self.room.hashValue ^ self.user.hashValue
+    }
+
+    public static func ==(lhs: PCCursor, rhs: PCCursor) -> Bool {
+        return
+            lhs.type == rhs.type &&
+                lhs.position == rhs.position &&
+                lhs.room == rhs.room &&
+                lhs.user == rhs.user
+    }
+}
+
 extension PCCursor {
     func copy() -> PCCursor {
         return PCCursor(
