@@ -49,7 +49,7 @@ extension PCMessage: Hashable {
         return self.id
     }
 
-    public static func ==(_ lhs: PCMessage, _ rhs: PCMessage) -> Bool {
+    public static func ==(lhs: PCMessage, rhs: PCMessage) -> Bool {
         return lhs.id == rhs.id
     }
 }

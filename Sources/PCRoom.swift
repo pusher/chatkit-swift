@@ -93,7 +93,7 @@ extension PCRoom: Hashable {
         return self.id.hashValue
     }
 
-    public static func ==(_ lhs: PCRoom, _ rhs: PCRoom) -> Bool {
+    public static func ==(lhs: PCRoom, rhs: PCRoom) -> Bool {
         return lhs.id == rhs.id
     }
 }

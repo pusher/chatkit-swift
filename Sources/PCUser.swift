@@ -66,7 +66,7 @@ extension PCUser: Hashable {
         return self.id.hashValue
     }
 
-    public static func ==(_ lhs: PCUser, _ rhs: PCUser) -> Bool {
+    public static func ==(lhs: PCUser, rhs: PCUser) -> Bool {
         return lhs.id == rhs.id
     }
 }
