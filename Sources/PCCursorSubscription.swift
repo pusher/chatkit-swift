@@ -7,7 +7,7 @@ public final class PCCursorSubscription {
     let connectionCoordinator: PCConnectionCoordinator
     public var logger: PPLogger
     var onNewReadCursorHook: ((PCCursor) -> Void)?
-    var initialStateHandler: ((CursorsInitialStateResult) -> Void)?
+    var initialStateHandler: ((InitialStateResult<PCCursor>) -> Void)?
 
     init(
         resumableSubscription: PPResumableSubscription,
@@ -15,7 +15,7 @@ public final class PCCursorSubscription {
         connectionCoordinator: PCConnectionCoordinator,
         logger: PPLogger,
         onNewReadCursorHook: ((PCCursor) -> Void)? = nil,
-        initialStateHandler: @escaping (CursorsInitialStateResult) -> Void
+        initialStateHandler: @escaping (InitialStateResult<PCCursor>) -> Void
     ) {
         self.resumableSubscription = resumableSubscription
         self.cursorStore = cursorStore
@@ -156,9 +156,4 @@ extension PCCursorsEventError: LocalizedError {
             return "\(key) missing in \(apiEventName.rawValue) API event payload: \(payload)"
         }
     }
-}
-
-enum CursorsInitialStateResult {
-    case error(Error)
-    case success(existing: [PCCursor], new: [PCCursor])
 }

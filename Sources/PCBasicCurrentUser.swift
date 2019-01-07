@@ -131,7 +131,7 @@ public final class PCBasicCurrentUser {
         )
     }
 
-    func establishCursorSubscription(initialStateHandler: @escaping (CursorsInitialStateResult) -> Void) {
+    func establishCursorSubscription(initialStateHandler: @escaping (InitialStateResult<PCCursor>) -> Void) {
         let userCursorSubscriptionPath = "/cursors/\(PCCursorType.read.rawValue)/users/\(self.pathFriendlyID)"
         let cursorSubscriptionRequestOptions = PPRequestOptions(
             method: HTTPMethod.SUBSCRIBE.rawValue,
