@@ -733,4 +733,179 @@ class ReconnectionTests: XCTestCase {
         wait(for: [onNewReadCursorCalledEx], timeout: 15)
     }
 
+    // MARK: Membership subscription reconciliation
+
+    func testOnUserJoinedHooksAreCalledIfANewRoomMemberIsAddedBetweenConnections() {
+        let addedToRoomEx = expectation(description: "alice added to room")
+        let roomCreatedEx = expectation(description: "room created")
+        let subscribedToRoomEx = expectation(description: "subscribe to room")
+        let userAddedToRoom = expectation(description: "user added to room")
+        let onUserJoinedCalledEx = expectation(description: "user joined hook (Room level) called")
+        let onUserJoinedRoomCalledEx = expectation(description: "user joined room hook (ChatManager level) called")
+
+        let roomName = "testroom"
+
+        let onUserJoinedRoom = { (room: PCRoom, user: PCUser) in
+            guard room.name == roomName else {
+                XCTFail("onUserJoinedRoom called for a different room")
+                return
+            }
+            guard user.id == "bob" else {
+                XCTFail("onUserJoinedRoom called for a different user")
+                return
+            }
+            onUserJoinedRoomCalledEx.fulfill()
+        }
+
+        let onUserJoined = { (user: PCUser) in
+            guard user.id == "bob" else {
+                XCTFail("onUserJoined called for a different user")
+                return
+            }
+            onUserJoinedCalledEx.fulfill()
+        }
+
+        let onAddedToRoom = { (room: PCRoom) in
+            guard room.name == roomName else {
+                XCTFail("onAddedToRoom called for a different room")
+                return
+            }
+            addedToRoomEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(
+            onUserJoinedRoom: onUserJoinedRoom,
+            onAddedToRoom: onAddedToRoom
+        )
+        let aliceRoomDelegate = TestingRoomDelegate(onUserJoined: onUserJoined)
+
+        var roomID: String!
+        var alice: PCCurrentUser!
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { a, err in
+            XCTAssertNil(err)
+            alice = a
+            alice.createRoom(name: roomName, isPrivate: false) { room, err in
+                XCTAssertNil(err)
+                roomID = room!.id
+                roomCreatedEx.fulfill()
+            }
+        }
+        wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+
+        alice.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
+            XCTAssertNil(err)
+            subscribedToRoomEx.fulfill()
+        }
+
+        wait(for: [subscribedToRoomEx], timeout: 15)
+        self.aliceChatManager.disconnect()
+
+
+        addUserToRoom(roomID: roomID, userID: "bob") { err in
+            XCTAssertNil(err)
+            userAddedToRoom.fulfill()
+        }
+        wait(for: [userAddedToRoom], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _, err in
+            XCTAssertNil(err)
+            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+
+            alice.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
+                XCTAssertNil(err)
+            }
+        }
+
+        wait(for: [onUserJoinedCalledEx, onUserJoinedRoomCalledEx], timeout: 15)
+    }
+
+    func testOnUserLeftHooksAreCalledIfANewRoomMemberIsAddedBetweenConnections() {
+        let addedToRoomEx = expectation(description: "alice added to room")
+        let roomCreatedEx = expectation(description: "room created")
+        let subscribedToRoomEx = expectation(description: "subscribe to room")
+        let userRemovedFromRoom = expectation(description: "user removed from room")
+        let onUserLeftCalledEx = expectation(description: "user left hook (Room level) called")
+        let onUserLeftRoomCalledEx = expectation(description: "user left room hook (ChatManager level) called")
+
+        let roomName = "testroom"
+
+        let onUserLeftRoom = { (room: PCRoom, user: PCUser) in
+            guard room.name == roomName else {
+                XCTFail("onUserLeftRoom called for a different room")
+                return
+            }
+            guard user.id == "bob" else {
+                XCTFail("onUserLeftRoom called for a different user")
+                return
+            }
+            onUserLeftRoomCalledEx.fulfill()
+        }
+
+        let onUserLeft = { (user: PCUser) in
+            guard user.id == "bob" else {
+                XCTFail("onUserLeft called for a different user")
+                return
+            }
+            onUserLeftCalledEx.fulfill()
+        }
+
+        let onAddedToRoom = { (room: PCRoom) in
+            guard room.name == roomName else {
+                XCTFail("onAddedToRoom called for a different room")
+                return
+            }
+            addedToRoomEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(
+            onUserLeftRoom: onUserLeftRoom,
+            onAddedToRoom: onAddedToRoom
+        )
+        let aliceRoomDelegate = TestingRoomDelegate(onUserLeft: onUserLeft)
+
+        var roomID: String!
+        var alice: PCCurrentUser!
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { a, err in
+            XCTAssertNil(err)
+            alice = a
+            alice.createRoom(
+                name: roomName,
+                isPrivate: false,
+                addUserIDs: ["bob"]
+            ) { room, err in
+                XCTAssertNil(err)
+                roomID = room!.id
+                roomCreatedEx.fulfill()
+            }
+        }
+        wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+
+        alice.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
+            XCTAssertNil(err)
+            subscribedToRoomEx.fulfill()
+        }
+
+        wait(for: [subscribedToRoomEx], timeout: 15)
+        self.aliceChatManager.disconnect()
+
+
+        removeUserFromRoom(roomID: roomID, userID: "bob") { err in
+            XCTAssertNil(err)
+            userRemovedFromRoom.fulfill()
+        }
+        wait(for: [userRemovedFromRoom], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _, err in
+            XCTAssertNil(err)
+            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+
+            alice.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
+                XCTAssertNil(err)
+            }
+        }
+
+        wait(for: [onUserLeftCalledEx, onUserLeftRoomCalledEx], timeout: 15)
+    }
 }
