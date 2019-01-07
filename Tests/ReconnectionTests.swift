@@ -110,7 +110,7 @@ class ReconnectionTests: XCTestCase {
 
         let roomName = "testroom"
 
-        let onRemovedFromRoom = { (room: PCRoom) -> Void in
+        let onRemovedFromRoom = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onRemovedFromRoom called for a different room")
                 return
@@ -118,7 +118,7 @@ class ReconnectionTests: XCTestCase {
             removedFromRoomEx.fulfill()
         }
 
-        let onAddedToRoom = { (room: PCRoom) -> Void in
+        let onAddedToRoom = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onAddedToRoom called for a different room")
                 return
@@ -171,7 +171,7 @@ class ReconnectionTests: XCTestCase {
 
         let roomName = "testroom"
 
-        let onRoomUpdated = { (room: PCRoom) -> Void in
+        let onRoomUpdated = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onRoomUpdated called for a different room")
                 return
@@ -182,7 +182,7 @@ class ReconnectionTests: XCTestCase {
             }
         }
 
-        let onAddedToRoom = { (room: PCRoom) -> Void in
+        let onAddedToRoom = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onAddedToRoom called for a different room")
                 return
@@ -233,7 +233,7 @@ class ReconnectionTests: XCTestCase {
         let roomName = "testroom"
         let newRoomName = "newname"
 
-        let onRoomUpdated = { (room: PCRoom) -> Void in
+        let onRoomUpdated = { (room: PCRoom) in
             guard room.name == newRoomName else {
                 XCTFail("onRoomUpdated called for a different room")
                 return
@@ -241,7 +241,7 @@ class ReconnectionTests: XCTestCase {
             onRoomUpdatedCalledEx.fulfill()
         }
 
-        let onAddedToRoom = { (room: PCRoom) -> Void in
+        let onAddedToRoom = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onAddedToRoom called for a different room")
                 return
@@ -291,7 +291,7 @@ class ReconnectionTests: XCTestCase {
 
         let roomName = "testroom"
 
-        let onRoomUpdated = { (room: PCRoom) -> Void in
+        let onRoomUpdated = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onRoomUpdated called for a different room")
                 return
@@ -300,7 +300,7 @@ class ReconnectionTests: XCTestCase {
             onRoomUpdatedCalledEx.fulfill()
         }
 
-        let onAddedToRoom = { (room: PCRoom) -> Void in
+        let onAddedToRoom = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onAddedToRoom called for a different room")
                 return
@@ -350,7 +350,7 @@ class ReconnectionTests: XCTestCase {
 
         let roomName = "testroom"
 
-        let onRoomUpdated = { (room: PCRoom) -> Void in
+        let onRoomUpdated = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onRoomUpdated called for a different room")
                 return
@@ -359,7 +359,7 @@ class ReconnectionTests: XCTestCase {
             onRoomUpdatedCalledEx.fulfill()
         }
 
-        let onAddedToRoom = { (room: PCRoom) -> Void in
+        let onAddedToRoom = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onAddedToRoom called for a different room")
                 return
@@ -409,7 +409,7 @@ class ReconnectionTests: XCTestCase {
 
         let roomName = "testroom"
 
-        let onRoomUpdated = { (room: PCRoom) -> Void in
+        let onRoomUpdated = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onRoomUpdated called for a different room")
                 return
@@ -420,7 +420,7 @@ class ReconnectionTests: XCTestCase {
             onRoomUpdatedCalledEx.fulfill()
         }
 
-        let onAddedToRoom = { (room: PCRoom) -> Void in
+        let onAddedToRoom = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onAddedToRoom called for a different room")
                 return
@@ -471,7 +471,7 @@ class ReconnectionTests: XCTestCase {
         let roomName = "testroom"
         let newRoomName = "newname"
 
-        let onRoomUpdated = { (room: PCRoom) -> Void in
+        let onRoomUpdated = { (room: PCRoom) in
             guard room.name == newRoomName else {
                 XCTFail("onRoomUpdated called for a different room")
                 return
@@ -483,7 +483,7 @@ class ReconnectionTests: XCTestCase {
             onRoomUpdatedCalledEx.fulfill()
         }
 
-        let onAddedToRoom = { (room: PCRoom) -> Void in
+        let onAddedToRoom = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onAddedToRoom called for a different room")
                 return
@@ -541,7 +541,7 @@ class ReconnectionTests: XCTestCase {
 
         let roomName = "testroom"
 
-        let onAddedToRoom = { (room: PCRoom) -> Void in
+        let onAddedToRoom = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onAddedToRoom called for a different room")
                 return
@@ -586,7 +586,7 @@ class ReconnectionTests: XCTestCase {
 
         let roomName = "testroom"
 
-        let onNewReadCursor = { (cursor: PCCursor) -> Void in
+        let onNewReadCursor = { (cursor: PCCursor) in
             guard cursor.room.name == roomName else {
                 XCTFail("onNewReadCursor called for a different room")
                 return
@@ -597,7 +597,7 @@ class ReconnectionTests: XCTestCase {
             }
         }
 
-        let onAddedToRoom = { (room: PCRoom) -> Void in
+        let onAddedToRoom = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onAddedToRoom called for a different room")
                 return
@@ -669,7 +669,7 @@ class ReconnectionTests: XCTestCase {
 
         let roomName = "testroom"
 
-        let onNewReadCursor = { (cursor: PCCursor) -> Void in
+        let onNewReadCursor = { (cursor: PCCursor) in
             guard cursor.room.name == roomName else {
                 XCTFail("onNewReadCursor called for a different room")
                 return
@@ -680,7 +680,7 @@ class ReconnectionTests: XCTestCase {
             }
         }
 
-        let onAddedToRoom = { (room: PCRoom) -> Void in
+        let onAddedToRoom = { (room: PCRoom) in
             guard room.name == roomName else {
                 XCTFail("onAddedToRoom called for a different room")
                 return
