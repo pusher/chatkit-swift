@@ -189,7 +189,7 @@ import NotificationCenter
                 guard roomsPayload.count > 0 else {
                     strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
                     if alreadyHadCurrentUser {
-                        strongSelf.reconcileRooms(
+                        reconcileRooms(
                             old: existingRooms,
                             new: [],
                             roomStore: strongSelf.currentUser!.roomStore,
@@ -218,7 +218,7 @@ import NotificationCenter
                         if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
                             strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
                             if alreadyHadCurrentUser {
-                                strongSelf.reconcileRooms(
+                                reconcileRooms(
                                     old: existingRooms,
                                     new: newRooms,
                                     roomStore: strongSelf.currentUser!.roomStore,
@@ -234,7 +234,7 @@ import NotificationCenter
                         if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
                             strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
                             if alreadyHadCurrentUser {
-                                strongSelf.reconcileRooms(
+                                reconcileRooms(
                                     old: existingRooms,
                                     new: newRooms,
                                     roomStore: strongSelf.currentUser!.roomStore,
@@ -249,16 +249,15 @@ import NotificationCenter
 
         basicCurrentUser!.establishPresenceSubscription()
         basicCurrentUser!.establishCursorSubscription(
-            initialStateHandler: { result in
-                if let currentUser = self.currentUser {
+            initialStateHandler: { [weak self] result in
+                if let currentUser = self?.currentUser {
                     switch result {
                     case .error(_):
                         return
                     case .success(let existing, let new):
-                        self.reconcileCursors(
+                        reconcileCursors(
                             new: new,
                             old: existing,
-                            cursorStore: currentUser.cursorStore,
                             onNewReadCursorHook: currentUser.delegate.onNewReadCursor
                         )
                     }
@@ -268,63 +267,6 @@ import NotificationCenter
 
         // TODO: This being here at the end seems necessary but bad
         connectionCoordinator.addConnectionCompletionHandler(completionHandler)
-    }
-
-    private func reconcileRooms(
-        old: [PCRoom],
-        new: [PCRoom],
-        roomStore: PCRoomStore,
-        delegate: PCChatManagerDelegate
-    ) {
-        let oldSet = Set(old)
-        let newSet = Set(new)
-
-        let roomsRemovedFrom = oldSet.subtracting(newSet)
-        let roomsAddedTo = newSet.subtracting(oldSet)
-
-        roomsRemovedFrom.forEach { room in
-            let removedRoom = roomStore.removeSync(id: room.id)
-            if removedRoom != nil {
-                delegate.onRemovedFromRoom(room)
-            }
-        }
-        roomsAddedTo.forEach(delegate.onAddedToRoom)
-
-        let sharedRooms = newSet.intersection(oldSet)
-
-        sharedRooms.forEach { room in
-            if let oldRoom = oldSet.first(where: { $0.id == room.id }), !room.deepEqual(to: oldRoom) {
-                delegate.onRoomUpdated(room: room)
-            }
-        }
-    }
-
-    private func reconcileCursors(
-        new: [PCCursor],
-        old: [PCCursor],
-        cursorStore: PCCursorStore,
-        onNewReadCursorHook: ((PCCursor) -> Void)?
-    ) {
-        let oldSet = Set(old)
-        let newSet = Set(new)
-
-        let newCursors = newSet.subtracting(oldSet)
-
-        newCursors.forEach { c in onNewReadCursorHook?(c) }
-
-        let commonCursors = newSet.intersection(oldSet)
-
-        commonCursors.forEach { cursor in
-            let oldCursor = oldSet.first(where: {
-                $0.type == cursor.type &&
-                    $0.room == cursor.room &&
-                    $0.user == cursor.user
-            })
-
-            if let _ = oldCursor, cursor != oldCursor {
-                onNewReadCursorHook?(cursor)
-            }
-        }
     }
 
     // TODO: Maybe we need some sort of ChatManagerConnectionState?
@@ -362,6 +304,62 @@ import NotificationCenter
 
     fileprivate func informConnectionCoordinatorOfCurrentUserCompletion(currentUser: PCCurrentUser?, error: Error?) {
         connectionCoordinator.connectionEventCompleted(PCConnectionEvent(currentUser: currentUser, error: error))
+    }
+}
+
+func reconcileRooms(
+    old: [PCRoom],
+    new: [PCRoom],
+    roomStore: PCRoomStore,
+    delegate: PCChatManagerDelegate
+) {
+    let oldSet = Set(old)
+    let newSet = Set(new)
+
+    let roomsRemovedFrom = oldSet.subtracting(newSet)
+    let roomsAddedTo = newSet.subtracting(oldSet)
+
+    roomsRemovedFrom.forEach { room in
+        let removedRoom = roomStore.removeSync(id: room.id)
+        if removedRoom != nil {
+            delegate.onRemovedFromRoom(room)
+        }
+    }
+    roomsAddedTo.forEach(delegate.onAddedToRoom)
+
+    let sharedRooms = newSet.intersection(oldSet)
+
+    sharedRooms.forEach { room in
+        if let oldRoom = oldSet.first(where: { $0.id == room.id }), !room.deepEqual(to: oldRoom) {
+            delegate.onRoomUpdated(room: room)
+        }
+    }
+}
+
+func reconcileCursors(
+    new: [PCCursor],
+    old: [PCCursor],
+    onNewReadCursorHook: ((PCCursor) -> Void)?
+) {
+    let oldSet = Set(old)
+    let newSet = Set(new)
+
+    let newCursors = newSet.subtracting(oldSet)
+
+    newCursors.forEach { c in onNewReadCursorHook?(c) }
+
+    let commonCursors = newSet.intersection(oldSet)
+
+    commonCursors.forEach { cursor in
+        let oldCursor = oldSet.first(where: {
+            $0.type == cursor.type &&
+            $0.room == cursor.room &&
+            $0.user == cursor.user
+        })
+
+        if let _ = oldCursor, cursor != oldCursor {
+            onNewReadCursorHook?(cursor)
+        }
     }
 }
 
