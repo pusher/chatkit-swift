@@ -4,7 +4,10 @@ import PusherPlatform
 public protocol PCRoomDelegate: NSObjectProtocol {
     func onMessage(_ message: PCMessage)
 
+    @available(*, deprecated, renamed: "onNewReadCursor")
     func onNewCursor(_ cursor: PCCursor)
+
+    func onNewReadCursor(_ cursor: PCCursor)
 
     func onUserStartedTyping(user: PCUser)
     func onUserStoppedTyping(user: PCUser)
@@ -21,6 +24,7 @@ public protocol PCRoomDelegate: NSObjectProtocol {
 public extension PCRoomDelegate {
     func onMessage(_ message: PCMessage) {}
     func onNewCursor(_ cursor: PCCursor) {}
+    func onNewReadCursor(_ cursor: PCCursor) {}
     func onUserStartedTyping(user: PCUser) {}
     func onUserStoppedTyping(user: PCUser) {}
     func onUserJoined(user: PCUser) {}
