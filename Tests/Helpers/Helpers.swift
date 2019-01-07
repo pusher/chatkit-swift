@@ -399,6 +399,53 @@ func updateRoom(
     }.resume()
 }
 
+func setReadCursor(
+    userID: String,
+    roomID: String,
+    position: Int,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    let cursorObject = ["position": position]
+
+    guard JSONSerialization.isValidJSONObject(cursorObject) else {
+        completionHandler(.generic("Invalid cursorObject \(cursorObject.debugDescription)"))
+        return
+    }
+
+    guard let data = try? JSONSerialization.data(withJSONObject: cursorObject, options: []) else {
+        completionHandler(.generic("Failed to JSON serialize cursorObject \(cursorObject.debugDescription)"))
+        return
+    }
+
+    let path = "/cursors/\(PCCursorType.read.rawValue)/rooms/\(roomID)/users/\(userID)"
+    var request = URLRequest(url: testInstanceServiceURL(.cursors, "v2", path))
+    request.httpMethod = "PUT"
+    request.httpBody = data
+    request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error setting read cursor: \(error!.localizedDescription)"))
+            return
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            completionHandler(.generic("Error setting read cursor"))
+            return
+        }
+
+        if 200..<300 ~= httpResponse.statusCode {
+            TestLogger().log("Read cursor set successfully!", logLevel: .debug)
+            completionHandler(nil)
+        } else {
+            let errorDesc = error?.localizedDescription ?? "no error"
+            completionHandler(.generic("Error setting read cursor: status \(httpResponse.statusCode), error: \(errorDesc)"))
+        }
+    }.resume()
+}
+
+
 func dataSubscriptionEventFor(_ eventJSON: String) -> Data {
     let noNewlineEventString = eventJSON.replacingOccurrences(of: "\n", with: "")
     let wrappedInitialStateEvent = "[1, \"\", {}, \(noNewlineEventString)]\n"
