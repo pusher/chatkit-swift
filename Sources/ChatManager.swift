@@ -189,7 +189,7 @@ import NotificationCenter
                 guard roomsPayload.count > 0 else {
                     strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
                     if alreadyHadCurrentUser {
-                        strongSelf.reconcileRoomsIfNecessary(
+                        strongSelf.reconcileRooms(
                             old: existingRooms,
                             new: [],
                             roomStore: strongSelf.currentUser!.roomStore,
@@ -218,7 +218,7 @@ import NotificationCenter
                         if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
                             strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
                             if alreadyHadCurrentUser {
-                                strongSelf.reconcileRoomsIfNecessary(
+                                strongSelf.reconcileRooms(
                                     old: existingRooms,
                                     new: newRooms,
                                     roomStore: strongSelf.currentUser!.roomStore,
@@ -234,7 +234,7 @@ import NotificationCenter
                         if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
                             strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
                             if alreadyHadCurrentUser {
-                                strongSelf.reconcileRoomsIfNecessary(
+                                strongSelf.reconcileRooms(
                                     old: existingRooms,
                                     new: newRooms,
                                     roomStore: strongSelf.currentUser!.roomStore,
@@ -270,7 +270,7 @@ import NotificationCenter
         connectionCoordinator.addConnectionCompletionHandler(completionHandler)
     }
 
-    private func reconcileRoomsIfNecessary(
+    private func reconcileRooms(
         old: [PCRoom],
         new: [PCRoom],
         roomStore: PCRoomStore,
