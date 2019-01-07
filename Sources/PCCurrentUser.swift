@@ -904,9 +904,9 @@ public final class PCCurrentUser {
             cursorStore: cursorStore,
             connectionCoordinator: connectionCoordinator,
             logger: self.cursorsInstance.logger,
-            onNewReadCursorHook: { cursor in
-                delegate.onNewReadCursor(cursor)
-                self.delegate.onNewReadCursor(cursor)
+            onNewReadCursorHook: { [weak self, weak delegate] cursor in
+                delegate?.onNewReadCursor(cursor)
+                self?.delegate.onNewReadCursor(cursor)
             },
             initialStateHandler: { result in
                 switch result {
