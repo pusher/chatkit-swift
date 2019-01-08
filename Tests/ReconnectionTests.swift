@@ -1117,4 +1117,65 @@ class ReconnectionTests: XCTestCase {
 
         wait(for: [onNewReadCursorCalledEx, onNewReadCursorCMCalledEx], timeout: 15)
     }
+
+    func testOnNewReadCursorIsNotCalledOnFirstInitialState() {
+        let roomCreatedEx = expectation(description: "room created")
+        let subscribedToRoomEx = expectation(description: "subscribe to room")
+        let cursorSetEx = expectation(description: "cursor set")
+        let messageSentEx = expectation(description: "message sent")
+
+        let roomName = "testroom"
+
+        let onNewReadCursorCM = { (cursor: PCCursor) in
+            XCTFail("onNewReadCursor (CM) called when it shouldn't have been")
+        }
+
+        let onNewReadCursor = { (cursor: PCCursor) in
+            XCTFail("onNewReadCursor (Room) called when it shouldn't have been")
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(onNewReadCursor: onNewReadCursorCM)
+        let aliceRoomDelegate = TestingRoomDelegate(onNewReadCursor: onNewReadCursor)
+
+        var roomID: String!
+
+        createRoom(creatorID: "alice", name: roomName, addUserIDs: ["bob"]) { err, data in
+            XCTAssertNil(err)
+            XCTAssertNotNil(data)
+            let roomObject = try! JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+            let roomIDFromJSON = roomObject["id"] as! String
+            roomID = roomIDFromJSON
+
+            roomCreatedEx.fulfill()
+        }
+        wait(for: [roomCreatedEx], timeout: 15)
+
+        setReadCursor(
+            userID: "bob",
+            roomID: roomID,
+            position: 100
+        ) { err in
+            XCTAssertNil(err)
+            cursorSetEx.fulfill()
+        }
+        wait(for: [cursorSetEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            alice!.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
+                XCTAssertNil(err)
+                subscribedToRoomEx.fulfill()
+
+                // We send a message to give some time for any cursor hook to be called
+                // otherwise it might have been going to be called but didn't have
+                // enough time
+                alice!.sendMessage(roomID: roomID, text: "blah") { _, err in
+                    XCTAssertNil(err)
+                    messageSentEx.fulfill()
+                }
+            }
+        }
+
+        wait(for: [subscribedToRoomEx, messageSentEx], timeout: 15)
+    }
 }
