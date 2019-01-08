@@ -918,22 +918,12 @@ class ReconnectionTests: XCTestCase {
         let initialCursorSetEx = expectation(description: "initial cursor set")
         let cursorUpdateEx = expectation(description: "cursor updated")
         let onNewReadCursorCalledEx = expectation(description: "new cursor hook (Room level) called")
-        let onNewReadCursorCMCalledEx = expectation(description: "new cursor hook (ChatManager level) called")
+        let messageSentEx = expectation(description: "message sent")
 
         let roomName = "testroom"
 
         let onNewReadCursorCM = { (cursor: PCCursor) in
-            guard cursor.room.name == roomName else {
-                XCTFail("onNewReadCursor (CM) called for a different room")
-                return
-            }
-            guard cursor.user.id == "bob" else {
-                XCTFail("onNewReadCursor (CM) called for a different user")
-                return
-            }
-            if cursor.position == 100 {
-                onNewReadCursorCMCalledEx.fulfill()
-            }
+            XCTFail("onNewReadCursor (CM) called when it shouldn't have been")
         }
 
         let onNewReadCursor = { (cursor: PCCursor) in
@@ -1016,34 +1006,33 @@ class ReconnectionTests: XCTestCase {
 
             alice.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
                 XCTAssertNil(err)
+
+                // We send a message to give some time for any cursor hook to be called
+                // otherwise it might have been going to be called but didn't have
+                // enough time, and we want to ensure that the ChatManager-level hook
+                // doesn't get called
+                alice.sendMessage(roomID: roomID, text: "blah") { _, err in
+                    XCTAssertNil(err)
+                    messageSentEx.fulfill()
+                }
             }
         }
 
-        wait(for: [onNewReadCursorCalledEx, onNewReadCursorCMCalledEx], timeout: 15)
+        wait(for: [onNewReadCursorCalledEx, messageSentEx], timeout: 15)
     }
 
-    func testBothOnNewReadCursorsAreCalledIfCurrentUserHasACursorSetBetweenConnections() {
+    func testOnNewReadCursorIsCalledIfAnotherUserHasACursorSetBetweenConnections() {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
         let subscribedToRoomEx = expectation(description: "subscribe to room")
         let cursorSetEx = expectation(description: "cursor set")
         let onNewReadCursorCalledEx = expectation(description: "new cursor hook called")
-        let onNewReadCursorCMCalledEx = expectation(description: "new cursor hook (ChatManager level) called")
+        let messageSentEx = expectation(description: "message sent")
 
         let roomName = "testroom"
 
         let onNewReadCursorCM = { (cursor: PCCursor) in
-            guard cursor.room.name == roomName else {
-                XCTFail("onNewReadCursor (CM) called for a different room")
-                return
-            }
-            guard cursor.user.id == "bob" else {
-                XCTFail("onNewReadCursor (CM) called for a different user")
-                return
-            }
-            if cursor.position == 100 {
-                onNewReadCursorCMCalledEx.fulfill()
-            }
+            XCTFail("onNewReadCursor (CM) called when it shouldn't have been")
         }
 
         let onNewReadCursor = { (cursor: PCCursor) in
@@ -1098,6 +1087,245 @@ class ReconnectionTests: XCTestCase {
 
         setReadCursor(
             userID: "bob",
+            roomID: roomID,
+            position: 100
+        ) { err in
+            XCTAssertNil(err)
+            cursorSetEx.fulfill()
+        }
+        wait(for: [cursorSetEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _, err in
+            XCTAssertNil(err)
+            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+
+            alice.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
+                XCTAssertNil(err)
+
+                // We send a message to give some time for any cursor hook to be called
+                // otherwise it might have been going to be called but didn't have
+                // enough time, and we want to ensure that the ChatManager-level hook
+                // doesn't get called
+                alice.sendMessage(roomID: roomID, text: "blah") { _, err in
+                    XCTAssertNil(err)
+                    messageSentEx.fulfill()
+                }
+            }
+        }
+
+        wait(for: [onNewReadCursorCalledEx, messageSentEx], timeout: 15)
+    }
+
+    // TODO: The Swift SDK deviates from the other client SDKs currently in that it calls
+    // the room-level onNewReadCursor hook for cursor updates relating to the current
+    // user, as well as calling the ChatManager-level onNewReadCursor hook. This is
+    // something that we should fix in the next release with breaking changes, but we've
+    // deemed it not worthy of its own breaking change release at this time.
+    func testBothOnNewReadCursorsAreCalledIfCurrentUserHasTheirCursorUpdatedBetweenConnections() {
+        let addedToRoomEx = expectation(description: "alice added to room")
+        let roomCreatedEx = expectation(description: "room created")
+        let subscribedToRoomEx = expectation(description: "subscribe to room")
+        let initialCursorSetEx = expectation(description: "initial cursor set")
+        let cursorUpdateEx = expectation(description: "cursor updated")
+        let onNewReadCursorCalledEx = expectation(description: "new cursor hook (Room level) called")
+        let onNewReadCursorCMCalledEx = expectation(description: "new cursor hook (ChatManager level) called")
+
+        let roomName = "testroom"
+        var onNewReadCursorCMCalledCount = 0
+
+        let onNewReadCursorCM = { (cursor: PCCursor) in
+            guard cursor.room.name == roomName else {
+                XCTFail("onNewReadCursor (CM) called for a different room")
+                return
+            }
+            guard cursor.user.id == "alice" else {
+                XCTFail("onNewReadCursor (CM) called for a different user")
+                return
+            }
+            guard cursor.position == 100 else {
+                XCTFail("onNewReadCursor (CM) called for a different cursor position")
+                return
+            }
+            onNewReadCursorCMCalledCount += 1
+            // This needs to have been called twice - once because of the users cursor
+            // subscription and once for the cursor subscription belonging to the room
+            // subscription
+            if onNewReadCursorCMCalledCount == 2 {
+                onNewReadCursorCMCalledEx.fulfill()
+            }
+        }
+
+        let onNewReadCursor = { (cursor: PCCursor) in
+            guard cursor.room.name == roomName else {
+                XCTFail("onNewReadCursor (Room) called for a different room")
+                return
+            }
+            guard cursor.user.id == "alice" else {
+                XCTFail("onNewReadCursor (Room) called for a different user")
+                return
+            }
+            if cursor.position == 100 {
+                onNewReadCursorCalledEx.fulfill()
+            }
+        }
+
+        let onAddedToRoom = { (room: PCRoom) in
+            guard room.name == roomName else {
+                XCTFail("onAddedToRoom called for a different room")
+                return
+            }
+            addedToRoomEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(
+            onAddedToRoom: onAddedToRoom,
+            onNewReadCursor: onNewReadCursorCM
+        )
+        let aliceRoomDelegate = TestingRoomDelegate(onNewReadCursor: onNewReadCursor)
+
+        var roomID: String!
+        var alice: PCCurrentUser!
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { a, err in
+            XCTAssertNil(err)
+            alice = a
+            alice.createRoom(
+                name: roomName,
+                isPrivate: false,
+                addUserIDs: ["bob"]
+            ) { room, err in
+                XCTAssertNil(err)
+                roomID = room!.id
+                roomCreatedEx.fulfill()
+            }
+        }
+        wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+
+        setReadCursor(
+            userID: "alice",
+            roomID: roomID,
+            position: 99
+        ) { err in
+            XCTAssertNil(err)
+            initialCursorSetEx.fulfill()
+        }
+        wait(for: [initialCursorSetEx], timeout: 15)
+
+        alice.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
+            XCTAssertNil(err)
+            subscribedToRoomEx.fulfill()
+        }
+
+        wait(for: [subscribedToRoomEx], timeout: 15)
+        self.aliceChatManager.disconnect()
+
+        setReadCursor(
+            userID: "alice",
+            roomID: roomID,
+            position: 100
+        ) { err in
+            XCTAssertNil(err)
+            cursorUpdateEx.fulfill()
+        }
+        wait(for: [cursorUpdateEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _, err in
+            XCTAssertNil(err)
+            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+
+            alice.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
+                XCTAssertNil(err)
+            }
+        }
+
+        wait(for: [onNewReadCursorCalledEx, onNewReadCursorCMCalledEx], timeout: 15)
+    }
+
+    func testBothOnNewReadCursorsAreCalledIfCurrentUserHasACursorSetBetweenConnections() {
+        let addedToRoomEx = expectation(description: "alice added to room")
+        let roomCreatedEx = expectation(description: "room created")
+        let subscribedToRoomEx = expectation(description: "subscribe to room")
+        let cursorSetEx = expectation(description: "cursor set")
+        let onNewReadCursorCalledEx = expectation(description: "new cursor hook called")
+        let onNewReadCursorCMCalledEx = expectation(description: "new cursor hook (ChatManager level) called")
+
+        let roomName = "testroom"
+        var onNewReadCursorCMCalledCount = 0
+
+        let onNewReadCursorCM = { (cursor: PCCursor) in
+            guard cursor.room.name == roomName else {
+                XCTFail("onNewReadCursor (CM) called for a different room")
+                return
+            }
+            guard cursor.user.id == "alice" else {
+                XCTFail("onNewReadCursor (CM) called for a different user")
+                return
+            }
+            guard cursor.position == 100 else {
+                XCTFail("onNewReadCursor (CM) called for a different cursor position")
+                return
+            }
+            onNewReadCursorCMCalledCount += 1
+            // This needs to have been called twice - once because of the users cursor
+            // subscription and once for the cursor subscription belonging to the room
+            // subscription
+            if onNewReadCursorCMCalledCount == 2 {
+                onNewReadCursorCMCalledEx.fulfill()
+            }
+        }
+
+        let onNewReadCursor = { (cursor: PCCursor) in
+            guard cursor.room.name == roomName else {
+                XCTFail("onNewReadCursor called for a different room")
+                return
+            }
+            guard cursor.user.id == "alice" else {
+                XCTFail("onNewReadCursor (Room) called for a different user")
+                return
+            }
+            if cursor.position == 100 {
+                onNewReadCursorCalledEx.fulfill()
+            }
+        }
+
+        let onAddedToRoom = { (room: PCRoom) in
+            guard room.name == roomName else {
+                XCTFail("onAddedToRoom called for a different room")
+                return
+            }
+            addedToRoomEx.fulfill()
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(
+            onAddedToRoom: onAddedToRoom,
+            onNewReadCursor: onNewReadCursorCM
+        )
+        let aliceRoomDelegate = TestingRoomDelegate(onNewReadCursor: onNewReadCursor)
+
+        var roomID: String!
+        var alice: PCCurrentUser!
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { a, err in
+            XCTAssertNil(err)
+            alice = a
+            alice.createRoom(name: roomName, isPrivate: false) { room, err in
+                XCTAssertNil(err)
+                roomID = room!.id
+                roomCreatedEx.fulfill()
+            }
+        }
+        wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+
+        alice.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
+            XCTAssertNil(err)
+            subscribedToRoomEx.fulfill()
+        }
+
+        wait(for: [subscribedToRoomEx], timeout: 15)
+        self.aliceChatManager.disconnect()
+
+        setReadCursor(
+            userID: "alice",
             roomID: roomID,
             position: 100
         ) { err in
