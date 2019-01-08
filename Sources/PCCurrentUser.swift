@@ -907,7 +907,9 @@ public final class PCCurrentUser {
             logger: self.cursorsInstance.logger,
             onNewReadCursorHook: { [weak self, weak delegate] cursor in
                 delegate?.onNewReadCursor(cursor)
-                self?.delegate.onNewReadCursor(cursor)
+                if cursor.user.id == self?.id {
+                    self?.delegate.onNewReadCursor(cursor)
+                }
             },
             initialStateHandler: { [weak self, weak delegate] result in
                 switch result {
@@ -923,7 +925,9 @@ public final class PCCurrentUser {
                         old: existing,
                         onNewReadCursorHook: { [weak self, weak delegate] cursor in
                             delegate?.onNewReadCursor(cursor)
-                            self?.delegate.onNewReadCursor(cursor)
+                            if cursor.user.id == self?.id {
+                                self?.delegate.onNewReadCursor(cursor)
+                            }
                         }
                     )
                 }
