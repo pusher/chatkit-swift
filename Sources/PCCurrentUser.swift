@@ -813,7 +813,7 @@ public final class PCCurrentUser {
             let membershipSub = self.subscribeToRoomMemberships(
                 room: roomToSubscribeTo,
                 delegate: delegate,
-                completionHandler: completionHandler
+                completionHandler: combinedCompletionHandler
             )
 
             if room.subscription != nil {
