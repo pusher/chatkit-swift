@@ -773,7 +773,7 @@ public final class PCCurrentUser {
             labelSuffix: "subscribe-to-room-\(UUID().uuidString)"
         )
 
-        let combinedCompletionHandler = { [logger = self.instance.logger] (err: Error?) in
+        let combinedCompletionHandler = { [logger = self.instance.logger, weak room] (err: Error?) in
             guard err == nil else {
                 logger.log(
                     "Error when establishing room subscription: \(err!.localizedDescription)",
@@ -785,6 +785,7 @@ public final class PCCurrentUser {
                 return
             }
             if progressCounter.incrementSuccessAndCheckIfFinished() {
+                room?.subscriptionPreviouslyEstablished = true
                 completionHandler(nil)
             }
         }
@@ -915,7 +916,6 @@ public final class PCCurrentUser {
                 case .success(let existing, let new):
                     completionHandler(nil)
                     guard room.subscriptionPreviouslyEstablished else {
-                        room.subscriptionPreviouslyEstablished = true
                         return
                     }
                     reconcileCursors(
@@ -974,7 +974,6 @@ public final class PCCurrentUser {
                 case .success(let existing, let new):
                     completionHandler(nil)
                     guard room.subscriptionPreviouslyEstablished else {
-                        room.subscriptionPreviouslyEstablished = true
                         return
                     }
                     reconcileMemberships(
