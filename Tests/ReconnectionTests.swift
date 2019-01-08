@@ -911,7 +911,7 @@ class ReconnectionTests: XCTestCase {
 
     // MARK: Room cursors subscription reconciliation
 
-    func testOnNewReadCursorIsCalledIfAnotherUserHasTHeirCursorUpdatedBetweenConnections() {
+    func testOnNewReadCursorIsCalledIfAnotherUserHasTheirCursorUpdatedBetweenConnections() {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
         let subscribedToRoomEx = expectation(description: "subscribe to room")
@@ -1022,7 +1022,7 @@ class ReconnectionTests: XCTestCase {
         wait(for: [onNewReadCursorCalledEx, onNewReadCursorCMCalledEx], timeout: 15)
     }
 
-    func testOnNewReadCursorIsCalledIfAnotherUserHasACursorSetBetweenConnections() {
+    func testBothOnNewReadCursorsAreCalledIfCurrentUserHasACursorSetBetweenConnections() {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
         let subscribedToRoomEx = expectation(description: "subscribe to room")
