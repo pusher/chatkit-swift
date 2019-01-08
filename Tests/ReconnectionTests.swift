@@ -559,7 +559,7 @@ class ReconnectionTests: XCTestCase {
         wait(for: [connectedSuccessfullyEx], timeout: 15)
         self.aliceChatManager.disconnect()
 
-        createRoom(creatorID: "bob", name: roomName, addUserIDs: ["alice"]) { err in
+        createRoom(creatorID: "bob", name: roomName, addUserIDs: ["alice"]) { err, _ in
             XCTAssertNil(err)
             roomCreatedEx.fulfill()
         }

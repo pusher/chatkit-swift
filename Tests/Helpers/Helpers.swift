@@ -287,7 +287,7 @@ func createRoom(
     isPrivate: Bool? = nil,
     customData: [String: Any]? = nil,
     addUserIDs userIDs: [String]? = nil,
-    completionHandler: @escaping (TestHelperError?) -> Void
+    completionHandler: @escaping (TestHelperError?, Data?) -> Void
 ) {
     var roomObject: [String: Any] = ["name": name]
 
@@ -304,12 +304,12 @@ func createRoom(
     }
 
     guard JSONSerialization.isValidJSONObject(roomObject) else {
-        completionHandler(.generic("Invalid roomObject \(roomObject.debugDescription)"))
+        completionHandler(.generic("Invalid roomObject \(roomObject.debugDescription)"), nil)
         return
     }
 
     guard let data = try? JSONSerialization.data(withJSONObject: roomObject, options: []) else {
-        completionHandler(.generic("Failed to JSON serialize roomObject \(roomObject.debugDescription)"))
+        completionHandler(.generic("Failed to JSON serialize roomObject \(roomObject.debugDescription)"), nil)
         return
     }
 
@@ -321,21 +321,21 @@ func createRoom(
 
     URLSession.shared.dataTask(with: request) { data, response, error in
         guard error == nil else {
-            completionHandler(.generic("Error creating room: \(error!.localizedDescription)"))
+            completionHandler(.generic("Error creating room: \(error!.localizedDescription)"), nil)
             return
         }
 
         guard let httpResponse = response as? HTTPURLResponse else {
-            completionHandler(.generic("Error creating room"))
+            completionHandler(.generic("Error creating room"), nil)
             return
         }
 
         if 200..<300 ~= httpResponse.statusCode {
             TestLogger().log("Room created successfully!", logLevel: .debug)
-            completionHandler(nil)
+            completionHandler(nil, data)
         } else {
             let errorDesc = error?.localizedDescription ?? "no error"
-            completionHandler(.generic("Error creating room: status \(httpResponse.statusCode), error: \(errorDesc)"))
+            completionHandler(.generic("Error creating room: status \(httpResponse.statusCode), error: \(errorDesc)"), nil)
         }
     }.resume()
 }
