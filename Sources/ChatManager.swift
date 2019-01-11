@@ -357,7 +357,7 @@ func reconcileCursors(
             $0.user == cursor.user
         })
 
-        if let _ = oldCursor, cursor != oldCursor {
+        if let oldCursor = oldCursor, cursor.equalBarPositionTo(oldCursor) {
             onNewReadCursorHook?(cursor)
         }
     }

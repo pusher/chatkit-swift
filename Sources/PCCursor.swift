@@ -28,6 +28,14 @@ public class PCCursor {
         self.updatedAt = updatedAt
         self.user = user
     }
+
+    public func equalBarPositionTo(_ cursor: PCCursor) -> Bool {
+        return
+            self.type == cursor.type &&
+            self.room == cursor.room &&
+            self.user == cursor.user &&
+            self.position != cursor.position
+    }
 }
 
 extension PCCursor: CustomDebugStringConvertible {
@@ -44,9 +52,8 @@ extension PCCursor: Hashable {
     public static func ==(lhs: PCCursor, rhs: PCCursor) -> Bool {
         return
             lhs.type == rhs.type &&
-                lhs.position == rhs.position &&
-                lhs.room == rhs.room &&
-                lhs.user == rhs.user
+            lhs.room == rhs.room &&
+            lhs.user == rhs.user
     }
 }
 
