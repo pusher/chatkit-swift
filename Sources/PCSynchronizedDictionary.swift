@@ -1,6 +1,6 @@
 import Foundation
 
-public final class PCSynchronizedDictionary<KeyType:Hashable, ValueType>: ExpressibleByDictionaryLiteral, Collection, Sequence {
+public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: ExpressibleByDictionaryLiteral, Collection, Sequence {
     public typealias Key = KeyType
     public typealias Value = ValueType
 
@@ -10,14 +10,26 @@ public final class PCSynchronizedDictionary<KeyType:Hashable, ValueType>: Expres
     public var startIndex: Index { return underlyingDictionary.startIndex }
     public var endIndex: Index { return underlyingDictionary.endIndex }
 
+    public var keys: Dictionary<KeyType, ValueType>.Keys {
+        get {
+            return queue.sync(flags: .barrier) {
+                return underlyingDictionary.keys
+            }
+        }
+    }
+
     public subscript(position: Index) -> (key: KeyType, value: ValueType) {
         get {
-            return underlyingDictionary[position]
+            return queue.sync(flags: .barrier) {
+                return underlyingDictionary[position]
+            }
         }
     }
 
     public func index(after i: Index) -> Index {
-        return underlyingDictionary.index(after: i)
+        return queue.sync(flags: .barrier) {
+            return underlyingDictionary.index(after: i)
+        }
     }
 
     internal var underlyingDictionary: [KeyType: ValueType]
