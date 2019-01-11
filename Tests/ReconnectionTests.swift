@@ -135,6 +135,7 @@ class ReconnectionTests: XCTestCase {
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
+            XCTAssertEqual(alice!.roomStore.rooms.count, 0)
             alice!.createRoom(name: roomName, addUserIDs: ["bob"]) { room, err in
                 XCTAssertNil(err)
                 roomID = room!.id
@@ -143,6 +144,8 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+        XCTAssertEqual(self.aliceChatManager.currentUser!.roomStore.rooms.count, 1)
+        XCTAssertEqual(self.aliceChatManager.currentUser!.roomStore.rooms.first!.name, roomName)
         self.aliceChatManager.disconnect()
 
         self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
@@ -199,6 +202,7 @@ class ReconnectionTests: XCTestCase {
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
+            XCTAssertEqual(alice!.roomStore.rooms.count, 0)
             alice!.createRoom(name: roomName, isPrivate: false) { room, err in
                 XCTAssertNil(err)
                 roomID = room!.id
@@ -207,6 +211,8 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+        XCTAssertEqual(self.aliceChatManager.currentUser!.roomStore.rooms.count, 1)
+        XCTAssertFalse(self.aliceChatManager.currentUser!.roomStore.rooms.first!.isPrivate)
         self.aliceChatManager.disconnect()
 
         updateRoom(id: roomID, isPrivate: true) { err in
@@ -219,6 +225,7 @@ class ReconnectionTests: XCTestCase {
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
             XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+            XCTAssertTrue(alice!.roomStore.rooms.first!.isPrivate)
         }
 
         wait(for: [onRoomUpdatedCalledEx], timeout: 15)
@@ -258,6 +265,7 @@ class ReconnectionTests: XCTestCase {
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
+            XCTAssertEqual(alice!.roomStore.rooms.count, 0)
             alice!.createRoom(name: roomName) { room, err in
                 XCTAssertNil(err)
                 roomID = room!.id
@@ -266,6 +274,8 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+        XCTAssertEqual(self.aliceChatManager.currentUser!.roomStore.rooms.count, 1)
+        XCTAssertEqual(self.aliceChatManager.currentUser!.roomStore.rooms.first!.name, roomName)
         self.aliceChatManager.disconnect()
 
         updateRoom(id: roomID, name: newRoomName) { err in
@@ -278,6 +288,7 @@ class ReconnectionTests: XCTestCase {
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
             XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+            XCTAssertEqual(alice!.roomStore.rooms.first!.name, newRoomName)
         }
 
         wait(for: [onRoomUpdatedCalledEx], timeout: 15)
@@ -317,6 +328,7 @@ class ReconnectionTests: XCTestCase {
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
+            XCTAssertEqual(alice!.roomStore.rooms.count, 0)
             alice!.createRoom(name: roomName) { room, err in
                 XCTAssertNil(err)
                 roomID = room!.id
@@ -325,6 +337,8 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+        XCTAssertEqual(self.aliceChatManager.currentUser!.roomStore.rooms.count, 1)
+        XCTAssertNil(self.aliceChatManager.currentUser!.roomStore.rooms.first!.customData)
         self.aliceChatManager.disconnect()
 
         updateRoom(id: roomID, customData: ["some": "custom data"]) { err in
@@ -337,6 +351,10 @@ class ReconnectionTests: XCTestCase {
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
             XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+            XCTAssertEqual(
+                self.aliceChatManager.currentUser!.roomStore.rooms.first!.customData!["some"] as! String,
+                "custom data"
+            )
         }
 
         wait(for: [onRoomUpdatedCalledEx], timeout: 15)
@@ -376,6 +394,7 @@ class ReconnectionTests: XCTestCase {
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
+            XCTAssertEqual(alice!.roomStore.rooms.count, 0)
             alice!.createRoom(name: roomName, customData: ["some": "custom data"]) { room, err in
                 XCTAssertNil(err)
                 roomID = room!.id
@@ -384,6 +403,11 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+        XCTAssertEqual(self.aliceChatManager.currentUser!.roomStore.rooms.count, 1)
+        XCTAssertEqual(
+            self.aliceChatManager.currentUser!.roomStore.rooms.first!.customData!["some"] as! String,
+            "custom data"
+        )
         self.aliceChatManager.disconnect()
 
         updateRoom(id: roomID, customData: [:]) { err in
@@ -396,6 +420,7 @@ class ReconnectionTests: XCTestCase {
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
             XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+            XCTAssertEqual(alice!.roomStore.rooms.first!.customData!.keys.count, 0)
         }
 
         wait(for: [onRoomUpdatedCalledEx], timeout: 15)
@@ -437,6 +462,7 @@ class ReconnectionTests: XCTestCase {
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
+            XCTAssertEqual(alice!.rooms.count, 0, "alice has the wrong number of rooms")
             alice!.createRoom(name: roomName, customData: ["some": "custom data"]) { room, err in
                 XCTAssertNil(err)
                 roomID = room!.id
@@ -445,6 +471,11 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+        XCTAssertEqual(self.aliceChatManager.currentUser!.roomStore.rooms.count, 1)
+        XCTAssertEqual(
+            self.aliceChatManager.currentUser!.roomStore.rooms.first!.customData!["some"] as! String,
+            "custom data"
+        )
         self.aliceChatManager.disconnect()
 
         updateRoom(id: roomID, customData: ["hello": "world", "chicken": ["curry"]]) { err in
@@ -457,6 +488,14 @@ class ReconnectionTests: XCTestCase {
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
             XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+            XCTAssertEqual(
+                alice!.roomStore.rooms.first!.customData!["hello"] as! String,
+                "world"
+            )
+            XCTAssertEqual(
+                alice!.roomStore.rooms.first!.customData!["chicken"] as! [String],
+                ["curry"]
+            )
         }
 
         wait(for: [onRoomUpdatedCalledEx], timeout: 15)
@@ -500,6 +539,7 @@ class ReconnectionTests: XCTestCase {
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
+            XCTAssertEqual(alice!.roomStore.rooms.count, 0)
             alice!.createRoom(
                 name: roomName,
                 isPrivate: false,
@@ -512,6 +552,12 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+        XCTAssertFalse(self.aliceChatManager.currentUser!.roomStore.rooms.first!.isPrivate)
+        XCTAssertEqual(self.aliceChatManager.currentUser!.roomStore.rooms.first!.name, roomName)
+        XCTAssertEqual(
+            self.aliceChatManager.currentUser!.roomStore.rooms.first!.customData!["some"] as! String,
+            "custom data"
+        )
         self.aliceChatManager.disconnect()
 
         updateRoom(
@@ -529,6 +575,16 @@ class ReconnectionTests: XCTestCase {
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
             XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+            XCTAssertTrue(alice!.roomStore.rooms.first!.isPrivate)
+            XCTAssertEqual(alice!.roomStore.rooms.first!.name, newRoomName)
+            XCTAssertEqual(
+                alice!.roomStore.rooms.first!.customData!["hello"] as! String,
+                "world"
+            )
+            XCTAssertEqual(
+                alice!.roomStore.rooms.first!.customData!["chicken"] as! [String],
+                ["curry"]
+            )
         }
 
         wait(for: [onRoomUpdatedCalledEx], timeout: 15)
@@ -553,6 +609,7 @@ class ReconnectionTests: XCTestCase {
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
+            XCTAssertEqual(alice!.rooms.count, 0, "alice has the wrong number of rooms")
             connectedSuccessfullyEx.fulfill()
         }
 
