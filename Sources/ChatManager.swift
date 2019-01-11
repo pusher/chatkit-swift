@@ -270,6 +270,7 @@ import NotificationCenter
 
     // TODO: Maybe we need some sort of ChatManagerConnectionState?
     public func disconnect() {
+        self.logger.log("Disconnect called", logLevel: .verbose)
         currentUser?.userSubscription?.end()
         currentUser?.userSubscription = nil
         currentUser?.presenceSubscription?.end()
