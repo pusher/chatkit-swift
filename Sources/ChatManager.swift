@@ -117,7 +117,6 @@ import NotificationCenter
         )
 
         // TODO: This could be nicer
-        // TODO: We don't need to wait for initial user fetch here, but we are
         // TODO: Do we need to nil out subscriptions on basicCurrentUser no matter what?
         connectionCoordinator.addConnectionCompletionHandler { cUser, error in
             guard error == nil, let cu = cUser else {
