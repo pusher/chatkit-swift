@@ -260,7 +260,15 @@ import NotificationCenter
                         reconcileCursors(
                             new: new,
                             old: existing,
-                            onNewReadCursorHook: currentUser.delegate.onNewReadCursor
+                            onNewReadCursorHook: { [weak currentUser] cursor in
+                                currentUser?.delegate.onNewReadCursor(cursor)
+                                // We only do this here because we currently still deliver cursor updates
+                                // about the current user over the room level onNewReadCursor hook. Once
+                                // we no longer support that then this can be removed.
+                                if let room = currentUser?.rooms.first(where: { $0.id == cursor.room.id }) {
+                                    room.subscription?.delegate?.onNewReadCursor(cursor)
+                                }
+                            }
                         )
                     }
                 }

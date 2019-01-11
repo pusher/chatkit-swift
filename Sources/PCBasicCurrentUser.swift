@@ -153,6 +153,9 @@ public final class PCBasicCurrentUser {
             cursorStore: cursorStore,
             connectionCoordinator: self.connectionCoordinator,
             logger: self.cursorsInstance.logger,
+            onNewReadCursorHook: { [weak delegate] cursor in
+                delegate?.onNewReadCursor(cursor)
+            },
             initialStateHandler: { [unowned self] result in
                 switch result {
                 case .error(let err):

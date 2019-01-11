@@ -807,7 +807,12 @@ public final class PCCurrentUser {
             )
             let cursorSub = self.subscribeToRoomCursors(
                 room: roomToSubscribeTo,
-                delegate: delegate,
+                onNewReadCursorHook: { [currentUserID = self.id, weak cmDelegate = self.delegate, weak delegate] cursor in
+                    delegate?.onNewReadCursor(cursor)
+                    if cursor.user.id == currentUserID {
+                        cmDelegate?.onNewReadCursor(cursor)
+                    }
+                },
                 completionHandler: combinedCompletionHandler
             )
             let membershipSub = self.subscribeToRoomMemberships(
@@ -893,7 +898,7 @@ public final class PCCurrentUser {
 
     fileprivate func subscribeToRoomCursors(
         room: PCRoom,
-        delegate: PCRoomDelegate,
+        onNewReadCursorHook: @escaping (PCCursor) -> Void,
         completionHandler: @escaping PCErrorCompletionHandler
     ) -> PCCursorSubscription {
         let path = "/cursors/\(PCCursorType.read.rawValue)/rooms/\(room.id)"
@@ -913,31 +918,20 @@ public final class PCCurrentUser {
             cursorStore: cursorStore,
             connectionCoordinator: connectionCoordinator,
             logger: self.cursorsInstance.logger,
-            onNewReadCursorHook: { [weak self, weak delegate] cursor in
-                delegate?.onNewReadCursor(cursor)
-                if cursor.user.id == self?.id {
-                    self?.delegate.onNewReadCursor(cursor)
-                }
-            },
-            initialStateHandler: { [weak self, weak delegate] result in
+            onNewReadCursorHook: onNewReadCursorHook,
+            initialStateHandler: { result in
                 switch result {
                 case .error(let err):
                     completionHandler(err)
                 case .success(let existing, let new):
-                    completionHandler(nil)
-                    guard room.subscriptionPreviouslyEstablished else {
-                        return
+                    if room.subscriptionPreviouslyEstablished {
+                        reconcileCursors(
+                            new: new,
+                            old: existing,
+                            onNewReadCursorHook: onNewReadCursorHook
+                        )
                     }
-                    reconcileCursors(
-                        new: new,
-                        old: existing,
-                        onNewReadCursorHook: { [weak self, weak delegate] cursor in
-                            delegate?.onNewReadCursor(cursor)
-                            if cursor.user.id == self?.id {
-                                self?.delegate.onNewReadCursor(cursor)
-                            }
-                        }
-                    )
+                    completionHandler(nil)
                 }
             }
         )
