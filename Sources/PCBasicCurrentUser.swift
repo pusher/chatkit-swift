@@ -31,7 +31,10 @@ public final class PCBasicCurrentUser {
         cursorsInstance: Instance,
         presenceInstance: Instance,
         connectionCoordinator: PCConnectionCoordinator,
-        delegate: PCChatManagerDelegate
+        delegate: PCChatManagerDelegate,
+        userStore: PCGlobalUserStore? = nil,
+        roomStore: PCRoomStore? = nil,
+        cursorStore: PCCursorStore? = nil
     ) {
         self.id = id
         self.pathFriendlyID = pathFriendlyID
@@ -43,13 +46,15 @@ public final class PCBasicCurrentUser {
         self.connectionCoordinator = connectionCoordinator
         self.delegate = delegate
 
-        let rooms = PCSynchronizedArray<PCRoom>()
-        self.userStore = PCGlobalUserStore(instance: instance)
-        self.roomStore = PCRoomStore(rooms: rooms, instance: instance)
-        self.cursorStore = PCCursorStore(
+        let us = userStore ?? PCGlobalUserStore(instance: instance)
+        let rs = roomStore ?? PCRoomStore(rooms: PCSynchronizedArray<PCRoom>(), instance: instance)
+        self.userStore = us
+        self.roomStore = rs
+
+        self.cursorStore = cursorStore ?? PCCursorStore(
             instance: instance,
-            roomStore: roomStore,
-            userStore: userStore
+            roomStore: rs,
+            userStore: us
         )
     }
 

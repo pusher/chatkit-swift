@@ -113,7 +113,10 @@ import NotificationCenter
             cursorsInstance: cursorsInstance,
             presenceInstance: presenceInstance,
             connectionCoordinator: connectionCoordinator,
-            delegate: delegate
+            delegate: delegate,
+            userStore: self.currentUser?.userStore,
+            roomStore: self.currentUser?.roomStore,
+            cursorStore: self.currentUser?.cursorStore
         )
 
         // TODO: This could be nicer
