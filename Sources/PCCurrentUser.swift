@@ -813,6 +813,14 @@ public final class PCCurrentUser {
             let membershipSub = self.subscribeToRoomMemberships(
                 room: roomToSubscribeTo,
                 delegate: delegate,
+                onUserJoinedHook: { [weak cmDelegate = self.delegate, weak delegate] user in
+                    cmDelegate?.onUserJoinedRoom(room, user: user)
+                    delegate?.onUserJoined(user: user)
+                },
+                onUserLeftHook: { [weak cmDelegate = self.delegate, weak delegate] user in
+                    cmDelegate?.onUserLeftRoom(room, user: user)
+                    delegate?.onUserLeft(user: user)
+                },
                 completionHandler: combinedCompletionHandler
             )
 
@@ -949,6 +957,8 @@ public final class PCCurrentUser {
     fileprivate func subscribeToRoomMemberships(
         room: PCRoom,
         delegate: PCRoomDelegate,
+        onUserJoinedHook: @escaping (PCUser) -> Void,
+        onUserLeftHook: @escaping (PCUser) -> Void,
         completionHandler: @escaping PCErrorCompletionHandler
     ) -> PCMembershipSubscription {
         let path = "/rooms/\(room.id)/memberships"
@@ -965,34 +975,26 @@ public final class PCCurrentUser {
 
         let membershipSubscription = PCMembershipSubscription(
             roomID: room.id,
-            delegate: delegate,
-            chatManagerDelegate: self.delegate,
             resumableSubscription: resumableSub,
             userStore: self.userStore,
             roomStore: self.roomStore,
             logger: self.instance.logger,
-            initialStateHandler: { [weak self, weak delegate] result in
+            onUserJoinedHook: onUserJoinedHook,
+            onUserLeftHook: onUserLeftHook,
+            initialStateHandler: { result in
                 switch result {
                 case .error(let err):
                     completionHandler(err)
                 case .success(let existing, let new):
-                    completionHandler(nil)
-                    guard room.subscriptionPreviouslyEstablished else {
-                        return
+                    if room.subscriptionPreviouslyEstablished {
+                        reconcileMemberships(
+                            new: new,
+                            old: existing,
+                            onUserJoinedHook: onUserJoinedHook,
+                            onUserLeftHook: onUserLeftHook
+                        )
                     }
-                    reconcileMemberships(
-                        new: new,
-                        old: existing,
-                        onUserJoinedHook: { [weak self, weak delegate] user in
-                            self?.delegate.onUserJoinedRoom(room, user: user)
-                            delegate?.onUserJoined(user: user)
-                        },
-                        onUserLeftHook: { [weak self, weak delegate] user in
-                            room.removeUser(id: user.id)
-                            self?.delegate.onUserLeftRoom(room, user: user)
-                            delegate?.onUserLeft(user: user)
-                        }
-                    )
+                    completionHandler(nil)
                 }
             }
         )

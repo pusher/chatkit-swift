@@ -2,33 +2,33 @@ import Foundation
 import PusherPlatform
 
 public final class PCMembershipSubscription {
-    public weak var delegate: PCRoomDelegate?
     let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore
     public let roomStore: PCRoomStore
     public var logger: PPLogger
+    let onUserJoinedHook: (PCUser) -> Void
+    let onUserLeftHook: (PCUser) -> Void
     var initialStateHandler: (InitialStateResult<PCUser>) -> Void
-    weak var chatManagerDelegate: PCChatManagerDelegate?
 
     let roomID: String
 
     init(
         roomID: String,
-        delegate: PCRoomDelegate? = nil,
-        chatManagerDelegate: PCChatManagerDelegate? = nil,
         resumableSubscription: PPResumableSubscription,
         userStore: PCGlobalUserStore,
         roomStore: PCRoomStore,
         logger: PPLogger,
+        onUserJoinedHook: @escaping (PCUser) -> Void,
+        onUserLeftHook: @escaping (PCUser) -> Void,
         initialStateHandler: @escaping (InitialStateResult<PCUser>) -> Void
     ) {
         self.roomID = roomID
-        self.delegate = delegate
-        self.chatManagerDelegate = chatManagerDelegate
         self.resumableSubscription = resumableSubscription
         self.userStore = userStore
         self.roomStore = roomStore
         self.logger = logger
+        self.onUserJoinedHook = onUserJoinedHook
+        self.onUserLeftHook = onUserLeftHook
         self.initialStateHandler = initialStateHandler
     }
 
@@ -111,9 +111,17 @@ extension PCMembershipSubscription {
 
                 let existingUsers = room.userStore.users.map { $0.copy() }
 
+                let oldSet = Set(existingUsers)
+                let newSet = Set(users)
+                let membersRemoved = oldSet.subtracting(newSet)
+
                 users.forEach { user in
                     let addedOrMergedUser = room.userStore.addOrMerge(user)
                     room.userIDs.insert(addedOrMergedUser.id)
+                }
+
+                membersRemoved.forEach { m in
+                    room.userStore.remove(id: m.id)
                 }
 
                 strongSelf.initialStateHandler(.success(existing: existingUsers, new: users))
@@ -164,8 +172,7 @@ extension PCMembershipSubscription {
                 let addedOrMergedUser = room.userStore.addOrMerge(user)
                 room.userIDs.insert(addedOrMergedUser.id)
 
-                strongSelf.delegate?.onUserJoined(user: addedOrMergedUser)
-                strongSelf.chatManagerDelegate?.onUserJoinedRoom(room, user: user)
+                strongSelf.onUserJoinedHook(user)
                 strongSelf.logger.log("User \(user.displayName) joined room: \(room.name)", logLevel: .verbose)
             }
         }
@@ -213,8 +220,7 @@ extension PCMembershipSubscription {
 
                 room.removeUser(id: user.id)
 
-                strongSelf.delegate?.onUserLeft(user: user)
-                strongSelf.chatManagerDelegate?.onUserLeftRoom(room, user: user)
+                strongSelf.onUserLeftHook(user)
                 strongSelf.logger.log("User \(user.displayName) left room: \(room.name)", logLevel: .verbose)
             }
         }
