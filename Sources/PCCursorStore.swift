@@ -7,7 +7,7 @@ public final class PCCursorStore {
     let userStore: PCGlobalUserStore
     let basicCursorEnricher: PCBasicCursorEnricher
 
-    public var cursors: [PCCursorKey: PCCursor] = [:]
+    public var cursors: PCSynchronizedDictionary<PCCursorKey, PCCursor> = [:]
 
     public init(instance: Instance, roomStore: PCRoomStore, userStore: PCGlobalUserStore) {
         self.instance = instance
