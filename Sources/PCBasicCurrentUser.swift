@@ -156,24 +156,32 @@ public final class PCBasicCurrentUser {
             onNewReadCursorHook: { [weak delegate] cursor in
                 delegate?.onNewReadCursor(cursor)
             },
-            initialStateHandler: { [unowned self] result in
+            initialStateHandler: { [weak self] result in
+                guard let strongSelf = self else {
+                    return
+                }
+
                 switch result {
                 case .error(let err):
-                    self.cursorsInstance.logger.log(err.localizedDescription, logLevel: .debug)
+                    strongSelf.cursorsInstance.logger.log(err.localizedDescription, logLevel: .debug)
 
                     // TODO: Should the connection coordinator get the error here?
                     // Do we care if a single (in this weird case, only the last to be received)
                     // basic cursor can't be enriched with information about its room and/or user?
                     // We probably just want to log something
-                    self.connectionCoordinator.connectionEventCompleted(
-                        PCConnectionEvent(cursorSubscription: self.cursorSubscription, error: nil)
+                    strongSelf.connectionCoordinator.connectionEventCompleted(
+                        PCConnectionEvent(cursorSubscription: strongSelf.cursorSubscription, error: nil)
                     )
                 case .success(_, _):
-                    self.connectionCoordinator.connectionEventCompleted(
-                        PCConnectionEvent(cursorSubscription: self.cursorSubscription, error: nil)
-                    )
-
+                    // This needs to be called before the connection event is sent to the
+                    // connectionCoordinator to ensure that the state of the cursor store
+                    // is accurate before the currentUser object can be yielded to the
+                    // end-user's code
                     initialStateHandler(result)
+
+                    strongSelf.connectionCoordinator.connectionEventCompleted(
+                        PCConnectionEvent(cursorSubscription: strongSelf.cursorSubscription, error: nil)
+                    )
                 }
             }
         )
