@@ -4,7 +4,7 @@ import PusherPlatform
 public final class PCRoomStore {
 
     public var rooms: PCSynchronizedArray<PCRoom>
-    public let instance: Instance
+    public unowned let instance: Instance
 
     public init(rooms: PCSynchronizedArray<PCRoom>, instance: Instance) {
         self.rooms = rooms

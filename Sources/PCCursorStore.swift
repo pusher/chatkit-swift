@@ -2,7 +2,7 @@ import Foundation
 import PusherPlatform
 
 public final class PCCursorStore {
-    public let instance: Instance
+    public unowned let instance: Instance
     let roomStore: PCRoomStore
     let userStore: PCGlobalUserStore
     let basicCursorEnricher: PCBasicCursorEnricher
