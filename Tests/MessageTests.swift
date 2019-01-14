@@ -23,44 +23,44 @@ class MessagesTests: XCTestCase {
         deleteInstanceResources() { err in
             XCTAssertNil(err)
             deleteResourcesEx.fulfill()
+        }
 
-            createStandardInstanceRoles() { err in
+        wait(for: [deleteResourcesEx], timeout: 15)
+
+        createStandardInstanceRoles() { err in
+            XCTAssertNil(err)
+            createRolesEx.fulfill()
+        }
+
+        createUser(id: "alice", name: "Alice") { err in
+            XCTAssertNil(err)
+            createAliceEx.fulfill()
+        }
+
+        createUser(id: "bob", name: "Bob") { err in
+            XCTAssertNil(err)
+            createBobEx.fulfill()
+        }
+
+        wait(for: [createRolesEx, createAliceEx, createBobEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+            XCTAssertNil(err)
+            alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
                 XCTAssertNil(err)
-                createRolesEx.fulfill()
-            }
+                self.roomID = room!.id
+                createRoomEx.fulfill()
 
-            createUser(id: "alice", name: "Alice") { err in
-                XCTAssertNil(err)
-                createAliceEx.fulfill()
-            }
-
-            createUser(id: "bob", name: "Bob") { err in
-                XCTAssertNil(err)
-                createBobEx.fulfill()
-            }
-
-            // TODO the following should really wait until we know both Alice
-            // and Bob exist... for now, sleep!
-            sleep(1)
-
-            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
-                XCTAssertNil(err)
-                alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
-                    XCTAssertNil(err)
-                    self.roomID = room!.id
-                    createRoomEx.fulfill()
-
-                    let messages = ["hello", "hey", "hi", "ho"]
-                    self.sendOrderedMessages(
-                        messages: messages,
-                        from: alice!,
-                        toRoomID: self.roomID
-                    ) { sendMessagesEx.fulfill() }
-                }
+                let messages = ["hello", "hey", "hi", "ho"]
+                self.sendOrderedMessages(
+                    messages: messages,
+                    from: alice!,
+                    toRoomID: self.roomID
+                ) { sendMessagesEx.fulfill() }
             }
         }
 
-        waitForExpectations(timeout: 15)
+        wait(for: [createRoomEx, sendMessagesEx], timeout: 15)
     }
 
     fileprivate func sendOrderedMessages(
@@ -75,6 +75,12 @@ class MessagesTests: XCTestCase {
         }
 
         user.sendMessage(roomID: roomID, text: message) { [messages] _, err in
+            if let err = err {
+                print("IS ERROR NIL? NO")
+                print(err.localizedDescription)
+            } else {
+                print("IS ERROR NIL? YES")
+            }
             XCTAssertNil(err)
             self.sendOrderedMessages(
                 messages: Array(messages.dropFirst()),
@@ -271,7 +277,8 @@ class MessagesTests: XCTestCase {
     func testSendAndReceiveMessageWithLinkAttachment() {
         let veryImportantImage = "https://i.imgur.com/rJbRKLU.gif"
 
-        let ex = expectation(description: "subscribe and receive sent messages")
+        let onMessageHookCalledEx = expectation(description: "subscribe and receive sent messages")
+        let messageSentEx = expectation(description: "message sent successfully")
 
         let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
             XCTAssertEqual(message.text, "see attached")
@@ -283,7 +290,7 @@ class MessagesTests: XCTestCase {
             XCTAssertEqual(message.attachment!.type, "image")
             XCTAssertEqual(message.attachment!.name, "rJbRKLU.gif")
 
-            ex.fulfill()
+            onMessageHookCalledEx.fulfill()
         })
 
         bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
@@ -305,6 +312,7 @@ class MessagesTests: XCTestCase {
                             attachment: .link(veryImportantImage, type: "image")
                         ) { _, err in
                             XCTAssertNil(err)
+                            messageSentEx.fulfill()
                         }
                     }
                 }
@@ -325,7 +333,8 @@ class MessagesTests: XCTestCase {
             ofType: "gif"
         )!
 
-        let ex = expectation(description: "subscribe and receive sent messages")
+        let onMessageHookCalledEx = expectation(description: "subscribe and receive sent messages")
+        let messageSentEx = expectation(description: "message sent successfully")
 
         let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
             XCTAssertEqual(message.text, "see attached")
@@ -336,7 +345,7 @@ class MessagesTests: XCTestCase {
             XCTAssertEqual(message.attachment!.type, "image")
             XCTAssertEqual(message.attachment!.name, "test-image.gif")
 
-            ex.fulfill()
+            onMessageHookCalledEx.fulfill()
         })
 
         bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
@@ -363,6 +372,7 @@ class MessagesTests: XCTestCase {
                     )
                 ) { _, err in
                     XCTAssertNil(err)
+                    messageSentEx.fulfill()
                 }
             }
         }
@@ -378,7 +388,8 @@ class MessagesTests: XCTestCase {
             ofType: "json"
         )!
 
-        let ex = expectation(description: "subscribe and receive sent messages")
+        let onMessageHookCalledEx = expectation(description: "subscribe and receive sent messages")
+        let messageSentEx = expectation(description: "message sent successfully")
 
         let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
             XCTAssertEqual(message.text, "see attached")
@@ -389,7 +400,7 @@ class MessagesTests: XCTestCase {
             XCTAssertEqual(message.attachment!.type, "file")
             XCTAssertEqual(message.attachment!.name, "lol ? wut ?&...json")
 
-            ex.fulfill()
+            onMessageHookCalledEx.fulfill()
         })
 
         bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
@@ -416,6 +427,7 @@ class MessagesTests: XCTestCase {
                     )
                 ) { _, err in
                     XCTAssertNil(err)
+                    messageSentEx.fulfill()
                 }
             }
         }
