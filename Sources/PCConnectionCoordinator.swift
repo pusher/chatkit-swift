@@ -11,8 +11,8 @@ public class PCConnectionCoordinator {
     }
 
     func connectionEventCompleted(_ event: PCConnectionEvent) {
-        queue.async {
-            self.logger.log("\(event.debugDescription) completed", logLevel: .verbose)
+        queue.sync {
+            self.logger.log("\(event.debugDescription) completed", logLevel: .info)
 
             let insertResult = self.completedConnectionEvents.insert(event)
             guard insertResult.inserted else {
@@ -48,7 +48,7 @@ public class PCConnectionCoordinator {
     }
 
     func addConnectionCompletionHandler(_ handler: @escaping (PCCurrentUser?, Error?) -> Void) {
-        queue.async {
+        queue.sync {
             self.connectionEventHandlers.append(
                 PCConnectionEventHandler(
                     handler: { events in
