@@ -21,31 +21,31 @@ class ReconnectionTests: XCTestCase {
         deleteInstanceResources() { err in
             XCTAssertNil(err)
             deleteResourcesEx.fulfill()
-
-            createStandardInstanceRoles() { err in
-                XCTAssertNil(err)
-                createRolesEx.fulfill()
-            }
-
-            createUser(
-                id: "alice",
-                name: "Alice Smith",
-                avatarURL: "https://alice.avatar.com",
-                customData: ["custom": "data"]
-            ) { err in
-                XCTAssertNil(err)
-                createAliceEx.fulfill()
-            }
-
-            createUser(id: "bob") { err in
-                XCTAssertNil(err)
-                createBobEx.fulfill()
-            }
-
-            sleep(1)
         }
 
-        waitForExpectations(timeout: 15)
+        wait(for: [deleteResourcesEx], timeout: 15)
+
+        createStandardInstanceRoles() { err in
+            XCTAssertNil(err)
+            createRolesEx.fulfill()
+        }
+
+        createUser(
+            id: "alice",
+            name: "Alice Smith",
+            avatarURL: "https://alice.avatar.com",
+            customData: ["custom": "data"]
+        ) { err in
+            XCTAssertNil(err)
+            createAliceEx.fulfill()
+        }
+
+        createUser(id: "bob") { err in
+            XCTAssertNil(err)
+            createBobEx.fulfill()
+        }
+
+        wait(for: [createRolesEx, createAliceEx, createBobEx], timeout: 15)
     }
 
     override func tearDown() {
@@ -106,6 +106,7 @@ class ReconnectionTests: XCTestCase {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
         let aliceRemovedFromRoomEx = expectation(description: "alice removed from room")
+        let connectedSuccessfullySecondEx = expectation(description: "alice connected successfully a second time")
         let removedFromRoomEx = expectation(description: "removed from room hook called")
 
         let roomName = "testroom"
@@ -161,15 +162,17 @@ class ReconnectionTests: XCTestCase {
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
             XCTAssertEqual(alice!.rooms.count, 0, "alice has the wrong number of rooms")
+            connectedSuccessfullySecondEx.fulfill()
         }
 
-        wait(for: [removedFromRoomEx], timeout: 15)
+        wait(for: [connectedSuccessfullySecondEx, removedFromRoomEx], timeout: 15)
     }
 
     func testOnRoomUpdatedIsCalledIfARoomHasItsPrivacyChangedBetweenConnections() {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
         let roomUpdatedEx = expectation(description: "room updated")
+        let connectedSuccessfullySecondEx = expectation(description: "alice connected successfully a second time")
         let onRoomUpdatedCalledEx = expectation(description: "room updated hook called")
 
         let roomName = "testroom"
@@ -226,15 +229,17 @@ class ReconnectionTests: XCTestCase {
             XCTAssertNil(err)
             XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
             XCTAssertTrue(alice!.roomStore.rooms.first!.isPrivate)
+            connectedSuccessfullySecondEx.fulfill()
         }
 
-        wait(for: [onRoomUpdatedCalledEx], timeout: 15)
+        wait(for: [connectedSuccessfullySecondEx, onRoomUpdatedCalledEx], timeout: 15)
     }
 
     func testOnRoomUpdatedIsCalledIfARoomHasItsNameChangedBetweenConnections() {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
         let roomUpdatedEx = expectation(description: "room updated")
+        let connectedSuccessfullySecondEx = expectation(description: "alice connected successfully a second time")
         let onRoomUpdatedCalledEx = expectation(description: "room updated hook called")
 
         let roomName = "testroom"
@@ -289,15 +294,17 @@ class ReconnectionTests: XCTestCase {
             XCTAssertNil(err)
             XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
             XCTAssertEqual(alice!.roomStore.rooms.first!.name, newRoomName)
+            connectedSuccessfullySecondEx.fulfill()
         }
 
-        wait(for: [onRoomUpdatedCalledEx], timeout: 15)
+        wait(for: [connectedSuccessfullySecondEx, onRoomUpdatedCalledEx], timeout: 15)
     }
 
     func testOnRoomUpdatedIsCalledIfARoomHasCustomDataAddedBetweenConnections() {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
         let roomUpdatedEx = expectation(description: "room updated")
+        let connectedSuccessfullySecondEx = expectation(description: "alice connected successfully a second time")
         let onRoomUpdatedCalledEx = expectation(description: "room updated hook called")
 
         let roomName = "testroom"
@@ -355,15 +362,17 @@ class ReconnectionTests: XCTestCase {
                 self.aliceChatManager.currentUser!.roomStore.rooms.first!.customData!["some"] as! String,
                 "custom data"
             )
+            connectedSuccessfullySecondEx.fulfill()
         }
 
-        wait(for: [onRoomUpdatedCalledEx], timeout: 15)
+        wait(for: [connectedSuccessfullySecondEx, onRoomUpdatedCalledEx], timeout: 15)
     }
 
     func testOnRoomUpdatedIsCalledIfARoomHasCustomDataRemovedBetweenConnections() {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
         let roomUpdatedEx = expectation(description: "room updated")
+        let connectedSuccessfullySecondEx = expectation(description: "alice connected successfully a second time")
         let onRoomUpdatedCalledEx = expectation(description: "room updated hook called")
 
         let roomName = "testroom"
@@ -403,11 +412,13 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
+
         XCTAssertEqual(self.aliceChatManager.currentUser!.roomStore.rooms.count, 1)
         XCTAssertEqual(
             self.aliceChatManager.currentUser!.roomStore.rooms.first!.customData!["some"] as! String,
             "custom data"
         )
+
         self.aliceChatManager.disconnect()
 
         updateRoom(id: roomID, customData: [:]) { err in
@@ -421,15 +432,17 @@ class ReconnectionTests: XCTestCase {
             XCTAssertNil(err)
             XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
             XCTAssertEqual(alice!.roomStore.rooms.first!.customData!.keys.count, 0)
+            connectedSuccessfullySecondEx.fulfill()
         }
 
-        wait(for: [onRoomUpdatedCalledEx], timeout: 15)
+        wait(for: [connectedSuccessfullySecondEx, onRoomUpdatedCalledEx], timeout: 15)
     }
 
     func testOnRoomUpdatedIsCalledIfARoomHasCustomDataMutatedBetweenConnections() {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
         let roomUpdatedEx = expectation(description: "room updated")
+        let connectedSuccessfullySecondEx = expectation(description: "alice connected successfully a second time")
         let onRoomUpdatedCalledEx = expectation(description: "room updated hook called")
 
         let roomName = "testroom"
@@ -496,9 +509,10 @@ class ReconnectionTests: XCTestCase {
                 alice!.roomStore.rooms.first!.customData!["chicken"] as! [String],
                 ["curry"]
             )
+            connectedSuccessfullySecondEx.fulfill()
         }
 
-        wait(for: [onRoomUpdatedCalledEx], timeout: 15)
+        wait(for: [connectedSuccessfullySecondEx, onRoomUpdatedCalledEx], timeout: 15)
     }
 
     func testOnRoomUpdatedIsCalledIfARoomHasCustomDataMutatedAndItsNameAndPrivacyChangedBetweenConnections() {
@@ -506,6 +520,7 @@ class ReconnectionTests: XCTestCase {
         let roomCreatedEx = expectation(description: "room created")
         let roomUpdatedEx = expectation(description: "room updated")
         let onRoomUpdatedCalledEx = expectation(description: "room updated hook called")
+        let connectedSuccessfullySecondEx = expectation(description: "alice connected successfully a second time")
 
         let roomName = "testroom"
         let newRoomName = "newname"
@@ -585,14 +600,16 @@ class ReconnectionTests: XCTestCase {
                 alice!.roomStore.rooms.first!.customData!["chicken"] as! [String],
                 ["curry"]
             )
+            connectedSuccessfullySecondEx.fulfill()
         }
 
-        wait(for: [onRoomUpdatedCalledEx], timeout: 15)
+        wait(for: [connectedSuccessfullySecondEx, onRoomUpdatedCalledEx], timeout: 15)
     }
 
     func testOnAddedToRoomIsCalledIfCurrentUserHasBeenAddedToARoomBetweenConnections() {
         let roomCreatedEx = expectation(description: "room created")
         let connectedSuccessfullyEx = expectation(description: "alice connected successfully")
+        let connectedSuccessfullySecondEx = expectation(description: "alice connected successfully a second time")
         let onAddedToRoomCalledEx = expectation(description: "added to room hook called")
 
         let roomName = "testroom"
@@ -626,9 +643,10 @@ class ReconnectionTests: XCTestCase {
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
             XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+            connectedSuccessfullySecondEx.fulfill()
         }
 
-        wait(for: [onAddedToRoomCalledEx], timeout: 15)
+        wait(for: [connectedSuccessfullySecondEx, onAddedToRoomCalledEx], timeout: 15)
     }
 
     // MARK: User cursors subscription reconciliation
@@ -636,10 +654,11 @@ class ReconnectionTests: XCTestCase {
     func testOnNewReadCursorIsCalledIfCurrentUserHasTheirCursorUpdatedBetweenConnections() {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
-        let subscribedToRoomEx = expectation(description: "subscribe to room")
         let initialCursorSetEx = expectation(description: "initial cursor set")
         let cursorUpdateEx = expectation(description: "cursor updated")
+        let firstOnNewCursorHookCalledEx = expectation(description: "first new cursor hook called")
         let onNewReadCursorCalledEx = expectation(description: "new cursor hook called")
+        let connectedSuccessfullySecondEx = expectation(description: "alice connected successfully a second time")
 
         let roomName = "testroom"
 
@@ -648,7 +667,9 @@ class ReconnectionTests: XCTestCase {
                 XCTFail("onNewReadCursor called for a different room")
                 return
             }
-
+            if cursor.position == 99 {
+                firstOnNewCursorHookCalledEx.fulfill()
+            }
             if cursor.position == 100 {
                 onNewReadCursorCalledEx.fulfill()
             }
@@ -673,6 +694,7 @@ class ReconnectionTests: XCTestCase {
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { a, err in
             XCTAssertNil(err)
             alice = a
+            XCTAssertEqual(alice.cursorStore.cursors.keys.count, 0)
             alice.createRoom(name: roomName, isPrivate: false) { room, err in
                 XCTAssertNil(err)
                 roomID = room!.id
@@ -689,14 +711,11 @@ class ReconnectionTests: XCTestCase {
             XCTAssertNil(err)
             initialCursorSetEx.fulfill()
         }
-        wait(for: [initialCursorSetEx], timeout: 15)
+        wait(for: [initialCursorSetEx, firstOnNewCursorHookCalledEx], timeout: 15)
 
-        alice.subscribeToRoom(id: roomID, roomDelegate: TestingRoomDelegate()) { err in
-            XCTAssertNil(err)
-            subscribedToRoomEx.fulfill()
-        }
+        XCTAssertEqual(alice.cursorStore.cursors.keys.count, 1)
+        XCTAssertEqual(alice.cursorStore.cursors.first!.value.position, 99)
 
-        wait(for: [subscribedToRoomEx], timeout: 15)
         self.aliceChatManager.disconnect()
 
         setReadCursor(
@@ -709,12 +728,16 @@ class ReconnectionTests: XCTestCase {
         }
         wait(for: [cursorUpdateEx], timeout: 15)
 
-        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _, err in
             XCTAssertNil(err)
-            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+            XCTAssertEqual(alice.rooms.count, 1, "alice has the wrong number of rooms")
+            connectedSuccessfullySecondEx.fulfill()
         }
 
-        wait(for: [onNewReadCursorCalledEx], timeout: 15)
+        wait(for: [connectedSuccessfullySecondEx, onNewReadCursorCalledEx], timeout: 15)
+
+        XCTAssertEqual(alice.cursorStore.cursors.keys.count, 1)
+        XCTAssertEqual(alice.cursorStore.cursors.first!.value.position, 100)
     }
 
     func testOnNewReadCursorIsCalledIfCurrentUserHasACursorSetBetweenConnections() {
@@ -722,6 +745,7 @@ class ReconnectionTests: XCTestCase {
         let roomCreatedEx = expectation(description: "room created")
         let subscribedToRoomEx = expectation(description: "subscribe to room")
         let cursorSetEx = expectation(description: "cursor set")
+        let connectedSuccessfullySecondEx = expectation(description: "alice connected successfully a second time")
         let onNewReadCursorCalledEx = expectation(description: "new cursor hook called")
 
         let roomName = "testroom"
@@ -770,6 +794,9 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [subscribedToRoomEx], timeout: 15)
+
+        XCTAssertEqual(alice.cursorStore.cursors.keys.count, 0)
+
         self.aliceChatManager.disconnect()
 
         setReadCursor(
@@ -782,12 +809,16 @@ class ReconnectionTests: XCTestCase {
         }
         wait(for: [cursorSetEx], timeout: 15)
 
-        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _, err in
             XCTAssertNil(err)
-            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+            XCTAssertEqual(alice.rooms.count, 1, "alice has the wrong number of rooms")
+            connectedSuccessfullySecondEx.fulfill()
         }
 
-        wait(for: [onNewReadCursorCalledEx], timeout: 15)
+        wait(for: [connectedSuccessfullySecondEx, onNewReadCursorCalledEx], timeout: 15)
+
+        XCTAssertEqual(alice.cursorStore.cursors.keys.count, 1)
+        XCTAssertEqual(alice.cursorStore.cursors.first!.value.position, 100)
     }
 
     // MARK: Membership subscription reconciliation
@@ -854,10 +885,12 @@ class ReconnectionTests: XCTestCase {
             XCTAssertNil(err)
             subscribedToRoomEx.fulfill()
         }
-
         wait(for: [subscribedToRoomEx], timeout: 15)
-        self.aliceChatManager.disconnect()
 
+        XCTAssertEqual(alice!.rooms.first!.users.count, 1)
+        XCTAssertEqual(alice!.rooms.first!.users.first!.id, "alice")
+
+        self.aliceChatManager.disconnect()
 
         addUserToRoom(roomID: roomID, userID: "bob") { err in
             XCTAssertNil(err)
@@ -875,9 +908,14 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [onUserJoinedCalledEx, onUserJoinedRoomCalledEx], timeout: 15)
+
+        XCTAssertEqual(alice!.rooms.first!.users.count, 2)
+        let expectedUserIDs = ["alice", "bob"]
+        let sortedUserIDs = alice!.rooms.first!.users.map { $0.id }.sorted()
+        XCTAssertEqual(sortedUserIDs, expectedUserIDs)
     }
 
-    func testOnUserLeftHooksAreCalledIfANewRoomMemberIsAddedBetweenConnections() {
+    func testOnUserLeftHooksAreCalledIfANewRoomMemberIsRemovedBetweenConnections() {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
         let subscribedToRoomEx = expectation(description: "subscribe to room")
@@ -945,8 +983,13 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [subscribedToRoomEx], timeout: 15)
-        self.aliceChatManager.disconnect()
 
+        XCTAssertEqual(alice!.rooms.first!.users.count, 2)
+        let expectedUserIDs = ["alice", "bob"]
+        let sortedUserIDs = alice!.rooms.first!.users.map { $0.id }.sorted()
+        XCTAssertEqual(sortedUserIDs, expectedUserIDs)
+
+        self.aliceChatManager.disconnect()
 
         removeUserFromRoom(roomID: roomID, userID: "bob") { err in
             XCTAssertNil(err)
@@ -964,6 +1007,9 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [onUserLeftCalledEx, onUserLeftRoomCalledEx], timeout: 15)
+
+        XCTAssertEqual(alice!.rooms.first!.users.count, 1)
+        XCTAssertEqual(alice!.rooms.first!.users.first!.id, "alice")
     }
 
     // MARK: Room cursors subscription reconciliation
@@ -1045,6 +1091,11 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [subscribedToRoomEx], timeout: 15)
+
+        XCTAssertEqual(alice.cursorStore.cursors.keys.count, 1)
+        XCTAssertEqual(alice.cursorStore.cursors.first!.value.position, 99)
+        XCTAssertEqual(alice.cursorStore.cursors.first!.value.user.id, "bob")
+
         self.aliceChatManager.disconnect()
 
         setReadCursor(
@@ -1076,6 +1127,10 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [onNewReadCursorCalledEx, messageSentEx], timeout: 15)
+
+        XCTAssertEqual(alice.cursorStore.cursors.keys.count, 1)
+        XCTAssertEqual(alice.cursorStore.cursors.first!.value.position, 100)
+        XCTAssertEqual(alice.cursorStore.cursors.first!.value.user.id, "bob")
     }
 
     func testOnNewReadCursorIsCalledIfAnotherUserHasACursorSetBetweenConnections() {
@@ -1140,6 +1195,9 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [subscribedToRoomEx], timeout: 15)
+
+        XCTAssertEqual(alice.cursorStore.cursors.keys.count, 0)
+
         self.aliceChatManager.disconnect()
 
         setReadCursor(
@@ -1171,6 +1229,10 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [onNewReadCursorCalledEx, messageSentEx], timeout: 15)
+
+        XCTAssertEqual(alice.cursorStore.cursors.keys.count, 1)
+        XCTAssertEqual(alice.cursorStore.cursors.first!.value.position, 100)
+        XCTAssertEqual(alice.cursorStore.cursors.first!.value.user.id, "bob")
     }
 
     // TODO: The Swift SDK deviates from the other client SDKs currently in that it calls
@@ -1178,16 +1240,19 @@ class ReconnectionTests: XCTestCase {
     // user, as well as calling the ChatManager-level onNewReadCursor hook. This is
     // something that we should fix in the next release with breaking changes, but we've
     // deemed it not worthy of its own breaking change release at this time.
-    func testBothOnNewReadCursorsAreCalledIfCurrentUserHasTheirCursorUpdatedBetweenConnections() {
+    func testBothOnNewReadCursorsAreCalledIfCurrentUserHasTheirCursorUpdatedBetweenConnectionsWhenThereIsNotAnExplicitDisconnect() {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
         let subscribedToRoomEx = expectation(description: "subscribe to room")
         let initialCursorSetEx = expectation(description: "initial cursor set")
         let cursorUpdateEx = expectation(description: "cursor updated")
         let onNewReadCursorCalledEx = expectation(description: "new cursor hook (Room level) called")
+        let onNewReadCursorCalledSecondEx = expectation(description: "new cursor hook (Room level) called for second cursor")
         let onNewReadCursorCMCalledEx = expectation(description: "new cursor hook (ChatManager level) called")
+        let onNewReadCursorCMCalledSecondEx = expectation(description: "new cursor hook (ChatManager level) called for second cursor")
 
         let roomName = "testroom"
+        var onNewReadCursorCalledCount = 0
         var onNewReadCursorCMCalledCount = 0
 
         let onNewReadCursorCM = { (cursor: PCCursor) in
@@ -1199,16 +1264,19 @@ class ReconnectionTests: XCTestCase {
                 XCTFail("onNewReadCursor (CM) called for a different user")
                 return
             }
-            guard cursor.position == 100 else {
-                XCTFail("onNewReadCursor (CM) called for a different cursor position")
-                return
-            }
             onNewReadCursorCMCalledCount += 1
-            // This needs to have been called twice - once because of the users cursor
-            // subscription and once for the cursor subscription belonging to the room
-            // subscription
-            if onNewReadCursorCMCalledCount == 2 {
+
+            switch onNewReadCursorCMCalledCount {
+            case 1: // called once via user cursor sub
+                XCTAssertEqual(cursor.position, 99)
+            case 2: // called once via room cursor sub
+                XCTAssertEqual(cursor.position, 99)
                 onNewReadCursorCMCalledEx.fulfill()
+            case 3: // called once via reconciliation
+                XCTAssertEqual(cursor.position, 100)
+                onNewReadCursorCMCalledSecondEx.fulfill()
+            default:
+                XCTFail("onNewReadCursor (CM) called too many times")
             }
         }
 
@@ -1221,10 +1289,23 @@ class ReconnectionTests: XCTestCase {
                 XCTFail("onNewReadCursor (Room) called for a different user")
                 return
             }
-            if cursor.position == 100 {
+            onNewReadCursorCalledCount += 1
+
+            switch onNewReadCursorCalledCount {
+            case 1:
+                XCTAssertEqual(cursor.position, 99)
                 onNewReadCursorCalledEx.fulfill()
+            case 2:
+                XCTAssertEqual(cursor.position, 100)
+                // This needs to have been called twice - once because of the users cursor
+                // subscription and once for the cursor subscription belonging to the room
+                // subscription
+                onNewReadCursorCalledSecondEx.fulfill()
+            default:
+                XCTFail("onNewReadCursor (Room) called too many times")
             }
         }
+
 
         let onAddedToRoom = { (room: PCRoom) in
             guard room.name == roomName else {
@@ -1258,6 +1339,12 @@ class ReconnectionTests: XCTestCase {
         }
         wait(for: [addedToRoomEx, roomCreatedEx], timeout: 15)
 
+        alice.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
+            XCTAssertNil(err)
+            subscribedToRoomEx.fulfill()
+        }
+        wait(for: [subscribedToRoomEx], timeout: 15)
+
         setReadCursor(
             userID: "alice",
             roomID: roomID,
@@ -1266,15 +1353,18 @@ class ReconnectionTests: XCTestCase {
             XCTAssertNil(err)
             initialCursorSetEx.fulfill()
         }
-        wait(for: [initialCursorSetEx], timeout: 15)
+        wait(for: [initialCursorSetEx, onNewReadCursorCMCalledEx, onNewReadCursorCalledEx], timeout: 15)
 
-        alice.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
-            XCTAssertNil(err)
-            subscribedToRoomEx.fulfill()
-        }
+        XCTAssertEqual(alice.cursorStore.cursors.keys.count, 1)
+        XCTAssertEqual(alice.cursorStore.cursors.first!.value.position, 99)
 
-        wait(for: [subscribedToRoomEx], timeout: 15)
-        self.aliceChatManager.disconnect()
+        // We want to simulate a reconnection that occurs without an explicit call to
+        // disconnect. As such, we end both cursor subscriptions before setting the
+        // new cursor position
+        self.aliceChatManager.currentUser?.cursorSubscription?.resumableSubscription.end()
+        self.aliceChatManager.currentUser?.rooms.first(where: {
+            $0.id == roomID
+        })!.subscription!.cursorSubscription!.resumableSubscription.end()
 
         setReadCursor(
             userID: "alice",
@@ -1286,19 +1376,24 @@ class ReconnectionTests: XCTestCase {
         }
         wait(for: [cursorUpdateEx], timeout: 15)
 
-        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _, err in
-            XCTAssertNil(err)
-            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+        // To cause the ended cursor subscriptions to get reesetablished we create
+        // a random error and call the `handleOnError` functions of the
+        // resumableSubscriptions, which will then attempt to reestablish the
+        // subscriptions
+        let error = PCError.currentUserIsNil
 
-            alice.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
-                XCTAssertNil(err)
-            }
-        }
+        self.aliceChatManager.currentUser?.cursorSubscription?.resumableSubscription.handleOnError(error: error)
+        self.aliceChatManager.currentUser?.rooms.first(where: {
+            $0.id == roomID
+        })!.subscription!.cursorSubscription!.resumableSubscription.handleOnError(error: error)
 
-        wait(for: [onNewReadCursorCalledEx, onNewReadCursorCMCalledEx], timeout: 15)
+        wait(for: [onNewReadCursorCalledSecondEx, onNewReadCursorCMCalledSecondEx], timeout: 15)
+
+        XCTAssertEqual(alice.cursorStore.cursors.keys.count, 1)
+        XCTAssertEqual(alice.cursorStore.cursors.first!.value.position, 100)
     }
 
-    func testBothOnNewReadCursorsAreCalledIfCurrentUserHasACursorSetBetweenConnections() {
+    func testBothOnNewReadCursorsAreCalledIfCurrentUserHasACursorSetBetweenConnectionsWhenThereIsNotAnExplicitDisconnect() {
         let addedToRoomEx = expectation(description: "alice added to room")
         let roomCreatedEx = expectation(description: "room created")
         let subscribedToRoomEx = expectation(description: "subscribe to room")
@@ -1307,7 +1402,6 @@ class ReconnectionTests: XCTestCase {
         let onNewReadCursorCMCalledEx = expectation(description: "new cursor hook (ChatManager level) called")
 
         let roomName = "testroom"
-        var onNewReadCursorCMCalledCount = 0
 
         let onNewReadCursorCM = { (cursor: PCCursor) in
             guard cursor.room.name == roomName else {
@@ -1318,17 +1412,8 @@ class ReconnectionTests: XCTestCase {
                 XCTFail("onNewReadCursor (CM) called for a different user")
                 return
             }
-            guard cursor.position == 100 else {
-                XCTFail("onNewReadCursor (CM) called for a different cursor position")
-                return
-            }
-            onNewReadCursorCMCalledCount += 1
-            // This needs to have been called twice - once because of the users cursor
-            // subscription and once for the cursor subscription belonging to the room
-            // subscription
-            if onNewReadCursorCMCalledCount == 2 {
-                onNewReadCursorCMCalledEx.fulfill()
-            }
+            XCTAssertEqual(cursor.position, 100)
+            onNewReadCursorCMCalledEx.fulfill()
         }
 
         let onNewReadCursor = { (cursor: PCCursor) in
@@ -1340,9 +1425,8 @@ class ReconnectionTests: XCTestCase {
                 XCTFail("onNewReadCursor (Room) called for a different user")
                 return
             }
-            if cursor.position == 100 {
-                onNewReadCursorCalledEx.fulfill()
-            }
+            XCTAssertEqual(cursor.position, 100)
+            onNewReadCursorCalledEx.fulfill()
         }
 
         let onAddedToRoom = { (room: PCRoom) in
@@ -1379,7 +1463,14 @@ class ReconnectionTests: XCTestCase {
         }
 
         wait(for: [subscribedToRoomEx], timeout: 15)
-        self.aliceChatManager.disconnect()
+
+        XCTAssertEqual(alice.cursorStore.cursors.keys.count, 0)
+
+        // We end both cursor subscriptions before setting the new cursor position
+        self.aliceChatManager.currentUser?.cursorSubscription?.resumableSubscription.end()
+        self.aliceChatManager.currentUser?.rooms.first(where: {
+            $0.id == roomID
+        })!.subscription!.cursorSubscription!.resumableSubscription.end()
 
         setReadCursor(
             userID: "alice",
@@ -1391,16 +1482,21 @@ class ReconnectionTests: XCTestCase {
         }
         wait(for: [cursorSetEx], timeout: 15)
 
-        self.aliceChatManager.connect(delegate: aliceCMDelegate) { _, err in
-            XCTAssertNil(err)
-            XCTAssertEqual(alice!.rooms.count, 1, "alice has the wrong number of rooms")
+        // To cause the ended cursor subscriptions to get reesetablished we create
+        // a random error and call the `handleOnError` functions of the
+        // resumableSubscriptions, which will then attempt to reestablish the
+        // subscriptions
+        let error = PCError.currentUserIsNil
 
-            alice.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
-                XCTAssertNil(err)
-            }
-        }
+        self.aliceChatManager.currentUser?.cursorSubscription?.resumableSubscription.handleOnError(error: error)
+        self.aliceChatManager.currentUser?.rooms.first(where: {
+            $0.id == roomID
+        })!.subscription!.cursorSubscription!.resumableSubscription.handleOnError(error: error)
 
         wait(for: [onNewReadCursorCalledEx, onNewReadCursorCMCalledEx], timeout: 15)
+
+        XCTAssertEqual(alice.cursorStore.cursors.keys.count, 1)
+        XCTAssertEqual(alice.cursorStore.cursors.first!.value.position, 100)
     }
 
     func testOnNewReadCursorIsNotCalledOnFirstInitialState() {
