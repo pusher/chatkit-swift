@@ -8,7 +8,7 @@ enum TestHelperError: Error {
 
 public struct TestLogger: PCLogger {
     public func log(_ message: @autoclosure @escaping () -> String, logLevel: PCLogLevel) {
-        guard logLevel > .debug else { return }
+        guard logLevel >= .info else { return }
         print("\(message())")
     }
 }
