@@ -33,43 +33,43 @@ class PresenceTests: XCTestCase {
         deleteInstanceResources() { err in
             XCTAssertNil(err)
             deleteResourcesEx.fulfill()
+        }
 
-            createStandardInstanceRoles() { err in
+        wait(for: [deleteResourcesEx], timeout: 15)
+
+        createStandardInstanceRoles() { err in
+            XCTAssertNil(err)
+            createRolesEx.fulfill()
+        }
+
+        createUser(id: self.uniqueAlice) { err in
+            XCTAssertNil(err)
+            createAliceEx.fulfill()
+        }
+
+        createUser(id: self.uniqueBob) { err in
+            XCTAssertNil(err)
+            createBobEx.fulfill()
+        }
+
+        createUser(id: "charlie") { err in
+            XCTAssertNil(err)
+            createCharlieEx.fulfill()
+        }
+
+        wait(for: [createRolesEx, createAliceEx, createBobEx, createCharlieEx], timeout: 10)
+
+        self.charlieChatManager.connect(delegate: TestingChatManagerDelegate()) { charlie, err in
+            XCTAssertNil(err)
+            charlie!.createRoom(name: "mushroom", addUserIDs: [self.uniqueAlice, self.uniqueBob]) { room, err in
                 XCTAssertNil(err)
-                createRolesEx.fulfill()
-            }
-
-            createUser(id: self.uniqueAlice) { err in
-                XCTAssertNil(err)
-                createAliceEx.fulfill()
-            }
-
-            createUser(id: self.uniqueBob) { err in
-                XCTAssertNil(err)
-                createBobEx.fulfill()
-            }
-
-            createUser(id: "charlie") { err in
-                XCTAssertNil(err)
-                createCharlieEx.fulfill()
-            }
-
-            // TODO the following should really wait until we know Alice, Bob,
-            // and Charlie exist... for now, sleep!
-            sleep(1)
-
-            self.charlieChatManager.connect(delegate: TestingChatManagerDelegate()) { charlie, err in
-                XCTAssertNil(err)
-                charlie!.createRoom(name: "mushroom", addUserIDs: [self.uniqueAlice, self.uniqueBob]) { room, err in
-                    XCTAssertNil(err)
-                    self.roomID = room!.id
-                    self.charlieChatManager.disconnect()
-                    createRoomEx.fulfill()
-                }
+                self.roomID = room!.id
+                self.charlieChatManager.disconnect()
+                createRoomEx.fulfill()
             }
         }
 
-        waitForExpectations(timeout: 15)
+        wait(for: [createRoomEx], timeout: 15)
     }
 
     override func tearDown() {
