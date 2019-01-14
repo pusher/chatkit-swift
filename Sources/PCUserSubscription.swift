@@ -5,10 +5,10 @@ public final class PCUserSubscription {
 
     // TODO: Do we need to be careful of retain cycles here? e.g. weak instance
 
-    let instance: Instance
-    let filesInstance: Instance
-    let cursorsInstance: Instance
-    let presenceInstance: Instance
+    unowned let instance: Instance
+    unowned let filesInstance: Instance
+    unowned let cursorsInstance: Instance
+    unowned let presenceInstance: Instance
     public let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore
     public internal(set) weak var delegate: PCChatManagerDelegate?
