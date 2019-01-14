@@ -56,11 +56,6 @@ public final class PCUserSubscription {
             return
         }
 
-        // TODO: Decide if we even need this in the client
-//        guard let timestamp = json["timestamp"] as? String else {
-//            return
-//        }
-
         guard let eventName = PCAPIEventName(rawValue: eventNameString) else {
             self.instance.logger.log("Unsupported API event name received: \(eventNameString)", logLevel: .debug)
             return
