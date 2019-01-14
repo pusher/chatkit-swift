@@ -24,6 +24,8 @@ import NotificationCenter
 
     var basicCurrentUser: PCBasicCurrentUser?
 
+    var wasPreviouslyConnected: Bool = false
+
     var logger: PCLogger {
         didSet {
             connectionCoordinator.logger = logger
@@ -121,17 +123,23 @@ import NotificationCenter
 
         // TODO: This could be nicer
         // TODO: Do we need to nil out subscriptions on basicCurrentUser no matter what?
-        connectionCoordinator.addConnectionCompletionHandler { cUser, error in
+        connectionCoordinator.addConnectionCompletionHandler { [weak self] cUser, error in
             guard error == nil, let cu = cUser else {
                 return
             }
 
-            cu.userSubscription = self.basicCurrentUser?.userSubscription
-            self.basicCurrentUser?.userSubscription = nil
-            cu.presenceSubscription = self.basicCurrentUser?.presenceSubscription
-            self.basicCurrentUser?.presenceSubscription = nil
-            cu.cursorSubscription = self.basicCurrentUser?.cursorSubscription
-            self.basicCurrentUser?.cursorSubscription = nil
+            guard let strongSelf = self else {
+                return
+            }
+
+            cu.userSubscription = strongSelf.basicCurrentUser?.userSubscription
+            strongSelf.basicCurrentUser?.userSubscription = nil
+            cu.presenceSubscription = strongSelf.basicCurrentUser?.presenceSubscription
+            strongSelf.basicCurrentUser?.presenceSubscription = nil
+            cu.cursorSubscription = strongSelf.basicCurrentUser?.cursorSubscription
+            strongSelf.basicCurrentUser?.cursorSubscription = nil
+
+            strongSelf.wasPreviouslyConnected = true
 
             // TODO: This is madness
             cu.userSubscription?.currentUser = cu
@@ -173,7 +181,6 @@ import NotificationCenter
                 }
 
                 var existingRooms: [PCRoom] = []
-                let alreadyHadCurrentUser = strongSelf.currentUser != nil
 
                 // If the currentUser property is already set then the assumption is that there was
                 // already a user subscription and so instead of setting the property to a new
@@ -189,8 +196,7 @@ import NotificationCenter
                 }
 
                 guard roomsPayload.count > 0 else {
-                    strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
-                    if alreadyHadCurrentUser {
+                    if strongSelf.wasPreviouslyConnected {
                         reconcileRooms(
                             old: existingRooms,
                             new: [],
@@ -198,6 +204,7 @@ import NotificationCenter
                             delegate: delegate
                         )
                     }
+                    strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
                     return
                 }
 
@@ -218,8 +225,7 @@ import NotificationCenter
                         let addedOrMergedRoom = strongSelf.currentUser!.roomStore.addOrMergeSync(room)
                         newRooms.append(addedOrMergedRoom)
                         if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
-                            strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
-                            if alreadyHadCurrentUser {
+                            if strongSelf.wasPreviouslyConnected {
                                 reconcileRooms(
                                     old: existingRooms,
                                     new: newRooms,
@@ -227,6 +233,7 @@ import NotificationCenter
                                     delegate: delegate
                                 )
                             }
+                            strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
                         }
                     } catch let err {
                         strongSelf.instance.logger.log(
@@ -234,8 +241,7 @@ import NotificationCenter
                             logLevel: .debug
                         )
                         if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
-                            strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
-                            if alreadyHadCurrentUser {
+                            if strongSelf.wasPreviouslyConnected {
                                 reconcileRooms(
                                     old: existingRooms,
                                     new: newRooms,
@@ -243,6 +249,7 @@ import NotificationCenter
                                     delegate: delegate
                                 )
                             }
+                            strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
                         }
                     }
                 }
@@ -252,7 +259,11 @@ import NotificationCenter
         basicCurrentUser!.establishPresenceSubscription()
         basicCurrentUser!.establishCursorSubscription(
             initialStateHandler: { [weak self] result in
-                if let currentUser = self?.currentUser {
+                guard let strongSelf = self else {
+                    return
+                }
+
+                if strongSelf.wasPreviouslyConnected, let currentUser = strongSelf.currentUser {
                     switch result {
                     case .error(_):
                         return
