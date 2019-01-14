@@ -12,11 +12,9 @@ struct UserRoomPair: Hashable {
 final class PCTypingIndicatorManager {
     var lastSentRequests = [String: Date]()
     var timers = [UserRoomPair: PPRepeater]()
-    let instance: Instance
+    weak var instance: Instance?
 
-    init(
-        instance: Instance
-    ) {
+    init(instance: Instance) {
         self.instance = instance
     }
 
@@ -39,7 +37,7 @@ final class PCTypingIndicatorManager {
 
         lastSentRequests[roomID] = now
 
-        instance.requestWithRetry(
+        instance?.requestWithRetry(
             using: PPRequestOptions(
                 method: HTTPMethod.POST.rawValue,
                 path: "/rooms/\(roomID)/typing_indicators"
