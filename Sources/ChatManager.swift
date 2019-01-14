@@ -275,7 +275,10 @@ import NotificationCenter
             }
         )
 
-        // TODO: This being here at the end seems necessary but bad
+        // This being here at the end seems necessary but bad - we want to
+        // call the developer-provided completionHandler last because we
+        // need to have our completionHandler(s) called first to make sure
+        // everything is in the correct state
         connectionCoordinator.addConnectionCompletionHandler(completionHandler)
     }
 
