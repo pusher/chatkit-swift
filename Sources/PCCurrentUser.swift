@@ -104,7 +104,16 @@ public final class PCCurrentUser {
         self.delegate = delegate
         self.typingIndicatorManager = PCTypingIndicatorManager(instance: instance)
 
-        self.userStore.onUserStoredHooks.append(subscribeToUserPresence)
+        self.userStore.onUserStoredHooks.append { [weak self] user in
+            guard let strongSelf = self else {
+                instance.logger.log(
+                    "PCCurrentUser (self) is nil when going to subscribe to user presence after storing user in store",
+                    logLevel: .verbose
+                )
+                return
+            }
+            strongSelf.subscribeToUserPresence(user: user)
+        }
     }
 
     func updateWithPropertiesOf(_ currentUser: PCCurrentUser) {
