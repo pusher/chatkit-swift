@@ -1,9 +1,6 @@
 import Foundation
 
 public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: ExpressibleByDictionaryLiteral, Collection, Sequence {
-    public typealias Key = KeyType
-    public typealias Value = ValueType
-
     public typealias Index = Dictionary<KeyType, ValueType>.Index
     public typealias Element = Dictionary<KeyType, ValueType>.Element
 
@@ -75,6 +72,12 @@ public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: Expre
     func removeAll() {
         queue.sync(flags: .barrier) {
             self.underlyingDictionary.removeAll()
+        }
+    }
+
+    func forEach(_ body: ((key: KeyType, value: ValueType)) -> Void) {
+        queue.sync {
+            underlyingDictionary.forEach(body)
         }
     }
 }
