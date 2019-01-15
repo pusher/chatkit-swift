@@ -116,14 +116,6 @@ public final class PCCurrentUser {
         }
     }
 
-    func updateWithPropertiesOf(_ currentUser: PCCurrentUser) {
-        self.updatedAt = currentUser.updatedAt
-        self.name = currentUser.name
-        self.avatarURL = currentUser.avatarURL
-        self.customData = currentUser.customData
-        self.delegate = currentUser.delegate
-    }
-
     public func createRoom(
         name: String,
         isPrivate: Bool = false,
@@ -1235,6 +1227,18 @@ func reconcileMemberships(
 public enum PCCurrentUserError: Error {
     case noSubscriptionToRoom(PCRoom)
     case mustBeMemberOfRoom
+}
+
+extension PCCurrentUser: PCUpdatable {
+    @discardableResult
+    func updateWithPropertiesOf(_ currentUser: PCCurrentUser) -> PCCurrentUser {
+        self.updatedAt = currentUser.updatedAt
+        self.name = currentUser.name
+        self.avatarURL = currentUser.avatarURL
+        self.customData = currentUser.customData
+        self.delegate = currentUser.delegate
+        return self
+    }
 }
 
 extension PCCurrentUserError: LocalizedError {

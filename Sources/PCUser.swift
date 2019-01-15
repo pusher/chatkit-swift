@@ -3,10 +3,10 @@ import Foundation
 public final class PCUser {
     public let id: String
     public let createdAt: String
-    public let updatedAt: String
-    public let name: String?
+    public var updatedAt: String
+    public var name: String?
     public var avatarURL: String?
-    public let customData: [String: Any]?
+    public var customData: [String: Any]?
     public internal(set) var presenceState: PCPresenceState
 
     public lazy var pathFriendlyID: String = {
@@ -45,19 +45,24 @@ public final class PCUser {
         self.presenceState = .unknown
     }
 
-    // TODO: Could use inout?
-    func updateWithPropertiesOfUser(_ user: PCUser) -> PCUser {
-        if user.presenceState != .unknown {
-            self.presenceState = user.presenceState
-        }
-
-        return self
-    }
-
     func updatePresenceInfoIfAppropriate(newInfoPayload: PCPresencePayload) {
         if newInfoPayload.state != .unknown {
             self.presenceState = newInfoPayload.state
         }
+    }
+}
+
+extension PCUser: PCUpdatable {
+    @discardableResult
+    func updateWithPropertiesOf(_ user: PCUser) -> PCUser {
+        self.name = user.name
+        self.avatarURL = user.avatarURL
+        self.customData = user.customData
+        self.updatedAt = user.updatedAt
+        if user.presenceState != .unknown {
+            self.presenceState = user.presenceState
+        }
+        return self
     }
 }
 

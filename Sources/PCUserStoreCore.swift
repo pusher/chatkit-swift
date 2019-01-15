@@ -16,7 +16,7 @@ public final class PCUserStoreCore {
             if !insertResult.inserted {
                 // If a user already exists in the store with a matching id then merge
                 // the properties of the two user objects
-                return insertResult.memberAfterInsert.updateWithPropertiesOfUser(user)
+                return insertResult.memberAfterInsert.updateWithPropertiesOf(user)
             } else {
                 return insertResult.memberAfterInsert
             }

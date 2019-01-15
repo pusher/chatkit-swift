@@ -225,7 +225,7 @@ extension PCUserSubscription {
                     return
                 }
 
-                roomToUpdate.updateWithPropertiesOfRoom(room)
+                roomToUpdate.updateWithPropertiesOf(room)
                 self.delegate?.onRoomUpdated(room: roomToUpdate)
                 self.instance.logger.log("Room updated: \(room.name)", logLevel: .verbose)
             }

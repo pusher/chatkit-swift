@@ -66,15 +66,6 @@ public final class PCRoom {
         self.userStore = PCRoomUserStore()
     }
 
-    func updateWithPropertiesOfRoom(_ room: PCRoom) {
-        self.name = room.name
-        self.isPrivate = room.isPrivate
-        self.updatedAt = room.updatedAt
-        self.customData = room.customData
-        self.userIDs = room.userIDs
-        self.deletedAt = room.deletedAt
-    }
-
     func removeUser(id: String) {
         let roomUserIDIndex = userIDs.index(of: id)
 
@@ -95,6 +86,19 @@ public final class PCRoom {
                     (self.customData! as NSDictionary).isEqual(to: room.customData!)
                 )
             )
+    }
+}
+
+extension PCRoom: PCUpdatable {
+    @discardableResult
+    func updateWithPropertiesOf(_ room: PCRoom) -> PCRoom {
+        self.name = room.name
+        self.isPrivate = room.isPrivate
+        self.updatedAt = room.updatedAt
+        self.customData = room.customData
+        self.userIDs = room.userIDs
+        self.deletedAt = room.deletedAt
+        return self
     }
 }
 
