@@ -327,8 +327,10 @@ class MessagesTests: XCTestCase {
             ofType: "gif"
         )!
 
-        let onMessageHookCalledEx = expectation(description: "subscribe and receive sent messages")
+        let onMessageHookCalledEx = expectation(description: "subscribe and receive sent message")
         let messageSentEx = expectation(description: "message sent successfully")
+        let bobConnectedEx = expectation(description: "bob connected")
+        let bobSubscribedToRoomEx = expectation(description: "bob subscribed to room")
 
         let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
             XCTAssertEqual(message.text, "see attached")
@@ -342,36 +344,45 @@ class MessagesTests: XCTestCase {
             onMessageHookCalledEx.fulfill()
         })
 
-        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+        var bob: PCCurrentUser!
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { b, err in
             XCTAssertNil(err)
+            bob = b
+            bobConnectedEx.fulfill()
+        }
 
-            bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
-                roomDelegate: bobRoomDelegate,
-                messageLimit: 0,
-                completionHandler: { err in
-                    XCTAssertNil(err)
-                }
-            )
+        wait(for: [bobConnectedEx], timeout: 15)
 
-            self.aliceChatManager.connect(
-                delegate: TestingChatManagerDelegate()
-            ) { alice, err in
-                alice!.sendMessage(
-                    roomID: self.roomID,
-                    text: "see attached",
-                    attachment: .fileURL(
-                        URL(fileURLWithPath: veryImportantImage),
-                        name: "test-image.gif"
-                    )
-                ) { _, err in
-                    XCTAssertNil(err)
-                    messageSentEx.fulfill()
-                }
+        bob.subscribeToRoom(
+            room: bob.rooms.first(where: { $0.id == self.roomID })!,
+            roomDelegate: bobRoomDelegate,
+            messageLimit: 0,
+            completionHandler: { err in
+                XCTAssertNil(err)
+                bobSubscribedToRoomEx.fulfill()
+            }
+        )
+
+        wait(for: [bobSubscribedToRoomEx], timeout: 15)
+
+        self.aliceChatManager.connect(
+            delegate: TestingChatManagerDelegate()
+        ) { alice, err in
+            alice!.sendMessage(
+                roomID: self.roomID,
+                text: "see attached",
+                attachment: .fileURL(
+                    URL(fileURLWithPath: veryImportantImage),
+                    name: "test-image.gif"
+                )
+            ) { _, err in
+                XCTAssertNil(err)
+                messageSentEx.fulfill()
             }
         }
 
-        waitForExpectations(timeout: 25)
+        wait(for: [messageSentEx, onMessageHookCalledEx], timeout: 15)
     }
 
     func testSendAndReceiveMessageWithDataAttachmentThatHasAHorribleName() {
@@ -382,8 +393,10 @@ class MessagesTests: XCTestCase {
             ofType: "json"
         )!
 
-        let onMessageHookCalledEx = expectation(description: "subscribe and receive sent messages")
+        let onMessageHookCalledEx = expectation(description: "subscribe and receive sent message")
         let messageSentEx = expectation(description: "message sent successfully")
+        let bobConnectedEx = expectation(description: "bob connected")
+        let bobSubscribedToRoomEx = expectation(description: "bob subscribed to room")
 
         let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
             XCTAssertEqual(message.text, "see attached")
@@ -397,36 +410,45 @@ class MessagesTests: XCTestCase {
             onMessageHookCalledEx.fulfill()
         })
 
-        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+        var bob: PCCurrentUser!
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { b, err in
             XCTAssertNil(err)
+            bob = b
+            bobConnectedEx.fulfill()
+        }
 
-            bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
-                roomDelegate: bobRoomDelegate,
-                messageLimit: 0,
-                completionHandler: { err in
-                    XCTAssertNil(err)
-                }
-            )
+        wait(for: [bobConnectedEx], timeout: 15)
 
-            self.aliceChatManager.connect(
-                delegate: TestingChatManagerDelegate()
-            ) { alice, err in
-                alice!.sendMessage(
-                    roomID: self.roomID,
-                    text: "see attached",
-                    attachment: .fileURL(
-                        URL(fileURLWithPath: testFilePath),
-                        name: "lol ? wut ?&...json"
-                    )
-                ) { _, err in
-                    XCTAssertNil(err)
-                    messageSentEx.fulfill()
-                }
+        bob.subscribeToRoom(
+            room: bob.rooms.first(where: { $0.id == self.roomID })!,
+            roomDelegate: bobRoomDelegate,
+            messageLimit: 0,
+            completionHandler: { err in
+                XCTAssertNil(err)
+                bobSubscribedToRoomEx.fulfill()
+        }
+        )
+
+        wait(for: [bobSubscribedToRoomEx], timeout: 15)
+
+        self.aliceChatManager.connect(
+            delegate: TestingChatManagerDelegate()
+        ) { alice, err in
+            alice!.sendMessage(
+                roomID: self.roomID,
+                text: "see attached",
+                attachment: .fileURL(
+                    URL(fileURLWithPath: testFilePath),
+                    name: "lol ? wut ?&...json"
+                )
+            ) { _, err in
+                XCTAssertNil(err)
+                messageSentEx.fulfill()
             }
         }
 
-        waitForExpectations(timeout: 25)
+        wait(for: [messageSentEx, onMessageHookCalledEx], timeout: 15)
     }
     #endif
 }
