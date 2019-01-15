@@ -75,12 +75,6 @@ class MessagesTests: XCTestCase {
         }
 
         user.sendMessage(roomID: roomID, text: message) { [messages] _, err in
-            if let err = err {
-                print("IS ERROR NIL? NO")
-                print(err.localizedDescription)
-            } else {
-                print("IS ERROR NIL? YES")
-            }
             XCTAssertNil(err)
             self.sendOrderedMessages(
                 messages: Array(messages.dropFirst()),
