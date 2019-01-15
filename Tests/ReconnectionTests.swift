@@ -649,6 +649,63 @@ class ReconnectionTests: XCTestCase {
         wait(for: [connectedSuccessfullySecondEx, onAddedToRoomCalledEx], timeout: 15)
     }
 
+    func testNoHooksAreCalledOnFirstInitialStateWhenCurrentUserIsAlreadyAMemberOfARoom() {
+        let roomCreatedEx = expectation(description: "room created")
+        let subscribedToRoomEx = expectation(description: "subscribe to room")
+        let messageSentEx = expectation(description: "message sent")
+
+        let roomName = "testroom"
+
+        let onAddedToRoom = { (room: PCRoom) in
+            XCTFail("onAddedToRoom called when it shouldn't have been")
+        }
+
+        let onRoomUpdated = { (room: PCRoom) in
+            XCTFail("onRoomUpdated called when it shouldn't have been")
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(
+            onAddedToRoom: onAddedToRoom,
+            onRoomUpdated: onRoomUpdated
+        )
+
+        var roomID: String!
+
+        createRoom(creatorID: "alice", name: roomName, addUserIDs: ["bob"]) { err, data in
+            XCTAssertNil(err)
+            XCTAssertNotNil(data)
+            let roomObject = try! JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+            let roomIDFromJSON = roomObject["id"] as! String
+            roomID = roomIDFromJSON
+
+            roomCreatedEx.fulfill()
+        }
+        wait(for: [roomCreatedEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            alice!.subscribeToRoom(id: roomID, roomDelegate: TestingRoomDelegate()) { err in
+                XCTAssertNil(err)
+                subscribedToRoomEx.fulfill()
+                XCTAssertEqual(alice!.roomStore.rooms.count, 1)
+                XCTAssertEqual(alice!.roomStore.rooms.first!.id, roomID)
+                XCTAssertEqual(alice!.roomStore.rooms.first!.name, roomName)
+                XCTAssertTrue(alice!.roomStore.rooms.first!.userIDs.contains("alice"))
+
+                // We send a message to give some time for any cursor hook to be called
+                // otherwise it might have been going to be called but didn't have
+                // enough time
+                alice!.sendMessage(roomID: roomID, text: "blah") { _, err in
+                    XCTAssertNil(err)
+                    messageSentEx.fulfill()
+                }
+            }
+        }
+
+        wait(for: [subscribedToRoomEx, messageSentEx], timeout: 15)
+    }
+
+
     // MARK: User cursors subscription reconciliation
 
     func testOnNewReadCursorIsCalledIfCurrentUserHasTheirCursorUpdatedBetweenConnections() {
@@ -819,6 +876,70 @@ class ReconnectionTests: XCTestCase {
 
         XCTAssertEqual(alice.cursorStore.cursors.keys.count, 1)
         XCTAssertEqual(alice.cursorStore.cursors.first!.value.position, 100)
+    }
+
+    func testOnNewReadCursorIsNotCalledOnFirstInitialStateWhenCurrentUserAlreadyHasACursorSet() {
+        let roomCreatedEx = expectation(description: "room created")
+        let subscribedToRoomEx = expectation(description: "subscribe to room")
+        let cursorSetEx = expectation(description: "cursor set")
+        let messageSentEx = expectation(description: "message sent")
+
+        let roomName = "testroom"
+
+        let onNewReadCursorCM = { (cursor: PCCursor) in
+            XCTFail("onNewReadCursor (CM) called when it shouldn't have been")
+        }
+
+        let onNewReadCursor = { (cursor: PCCursor) in
+            XCTFail("onNewReadCursor (Room) called when it shouldn't have been")
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(onNewReadCursor: onNewReadCursorCM)
+        let aliceRoomDelegate = TestingRoomDelegate(onNewReadCursor: onNewReadCursor)
+
+        var roomID: String!
+
+        createRoom(creatorID: "alice", name: roomName, addUserIDs: ["bob"]) { err, data in
+            XCTAssertNil(err)
+            XCTAssertNotNil(data)
+            let roomObject = try! JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+            let roomIDFromJSON = roomObject["id"] as! String
+            roomID = roomIDFromJSON
+
+            roomCreatedEx.fulfill()
+        }
+        wait(for: [roomCreatedEx], timeout: 15)
+
+        setReadCursor(
+            userID: "alice",
+            roomID: roomID,
+            position: 100
+        ) { err in
+            XCTAssertNil(err)
+            cursorSetEx.fulfill()
+        }
+        wait(for: [cursorSetEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            alice!.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
+                XCTAssertNil(err)
+                subscribedToRoomEx.fulfill()
+                XCTAssertEqual(alice!.cursorStore.cursors.keys.count, 1)
+                XCTAssertEqual(alice!.cursorStore.cursors.first!.value.position, 100)
+                XCTAssertEqual(alice!.cursorStore.cursors.first!.value.user.id, "alice")
+
+                // We send a message to give some time for any cursor hook to be called
+                // otherwise it might have been going to be called but didn't have
+                // enough time
+                alice!.sendMessage(roomID: roomID, text: "blah") { _, err in
+                    XCTAssertNil(err)
+                    messageSentEx.fulfill()
+                }
+            }
+        }
+
+        wait(for: [subscribedToRoomEx, messageSentEx], timeout: 15)
     }
 
     // MARK: Membership subscription reconciliation
@@ -1010,6 +1131,60 @@ class ReconnectionTests: XCTestCase {
 
         XCTAssertEqual(alice!.rooms.first!.users.count, 1)
         XCTAssertEqual(alice!.rooms.first!.users.first!.id, "alice")
+    }
+
+    func testOnUserJoinedIsNotCalledOnFirstInitialStateIfTheCurrentUserIsAMemberOfARoomWithOtherMembers() {
+        let roomCreatedEx = expectation(description: "room created")
+        let subscribedToRoomEx = expectation(description: "subscribe to room")
+        let messageSentEx = expectation(description: "message sent")
+
+        let roomName = "testroom"
+
+        let onUserJoinedRoom = { (room: PCRoom, user: PCUser) in
+            XCTFail("onUserJoinedRoom (CM) called when it shouldn't have been")
+        }
+
+        let onUserJoined = { (user: PCUser) in
+            XCTFail("onUserJoined (Room) called when it shouldn't have been")
+        }
+
+        let aliceCMDelegate = TestingChatManagerDelegate(onUserJoinedRoom: onUserJoinedRoom)
+        let aliceRoomDelegate = TestingRoomDelegate(onUserJoined: onUserJoined)
+
+        var roomID: String!
+
+        createRoom(creatorID: "alice", name: roomName, addUserIDs: ["bob"]) { err, data in
+            XCTAssertNil(err)
+            XCTAssertNotNil(data)
+            let roomObject = try! JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+            let roomIDFromJSON = roomObject["id"] as! String
+            roomID = roomIDFromJSON
+
+            roomCreatedEx.fulfill()
+        }
+        wait(for: [roomCreatedEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
+            XCTAssertNil(err)
+            alice!.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
+                XCTAssertNil(err)
+                subscribedToRoomEx.fulfill()
+                XCTAssertEqual(alice!.roomStore.rooms.count, 1)
+                XCTAssertEqual(alice!.roomStore.rooms.first!.id, roomID)
+                XCTAssertEqual(alice!.roomStore.rooms.first!.name, roomName)
+                XCTAssertTrue(alice!.roomStore.rooms.first!.userIDs.contains("bob"))
+
+                // We send a message to give some time for any cursor hook to be called
+                // otherwise it might have been going to be called but didn't have
+                // enough time
+                alice!.sendMessage(roomID: roomID, text: "blah") { _, err in
+                    XCTAssertNil(err)
+                    messageSentEx.fulfill()
+                }
+            }
+        }
+
+        wait(for: [subscribedToRoomEx, messageSentEx], timeout: 15)
     }
 
     // MARK: Room cursors subscription reconciliation
@@ -1499,7 +1674,7 @@ class ReconnectionTests: XCTestCase {
         XCTAssertEqual(alice.cursorStore.cursors.first!.value.position, 100)
     }
 
-    func testOnNewReadCursorIsNotCalledOnFirstInitialState() {
+    func testOnNewReadCursorIsNotCalledOnFirstInitialStateWhenAnotherUserAlreadyHasACursorSet() {
         let roomCreatedEx = expectation(description: "room created")
         let subscribedToRoomEx = expectation(description: "subscribe to room")
         let cursorSetEx = expectation(description: "cursor set")
@@ -1546,6 +1721,9 @@ class ReconnectionTests: XCTestCase {
             alice!.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
                 XCTAssertNil(err)
                 subscribedToRoomEx.fulfill()
+                XCTAssertEqual(alice!.cursorStore.cursors.keys.count, 1)
+                XCTAssertEqual(alice!.cursorStore.cursors.first!.value.position, 100)
+                XCTAssertEqual(alice!.cursorStore.cursors.first!.value.user.id, "bob")
 
                 // We send a message to give some time for any cursor hook to be called
                 // otherwise it might have been going to be called but didn't have
