@@ -13,7 +13,7 @@ public final class PCSynchronizedArray<T> {
         }
     }
 
-    public func appendSync(_ newElement: T) -> T {
+    func appendSync(_ newElement: T) -> T {
         self.accessQueue.sync {
             self.underlyingArray.append(newElement)
         }
