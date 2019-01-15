@@ -141,3 +141,33 @@ public final class PCSynchronizedArray<T> {
         }
     }
 }
+
+extension PCSynchronizedArray where T: PCUpdatable {
+    func appendOrUpdate(
+        _ value: T,
+        predicate: @escaping (T) -> Bool,
+        completionHandler: @escaping (T) -> Void
+    ) {
+        self.accessQueue.async(flags: .barrier) {
+            if let existingValue = self.underlyingArray.first(where: predicate) {
+                existingValue.updateWithPropertiesOf(value)
+                completionHandler(existingValue)
+            } else {
+                self.underlyingArray.append(value)
+                completionHandler(value)
+            }
+        }
+    }
+
+    func appendOrUpdateSync(_ value: T, predicate: @escaping (T) -> Bool) -> T {
+        return self.accessQueue.sync {
+            if let existingValue = self.underlyingArray.first(where: predicate) {
+                existingValue.updateWithPropertiesOf(value)
+                return existingValue
+            } else {
+                self.underlyingArray.append(value)
+                return value
+            }
+        }
+    }
+}
