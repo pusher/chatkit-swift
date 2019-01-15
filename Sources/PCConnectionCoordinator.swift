@@ -12,7 +12,7 @@ public class PCConnectionCoordinator {
 
     func connectionEventCompleted(_ event: PCConnectionEvent) {
         queue.sync {
-            self.logger.log("\(event.debugDescription) completed", logLevel: .info)
+            self.logger.log("\(event.debugDescription) completed", logLevel: .verbose)
 
             let insertResult = self.completedConnectionEvents.insert(event)
             guard insertResult.inserted else {
