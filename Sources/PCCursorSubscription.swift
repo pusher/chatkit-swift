@@ -67,9 +67,9 @@ extension PCCursorSubscription {
 
     fileprivate func parseInitialStatePayload(_ eventName: PCCursorEventName, data: [String: Any]) {
         guard let cursorsPayload = data["cursors"] as? [[String: Any]] else {
-            let error = PCCursorsEventError.keyNotPresentInEventPayload(
+            let error = PCSubscriptionEventError.keyNotPresentInEventPayload(
                 key: "cursors",
-                apiEventName: eventName,
+                eventName: eventName.rawValue,
                 payload: data
             )
             initialStateHandler?(.error(error))
@@ -142,18 +142,4 @@ extension PCCursorSubscription {
 public enum PCCursorEventName: String {
     case initial_state
     case new_cursor
-}
-
-// TODO: This is the same across all subscription classes I think
-public enum PCCursorsEventError: Error {
-    case keyNotPresentInEventPayload(key: String, apiEventName: PCCursorEventName, payload: [String: Any])
-}
-
-extension PCCursorsEventError: LocalizedError {
-    public var errorDescription: String? {
-        switch self {
-        case let .keyNotPresentInEventPayload(key, apiEventName, payload):
-            return "\(key) missing in \(apiEventName.rawValue) API event payload: \(payload)"
-        }
-    }
 }
