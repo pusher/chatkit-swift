@@ -28,19 +28,13 @@ public final class PCRoom {
 
     public internal(set) var userStore: PCRoomUserStore
 
-    private lazy var dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        return dateFormatter
-    }()
-
-    public var createdAtDate: Date { return self.dateFormatter.date(from: self.createdAt)! }
-    public var updatedAtDate: Date { return self.dateFormatter.date(from: self.updatedAt)! }
+    public var createdAtDate: Date { return PCDateFormatter.shared.formatString(self.createdAt) }
+    public var updatedAtDate: Date { return PCDateFormatter.shared.formatString(self.updatedAt) }
     public var deletedAtDate: Date? {
         guard let deletedAt = self.deletedAt else {
             return nil
         }
-        return self.dateFormatter.date(from: deletedAt)!
+        return PCDateFormatter.shared.formatString(deletedAt)
     }
 
     public init(

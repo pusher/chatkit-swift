@@ -7,13 +7,7 @@ public class PCCursor {
     public let updatedAt: String
     public let user: PCUser
 
-    public var updatedAtDate: Date { return self.dateFormatter.date(from: self.updatedAt)! }
-
-    private lazy var dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        return dateFormatter
-    }()
+    public var updatedAtDate: Date { return PCDateFormatter.shared.formatString(self.updatedAt) }
 
     init(
         type: PCCursorType,

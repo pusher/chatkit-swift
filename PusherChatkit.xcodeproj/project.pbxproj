@@ -67,6 +67,7 @@
 		3775A83F21EE3845002297FA /* PCUpdatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3775A83E21EE3844002297FA /* PCUpdatable.swift */; };
 		3775A84121EE4177002297FA /* PCSubscriptionEventError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3775A84021EE4177002297FA /* PCSubscriptionEventError.swift */; };
 		37C526D621E3789B00309E3C /* InitialStateResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C526D521E3789B00309E3C /* InitialStateResult.swift */; };
+		374C814A21F0DA98008ECEBD /* PCDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374C814921F0DA98008ECEBD /* PCDateFormatter.swift */; };
 		37DEF4D221A456C200F924EC /* RoomTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DEF4D121A456C200F924EC /* RoomTests.swift */; };
 		37DEF4D621A4835900F924EC /* lol ? wut ?&...json in Resources */ = {isa = PBXBuildFile; fileRef = 37DEF4D521A4835900F924EC /* lol ? wut ?&...json */; };
 		37DEF4D721A485F400F924EC /* lol ? wut ?&...json in Resources */ = {isa = PBXBuildFile; fileRef = 37DEF4D521A4835900F924EC /* lol ? wut ?&...json */; };
@@ -152,6 +153,7 @@
 		3775A83E21EE3844002297FA /* PCUpdatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCUpdatable.swift; sourceTree = "<group>"; };
 		3775A84021EE4177002297FA /* PCSubscriptionEventError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCSubscriptionEventError.swift; sourceTree = "<group>"; };
 		37C526D521E3789B00309E3C /* InitialStateResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialStateResult.swift; sourceTree = "<group>"; };
+		374C814921F0DA98008ECEBD /* PCDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCDateFormatter.swift; sourceTree = "<group>"; };
 		37DEF4D121A456C200F924EC /* RoomTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTests.swift; sourceTree = "<group>"; };
 		37DEF4D521A4835900F924EC /* lol ? wut ?&...json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "lol ? wut ?&...json"; sourceTree = "<group>"; };
 		A14B8C3B2191AD1D0039AD5D /* ChatkitBeamsTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatkitBeamsTokenProvider.swift; sourceTree = "<group>"; };
@@ -248,6 +250,7 @@
 				3775A83E21EE3844002297FA /* PCUpdatable.swift */,
 				3775A84021EE4177002297FA /* PCSubscriptionEventError.swift */,
 				37C526D521E3789B00309E3C /* InitialStateResult.swift */,
+				374C814921F0DA98008ECEBD /* PCDateFormatter.swift */,
 				33E3EBC6200E2368003D888D /* PPTypealiases.swift */,
 				A14B8C3B2191AD1D0039AD5D /* ChatkitBeamsTokenProvider.swift */,
 				33831C8C1A9CF61600B124F1 /* Supporting Files */,
@@ -504,6 +507,7 @@
 				3314212F1ED32AE700D0B6DB /* PCProgressCounter.swift in Sources */,
 				33BA3013210F4D5C000E0832 /* PCUserPresenceSubscription.swift in Sources */,
 				335AD8F8205C10AD000D4D08 /* PCMessageSubscription.swift in Sources */,
+				374C814A21F0DA98008ECEBD /* PCDateFormatter.swift in Sources */,
 				339CABD31EC3078200FDFB58 /* PCRoomDelegate.swift in Sources */,
 				33C5D8FB2020854A00E826FB /* PCCursor.swift in Sources */,
 				3704959A21876E3200DFC497 /* PCPresenceStateChange.swift in Sources */,
