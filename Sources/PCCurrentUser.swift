@@ -104,15 +104,16 @@ public final class PCCurrentUser {
         self.delegate = delegate
         self.typingIndicatorManager = PCTypingIndicatorManager(instance: instance)
 
-        self.userStore.onUserStoredHooks.append(subscribeToUserPresence)
-    }
-
-    func updateWithPropertiesOf(_ currentUser: PCCurrentUser) {
-        self.updatedAt = currentUser.updatedAt
-        self.name = currentUser.name
-        self.avatarURL = currentUser.avatarURL
-        self.customData = currentUser.customData
-        self.delegate = currentUser.delegate
+        self.userStore.onUserStoredHooks.append { [weak self] user in
+            guard let strongSelf = self else {
+                instance.logger.log(
+                    "PCCurrentUser (self) is nil when going to subscribe to user presence after storing user in store",
+                    logLevel: .verbose
+                )
+                return
+            }
+            strongSelf.subscribeToUserPresence(user: user)
+        }
     }
 
     public func createRoom(
@@ -773,7 +774,7 @@ public final class PCCurrentUser {
             labelSuffix: "subscribe-to-room-\(UUID().uuidString)"
         )
 
-        let combinedCompletionHandler = { [logger = self.instance.logger] (err: Error?) in
+        let combinedCompletionHandler = { [logger = self.instance.logger, weak room] (err: Error?) in
             guard err == nil else {
                 logger.log(
                     "Error when establishing room subscription: \(err!.localizedDescription)",
@@ -785,6 +786,7 @@ public final class PCCurrentUser {
                 return
             }
             if progressCounter.incrementSuccessAndCheckIfFinished() {
+                room?.subscriptionPreviouslyEstablished = true
                 completionHandler(nil)
             }
         }
@@ -806,13 +808,26 @@ public final class PCCurrentUser {
             )
             let cursorSub = self.subscribeToRoomCursors(
                 room: roomToSubscribeTo,
-                delegate: delegate,
+                onNewReadCursorHook: { [currentUserID = self.id, weak cmDelegate = self.delegate, weak delegate] cursor in
+                    delegate?.onNewReadCursor(cursor)
+                    if cursor.user.id == currentUserID {
+                        cmDelegate?.onNewReadCursor(cursor)
+                    }
+                },
                 completionHandler: combinedCompletionHandler
             )
             let membershipSub = self.subscribeToRoomMemberships(
                 room: roomToSubscribeTo,
                 delegate: delegate,
-                completionHandler: completionHandler
+                onUserJoinedHook: { [weak cmDelegate = self.delegate, weak delegate] user in
+                    cmDelegate?.onUserJoinedRoom(room, user: user)
+                    delegate?.onUserJoined(user: user)
+                },
+                onUserLeftHook: { [weak cmDelegate = self.delegate, weak delegate] user in
+                    cmDelegate?.onUserLeftRoom(room, user: user)
+                    delegate?.onUserLeft(user: user)
+                },
+                completionHandler: combinedCompletionHandler
             )
 
             if room.subscription != nil {
@@ -884,7 +899,7 @@ public final class PCCurrentUser {
 
     fileprivate func subscribeToRoomCursors(
         room: PCRoom,
-        delegate: PCRoomDelegate,
+        onNewReadCursorHook: @escaping (PCCursor) -> Void,
         completionHandler: @escaping PCErrorCompletionHandler
     ) -> PCCursorSubscription {
         let path = "/cursors/\(PCCursorType.read.rawValue)/rooms/\(room.id)"
@@ -900,12 +915,26 @@ public final class PCCurrentUser {
         )
 
         let cursorSubscription = PCCursorSubscription(
-            delegate: delegate,
             resumableSubscription: resumableSub,
             cursorStore: cursorStore,
             connectionCoordinator: connectionCoordinator,
             logger: self.cursorsInstance.logger,
-            initialStateHandler: completionHandler
+            onNewReadCursorHook: onNewReadCursorHook,
+            initialStateHandler: { result in
+                switch result {
+                case .error(let err):
+                    completionHandler(err)
+                case .success(let existing, let new):
+                    if room.subscriptionPreviouslyEstablished {
+                        reconcileCursors(
+                            new: new,
+                            old: existing,
+                            onNewReadCursorHook: onNewReadCursorHook
+                        )
+                    }
+                    completionHandler(nil)
+                }
+            }
         )
 
         self.cursorsInstance.subscribeWithResume(
@@ -923,6 +952,8 @@ public final class PCCurrentUser {
     fileprivate func subscribeToRoomMemberships(
         room: PCRoom,
         delegate: PCRoomDelegate,
+        onUserJoinedHook: @escaping (PCUser) -> Void,
+        onUserLeftHook: @escaping (PCUser) -> Void,
         completionHandler: @escaping PCErrorCompletionHandler
     ) -> PCMembershipSubscription {
         let path = "/rooms/\(room.id)/memberships"
@@ -939,13 +970,28 @@ public final class PCCurrentUser {
 
         let membershipSubscription = PCMembershipSubscription(
             roomID: room.id,
-            delegate: delegate,
-            chatManagerDelegate: self.delegate,
             resumableSubscription: resumableSub,
             userStore: self.userStore,
             roomStore: self.roomStore,
             logger: self.instance.logger,
-            initialStateHandler: completionHandler
+            onUserJoinedHook: onUserJoinedHook,
+            onUserLeftHook: onUserLeftHook,
+            initialStateHandler: { result in
+                switch result {
+                case .error(let err):
+                    completionHandler(err)
+                case .success(let existing, let new):
+                    if room.subscriptionPreviouslyEstablished {
+                        reconcileMemberships(
+                            new: new,
+                            old: existing,
+                            onUserJoinedHook: onUserJoinedHook,
+                            onUserLeftHook: onUserLeftHook
+                        )
+                    }
+                    completionHandler(nil)
+                }
+            }
         )
 
         self.instance.subscribeWithResume(
@@ -1159,9 +1205,40 @@ public final class PCCurrentUser {
     }
 }
 
+func reconcileMemberships(
+    new: [PCUser],
+    old: [PCUser],
+    onUserJoinedHook: ((PCUser) -> Void)?,
+    onUserLeftHook: ((PCUser) -> Void)?
+) {
+    let oldSet = Set(old)
+    let newSet = Set(new)
+
+    let newMembers = newSet.subtracting(oldSet)
+    let membersRemoved = oldSet.subtracting(newSet)
+
+    newMembers.forEach { onUserJoinedHook?($0) }
+
+    membersRemoved.forEach { m in
+        onUserLeftHook?(m)
+    }
+}
+
 public enum PCCurrentUserError: Error {
     case noSubscriptionToRoom(PCRoom)
     case mustBeMemberOfRoom
+}
+
+extension PCCurrentUser: PCUpdatable {
+    @discardableResult
+    func updateWithPropertiesOf(_ currentUser: PCCurrentUser) -> PCCurrentUser {
+        self.updatedAt = currentUser.updatedAt
+        self.name = currentUser.name
+        self.avatarURL = currentUser.avatarURL
+        self.customData = currentUser.customData
+        self.delegate = currentUser.delegate
+        return self
+    }
 }
 
 extension PCCurrentUserError: LocalizedError {

@@ -2,13 +2,10 @@ import Foundation
 import PusherPlatform
 
 public final class PCUserSubscription {
-
-    // TODO: Do we need to be careful of retain cycles here? e.g. weak instance
-
-    let instance: Instance
-    let filesInstance: Instance
-    let cursorsInstance: Instance
-    let presenceInstance: Instance
+    unowned let instance: Instance
+    unowned let filesInstance: Instance
+    unowned let cursorsInstance: Instance
+    unowned let presenceInstance: Instance
     public let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore
     public internal(set) weak var delegate: PCChatManagerDelegate?
@@ -56,11 +53,6 @@ public final class PCUserSubscription {
             return
         }
 
-        // TODO: Decide if we even need this in the client
-//        guard let timestamp = json["timestamp"] as? String else {
-//            return
-//        }
-
         guard let eventName = PCAPIEventName(rawValue: eventNameString) else {
             self.instance.logger.log("Unsupported API event name received: \(eventNameString)", logLevel: .debug)
             return
@@ -101,9 +93,9 @@ extension PCUserSubscription {
         guard let roomsPayload = data["rooms"] as? [[String: Any]] else {
             informConnectionCoordinatorOfCurrentUserCompletion(
                 currentUser: nil,
-                error: PCAPIEventError.keyNotPresentInEventPayload(
+                error: PCSubscriptionEventError.keyNotPresentInEventPayload(
                     key: "rooms",
-                    apiEventName: eventName,
+                    eventName: eventName.rawValue,
                     payload: data
                 )
             )
@@ -113,9 +105,9 @@ extension PCUserSubscription {
         guard let currentUserPayload = data["current_user"] as? [String: Any] else {
             informConnectionCoordinatorOfCurrentUserCompletion(
                 currentUser: nil,
-                error: PCAPIEventError.keyNotPresentInEventPayload(
+                error: PCSubscriptionEventError.keyNotPresentInEventPayload(
                     key: "current_user",
-                    apiEventName: eventName,
+                    eventName: eventName.rawValue,
                     payload: data
                 )
             )
@@ -128,9 +120,9 @@ extension PCUserSubscription {
     fileprivate func parseAddedToRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomPayload = data["room"] as? [String: Any] else {
             self.delegate?.onError(
-                error: PCAPIEventError.keyNotPresentInEventPayload(
+                error: PCSubscriptionEventError.keyNotPresentInEventPayload(
                     key: "room",
-                    apiEventName: eventName,
+                    eventName: eventName.rawValue,
                     payload: data
                 )
             )
@@ -188,9 +180,9 @@ extension PCUserSubscription {
     fileprivate func parseRemovedFromRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomID = data["room_id"] as? String else {
             self.delegate?.onError(
-                error: PCAPIEventError.keyNotPresentInEventPayload(
+                error: PCSubscriptionEventError.keyNotPresentInEventPayload(
                     key: "room_id",
-                    apiEventName: eventName,
+                    eventName: eventName.rawValue,
                     payload: data
                 )
             )
@@ -211,9 +203,9 @@ extension PCUserSubscription {
     fileprivate func parseRoomUpdatedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomPayload = data["room"] as? [String: Any] else {
             self.delegate?.onError(
-                error: PCAPIEventError.keyNotPresentInEventPayload(
+                error: PCSubscriptionEventError.keyNotPresentInEventPayload(
                     key: "room",
-                    apiEventName: eventName,
+                    eventName: eventName.rawValue,
                     payload: data
                 )
             )
@@ -230,7 +222,7 @@ extension PCUserSubscription {
                     return
                 }
 
-                roomToUpdate.updateWithPropertiesOfRoom(room)
+                roomToUpdate.updateWithPropertiesOf(room)
                 self.delegate?.onRoomUpdated(room: roomToUpdate)
                 self.instance.logger.log("Room updated: \(room.name)", logLevel: .verbose)
             }
@@ -243,9 +235,9 @@ extension PCUserSubscription {
     fileprivate func parseRoomDeletedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
         guard let roomID = data["room_id"] as? String else {
             self.delegate?.onError(
-                error: PCAPIEventError.keyNotPresentInEventPayload(
+                error: PCSubscriptionEventError.keyNotPresentInEventPayload(
                     key: "room_id",
-                    apiEventName: eventName,
+                    eventName: eventName.rawValue,
                     payload: data
                 )
             )
@@ -266,25 +258,6 @@ extension PCUserSubscription {
 
             self.delegate?.onRoomDeleted(room: deletedRoom)
             self.instance.logger.log("Room deleted: \(deletedRoom.name)", logLevel: .verbose)
-        }
-    }
-}
-
-public enum PCAPIEventError: Error {
-    case eventTypeNameMissingInAPIEventPayload([String: Any])
-    case apiEventDataMissingInAPIEventPayload([String: Any])
-    case keyNotPresentInEventPayload(key: String, apiEventName: PCAPIEventName, payload: [String: Any])
-}
-
-extension PCAPIEventError: LocalizedError {
-    public var errorDescription: String? {
-        switch self {
-        case let .eventTypeNameMissingInAPIEventPayload(payload):
-            return "Event type missing in API event payload: \(payload)"
-        case let .apiEventDataMissingInAPIEventPayload(payload):
-            return "Data missing in API event payload: \(payload)"
-        case let .keyNotPresentInEventPayload(key, apiEventName, payload):
-            return "\(key) missing in \(apiEventName.rawValue) API event payload: \(payload)"
         }
     }
 }

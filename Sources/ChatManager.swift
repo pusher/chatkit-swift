@@ -24,6 +24,8 @@ import NotificationCenter
 
     var basicCurrentUser: PCBasicCurrentUser?
 
+    var wasPreviouslyConnected: Bool = false
+
     var logger: PCLogger {
         didSet {
             connectionCoordinator.logger = logger
@@ -113,23 +115,31 @@ import NotificationCenter
             cursorsInstance: cursorsInstance,
             presenceInstance: presenceInstance,
             connectionCoordinator: connectionCoordinator,
-            delegate: delegate
+            delegate: delegate,
+            userStore: self.currentUser?.userStore,
+            roomStore: self.currentUser?.roomStore,
+            cursorStore: self.currentUser?.cursorStore
         )
 
         // TODO: This could be nicer
-        // TODO: We don't need to wait for initial user fetch here, but we are
         // TODO: Do we need to nil out subscriptions on basicCurrentUser no matter what?
-        connectionCoordinator.addConnectionCompletionHandler { cUser, error in
+        connectionCoordinator.addConnectionCompletionHandler { [weak self] cUser, error in
             guard error == nil, let cu = cUser else {
                 return
             }
 
-            cu.userSubscription = self.basicCurrentUser?.userSubscription
-            self.basicCurrentUser?.userSubscription = nil
-            cu.presenceSubscription = self.basicCurrentUser?.presenceSubscription
-            self.basicCurrentUser?.presenceSubscription = nil
-            cu.cursorSubscription = self.basicCurrentUser?.cursorSubscription
-            self.basicCurrentUser?.cursorSubscription = nil
+            guard let strongSelf = self else {
+                return
+            }
+
+            cu.userSubscription = strongSelf.basicCurrentUser?.userSubscription
+            strongSelf.basicCurrentUser?.userSubscription = nil
+            cu.presenceSubscription = strongSelf.basicCurrentUser?.presenceSubscription
+            strongSelf.basicCurrentUser?.presenceSubscription = nil
+            cu.cursorSubscription = strongSelf.basicCurrentUser?.cursorSubscription
+            strongSelf.basicCurrentUser?.cursorSubscription = nil
+
+            strongSelf.wasPreviouslyConnected = true
 
             // TODO: This is madness
             cu.userSubscription?.currentUser = cu
@@ -170,59 +180,99 @@ import NotificationCenter
                     return
                 }
 
+                var oldRooms = Set<PCRoom>()
+                var newRooms = Set<PCRoom>()
+
                 // If the currentUser property is already set then the assumption is that there was
                 // already a user subscription and so instead of setting the property to a new
                 // PCCurrentUser, we update the existing one to have the most up-to-date state
                 if let currentUser = strongSelf.currentUser {
+                    // We need to take copies of the rooms so that when we make the comparisons
+                    // of received rooms to pre-existing rooms we aren't actually just comparing
+                    // the same rooms (as PCRoom is a class and we have reference semantics)
+                    currentUser.rooms.forEach { oldRooms.insert($0.copy()) }
                     currentUser.updateWithPropertiesOf(receivedCurrentUser)
                 } else {
                     strongSelf.currentUser = receivedCurrentUser
                 }
 
-                guard roomsPayload.count > 0 else {
-                    strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
-                    return
-                }
-
-                let roomsAddedToRoomStoreProgressCounter = PCProgressCounter(
-                    totalCount: roomsPayload.count,
-                    labelSuffix: "roomstore-room-append"
-                )
-
-                var combinedRoomUserIDs = Set<String>()
-
                 roomsPayload.forEach { roomPayload in
                     do {
                         let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-
-                        combinedRoomUserIDs.formUnion(room.userIDs)
-
-                        strongSelf.currentUser!.roomStore.addOrMergeSync(room)
-                        if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
-                            strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
-                        }
+                        let addedOrMergedRoom = strongSelf.currentUser!.roomStore.addOrMergeSync(room)
+                        newRooms.insert(addedOrMergedRoom)
                     } catch let err {
                         strongSelf.instance.logger.log(
                             "Incomplete room payload in initial_state event: \(roomPayload). Error: \(err.localizedDescription)",
                             logLevel: .debug
                         )
-                        if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
-                            strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
+                    }
+                }
+
+                if strongSelf.wasPreviouslyConnected {
+                    let roomsRemovedFrom = oldRooms.subtracting(newRooms)
+                    let roomsAddedTo = newRooms.subtracting(oldRooms)
+
+                    roomsRemovedFrom.forEach { room in
+                        if let removedRoom = strongSelf.currentUser!.roomStore.removeSync(id: room.id) {
+                            delegate.onRemovedFromRoom(removedRoom)
                         }
+                    }
+                    roomsAddedTo.forEach(delegate.onAddedToRoom)
+
+                    let sharedRooms = newRooms.intersection(oldRooms)
+
+                    sharedRooms.forEach { room in
+                        if let oldRoom = oldRooms.first(where: { $0.id == room.id }), !room.deepEqual(to: oldRoom) {
+                            delegate.onRoomUpdated(room: room)
+                        }
+                    }
+                }
+
+                strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
+            }
+        )
+
+        basicCurrentUser!.establishPresenceSubscription()
+        basicCurrentUser!.establishCursorSubscription(
+            initialStateHandler: { [weak self] result in
+                guard let strongSelf = self else {
+                    return
+                }
+
+                if strongSelf.wasPreviouslyConnected, let currentUser = strongSelf.currentUser {
+                    switch result {
+                    case .error(_):
+                        return
+                    case .success(let existing, let new):
+                        reconcileCursors(
+                            new: new,
+                            old: existing,
+                            onNewReadCursorHook: { [weak currentUser] cursor in
+                                currentUser?.delegate.onNewReadCursor(cursor)
+                                // We only do this here because we currently still deliver cursor updates
+                                // about the current user over the room level onNewReadCursor hook. Once
+                                // we no longer support that then this can be removed.
+                                if let room = currentUser?.rooms.first(where: { $0.id == cursor.room.id }) {
+                                    room.subscription?.delegate?.onNewReadCursor(cursor)
+                                }
+                            }
+                        )
                     }
                 }
             }
         )
 
-        basicCurrentUser!.establishPresenceSubscription()
-        basicCurrentUser!.establishCursorSubscription()
-
-        // TODO: This being here at the end seems necessary but bad
+        // This being here at the end seems necessary but bad - we want to
+        // call the developer-provided completionHandler last because we
+        // need to have our completionHandler(s) called first to make sure
+        // everything is in the correct state
         connectionCoordinator.addConnectionCompletionHandler(completionHandler)
     }
 
     // TODO: Maybe we need some sort of ChatManagerConnectionState?
     public func disconnect() {
+        self.logger.log("Disconnect called", logLevel: .verbose)
         currentUser?.userSubscription?.end()
         currentUser?.userSubscription = nil
         currentUser?.presenceSubscription?.end()
@@ -256,6 +306,36 @@ import NotificationCenter
 
     fileprivate func informConnectionCoordinatorOfCurrentUserCompletion(currentUser: PCCurrentUser?, error: Error?) {
         connectionCoordinator.connectionEventCompleted(PCConnectionEvent(currentUser: currentUser, error: error))
+    }
+}
+
+func reconcileCursors(
+    new: [PCCursor],
+    old: [PCCursor],
+    onNewReadCursorHook: ((PCCursor) -> Void)?
+) {
+    let oldSet = Set(old)
+    let newSet = Set(new)
+
+    let newCursors = newSet.subtracting(oldSet)
+
+    newCursors.forEach { c in onNewReadCursorHook?(c) }
+
+    let commonCursors = newSet.intersection(oldSet)
+
+    commonCursors.forEach { cursor in
+        let oldCursor = oldSet.first(where: {
+            $0.type == cursor.type &&
+            $0.room == cursor.room &&
+            $0.user == cursor.user
+        })
+
+        if let oldCursor = oldCursor,
+           cursor.equalBarPositionTo(oldCursor),
+           cursor.position != oldCursor.position
+        {
+            onNewReadCursorHook?(cursor)
+        }
     }
 }
 

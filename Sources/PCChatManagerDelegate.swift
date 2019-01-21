@@ -13,6 +13,7 @@ public protocol PCChatManagerDelegate: AnyObject {
     func onUserJoinedRoom(_ room: PCRoom, user: PCUser)
     func onUserLeftRoom(_ room: PCRoom, user: PCUser)
     func onPresenceChanged(stateChange: PCPresenceStateChange, user: PCUser)
+    func onNewReadCursor(_ cursor: PCCursor)
 
     // TODO: Is this the best way of communicating errors? What errors are
     // communicated using this?
@@ -29,5 +30,6 @@ public extension PCChatManagerDelegate {
     func onUserJoinedRoom(_ room: PCRoom, user: PCUser) {}
     func onUserLeftRoom(_ room: PCRoom, user: PCUser) {}
     func onPresenceChanged(stateChange: PCPresenceStateChange, user: PCUser) {}
+    func onNewReadCursor(_ cursor: PCCursor) {}
     func onError(error: Error) {}
 }

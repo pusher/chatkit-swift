@@ -13,7 +13,7 @@ public final class PCTokenProvider: PPTokenProvider {
 
     public var logger: PPLogger? {
         willSet {
-            self.internalTokenProvider.logger = newValue
+            self.internalTokenProvider?.logger = newValue
         }
     }
 
@@ -24,23 +24,7 @@ public final class PCTokenProvider: PPTokenProvider {
         return req
     }
 
-    lazy var internalTokenProvider: PCHTTPTokenProvider = {
-        return PCHTTPTokenProvider(
-            url: url,
-            requestInjector: { req -> PCTokenProviderRequest in
-                guard let userID = self.userID else {
-                    return self.requestInjector != nil ? self.requestInjector!(req) : req
-                }
-
-                if let customRequestInjector = self.requestInjector {
-                    return self.userIDRequestInjector(customRequestInjector(req), userID)
-                }
-
-                return self.userIDRequestInjector(req, userID)
-            },
-            retryStrategy: retryStrategy
-        )
-    }()
+    var internalTokenProvider: PCHTTPTokenProvider? = nil
 
     public init(
         url: String,
@@ -63,14 +47,41 @@ public final class PCTokenProvider: PPTokenProvider {
                 return
             }
 
+            let tokenProvider = self.internalTokenProvider ?? self.createInternalTokenProvider()
+
             self.fetchingToken = true
 
-            self.internalTokenProvider.fetchToken { result in
+            tokenProvider.fetchToken { result in
                 completionHandler(result)
                 self.queuedTokenRecipients.forEach { $0(result) }
                 self.queuedTokenRecipients = []
                 self.fetchingToken = false
             }
         }
+    }
+
+    fileprivate func createInternalTokenProvider() -> PCHTTPTokenProvider {
+        let tokenProvider = PCHTTPTokenProvider(
+            url: self.url,
+            requestInjector: { [weak self] req -> PCTokenProviderRequest in
+                guard let strongSelf = self else {
+                    return req
+                }
+
+                guard let userID = strongSelf.userID else {
+                    return strongSelf.requestInjector != nil ? strongSelf.requestInjector!(req) : req
+                }
+
+                if let customRequestInjector = strongSelf.requestInjector {
+                    return strongSelf.userIDRequestInjector(customRequestInjector(req), userID)
+                }
+
+                return strongSelf.userIDRequestInjector(req, userID)
+            },
+            retryStrategy: self.retryStrategy
+        )
+
+        self.internalTokenProvider = tokenProvider
+        return tokenProvider
     }
 }

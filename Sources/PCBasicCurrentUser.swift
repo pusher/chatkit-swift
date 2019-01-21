@@ -31,7 +31,10 @@ public final class PCBasicCurrentUser {
         cursorsInstance: Instance,
         presenceInstance: Instance,
         connectionCoordinator: PCConnectionCoordinator,
-        delegate: PCChatManagerDelegate
+        delegate: PCChatManagerDelegate,
+        userStore: PCGlobalUserStore? = nil,
+        roomStore: PCRoomStore? = nil,
+        cursorStore: PCCursorStore? = nil
     ) {
         self.id = id
         self.pathFriendlyID = pathFriendlyID
@@ -43,13 +46,15 @@ public final class PCBasicCurrentUser {
         self.connectionCoordinator = connectionCoordinator
         self.delegate = delegate
 
-        let rooms = PCSynchronizedArray<PCRoom>()
-        self.userStore = PCGlobalUserStore(instance: instance)
-        self.roomStore = PCRoomStore(rooms: rooms, instance: instance)
-        self.cursorStore = PCCursorStore(
+        let us = userStore ?? PCGlobalUserStore(instance: instance)
+        let rs = roomStore ?? PCRoomStore(rooms: PCSynchronizedArray<PCRoom>(), instance: instance)
+        self.userStore = us
+        self.roomStore = rs
+
+        self.cursorStore = cursorStore ?? PCCursorStore(
             instance: instance,
-            roomStore: roomStore,
-            userStore: userStore
+            roomStore: rs,
+            userStore: us
         )
     }
 
@@ -131,7 +136,7 @@ public final class PCBasicCurrentUser {
         )
     }
 
-    func establishCursorSubscription() {
+    func establishCursorSubscription(initialStateHandler: @escaping (InitialStateResult<PCCursor>) -> Void) {
         let userCursorSubscriptionPath = "/cursors/\(PCCursorType.read.rawValue)/users/\(self.pathFriendlyID)"
         let cursorSubscriptionRequestOptions = PPRequestOptions(
             method: HTTPMethod.SUBSCRIBE.rawValue,
@@ -148,17 +153,36 @@ public final class PCBasicCurrentUser {
             cursorStore: cursorStore,
             connectionCoordinator: self.connectionCoordinator,
             logger: self.cursorsInstance.logger,
-            initialStateHandler: { [unowned self] err in
-                if let err = err {
-                    self.cursorsInstance.logger.log(err.localizedDescription, logLevel: .debug)
+            onNewReadCursorHook: { [weak delegate] cursor in
+                delegate?.onNewReadCursor(cursor)
+            },
+            initialStateHandler: { [weak self] result in
+                guard let strongSelf = self else {
+                    return
                 }
-                // TODO: Should the connection coordinator get the error here?
-                // Do we care if a single (in this weird case, only the last to be received)
-                // basic cursor can't be enriched with information about its room and/or user?
-                // We probably just want to log something
-                self.connectionCoordinator.connectionEventCompleted(
-                    PCConnectionEvent(cursorSubscription: self.cursorSubscription, error: nil)
-                )
+
+                switch result {
+                case .error(let err):
+                    strongSelf.cursorsInstance.logger.log(err.localizedDescription, logLevel: .debug)
+
+                    // TODO: Should the connection coordinator get the error here?
+                    // Do we care if a single (in this weird case, only the last to be received)
+                    // basic cursor can't be enriched with information about its room and/or user?
+                    // We probably just want to log something
+                    strongSelf.connectionCoordinator.connectionEventCompleted(
+                        PCConnectionEvent(cursorSubscription: strongSelf.cursorSubscription, error: nil)
+                    )
+                case .success(_, _):
+                    // This needs to be called before the connection event is sent to the
+                    // connectionCoordinator to ensure that the state of the cursor store
+                    // is accurate before the currentUser object can be yielded to the
+                    // end-user's code
+                    initialStateHandler(result)
+
+                    strongSelf.connectionCoordinator.connectionEventCompleted(
+                        PCConnectionEvent(cursorSubscription: strongSelf.cursorSubscription, error: nil)
+                    )
+                }
             }
         )
 

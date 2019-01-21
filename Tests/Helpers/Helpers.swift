@@ -8,7 +8,7 @@ enum TestHelperError: Error {
 
 public struct TestLogger: PCLogger {
     public func log(_ message: @autoclosure @escaping () -> String, logLevel: PCLogLevel) {
-        guard logLevel > .debug else { return }
+        guard logLevel >= .info else { return }
         print("\(message())")
     }
 }
@@ -57,6 +57,64 @@ func createUser(
 
         TestLogger().log("User \(id) created successfully!", logLevel: .debug)
         completionHandler(nil)
+    }.resume()
+}
+
+func updateUser(
+    id: String,
+    name: String? = nil,
+    avatarURL: String? = nil,
+    customData: [String: Any]? = nil,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    var userObject = [String: Any]()
+
+    if name != nil {
+        userObject["name"] = name!
+    }
+
+    if avatarURL != nil {
+        userObject["avatar_url"] = avatarURL!
+    }
+
+    if customData != nil {
+        userObject["custom_data"] = customData!
+    }
+
+    guard JSONSerialization.isValidJSONObject(userObject) else {
+        completionHandler(.generic("Invalid userObject \(userObject.debugDescription)"))
+        return
+    }
+
+    guard let data = try? JSONSerialization.data(withJSONObject: userObject, options: []) else {
+        completionHandler(.generic("Failed to JSON serialize userObject \(userObject.debugDescription)"))
+        return
+    }
+
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v2", "users/\(id)"))
+    request.httpMethod = "PUT"
+    request.httpBody = data
+    request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error updating user: \(error!.localizedDescription)"))
+            return
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            completionHandler(.generic("Error updating user"))
+            return
+        }
+
+        if 200..<300 ~= httpResponse.statusCode {
+            TestLogger().log("User \(id) updated successfully!", logLevel: .debug)
+            completionHandler(nil)
+        } else {
+            let errorDesc = error?.localizedDescription ?? "no error"
+            completionHandler(.generic("Error updating user: status \(httpResponse.statusCode), error: \(errorDesc)"))
+        }
     }.resume()
 }
 
@@ -132,7 +190,7 @@ func createRole(
         return
     }
 
-    var request = URLRequest(url: testInstanceServiceURL(.authorizer, "v1", "roles"))
+    var request = URLRequest(url: testInstanceServiceURL(.authorizer, "v2", "roles"))
     request.httpMethod = "POST"
     request.httpBody = data
     request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
@@ -166,7 +224,7 @@ func assignGlobalRole(
         return
     }
 
-    var request = URLRequest(url: testInstanceServiceURL(.authorizer, "v1", "users/\(userID)/roles"))
+    var request = URLRequest(url: testInstanceServiceURL(.authorizer, "v2", "users/\(userID)/roles"))
     request.httpMethod = "PUT"
     request.httpBody = data
     request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
@@ -184,7 +242,7 @@ func assignGlobalRole(
 }
 
 func testInstanceServiceURL(_ service: ChatkitService, _ version: String = "v1", _ path: String) -> URL {
-    return serviceURL(instanceLocator: testInstanceLocator, service: service, path: path)
+    return serviceURL(instanceLocator: testInstanceLocator, service: service, path: path, version: version)
 }
 
 func serviceURL(instanceLocator: String, service: ChatkitService, path: String, version: String = "v1") -> URL {
@@ -224,30 +282,244 @@ func newTestChatManager(
 }
 
 func createRoom(
-    user: PCCurrentUser,
-    roomName: String,
-    isPrivate: Bool = false,
-    addUserIDs userIDs: [String] = []
-) throws -> PCRoom {
-    var room: PCRoom!
-    var error: Error?
+    creatorID: String,
+    name: String,
+    isPrivate: Bool? = nil,
+    customData: [String: Any]? = nil,
+    addUserIDs userIDs: [String]? = nil,
+    completionHandler: @escaping (TestHelperError?, Data?) -> Void
+) {
+    var roomObject: [String: Any] = ["name": name]
 
-    let group = DispatchGroup()
-    group.enter()
-
-    user.createRoom(name: roomName, isPrivate: isPrivate, addUserIDs: userIDs) { r, e in
-        room = r
-        error = e
-        group.leave()
+    if isPrivate != nil {
+        roomObject["private"] = isPrivate!
     }
 
-    group.wait()
-
-    if let e = error {
-        throw e
+    if customData != nil {
+        roomObject["custom_data"] = customData!
     }
 
-    return room
+    if userIDs != nil && userIDs!.count > 0 {
+        roomObject["user_ids"] = userIDs
+    }
+
+    guard JSONSerialization.isValidJSONObject(roomObject) else {
+        completionHandler(.generic("Invalid roomObject \(roomObject.debugDescription)"), nil)
+        return
+    }
+
+    guard let data = try? JSONSerialization.data(withJSONObject: roomObject, options: []) else {
+        completionHandler(.generic("Failed to JSON serialize roomObject \(roomObject.debugDescription)"), nil)
+        return
+    }
+
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v2", "rooms"))
+    request.httpMethod = "POST"
+    request.httpBody = data
+    request.addValue("Bearer \(generateSuperuserToken(sub: creatorID))", forHTTPHeaderField: "Authorization")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error creating room: \(error!.localizedDescription)"), nil)
+            return
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            completionHandler(.generic("Error creating room"), nil)
+            return
+        }
+
+        if 200..<300 ~= httpResponse.statusCode {
+            TestLogger().log("Room created successfully!", logLevel: .debug)
+            completionHandler(nil, data)
+        } else {
+            let errorDesc = error?.localizedDescription ?? "no error"
+            completionHandler(.generic("Error creating room: status \(httpResponse.statusCode), error: \(errorDesc)"), nil)
+        }
+    }.resume()
+}
+
+
+func updateRoom(
+    id: String,
+    name: String? = nil,
+    isPrivate: Bool? = nil,
+    customData: [String: Any]? = nil,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    var roomObject = [String: Any]()
+
+    if name != nil {
+        roomObject["name"] = name!
+    }
+
+    if isPrivate != nil {
+        roomObject["private"] = isPrivate!
+    }
+
+    if customData != nil {
+        roomObject["custom_data"] = customData!
+    }
+
+    guard JSONSerialization.isValidJSONObject(roomObject) else {
+        completionHandler(.generic("Invalid roomObject \(roomObject.debugDescription)"))
+        return
+    }
+
+    guard let data = try? JSONSerialization.data(withJSONObject: roomObject, options: []) else {
+        completionHandler(.generic("Failed to JSON serialize roomObject \(roomObject.debugDescription)"))
+        return
+    }
+
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v2", "rooms/\(id)"))
+    request.httpMethod = "PUT"
+    request.httpBody = data
+    request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error updating room: \(error!.localizedDescription)"))
+            return
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            completionHandler(.generic("Error updating room"))
+            return
+        }
+
+        if 200..<300 ~= httpResponse.statusCode {
+            TestLogger().log("Room \(id) updated successfully!", logLevel: .debug)
+            completionHandler(nil)
+        } else {
+            let errorDesc = error?.localizedDescription ?? "no error"
+            completionHandler(.generic("Error updating room: status \(httpResponse.statusCode), error: \(errorDesc)"))
+        }
+    }.resume()
+}
+
+func setReadCursor(
+    userID: String,
+    roomID: String,
+    position: Int,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    let cursorObject = ["position": position]
+
+    guard JSONSerialization.isValidJSONObject(cursorObject) else {
+        completionHandler(.generic("Invalid cursorObject \(cursorObject.debugDescription)"))
+        return
+    }
+
+    guard let data = try? JSONSerialization.data(withJSONObject: cursorObject, options: []) else {
+        completionHandler(.generic("Failed to JSON serialize cursorObject \(cursorObject.debugDescription)"))
+        return
+    }
+
+    let path = "/cursors/\(PCCursorType.read.rawValue)/rooms/\(roomID)/users/\(userID)"
+    var request = URLRequest(url: testInstanceServiceURL(.cursors, "v2", path))
+    request.httpMethod = "PUT"
+    request.httpBody = data
+    request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error setting read cursor: \(error!.localizedDescription)"))
+            return
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            completionHandler(.generic("Error setting read cursor"))
+            return
+        }
+
+        if 200..<300 ~= httpResponse.statusCode {
+            TestLogger().log("Read cursor set successfully!", logLevel: .debug)
+            completionHandler(nil)
+        } else {
+            let errorDesc = error?.localizedDescription ?? "no error"
+            completionHandler(.generic("Error setting read cursor: status \(httpResponse.statusCode), error: \(errorDesc)"))
+        }
+    }.resume()
+}
+
+func addUserToRoom(
+    roomID: String,
+    userID: String,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    addOrRemoveUsers(
+        roomID: roomID,
+        userIDs: [userID],
+        membershipChange: .add,
+        completionHandler: completionHandler
+    )
+}
+
+func removeUserFromRoom(
+    roomID: String,
+    userID: String,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    addOrRemoveUsers(
+        roomID: roomID,
+        userIDs: [userID],
+        membershipChange: .remove,
+        completionHandler: completionHandler
+    )
+}
+
+fileprivate enum PCUserMembershipChange: String {
+    case add
+    case remove
+}
+
+fileprivate func addOrRemoveUsers(
+    roomID: String,
+    userIDs: [String],
+    membershipChange: PCUserMembershipChange,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    let userPayload = ["user_ids": userIDs]
+
+    guard JSONSerialization.isValidJSONObject(userPayload) else {
+        completionHandler(.generic("Invalid userPayload \(userPayload.debugDescription)"))
+        return
+    }
+
+    guard let data = try? JSONSerialization.data(withJSONObject: userPayload, options: []) else {
+        completionHandler(.generic("Failed to JSON serialize userPayload \(userPayload.debugDescription)"))
+        return
+    }
+
+    let path = "/rooms/\(roomID)/users/\(membershipChange.rawValue)"
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v2", path))
+    request.httpMethod = "PUT"
+    request.httpBody = data
+    request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error making room membership change: \(error!.localizedDescription)"))
+            return
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            completionHandler(.generic("Error making room membership change"))
+            return
+        }
+
+        if 200..<300 ~= httpResponse.statusCode {
+            TestLogger().log("Room membership change completed successfully!", logLevel: .debug)
+            completionHandler(nil)
+        } else {
+            let errorDesc = error?.localizedDescription ?? "no error"
+            completionHandler(.generic("Error making room membership change: status \(httpResponse.statusCode), error: \(errorDesc)"))
+        }
+    }.resume()
 }
 
 func dataSubscriptionEventFor(_ eventJSON: String) -> Data {

@@ -8,7 +8,7 @@ public final class PCGlobalUserStore {
     }
 
     public internal(set) var userStoreCore: PCUserStoreCore
-    let instance: Instance
+    unowned let instance: Instance
     var onUserStoredHooks: [(PCUser) -> Void]
 
     init(userStoreCore: PCUserStoreCore = PCUserStoreCore(), instance: Instance) {

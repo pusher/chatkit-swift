@@ -22,37 +22,37 @@ class TypingIndicatorTests: XCTestCase {
         deleteInstanceResources() { err in
             XCTAssertNil(err)
             deleteResourcesEx.fulfill()
+        }
 
-            createStandardInstanceRoles() { err in
+        wait(for: [deleteResourcesEx], timeout: 15)
+
+        createStandardInstanceRoles() { err in
+            XCTAssertNil(err)
+            createRolesEx.fulfill()
+        }
+
+        createUser(id: "alice") { err in
+            XCTAssertNil(err)
+            createAliceEx.fulfill()
+        }
+
+        createUser(id: "bob") { err in
+            XCTAssertNil(err)
+            createBobEx.fulfill()
+        }
+
+        wait(for: [createRolesEx, createAliceEx, createBobEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+            XCTAssertNil(err)
+            alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
                 XCTAssertNil(err)
-                createRolesEx.fulfill()
-            }
-
-            createUser(id: "alice") { err in
-                XCTAssertNil(err)
-                createAliceEx.fulfill()
-            }
-
-            createUser(id: "bob") { err in
-                XCTAssertNil(err)
-                createBobEx.fulfill()
-            }
-
-            // TODO the following should really wait until we know both Alice
-            // and Bob exist... for now, sleep!
-            sleep(1)
-
-            self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
-                XCTAssertNil(err)
-                alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
-                    XCTAssertNil(err)
-                    self.roomID = room!.id
-                    createRoomEx.fulfill()
-                }
+                self.roomID = room!.id
+                createRoomEx.fulfill()
             }
         }
 
-        waitForExpectations(timeout: 15)
+        wait(for: [createRoomEx], timeout: 15)
     }
 
     override func tearDown() {

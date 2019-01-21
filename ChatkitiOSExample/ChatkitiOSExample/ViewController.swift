@@ -128,7 +128,7 @@ extension ViewController: PCRoomDelegate {
         print("\(user.displayName)'s presence state went from \(stateChange.previous.rawValue) to \(stateChange.current.rawValue)")
     }
 
-    func onNewCursor(_ cursor: PCCursor) {
+    func onNewReadCursor(_ cursor: PCCursor) {
         print("New cursor for \(cursor.user.displayName) at position \(cursor.position)")
     }
 

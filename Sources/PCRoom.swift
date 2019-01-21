@@ -12,8 +12,8 @@ public final class PCRoom {
     public internal(set) var customData: [String: Any]?
 
     public internal(set) var subscription: PCRoomSubscription?
-
     public internal(set) var userIDs: Set<String>
+    var subscriptionPreviouslyEstablished = false
 
     // TODO: Should each Room instead have access to the user store and then the users
     // property would become a func with a completion handler that queried the user store
@@ -66,13 +66,39 @@ public final class PCRoom {
         self.userStore = PCRoomUserStore()
     }
 
-    func updateWithPropertiesOfRoom(_ room: PCRoom) {
+    func removeUser(id: String) {
+        let roomUserIDIndex = userIDs.index(of: id)
+
+        if let indexToRemove = roomUserIDIndex {
+            userIDs.remove(at: indexToRemove)
+        }
+
+        userStore.remove(id: id)
+    }
+
+    func deepEqual(to room: PCRoom) -> Bool {
+        return
+            self.name == room.name &&
+            self.isPrivate == room.isPrivate &&
+            (
+                (self.customData == nil && room.customData == nil) ||
+                (self.customData != nil && room.customData != nil &&
+                    (self.customData! as NSDictionary).isEqual(to: room.customData!)
+                )
+            )
+    }
+}
+
+extension PCRoom: PCUpdatable {
+    @discardableResult
+    func updateWithPropertiesOf(_ room: PCRoom) -> PCRoom {
         self.name = room.name
         self.isPrivate = room.isPrivate
         self.updatedAt = room.updatedAt
         self.customData = room.customData
         self.userIDs = room.userIDs
         self.deletedAt = room.deletedAt
+        return self
     }
 }
 
@@ -81,7 +107,7 @@ extension PCRoom: Hashable {
         return self.id.hashValue
     }
 
-    public static func ==(_ lhs: PCRoom, _ rhs: PCRoom) -> Bool {
+    public static func ==(lhs: PCRoom, rhs: PCRoom) -> Bool {
         return lhs.id == rhs.id
     }
 }
@@ -89,5 +115,18 @@ extension PCRoom: Hashable {
 extension PCRoom: CustomDebugStringConvertible {
     public var debugDescription: String {
         return "ID: \(self.id) Name: \(self.name) Private: \(self.isPrivate)"
+    }
+}
+
+extension PCRoom {
+    func copy() -> PCRoom {
+        return PCRoom(
+            id: self.id,
+            name: self.name,
+            isPrivate: self.isPrivate,
+            createdByUserID: self.createdByUserID,
+            createdAt: self.createdAt,
+            updatedAt: self.updatedAt
+        )
     }
 }

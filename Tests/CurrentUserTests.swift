@@ -102,7 +102,7 @@ class CurrentUserTests: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectations(timeout: 2)
+        waitForExpectations(timeout: 15)
     }
 
 }

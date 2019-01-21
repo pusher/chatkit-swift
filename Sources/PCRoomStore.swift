@@ -4,7 +4,7 @@ import PusherPlatform
 public final class PCRoomStore {
 
     public var rooms: PCSynchronizedArray<PCRoom>
-    public let instance: Instance
+    public unowned let instance: Instance
 
     public init(rooms: PCSynchronizedArray<PCRoom>, instance: Instance) {
         self.rooms = rooms
@@ -16,30 +16,24 @@ public final class PCRoomStore {
     }
 
     func addOrMerge(_ room: PCRoom, completionHandler: @escaping (PCRoom) -> Void) {
-
-        // TODO: Maybe we need to create a synchronisation point here? Or maybe changing the
-        // rooms to be an ordered set would make it easier?
-
-        if let existingRoom = self.rooms.first(where: { $0.id == room.id }) {
-            existingRoom.updateWithPropertiesOfRoom(room)
-            completionHandler(existingRoom)
-        } else {
-            self.rooms.appendAndComplete(room, completionHandler: completionHandler)
-        }
+        self.rooms.appendOrUpdate(
+            room,
+            predicate: { $0.id == room.id },
+            completionHandler: completionHandler
+        )
     }
 
     @discardableResult
     func addOrMergeSync(_ room: PCRoom) -> PCRoom {
-        if let existingRoom = self.rooms.first(where: { $0.id == room.id }) {
-            existingRoom.updateWithPropertiesOfRoom(room)
-            return existingRoom
-        } else {
-            return self.rooms.appendSync(room)
-        }
+        return self.rooms.appendOrUpdateSync(room, predicate: { $0.id == room.id })
     }
 
     func remove(id: String, completionHandler: ((PCRoom?) -> Void)? = nil) {
         return self.rooms.remove(where: { $0.id == id }, completionHandler: completionHandler)
+    }
+
+    func removeSync(id: String) -> PCRoom? {
+        return self.rooms.removeSync(where: { $0.id == id })
     }
 
     func findOrGetRoom(id: String, completionHandler: @escaping (PCRoom?, Error?) -> Void) {

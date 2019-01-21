@@ -21,26 +21,26 @@ class RoomMembershipTests: XCTestCase {
         deleteInstanceResources() { err in
             XCTAssertNil(err)
             deleteResourcesEx.fulfill()
-
-            createStandardInstanceRoles() { err in
-                XCTAssertNil(err)
-                createRolesEx.fulfill()
-            }
-
-            createUser(id: "alice") { err in
-                XCTAssertNil(err)
-                createAliceEx.fulfill()
-            }
-
-            createUser(id: "bob") { err in
-                XCTAssertNil(err)
-                createBobEx.fulfill()
-            }
-
-            sleep(1)
         }
 
-        waitForExpectations(timeout: 15)
+        wait(for: [deleteResourcesEx], timeout: 15)
+
+        createStandardInstanceRoles() { err in
+            XCTAssertNil(err)
+            createRolesEx.fulfill()
+        }
+
+        createUser(id: "alice") { err in
+            XCTAssertNil(err)
+            createAliceEx.fulfill()
+        }
+
+        createUser(id: "bob") { err in
+            XCTAssertNil(err)
+            createBobEx.fulfill()
+        }
+
+        wait(for: [createRolesEx, createAliceEx, createBobEx], timeout: 15)
     }
 
     override func tearDown() {

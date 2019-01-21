@@ -2,33 +2,33 @@ import Foundation
 import PusherPlatform
 
 public final class PCMembershipSubscription {
-    public weak var delegate: PCRoomDelegate?
     let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore
     public let roomStore: PCRoomStore
     public var logger: PPLogger
-    var initialStateHandler: (Error?) -> Void
-    weak var chatManagerDelegate: PCChatManagerDelegate?
+    let onUserJoinedHook: (PCUser) -> Void
+    let onUserLeftHook: (PCUser) -> Void
+    var initialStateHandler: (InitialStateResult<PCUser>) -> Void
 
     let roomID: String
 
     init(
         roomID: String,
-        delegate: PCRoomDelegate? = nil,
-        chatManagerDelegate: PCChatManagerDelegate? = nil,
         resumableSubscription: PPResumableSubscription,
         userStore: PCGlobalUserStore,
         roomStore: PCRoomStore,
         logger: PPLogger,
-        initialStateHandler: @escaping (Error?) -> Void
+        onUserJoinedHook: @escaping (PCUser) -> Void,
+        onUserLeftHook: @escaping (PCUser) -> Void,
+        initialStateHandler: @escaping (InitialStateResult<PCUser>) -> Void
     ) {
         self.roomID = roomID
-        self.delegate = delegate
-        self.chatManagerDelegate = chatManagerDelegate
         self.resumableSubscription = resumableSubscription
         self.userStore = userStore
         self.roomStore = roomStore
         self.logger = logger
+        self.onUserJoinedHook = onUserJoinedHook
+        self.onUserLeftHook = onUserLeftHook
         self.initialStateHandler = initialStateHandler
     }
 
@@ -94,7 +94,7 @@ extension PCMembershipSubscription {
             }
 
             guard let room = room, err == nil else {
-                strongSelf.initialStateHandler(err!)
+                strongSelf.initialStateHandler(.error(err!))
                 return
             }
 
@@ -105,16 +105,26 @@ extension PCMembershipSubscription {
                 }
 
                 guard let users = users, err == nil else {
-                    strongSelf.initialStateHandler(err!)
+                    strongSelf.initialStateHandler(.error(err!))
                     return
                 }
+
+                let existingUsers = room.userStore.users.map { $0.copy() }
+
+                let oldSet = Set(existingUsers)
+                let newSet = Set(users)
+                let membersRemoved = oldSet.subtracting(newSet)
 
                 users.forEach { user in
                     let addedOrMergedUser = room.userStore.addOrMerge(user)
                     room.userIDs.insert(addedOrMergedUser.id)
                 }
 
-                strongSelf.initialStateHandler(nil)
+                membersRemoved.forEach { m in
+                    room.userStore.remove(id: m.id)
+                }
+
+                strongSelf.initialStateHandler(.success(existing: existingUsers, new: users))
             }
         }
     }
@@ -162,8 +172,7 @@ extension PCMembershipSubscription {
                 let addedOrMergedUser = room.userStore.addOrMerge(user)
                 room.userIDs.insert(addedOrMergedUser.id)
 
-                strongSelf.delegate?.onUserJoined(user: addedOrMergedUser)
-                strongSelf.chatManagerDelegate?.onUserJoinedRoom(room, user: user)
+                strongSelf.onUserJoinedHook(user)
                 strongSelf.logger.log("User \(user.displayName) joined room: \(room.name)", logLevel: .verbose)
             }
         }
@@ -209,16 +218,9 @@ extension PCMembershipSubscription {
                     return
                 }
 
-                let roomUserIDIndex = room.userIDs.index(of: user.id)
+                room.removeUser(id: user.id)
 
-                if let indexToRemove = roomUserIDIndex {
-                    room.userIDs.remove(at: indexToRemove)
-                }
-
-                room.userStore.remove(id: user.id)
-
-                strongSelf.delegate?.onUserLeft(user: user)
-                strongSelf.chatManagerDelegate?.onUserLeftRoom(room, user: user)
+                strongSelf.onUserLeftHook(user)
                 strongSelf.logger.log("User \(user.displayName) left room: \(room.name)", logLevel: .verbose)
             }
         }
