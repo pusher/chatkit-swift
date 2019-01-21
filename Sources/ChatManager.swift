@@ -180,7 +180,8 @@ import NotificationCenter
                     return
                 }
 
-                var existingRooms: [PCRoom] = []
+                var oldRooms = Set<PCRoom>()
+                var newRooms = Set<PCRoom>()
 
                 // If the currentUser property is already set then the assumption is that there was
                 // already a user subscription and so instead of setting the property to a new
@@ -189,70 +190,46 @@ import NotificationCenter
                     // We need to take copies of the rooms so that when we make the comparisons
                     // of received rooms to pre-existing rooms we aren't actually just comparing
                     // the same rooms (as PCRoom is a class and we have reference semantics)
-                    existingRooms = currentUser.rooms.map { $0.copy() }
+                    currentUser.rooms.forEach { oldRooms.insert($0.copy()) }
                     currentUser.updateWithPropertiesOf(receivedCurrentUser)
                 } else {
                     strongSelf.currentUser = receivedCurrentUser
                 }
 
-                guard roomsPayload.count > 0 else {
-                    if strongSelf.wasPreviouslyConnected {
-                        reconcileRooms(
-                            old: existingRooms,
-                            new: [],
-                            roomStore: strongSelf.currentUser!.roomStore,
-                            delegate: delegate
-                        )
-                    }
-                    strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
-                    return
-                }
-
-                let roomsAddedToRoomStoreProgressCounter = PCProgressCounter(
-                    totalCount: roomsPayload.count,
-                    labelSuffix: "roomstore-room-append"
-                )
-
-                var combinedRoomUserIDs = Set<String>()
-                var newRooms: [PCRoom] = []
-
                 roomsPayload.forEach { roomPayload in
                     do {
                         let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-
-                        combinedRoomUserIDs.formUnion(room.userIDs)
-
                         let addedOrMergedRoom = strongSelf.currentUser!.roomStore.addOrMergeSync(room)
-                        newRooms.append(addedOrMergedRoom)
-                        if roomsAddedToRoomStoreProgressCounter.incrementSuccessAndCheckIfFinished() {
-                            if strongSelf.wasPreviouslyConnected {
-                                reconcileRooms(
-                                    old: existingRooms,
-                                    new: newRooms,
-                                    roomStore: strongSelf.currentUser!.roomStore,
-                                    delegate: delegate
-                                )
-                            }
-                            strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
-                        }
+                        newRooms.insert(addedOrMergedRoom)
                     } catch let err {
                         strongSelf.instance.logger.log(
                             "Incomplete room payload in initial_state event: \(roomPayload). Error: \(err.localizedDescription)",
                             logLevel: .debug
                         )
-                        if roomsAddedToRoomStoreProgressCounter.incrementFailedAndCheckIfFinished() {
-                            if strongSelf.wasPreviouslyConnected {
-                                reconcileRooms(
-                                    old: existingRooms,
-                                    new: newRooms,
-                                    roomStore: strongSelf.currentUser!.roomStore,
-                                    delegate: delegate
-                                )
-                            }
-                            strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
+                    }
+                }
+
+                if strongSelf.wasPreviouslyConnected {
+                    let roomsRemovedFrom = oldRooms.subtracting(newRooms)
+                    let roomsAddedTo = newRooms.subtracting(oldRooms)
+
+                    roomsRemovedFrom.forEach { room in
+                        if let removedRoom = strongSelf.currentUser!.roomStore.removeSync(id: room.id) {
+                            delegate.onRemovedFromRoom(removedRoom)
+                        }
+                    }
+                    roomsAddedTo.forEach(delegate.onAddedToRoom)
+
+                    let sharedRooms = newRooms.intersection(oldRooms)
+
+                    sharedRooms.forEach { room in
+                        if let oldRoom = oldRooms.first(where: { $0.id == room.id }), !room.deepEqual(to: oldRoom) {
+                            delegate.onRoomUpdated(room: room)
                         }
                     }
                 }
+
+                strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
             }
         )
 
@@ -329,35 +306,6 @@ import NotificationCenter
 
     fileprivate func informConnectionCoordinatorOfCurrentUserCompletion(currentUser: PCCurrentUser?, error: Error?) {
         connectionCoordinator.connectionEventCompleted(PCConnectionEvent(currentUser: currentUser, error: error))
-    }
-}
-
-func reconcileRooms(
-    old: [PCRoom],
-    new: [PCRoom],
-    roomStore: PCRoomStore,
-    delegate: PCChatManagerDelegate
-) {
-    let oldSet = Set(old)
-    let newSet = Set(new)
-
-    let roomsRemovedFrom = oldSet.subtracting(newSet)
-    let roomsAddedTo = newSet.subtracting(oldSet)
-
-    roomsRemovedFrom.forEach { room in
-        let removedRoom = roomStore.removeSync(id: room.id)
-        if removedRoom != nil {
-            delegate.onRemovedFromRoom(room)
-        }
-    }
-    roomsAddedTo.forEach(delegate.onAddedToRoom)
-
-    let sharedRooms = newSet.intersection(oldSet)
-
-    sharedRooms.forEach { room in
-        if let oldRoom = oldSet.first(where: { $0.id == room.id }), !room.deepEqual(to: oldRoom) {
-            delegate.onRoomUpdated(room: room)
-        }
     }
 }
 
