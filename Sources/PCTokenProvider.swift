@@ -80,6 +80,7 @@ public final class PCTokenProvider: PPTokenProvider {
             },
             retryStrategy: self.retryStrategy
         )
+        tokenProvider.logger = self.logger
 
         self.internalTokenProvider = tokenProvider
         return tokenProvider
