@@ -90,14 +90,14 @@ import NotificationCenter
         )
 
         self.connectionCoordinator = PCConnectionCoordinator(logger: logger)
+        self.userID = userID
+        let pathUserID = pathFriendlyVersion(of: userID)
+        self.pathFriendlyUserID = pathUserID
 
         if let tokenProvider = tokenProvider as? PCTokenProvider {
-            tokenProvider.userID = userID
+            tokenProvider.userID = pathUserID
             tokenProvider.logger = logger
         }
-
-        self.userID = userID
-        self.pathFriendlyUserID = pathFriendlyVersion(of: userID)
     }
 
     public func connect(
