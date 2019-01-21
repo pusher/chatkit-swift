@@ -13,14 +13,8 @@ public final class PCUser {
         return pathFriendlyVersion(of: self.id)
     }()
 
-    private lazy var dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        return dateFormatter
-    }()
-
-    public var createdAtDate: Date { return self.dateFormatter.date(from: self.createdAt)! }
-    public var updatedAtDate: Date { return self.dateFormatter.date(from: self.updatedAt)! }
+    public var createdAtDate: Date { return PCDateFormatter.shared.formatString(self.createdAt) }
+    public var updatedAtDate: Date { return PCDateFormatter.shared.formatString(self.updatedAt) }
 
     public var displayName: String {
         get {
