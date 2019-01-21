@@ -33,8 +33,7 @@ public class PCCursor {
         return
             self.type == cursor.type &&
             self.room == cursor.room &&
-            self.user == cursor.user &&
-            self.position != cursor.position
+            self.user == cursor.user
     }
 }
 
