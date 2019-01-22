@@ -60,6 +60,11 @@ public final class PCRoom {
         self.userStore = PCRoomUserStore()
     }
 
+    public func unsubscribe() {
+        self.subscription?.end()
+        self.subscription = nil
+    }
+
     func removeUser(id: String) {
         let roomUserIDIndex = userIDs.index(of: id)
 
