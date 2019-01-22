@@ -15,7 +15,7 @@
 		33FD74EF200E09A8001D8185 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33FD74EE200E09A8001D8185 /* Assets.xcassets */; };
 		33FD74F2200E09A8001D8185 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33FD74F0200E09A8001D8185 /* LaunchScreen.storyboard */; };
 		372FCCEB21B1A4430062936A /* BeamsChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 372FCCEA21B1A4430062936A /* BeamsChatkit.framework */; };
-		37EFE8BD21B1A53400C09893 /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C6095D21B1A4FF00862CC9 /* PusherChatkit.framework */; };
+		374C814821F0C8BC008ECEBD /* PusherChatkit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 37C6095D21B1A4FF00862CC9 /* PusherChatkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +25,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				374C814821F0C8BC008ECEBD /* PusherChatkit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -53,7 +54,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				372FCCEB21B1A4430062936A /* BeamsChatkit.framework in Frameworks */,
-				37EFE8BD21B1A53400C09893 /* PusherChatkit.framework in Frameworks */,
 				33BA563A200E473A00FFC587 /* PusherPlatform.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
