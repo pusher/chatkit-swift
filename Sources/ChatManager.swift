@@ -90,14 +90,13 @@ import NotificationCenter
         )
 
         self.connectionCoordinator = PCConnectionCoordinator(logger: logger)
+        self.userID = userID
+        self.pathFriendlyUserID = pathFriendlyVersion(of: userID)
 
         if let tokenProvider = tokenProvider as? PCTokenProvider {
             tokenProvider.userID = userID
             tokenProvider.logger = logger
         }
-
-        self.userID = userID
-        self.pathFriendlyUserID = pathFriendlyVersion(of: userID)
     }
 
     public func connect(
@@ -272,7 +271,6 @@ import NotificationCenter
 
     // TODO: Maybe we need some sort of ChatManagerConnectionState?
     public func disconnect() {
-        self.logger.log("Disconnect called", logLevel: .verbose)
         currentUser?.userSubscription?.end()
         currentUser?.userSubscription = nil
         currentUser?.presenceSubscription?.end()

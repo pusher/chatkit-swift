@@ -63,11 +63,12 @@
 		33EE67DD20F5176800B0F0AD /* TokenGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33EE67DC20F5176800B0F0AD /* TokenGenerator.swift */; };
 		33F1FC2B210734A90083E05E /* test-image.gif in Resources */ = {isa = PBXBuildFile; fileRef = 33F1FC2A210734A90083E05E /* test-image.gif */; };
 		3704959A21876E3200DFC497 /* PCPresenceStateChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3704959921876E3200DFC497 /* PCPresenceStateChange.swift */; };
+		372641F921F7599A00B77869 /* ConnectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372641F821F7599A00B77869 /* ConnectionTests.swift */; };
+		374C814A21F0DA98008ECEBD /* PCDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374C814921F0DA98008ECEBD /* PCDateFormatter.swift */; };
 		3762F45321A6ED20009D81CF /* ReconnectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3762F45221A6ED20009D81CF /* ReconnectionTests.swift */; };
 		3775A83F21EE3845002297FA /* PCUpdatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3775A83E21EE3844002297FA /* PCUpdatable.swift */; };
 		3775A84121EE4177002297FA /* PCSubscriptionEventError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3775A84021EE4177002297FA /* PCSubscriptionEventError.swift */; };
 		37C526D621E3789B00309E3C /* InitialStateResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C526D521E3789B00309E3C /* InitialStateResult.swift */; };
-		374C814A21F0DA98008ECEBD /* PCDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374C814921F0DA98008ECEBD /* PCDateFormatter.swift */; };
 		37DEF4D221A456C200F924EC /* RoomTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DEF4D121A456C200F924EC /* RoomTests.swift */; };
 		37DEF4D621A4835900F924EC /* lol ? wut ?&...json in Resources */ = {isa = PBXBuildFile; fileRef = 37DEF4D521A4835900F924EC /* lol ? wut ?&...json */; };
 		37DEF4D721A485F400F924EC /* lol ? wut ?&...json in Resources */ = {isa = PBXBuildFile; fileRef = 37DEF4D521A4835900F924EC /* lol ? wut ?&...json */; };
@@ -149,11 +150,12 @@
 		33EE67DC20F5176800B0F0AD /* TokenGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenGenerator.swift; sourceTree = "<group>"; };
 		33F1FC2A210734A90083E05E /* test-image.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "test-image.gif"; sourceTree = "<group>"; };
 		3704959921876E3200DFC497 /* PCPresenceStateChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCPresenceStateChange.swift; sourceTree = "<group>"; };
+		372641F821F7599A00B77869 /* ConnectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionTests.swift; sourceTree = "<group>"; };
+		374C814921F0DA98008ECEBD /* PCDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCDateFormatter.swift; sourceTree = "<group>"; };
 		3762F45221A6ED20009D81CF /* ReconnectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReconnectionTests.swift; sourceTree = "<group>"; };
 		3775A83E21EE3844002297FA /* PCUpdatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCUpdatable.swift; sourceTree = "<group>"; };
 		3775A84021EE4177002297FA /* PCSubscriptionEventError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCSubscriptionEventError.swift; sourceTree = "<group>"; };
 		37C526D521E3789B00309E3C /* InitialStateResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialStateResult.swift; sourceTree = "<group>"; };
-		374C814921F0DA98008ECEBD /* PCDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCDateFormatter.swift; sourceTree = "<group>"; };
 		37DEF4D121A456C200F924EC /* RoomTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTests.swift; sourceTree = "<group>"; };
 		37DEF4D521A4835900F924EC /* lol ? wut ?&...json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "lol ? wut ?&...json"; sourceTree = "<group>"; };
 		A14B8C3B2191AD1D0039AD5D /* ChatkitBeamsTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatkitBeamsTokenProvider.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				33D0394D20F6593200B5D87A /* Config */,
 				33D0394C20F650F900B5D87A /* Helpers */,
 				33D2A5AD1E39074800EA7549 /* ChatManagerTests.swift */,
+				372641F821F7599A00B77869 /* ConnectionTests.swift */,
 				333D861720F4A97100734402 /* CurrentUserTests.swift */,
 				F2AA717420F7616000BC01DE /* CursorTests.swift */,
 				33BC080F209A1765001DB5F9 /* DefaultsTests.swift */,
@@ -535,6 +538,7 @@
 				F2AA717920F8FBA400BC01DE /* TypingIndicatorTests.swift in Sources */,
 				F2665DEE20FDEE56002A0A3D /* PresenceTests.swift in Sources */,
 				33D2A5AF1E39075100EA7549 /* ChatManagerTests.swift in Sources */,
+				372641F921F7599A00B77869 /* ConnectionTests.swift in Sources */,
 				339768F520F4ED2F00BCB10B /* UserSubscriptionTests.swift in Sources */,
 				33AF440820FC922F00336710 /* RoomMembershipTests.swift in Sources */,
 				333D861820F4A97200734402 /* CurrentUserTests.swift in Sources */,

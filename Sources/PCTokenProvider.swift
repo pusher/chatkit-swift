@@ -4,7 +4,16 @@ import PusherPlatform
 public final class PCTokenProvider: PPTokenProvider {
     public let url: String
     public let requestInjector: ((PCTokenProviderRequest) -> PCTokenProviderRequest)?
-    public var userID: String? = nil
+    public var userID: String? = nil {
+        willSet {
+            guard newValue != nil else {
+                return
+            }
+            self.pathFriendUserID = pathFriendlyVersion(of: newValue!)
+        }
+    }
+
+    var pathFriendUserID: String? = nil
 
     var fetchingToken: Bool = false
     var queuedTokenRecipients: [(PPTokenProviderResult) -> Void] = []
@@ -68,7 +77,7 @@ public final class PCTokenProvider: PPTokenProvider {
                     return req
                 }
 
-                guard let userID = strongSelf.userID else {
+                guard let userID = strongSelf.pathFriendUserID else {
                     return strongSelf.requestInjector != nil ? strongSelf.requestInjector!(req) : req
                 }
 
@@ -80,6 +89,7 @@ public final class PCTokenProvider: PPTokenProvider {
             },
             retryStrategy: self.retryStrategy
         )
+        tokenProvider.logger = self.logger
 
         self.internalTokenProvider = tokenProvider
         return tokenProvider
