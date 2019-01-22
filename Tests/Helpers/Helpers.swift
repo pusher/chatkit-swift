@@ -60,6 +60,41 @@ func createUser(
     }.resume()
 }
 
+func createUsers(
+    users: [[String: Any]],
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    let usersObject: [String: [[String: Any]]] = [
+        "users": users
+    ]
+
+    guard JSONSerialization.isValidJSONObject(usersObject) else {
+        completionHandler(.generic("Invalid usersObject \(usersObject.debugDescription)"))
+        return
+    }
+
+    guard let data = try? JSONSerialization.data(withJSONObject: usersObject, options: []) else {
+        completionHandler(.generic("Failed to JSON serialize usersObject \(usersObject.debugDescription)"))
+        return
+    }
+
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v2", "batch_users"))
+    request.httpMethod = "POST"
+    request.httpBody = data
+    request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error creating users: \(error!.localizedDescription)"))
+            return
+        }
+
+        TestLogger().log("Users created successfully!", logLevel: .debug)
+        completionHandler(nil)
+    }.resume()
+}
+
 func updateUser(
     id: String,
     name: String? = nil,
