@@ -885,7 +885,6 @@ public final class PCCurrentUser {
                 messageSubscription.handleEvent(eventID: eventID, headers: headers, data: data)
             },
             onError: completionHandler
-
         )
 
         return messageSubscription
