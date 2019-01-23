@@ -763,28 +763,6 @@ public final class PCCurrentUser {
             logLevel: .verbose
         )
 
-        let progressCounter = PCProgressCounter(
-            totalCount: 3,
-            labelSuffix: "subscribe-to-room-\(UUID().uuidString)"
-        )
-
-        let combinedCompletionHandler = { [logger = self.instance.logger, weak room] (err: Error?) in
-            guard err == nil else {
-                logger.log(
-                    "Error when establishing room subscription: \(err!.localizedDescription)",
-                    logLevel: .error
-                )
-                if progressCounter.incrementFailedAndCheckIfFinished() {
-                    completionHandler(err)
-                }
-                return
-            }
-            if progressCounter.incrementSuccessAndCheckIfFinished() {
-                room?.subscriptionPreviouslyEstablished = true
-                completionHandler(nil)
-            }
-        }
-
         self.joinRoom(roomID: room.id) { innerRoom, err in
             guard let roomToSubscribeTo = innerRoom, err == nil else {
                 self.instance.logger.log(
@@ -794,208 +772,27 @@ public final class PCCurrentUser {
                 return
             }
 
-            let messageSub = self.subscribeToRoomMessages(
-                room: roomToSubscribeTo,
-                delegate: delegate,
-                messageLimit: messageLimit,
-                completionHandler: combinedCompletionHandler
-            )
-            let cursorSub = self.subscribeToRoomCursors(
-                room: roomToSubscribeTo,
-                onNewReadCursorHook: { [currentUserID = self.id, weak cmDelegate = self.delegate, weak delegate] cursor in
-                    delegate?.onNewReadCursor(cursor)
-                    if cursor.user.id == currentUserID {
-                        cmDelegate?.onNewReadCursor(cursor)
-                    }
-                },
-                completionHandler: combinedCompletionHandler
-            )
-            let membershipSub = self.subscribeToRoomMemberships(
-                room: roomToSubscribeTo,
-                delegate: delegate,
-                onUserJoinedHook: { [weak cmDelegate = self.delegate, weak delegate] user in
-                    cmDelegate?.onUserJoinedRoom(room, user: user)
-                    delegate?.onUserJoined(user: user)
-                },
-                onUserLeftHook: { [weak cmDelegate = self.delegate, weak delegate] user in
-                    cmDelegate?.onUserLeftRoom(room, user: user)
-                    delegate?.onUserLeft(user: user)
-                },
-                completionHandler: combinedCompletionHandler
-            )
-
             if room.subscription != nil {
                 room.subscription!.end()
                 room.subscription = nil
             }
 
             room.subscription = PCRoomSubscription(
-                messageSubscription: messageSub,
-                cursorSubscription: cursorSub,
-                membershipSubscription: membershipSub,
-                delegate: delegate
+                room: roomToSubscribeTo,
+                messageLimit: messageLimit,
+                currentUserID: self.id,
+                roomDelegate: delegate,
+                chatManagerDelegate: self.delegate,
+                userStore: self.userStore,
+                roomStore: self.roomStore,
+                cursorStore: self.cursorStore,
+                typingIndicatorManager: self.typingIndicatorManager,
+                instance: self.instance,
+                cursorsInstance: self.cursorsInstance,
+                logger: self.instance.logger,
+                completionHandler: completionHandler
             )
         }
-    }
-
-    fileprivate func subscribeToRoomMessages(
-        room: PCRoom,
-        delegate: PCRoomDelegate,
-        messageLimit: Int,
-        completionHandler: @escaping PCErrorCompletionHandler
-    ) -> PCMessageSubscription {
-        let path = "/rooms/\(room.id)"
-
-        // TODO: What happens if you provide both a message_limit and a Last-Event-ID?
-        let subscribeRequest = PPRequestOptions(
-            method: HTTPMethod.SUBSCRIBE.rawValue,
-            path: path,
-            queryItems: [
-                URLQueryItem(name: "message_limit", value: String(messageLimit))
-            ]
-        )
-
-        var resumableSub = PPResumableSubscription(
-            instance: self.instance,
-            requestOptions: subscribeRequest
-        )
-
-        let messageSubscription = PCMessageSubscription(
-            roomID: room.id,
-            delegate: delegate,
-            chatManagerDelegate: self.delegate,
-            resumableSubscription: resumableSub,
-            logger: self.instance.logger,
-            basicMessageEnricher: PCBasicMessageEnricher(
-                userStore: self.userStore,
-                // TODO: This should probably be a room store
-                room: room,
-                logger: self.instance.logger
-            ),
-            userStore: userStore,
-            roomStore: roomStore,
-            typingIndicatorManager: typingIndicatorManager
-        )
-
-        self.instance.subscribeWithResume(
-            with: &resumableSub,
-            using: subscribeRequest,
-            onOpen: { completionHandler(nil) },
-            onEvent: { [unowned messageSubscription] eventID, headers, data in
-                messageSubscription.handleEvent(eventID: eventID, headers: headers, data: data)
-            },
-            onError: completionHandler
-        )
-
-        return messageSubscription
-    }
-
-    fileprivate func subscribeToRoomCursors(
-        room: PCRoom,
-        onNewReadCursorHook: @escaping (PCCursor) -> Void,
-        completionHandler: @escaping PCErrorCompletionHandler
-    ) -> PCCursorSubscription {
-        let path = "/cursors/\(PCCursorType.read.rawValue)/rooms/\(room.id)"
-
-        let subscribeRequest = PPRequestOptions(
-            method: HTTPMethod.SUBSCRIBE.rawValue,
-            path: path
-        )
-
-        var resumableSub = PPResumableSubscription(
-            instance: self.cursorsInstance,
-            requestOptions: subscribeRequest
-        )
-
-        let cursorSubscription = PCCursorSubscription(
-            resumableSubscription: resumableSub,
-            cursorStore: self.cursorStore,
-            logger: self.cursorsInstance.logger,
-            onNewReadCursorHook: onNewReadCursorHook,
-            initialStateHandler: { result in
-                switch result {
-                case .error(let err):
-                    completionHandler(err)
-                case .success(let existing, let new):
-                    if room.subscriptionPreviouslyEstablished {
-                        reconcileCursors(
-                            new: new,
-                            old: existing,
-                            onNewReadCursorHook: onNewReadCursorHook
-                        )
-                    }
-                    completionHandler(nil)
-                }
-            }
-        )
-
-        self.cursorsInstance.subscribeWithResume(
-            with: &resumableSub,
-            using: subscribeRequest,
-            onEvent: { [unowned cursorSubscription] eventID, headers, data in
-                cursorSubscription.handleEvent(eventID: eventID, headers: headers, data: data)
-            },
-            onError: completionHandler
-        )
-
-        return cursorSubscription
-    }
-
-    fileprivate func subscribeToRoomMemberships(
-        room: PCRoom,
-        delegate: PCRoomDelegate,
-        onUserJoinedHook: @escaping (PCUser) -> Void,
-        onUserLeftHook: @escaping (PCUser) -> Void,
-        completionHandler: @escaping PCErrorCompletionHandler
-    ) -> PCMembershipSubscription {
-        let path = "/rooms/\(room.id)/memberships"
-
-        let subscribeRequest = PPRequestOptions(
-            method: HTTPMethod.SUBSCRIBE.rawValue,
-            path: path
-        )
-
-        var resumableSub = PPResumableSubscription(
-            instance: self.instance,
-            requestOptions: subscribeRequest
-        )
-
-        let membershipSubscription = PCMembershipSubscription(
-            roomID: room.id,
-            resumableSubscription: resumableSub,
-            userStore: self.userStore,
-            roomStore: self.roomStore,
-            logger: self.instance.logger,
-            onUserJoinedHook: onUserJoinedHook,
-            onUserLeftHook: onUserLeftHook,
-            initialStateHandler: { result in
-                switch result {
-                case .error(let err):
-                    completionHandler(err)
-                case .success(let existing, let new):
-                    if room.subscriptionPreviouslyEstablished {
-                        reconcileMemberships(
-                            new: new,
-                            old: existing,
-                            onUserJoinedHook: onUserJoinedHook,
-                            onUserLeftHook: onUserLeftHook
-                        )
-                    }
-                    completionHandler(nil)
-                }
-            }
-        )
-
-        self.instance.subscribeWithResume(
-            with: &resumableSub,
-            using: subscribeRequest,
-            onEvent: { [unowned membershipSubscription] eventID, headers, data in
-                membershipSubscription.handleEvent(eventID: eventID, headers: headers, data: data)
-            },
-            onError: completionHandler
-        )
-
-        return membershipSubscription
     }
 
     public func fetchMessagesFromRoom(
