@@ -909,8 +909,7 @@ public final class PCCurrentUser {
 
         let cursorSubscription = PCCursorSubscription(
             resumableSubscription: resumableSub,
-            cursorStore: cursorStore,
-            connectionCoordinator: connectionCoordinator,
+            cursorStore: self.cursorStore,
             logger: self.cursorsInstance.logger,
             onNewReadCursorHook: onNewReadCursorHook,
             initialStateHandler: { result in

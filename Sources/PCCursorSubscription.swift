@@ -4,7 +4,6 @@ import PusherPlatform
 public final class PCCursorSubscription {
     let resumableSubscription: PPResumableSubscription
     let cursorStore: PCCursorStore
-    let connectionCoordinator: PCConnectionCoordinator
     public var logger: PPLogger
     var onNewReadCursorHook: ((PCCursor) -> Void)?
     var initialStateHandler: ((InitialStateResult<PCCursor>) -> Void)?
@@ -12,14 +11,12 @@ public final class PCCursorSubscription {
     init(
         resumableSubscription: PPResumableSubscription,
         cursorStore: PCCursorStore,
-        connectionCoordinator: PCConnectionCoordinator,
         logger: PPLogger,
         onNewReadCursorHook: ((PCCursor) -> Void)? = nil,
         initialStateHandler: @escaping (InitialStateResult<PCCursor>) -> Void
     ) {
         self.resumableSubscription = resumableSubscription
         self.cursorStore = cursorStore
-        self.connectionCoordinator = connectionCoordinator
         self.logger = logger
         self.onNewReadCursorHook = onNewReadCursorHook
         self.initialStateHandler = initialStateHandler
