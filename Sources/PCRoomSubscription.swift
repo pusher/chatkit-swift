@@ -6,6 +6,10 @@ public final class PCRoomSubscription {
     public var cursorSubscription: PCCursorSubscription?
     public var membershipSubscription: PCMembershipSubscription?
     public weak var delegate: PCRoomDelegate?
+    weak var room: PCRoom?
+
+    fileprivate let eventBufferQueue = DispatchQueue(label: "com.pusher.chatkit.room-event-buffer-\(UUID().uuidString)")
+    var eventBuffer = [() -> Void]()
 
     init(
         room: PCRoom,
@@ -23,13 +27,14 @@ public final class PCRoomSubscription {
         completionHandler: @escaping PCErrorCompletionHandler
     ) {
         self.delegate = roomDelegate
+        self.room = room
 
         let progressCounter = PCProgressCounter(
             totalCount: 3,
             labelSuffix: "subscribe-to-room-\(UUID().uuidString)"
         )
 
-        let combinedCompletionHandler = { [logger = logger, weak room] (err: Error?) in
+        let combinedCompletionHandler = { [logger = logger, weak room, weak self] (err: Error?) in
             guard err == nil else {
                 logger.log(
                     "Error when establishing room subscription: \(err!.localizedDescription)",
@@ -41,8 +46,12 @@ public final class PCRoomSubscription {
                 return
             }
             if progressCounter.incrementSuccessAndCheckIfFinished() {
-                room?.subscriptionPreviouslyEstablished = true
-                completionHandler(nil)
+                self?.eventBufferQueue.async {
+                    room?.subscriptionPreviouslyEstablished = true
+                    completionHandler(nil)
+                    self?.eventBuffer.forEach { $0() }
+                    self?.eventBuffer = []
+                }
             }
         }
 
@@ -53,18 +62,26 @@ public final class PCRoomSubscription {
             userStore: userStore,
             roomStore: roomStore,
             logger: logger,
-            onMessageHook: { [weak roomDelegate] message in
-                roomDelegate?.onMessage(message)
+            onMessageHook: { [weak roomDelegate, weak self] message in
+                self?.eventBufferQueue.async {
+                    self?.callOrBuffer(room: room) {
+                        roomDelegate?.onMessage(message)
+                    }
+                }
             },
-            onIsTypingHook: { [weak typingIndicatorManager, weak roomDelegate, weak cmDelegate = chatManagerDelegate] room, user in
-                typingIndicatorManager?.onIsTyping(
-                    room: room,
-                    user: user,
-                    globalStartHook: cmDelegate?.onUserStartedTyping,
-                    globalStopHook: cmDelegate?.onUserStoppedTyping,
-                    roomStartHook: roomDelegate?.onUserStartedTyping,
-                    roomStopHook: roomDelegate?.onUserStoppedTyping
-                )
+            onIsTypingHook: { [weak typingIndicatorManager, weak roomDelegate, weak cmDelegate = chatManagerDelegate, weak self] room, user in
+                self?.eventBufferQueue.async {
+                    self?.callOrBuffer(room: room) {
+                        typingIndicatorManager?.onIsTyping(
+                            room: room,
+                            user: user,
+                            globalStartHook: cmDelegate?.onUserStartedTyping,
+                            globalStopHook: cmDelegate?.onUserStoppedTyping,
+                            roomStartHook: roomDelegate?.onUserStartedTyping,
+                            roomStopHook: roomDelegate?.onUserStoppedTyping
+                        )
+                    }
+                }
             },
             completionHandler: combinedCompletionHandler
         )
@@ -74,10 +91,14 @@ public final class PCRoomSubscription {
             cursorsInstance: cursorsInstance,
             cursorStore: cursorStore,
             logger: logger,
-            onNewReadCursorHook: { [currentUserID = currentUserID, weak cmDelegate = chatManagerDelegate, weak roomDelegate] cursor in
-                roomDelegate?.onNewReadCursor(cursor)
-                if cursor.user.id == currentUserID {
-                    cmDelegate?.onNewReadCursor(cursor)
+            onNewReadCursorHook: { [currentUserID = currentUserID, weak cmDelegate = chatManagerDelegate, weak roomDelegate, weak self] cursor in
+                self?.eventBufferQueue.async {
+                    self?.callOrBuffer(room: room) {
+                        roomDelegate?.onNewReadCursor(cursor)
+                        if cursor.user.id == currentUserID {
+                            cmDelegate?.onNewReadCursor(cursor)
+                        }
+                    }
                 }
             },
             completionHandler: combinedCompletionHandler
@@ -89,13 +110,21 @@ public final class PCRoomSubscription {
             userStore: userStore,
             roomStore: roomStore,
             logger: logger,
-            onUserJoinedHook: { [weak cmDelegate = chatManagerDelegate, weak roomDelegate] user in
-                cmDelegate?.onUserJoinedRoom(room, user: user)
-                roomDelegate?.onUserJoined(user: user)
+            onUserJoinedHook: { [weak cmDelegate = chatManagerDelegate, weak roomDelegate, weak self] user in
+                self?.eventBufferQueue.async {
+                    self?.callOrBuffer(room: room) {
+                        cmDelegate?.onUserJoinedRoom(room, user: user)
+                        roomDelegate?.onUserJoined(user: user)
+                    }
+                }
             },
-            onUserLeftHook: { [weak cmDelegate = chatManagerDelegate, weak roomDelegate] user in
-                cmDelegate?.onUserLeftRoom(room, user: user)
-                roomDelegate?.onUserLeft(user: user)
+            onUserLeftHook: { [weak cmDelegate = chatManagerDelegate, weak roomDelegate, weak self] user in
+                self?.eventBufferQueue.async {
+                    self?.callOrBuffer(room: room) {
+                        cmDelegate?.onUserLeftRoom(room, user: user)
+                        roomDelegate?.onUserLeft(user: user)
+                    }
+                }
             },
             completionHandler: combinedCompletionHandler
         )
@@ -113,6 +142,16 @@ public final class PCRoomSubscription {
         self.messageSubscription = nil
         self.cursorSubscription = nil
         self.membershipSubscription = nil
+    }
+
+    func callOrBuffer(room: PCRoom, eventHook: @escaping () -> Void) {
+        if room.subscriptionPreviouslyEstablished {
+            eventHook()
+        } else {
+            self.eventBuffer.append {
+                eventHook()
+            }
+        }
     }
 }
 
