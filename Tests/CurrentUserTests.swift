@@ -36,8 +36,8 @@ class CurrentUserTests: XCTestCase {
         let userSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .server,
-            path: "users",
-            version: "v2"
+            version: "v2",
+            path: "users"
         ).absoluteString
 
         stub(uri(userSubscriptionURL)) { req in
@@ -64,8 +64,8 @@ class CurrentUserTests: XCTestCase {
         let presenceSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .presence,
-            path: "users/\(userID)/register",
-            version: "v2"
+            version: "v2",
+            path: "users/\(userID)/register"
         ).absoluteString
 
         stub(uri(presenceSubscriptionURL)) { req in
@@ -75,8 +75,8 @@ class CurrentUserTests: XCTestCase {
         let cursorsSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .cursors,
-            path: "cursors/0/users/\(userID)",
-            version: "v2"
+            version: "v2",
+            path: "cursors/0/users/\(userID)"
         ).absoluteString
 
         stub(uri(cursorsSubscriptionURL)) { req in
