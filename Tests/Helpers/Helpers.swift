@@ -523,6 +523,41 @@ func removeUserFromRoom(
     )
 }
 
+func sendMessage(
+    asUser senderID: String,
+    toRoom roomID: String,
+    text: String = "",
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    let messageObject: [String: Any] = ["text": text]
+
+    guard JSONSerialization.isValidJSONObject(messageObject) else {
+        completionHandler(.generic("Invalid messageObject \(messageObject.debugDescription)"))
+        return
+    }
+
+    guard let data = try? JSONSerialization.data(withJSONObject: messageObject, options: []) else {
+        completionHandler(.generic("Failed to JSON serialize messageObject \(messageObject.debugDescription)"))
+        return
+    }
+
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v2", "rooms/\(roomID)/messages"))
+    request.httpMethod = "POST"
+    request.httpBody = data
+    request.addValue("Bearer \(generateSuperuserToken(sub: senderID))", forHTTPHeaderField: "Authorization")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error sending message: \(error!.localizedDescription)"))
+            return
+        }
+
+        TestLogger().log("Message sent successfully!", logLevel: .debug)
+        completionHandler(nil)
+    }.resume()
+}
+
 fileprivate enum PCUserMembershipChange: String {
     case add
     case remove
