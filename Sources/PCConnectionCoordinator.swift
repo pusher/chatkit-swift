@@ -1,7 +1,7 @@
 import Foundation
 
 public class PCConnectionCoordinator {
-    private var queue = DispatchQueue(label: "com.pusher.chatkit.connection-coordinator")
+    private var queue = DispatchQueue(label: "com.pusher.chatkit.connection-coordinator-\(UUID().uuidString)")
     var completedConnectionEvents: Set<PCConnectionEvent> = []
     var connectionEventHandlers: [PCConnectionEventHandler] = []
     var logger: PCLogger
