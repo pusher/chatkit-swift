@@ -316,6 +316,102 @@ class MessagesTests: XCTestCase {
         waitForExpectations(timeout: 15)
     }
 
+    func testUnsubscribingFromARoomMeansYouStopReceivingMessages() {
+        let connectEx = expectation(description: "bob connected successfully")
+        let subscribedFirstEx = expectation(description: "subscribed to room first time successfully")
+        let subscribedSecondEx = expectation(description: "subscribed to room second time successfully")
+        let firstOnMessageHookCalledEx = expectation(description: "received first message")
+        let secondOnMessageHookCalledEx = expectation(description: "received third message")
+        let firstMessageSentEx = expectation(description: "first message sent successfully")
+        let secondMessageSentEx = expectation(description: "second message sent successfully")
+        let thirdMessageSentEx = expectation(description: "third message sent successfully")
+
+        var messageCountReceived = 0
+
+        let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
+            switch messageCountReceived {
+            case 0:
+                XCTAssertEqual(message.text, "some text")
+                XCTAssertEqual(message.sender.id, "alice")
+                XCTAssertEqual(message.sender.name, "Alice")
+                XCTAssertEqual(message.room.id, self.roomID)
+                XCTAssertEqual(message.room.name, "mushroom")
+
+                messageCountReceived += 1
+                firstOnMessageHookCalledEx.fulfill()
+            case 1:
+                XCTAssertEqual(message.text, "message three")
+                XCTAssertEqual(message.sender.id, "alice")
+                XCTAssertEqual(message.sender.name, "Alice")
+                XCTAssertEqual(message.room.id, self.roomID)
+                XCTAssertEqual(message.room.name, "mushroom")
+
+                messageCountReceived += 1
+                secondOnMessageHookCalledEx.fulfill()
+            default:
+                XCTFail("Too many messages received")
+            }
+
+        })
+
+        var bob: PCCurrentUser!
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { b, err in
+            XCTAssertNil(err)
+            bob = b
+            connectEx.fulfill()
+        }
+
+        wait(for: [connectEx], timeout: 15)
+
+        bob.subscribeToRoom(
+            id: self.roomID,
+            roomDelegate: bobRoomDelegate,
+            messageLimit: 0,
+            completionHandler: { err in
+                XCTAssertNil(err)
+                subscribedFirstEx.fulfill()
+            }
+        )
+
+        wait(for: [subscribedFirstEx], timeout: 15)
+
+        sendMessage(asUser: "alice", toRoom: self.roomID, text: "some text") { err in
+            XCTAssertNil(err)
+            firstMessageSentEx.fulfill()
+        }
+
+        wait(for: [firstOnMessageHookCalledEx, firstMessageSentEx], timeout: 15)
+
+        bob.rooms.first { $0.id == self.roomID }!.unsubscribe()
+
+        sendMessage(asUser: "alice", toRoom: self.roomID, text: "message 2") { err in
+            XCTAssertNil(err)
+            secondMessageSentEx.fulfill()
+        }
+
+        wait(for: [secondMessageSentEx], timeout: 15)
+
+        bob.subscribeToRoom(
+            id: self.roomID,
+            roomDelegate: bobRoomDelegate,
+            messageLimit: 0,
+            completionHandler: { err in
+                XCTAssertNil(err)
+                subscribedSecondEx.fulfill()
+            }
+        )
+
+        wait(for: [subscribedSecondEx], timeout: 15)
+
+        sendMessage(asUser: "alice", toRoom: self.roomID, text: "message three") { err in
+            XCTAssertNil(err)
+            thirdMessageSentEx.fulfill()
+        }
+
+        wait(for: [secondOnMessageHookCalledEx, thirdMessageSentEx], timeout: 15)
+    }
+
     // Unsure why this doesn't work on iOS but it does work for macOS. Uploading
     // using the same method as is used here works in the iOS example app, so I
     // think it must be some test-specific oddity
