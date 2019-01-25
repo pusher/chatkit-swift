@@ -151,7 +151,6 @@ public final class PCBasicCurrentUser {
         let cursorSub = PCCursorSubscription(
             resumableSubscription: cursorResumableSub,
             cursorStore: cursorStore,
-            connectionCoordinator: self.connectionCoordinator,
             logger: self.cursorsInstance.logger,
             onNewReadCursorHook: { [weak delegate] cursor in
                 delegate?.onNewReadCursor(cursor)

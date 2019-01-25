@@ -9,12 +9,12 @@ final class PCBasicMessageEnricher {
     fileprivate var completionOrderList: [Int] = []
     fileprivate var messageIDToCompletionHandlers: [Int: (PCMessage?, Error?) -> Void] = [:]
     fileprivate var enrichedMessagesAwaitingCompletionCalls: [Int: PCMessageEnrichmentResult] = [:]
-    fileprivate let messageEnrichmentQueue = DispatchQueue(label: "com.pusher.chatkit.message-enrichment")
+    fileprivate let messageEnrichmentQueue = DispatchQueue(label: "com.pusher.chatkit.message-enrichment-\(UUID().uuidString)")
 
     fileprivate var userIDsBeingRetrieved: [String] = []
     fileprivate var userIDsToBasicMessageIDs: [String: [Int]] = [:]
     fileprivate var messagesAwaitingEnrichmentDependentOnUserRetrieval: [Int: PCBasicMessage] = [:]
-    fileprivate let userRetrievalQueue = DispatchQueue(label: "com.pusher.chatkit.user-retrieval")
+    fileprivate let userRetrievalQueue = DispatchQueue(label: "com.pusher.chatkit.user-retrieval-\(UUID().uuidString)")
 
     init(userStore: PCGlobalUserStore, room: PCRoom, logger: PPLogger) {
         self.userStore = userStore

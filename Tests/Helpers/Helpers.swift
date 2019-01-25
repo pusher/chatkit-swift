@@ -277,15 +277,32 @@ func assignGlobalRole(
 }
 
 func testInstanceServiceURL(_ service: ChatkitService, _ version: String = "v1", _ path: String) -> URL {
-    return serviceURL(instanceLocator: testInstanceLocator, service: service, path: path, version: version)
+    return serviceURL(instanceLocator: testInstanceLocator, service: service, version: version, path: path)
 }
 
-func serviceURL(instanceLocator: String, service: ChatkitService, path: String, version: String = "v1") -> URL {
+func serviceURL(
+    instanceLocator: String,
+    service: ChatkitService,
+    version: String,
+    path: String,
+    queryItems: [URLQueryItem]? = nil
+) -> URL {
     let splitInstanceLocator = instanceLocator.split(separator: ":")
     let instanceCluster = splitInstanceLocator[1]
     let instanceID = splitInstanceLocator.last!
-    let pathlessURL = URL(string: "https://\(instanceCluster).pusherplatform.io/services/\(service.stringValue())/\(version)/\(instanceID)")!
-    return pathlessURL.appendingPathComponent(path)
+
+    var urlComponents = URLComponents(string: "https://\(instanceCluster).pusherplatform.io")!
+
+    var sanitisedPath = path
+    if sanitisedPath.hasPrefix("/") {
+        sanitisedPath.remove(at: sanitisedPath.startIndex)
+    }
+    let fullPath = "/services/\(service.stringValue())/\(version)/\(instanceID)/\(sanitisedPath)"
+
+    urlComponents.percentEncodedPath = fullPath
+    urlComponents.queryItems = queryItems
+
+    return urlComponents.url!
 }
 
 enum ChatkitService {

@@ -2,36 +2,33 @@ import Foundation
 import PusherPlatform
 
 public final class PCMessageSubscription {
-    public weak var delegate: PCRoomDelegate?
+    let roomID: String
     let resumableSubscription: PPResumableSubscription
     public var logger: PPLogger
     let basicMessageEnricher: PCBasicMessageEnricher
-    weak var chatManagerDelegate: PCChatManagerDelegate?
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
-    let typingIndicatorManager: PCTypingIndicatorManager
-    let roomID: String
+    let onMessageHook: (PCMessage) -> Void
+    let onIsTypingHook: (PCRoom, PCUser) -> Void
 
     init(
         roomID: String,
-        delegate: PCRoomDelegate? = nil,
-        chatManagerDelegate: PCChatManagerDelegate? = nil,
         resumableSubscription: PPResumableSubscription,
         logger: PPLogger,
         basicMessageEnricher: PCBasicMessageEnricher,
         userStore: PCGlobalUserStore,
         roomStore: PCRoomStore,
-        typingIndicatorManager: PCTypingIndicatorManager
+        onMessageHook: @escaping (PCMessage) -> Void,
+        onIsTypingHook: @escaping (PCRoom, PCUser) -> Void
     ) {
         self.roomID = roomID
-        self.delegate = delegate
-        self.chatManagerDelegate = chatManagerDelegate
         self.resumableSubscription = resumableSubscription
         self.logger = logger
         self.basicMessageEnricher = basicMessageEnricher
         self.userStore = userStore
         self.roomStore = roomStore
-        self.typingIndicatorManager = typingIndicatorManager
+        self.onMessageHook = onMessageHook
+        self.onIsTypingHook = onIsTypingHook
     }
 
     func handleEvent(eventID _: String, headers _: [String: String], data: Any) {
@@ -79,7 +76,7 @@ public final class PCMessageSubscription {
                     return
                 }
 
-                strongSelf.delegate?.onMessage(message)
+                strongSelf.onMessageHook(message)
                 strongSelf.logger.log("Room received new message: \(message.debugDescription)", logLevel: .verbose)
             }
         } catch let err {
@@ -120,14 +117,7 @@ public final class PCMessageSubscription {
                     return
                 }
 
-                strongSelf.typingIndicatorManager.onIsTyping(
-                    room: room,
-                    user: user,
-                    globalStartHook: strongSelf.chatManagerDelegate?.onUserStartedTyping,
-                    globalStopHook: strongSelf.chatManagerDelegate?.onUserStoppedTyping,
-                    roomStartHook: strongSelf.delegate?.onUserStartedTyping,
-                    roomStopHook: strongSelf.delegate?.onUserStoppedTyping
-                )
+                strongSelf.onIsTypingHook(room, user)
             }
         }
     }
