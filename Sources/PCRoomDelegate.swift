@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-public protocol PCRoomDelegate: NSObjectProtocol {
+public protocol PCRoomDelegate: AnyObject {
     func onMessage(_ message: PCMessage)
 
     @available(*, deprecated, renamed: "onNewReadCursor")
