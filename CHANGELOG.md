@@ -4,7 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/pusher/chatkit-swift/compare/1.2.3...HEAD)
+## [Unreleased](https://github.com/pusher/chatkit-swift/compare/1.3.0...HEAD)
+
+## [1.3.0](https://github.com/pusher/chatkit-swift/compare/1.2.3...1.3.0) - 2019-01-25
+
+### Added
+
+- You can call `unsubscribe()` on a `PCRoom` to unsubscribe from it
+- `onNewReadCursor` has been added to the `PCChatManagerDelegate`, which allows you to get notified of read cursor updates for the current user. Note that to support existing users of the read cursor functionality, `onNewReadCursor` on the `PCRoomDelegate` will also still be called for new read cursors for the current user. This functionality will be removed in a future release that contains other breaking changes (i.e. 2.0.0, in all likelihood)
+
+### Fixed
+
+- Appropriate `PCChatManagerDelegate` and `PCRoomDelegate` hooks will be called upon reconnection when state has changed during the period of disconnection
+- `createdAtDate`, `updatedAtDate`, and `deletedAtDate` should no longer lead to crashes
+- Only call `PCRoomDelegate` functions once a room subscription has been fully established
+- Removed some race conditions
+- Fixed some reference cycles
+
+### Removed
+
+- `PCRoomDelegate` no longer has a restriction to ensure that conforming types also conform to `NSObjectProtocol`
 
 ## [1.2.3](https://github.com/pusher/chatkit-swift/compare/1.2.2...1.2.3) - 2018-12-21
 
