@@ -1,13 +1,13 @@
 import Foundation
 
-public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: ExpressibleByDictionaryLiteral, Collection, Sequence {
-    public typealias Index = Dictionary<KeyType, ValueType>.Index
-    public typealias Element = Dictionary<KeyType, ValueType>.Element
+public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: ExpressibleByDictionaryLiteral {
+    typealias Index = Dictionary<KeyType, ValueType>.Index
+    typealias Element = Dictionary<KeyType, ValueType>.Element
 
-    public var startIndex: Index { return underlyingDictionary.startIndex }
-    public var endIndex: Index { return underlyingDictionary.endIndex }
+    var startIndex: Index { return underlyingDictionary.startIndex }
+    var endIndex: Index { return underlyingDictionary.endIndex }
 
-    public var keys: Dictionary<KeyType, ValueType>.Keys {
+    var keys: Dictionary<KeyType, ValueType>.Keys {
         get {
             return queue.sync(flags: .barrier) {
                 return underlyingDictionary.keys
@@ -15,7 +15,13 @@ public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: Expre
         }
     }
 
-    public subscript(position: Index) -> (key: KeyType, value: ValueType) {
+    var first: (key: KeyType, value: ValueType)? {
+        return queue.sync {
+            return underlyingDictionary.first
+        }
+    }
+
+    subscript(position: Index) -> (key: KeyType, value: ValueType) {
         get {
             return queue.sync(flags: .barrier) {
                 return underlyingDictionary[position]
@@ -23,19 +29,19 @@ public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: Expre
         }
     }
 
-    public func index(after i: Index) -> Index {
+    func index(after i: Index) -> Index {
         return queue.sync(flags: .barrier) {
             return underlyingDictionary.index(after: i)
         }
     }
 
-    internal var underlyingDictionary: [KeyType: ValueType]
+    var underlyingDictionary: [KeyType: ValueType]
     private let queue = DispatchQueue(
         label: "synchronized.dictionary.access.\(UUID().uuidString)",
         attributes: .concurrent
     )
 
-    public init(dictionary: [KeyType: ValueType]) {
+    init(dictionary: [KeyType: ValueType]) {
         self.underlyingDictionary = dictionary
     }
 
@@ -78,6 +84,21 @@ public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: Expre
     func forEach(_ body: ((key: KeyType, value: ValueType)) -> Void) {
         queue.sync {
             underlyingDictionary.forEach(body)
+        }
+    }
+
+    func first(where predicate: ((key: KeyType, value: ValueType)) -> Bool) -> (key: KeyType, value: ValueType)? {
+        return queue.sync {
+            return underlyingDictionary.first(where: predicate)
+        }
+    }
+
+    func reduce<Result>(
+        into initialResult: Result,
+        _ updateAccumulatingResult: (inout Result, (key: KeyType, value: ValueType)) throws -> ()
+    ) rethrows -> Result {
+        return try queue.sync {
+            return try underlyingDictionary.reduce(into: initialResult, updateAccumulatingResult)
         }
     }
 }
