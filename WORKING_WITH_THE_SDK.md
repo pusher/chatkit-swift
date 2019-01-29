@@ -18,7 +18,7 @@ At the time of writing the test-only dependencies are:
 * [`CryptoSwift`](https://www.github.com/krzyzanowskim/CryptoSwift): a crypto library used as part of generating tokens for making requests in tests.
 * [`hamchapman/Mockingjay`](https://github.com/hamchapman/Mockingjay): this is a fork of [`kylef/Mockingjay`](https://github.com/kylef/Mockingjay). It is an HTTP stubbing library that we forked to add support for stubbing subscriptions.
 
-All of these dependencies have their versions locked in the [`Cartfile.resolved file`](https://github.com/pusher/chatkit-swift/blob/master/Cartfile.resolved).
+All of these dependencies have their versions locked in the [`Cartfile.resolved` file](https://github.com/pusher/chatkit-swift/blob/master/Cartfile.resolved).
 
 ### Fetching and managing dependencies
 
