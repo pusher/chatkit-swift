@@ -17,6 +17,7 @@
     2. [`Sources/ChatManager.swift`](https://github.com/pusher/chatkit-swift/blob/master/Sources/ChatManager.swift)
     3. [`Sources/Info.plist`](https://github.com/pusher/chatkit-swift/blob/master/Sources/Info.plist) (under the key `CFBundleShortVersionString`)
     4. [`Tests/Supporting Files/Info.plist`](https://github.com/pusher/chatkit-swift/blob/master/Tests/Supporting%20Files/Info.plist) (under the key `CFBundleShortVersionString`)
+    5. [`PusherChatkit.podspec`](https://github.com/pusher/chatkit-swift/blob/master/PusherChatkit.podspec)
 3. Run `carthage build --no-skip-current` to ensure that the framework builds. This will likely take a while - go get a drink.
 4. In Xcode, run the tests (⌘+u) with the `PusherChatkit` target selected (the briefcase symbol in the top bar) for an iOS device, your Mac, and a tvOS device.
 5. Commit all of the version changes: `git commit -am "Bump to NEW_VERSION_NUMBER"`
