@@ -452,6 +452,37 @@ func updateRoom(
     }.resume()
 }
 
+func deleteRoom(
+    id: String,
+    completionHandler: @escaping (TestHelperError?) -> Void
+) {
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v2", "rooms/\(id)"))
+    request.httpMethod = "DELETE"
+    request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
+    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error deleting room: \(error!.localizedDescription)"))
+            return
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            completionHandler(.generic("Error deleting room"))
+            return
+        }
+
+        if 200..<300 ~= httpResponse.statusCode {
+            TestLogger().log("Room deleted successfully!", logLevel: .debug)
+            completionHandler(nil)
+        } else {
+            let errorDesc = error?.localizedDescription ?? "no error"
+            completionHandler(.generic("Error deleting room: status \(httpResponse.statusCode), error: \(errorDesc)"))
+        }
+    }.resume()
+}
+
+
 func setReadCursor(
     userID: String,
     roomID: String,
