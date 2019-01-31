@@ -95,8 +95,38 @@ extension PCCursorSubscription {
                             self.initialStateHandler?(.success(existing: existingCursors, new: newCursors))
                         }
                     } else if let err = err {
-                        if cursorsProgressCounter.incrementFailedAndCheckIfFinished() {
-                            self.initialStateHandler?(.error(err))
+                        let incrementFailed = {
+                            if cursorsProgressCounter.incrementFailedAndCheckIfFinished() {
+                                self.initialStateHandler?(.error(err))
+                            }
+                        }
+
+                        if let statusError = err as? PPRequestTaskDelegateError {
+                            var response: HTTPURLResponse? = nil
+
+                            switch statusError {
+                            case .badResponseStatusCode(let res):
+                                response = res
+                            case .badResponseStatusCodeWithMessage(let res, _):
+                                response = res
+                            default:
+                                break
+                            }
+
+                            if let response = response, 400..<500 ~= response.statusCode {
+                                // We don't want the initial state handler to not be called because of
+                                // a 4XX status code error. So we still call it with a success result
+                                // but ignore (throw away) the cursor for which the fetch failed. We
+                                // also still increment the failed count of the progress counter, to
+                                // make any potential debugging easier
+                                if cursorsProgressCounter.incrementFailedAndCheckIfFinished() {
+                                    self.initialStateHandler?(.success(existing: existingCursors, new: newCursors))
+                                }
+                            } else {
+                                incrementFailed()
+                            }
+                        } else {
+                            incrementFailed()
                         }
                     } else {
                         if cursorsProgressCounter.incrementFailedAndCheckIfFinished() {
