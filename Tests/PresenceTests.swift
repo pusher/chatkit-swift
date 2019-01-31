@@ -21,7 +21,6 @@ class PresenceTests: XCTestCase {
 
         aliceChatManager = newTestChatManager(userID: uniqueAlice)
         bobChatManager = newTestChatManager(userID: uniqueBob)
-        charlieChatManager = newTestChatManager(userID: "charlie")
 
         let deleteResourcesEx = expectation(description: "delete resources")
         let createRolesEx = expectation(description: "create roles")
@@ -59,14 +58,18 @@ class PresenceTests: XCTestCase {
 
         wait(for: [createRolesEx, createAliceEx, createBobEx, createCharlieEx], timeout: 10)
 
-        self.charlieChatManager.connect(delegate: TestingChatManagerDelegate()) { charlie, err in
+        createRoom(
+            creatorID: "charlie",
+            name: "mushroom",
+            addUserIDs: [self.uniqueAlice, self.uniqueBob]
+        ) { err, data in
             XCTAssertNil(err)
-            charlie!.createRoom(name: "mushroom", addUserIDs: [self.uniqueAlice, self.uniqueBob]) { room, err in
-                XCTAssertNil(err)
-                self.roomID = room!.id
-                self.charlieChatManager.disconnect()
-                createRoomEx.fulfill()
-            }
+            XCTAssertNotNil(data)
+            let roomObject = try! JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+            let roomIDFromJSON = roomObject["id"] as! String
+            self.roomID = roomIDFromJSON
+
+            createRoomEx.fulfill()
         }
 
         wait(for: [createRoomEx], timeout: 15)
@@ -77,12 +80,13 @@ class PresenceTests: XCTestCase {
         aliceChatManager = nil
         bobChatManager.disconnect()
         bobChatManager = nil
-        charlieChatManager.disconnect()
-        charlieChatManager = nil
         roomID = nil
     }
 
     func testChatManagerDelegatePresenceHooks() {
+        let aliceConnectedEx = expectation(description: "alice connected")
+        let aliceSubscribedEx = expectation(description: "alice subscribed to room")
+        let bobConnectedEx = expectation(description: "bob connected")
         let initialPresenceEx = expectation(description: "notified of Bob initially being offline (user)")
         let onlineEx = expectation(description: "notified of Bob coming online (user)")
         let offlineEx = expectation(description: "notified of Bob going offline (user)")
@@ -103,23 +107,35 @@ class PresenceTests: XCTestCase {
 
         let aliceCMDelegate = TestingChatManagerDelegate(onPresenceChanged: onPresenceChanged)
 
-        aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
-            XCTAssertNil(err)
-            alice!.subscribeToRoom(
-                room: alice!.rooms.first(where: { $0.id == self.roomID })!,
-                roomDelegate: TestingRoomDelegate()
-            ) { err in
-                XCTAssertNil(err)
-                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
-                    XCTAssertNil(err)
-                }
-            }
-        }
+        var alice: PCCurrentUser!
 
-        waitForExpectations(timeout: 20)
+        aliceChatManager.connect(delegate: aliceCMDelegate) { a, err in
+            XCTAssertNil(err)
+            alice = a
+            aliceConnectedEx.fulfill()
+        }
+        wait(for: [aliceConnectedEx], timeout: 15)
+
+        alice.subscribeToRoom(
+            room: alice.rooms.first(where: { $0.id == self.roomID })!,
+            roomDelegate: TestingRoomDelegate()
+        ) { err in
+            XCTAssertNil(err)
+            aliceSubscribedEx.fulfill()
+        }
+        wait(for: [aliceSubscribedEx], timeout: 15)
+
+        self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
+            XCTAssertNil(err)
+            bobConnectedEx.fulfill()
+        }
+        wait(for: [bobConnectedEx, initialPresenceEx, onlineEx, offlineEx], timeout: 20)
     }
 
     func testRoomDelegatePresenceHooks() {
+        let bobConnectedEx = expectation(description: "bob connected")
+        let bobSubscribedEx = expectation(description: "bob subscribed to room")
+        let aliceConnectedEx = expectation(description: "bob connected")
         let initialPresenceEx = expectation(description: "notified of Alice initially being offline (room)")
         let onlineEx = expectation(description: "notified of Alice coming online (room)")
         let offlineEx = expectation(description: "notified of Alice going offline (room)")
@@ -140,19 +156,28 @@ class PresenceTests: XCTestCase {
 
         let bobRoomDelegate = TestingRoomDelegate(onPresenceChanged: onPresenceChanged)
 
-        self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
-            XCTAssertNil(err)
-            bob!.subscribeToRoom(
-                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
-                roomDelegate: bobRoomDelegate
-            ) { err in
-                XCTAssertNil(err)
-                self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
-                    XCTAssertNil(err)
-                }
-            }
-        }
+        var bob: PCCurrentUser!
 
-        waitForExpectations(timeout: 20)
+        self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { b, err in
+            XCTAssertNil(err)
+            bob = b!
+            bobConnectedEx.fulfill()
+        }
+        wait(for: [bobConnectedEx], timeout: 15)
+
+        bob!.subscribeToRoom(
+            room: bob!.rooms.first(where: { $0.id == self.roomID })!,
+            roomDelegate: bobRoomDelegate
+        ) { err in
+            XCTAssertNil(err)
+            bobSubscribedEx.fulfill()
+        }
+        wait(for: [bobSubscribedEx], timeout: 15)
+
+        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { _, err in
+            XCTAssertNil(err)
+            aliceConnectedEx.fulfill()
+        }
+        wait(for: [aliceConnectedEx, initialPresenceEx, onlineEx, offlineEx], timeout: 20)
     }
 }
