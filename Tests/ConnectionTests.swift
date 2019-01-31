@@ -39,7 +39,8 @@ class ConnectionTests: XCTestCase {
             // Modified emoji (e.g. skin tones)
             "🙆🏽",
             "with/slash",
-            "addaboy++"
+            "addaboy++",
+            "email@email.email"
         ]
 
         var connectionExpectations = [XCTestExpectation]()
