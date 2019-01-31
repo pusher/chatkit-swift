@@ -590,6 +590,33 @@ func sendMessage(
     }.resume()
 }
 
+func sendOrderedMessages(
+    messages: [String],
+    fromUserID userID: String,
+    toRoomID roomID: String,
+    completionHandler: @escaping (Error?) -> Void
+) {
+    guard let message = messages.first else {
+        completionHandler(nil)
+        return
+    }
+
+    sendMessage(asUser: userID, toRoom: roomID, text: message) { [messages] err in
+        guard err == nil else {
+            completionHandler(err!)
+            return
+        }
+
+        sendOrderedMessages(
+            messages: Array(messages.dropFirst()),
+            fromUserID: userID,
+            toRoomID: roomID,
+            completionHandler: completionHandler
+        )
+    }
+}
+
+
 fileprivate enum PCUserMembershipChange: String {
     case add
     case remove

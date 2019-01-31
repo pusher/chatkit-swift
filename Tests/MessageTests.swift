@@ -41,48 +41,34 @@ class MessagesTests: XCTestCase {
             XCTAssertNil(err)
             createBobEx.fulfill()
         }
-
         wait(for: [createRolesEx, createAliceEx, createBobEx], timeout: 15)
 
-        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+        createRoom(
+            creatorID: "alice",
+            name: "mushroom",
+            addUserIDs: ["bob"]
+        ) { err, data in
             XCTAssertNil(err)
-            alice!.createRoom(name: "mushroom", addUserIDs: ["bob"]) { room, err in
-                XCTAssertNil(err)
-                self.roomID = room!.id
-                createRoomEx.fulfill()
+            XCTAssertNotNil(data)
+            let roomObject = try! JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
+            let roomIDFromJSON = roomObject["id"] as! String
+            self.roomID = roomIDFromJSON
 
-                let messages = ["hello", "hey", "hi", "ho"]
-                self.sendOrderedMessages(
-                    messages: messages,
-                    from: alice!,
-                    toRoomID: self.roomID
-                ) { sendMessagesEx.fulfill() }
-            }
+            createRoomEx.fulfill()
         }
+        wait(for: [createRoomEx], timeout: 15)
 
-        wait(for: [createRoomEx, sendMessagesEx], timeout: 15)
-    }
-
-    fileprivate func sendOrderedMessages(
-        messages: [String],
-        from user: PCCurrentUser,
-        toRoomID roomID: String,
-        completionHandler: @escaping () -> Void
-    ) {
-        guard let message = messages.first else {
-            completionHandler()
-            return
-        }
-
-        user.sendMessage(roomID: roomID, text: message) { [messages] _, err in
+        let messages = ["hello", "hey", "hi", "ho"]
+        sendOrderedMessages(
+            messages: messages,
+            fromUserID: "alice",
+            toRoomID: self.roomID
+        ) { err in
             XCTAssertNil(err)
-            self.sendOrderedMessages(
-                messages: Array(messages.dropFirst()),
-                from: user,
-                toRoomID: roomID,
-                completionHandler: completionHandler
-            )
+            sendMessagesEx.fulfill()
         }
+
+        wait(for: [sendMessagesEx], timeout: 15)
     }
 
     override func tearDown() {
@@ -225,7 +211,10 @@ class MessagesTests: XCTestCase {
     }
 
     func testSubscribeToRoomAndReceiveSentMessages() {
-        let ex = expectation(description: "subscribe and receive sent messages")
+        let connectEx = expectation(description: "bob connected")
+        let subscribeEx = expectation(description: "bob subscribed to room")
+        let sendMessagesEx = expectation(description: "messages sent")
+        let messagesReceivedEx = expectation(description: "received sent messages")
 
         var expectedMessageTexts = ["yooo", "yo"]
 
@@ -237,12 +226,13 @@ class MessagesTests: XCTestCase {
             XCTAssertEqual(message.room.name, "mushroom")
 
             if expectedMessageTexts.isEmpty {
-                ex.fulfill()
+                messagesReceivedEx.fulfill()
             }
         })
 
         bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
             XCTAssertNil(err)
+            connectEx.fulfill()
 
             bob!.subscribeToRoom(
                 room: bob!.rooms.first(where: { $0.id == self.roomID })!,
@@ -250,22 +240,22 @@ class MessagesTests: XCTestCase {
                 messageLimit: 0,
                 completionHandler: { err in
                     XCTAssertNil(err)
-
-                    self.aliceChatManager.connect(
-                        delegate: TestingChatManagerDelegate()
-                    ) { alice, err in
-                        let messages = ["yo", "yooo"]
-                        self.sendOrderedMessages(
-                            messages: messages,
-                            from: alice!,
-                            toRoomID: self.roomID
-                        ) {}
-                    }
+                    subscribeEx.fulfill()
                 }
             )
         }
+        wait(for: [connectEx, subscribeEx], timeout: 15)
 
-        waitForExpectations(timeout: 15)
+        let messages = ["yo", "yooo"]
+        sendOrderedMessages(
+            messages: messages,
+            fromUserID: "alice",
+            toRoomID: self.roomID
+        ) { err in
+            XCTAssertNil(err)
+            sendMessagesEx.fulfill()
+        }
+        wait(for: [sendMessagesEx, messagesReceivedEx], timeout: 15)
     }
 
     func testSendAndReceiveMessageWithLinkAttachment() {
