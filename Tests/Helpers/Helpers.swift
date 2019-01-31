@@ -322,15 +322,23 @@ enum ChatkitService {
     }
 }
 
-func newTestChatManager(
-    userID: String,
-    delegate: PCChatManagerDelegate = TestingChatManagerDelegate()
-) -> ChatManager {
+func newTestChatManager(userID: String) -> ChatManager {
+    let splitInstance = testInstanceLocator.split(separator: ":")
+    let cluster = splitInstance[1]
+    let sdkInfo = PPSDKInfo(productName: "chatkit", sdkVersion: "1.3.0")
+
+    let baseClient = PCBaseClient(
+        host: "\(cluster).pusherplatform.io",
+        sdkInfo: sdkInfo,
+        enableTracing: true
+    )
+
     return ChatManager(
         instanceLocator: testInstanceLocator,
         tokenProvider: PCTokenProvider(url: testInstanceTokenProviderURL),
         userID: userID,
-        logger: TestLogger()
+        logger: TestLogger(),
+        baseClient: baseClient
     )
 }
 
