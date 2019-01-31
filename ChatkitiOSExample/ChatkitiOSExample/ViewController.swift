@@ -198,6 +198,10 @@ public class MyDelegate: PCChatManagerDelegate {
         print("\(user.displayName) stopped typing in room \(room.name)")
     }
 
+    public func onNewReadCursor(_ cursor: PCCursor) {
+        print("New cursor for currentUser at position \(cursor.position) in room \(cursor.room.id)")
+    }
+
     public func onError(error: Error) {
         print("Error: \(error.localizedDescription)")
     }
