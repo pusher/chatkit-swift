@@ -1,5 +1,6 @@
 import Foundation
 import PusherChatkit
+import PusherPlatform
 import Mockingjay
 
 enum TestHelperError: Error {

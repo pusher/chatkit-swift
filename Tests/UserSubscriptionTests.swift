@@ -15,18 +15,19 @@ class UserSubscriptionTests: XCTestCase {
         deleteInstanceResources() { err in
             XCTAssertNil(err)
             deleteResourcesEx.fulfill()
+        }
+        wait(for: [deleteResourcesEx], timeout: 15)
 
-            createStandardInstanceRoles() { err in
-                XCTAssertNil(err)
-                createRolesEx.fulfill()
-            }
-            createUser(id: "ash") { err in
-                XCTAssertNil(err)
-                createUserEx.fulfill()
-            }
+        createStandardInstanceRoles() { err in
+            XCTAssertNil(err)
+            createRolesEx.fulfill()
         }
 
-        waitForExpectations(timeout: 15)
+        createUser(id: "ash") { err in
+            XCTAssertNil(err)
+            createUserEx.fulfill()
+        }
+        wait(for: [createRolesEx, createUserEx], timeout: 15)
     }
 
     override func tearDown() {
@@ -36,15 +37,7 @@ class UserSubscriptionTests: XCTestCase {
     }
 
     func testThatWeCanConnect() {
-        let tokenEndpoint = testInstanceTokenProviderURL
-
-        chatManager = ChatManager(
-            instanceLocator: testInstanceLocator,
-            tokenProvider: PCTokenProvider(url: tokenEndpoint),
-            userID: "ash",
-            logger: TestLogger()
-        )
-
+        chatManager = newTestChatManager(userID: "ash")
         let ex = expectation(description: "Get currentUser back when connecting")
 
         chatManager.connect(delegate: TestingChatManagerDelegate()) { currentUser, error in
