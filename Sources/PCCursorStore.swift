@@ -33,7 +33,7 @@ public final class PCCursorStore {
             guard let cursor = cursor, err == nil else {
                 self.instance.logger.log(
                     "Error when enriching basic cursor: \(err!.localizedDescription)",
-                    logLevel: .error
+                    logLevel: .debug
                 )
                 completionHandler?(nil, err!)
                 return
@@ -86,7 +86,7 @@ public final class PCCursorStore {
                         guard let cursor = cursor, err == nil else {
                             self.instance.logger.log(
                                 "Error when enriching basic cursor: \(err!.localizedDescription)",
-                                logLevel: .error
+                                logLevel: .debug
                             )
                             completionHandler(nil, err!)
                             return
