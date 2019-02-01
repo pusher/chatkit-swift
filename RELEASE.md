@@ -24,7 +24,7 @@
 6. Tag the commit with the version number: `git tag -a NEW_VERSION_NUMBER -m NEW_VERSION_NUMBER`
 7. Push the commit and the tags: `git push origin master && git push --tags`
 
-_[Skip 8 and 9 if you have already registed with Cocoapods trunk on your machine]_
+_[Skip 8 and 9 if you have already registered with Cocoapods trunk on your machine]_
 
 8. Register your machine with Cocoapods by running `pod trunk register support@pusher.com`
 9. Go to Zendesk (or ask someone with access) to click the link in the challenge email that will have been sent to support@pusher.com. Note that it quite often ends up in the "spam" section of Zendesk so make sure you check there too.
