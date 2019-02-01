@@ -12,12 +12,13 @@
 ## Checklist
 
 1. Update [`CHANGELOG.md`](https://github.com/pusher/chatkit-swift/blob/master/CHANGELOG.md), following the existing format.
-2. Update version string in:
+2. Update version string in (searching the repo for the existing version string is probably the easiest way):
     1. [`Tests/ChatManagerTests.swift`](https://github.com/pusher/chatkit-swift/blob/master/Tests/ChatManagerTests.swift)
     2. [`Sources/ChatManager.swift`](https://github.com/pusher/chatkit-swift/blob/master/Sources/ChatManager.swift)
     3. [`Sources/Info.plist`](https://github.com/pusher/chatkit-swift/blob/master/Sources/Info.plist) (under the key `CFBundleShortVersionString`)
     4. [`Tests/Supporting Files/Info.plist`](https://github.com/pusher/chatkit-swift/blob/master/Tests/Supporting%20Files/Info.plist) (under the key `CFBundleShortVersionString`)
     5. [`PusherChatkit.podspec`](https://github.com/pusher/chatkit-swift/blob/master/PusherChatkit.podspec)
+    6. [`Tests/Helpers/Helpers.swift`](https://github.com/pusher/chatkit-swift/blob/master/Tests/Helpers/Helpers.swift)
 3. Run `carthage build --no-skip-current` to ensure that the framework builds. This will likely take a while - go get a drink.
 4. In Xcode, run the tests (⌘+u) with the `PusherChatkit` target selected (the briefcase symbol in the top bar) for an iOS device, your Mac, and a tvOS device.
 5. Commit all of the version changes: `git commit -am "Bump to NEW_VERSION_NUMBER"`
