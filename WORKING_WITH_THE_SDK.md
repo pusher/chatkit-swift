@@ -60,9 +60,9 @@ If you look in the [project file](https://github.com/pusher/chatkit-swift/blob/m
 
 This only applies for the test target (`PusherChatkitTests`). For the framework target (`PusherChatkit`) there isn't such a script because all that's required is a [special config](https://github.com/pusher/chatkit-swift/blob/master/Carthage.xcconfig) that sets custom `FRAMEWORK_SEARCH_PATHS` values to ensure that the frameworks for the required dependencies can be discovered.
 
-### Developing in conjucation with pusher-platform-swift
+### Developing in conjunction with pusher-platform-swift
 
-Sometimes you'll like want to do some development alongside some updates to [pusher-platform-swift](https://github.com/pusher/pusher-platform-swift). The simplest way to get this working locally (or even generally) is to change the `Cartfile` to point to a different source for the SDK. So, for example, you could change `github "pusher/pusher-platform-swift" ~> 0.6` in the [`Cartfile`](https://github.com/pusher/chatkit-swift/blob/master/Cartfile) to instead be `github "pusher/pusher-platform-swift" "testing-branch"` and then after running `carthage update pusher-platform-swift` you'd then be using the `testing-branch` of `pusher-platform-swift` as a dependency.
+Sometimes you'll likely want to do some development alongside some updates to [pusher-platform-swift](https://github.com/pusher/pusher-platform-swift). The simplest way to get this working locally (or even generally) is to change the `Cartfile` to point to a different source for the SDK. So, for example, you could change `github "pusher/pusher-platform-swift" ~> 0.6` in the [`Cartfile`](https://github.com/pusher/chatkit-swift/blob/master/Cartfile) to instead be `github "pusher/pusher-platform-swift" "testing-branch"` and then after running `carthage update pusher-platform-swift` you'd then be using the `testing-branch` of `pusher-platform-swift` as a dependency.
 
 Equally, if you don't want to push changes up to GitHub then you can use a local version of `pusher-platform-swift`. An example of how to do so is left as a comment in the `Cartfile`. You'll essentially want something in the form of: `git "file:///Users/ham/pusher/pusher-platform-swift" "branch-name"` and then again, running `carthage update pusher-platform-swift` will update your dependency to your local version of `pusher-platform-swift` using the `branch-name` branch.
 
@@ -76,7 +76,7 @@ The Chatkit SDK will then use the code from `pusher-platform.swift` as opposed t
 
 ### Memory leaks
 
-If you suspect a memory leak then you should run the tests or the example app having configured some code diagnostics in the appropriate scheme's Run action. You'll want to enable the `Malloc stack` option (Live Allocations Only is fine). Then run the tests / app as normal and when you want to inspect the memory graph you can enable the memory graph debugger. More information about using it can be found online, but [here](https://useyourloaf.com/blog/xcode-visual-memory-debugger/) is a simple introduction to it. Some Apple-provide docs for it can be found [here](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/debugging_with_xcode/chapters/special_debugging_workflows.html#//apple_ref/doc/uid/TP40015022-CH9-DontLinkElementID_1).
+If you suspect a memory leak then you should run the tests or the example app having configured some code diagnostics in the appropriate scheme's Run action. You'll want to enable the `Malloc stack` option (Live Allocations Only is fine). Then run the tests / app as normal and when you want to inspect the memory graph you can enable the memory graph debugger. More information about using it can be found online, but [here](https://useyourloaf.com/blog/xcode-visual-memory-debugger/) is a simple introduction to it. Some Apple-provided docs for it can be found [here](https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/debugging_with_xcode/chapters/special_debugging_workflows.html#//apple_ref/doc/uid/TP40015022-CH9-DontLinkElementID_1).
 
 ### Race conditions
 
