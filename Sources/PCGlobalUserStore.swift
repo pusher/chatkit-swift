@@ -2,14 +2,17 @@ import Foundation
 import PusherPlatform
 
 public final class PCGlobalUserStore {
+    public internal(set) var userStoreCore: PCUserStoreCore
+    unowned let instance: Instance
+    var onUserStoredHooks: [(PCUser) -> Void]
 
     public var users: Set<PCUser> {
         return self.userStoreCore.users
     }
 
-    public internal(set) var userStoreCore: PCUserStoreCore
-    unowned let instance: Instance
-    var onUserStoredHooks: [(PCUser) -> Void]
+    // Dictionary of userID -> [completionHandler]
+    var queuedUserFetches: [String: [(PCUser?, Error?) -> Void]] = [:]
+    let userFetchQueue = DispatchQueue(label: "com.pusher.chatkit.user-fetcher-\(UUID().uuidString)")
 
     init(userStoreCore: PCUserStoreCore = PCUserStoreCore(), instance: Instance) {
         self.userStoreCore = userStoreCore
@@ -29,62 +32,69 @@ public final class PCGlobalUserStore {
         return storedUser
     }
 
-    func remove(id: String) -> PCUser? {
-        return self.userStoreCore.remove(id: id)
-    }
-
     func findOrGetUser(id: String, completionHandler: @escaping (PCUser?, Error?) -> Void) {
         if let user = self.userStoreCore.users.first(where: { $0.id == id }) {
             completionHandler(user, nil)
         } else {
-            self.getUser(id: id) { [weak self] user, err in
-                guard let strongSelf = self else {
-                    print("self is nil getUser completes in the user store")
-                    return
-                }
-
-                guard let user = user, err == nil else {
-                    strongSelf.instance.logger.log(err!.localizedDescription, logLevel: .error)
-                    completionHandler(nil, err!)
-                    return
-                }
-
-                let userToReturn = strongSelf.addOrMerge(user)
-                completionHandler(userToReturn, nil)
-            }
+            self.getUser(id: id, completionHandler: completionHandler)
         }
     }
 
     func getUser(id: String, completionHandler: @escaping (PCUser?, Error?) -> Void) {
-        let path = "/users/\(id)"
-        let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
+        userFetchQueue.sync {
+            if let queued = queuedUserFetches[id] {
+                queuedUserFetches[id] = queued + [completionHandler]
+            } else {
+                let path = "/users/\(id)"
+                let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
+                self.queuedUserFetches[id] = [completionHandler]
 
-        self.instance.requestWithRetry(
-            using: generalRequest,
-            onSuccess: { data in
-                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                    completionHandler(nil, PCError.failedToDeserializeJSON(data))
-                    return
-                }
+                self.instance.requestWithRetry(
+                    using: generalRequest,
+                    onSuccess: { [weak self] data in
+                        guard let strongSelf = self else {
+                            print("self is nil getUser completes in the user store")
+                            return
+                        }
 
-                guard let userPayload = jsonObject as? [String: Any] else {
-                    completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
-                    return
-                }
+                        strongSelf.userFetchQueue.sync {
+                            let completionHandlers = strongSelf.queuedUserFetches[id, default: []]
+                            let callAllCompletionHandlersAndCleanUp = { (user: PCUser?, err: Error?) in
+                                completionHandlers.forEach { $0(user, err) }
+                                strongSelf.queuedUserFetches.removeValue(forKey: id)
+                            }
 
-                do {
-                    let user = try PCPayloadDeserializer.createUserFromPayload(userPayload)
-                    completionHandler(user, nil)
-                } catch let err {
-                    self.instance.logger.log(err.localizedDescription, logLevel: .debug)
-                    completionHandler(nil, err)
-                    return
-                }
-            },
-            onError: { err in
-                completionHandler(nil, err)
+                            guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
+                                callAllCompletionHandlersAndCleanUp(nil, PCError.failedToDeserializeJSON(data))
+                                return
+                            }
+
+                            guard let userPayload = jsonObject as? [String: Any] else {
+                                callAllCompletionHandlersAndCleanUp(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
+                                return
+                            }
+
+                            do {
+                                let user = try PCPayloadDeserializer.createUserFromPayload(userPayload)
+                                let userToReturn = strongSelf.addOrMerge(user)
+                                callAllCompletionHandlersAndCleanUp(userToReturn, nil)
+                            } catch let err {
+                                strongSelf.instance.logger.log(err.localizedDescription, logLevel: .debug)
+                                callAllCompletionHandlersAndCleanUp(nil, err)
+                                return
+                            }
+                        }
+                    },
+                    onError: { err in
+                        self.userFetchQueue.sync {
+                            let completionHandlers = self.queuedUserFetches[id, default: []]
+                            completionHandlers.forEach { $0(nil, err) }
+                            self.queuedUserFetches.removeValue(forKey: id)
+                        }
+                    }
+                )
             }
-        )
+        }
     }
 
     // TODO: Need a version of this that first checks the userStore for any of the userIDs
