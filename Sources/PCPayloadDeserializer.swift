@@ -168,6 +168,30 @@ struct PCPayloadDeserializer {
             userID: userID
         )
     }
+    
+    static func createMultipartAttachmentFromPayload(_ payload: [String: Any]) throws -> PCMultipartAttachment {
+        guard
+            let id = payload["id"] as? String,
+            let downloadUrl = payload["download_url"] as? String,
+            let refreshUrl = payload["refresh_url"] as? String,
+            let expiration = payload["expiration"] as? String,
+            let name = payload["name"] as? String?,
+        let customData = payload["custom_data"] as? [String: Any]?,
+            let size = payload["size"] as? Int
+        else {
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCMultipartAttachment.self), payload: payload)
+        }
+        
+        return PCMultipartAttachment(
+            id: id,
+            downloadUrl: downloadUrl,
+            refreshUrl: refreshUrl,
+            expiration: expiration,
+            name: name,
+            customData: customData,
+            size: size
+        )
+    }
 
     fileprivate static func createBasicUserFromPayload(_ payload: [String: Any]) throws -> PCBasicUser {
         guard
