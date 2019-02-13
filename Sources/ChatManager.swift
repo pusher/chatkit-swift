@@ -11,7 +11,8 @@ import NotificationCenter
 
 @objc public class ChatManager: NSObject {
     private let chatkitBeamsTokenProviderInstance: Instance
-    public let instance: Instance
+    public let v2Instance: Instance
+    public let v3Instance: Instance
     public let filesInstance: Instance
     public let cursorsInstance: Instance
     public let presenceInstance: Instance
@@ -29,7 +30,8 @@ import NotificationCenter
     var logger: PCLogger {
         didSet {
             connectionCoordinator.logger = logger
-            instance.logger = logger
+            v2Instance.logger = logger
+            v3Instance.logger = logger
             filesInstance.logger = logger
             cursorsInstance.logger = logger
             presenceInstance.logger = logger
@@ -59,9 +61,15 @@ import NotificationCenter
             logger: logger
         )
 
-        self.instance = ChatManager.createInstance(
+        self.v2Instance = ChatManager.createInstance(
             serviceName: "chatkit",
             serviceVersion: "v2",
+            sharedOptions: sharedInstanceOptions
+        )
+        
+        self.v3Instance = ChatManager.createInstance(
+            serviceName: "chatkit",
+            serviceVersion: "v3",
             sharedOptions: sharedInstanceOptions
         )
 
@@ -108,7 +116,7 @@ import NotificationCenter
         self.basicCurrentUser = PCBasicCurrentUser(
             id: userID,
             pathFriendlyID: pathFriendlyUserID,
-            instance: instance,
+            instance: v3Instance,
             chatkitBeamsTokenProviderInstance: chatkitBeamsTokenProviderInstance,
             filesInstance: filesInstance,
             cursorsInstance: cursorsInstance,
@@ -160,7 +168,8 @@ import NotificationCenter
                         currentUserPayload,
                         id: strongSelf.userID,
                         pathFriendlyID: strongSelf.pathFriendlyUserID,
-                        instance: strongSelf.instance,
+                        v2Instance: strongSelf.v2Instance,
+                        v3Instance: strongSelf.v3Instance,
                         chatkitBeamsTokenProviderInstance: strongSelf.chatkitBeamsTokenProviderInstance,
                         filesInstance: strongSelf.filesInstance,
                         cursorsInstance: strongSelf.cursorsInstance,
@@ -201,7 +210,7 @@ import NotificationCenter
                         let addedOrMergedRoom = strongSelf.currentUser!.roomStore.addOrMergeSync(room)
                         newRooms.insert(addedOrMergedRoom)
                     } catch let err {
-                        strongSelf.instance.logger.log(
+                        strongSelf.v2Instance.logger.log(
                             "Incomplete room payload in initial_state event: \(roomPayload). Error: \(err.localizedDescription)",
                             logLevel: .debug
                         )

@@ -21,11 +21,16 @@ class ChatManagerTests: XCTestCase {
         let sdkVersion = "1.3.1"
         let sdkLanguage = "swift"
 
-        let baseClientHeaders = chatManager.instance.client.generalRequestURLSession.configuration.httpAdditionalHeaders as! [String: String]
+        let baseClientHeadersV2 = chatManager.v2Instance.client.generalRequestURLSession.configuration.httpAdditionalHeaders as! [String: String]
+        let baseClientHeadersV3 = chatManager.v3Instance.client.generalRequestURLSession.configuration.httpAdditionalHeaders as! [String: String]
 
-        XCTAssertEqual(baseClientHeaders["X-SDK-Product"], sdkProductName)
-        XCTAssertEqual(baseClientHeaders["X-SDK-Version"], sdkVersion)
-        XCTAssertEqual(baseClientHeaders["X-SDK-Language"], sdkLanguage)
+        XCTAssertEqual(baseClientHeadersV2["X-SDK-Product"], sdkProductName)
+        XCTAssertEqual(baseClientHeadersV2["X-SDK-Version"], sdkVersion)
+        XCTAssertEqual(baseClientHeadersV2["X-SDK-Language"], sdkLanguage)
+        
+        XCTAssertEqual(baseClientHeadersV3["X-SDK-Product"], sdkProductName)
+        XCTAssertEqual(baseClientHeadersV3["X-SDK-Version"], sdkVersion)
+        XCTAssertEqual(baseClientHeadersV3["X-SDK-Language"], sdkLanguage)
     }
 }
 
