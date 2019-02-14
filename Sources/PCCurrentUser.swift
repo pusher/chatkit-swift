@@ -550,7 +550,7 @@ public final class PCCurrentUser {
 
     // MARK: Message-related interactions
 
-    func sendMessage(_ messageObject: [String: Any], roomID: String, completionHandler: @escaping (Int?, Error?) -> Void) {
+    func sendMessage(instance: Instance, _ messageObject: [String: Any], roomID: String, completionHandler: @escaping (Int?, Error?) -> Void) {
         guard JSONSerialization.isValidJSONObject(messageObject) else {
             completionHandler(nil, PCError.invalidJSONObjectAsData(messageObject))
             return
@@ -564,7 +564,7 @@ public final class PCCurrentUser {
         let path = "/rooms/\(roomID)/messages"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
-        self.v2Instance.requestWithRetry(
+        instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -612,7 +612,7 @@ public final class PCCurrentUser {
             reqOptions = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: "/rooms/\(roomID)/users/\(pathFriendlyID)/files/\(pathSafeName)")
             break
         default:
-            sendMessage(messageObject, roomID: roomID, completionHandler: completionHandler)
+            sendMessage(instance: self.v2Instance, messageObject, roomID: roomID, completionHandler: completionHandler)
             return
         }
 
@@ -639,7 +639,7 @@ public final class PCCurrentUser {
                         "type": attachmentUploadResponse.type
                     ]
 
-                    self.sendMessage(mutableMessageObject, roomID: roomID, completionHandler: completionHandler)
+                    self.sendMessage(instance: self.v2Instance, mutableMessageObject, roomID: roomID, completionHandler: completionHandler)
                 } catch let err {
                     completionHandler(nil, err)
                     self.v2Instance.logger.log("Response from uploading attachment to room \(roomID) was invalid", logLevel: .verbose)
@@ -666,7 +666,7 @@ public final class PCCurrentUser {
         ]
 
         guard let attachment = attachment else {
-            sendMessage(messageObject, roomID: roomID, completionHandler: completionHandler)
+            sendMessage(instance: self.v2Instance, messageObject, roomID: roomID, completionHandler: completionHandler)
             return
         }
 
@@ -684,9 +684,36 @@ public final class PCCurrentUser {
                 "resource_link": url,
                 "type": type
             ]
-            sendMessage(messageObject, roomID: roomID, completionHandler: completionHandler)
+            sendMessage(instance: self.v2Instance, messageObject, roomID: roomID, completionHandler: completionHandler)
             break
         }
+    }
+    
+    public func sendSimpleMessage(roomID: String, text: String, completionHandler: @escaping (Int?, Error?) -> Void) {
+        let messageObject: [String: Any] = [
+            "parts": [
+                ["content": text, "type": "text/plain"]
+            ]
+        ]
+        
+        sendMessage(instance: self.v3Instance, messageObject, roomID: roomID, completionHandler: completionHandler)
+    }
+    
+    public func sendMultipartMessage(roomID: String, parts: [PCPart], completionHandler: @escaping (Int?, Error?) -> Void) {
+        let partObjects = parts.map { (part) -> [String: Any] in
+            switch part.payload {
+            case .inlinePayload(let payload):
+                return ["content": payload.content, "type": payload.type]
+            case .urlPayload(let payload):
+                return ["url": payload.url, "type": payload.type]
+            case .attachmentPayload:
+                break
+            }
+            
+            return [:]
+        }
+        
+        sendMessage(instance: self.v3Instance, ["parts": partObjects], roomID: roomID, completionHandler: completionHandler)
     }
 
     public func downloadAttachment(

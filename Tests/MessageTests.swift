@@ -223,7 +223,83 @@ class MessagesTests: XCTestCase {
 
         waitForExpectations(timeout: 15)
     }
-
+    
+    func testSendSimpleMessage() {
+        let ex = expectation(description: "send simple message (multipart message)")
+        
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.sendSimpleMessage(roomID: self.roomID, text: "simple message", completionHandler: { _, err in
+                XCTAssertNil(err)
+                
+                bob!.fetchMessagesFromRoom(bob!.rooms.first(where: { $0.id == self.roomID })!, completionHandler: { messages, err in
+                    XCTAssertNil(err)
+                    XCTAssertEqual(messages!.last?.text, "simple message")
+                    ex.fulfill()
+                })
+            })
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+    
+    func testSendMultipartMessageWithSingleTextPart() {
+        let ex = expectation(description: "send multipart message with single text part")
+        
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: [
+                    PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: "text/plain", content: "hola!")))
+                ],
+                completionHandler: { messageID, err in
+                    XCTAssertNil(err)
+                
+                    bob!.fetchMessagesFromRoom(bob!.rooms.first(where: { $0.id == self.roomID })!, completionHandler: { messages, err in
+                        XCTAssertNil(err)
+                        XCTAssertEqual(messages!.last?.text, "hola!")
+                        ex.fulfill()
+                    })
+                }
+            )
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+    
+    func testSendMultipartMessageWithMultipleParts() {
+        let ex = expectation(description: "send multipart message with multiple inline parts")
+    
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: [
+                    PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: "text/plain", content: "senõr"))),
+                    PCPart(payload: PCMultipartPayload.urlPayload(payload: PCMultipartURLPayload(type: "image/png", url: "https://imgur.com/images/asdasd.png")))
+                ],
+                completionHandler: { messageID, err in
+                    XCTAssertNil(err)
+                    
+                    bob!.fetchMessagesFromRoom(bob!.rooms.first(where: { $0.id == self.roomID })!, completionHandler: {
+                        messages, err in
+                        XCTAssertNil(err)
+                        XCTAssertEqual(messages!.last?.text, "senõr")
+                        XCTAssertEqual(messages!.last?.attachment?.link, "https://imgur.com/images/asdasd.png")
+                        XCTAssertEqual(messages!.last?.attachment?.type, "image")
+                        ex.fulfill()
+                    })
+                }
+            )
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+    
     func testSubscribeToRoomAndReceiveSentMessages() {
         let ex = expectation(description: "subscribe and receive sent messages")
 
