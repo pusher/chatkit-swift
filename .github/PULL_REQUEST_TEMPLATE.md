@@ -7,5 +7,3 @@
 
 
 ----
-
-CC @hamchapman

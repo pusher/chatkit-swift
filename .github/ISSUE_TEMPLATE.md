@@ -14,5 +14,3 @@
 
 
 ----
-
-CC @hamchapman
