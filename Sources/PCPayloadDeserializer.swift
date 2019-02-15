@@ -19,7 +19,8 @@ struct PCPayloadDeserializer {
         _ userPayload: [String: Any],
         id: String,
         pathFriendlyID: String,
-        instance: Instance,
+        v2Instance: Instance,
+        v3Instance: Instance,
         chatkitBeamsTokenProviderInstance: Instance,
         filesInstance: Instance,
         cursorsInstance: Instance,
@@ -40,7 +41,8 @@ struct PCPayloadDeserializer {
             name: userPayload["name"] as? String,
             avatarURL: userPayload["avatar_url"] as? String,
             customData: userPayload["custom_data"] as? [String: Any],
-            instance: instance,
+            v2Instance: v2Instance,
+            v3Instance: v3Instance,
             chatkitBeamsTokenProviderInstance: chatkitBeamsTokenProviderInstance,
             filesInstance: filesInstance,
             cursorsInstance: cursorsInstance,
@@ -164,6 +166,30 @@ struct PCPayloadDeserializer {
             roomID: roomID,
             updatedAt: updatedAt,
             userID: userID
+        )
+    }
+    
+    static func createMultipartAttachmentFromPayload(_ payload: [String: Any]) throws -> PCMultipartAttachment {
+        guard
+            let id = payload["id"] as? String,
+            let downloadUrl = payload["download_url"] as? String,
+            let refreshUrl = payload["refresh_url"] as? String,
+            let expiration = payload["expiration"] as? String,
+            let name = payload["name"] as? String?,
+        let customData = payload["custom_data"] as? [String: Any]?,
+            let size = payload["size"] as? Int
+        else {
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCMultipartAttachment.self), payload: payload)
+        }
+        
+        return PCMultipartAttachment(
+            id: id,
+            downloadUrl: downloadUrl,
+            refreshUrl: refreshUrl,
+            expiration: expiration,
+            name: name,
+            customData: customData,
+            size: size
         )
     }
 
