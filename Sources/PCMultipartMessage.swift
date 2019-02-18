@@ -59,41 +59,13 @@ public struct PCMultipartURLPayload {
     let url: String
 }
 
-public class PCMultipartAttachmentPayload {
-    let type: String
-    let size: Int
-    let name: String?
-    let customData: [String: Any]?
-    internal let refreshURL: String
-    internal var downloadURL: String
-    internal var expiration: String
-    
-     init(
-        type: String,
-        size: Int,
-        name: String?,
-        customData: [String: Any]?,
-        refreshURL: String,
-        downloadURL: String,
-        expiration: String
-    ) {
-        self.type = type
-        self.size = size
-        self.name = name
-        self.customData = customData
-        self.refreshURL = refreshURL
-        self.downloadURL = downloadURL
-        self.expiration = expiration
-    }
-}
-
-public enum PCMultipartPayload {
+public enum PCMultipartPayload { 
     case inlinePayload(payload: PCMultipartInlinePayload)
     case urlPayload(payload: PCMultipartURLPayload)
     case attachmentPayload(payload: PCMultipartAttachmentPayload)
 }
 
-struct PCMultipartAttachment {
+public struct PCMultipartAttachmentPayload {
     let id: String
     let downloadUrl: String
     let refreshUrl: String
@@ -101,5 +73,4 @@ struct PCMultipartAttachment {
     let name: String?
     let customData: [String: Any]?
     let size: Int
-    
 }
