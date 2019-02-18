@@ -751,6 +751,8 @@ public final class PCCurrentUser {
             room,
             delegate: roomDelegate,
             messageLimit: messageLimit,
+            instance: self.v2Instance,
+            version: "v2",
             completionHandler: completionHandler
         )
     }
@@ -777,6 +779,50 @@ public final class PCCurrentUser {
                 room,
                 delegate: roomDelegate,
                 messageLimit: messageLimit,
+                instance: self.v2Instance,
+                version: "v2",
+                completionHandler: completionHandler
+            )
+        }
+    }
+    
+    public func subscribeToRoomMultipart(
+        room: PCRoom,
+        roomDelegate: PCRoomDelegate,
+        messageLimit: Int = 20,
+        completionHandler: @escaping PCErrorCompletionHandler
+    ) {
+        self.subscribeToRoom(
+            room,
+            delegate: roomDelegate,
+            messageLimit: messageLimit,
+            instance: self.v3Instance,
+            version: "v3",
+            completionHandler: completionHandler
+        )
+    }
+    
+    public func subscribeToRoomMultipart(
+        id roomID: String,
+        roomDelegate: PCRoomDelegate,
+        messageLimit: Int = 20,
+        completionHandler: @escaping PCErrorCompletionHandler
+    ) {
+        self.roomStore.room(id: roomID) { r, err in
+            guard err == nil, let room = r else {
+                self.v3Instance.logger.log(
+                    "Error getting room from room store as part of multipart message subscription \(err!.localizedDescription)",
+                    logLevel: .error
+                )
+                completionHandler(err)
+                return
+            }
+            self.subscribeToRoom(
+                room,
+                delegate: roomDelegate,
+                messageLimit: messageLimit,
+                instance: self.v3Instance,
+                version: "v3",
                 completionHandler: completionHandler
             )
         }
@@ -786,16 +832,18 @@ public final class PCCurrentUser {
         _ room: PCRoom,
         delegate: PCRoomDelegate,
         messageLimit: Int = 20,
+        instance: Instance,
+        version: String,
         completionHandler: @escaping PCErrorCompletionHandler
     ) {
-        self.v2Instance.logger.log(
+        instance.logger.log(
             "About to subscribe to room \(room.debugDescription)",
             logLevel: .verbose
         )
 
         self.joinRoom(roomID: room.id) { innerRoom, err in
             guard let roomToSubscribeTo = innerRoom, err == nil else {
-                self.v3Instance.logger.log(
+                instance.logger.log(
                     "Error joining room as part of room subscription process \(room.debugDescription)",
                     logLevel: .error
                 )
@@ -817,8 +865,9 @@ public final class PCCurrentUser {
                 roomStore: self.roomStore,
                 cursorStore: self.cursorStore,
                 typingIndicatorManager: self.typingIndicatorManager,
-                instance: self.v2Instance,
+                instance: instance,
                 cursorsInstance: self.cursorsInstance,
+                version: version,
                 logger: self.v2Instance.logger,
                 completionHandler: completionHandler
             )
