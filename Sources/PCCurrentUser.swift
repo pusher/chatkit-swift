@@ -877,93 +877,139 @@ public final class PCCurrentUser {
         direction: PCRoomMessageFetchDirection = .older,
         completionHandler: @escaping ([PCMessage]?, Error?) -> Void
     ) {
+        self.fetchEnrichedMessages(
+            room,
+            initialID: initialID,
+            limit: limit,
+            direction: direction,
+            instance: self.v2Instance,
+            deserialise: PCPayloadDeserializer.createBasicMessageFromPayload,
+            messageFactory: { (basicMessage, room, user) in
+                return PCMessage(
+                    id: basicMessage.id,
+                    text: basicMessage.text,
+                    createdAt: basicMessage.createdAt,
+                    updatedAt: basicMessage.updatedAt,
+                    attachment: basicMessage.attachment,
+                    sender: user,
+                    room: room
+                )
+            },
+            completionHandler: completionHandler
+        )
+    }
+    
+    public func fetchMultipartMessages(
+        _ room: PCRoom,
+        initialID: String? = nil,
+        limit: Int? = nil,
+        direction: PCRoomMessageFetchDirection = .older,
+        completionHandler: @escaping ([PCMultipartMessage]?, Error?) -> Void
+    ) {
+        self.fetchEnrichedMessages(
+            room,
+            initialID: initialID,
+            limit: limit,
+            direction: direction,
+            instance: self.v3Instance,
+            deserialise: PCPayloadDeserializer.createMultipartMessageFromPayload,
+            messageFactory: { (basicMessage, room, user) in
+                return PCMultipartMessage(
+                    id: basicMessage.id,
+                    sender: user,
+                    room: room,
+                    parts: basicMessage.parts,
+                    createdAt: basicMessage.createdAt,
+                    updatedAt: basicMessage.updatedAt
+                )
+                
+            },
+            completionHandler: completionHandler
+        )
+    }
+    
+    fileprivate func fetchEnrichedMessages<A: PCCommonBasicMessage, B: PCEnrichedMessage>(
+        _ room: PCRoom,
+        initialID: String? = nil,
+        limit: Int? = nil,
+        direction: PCRoomMessageFetchDirection = .older,
+        instance: Instance,
+        deserialise: @escaping ([String: Any]) throws -> A,
+        messageFactory: @escaping (A, PCRoom, PCUser) -> B,
+        completionHandler: @escaping ([B]?, Error?) -> Void
+    ) {
         let path = "/rooms/\(room.id)/messages"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
-
+        
         if let initialID = initialID {
             generalRequest.addQueryItems([URLQueryItem(name: "initial_id", value: initialID)])
         }
-
+        
         if let limit = limit {
             generalRequest.addQueryItems([URLQueryItem(name: "limit", value: String(limit))])
         }
-
+        
         generalRequest.addQueryItems([URLQueryItem(name: "direction", value: direction.rawValue)])
-
-        self.v2Instance.requestWithRetry(
+        
+        instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
                     completionHandler(nil, PCError.failedToDeserializeJSON(data))
                     return
                 }
-
+                
                 guard let messagesPayload = jsonObject as? [[String: Any]] else {
                     completionHandler(nil, PCError.failedToCastJSONObjectToDictionary(jsonObject))
                     return
                 }
-
+                
                 guard messagesPayload.count > 0 else {
                     completionHandler([], nil)
                     return
                 }
-
+                
                 let progressCounter = PCProgressCounter(totalCount: messagesPayload.count, labelSuffix: "message-enricher")
-                let messages = PCSynchronizedArray<PCMessage>()
-                var basicMessages: [PCBasicMessage] = []
-
+                let messages = PCSynchronizedArray<B>()
+                var basicMessages: [A] = []
+                
                 let messageUserIDs = messagesPayload.compactMap { messagePayload -> String? in
                     do {
-                        let basicMessage = try PCPayloadDeserializer.createBasicMessageFromPayload(messagePayload)
+                        let basicMessage = try deserialise(messagePayload)
                         basicMessages.append(basicMessage)
                         return basicMessage.senderID
                     } catch let err {
-                        self.v2Instance.logger.log(err.localizedDescription, logLevel: .debug)
+                        instance.logger.log(err.localizedDescription, logLevel: .debug)
                         return nil
                     }
                 }
-
+                
                 let messageUserIDsSet = Set<String>(messageUserIDs)
-
+                
                 self.userStore.fetchUsersWithIDs(messageUserIDsSet) { _, err in
                     if let err = err {
-                        self.v2Instance.logger.log(err.localizedDescription, logLevel: .debug)
+                        instance.logger.log(err.localizedDescription, logLevel: .debug)
                     }
-
-                    let messageEnricher = PCBasicMessageEnricher<PCBasicMessage, PCMessage>(
+                    
+                    let messageEnricher = PCBasicMessageEnricher<A, B>(
                         userStore: self.userStore,
                         room: room,
-                        messageFactory: { (basicMessage, room, user) in
-                            return PCMessage(
-                                id: basicMessage.id,
-                                text: basicMessage.text,
-                                createdAt: basicMessage.createdAt,
-                                updatedAt: basicMessage.updatedAt,
-                                attachment: basicMessage.attachment,
-                                sender: user,
-                                room: room
-                            )
-                        },
-                        logger: self.v2Instance.logger
+                        messageFactory: messageFactory,
+                        logger: instance.logger
                     )
-
+        
                     basicMessages.forEach { basicMessage in
-                        messageEnricher.enrich(basicMessage) { [weak self] message, err in
-                            guard let strongSelf = self else {
-                                print("self is nil in enrichment of basicMessage")
-                                return
-                            }
-
+                        messageEnricher.enrich(basicMessage) { message, err in
                             guard let message = message, err == nil else {
-                                strongSelf.v2Instance.logger.log(err!.localizedDescription, logLevel: .debug)
-
+                                instance.logger.log(err!.localizedDescription, logLevel: .debug)
+                                
                                 if progressCounter.incrementFailedAndCheckIfFinished() {
                                     completionHandler(messages.underlyingArray.sorted(by: { $0.id > $1.id }), nil)
                                 }
-
+                                
                                 return
                             }
-                        
+                            
                             messages.append(message) {
                                 if progressCounter.incrementSuccessAndCheckIfFinished() {
                                     completionHandler(

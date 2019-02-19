@@ -6,7 +6,7 @@ class MessagesTests: XCTestCase {
     var aliceChatManager: ChatManager!
     var bobChatManager: ChatManager!
     var roomID: String!
-
+    
     override func setUp() {
         super.setUp()
 
@@ -156,6 +156,115 @@ class MessagesTests: XCTestCase {
             }
         }
 
+        waitForExpectations(timeout: 15)
+    }
+    
+    func testFetchMessagesV3MessageWithOneTextPartRetrievedOnV2() {
+        let ex = expectation(description: "retrieve multipart message (one text part) sent on v3 retrieved on v2")
+        
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: [
+                PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: "text/plain", content: "hola!")))
+                ]
+            ) { _, err in
+                XCTAssertNil(err)
+                
+                bob!.fetchMessagesFromRoom(
+                    bob!.rooms.first(where: { $0.id == self.roomID })!,
+                    direction: .newer
+                ) { messages, err in
+                    XCTAssertNotNil(messages)
+                    XCTAssertNil(err)
+        
+                    XCTAssertEqual(messages!.last!.text, "hola!")
+                    XCTAssertEqual(messages!.last!.sender.id, "bob")
+                    XCTAssertEqual(messages!.last!.sender.name, "Bob")
+                    XCTAssertEqual(messages!.last!.room.id, self.roomID)
+                    XCTAssertEqual(messages!.last!.room.name, "mushroom")
+                    
+                    ex.fulfill()
+                }
+            }
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+
+    func testFetchMultipartMessageV3MessageWithSeveralPartsRetrievedOnV3() {
+        let ex = expectation(description: "retrieve multipart message (several parts) sent on v3 retrieved on v3")
+        let expectedParts = [
+                PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: "text/plain", content: "hola!"))),
+                PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: "text/plain", content: "gracias!"))),
+                PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: "text/plain", content: "por favor!"))),
+                PCPart(payload: PCMultipartPayload.urlPayload(payload: PCMultipartURLPayload(type: "image/png", url: "https://images.com/image.png")))
+            ]
+        
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: expectedParts
+            ) { _, err in
+                XCTAssertNil(err)
+                
+                bob!.fetchMultipartMessages(
+                    bob!.rooms.first(where: { $0.id == self.roomID })!,
+                    direction: .newer
+                ) { messages, err in
+                    XCTAssertNotNil(messages)
+                    XCTAssertNil(err)
+                    
+                    XCTAssertEqual(messages!.last!.parts[0].payload, expectedParts[0].payload)
+                    XCTAssertEqual(messages!.last!.parts[1].payload, expectedParts[1].payload)
+                    XCTAssertEqual(messages!.last!.parts[2].payload, expectedParts[2].payload)
+                    
+                    XCTAssertEqual(messages!.last!.sender.id, "bob")
+                    XCTAssertEqual(messages!.last!.sender.name, "Bob")
+                    XCTAssertEqual(messages!.last!.room.id, self.roomID)
+                    XCTAssertEqual(messages!.last!.room.name, "mushroom")
+                    ex.fulfill()
+                }
+            }
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+
+    func testFetchMultipartMessageV2MessageRetrievedOnV3() {
+        let ex = expectation(description: "retrieve multipart message sent on v3 retrieved on v3")
+        
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.sendSimpleMessage(
+                roomID: self.roomID,
+                text: "testing!"
+            ) { _, err in
+                XCTAssertNil(err)
+                
+                bob!.fetchMessagesFromRoom(
+                    bob!.rooms.first(where: { $0.id == self.roomID })!,
+                    direction: .newer
+                ) { messages, err in
+                    XCTAssertNotNil(messages)
+                    XCTAssertNil(err)
+                    
+                    XCTAssertEqual(messages!.last!.text, "testing!")
+                    XCTAssertEqual(messages!.last!.sender.id, "bob")
+                    XCTAssertEqual(messages!.last!.sender.name, "Bob")
+                    XCTAssertEqual(messages!.last!.room.id, self.roomID)
+                    XCTAssertEqual(messages!.last!.room.name, "mushroom")
+                    
+                    ex.fulfill()
+                }
+            }
+        }
+        
         waitForExpectations(timeout: 15)
     }
 

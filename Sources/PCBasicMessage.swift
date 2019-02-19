@@ -7,6 +7,7 @@ public protocol PCCommonBasicMessage {
 }
 
 public protocol PCEnrichedMessage {
+    var id: Int { get }
     var sender: PCUser { get }
     var room: PCRoom { get }
 }
