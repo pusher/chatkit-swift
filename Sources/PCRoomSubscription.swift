@@ -2,8 +2,8 @@ import Foundation
 import PusherPlatform
 
 public final class PCRoomSubscription {
-    public var messageSubscription: PCMessageSubscription?
-    public var multipartMessageSubscription: PCMultipartMessageSubscription?
+    public var messageSubscription: PCMessageSubscription<PCBasicMessage, PCMessage>?
+    public var multipartMessageSubscription: PCMessageSubscription<PCBasicMultipartMessage, PCMultipartMessage>?
     public var cursorSubscription: PCCursorSubscription?
     public var membershipSubscription: PCMembershipSubscription?
     public weak var delegate: PCRoomDelegate?
@@ -60,7 +60,7 @@ public final class PCRoomSubscription {
         }
         
         if version == "v3" {
-            self.multipartMessageSubscription =  subscribeToRoomMultipartMessages(
+            self.multipartMessageSubscription = subscribeToRoomMultipartMessages(
                 room: room,
                 messageLimit: messageLimit,
                 instance: instance,
@@ -211,7 +211,7 @@ fileprivate func subscribeToRoomMessages(
     onMessageHook: @escaping (PCMessage) -> Void,
     onIsTypingHook: @escaping (PCRoom, PCUser) -> Void,
     completionHandler: @escaping PCErrorCompletionHandler
-) -> PCMessageSubscription {
+) -> PCMessageSubscription<PCBasicMessage, PCMessage> {
     let path = "/rooms/\(room.id)"
 
     // TODO: What happens if you provide both a message_limit and a Last-Event-ID?
@@ -232,11 +232,23 @@ fileprivate func subscribeToRoomMessages(
         roomID: room.id,
         resumableSubscription: resumableSub,
         logger: logger,
-        basicMessageEnricher: PCBasicMessageEnricher<PCBasicMessage>(
+        basicMessageEnricher: PCBasicMessageEnricher<PCBasicMessage, PCMessage>(
             userStore: userStore,
             room: room,
+            messageFactory: { (basicMessage, room, user) in
+                return PCMessage(
+                    id: basicMessage.id,
+                    text: basicMessage.text,
+                    createdAt: basicMessage.createdAt,
+                    updatedAt: basicMessage.updatedAt,
+                    attachment: basicMessage.attachment,
+                    sender: user,
+                    room: room
+                )
+            },
             logger: logger
         ),
+        deserialise: PCPayloadDeserializer.createBasicMessageFromPayload,
         userStore: userStore,
         roomStore: roomStore,
         onMessageHook: onMessageHook,
@@ -266,7 +278,7 @@ fileprivate func subscribeToRoomMultipartMessages(
     onMessageHook: @escaping (PCMultipartMessage) -> Void,
     onIsTypingHook: @escaping (PCRoom, PCUser) -> Void,
     completionHandler: @escaping PCErrorCompletionHandler
-    ) -> PCMultipartMessageSubscription {
+    ) -> PCMessageSubscription<PCBasicMultipartMessage, PCMultipartMessage> {
     let path = "/rooms/\(room.id)"
     
     let subscribeRequest = PPRequestOptions(
@@ -279,15 +291,26 @@ fileprivate func subscribeToRoomMultipartMessages(
 
     var resumableSub = PPResumableSubscription(instance: instance, requestOptions: subscribeRequest)
     
-    let messageSubscription = PCMultipartMessageSubscription(
+    let messageSubscription = PCMessageSubscription<PCBasicMultipartMessage, PCMultipartMessage>(
         roomID: room.id,
         resumableSubscription: resumableSub,
         logger: logger,
-        messageEnricher: PCBasicMessageEnricher<PCBasicMultipartMessage>(
+        basicMessageEnricher: PCBasicMessageEnricher<PCBasicMultipartMessage, PCMultipartMessage>(
             userStore: userStore,
             room: room,
+            messageFactory: { (basicMessage, room, user) in
+                return PCMultipartMessage(
+                    id: basicMessage.id,
+                    sender: user,
+                    room: room,
+                    parts: basicMessage.parts,
+                    createdAt: basicMessage.createdAt,
+                    updatedAt: basicMessage.updatedAt
+                )
+            },
             logger: logger
         ),
+        deserialise: PCPayloadDeserializer.createMultipartMessageFromPayload,
         userStore: userStore,
         roomStore: roomStore,
         onMessageHook: onMessageHook,
