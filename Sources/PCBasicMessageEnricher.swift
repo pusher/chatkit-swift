@@ -1,28 +1,35 @@
 import Foundation
 import PusherPlatform
 
-final class PCBasicMessageEnricher<BasicMessage: PCCommonBasicMessage> {
+final class PCBasicMessageEnricher<A: PCCommonBasicMessage, B: PCEnrichedMessage> {
     public let userStore: PCGlobalUserStore
     public let room: PCRoom
     let logger: PPLogger
+    let messageFactory: (A, PCRoom, PCUser) -> B
 
     fileprivate var completionOrderList: [Int] = []
-    fileprivate var messageIDToCompletionHandlers: [Int: (PCEnrichedMessage?, Error?) -> Void] = [:]
+    fileprivate var messageIDToCompletionHandlers: [Int: (B?, Error?) -> Void] = [:]
     fileprivate var enrichedMessagesAwaitingCompletionCalls: [Int: PCMessageEnrichmentResult] = [:]
     fileprivate let messageEnrichmentQueue = DispatchQueue(label: "com.pusher.chatkit.message-enrichment-\(UUID().uuidString)")
 
     fileprivate var userIDsBeingRetrieved: [String] = []
     fileprivate var userIDsToBasicMessageIDs: [String: [Int]] = [:]
-    fileprivate var messagesAwaitingEnrichmentDependentOnUserRetrieval: [Int: BasicMessage] = [:]
+    fileprivate var messagesAwaitingEnrichmentDependentOnUserRetrieval: [Int: A] = [:]
     fileprivate let userRetrievalQueue = DispatchQueue(label: "com.pusher.chatkit.user-retrieval-\(UUID().uuidString)")
-
-    init(userStore: PCGlobalUserStore, room: PCRoom, logger: PPLogger) {
+    
+    init(
+        userStore: PCGlobalUserStore,
+        room: PCRoom,
+        messageFactory: @escaping (A, PCRoom, PCUser) -> B,
+        logger: PPLogger
+    ) {
         self.userStore = userStore
         self.room = room
         self.logger = logger
+        self.messageFactory = messageFactory
     }
 
-    func enrich(_ basicMessage: BasicMessage, completionHandler: @escaping (PCEnrichedMessage?, Error?) -> Void) {
+    func enrich(_ basicMessage: A, completionHandler: @escaping (B?, Error?) -> Void) {
         let basicMessageID = basicMessage.id
         let basicMessageSenderID = basicMessage.senderID
 
@@ -70,7 +77,7 @@ final class PCBasicMessageEnricher<BasicMessage: PCCommonBasicMessage> {
                         return
                     }
 
-                    let basicMessages = basicMessageIDs.compactMap { bmID -> BasicMessage? in
+                    let basicMessages = basicMessageIDs.compactMap { bmID -> A? in
                         return strongSelf.messagesAwaitingEnrichmentDependentOnUserRetrieval[bmID]
                     }
 
@@ -84,10 +91,10 @@ final class PCBasicMessageEnricher<BasicMessage: PCCommonBasicMessage> {
         }
     }
 
-    fileprivate func enrichMessagesWithUser(_ user: PCUser, messages: [BasicMessage]) {
+    fileprivate func enrichMessagesWithUser(_ user: PCUser, messages: [A]) {
         messages.forEach { basicMessage in
-            let message = basicMessage.enrichMessage(user: user, room: self.room)
-            self.callCompletionHandlersForEnrichedMessagesWithIDsLessThanOrEqualTo(id: basicMessage.id, result: .success(message))
+            let message = self.messageFactory(basicMessage, room, user)
+            self.callCompletionHandlersForEnrichedMessagesWithIDsLessThanOrEqualTo(id: basicMessage.id, result: PCMessageEnrichmentResult.success(message))
         }
     }
 
@@ -138,9 +145,10 @@ final class PCBasicMessageEnricher<BasicMessage: PCCommonBasicMessage> {
             } while self.completionOrderList.first != nil && self.enrichedMessagesAwaitingCompletionCalls[self.completionOrderList.first!] != nil
         }
     }
+    
+    enum PCMessageEnrichmentResult {
+        case success(B)
+        case error(Error)
+    }
 }
 
-public enum PCMessageEnrichmentResult {
-    case success(PCEnrichedMessage)
-    case error(Error)
-}
