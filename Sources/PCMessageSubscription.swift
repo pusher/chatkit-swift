@@ -80,7 +80,6 @@ public final class PCMessageSubscription<A: PCCommonBasicMessage, B: PCEnrichedM
                 }
 
                 strongSelf.onMessageHook(message)
-//                strongSelf.logger.log("Room received new message: \(message.debugDescription)", logLevel: .verbose)
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)

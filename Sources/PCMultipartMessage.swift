@@ -31,7 +31,7 @@ public final class PCMultipartMessage: PCEnrichedMessage {
 
 extension PCMultipartMessage: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "Message - ID: \(self.id), sender: \(self.sender.id)"
+        return "Message - ID: \(self.id), sender: \(self.sender.id), parts: \(self.parts)"
     }
 }
 

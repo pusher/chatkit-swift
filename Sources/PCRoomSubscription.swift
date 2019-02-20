@@ -68,6 +68,7 @@ public final class PCRoomSubscription {
                 roomStore: roomStore,
                 logger: logger,
                 onMessageHook: { [weak roomDelegate, weak self] message in
+                    instance.logger.log("Room received new message: \(message.debugDescription)", logLevel: .verbose)
                     self?.eventBufferQueue.async {
                         self?.callOrBuffer(room: room) {
                             roomDelegate?.onMultipartMessage(message)
@@ -100,6 +101,7 @@ public final class PCRoomSubscription {
                 roomStore: roomStore,
                 logger: logger,
                 onMessageHook: { [weak roomDelegate, weak self] message in
+                    instance.logger.log("Room received new message: \(message.debugDescription)", logLevel: .verbose)
                     self?.eventBufferQueue.async {
                         self?.callOrBuffer(room: room) {
                             roomDelegate?.onMessage(message)
