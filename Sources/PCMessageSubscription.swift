@@ -5,7 +5,7 @@ public final class PCMessageSubscription {
     let roomID: String
     let resumableSubscription: PPResumableSubscription
     public var logger: PPLogger
-    let basicMessageEnricher: PCBasicMessageEnricher
+    let basicMessageEnricher: PCBasicMessageEnricher<PCBasicMessage>
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
     let onMessageHook: (PCMessage) -> Void
@@ -15,7 +15,7 @@ public final class PCMessageSubscription {
         roomID: String,
         resumableSubscription: PPResumableSubscription,
         logger: PPLogger,
-        basicMessageEnricher: PCBasicMessageEnricher,
+        basicMessageEnricher: PCBasicMessageEnricher<PCBasicMessage>,
         userStore: PCGlobalUserStore,
         roomStore: PCRoomStore,
         onMessageHook: @escaping (PCMessage) -> Void,
@@ -75,9 +75,14 @@ public final class PCMessageSubscription {
                     strongSelf.logger.log(err!.localizedDescription, logLevel: .debug)
                     return
                 }
+                
+                guard let bMessage = message as? PCMessage else {
+                    strongSelf.logger.log("Failed to get enriched message as PCMessage", logLevel: .error)
+                    return
+                }
 
-                strongSelf.onMessageHook(message)
-                strongSelf.logger.log("Room received new message: \(message.debugDescription)", logLevel: .verbose)
+                strongSelf.onMessageHook(bMessage)
+                strongSelf.logger.log("Room received new message: \(bMessage.debugDescription)", logLevel: .verbose)
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)

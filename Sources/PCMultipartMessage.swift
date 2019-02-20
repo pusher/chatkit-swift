@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-public final class PCMultipartMessage {
+public final class PCMultipartMessage: PCEnrichedMessage {
     public let id: Int
     public let sender: PCUser
     public let room:PCRoom

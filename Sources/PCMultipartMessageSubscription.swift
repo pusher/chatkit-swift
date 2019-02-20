@@ -5,7 +5,7 @@ public final class PCMultipartMessageSubscription {
     let roomID: String
     let resumableSubscription: PPResumableSubscription
     public var logger: PPLogger
-    let multipartMessageEnricher: PCMultipartBasicMessageEnricher
+    let messageEnricher: PCBasicMessageEnricher<PCBasicMultipartMessage>
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
     let onMessageHook: (PCMultipartMessage) -> Void
@@ -15,7 +15,7 @@ public final class PCMultipartMessageSubscription {
         roomID: String,
         resumableSubscription: PPResumableSubscription,
         logger: PPLogger,
-        multipartMessageEnricher: PCMultipartBasicMessageEnricher,
+        messageEnricher: PCBasicMessageEnricher<PCBasicMultipartMessage>,
         userStore: PCGlobalUserStore,
         roomStore: PCRoomStore,
         onMessageHook: @escaping (PCMultipartMessage) -> Void,
@@ -24,7 +24,7 @@ public final class PCMultipartMessageSubscription {
         self.roomID = roomID
         self.resumableSubscription = resumableSubscription
         self.logger = logger
-        self.multipartMessageEnricher = multipartMessageEnricher
+        self.messageEnricher = messageEnricher
         self.userStore = userStore
         self.roomStore = roomStore
         self.onMessageHook = onMessageHook
@@ -64,7 +64,7 @@ public final class PCMultipartMessageSubscription {
     func onNewMessage(data: [String: Any]) {
         do {
             let multipartMessage = try PCPayloadDeserializer.createMultipartMessageFromPayload(data)
-            self.multipartMessageEnricher.enrich(multipartMessage) { [weak self] message, err in
+            self.messageEnricher.enrich(multipartMessage) { [weak self] message, err in
                 guard let strongSelf = self else {
                     print("self is nil when enrichment of multipartMessage has completed")
                     return
@@ -75,8 +75,13 @@ public final class PCMultipartMessageSubscription {
                     return
                 }
                 
-                strongSelf.onMessageHook(message)
-                strongSelf.logger.log("Room received new message: \(message.debugDescription)", logLevel: .verbose)
+                guard let mmMessage = message as? PCMultipartMessage else {
+                    strongSelf.logger.log("Failed to get enriched message as PCMultipartMessage", logLevel: .error)
+                    return
+                }
+                
+                strongSelf.onMessageHook(mmMessage)
+                strongSelf.logger.log("Room received new message: \(mmMessage.debugDescription)", logLevel: .verbose)
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)

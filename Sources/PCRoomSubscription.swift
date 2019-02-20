@@ -232,7 +232,7 @@ fileprivate func subscribeToRoomMessages(
         roomID: room.id,
         resumableSubscription: resumableSub,
         logger: logger,
-        basicMessageEnricher: PCBasicMessageEnricher(
+        basicMessageEnricher: PCBasicMessageEnricher<PCBasicMessage>(
             userStore: userStore,
             room: room,
             logger: logger
@@ -283,7 +283,7 @@ fileprivate func subscribeToRoomMultipartMessages(
         roomID: room.id,
         resumableSubscription: resumableSub,
         logger: logger,
-        multipartMessageEnricher: PCMultipartBasicMessageEnricher(
+        messageEnricher: PCBasicMessageEnricher<PCBasicMultipartMessage>(
             userStore: userStore,
             room: room,
             logger: logger
