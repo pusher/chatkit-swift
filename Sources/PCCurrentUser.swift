@@ -930,7 +930,7 @@ public final class PCCurrentUser {
                         self.v2Instance.logger.log(err.localizedDescription, logLevel: .debug)
                     }
 
-                    let messageEnricher = PCBasicMessageEnricher(
+                    let messageEnricher = PCBasicMessageEnricher<PCBasicMessage>(
                         userStore: self.userStore,
                         room: room,
                         logger: self.v2Instance.logger
@@ -952,8 +952,13 @@ public final class PCCurrentUser {
 
                                 return
                             }
+                            
+                            guard let bMessage = message as? PCMessage else {
+                                self?.v2Instance.logger.log("Failed to get PCBasicCommonMessage as PCMessage", logLevel: .error)
+                                return
+                            }
 
-                            messages.append(message) {
+                            messages.append(bMessage) {
                                 if progressCounter.incrementSuccessAndCheckIfFinished() {
                                     completionHandler(
                                         messages.underlyingArray.sorted(
