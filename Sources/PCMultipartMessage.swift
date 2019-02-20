@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-public final class PCMultipartMessage {
+public final class PCMultipartMessage: PCEnrichedMessage {
     public let id: Int
     public let sender: PCUser
     public let room:PCRoom
@@ -31,7 +31,7 @@ public final class PCMultipartMessage {
 
 extension PCMultipartMessage: CustomDebugStringConvertible {
     public var debugDescription: String {
-        return "Message - ID: \(self.id), sender: \(self.sender.id)"
+        return "Message - ID: \(self.id), sender: \(self.sender.id), parts: \(self.parts)"
     }
 }
 
@@ -59,41 +59,13 @@ public struct PCMultipartURLPayload {
     let url: String
 }
 
-public class PCMultipartAttachmentPayload {
-    let type: String
-    let size: Int
-    let name: String?
-    let customData: [String: Any]?
-    internal let refreshURL: String
-    internal var downloadURL: String
-    internal var expiration: String
-    
-     init(
-        type: String,
-        size: Int,
-        name: String?,
-        customData: [String: Any]?,
-        refreshURL: String,
-        downloadURL: String,
-        expiration: String
-    ) {
-        self.type = type
-        self.size = size
-        self.name = name
-        self.customData = customData
-        self.refreshURL = refreshURL
-        self.downloadURL = downloadURL
-        self.expiration = expiration
-    }
-}
-
-public enum PCMultipartPayload {
+public enum PCMultipartPayload { 
     case inlinePayload(payload: PCMultipartInlinePayload)
     case urlPayload(payload: PCMultipartURLPayload)
     case attachmentPayload(payload: PCMultipartAttachmentPayload)
 }
 
-struct PCMultipartAttachment {
+public struct PCMultipartAttachmentPayload {
     let id: String
     let downloadUrl: String
     let refreshUrl: String
@@ -101,5 +73,4 @@ struct PCMultipartAttachment {
     let name: String?
     let customData: [String: Any]?
     let size: Int
-    
 }

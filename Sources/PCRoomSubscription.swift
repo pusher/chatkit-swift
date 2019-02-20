@@ -2,10 +2,12 @@ import Foundation
 import PusherPlatform
 
 public final class PCRoomSubscription {
-    public var messageSubscription: PCMessageSubscription?
+    public var messageSubscription: PCMessageSubscription<PCBasicMessage, PCMessage>?
+    public var multipartMessageSubscription: PCMessageSubscription<PCBasicMultipartMessage, PCMultipartMessage>?
     public var cursorSubscription: PCCursorSubscription?
     public var membershipSubscription: PCMembershipSubscription?
     public weak var delegate: PCRoomDelegate?
+    public var version: String
     weak var room: PCRoom?
 
     fileprivate let eventBufferQueue = DispatchQueue(label: "com.pusher.chatkit.room-event-buffer-\(UUID().uuidString)")
@@ -23,11 +25,13 @@ public final class PCRoomSubscription {
         typingIndicatorManager: PCTypingIndicatorManager,
         instance: Instance,
         cursorsInstance: Instance,
+        version: String,
         logger: PCLogger,
         completionHandler: @escaping PCErrorCompletionHandler
     ) {
         self.delegate = roomDelegate
         self.room = room
+        self.version = version
 
         let progressCounter = PCProgressCounter(
             totalCount: 3,
@@ -54,38 +58,75 @@ public final class PCRoomSubscription {
                 }
             }
         }
-
-        let messageSub = subscribeToRoomMessages(
-            room: room,
-            messageLimit: messageLimit,
-            instance: instance,
-            userStore: userStore,
-            roomStore: roomStore,
-            logger: logger,
-            onMessageHook: { [weak roomDelegate, weak self] message in
-                self?.eventBufferQueue.async {
-                    self?.callOrBuffer(room: room) {
-                        roomDelegate?.onMessage(message)
+        
+        if version == "v3" {
+            self.multipartMessageSubscription = subscribeToRoomMultipartMessages(
+                room: room,
+                messageLimit: messageLimit,
+                instance: instance,
+                userStore: userStore,
+                roomStore: roomStore,
+                logger: logger,
+                onMessageHook: { [weak roomDelegate, weak self] message in
+                    instance.logger.log("Room received new message: \(message.debugDescription)", logLevel: .verbose)
+                    self?.eventBufferQueue.async {
+                        self?.callOrBuffer(room: room) {
+                            roomDelegate?.onMultipartMessage(message)
+                        }
                     }
-                }
-            },
-            onIsTypingHook: { [weak typingIndicatorManager, weak roomDelegate, weak cmDelegate = chatManagerDelegate, weak self] room, user in
-                self?.eventBufferQueue.async {
-                    self?.callOrBuffer(room: room) {
-                        typingIndicatorManager?.onIsTyping(
-                            room: room,
-                            user: user,
-                            globalStartHook: cmDelegate?.onUserStartedTyping,
-                            globalStopHook: cmDelegate?.onUserStoppedTyping,
-                            roomStartHook: roomDelegate?.onUserStartedTyping,
-                            roomStopHook: roomDelegate?.onUserStoppedTyping
-                        )
+                },
+                onIsTypingHook: { [weak typingIndicatorManager, weak roomDelegate, weak cmDelegate = chatManagerDelegate, weak self] room, user in
+                    self?.eventBufferQueue.async {
+                        self?.callOrBuffer(room: room) {
+                            typingIndicatorManager?.onIsTyping(
+                                room: room,
+                                user: user,
+                                globalStartHook: cmDelegate?.onUserStartedTyping,
+                                globalStopHook: cmDelegate?.onUserStoppedTyping,
+                                roomStartHook: roomDelegate?.onUserStartedTyping,
+                                roomStopHook: roomDelegate?.onUserStoppedTyping
+                            )
+                        }
                     }
-                }
-            },
-            completionHandler: combinedCompletionHandler
-        )
-
+                },
+                completionHandler: combinedCompletionHandler
+            )
+            self.messageSubscription = nil
+        } else {
+            self.messageSubscription = subscribeToRoomMessages(
+                room: room,
+                messageLimit: messageLimit,
+                instance: instance,
+                userStore: userStore,
+                roomStore: roomStore,
+                logger: logger,
+                onMessageHook: { [weak roomDelegate, weak self] message in
+                    instance.logger.log("Room received new message: \(message.debugDescription)", logLevel: .verbose)
+                    self?.eventBufferQueue.async {
+                        self?.callOrBuffer(room: room) {
+                            roomDelegate?.onMessage(message)
+                        }
+                    }
+                },
+                onIsTypingHook: { [weak typingIndicatorManager, weak roomDelegate, weak cmDelegate = chatManagerDelegate, weak self] room, user in
+                    self?.eventBufferQueue.async {
+                        self?.callOrBuffer(room: room) {
+                            typingIndicatorManager?.onIsTyping(
+                                room: room,
+                                user: user,
+                                globalStartHook: cmDelegate?.onUserStartedTyping,
+                                globalStopHook: cmDelegate?.onUserStoppedTyping,
+                                roomStartHook: roomDelegate?.onUserStartedTyping,
+                                roomStopHook: roomDelegate?.onUserStoppedTyping
+                            )
+                        }
+                    }
+                },
+                completionHandler: combinedCompletionHandler
+            )
+            self.multipartMessageSubscription = nil
+        }
+        
         let cursorSub = subscribeToRoomCursors(
             room: room,
             cursorsInstance: cursorsInstance,
@@ -129,17 +170,24 @@ public final class PCRoomSubscription {
             completionHandler: combinedCompletionHandler
         )
 
-        self.messageSubscription = messageSub
         self.cursorSubscription = cursorSub
         self.membershipSubscription = membershipSub
     }
 
     func end() {
-        self.messageSubscription?.end()
+        if self.messageSubscription != nil {
+            self.messageSubscription!.end()
+        }
+        
+        if self.multipartMessageSubscription != nil {
+            self.multipartMessageSubscription!.end()
+        }
+    
         self.cursorSubscription?.end()
         self.membershipSubscription?.end()
 
         self.messageSubscription = nil
+        self.multipartMessageSubscription = nil
         self.cursorSubscription = nil
         self.membershipSubscription = nil
     }
@@ -165,7 +213,7 @@ fileprivate func subscribeToRoomMessages(
     onMessageHook: @escaping (PCMessage) -> Void,
     onIsTypingHook: @escaping (PCRoom, PCUser) -> Void,
     completionHandler: @escaping PCErrorCompletionHandler
-) -> PCMessageSubscription {
+) -> PCMessageSubscription<PCBasicMessage, PCMessage> {
     let path = "/rooms/\(room.id)"
 
     // TODO: What happens if you provide both a message_limit and a Last-Event-ID?
@@ -186,11 +234,23 @@ fileprivate func subscribeToRoomMessages(
         roomID: room.id,
         resumableSubscription: resumableSub,
         logger: logger,
-        basicMessageEnricher: PCBasicMessageEnricher(
+        basicMessageEnricher: PCBasicMessageEnricher<PCBasicMessage, PCMessage>(
             userStore: userStore,
             room: room,
+            messageFactory: { (basicMessage, room, user) in
+                return PCMessage(
+                    id: basicMessage.id,
+                    text: basicMessage.text,
+                    createdAt: basicMessage.createdAt,
+                    updatedAt: basicMessage.updatedAt,
+                    attachment: basicMessage.attachment,
+                    sender: user,
+                    room: room
+                )
+            },
             logger: logger
         ),
+        deserialise: PCPayloadDeserializer.createBasicMessageFromPayload,
         userStore: userStore,
         roomStore: roomStore,
         onMessageHook: onMessageHook,
@@ -208,6 +268,69 @@ fileprivate func subscribeToRoomMessages(
     )
 
     return messageSubscription
+}
+
+fileprivate func subscribeToRoomMultipartMessages(
+    room: PCRoom,
+    messageLimit: Int,
+    instance: Instance,
+    userStore: PCGlobalUserStore,
+    roomStore: PCRoomStore,
+    logger: PCLogger,
+    onMessageHook: @escaping (PCMultipartMessage) -> Void,
+    onIsTypingHook: @escaping (PCRoom, PCUser) -> Void,
+    completionHandler: @escaping PCErrorCompletionHandler
+    ) -> PCMessageSubscription<PCBasicMultipartMessage, PCMultipartMessage> {
+    let path = "/rooms/\(room.id)"
+    
+    let subscribeRequest = PPRequestOptions(
+        method: HTTPMethod.SUBSCRIBE.rawValue,
+        path: path,
+        queryItems: [
+            URLQueryItem(name: "message_limit", value: String(messageLimit))
+        ]
+    )
+
+    var resumableSub = PPResumableSubscription(instance: instance, requestOptions: subscribeRequest)
+    
+    let messageSubscription = PCMessageSubscription<PCBasicMultipartMessage, PCMultipartMessage>(
+        roomID: room.id,
+        resumableSubscription: resumableSub,
+        logger: logger,
+        basicMessageEnricher: PCBasicMessageEnricher<PCBasicMultipartMessage, PCMultipartMessage>(
+            userStore: userStore,
+            room: room,
+            messageFactory: { (basicMessage, room, user) in
+                return PCMultipartMessage(
+                    id: basicMessage.id,
+                    sender: user,
+                    room: room,
+                    parts: basicMessage.parts,
+                    createdAt: basicMessage.createdAt,
+                    updatedAt: basicMessage.updatedAt
+                )
+            },
+            logger: logger
+        ),
+        deserialise: PCPayloadDeserializer.createMultipartMessageFromPayload,
+        userStore: userStore,
+        roomStore: roomStore,
+        onMessageHook: onMessageHook,
+        onIsTypingHook: onIsTypingHook
+    )
+    
+    instance.subscribeWithResume(
+        with: &resumableSub,
+        using: subscribeRequest,
+        onOpen: { completionHandler(nil) },
+        onEvent: { [unowned messageSubscription] eventID, headers, data in
+            messageSubscription.handleEvent(eventID: eventID, headers: headers, data: data)
+        },
+        onError: completionHandler
+    )
+    
+    return messageSubscription
+    
 }
 
 fileprivate func subscribeToRoomCursors(

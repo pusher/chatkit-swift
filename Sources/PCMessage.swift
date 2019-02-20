@@ -1,6 +1,6 @@
 import Foundation
 
-public final class PCMessage {
+public final class PCMessage: PCEnrichedMessage {
     public let id: Int
     public let text: String
     public let createdAt: String

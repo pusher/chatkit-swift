@@ -74,6 +74,7 @@
 		37DEF4D621A4835900F924EC /* lol ? wut ?&...json in Resources */ = {isa = PBXBuildFile; fileRef = 37DEF4D521A4835900F924EC /* lol ? wut ?&...json */; };
 		37DEF4D721A485F400F924EC /* lol ? wut ?&...json in Resources */ = {isa = PBXBuildFile; fileRef = 37DEF4D521A4835900F924EC /* lol ? wut ?&...json */; };
 		90690D15221438D900645E8A /* PCMultipartMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90690D14221438D900645E8A /* PCMultipartMessage.swift */; };
+		90CF0391221AD1A300FAE8B2 /* PCBasicMultipartMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90CF0390221AD1A300FAE8B2 /* PCBasicMultipartMessage.swift */; };
 		A14B8C3C2191AD1D0039AD5D /* ChatkitBeamsTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14B8C3B2191AD1D0039AD5D /* ChatkitBeamsTokenProvider.swift */; };
 		F2665DEE20FDEE56002A0A3D /* PresenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2665DED20FDEE56002A0A3D /* PresenceTests.swift */; };
 		F2665E0F20FE025D002A0A3D /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2665E0E20FE025C002A0A3D /* MessageTests.swift */; };
@@ -162,6 +163,7 @@
 		37DEF4D121A456C200F924EC /* RoomTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTests.swift; sourceTree = "<group>"; };
 		37DEF4D521A4835900F924EC /* lol ? wut ?&...json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "lol ? wut ?&...json"; sourceTree = "<group>"; };
 		90690D14221438D900645E8A /* PCMultipartMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCMultipartMessage.swift; sourceTree = "<group>"; };
+		90CF0390221AD1A300FAE8B2 /* PCBasicMultipartMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCBasicMultipartMessage.swift; sourceTree = "<group>"; };
 		A14B8C3B2191AD1D0039AD5D /* ChatkitBeamsTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatkitBeamsTokenProvider.swift; sourceTree = "<group>"; };
 		A14F52F82189C1F200D4C284 /* PushNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PushNotifications.framework; path = Carthage/Build/iOS/PushNotifications.framework; sourceTree = "<group>"; };
 		F2665DED20FDEE56002A0A3D /* PresenceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresenceTests.swift; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				A14B8C3B2191AD1D0039AD5D /* ChatkitBeamsTokenProvider.swift */,
 				33831C8C1A9CF61600B124F1 /* Supporting Files */,
 				33346ABF1EAE1887002C58B8 /* PusherChatkit.h */,
+				90CF0390221AD1A300FAE8B2 /* PCBasicMultipartMessage.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -514,6 +517,7 @@
 				33C5D8F72020837100E826FB /* PCCursorType.swift in Sources */,
 				335AD5E6205828F7000D4D08 /* PCCursorStore.swift in Sources */,
 				3314212F1ED32AE700D0B6DB /* PCProgressCounter.swift in Sources */,
+				90CF0391221AD1A300FAE8B2 /* PCBasicMultipartMessage.swift in Sources */,
 				33BA3013210F4D5C000E0832 /* PCUserPresenceSubscription.swift in Sources */,
 				335AD8F8205C10AD000D4D08 /* PCMessageSubscription.swift in Sources */,
 				374C814A21F0DA98008ECEBD /* PCDateFormatter.swift in Sources */,
