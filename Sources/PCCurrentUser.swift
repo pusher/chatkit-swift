@@ -703,18 +703,16 @@ public final class PCCurrentUser {
         sendMessage(instance: self.v3Instance, messageObject, roomID: roomID, completionHandler: completionHandler)
     }
     
-    public func sendMultipartMessage(roomID: String, parts: [PCPart], completionHandler: @escaping (Int?, Error?) -> Void) {
+    public func sendMultipartMessage(roomID: String, parts: [PCPartRequest], completionHandler: @escaping (Int?, Error?) -> Void) {
         let partObjects = parts.map { (part) -> [String: Any] in
             switch part.payload {
-            case .inlinePayload(let payload):
-                return ["content": payload.content, "type": payload.type]
-            case .urlPayload(let payload):
-                return ["url": payload.url, "type": payload.type]
-            case .attachmentPayload:
-                break
+            case .inline(let payload):
+                return payload.toMap()
+            case .url(let payload):
+                return payload.toMap()
+            case .attachment(let payload):
+                return payload.toMap()
             }
-            
-            return [:]
         }
         
         sendMessage(instance: self.v3Instance, ["parts": partObjects], roomID: roomID, completionHandler: completionHandler)
