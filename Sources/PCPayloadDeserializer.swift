@@ -219,27 +219,27 @@ struct PCPayloadDeserializer {
     
     fileprivate static func createPartFromPayload(_ payload: [String: Any]) throws -> PCPart {
         // Empty mutable part
-        var resultPartPayload: PCMultipartPayload = PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: "", content: ""))
+        var resultPartPayload: PCMultipartPayload = .inline(PCMultipartInlinePayload(type: "", content: ""))
         
         guard let partType = payload["type"] as? String else {
             throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCPart.self), payload: payload)
         }
         
         if let content = payload["content"] as? String {
-            resultPartPayload = PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: partType, content: content))
+            resultPartPayload = .inline(PCMultipartInlinePayload(type: partType, content: content))
         }
         
         if let url = payload["url"] as? String {
-            resultPartPayload = PCMultipartPayload.urlPayload(payload: PCMultipartURLPayload(type: partType, url: url))
+            resultPartPayload = .url(PCMultipartURLPayload(type: partType, url: url))
         }
         
         
         if let attachment = payload["attachment"] as? [String: Any] {
             let multipartAttachment = try createMultipartAttachmentFromPayload(attachment)
-            resultPartPayload = PCMultipartPayload.attachmentPayload(payload: multipartAttachment)
+            resultPartPayload = .attachment(multipartAttachment)
         }
         
-        return PCPart(payload: resultPartPayload)
+        return PCPart(resultPartPayload)
     }
 
     fileprivate static func createBasicUserFromPayload(_ payload: [String: Any]) throws -> PCBasicUser {
