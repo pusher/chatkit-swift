@@ -197,10 +197,10 @@ class MessagesTests: XCTestCase {
     func testFetchMultipartMessageV3MessageWithSeveralPartsRetrievedOnV3() {
         let ex = expectation(description: "retrieve multipart message (several parts) sent on v3 retrieved on v3")
         let expectedParts = [
-                PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: "text/plain", content: "hola!"))),
-                PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: "text/plain", content: "gracias!"))),
-                PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: "text/plain", content: "por favor!"))),
-                PCPart(payload: PCMultipartPayload.urlPayload(payload: PCMultipartURLPayload(type: "image/png", url: "https://images.com/image.png")))
+                PCPart(.inline(PCMultipartInlinePayload(type: "text/plain", content: "hola!"))),
+                PCPart(.inline(PCMultipartInlinePayload(type: "text/plain", content: "gracias!"))),
+                PCPart(.inline(PCMultipartInlinePayload(type: "text/plain", content: "por favor!"))),
+                PCPart(.url(PCMultipartURLPayload(type: "image/png", url: "https://images.com/image.png")))
             ]
         let requestParts = [
             PCPartRequest(.inline(PCPartInlineRequest(content: "hola!"))),
@@ -514,7 +514,7 @@ class MessagesTests: XCTestCase {
         
         let bobRoomDelegate = TestingRoomDelegate(onMultipartMessage: { message in
             switch message.parts[0].payload {
-            case .inlinePayload(let payload):
+            case .inline(let payload):
                 XCTAssertEqual(payload.content, expectedMessageContent)
                 XCTAssertEqual(payload.type, "text/plain")
             default:
@@ -563,12 +563,12 @@ class MessagesTests: XCTestCase {
         let urlPart = PCPartRequest(.url(PCPartUrlRequest(type: expectedURLPartType, url: expectedURLPartString)))
         
         let bobRoomDelegate = TestingRoomDelegate(onMultipartMessage: { message in
-            if case let PCMultipartPayload.inlinePayload(payload) = message.parts[0].payload {
+            if case let .inline(payload) = message.parts[0].payload {
                 XCTAssertEqual(payload.content, expectedTextPartContent)
                 XCTAssertEqual(payload.type, "text/plain")
             }
             
-            if case let PCMultipartPayload.urlPayload(payload) = message.parts[1].payload {
+            if case let .url(payload) = message.parts[1].payload {
                 XCTAssertEqual(payload.url, expectedURLPartString)
                 XCTAssertEqual(payload.type, "image/jpeg")
             }
