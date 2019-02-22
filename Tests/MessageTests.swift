@@ -168,7 +168,7 @@ class MessagesTests: XCTestCase {
             bob!.sendMultipartMessage(
                 roomID: self.roomID,
                 parts: [
-                PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: "text/plain", content: "hola!")))
+                    PCPartRequest(.inline(PCPartInlineRequest(content: "hola!")))
                 ]
             ) { _, err in
                 XCTAssertNil(err)
@@ -202,13 +202,19 @@ class MessagesTests: XCTestCase {
                 PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: "text/plain", content: "por favor!"))),
                 PCPart(payload: PCMultipartPayload.urlPayload(payload: PCMultipartURLPayload(type: "image/png", url: "https://images.com/image.png")))
             ]
+        let requestParts = [
+            PCPartRequest(.inline(PCPartInlineRequest(content: "hola!"))),
+            PCPartRequest(.inline(PCPartInlineRequest(content: "gracias!"))),
+            PCPartRequest(.inline(PCPartInlineRequest(content: "por favor!"))),
+            PCPartRequest(.url(PCPartUrlRequest(type: "image/png", url: "https://images.com/image.png")))
+        ]
         
         bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
             XCTAssertNil(err)
             
             bob!.sendMultipartMessage(
                 roomID: self.roomID,
-                parts: expectedParts
+                parts: requestParts
             ) { _, err in
                 XCTAssertNil(err)
                 
@@ -362,7 +368,7 @@ class MessagesTests: XCTestCase {
             bob!.sendMultipartMessage(
                 roomID: self.roomID,
                 parts: [
-                    PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: "text/plain", content: "hola!")))
+                    PCPartRequest(.inline(PCPartInlineRequest(content: "hola!")))
                 ],
                 completionHandler: { messageID, err in
                     XCTAssertNil(err)
@@ -388,8 +394,8 @@ class MessagesTests: XCTestCase {
             bob!.sendMultipartMessage(
                 roomID: self.roomID,
                 parts: [
-                    PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: "text/plain", content: "senõr"))),
-                    PCPart(payload: PCMultipartPayload.urlPayload(payload: PCMultipartURLPayload(type: "image/png", url: "https://imgur.com/images/asdasd.png")))
+                    PCPartRequest(.inline(PCPartInlineRequest(content: "senõr"))),
+                    PCPartRequest(.url(PCPartUrlRequest(type: "image/png", url: "https://imgur.com/images/asdasd.png")))
                 ],
                 completionHandler: { messageID, err in
                     XCTAssertNil(err)
@@ -553,8 +559,8 @@ class MessagesTests: XCTestCase {
         let expectedURLPartString = "https://images.com/cat.jpeg"
         let expectedURLPartType = "image/jpeg"
         
-        let textPart = PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: expectedTextPartType, content: expectedTextPartContent)))
-        let urlPart = PCPart(payload: PCMultipartPayload.urlPayload(payload: PCMultipartURLPayload(type: expectedURLPartType, url: expectedURLPartString)))
+        let textPart = PCPartRequest(.inline(PCPartInlineRequest(type: expectedTextPartType, content: expectedTextPartContent)))
+        let urlPart = PCPartRequest(.url(PCPartUrlRequest(type: expectedURLPartType, url: expectedURLPartString)))
         
         let bobRoomDelegate = TestingRoomDelegate(onMultipartMessage: { message in
             if case let PCMultipartPayload.inlinePayload(payload) = message.parts[0].payload {
@@ -605,8 +611,8 @@ class MessagesTests: XCTestCase {
         let expectedURLPartString = "https://images.com/cat.jpeg"
         let expectedURLPartType = "image/jpeg"
         
-        let textPart = PCPart(payload: PCMultipartPayload.inlinePayload(payload: PCMultipartInlinePayload(type: expectedTextPartType, content: expectedTextPartContent)))
-        let urlPart = PCPart(payload: PCMultipartPayload.urlPayload(payload: PCMultipartURLPayload(type: expectedURLPartType, url: expectedURLPartString)))
+        let textPart = PCPartRequest(.inline(PCPartInlineRequest(type: expectedTextPartType, content: expectedTextPartContent)))
+        let urlPart = PCPartRequest(.url(PCPartUrlRequest(type: expectedURLPartType, url: expectedURLPartString)))
         
         let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
             XCTAssertEqual(message.text, expectedTextPartContent)
