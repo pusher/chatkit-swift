@@ -169,7 +169,10 @@ struct PCPayloadDeserializer {
         )
     }
     
-    static func createMultipartMessageFromPayload(_ payload: [String: Any]) throws -> PCBasicMultipartMessage {
+    static func createMultipartMessageFromPayload(
+        _ payload: [String: Any],
+        urlRefresher: PCMultipartAttachmentUrlRefresher
+    ) throws -> PCBasicMultipartMessage {
         guard
             let id = payload["id"] as? Int,
             let senderID = payload["user_id"] as? String,
@@ -181,7 +184,7 @@ struct PCPayloadDeserializer {
             throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCBasicMultipartMessage.self), payload: payload)
         }
         
-        let messageParts = try (parts.map { try createPartFromPayload($0 )})
+        let messageParts = try (parts.map { try createPartFromPayload($0, urlRefresher: urlRefresher)})
         
         return PCBasicMultipartMessage(
             id: id,
@@ -193,7 +196,10 @@ struct PCPayloadDeserializer {
         )
     }
     
-    static func createMultipartAttachmentFromPayload(_ payload: [String: Any]) throws -> PCMultipartAttachmentPayload {
+    static func createMultipartAttachmentFromPayload(
+        _ payload: [String: Any],
+        urlRefresher: PCMultipartAttachmentUrlRefresher
+    ) throws -> PCMultipartAttachmentPayload {
         guard
             let id = payload["id"] as? String,
             let downloadUrl = payload["download_url"] as? String,
@@ -208,16 +214,20 @@ struct PCPayloadDeserializer {
         
         return PCMultipartAttachmentPayload(
             id: id,
-            downloadUrl: downloadUrl,
-            refreshUrl: refreshUrl,
-            expiration: expiration,
             name: name,
             customData: customData,
-            size: size
+            size: size,
+            urlRefresher: urlRefresher,
+            refreshUrl: refreshUrl,
+            downloadUrl: downloadUrl,
+            expiration: expiration
         )
     }
     
-    fileprivate static func createPartFromPayload(_ payload: [String: Any]) throws -> PCPart {
+    fileprivate static func createPartFromPayload(
+        _ payload: [String: Any],
+        urlRefresher: PCMultipartAttachmentUrlRefresher
+    ) throws -> PCPart {
         // Empty mutable part
         var resultPartPayload: PCMultipartPayload = .inline(PCMultipartInlinePayload(content: ""))
         
@@ -235,7 +245,7 @@ struct PCPayloadDeserializer {
         
         
         if let attachment = payload["attachment"] as? [String: Any] {
-            let multipartAttachment = try createMultipartAttachmentFromPayload(attachment)
+            let multipartAttachment = try createMultipartAttachmentFromPayload(attachment, urlRefresher: urlRefresher)
             resultPartPayload = .attachment(multipartAttachment)
         }
         

@@ -67,6 +67,7 @@ public final class PCRoomSubscription {
                 userStore: userStore,
                 roomStore: roomStore,
                 logger: logger,
+                urlRefresher: PCMultipartAttachmentUrlRefresher(client: instance),
                 onMessageHook: { [weak roomDelegate, weak self] message in
                     instance.logger.log("Room received new message: \(message.debugDescription)", logLevel: .verbose)
                     self?.eventBufferQueue.async {
@@ -277,6 +278,7 @@ fileprivate func subscribeToRoomMultipartMessages(
     userStore: PCGlobalUserStore,
     roomStore: PCRoomStore,
     logger: PCLogger,
+    urlRefresher: PCMultipartAttachmentUrlRefresher,
     onMessageHook: @escaping (PCMultipartMessage) -> Void,
     onIsTypingHook: @escaping (PCRoom, PCUser) -> Void,
     completionHandler: @escaping PCErrorCompletionHandler
@@ -312,7 +314,12 @@ fileprivate func subscribeToRoomMultipartMessages(
             },
             logger: logger
         ),
-        deserialise: PCPayloadDeserializer.createMultipartMessageFromPayload,
+        deserialise: { rawPayload in
+            return try PCPayloadDeserializer.createMultipartMessageFromPayload(
+                rawPayload,
+                urlRefresher: urlRefresher
+            )
+        },
         userStore: userStore,
         roomStore: roomStore,
         onMessageHook: onMessageHook,

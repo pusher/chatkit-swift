@@ -1021,7 +1021,12 @@ public final class PCCurrentUser {
             limit: limit,
             direction: direction,
             instance: self.v3Instance,
-            deserialise: PCPayloadDeserializer.createMultipartMessageFromPayload,
+            deserialise: { rawPayload in
+                return try PCPayloadDeserializer.createMultipartMessageFromPayload(
+                    rawPayload,
+                    urlRefresher: PCMultipartAttachmentUrlRefresher(client: self.v3Instance)
+                )
+            },
             messageFactory: { (basicMessage, room, user) in
                 return PCMultipartMessage(
                     id: basicMessage.id,
