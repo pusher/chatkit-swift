@@ -197,11 +197,11 @@ class MessagesTests: XCTestCase {
     func testFetchMultipartMessageV3MessageWithSeveralPartsRetrievedOnV3() {
         let ex = expectation(description: "retrieve multipart message (several parts) sent on v3 retrieved on v3")
         let expectedParts = [
-                PCPart(.inline(PCMultipartInlinePayload(type: "text/plain", content: "hola!"))),
-                PCPart(.inline(PCMultipartInlinePayload(type: "text/plain", content: "gracias!"))),
-                PCPart(.inline(PCMultipartInlinePayload(type: "text/plain", content: "por favor!"))),
-                PCPart(.url(PCMultipartURLPayload(type: "image/png", url: "https://images.com/image.png")))
-            ]
+            PCPart(type: "text/plain", payload: .inline(PCMultipartInlinePayload(content: "hola!"))),
+            PCPart(type: "text/plain", payload: .inline(PCMultipartInlinePayload(content: "gracias!"))),
+            PCPart(type: "text/plain", payload: .inline(PCMultipartInlinePayload(content: "por favor!"))),
+            PCPart(type: "image/png", payload: .url(PCMultipartURLPayload(url: "https://images.com/image.png")))
+        ]
         let requestParts = [
             PCPartRequest(.inline(PCPartInlineRequest(content: "hola!"))),
             PCPartRequest(.inline(PCPartInlineRequest(content: "gracias!"))),
@@ -516,7 +516,7 @@ class MessagesTests: XCTestCase {
             switch message.parts[0].payload {
             case .inline(let payload):
                 XCTAssertEqual(payload.content, expectedMessageContent)
-                XCTAssertEqual(payload.type, "text/plain")
+                XCTAssertEqual(message.parts[0].type, "text/plain")
             default:
                 XCTFail()
             }
@@ -563,14 +563,14 @@ class MessagesTests: XCTestCase {
         let urlPart = PCPartRequest(.url(PCPartUrlRequest(type: expectedURLPartType, url: expectedURLPartString)))
         
         let bobRoomDelegate = TestingRoomDelegate(onMultipartMessage: { message in
+            XCTAssertEqual(message.parts[0].type, "text/plain")
             if case let .inline(payload) = message.parts[0].payload {
                 XCTAssertEqual(payload.content, expectedTextPartContent)
-                XCTAssertEqual(payload.type, "text/plain")
             }
-            
+
+            XCTAssertEqual(message.parts[1].type, "image/jpeg")
             if case let .url(payload) = message.parts[1].payload {
                 XCTAssertEqual(payload.url, expectedURLPartString)
-                XCTAssertEqual(payload.type, "image/jpeg")
             }
             
             XCTAssertEqual(message.sender.id, "alice")
