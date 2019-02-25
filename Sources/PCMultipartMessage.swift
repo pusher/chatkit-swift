@@ -46,20 +46,15 @@ extension PCMultipartMessage: Hashable {
 }
 
 public struct PCPart {
+    let type: String
     let payload: PCMultipartPayload
-
-    init(_ payload: PCMultipartPayload) {
-        self.payload = payload
-    }
 }
 
 public struct PCMultipartInlinePayload {
-    let type: String
     let content: String
 }
 
 public struct PCMultipartURLPayload {
-    let type: String
     let url: String
 }
 
@@ -73,9 +68,9 @@ extension PCMultipartPayload: Equatable {
     public static func == (lhs: PCMultipartPayload, rhs: PCMultipartPayload) -> Bool {
         switch (lhs, rhs) {
         case (let .inline(payload1), let .inline(payload2)):
-            return payload1.content == payload2.content && payload1.type == payload2.type
+            return payload1.content == payload2.content
         case (let .url(payload1), let .url(payload2)):
-            return payload1.url == payload2.url && payload1.type == payload2.type
+            return payload1.url == payload2.url
         case (let .attachment(payload1), let .attachment(payload2)):
             return payload1.downloadUrl == payload2.downloadUrl && payload1.expiration == payload2.expiration && payload1.id == payload2.id && payload1.name == payload2.name && payload1.refreshUrl == payload2.refreshUrl && payload1.size == payload2.size
         default:
