@@ -40,15 +40,20 @@ public struct PCPartUrlRequest {
 
 public struct PCPartAttachmentRequest {
     let type: String
-    let attachmentID: String
+    let file: Data
+    let name: String?
+    let customData: [String: Any]?
 
-    func toMap() -> [String: Any] {
-        return [
-            "type": self.type,
-            "attachment": [
-                "id": self.attachmentID,
-            ]
-        ]
+    init(
+        type: String,
+        file: Data,
+        name: String? = nil,
+        customData: [String: Any]? = nil
+    ) {
+        self.type = type
+        self.file = file
+        self.name = name
+        self.customData = customData
     }
 }
 
@@ -56,4 +61,33 @@ public enum PCPartRequestType {
     case inline(_ payload: PCPartInlineRequest)
     case url(_ payload: PCPartUrlRequest)
     case attachment(_ payload: PCPartAttachmentRequest)
+}
+
+public struct PCMultipartAttachmentUploadRequest {
+    let contentType: String
+    let contentLength: Int
+    let name: String?
+    let customData: [String: Any]?
+
+    func toMap() -> [String: Any] {
+        var params: [String: Any] = [
+            "content_type": contentType,
+            "content_length": contentLength,
+        ]
+
+        if name != nil {
+            params["name"] = name!
+        }
+
+        if customData != nil {
+            params["name"] = customData!
+        }
+
+        return params
+    }
+}
+
+struct PCMultipartAttachmentUploadResponse {
+    let attachmentID: String
+    let uploadUrl: String
 }
