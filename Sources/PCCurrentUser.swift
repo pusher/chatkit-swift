@@ -703,19 +703,126 @@ public final class PCCurrentUser {
         sendMessage(instance: self.v3Instance, messageObject, roomID: roomID, completionHandler: completionHandler)
     }
     
-    public func sendMultipartMessage(roomID: String, parts: [PCPartRequest], completionHandler: @escaping (Int?, Error?) -> Void) {
-        let partObjects = parts.map { (part) -> [String: Any] in
+    public func sendMultipartMessage(
+        roomID: String,
+        parts: [PCPartRequest],
+        completionHandler: @escaping (Int?, Error?) -> Void
+    ) {
+        var partObjects: [[String: Any]] = []
+        for part in parts {
             switch part.payload {
             case .inline(let payload):
-                return payload.toMap()
+                partObjects.append(payload.toMap())
             case .url(let payload):
-                return payload.toMap()
+                partObjects.append(payload.toMap())
             case .attachment(let payload):
-                return payload.toMap()
+                self.uploadMultipartAttachment(
+                    roomID: roomID,
+                    uploadRequest: PCMultipartAttachmentUploadRequest(
+                        contentType: payload.type,
+                        contentLength: payload.file.count,
+                        name: payload.name,
+                        customData: payload.customData
+                    ),
+                    file: payload.file
+                ) { attachmentID, error in
+                    guard error == nil else {
+                        completionHandler(nil, error)
+                        return
+                    }
+
+                    partObjects.append(["type": payload.type, "attachment": ["attachment_id": attachmentID!]])
+                }
             }
         }
-        
+
         sendMessage(instance: self.v3Instance, ["parts": partObjects], roomID: roomID, completionHandler: completionHandler)
+    }
+
+    fileprivate func uploadMultipartAttachment(
+        roomID: String,
+        uploadRequest: PCMultipartAttachmentUploadRequest,
+        file: Data,
+        completionHandler: @escaping (String?, Error?) -> Void
+    ) {
+        let uploadRequestMap = uploadRequest.toMap()
+        guard JSONSerialization.isValidJSONObject(uploadRequestMap) else {
+            completionHandler(nil, PCError.invalidJSONObjectAsData(uploadRequestMap))
+            return
+        }
+
+        guard let data = try? JSONSerialization.data(withJSONObject: uploadRequestMap, options: []) else {
+            completionHandler(nil, PCError.failedToJSONSerializeData(uploadRequestMap))
+            return
+        }
+
+        let path = "/rooms/\(roomID)/attachments"
+        let requestOptions = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
+        self.v3Instance.request(
+            using: requestOptions,
+            onSuccess: { data in
+                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
+                    let err = PCError.failedToDeserializeJSON(data)
+                    self.v3Instance.logger.log(
+                        "Error getting upload url: \(err.localizedDescription)",
+                        logLevel: .debug
+                    )
+                    completionHandler(nil, err)
+                    return
+                }
+
+                guard let attachmentResponse = jsonObject as? [String: Any] else {
+                    let err = PCError.failedToCastJSONObjectToDictionary(jsonObject)
+                    self.v3Instance.logger.log(
+                        "Error getting upload url: \(err.localizedDescription)",
+                        logLevel: .debug
+                    )
+                    completionHandler(nil, err)
+                    return
+                }
+
+                let attachmentID = attachmentResponse["attachment_id"] as? String
+                let uploadUrl = attachmentResponse["upload_url"] as? String
+
+                self.uploadFileToCloudStorage(uploadUrl: uploadUrl!, file: file) { error in
+                    guard error == nil else {
+                        completionHandler(nil, error)
+                        return
+                    }
+                }
+
+                completionHandler(attachmentID, nil)
+                return
+            },
+            onError: { error in
+                completionHandler(nil, error)
+                return
+            }
+        )
+    }
+
+    fileprivate func uploadFileToCloudStorage(
+        uploadUrl: String,
+        file: Data,
+        completionHandler: @escaping (Error?) -> Void
+    ) {
+        let requestOptions = PPRequestOptions(
+            method: HTTPMethod.PUT.rawValue,
+            destination: .absolute(uploadUrl),
+            body: file
+        )
+        self.v3Instance.request(
+            using: requestOptions,
+            onSuccess: { _ in
+                // dont care about response returned as long as it is successful
+                completionHandler(nil)
+                return
+            },
+            onError: { error in
+                completionHandler(error)
+                return
+            }
+        )
     }
 
     public func downloadAttachment(
