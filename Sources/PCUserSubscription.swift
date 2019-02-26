@@ -268,6 +268,7 @@ public enum PCError: Error {
     case failedToDeserializeJSON(Data)
     case failedToCastJSONObjectToDictionary(Any)
     case currentUserIsNil
+    case multipartAttachmentUploadTimedOut
 }
 
 extension PCError: LocalizedError {
@@ -287,6 +288,8 @@ extension PCError: LocalizedError {
             return "Failed to cast JSON object to Dictionary: \(jsonObject)"
         case .currentUserIsNil:
             return "currentUser property is nil for PCUserSubscription"
+        case .multipartAttachmentUploadTimedOut:
+            return "Multipart attachment upload timed out"
         }
     }
 }

@@ -708,121 +708,49 @@ public final class PCCurrentUser {
         parts: [PCPartRequest],
         completionHandler: @escaping (Int?, Error?) -> Void
     ) {
-        var partObjects: [[String: Any]] = []
+        var partObjects: [PartObjectWithIndex] = []
+        var uploadTasks: [PCMultipartAttachmentUploadTask] = []
+        var partIndex: Int = 0
+
         for part in parts {
+            partIndex += 1
             switch part.payload {
             case .inline(let payload):
-                partObjects.append(payload.toMap())
+                partObjects.append(PartObjectWithIndex(object: payload.toMap(), index: partIndex))
             case .url(let payload):
-                partObjects.append(payload.toMap())
+                partObjects.append(PartObjectWithIndex(object: payload.toMap(), index: partIndex))
             case .attachment(let payload):
-                self.uploadMultipartAttachment(
-                    roomID: roomID,
-                    uploadRequest: PCMultipartAttachmentUploadRequest(
-                        contentType: payload.type,
-                        contentLength: payload.file.count,
-                        name: payload.name,
-                        customData: payload.customData
-                    ),
-                    file: payload.file
-                ) { attachmentID, error in
-                    guard error == nil else {
-                        completionHandler(nil, error)
-                        return
-                    }
-
-                    partObjects.append(["type": payload.type, "attachment": ["attachment_id": attachmentID!]])
-                }
+                uploadTasks.append(
+                    PCMultipartAttachmentUploadTask(
+                        uploadRequest: PCMultipartAttachmentUploadRequest(
+                            contentType: payload.type,
+                            contentLength: payload.file.count,
+                            name: payload.name,
+                            customData: payload.customData
+                        ),
+                        roomID: roomID,
+                        file: payload.file,
+                        partNumber: partIndex
+                    )
+                )
             }
         }
 
-        sendMessage(instance: self.v3Instance, ["parts": partObjects], roomID: roomID, completionHandler: completionHandler)
-    }
-
-    fileprivate func uploadMultipartAttachment(
-        roomID: String,
-        uploadRequest: PCMultipartAttachmentUploadRequest,
-        file: Data,
-        completionHandler: @escaping (String?, Error?) -> Void
-    ) {
-        let uploadRequestMap = uploadRequest.toMap()
-        guard JSONSerialization.isValidJSONObject(uploadRequestMap) else {
-            completionHandler(nil, PCError.invalidJSONObjectAsData(uploadRequestMap))
-            return
-        }
-
-        guard let data = try? JSONSerialization.data(withJSONObject: uploadRequestMap, options: []) else {
-            completionHandler(nil, PCError.failedToJSONSerializeData(uploadRequestMap))
-            return
-        }
-
-        let path = "/rooms/\(roomID)/attachments"
-        let requestOptions = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
-        self.v3Instance.request(
-            using: requestOptions,
-            onSuccess: { data in
-                guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                    let err = PCError.failedToDeserializeJSON(data)
-                    self.v3Instance.logger.log(
-                        "Error getting upload url: \(err.localizedDescription)",
-                        logLevel: .debug
-                    )
-                    completionHandler(nil, err)
-                    return
-                }
-
-                guard let attachmentResponse = jsonObject as? [String: Any] else {
-                    let err = PCError.failedToCastJSONObjectToDictionary(jsonObject)
-                    self.v3Instance.logger.log(
-                        "Error getting upload url: \(err.localizedDescription)",
-                        logLevel: .debug
-                    )
-                    completionHandler(nil, err)
-                    return
-                }
-
-                let attachmentID = attachmentResponse["attachment_id"] as? String
-                let uploadUrl = attachmentResponse["upload_url"] as? String
-
-                self.uploadFileToCloudStorage(uploadUrl: uploadUrl!, file: file) { error in
-                    guard error == nil else {
-                        completionHandler(nil, error)
-                        return
-                    }
-                }
-
-                completionHandler(attachmentID, nil)
-                return
-            },
-            onError: { error in
+        if uploadTasks.count > 0 {
+            let uploader = PCMultipartAttachmentUploader(instance: self.v3Instance, uploadTasks: uploadTasks)
+            do {
+                let results = try uploader.getResults()
+                let uploadResultObjectsWithIndex = results.map { PartObjectWithIndex(object: $0.payload, index: $0.partNumber)}
+                partObjects = (partObjects + uploadResultObjectsWithIndex).sorted(by: { $0.index < $1.index })
+            } catch let error {
                 completionHandler(nil, error)
                 return
             }
-        )
-    }
+        }
 
-    fileprivate func uploadFileToCloudStorage(
-        uploadUrl: String,
-        file: Data,
-        completionHandler: @escaping (Error?) -> Void
-    ) {
-        let requestOptions = PPRequestOptions(
-            method: HTTPMethod.PUT.rawValue,
-            destination: .absolute(uploadUrl),
-            body: file
-        )
-        self.v3Instance.request(
-            using: requestOptions,
-            onSuccess: { _ in
-                // dont care about response returned as long as it is successful
-                completionHandler(nil)
-                return
-            },
-            onError: { error in
-                completionHandler(error)
-                return
-            }
-        )
+        let partsToSend = partObjects.map { $0.object }
+        print(partsToSend)
+        sendMessage(instance: self.v3Instance, ["parts": partsToSend], roomID: roomID, completionHandler: completionHandler)
     }
 
     public func downloadAttachment(
@@ -1238,6 +1166,11 @@ public final class PCCurrentUser {
             }
         )
     }
+}
+
+struct PartObjectWithIndex {
+    let object: [String: Any]
+    let index: Int
 }
 
 func reconcileMemberships(

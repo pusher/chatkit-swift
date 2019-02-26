@@ -80,7 +80,7 @@ public struct PCMultipartAttachmentUploadRequest {
         }
 
         if customData != nil {
-            params["name"] = customData!
+            params["custom_data"] = customData!
         }
 
         return params
