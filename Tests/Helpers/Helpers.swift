@@ -169,6 +169,28 @@ func deleteInstanceResources(completionHandler: @escaping (TestHelperError?) -> 
     }.resume()
 }
 
+func synchronousHTTPRequest(
+    url: String,
+    method: String,
+    headers: [String: String]?,
+    completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void
+) {
+    var request = URLRequest(url: URL(string: url)!)
+
+    if headers != nil {
+        for (headerKey, headerValue) in headers! {
+            request.addValue(headerValue, forHTTPHeaderField: headerKey)
+        }
+    }
+
+    let sem = DispatchSemaphore(value: 0)
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        completionHandler(data, response, error)
+        sem.signal()
+    }.resume()
+    sem.wait()
+}
+
 let defaultRolePermissions = [
     "message:create",
     "room:join",
