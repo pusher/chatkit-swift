@@ -732,21 +732,30 @@ public final class PCCurrentUser {
             }
         }
 
-        if uploadTasks.count > 0 {
-            let uploader = PCMultipartAttachmentUploader(instance: self.v3Instance, uploadTasks: uploadTasks)
-            do {
-                let results = try uploader.getResults()
-                let uploadResultObjectsWithIndex = results.map { PartObjectWithIndex(object: $0.payload, index: $0.partNumber)}
-                partObjects = (partObjects + uploadResultObjectsWithIndex).sorted(by: { $0.index < $1.index })
-            } catch let error {
-                completionHandler(nil, error)
-                return
-            }
+        let sendMessage: ([[String: Any]]) -> Void = { partsToSend in
+            self.sendMessage(
+                instance: self.v3Instance,
+                ["parts": partsToSend],
+                roomID: roomID,
+                completionHandler: completionHandler
+            )
         }
 
-        let partsToSend = partObjects.map { $0.object }
-        print(partsToSend)
-        sendMessage(instance: self.v3Instance, ["parts": partsToSend], roomID: roomID, completionHandler: completionHandler)
+        if uploadTasks.count > 0 {
+            let uploader = PCMultipartAttachmentUploader(instance: self.v3Instance, uploadTasks: uploadTasks)
+            uploader.upload() { results, errors in
+                guard errors == nil else {
+                    completionHandler(nil, errors!.first!)
+                    return
+                }
+
+                let uploadResultObjectsWithIndex = results!.map { PartObjectWithIndex(object: $0.payload, index: $0.partNumber)}
+                partObjects = (partObjects + uploadResultObjectsWithIndex).sorted(by: { $0.index < $1.index })
+                sendMessage(partObjects.map { $0.object })
+            }
+        } else {
+            sendMessage(partObjects.map { $0.object })
+        }
     }
 
     public func downloadAttachment(
