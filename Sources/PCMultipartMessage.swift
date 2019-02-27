@@ -109,10 +109,11 @@ public class PCMultipartAttachmentPayload {
         self.expiration = expiration
     }
 
-    func url() -> String {
+    func url(completionHandler: @escaping (String?, Error?) -> Void) {
         if (Date() > self.urlExpiry()) {
             self.urlRefresher.refresh(attachment: self) { newAttachment, error in
                 guard error == nil else {
+                    completionHandler(nil, error)
                     return
                 }
 
@@ -120,10 +121,14 @@ public class PCMultipartAttachmentPayload {
                     self.downloadUrl = newAttachment!.downloadUrl
                     self.expiration = newAttachment!.expiration
                 }
+
+                completionHandler(newAttachment!.downloadUrl, nil)
+                return
             }
         }
 
-        return downloadUrl
+        completionHandler(self.downloadUrl, nil)
+        return
     }
 
     func urlExpiry() -> Date {
@@ -165,6 +170,7 @@ public class PCMultipartAttachmentUrlRefresher {
                 return
             },
             onError: { error in
+                self.client.logger.log("Failed to refresh download url (attachment id \(attachment.id)): \(error.localizedDescription)", logLevel: .error)
                 completionHandler(nil, error)
                 return
             }
