@@ -446,16 +446,15 @@ class MessagesTests: XCTestCase {
                     XCTAssertNil(error)
                     XCTAssertNotNil(downloadUrl)
 
-                    synchronousHTTPRequest(
+                    let (data, _, err) = synchronousHTTPRequest(
                         url: downloadUrl!,
                         method: "GET",
                         headers: nil
-                    ) { data, response, error in
-                        XCTAssertNil(error)
-                        XCTAssertNotNil(data)
-                        XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
-                    }
+                    )
 
+                    XCTAssertNil(err)
+                    XCTAssertNotNil(data)
+                    XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
                 }
 
                 // set expiry to now
@@ -471,15 +470,15 @@ class MessagesTests: XCTestCase {
                     XCTAssertNil(error)
                     XCTAssertNotNil(downloadUrl)
 
-                    synchronousHTTPRequest(
+                    let (data, _, err) = synchronousHTTPRequest(
                         url: downloadUrl!,
                         method: "GET",
                         headers: nil
-                    ) { data, response, error in
-                        XCTAssertNil(error)
-                        XCTAssertNotNil(data)
-                        XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
-                    }
+                    )
+
+                    XCTAssertNil(err)
+                    XCTAssertNotNil(data)
+                    XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
                 }
             }
 
@@ -555,15 +554,15 @@ class MessagesTests: XCTestCase {
                                 XCTAssertNil(error)
                                 XCTAssertNotNil(downloadUrl)
 
-                                synchronousHTTPRequest(
+                                let (data, _, err) = synchronousHTTPRequest(
                                     url: downloadUrl!,
                                     method: "GET",
                                     headers: nil
-                                ) { data, response, error in
-                                    XCTAssertNil(error)
-                                    XCTAssertNotNil(data)
-                                    XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
-                                }
+                                )
+
+                                XCTAssertNil(err)
+                                XCTAssertNotNil(data)
+                                XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
                             }
                         }
                         ex.fulfill()
@@ -575,7 +574,7 @@ class MessagesTests: XCTestCase {
         waitForExpectations(timeout: 15)
     }
 
-    func testMultipartMessageWithMultipleeAttachmentsRetrievedOnV3() {
+    func testMultipartMessageWithMultipleAttachmentsRetrievedOnV3() {
         let ex = expectation(description: "send multipart message with two attachments retrieved on v3")
 
         let htmlString = "<body>This is a test attachment body</body>"
@@ -610,15 +609,15 @@ class MessagesTests: XCTestCase {
                                 XCTAssertNil(error)
                                 XCTAssertNotNil(downloadUrl)
 
-                                synchronousHTTPRequest(
+                                let (data, _, err) = synchronousHTTPRequest(
                                     url: downloadUrl!,
                                     method: "GET",
                                     headers: nil
-                                ) { data, response, error in
-                                    XCTAssertNil(error)
-                                    XCTAssertNotNil(data)
-                                    XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
-                                }
+                                )
+
+                                XCTAssertNil(err)
+                                XCTAssertNotNil(data)
+                                XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
                             }
                         }
 
@@ -628,15 +627,15 @@ class MessagesTests: XCTestCase {
                                 XCTAssertNil(error)
                                 XCTAssertNotNil(downloadUrl)
 
-                                synchronousHTTPRequest(
+                                let (data, _, err) = synchronousHTTPRequest(
                                     url: downloadUrl!,
                                     method: "GET",
                                     headers: nil
-                                ) { data, response, error in
-                                    XCTAssertNil(error)
-                                    XCTAssertNotNil(data)
-                                    XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
-                                }
+                                )
+
+                                XCTAssertNil(err)
+                                XCTAssertNotNil(data)
+                                XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
                             }
                         }
                         ex.fulfill()
@@ -716,15 +715,16 @@ class MessagesTests: XCTestCase {
                         XCTAssertNotNil(messages!.last!.attachment)
                         XCTAssertEqual(messages!.last!.attachment!.type, "file")
 
-                        synchronousHTTPRequest(
+
+
+                        let (data, _, err) = synchronousHTTPRequest(
                             url: messages!.last!.attachment!.link,
                             method: "GET",
                             headers: nil
-                        ) { data, response, error in
-                            XCTAssertNil(error)
-                            XCTAssertNotNil(data)
-                            XCTAssertEqual(String(data: data!, encoding: .utf8), jsonString)
-                        }
+                        )
+                        XCTAssertNil(err)
+                        XCTAssertNotNil(data)
+                        XCTAssertEqual(String(data: data!, encoding: .utf8), jsonString)
                     }
                     ex.fulfill()
                 }
@@ -787,15 +787,15 @@ class MessagesTests: XCTestCase {
                                 XCTAssertNil(error)
                                 XCTAssertNotNil(downloadUrl)
 
-                                synchronousHTTPRequest(
+                                let (data, _, err) = synchronousHTTPRequest(
                                     url: downloadUrl!,
                                     method: "GET",
                                     headers: nil
-                                ) { data, response, error in
-                                    XCTAssertNil(error)
-                                    XCTAssertNotNil(data)
-                                    XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
-                                }
+                                )
+
+                                XCTAssertNil(err)
+                                XCTAssertNotNil(data)
+                                XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
                             }
                         }
                         ex.fulfill()
@@ -899,14 +899,14 @@ class MessagesTests: XCTestCase {
                                 XCTAssertNil(error)
                                 XCTAssertNotNil(downloadUrl)
 
-                                synchronousHTTPRequest(
+                                let (data, _, err) = synchronousHTTPRequest(
                                     url: downloadUrl!,
                                     method: "GET",
                                     headers: nil
-                                ) { data, response, error in
-                                    XCTAssertNil(error)
-                                    XCTAssertNotNil(data)
-                                }
+                                )
+
+                                XCTAssertNil(err)
+                                XCTAssertNotNil(data)
                             }
                         }
                         ex.fulfill()
@@ -1103,15 +1103,15 @@ class MessagesTests: XCTestCase {
                     XCTAssertNil(error)
                     XCTAssertNotNil(downloadUrl)
 
-                    synchronousHTTPRequest(
+                    let (data, _, err) = synchronousHTTPRequest(
                         url: downloadUrl!,
                         method: "GET",
                         headers: nil
-                    ) { data, response, error in
-                        XCTAssertNil(error)
-                        XCTAssertNotNil(data)
-                        XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
-                    }
+                    )
+
+                    XCTAssertNil(err)
+                    XCTAssertNotNil(data)
+                    XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
                 }
             }
 
@@ -1272,16 +1272,15 @@ class MessagesTests: XCTestCase {
             XCTAssertEqual(message.room.id, self.roomID)
             XCTAssertEqual(message.room.name, "mushroom")
 
-            synchronousHTTPRequest(
+            let (data, _, err) = synchronousHTTPRequest(
                 url: message.attachment!.link,
                 method: "GET",
                 headers: nil
-            ) { data, response, error in
-                XCTAssertNil(error)
-                XCTAssertNotNil(data)
-                XCTAssertEqual(String(data: data!, encoding: .utf8), jsonString)
-            }
+            )
 
+            XCTAssertNil(err)
+            XCTAssertNotNil(data)
+            XCTAssertEqual(String(data: data!, encoding: .utf8), jsonString)
             ex.fulfill()
         })
 
@@ -1333,14 +1332,14 @@ class MessagesTests: XCTestCase {
                     XCTAssertNil(error)
                     XCTAssertNotNil(downloadUrl)
 
-                    synchronousHTTPRequest(
+                    let (data, _, err) = synchronousHTTPRequest(
                         url: downloadUrl!,
                         method: "GET",
                         headers: nil
-                    ) { data, response, error in
-                        XCTAssertNil(error)
-                        XCTAssertNotNil(data)
-                    }
+                    )
+
+                    XCTAssertNil(err)
+                    XCTAssertNotNil(data)
                 }
             }
 
