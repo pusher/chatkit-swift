@@ -19,7 +19,8 @@ class PCMultipartAttachmentUploader {
     fileprivate let uploadTasks: Array<PCMultipartAttachmentUploadTask>
     fileprivate let dispatchQueue = DispatchQueue(label: "com.pusher.chatkit.multipart-upload-\(UUID().uuidString)")
     fileprivate let dispatchGroup = DispatchGroup()
-    fileprivate let uploadResults = PCSynchronizedArray<PCMultipartAttachmentUploadResult>()
+    fileprivate let uploadSuccesses = PCSynchronizedArray<PCMultipartAttachmentUploadResult>()
+    fileprivate let uploadFailures = PCSynchronizedArray<Error>()
 
     init(
         instance: Instance,
@@ -29,21 +30,22 @@ class PCMultipartAttachmentUploader {
         self.uploadTasks = uploadTasks
     }
 
-    func getResults() throws -> [PCMultipartAttachmentUploadResult] {
+    func upload(completionHandler: @escaping ([PCMultipartAttachmentUploadResult]?, [Error]?) -> Void) {
         for task in self.uploadTasks {
             self.dispatchGroup.enter()
             self.dispatchQueue.async {
                 self.uploadMultipartAttachment(task: task) { (attachmentID, error) in
                     defer { self.dispatchGroup.leave() }
                     guard error == nil else {
+                        self.uploadFailures.append(error!)
                         self.instance.logger.log(
                             "Failed to upload multipart attachment: \(error.debugDescription)",
-                            logLevel: .debug
+                            logLevel: .error
                         )
                         return
                     }
 
-                    self.uploadResults.append(
+                    self.uploadSuccesses.append(
                         PCMultipartAttachmentUploadResult(
                             attachmentID: attachmentID!,
                             partNumber: task.partNumber,
@@ -57,12 +59,12 @@ class PCMultipartAttachmentUploader {
             }
         }
 
-        let uploadResult = self.dispatchGroup.wait(timeout: .now() + 10)
-        switch uploadResult {
-        case .success:
-            return self.uploadResults.underlyingArray
-        case .timedOut:
-            throw PCError.multipartAttachmentUploadTimedOut
+        self.dispatchGroup.notify(queue: .main) {
+            if self.uploadFailures.count > 0 {
+                completionHandler(nil, self.uploadFailures.underlyingArray)
+            } else {
+                completionHandler(self.uploadSuccesses.underlyingArray, nil)
+            }
         }
     }
 
@@ -90,7 +92,7 @@ class PCMultipartAttachmentUploader {
                     let err = PCError.failedToDeserializeJSON(data)
                     self.instance.logger.log(
                         "Error getting upload url: \(err.localizedDescription)",
-                        logLevel: .debug
+                        logLevel: .error
                     )
                     completionHandler(nil, err)
                     return
@@ -100,7 +102,7 @@ class PCMultipartAttachmentUploader {
                     let err = PCError.failedToCastJSONObjectToDictionary(jsonObject)
                     self.instance.logger.log(
                         "Error getting upload url: \(err.localizedDescription)",
-                        logLevel: .debug
+                        logLevel: .error
                     )
                     completionHandler(nil, err)
                     return
