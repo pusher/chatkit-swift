@@ -560,6 +560,106 @@ class MessagesTests: XCTestCase {
         waitForExpectations(timeout: 15)
     }
 
+    func testMultipartMessageWithMultipleeAttachmentsRetrievedOnV3() {
+        let ex = expectation(description: "send multipart message with two attachments retrieved on v3")
+
+        let htmlString = "<body>This is a test attachment body</body>"
+        let htmlData = htmlString.data(using: .utf8)
+        XCTAssertNotNil(htmlData)
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: [
+                    PCPartRequest(.attachment(PCPartAttachmentRequest(type: "text/html", file: htmlData!))),
+                    PCPartRequest(.attachment(PCPartAttachmentRequest(type: "text/html", file: htmlData!)))
+                ],
+                completionHandler: { messageID, err in
+                    XCTAssertNil(err)
+
+                    bob!.fetchMultipartMessages(
+                        bob!.rooms.first(where: { $0.id == self.roomID })!,
+                        direction: .newer
+                    ) { messages, err in
+                        XCTAssertNil(err)
+
+                        XCTAssertEqual(messages!.last!.id, messageID)
+                        XCTAssertEqual(messages!.last!.room.id, self.roomID)
+                        XCTAssertEqual(messages!.last!.sender.id, bob!.id)
+
+                        XCTAssertEqual(messages!.last!.parts[0].type, "text/html")
+                        if case let .attachment(payload) = messages!.last!.parts[0].payload {
+                            synchronousHTTPRequest(
+                                url: payload.url(),
+                                method: "GET",
+                                headers: nil
+                            ) { data, response, error in
+                                XCTAssertNil(error)
+                                XCTAssertNotNil(data)
+                                XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
+                            }
+                        }
+
+                        XCTAssertEqual(messages!.last!.parts[1].type, "text/html")
+                        if case let .attachment(payload) = messages!.last!.parts[1].payload {
+                            synchronousHTTPRequest(
+                                url: payload.url(),
+                                method: "GET",
+                                headers: nil
+                            ) { data, response, error in
+                                XCTAssertNil(error)
+                                XCTAssertNotNil(data)
+                                XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
+                            }
+                        }
+                        ex.fulfill()
+                    }
+                }
+            )
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
+    func testMultipartMessageAttachmentUploadError() {
+        let ex = expectation(description: "send multipart message with a text part and an attachment without a type retrieved on v3")
+
+        let htmlString = "<body>This is a test attachment body</body>"
+        let htmlData = htmlString.data(using: .utf8)
+        XCTAssertNotNil(htmlData)
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: [
+                    PCPartRequest(.inline(PCPartInlineRequest(content: "Have a look at this"))),
+                    PCPartRequest(.attachment(PCPartAttachmentRequest(type: "", file: htmlData!)))
+                ],
+                completionHandler: { _, err in
+                    XCTAssertNotNil(err)
+
+                    let uploadError = err as? PPRequestTaskDelegateError
+                    XCTAssertNotNil(uploadError)
+
+                    if case let .badResponseStatusCodeWithMessage(_, errorMessage) = uploadError! {
+                        XCTAssertEqual(
+                            errorMessage,
+                            "services/chatkit/unprocessable_entity/validation_failed: Field `content_type` is invalid"
+                        )
+                    }
+
+                    ex.fulfill()
+                }
+            )
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
     func testMultipartMessageWithAttachmentSentOnV3RetrievedOnV2() {
         let ex = expectation(description: "send multipart message with a text part and an attachment from v3 retrieved on v2")
 
