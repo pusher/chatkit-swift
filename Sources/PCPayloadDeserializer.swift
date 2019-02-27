@@ -198,6 +198,7 @@ struct PCPayloadDeserializer {
     
     static func createMultipartAttachmentFromPayload(
         _ payload: [String: Any],
+        type: String,
         urlRefresher: PCMultipartAttachmentUrlRefresher
     ) throws -> PCMultipartAttachmentPayload {
         guard
@@ -213,6 +214,7 @@ struct PCPayloadDeserializer {
         }
         
         return PCMultipartAttachmentPayload(
+            type: type,
             id: id,
             name: name,
             customData: customData,
@@ -229,27 +231,27 @@ struct PCPayloadDeserializer {
         urlRefresher: PCMultipartAttachmentUrlRefresher
     ) throws -> PCPart {
         // Empty mutable part
-        var resultPartPayload: PCMultipartPayload = .inline(PCMultipartInlinePayload(content: ""))
+        var resultPartPayload: PCMultipartPayload = .inline(PCMultipartInlinePayload(type: "", content: ""))
         
         guard let partType = payload["type"] as? String else {
             throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCPart.self), payload: payload)
         }
         
         if let content = payload["content"] as? String {
-            resultPartPayload = .inline(PCMultipartInlinePayload(content: content))
+            resultPartPayload = .inline(PCMultipartInlinePayload(type: partType, content: content))
         }
         
         if let url = payload["url"] as? String {
-            resultPartPayload = .url(PCMultipartURLPayload(url: url))
+            resultPartPayload = .url(PCMultipartURLPayload(type: partType, url: url))
         }
         
         
         if let attachment = payload["attachment"] as? [String: Any] {
-            let multipartAttachment = try createMultipartAttachmentFromPayload(attachment, urlRefresher: urlRefresher)
+            let multipartAttachment = try createMultipartAttachmentFromPayload(attachment, type: partType, urlRefresher: urlRefresher)
             resultPartPayload = .attachment(multipartAttachment)
         }
         
-        return PCPart(type: partType, payload: resultPartPayload)
+        return PCPart(resultPartPayload)
     }
 
     fileprivate static func createBasicUserFromPayload(_ payload: [String: Any]) throws -> PCBasicUser {

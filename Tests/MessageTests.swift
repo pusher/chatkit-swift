@@ -197,10 +197,10 @@ class MessagesTests: XCTestCase {
     func testFetchMultipartMessageV3MessageWithSeveralPartsRetrievedOnV3() {
         let ex = expectation(description: "retrieve multipart message (several parts) sent on v3 retrieved on v3")
         let expectedParts = [
-            PCPart(type: "text/plain", payload: .inline(PCMultipartInlinePayload(content: "hola!"))),
-            PCPart(type: "text/plain", payload: .inline(PCMultipartInlinePayload(content: "gracias!"))),
-            PCPart(type: "text/plain", payload: .inline(PCMultipartInlinePayload(content: "por favor!"))),
-            PCPart(type: "image/png", payload: .url(PCMultipartURLPayload(url: "https://images.com/image.png")))
+            PCPart(.inline(PCMultipartInlinePayload(type: "text/plain", content: "hola!"))),
+            PCPart(.inline(PCMultipartInlinePayload(type: "text/plain", content: "gracias!"))),
+            PCPart(.inline(PCMultipartInlinePayload(type: "text/plain", content: "por favor!"))),
+            PCPart(.url(PCMultipartURLPayload(type: "image/png", url: "https://images.com/image.png")))
         ]
         let requestParts = [
             PCPartRequest(.inline(PCPartInlineRequest(content: "hola!"))),
@@ -434,8 +434,8 @@ class MessagesTests: XCTestCase {
         )
 
         let bobRoomDelegate = TestingRoomDelegate(onMultipartMessage: { message in
-            XCTAssertEqual(message.parts[0].type, "text/html")
             if case let .attachment(payload) = message.parts[0].payload {
+                XCTAssertEqual(payload.type, "text/html")
                 XCTAssertNotNil(payload.customData)
                 XCTAssertEqual(payload.customData!["key"] as! String, "value")
                 XCTAssertNotNil(payload.name)
@@ -543,13 +543,13 @@ class MessagesTests: XCTestCase {
                         XCTAssertEqual(messages!.last!.room.id, self.roomID)
                         XCTAssertEqual(messages!.last!.sender.id, bob!.id)
 
-                        XCTAssertEqual(messages!.last!.parts[0].type, "text/plain")
                         if case let .inline(payload) = messages!.last!.parts[0].payload {
+                            XCTAssertEqual(payload.type, "text/plain")
                             XCTAssertEqual(payload.content, "Have a look at this")
                         }
 
-                        XCTAssertEqual(messages!.last!.parts[1].type, "text/html")
                         if case let .attachment(payload) = messages!.last!.parts[1].payload {
+                            XCTAssertEqual(payload.type, "text/html")
                             payload.url() { downloadUrl, error in
                                 XCTAssertNil(error)
                                 XCTAssertNotNil(downloadUrl)
@@ -603,8 +603,8 @@ class MessagesTests: XCTestCase {
                         XCTAssertEqual(messages!.last!.room.id, self.roomID)
                         XCTAssertEqual(messages!.last!.sender.id, bob!.id)
 
-                        XCTAssertEqual(messages!.last!.parts[0].type, "text/html")
                         if case let .attachment(payload) = messages!.last!.parts[0].payload {
+                            XCTAssertEqual(payload.type, "text/html")
                             payload.url { downloadUrl, error in
                                 XCTAssertNil(error)
                                 XCTAssertNotNil(downloadUrl)
@@ -621,8 +621,8 @@ class MessagesTests: XCTestCase {
                             }
                         }
 
-                        XCTAssertEqual(messages!.last!.parts[1].type, "text/html")
                         if case let .attachment(payload) = messages!.last!.parts[1].payload {
+                            XCTAssertEqual(payload.type, "text/html")
                             payload.url { downloadUrl, error in
                                 XCTAssertNil(error)
                                 XCTAssertNotNil(downloadUrl)
@@ -772,13 +772,13 @@ class MessagesTests: XCTestCase {
                         XCTAssertEqual(messages!.last!.room.id, self.roomID)
                         XCTAssertEqual(messages!.last!.sender.id, bob!.id)
 
-                        XCTAssertEqual(messages!.last!.parts[0].type, "text/plain")
                         if case let .inline(payload) = messages!.last!.parts[0].payload {
+                            XCTAssertEqual(payload.type, "text/plain")
                             XCTAssertEqual(payload.content, "Have a look at this")
                         }
 
-                        XCTAssertEqual(messages!.last!.parts[1].type, "text/html")
                         if case let .attachment(payload) = messages!.last!.parts[1].payload {
+                            XCTAssertEqual(payload.type, "text/html")
                             XCTAssertNotNil(payload.customData)
                             XCTAssertEqual(payload.customData!["key"] as! String, "value")
                             XCTAssertNotNil(payload.name)
@@ -833,13 +833,13 @@ class MessagesTests: XCTestCase {
                         XCTAssertEqual(messages!.last!.room.id, self.roomID)
                         XCTAssertEqual(messages!.last!.sender.id, alice!.id)
 
-                        XCTAssertEqual(messages!.last!.parts[0].type, "text/plain")
                         if case let .inline(payload) = messages!.last!.parts[0].payload {
+                            XCTAssertEqual(payload.type, "text/plain")
                             XCTAssertEqual(payload.content, "see attached")
                         }
 
-                        XCTAssertEqual(messages!.last!.parts[1].type, "image/x-pusher-img")
                         if case let .url(payload) = messages!.last!.parts[1].payload {
+                            XCTAssertEqual(payload.type, "image/x-pusher-img")
                             XCTAssertEqual(payload.url, veryImportantImage)
                         }
                         ex.fulfill()
@@ -886,13 +886,13 @@ class MessagesTests: XCTestCase {
                         XCTAssertEqual(messages!.last!.room.id, self.roomID)
                         XCTAssertEqual(messages!.last!.sender.id, alice!.id)
 
-                        XCTAssertEqual(messages!.last!.parts[0].type, "text/plain")
                         if case let .inline(payload) = messages!.last!.parts[0].payload {
+                            XCTAssertEqual(payload.type, "text/plain")
                             XCTAssertEqual(payload.content, "see attached")
                         }
 
-                        XCTAssertEqual(messages!.last!.parts[1].type, "image/x-pusher-img")
                         if case let .attachment(payload) = messages!.last!.parts[1].payload {
+                            XCTAssertEqual(payload.type, "image/x-pusher-img")
                             XCTAssertNotNil(payload.name)
                             XCTAssertEqual(payload.name!, "test-image.gif")
                             payload.url { downloadUrl, error in
@@ -1019,7 +1019,7 @@ class MessagesTests: XCTestCase {
             switch message.parts[0].payload {
             case .inline(let payload):
                 XCTAssertEqual(payload.content, expectedMessageContent)
-                XCTAssertEqual(message.parts[0].type, "text/plain")
+                XCTAssertEqual(payload.type, "text/plain")
             default:
                 XCTFail()
             }
@@ -1082,18 +1082,18 @@ class MessagesTests: XCTestCase {
         )
 
         let bobRoomDelegate = TestingRoomDelegate(onMultipartMessage: { message in
-            XCTAssertEqual(message.parts[0].type, expectedTextPartType)
             if case let .inline(payload) = message.parts[0].payload {
+                XCTAssertEqual(payload.type, expectedTextPartType)
                 XCTAssertEqual(payload.content, expectedTextPartContent)
             }
 
-            XCTAssertEqual(message.parts[1].type, expectedURLPartType)
             if case let .url(payload) = message.parts[1].payload {
+                XCTAssertEqual(payload.type, expectedURLPartType)
                 XCTAssertEqual(payload.url, expectedURLPartString)
             }
 
-            XCTAssertEqual(message.parts[2].type, expectedAttachmentPartType)
             if case let .attachment(payload) = message.parts[2].payload {
+                XCTAssertEqual(payload.type, expectedAttachmentPartType)
                 XCTAssertNotNil(payload.customData)
                 XCTAssertEqual(payload.customData!["key"] as! String, "value")
                 XCTAssertNotNil(payload.name)
@@ -1157,13 +1157,13 @@ class MessagesTests: XCTestCase {
         let urlPart = PCPartRequest(.url(PCPartUrlRequest(type: expectedURLPartType, url: expectedURLPartString)))
         
         let bobRoomDelegate = TestingRoomDelegate(onMultipartMessage: { message in
-            XCTAssertEqual(message.parts[0].type, "text/plain")
             if case let .inline(payload) = message.parts[0].payload {
+                XCTAssertEqual(payload.type, "text/plain")
                 XCTAssertEqual(payload.content, expectedTextPartContent)
             }
 
-            XCTAssertEqual(message.parts[1].type, "image/jpeg")
             if case let .url(payload) = message.parts[1].payload {
+                XCTAssertEqual(payload.type, "image/jpeg")
                 XCTAssertEqual(payload.url, expectedURLPartString)
             }
             
@@ -1318,13 +1318,13 @@ class MessagesTests: XCTestCase {
         )!
 
         let bobRoomDelegate = TestingRoomDelegate(onMultipartMessage: { message in
-            XCTAssertEqual(message.parts[0].type, "text/plain")
             if case let .inline(payload) = message.parts[0].payload {
+                XCTAssertEqual(payload.type, "text/plain")
                 XCTAssertEqual(payload.content, "see attached")
             }
 
-            XCTAssertEqual(message.parts[1].type, "image/x-pusher-img")
             if case let .attachment(payload) = message.parts[1].payload {
+                XCTAssertEqual(payload.type, "image/x-pusher-img")
                 XCTAssertNotNil(payload.name)
                 XCTAssertEqual(payload.name!, "test-image.gif")
 
