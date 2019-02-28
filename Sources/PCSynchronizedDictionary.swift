@@ -1,44 +1,15 @@
 import Foundation
 
+// PCSynchronizedDictionary is a thead-safe dictionary
+// A serial DispatchQueue is used to control access to it
+// Reads and writes are both synchronous
 public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: ExpressibleByDictionaryLiteral {
     typealias Index = Dictionary<KeyType, ValueType>.Index
     typealias Element = Dictionary<KeyType, ValueType>.Element
 
-    var startIndex: Index { return underlyingDictionary.startIndex }
-    var endIndex: Index { return underlyingDictionary.endIndex }
-
-    var keys: Dictionary<KeyType, ValueType>.Keys {
-        get {
-            return queue.sync(flags: .barrier) {
-                return underlyingDictionary.keys
-            }
-        }
-    }
-
-    var first: (key: KeyType, value: ValueType)? {
-        return queue.sync {
-            return underlyingDictionary.first
-        }
-    }
-
-    subscript(position: Index) -> (key: KeyType, value: ValueType) {
-        get {
-            return queue.sync(flags: .barrier) {
-                return underlyingDictionary[position]
-            }
-        }
-    }
-
-    func index(after i: Index) -> Index {
-        return queue.sync(flags: .barrier) {
-            return underlyingDictionary.index(after: i)
-        }
-    }
-
     var underlyingDictionary: [KeyType: ValueType]
     private let queue = DispatchQueue(
-        label: "synchronized.dictionary.access.\(UUID().uuidString)",
-        attributes: .concurrent
+        label: "synchronized.dictionary.access.\(UUID().uuidString)"
     )
 
     init(dictionary: [KeyType: ValueType]) {
@@ -53,15 +24,46 @@ public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: Expre
         self.init(dictionary: dict)
     }
 
+    var startIndex: Index { return underlyingDictionary.startIndex }
+    var endIndex: Index { return underlyingDictionary.endIndex }
+
+    var keys: Dictionary<KeyType, ValueType>.Keys {
+        get {
+            return queue.sync {
+                return underlyingDictionary.keys
+            }
+        }
+    }
+
+    var first: (key: KeyType, value: ValueType)? {
+        return queue.sync {
+            return underlyingDictionary.first
+        }
+    }
+
+    subscript(position: Index) -> (key: KeyType, value: ValueType) {
+        get {
+            return queue.sync {
+                return underlyingDictionary[position]
+            }
+        }
+    }
+
+    func index(after i: Index) -> Index {
+        return queue.sync {
+            return underlyingDictionary.index(after: i)
+        }
+    }
+
     subscript(key: KeyType) -> ValueType? {
         get {
             var value: ValueType?
-            queue.sync(flags: .barrier) { value = self.underlyingDictionary[key] }
+            queue.sync { value = self.underlyingDictionary[key] }
             return value
         }
 
         set {
-            queue.async {
+            queue.sync {
                 self.underlyingDictionary[key] = newValue
             }
         }
@@ -69,14 +71,14 @@ public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: Expre
 
     func removeValue(forKey key: KeyType) -> ValueType? {
         var oldValue: ValueType? = nil
-        queue.sync(flags: .barrier) {
+        queue.sync {
             oldValue = self.underlyingDictionary.removeValue(forKey: key)
         }
         return oldValue
     }
 
     func removeAll() {
-        queue.sync(flags: .barrier) {
+        queue.async {
             self.underlyingDictionary.removeAll()
         }
     }
