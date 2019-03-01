@@ -78,7 +78,7 @@ public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: Expre
     }
 
     func removeAll() {
-        queue.async {
+        queue.sync {
             self.underlyingDictionary.removeAll()
         }
     }
