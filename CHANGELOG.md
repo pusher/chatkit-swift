@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/pusher/chatkit-swift/compare/1.3.0...HEAD)
+## [Unreleased](https://github.com/pusher/chatkit-swift/compare/1.3.1...HEAD)
+
+## [1.3.1](https://github.com/pusher/chatkit-swift/compare/1.3.0...1.3.1) - 2019-03-05
+
+### Fixed
+
+- `PCSynchronizedDictionary` uses a serial queue. Previously setting values would happen
+  ansynchronously without any barriers which could give us a wrong result. For sake of
+  simplicity, the queue has been made serial with sync operations.
 
 ## [1.3.0](https://github.com/pusher/chatkit-swift/compare/1.2.3...1.3.0) - 2019-01-25
 
