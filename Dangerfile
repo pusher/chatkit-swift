@@ -30,7 +30,3 @@ end
 if git.commits.any? { |c| c.message =~ /^Merge branch 'master'/ }
   warn 'Please rebase to get rid of the merge commits in this PR'
 end
-
-# Run SwiftLint
-# Add fail_on_error: true if we want to make linting errors fail the build
-swiftlint.lint_files
