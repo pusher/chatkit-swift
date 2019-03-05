@@ -39,10 +39,6 @@ public final class PCCurrentUser {
     public internal(set) var presenceSubscription: PCPresenceSubscription?
     public internal(set) var cursorSubscription: PCCursorSubscription?
 
-    private let roomSubscriptionQueue = DispatchQueue(
-        label: "com.pusher.chatkit.room-subscriptions"
-    )
-
     public var createdAtDate: Date { return PCDateFormatter.shared.formatString(self.createdAt) }
     public var updatedAtDate: Date { return PCDateFormatter.shared.formatString(self.updatedAt) }
 
