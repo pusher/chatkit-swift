@@ -1,30 +1,33 @@
 import Foundation
 import PusherPlatform
 
-public final class PCMessageSubscription {
+public final class PCMessageSubscription<A: PCCommonBasicMessage, B: PCEnrichedMessage> {
     let roomID: String
     let resumableSubscription: PPResumableSubscription
     public var logger: PPLogger
-    let basicMessageEnricher: PCBasicMessageEnricher
+    let basicMessageEnricher: PCBasicMessageEnricher<A, B>
+    let deserialise: ([String: Any]) throws -> A
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
-    let onMessageHook: (PCMessage) -> Void
+    let onMessageHook: (B) -> Void
     let onIsTypingHook: (PCRoom, PCUser) -> Void
 
     init(
         roomID: String,
         resumableSubscription: PPResumableSubscription,
         logger: PPLogger,
-        basicMessageEnricher: PCBasicMessageEnricher,
+        basicMessageEnricher: PCBasicMessageEnricher<A, B>,
+        deserialise: @escaping ([String: Any]) throws -> A,
         userStore: PCGlobalUserStore,
         roomStore: PCRoomStore,
-        onMessageHook: @escaping (PCMessage) -> Void,
+        onMessageHook: @escaping (B) -> Void,
         onIsTypingHook: @escaping (PCRoom, PCUser) -> Void
     ) {
         self.roomID = roomID
         self.resumableSubscription = resumableSubscription
         self.logger = logger
         self.basicMessageEnricher = basicMessageEnricher
+        self.deserialise = deserialise
         self.userStore = userStore
         self.roomStore = roomStore
         self.onMessageHook = onMessageHook
@@ -63,8 +66,8 @@ public final class PCMessageSubscription {
 
     func onNewMessage(data: [String: Any]) {
         do {
-            let basicMessage = try PCPayloadDeserializer.createBasicMessageFromPayload(data)
-
+            
+            let basicMessage = try self.deserialise(data)
             self.basicMessageEnricher.enrich(basicMessage) { [weak self] message, err in
                 guard let strongSelf = self else {
                     print("self is nil when enrichment of basicMessage has completed")
@@ -77,7 +80,6 @@ public final class PCMessageSubscription {
                 }
 
                 strongSelf.onMessageHook(message)
-                strongSelf.logger.log("Room received new message: \(message.debugDescription)", logLevel: .verbose)
             }
         } catch let err {
             self.logger.log(err.localizedDescription, logLevel: .debug)

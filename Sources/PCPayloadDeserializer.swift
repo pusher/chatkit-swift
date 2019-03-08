@@ -19,7 +19,8 @@ struct PCPayloadDeserializer {
         _ userPayload: [String: Any],
         id: String,
         pathFriendlyID: String,
-        instance: Instance,
+        v2Instance: Instance,
+        v3Instance: Instance,
         chatkitBeamsTokenProviderInstance: Instance,
         filesInstance: Instance,
         cursorsInstance: Instance,
@@ -40,7 +41,8 @@ struct PCPayloadDeserializer {
             name: userPayload["name"] as? String,
             avatarURL: userPayload["avatar_url"] as? String,
             customData: userPayload["custom_data"] as? [String: Any],
-            instance: instance,
+            v2Instance: v2Instance,
+            v3Instance: v3Instance,
             chatkitBeamsTokenProviderInstance: chatkitBeamsTokenProviderInstance,
             filesInstance: filesInstance,
             cursorsInstance: cursorsInstance,
@@ -165,6 +167,91 @@ struct PCPayloadDeserializer {
             updatedAt: updatedAt,
             userID: userID
         )
+    }
+    
+    static func createMultipartMessageFromPayload(
+        _ payload: [String: Any],
+        urlRefresher: PCMultipartAttachmentUrlRefresher
+    ) throws -> PCBasicMultipartMessage {
+        guard
+            let id = payload["id"] as? Int,
+            let senderID = payload["user_id"] as? String,
+            let roomID = payload["room_id"] as? String,
+            let parts = payload["parts"] as? [[String: Any]],
+            let createdAt = payload["created_at"] as? String,
+            let updatedAt = payload["updated_at"] as? String
+        else {
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCBasicMultipartMessage.self), payload: payload)
+        }
+        
+        let messageParts = try (parts.map { try createPartFromPayload($0, urlRefresher: urlRefresher)})
+        
+        return PCBasicMultipartMessage(
+            id: id,
+            senderID: senderID,
+            roomID: roomID,
+            parts: messageParts,
+            createdAt: createdAt,
+            updatedAt: updatedAt
+        )
+    }
+    
+    static func createMultipartAttachmentFromPayload(
+        _ payload: [String: Any],
+        type: String,
+        urlRefresher: PCMultipartAttachmentUrlRefresher
+    ) throws -> PCMultipartAttachmentPayload {
+        guard
+            let id = payload["id"] as? String,
+            let downloadUrl = payload["download_url"] as? String,
+            let refreshUrl = payload["refresh_url"] as? String,
+            let expiration = payload["expiration"] as? String,
+            let name = payload["name"] as? String?,
+            let customData = payload["custom_data"] as? [String: Any]?,
+            let size = payload["size"] as? Int
+        else {
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCMultipartAttachmentPayload.self), payload: payload)
+        }
+        
+        return PCMultipartAttachmentPayload(
+            type: type,
+            id: id,
+            name: name,
+            customData: customData,
+            size: size,
+            urlRefresher: urlRefresher,
+            refreshUrl: refreshUrl,
+            downloadUrl: downloadUrl,
+            expiration: expiration
+        )
+    }
+    
+    fileprivate static func createPartFromPayload(
+        _ payload: [String: Any],
+        urlRefresher: PCMultipartAttachmentUrlRefresher
+    ) throws -> PCPart {
+        // Empty mutable part
+        var resultPartPayload: PCMultipartPayload = .inline(PCMultipartInlinePayload(type: "", content: ""))
+        
+        guard let partType = payload["type"] as? String else {
+            throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCPart.self), payload: payload)
+        }
+        
+        if let content = payload["content"] as? String {
+            resultPartPayload = .inline(PCMultipartInlinePayload(type: partType, content: content))
+        }
+        
+        if let url = payload["url"] as? String {
+            resultPartPayload = .url(PCMultipartURLPayload(type: partType, url: url))
+        }
+        
+        
+        if let attachment = payload["attachment"] as? [String: Any] {
+            let multipartAttachment = try createMultipartAttachmentFromPayload(attachment, type: partType, urlRefresher: urlRefresher)
+            resultPartPayload = .attachment(multipartAttachment)
+        }
+        
+        return PCPart(resultPartPayload)
     }
 
     fileprivate static func createBasicUserFromPayload(_ payload: [String: Any]) throws -> PCBasicUser {

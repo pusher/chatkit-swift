@@ -86,6 +86,7 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
     let handleUserJoined: (PCUser) -> Void
     let handleUserLeft: (PCUser) -> Void
     let handleNewMessage: (PCMessage) -> Void
+    let handleMultipartMessage: (PCMultipartMessage) -> Void
 
     init(
         onNewReadCursor: @escaping (PCCursor) -> Void = { _ in },
@@ -94,7 +95,8 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
         onPresenceChanged: @escaping (PCPresenceStateChange, PCUser) -> Void = { _, _ in },
         onUserJoined: @escaping (PCUser) -> Void = { _ in },
         onUserLeft: @escaping (PCUser) -> Void = { _ in },
-        onMessage: @escaping (PCMessage) -> Void = { _ in }
+        onMessage: @escaping (PCMessage) -> Void = { _ in },
+        onMultipartMessage: @escaping (PCMultipartMessage) -> Void = { _ in }
     ) {
         handleNewReadCursor = onNewReadCursor
         handleUserStartedTyping = onUserStartedTyping
@@ -103,6 +105,7 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
         handleUserJoined = onUserJoined
         handleUserLeft = onUserLeft
         handleNewMessage = onMessage
+        handleMultipartMessage = onMultipartMessage
     }
 
     func onNewReadCursor(_ cursor: PCCursor) -> Void {
@@ -131,5 +134,9 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
 
     func onMessage(_ message: PCMessage) {
         handleNewMessage(message)
+    }
+    
+    func onMultipartMessage(_ message: PCMultipartMessage) {
+        handleMultipartMessage(message)
     }
 }

@@ -6,7 +6,7 @@ class MessagesTests: XCTestCase {
     var aliceChatManager: ChatManager!
     var bobChatManager: ChatManager!
     var roomID: String!
-
+    
     override func setUp() {
         super.setUp()
 
@@ -158,6 +158,121 @@ class MessagesTests: XCTestCase {
 
         waitForExpectations(timeout: 15)
     }
+    
+    func testFetchMessagesV3MessageWithOneTextPartRetrievedOnV2() {
+        let ex = expectation(description: "retrieve multipart message (one text part) sent on v3 retrieved on v2")
+        
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: [
+                    PCPartRequest(.inline(PCPartInlineRequest(content: "hola!")))
+                ]
+            ) { _, err in
+                XCTAssertNil(err)
+                
+                bob!.fetchMessagesFromRoom(
+                    bob!.rooms.first(where: { $0.id == self.roomID })!,
+                    direction: .newer
+                ) { messages, err in
+                    XCTAssertNotNil(messages)
+                    XCTAssertNil(err)
+        
+                    XCTAssertEqual(messages!.last!.text, "hola!")
+                    XCTAssertEqual(messages!.last!.sender.id, "bob")
+                    XCTAssertEqual(messages!.last!.sender.name, "Bob")
+                    XCTAssertEqual(messages!.last!.room.id, self.roomID)
+                    XCTAssertEqual(messages!.last!.room.name, "mushroom")
+                    
+                    ex.fulfill()
+                }
+            }
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+
+    func testFetchMultipartMessageV3MessageWithSeveralPartsRetrievedOnV3() {
+        let ex = expectation(description: "retrieve multipart message (several parts) sent on v3 retrieved on v3")
+        let expectedParts = [
+            PCPart(.inline(PCMultipartInlinePayload(type: "text/plain", content: "hola!"))),
+            PCPart(.inline(PCMultipartInlinePayload(type: "text/plain", content: "gracias!"))),
+            PCPart(.inline(PCMultipartInlinePayload(type: "text/plain", content: "por favor!"))),
+            PCPart(.url(PCMultipartURLPayload(type: "image/png", url: "https://images.com/image.png")))
+        ]
+        let requestParts = [
+            PCPartRequest(.inline(PCPartInlineRequest(content: "hola!"))),
+            PCPartRequest(.inline(PCPartInlineRequest(content: "gracias!"))),
+            PCPartRequest(.inline(PCPartInlineRequest(content: "por favor!"))),
+            PCPartRequest(.url(PCPartUrlRequest(type: "image/png", url: "https://images.com/image.png")))
+        ]
+        
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: requestParts
+            ) { _, err in
+                XCTAssertNil(err)
+                
+                bob!.fetchMultipartMessages(
+                    bob!.rooms.first(where: { $0.id == self.roomID })!,
+                    direction: .newer
+                ) { messages, err in
+                    XCTAssertNotNil(messages)
+                    XCTAssertNil(err)
+                    
+                    XCTAssertEqual(messages!.last!.parts[0].payload, expectedParts[0].payload)
+                    XCTAssertEqual(messages!.last!.parts[1].payload, expectedParts[1].payload)
+                    XCTAssertEqual(messages!.last!.parts[2].payload, expectedParts[2].payload)
+                    
+                    XCTAssertEqual(messages!.last!.sender.id, "bob")
+                    XCTAssertEqual(messages!.last!.sender.name, "Bob")
+                    XCTAssertEqual(messages!.last!.room.id, self.roomID)
+                    XCTAssertEqual(messages!.last!.room.name, "mushroom")
+                    ex.fulfill()
+                }
+            }
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+
+    func testFetchMultipartMessageV2MessageRetrievedOnV3() {
+        let ex = expectation(description: "retrieve multipart message sent on v3 retrieved on v3")
+        
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.sendSimpleMessage(
+                roomID: self.roomID,
+                text: "testing!"
+            ) { _, err in
+                XCTAssertNil(err)
+                
+                bob!.fetchMessagesFromRoom(
+                    bob!.rooms.first(where: { $0.id == self.roomID })!,
+                    direction: .newer
+                ) { messages, err in
+                    XCTAssertNotNil(messages)
+                    XCTAssertNil(err)
+                    
+                    XCTAssertEqual(messages!.last!.text, "testing!")
+                    XCTAssertEqual(messages!.last!.sender.id, "bob")
+                    XCTAssertEqual(messages!.last!.sender.name, "Bob")
+                    XCTAssertEqual(messages!.last!.room.id, self.roomID)
+                    XCTAssertEqual(messages!.last!.room.name, "mushroom")
+                    
+                    ex.fulfill()
+                }
+            }
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
 
     func testSubscribeToRoomAndFetchInitial() {
         let ex = expectation(description: "subscribe and get initial messages")
@@ -219,6 +334,585 @@ class MessagesTests: XCTestCase {
                     XCTAssertNil(err)
                 }
             )
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+    
+    func testSendSimpleMessage() {
+        let ex = expectation(description: "send simple message (multipart message)")
+        
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.sendSimpleMessage(roomID: self.roomID, text: "simple message", completionHandler: { _, err in
+                XCTAssertNil(err)
+                
+                bob!.fetchMessagesFromRoom(bob!.rooms.first(where: { $0.id == self.roomID })!, completionHandler: { messages, err in
+                    XCTAssertNil(err)
+                    XCTAssertEqual(messages!.last?.text, "simple message")
+                    ex.fulfill()
+                })
+            })
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+    
+    func testSendMultipartMessageWithSingleTextPart() {
+        let ex = expectation(description: "send multipart message with single text part")
+        
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: [
+                    PCPartRequest(.inline(PCPartInlineRequest(content: "hola!")))
+                ],
+                completionHandler: { messageID, err in
+                    XCTAssertNil(err)
+                
+                    bob!.fetchMessagesFromRoom(bob!.rooms.first(where: { $0.id == self.roomID })!, completionHandler: { messages, err in
+                        XCTAssertNil(err)
+                        XCTAssertEqual(messages!.last?.text, "hola!")
+                        ex.fulfill()
+                    })
+                }
+            )
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+    
+    func testSendMultipartMessageWithMultipleParts() {
+        let ex = expectation(description: "send multipart message with multiple inline parts")
+    
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: [
+                    PCPartRequest(.inline(PCPartInlineRequest(content: "senõr"))),
+                    PCPartRequest(.url(PCPartUrlRequest(type: "image/png", url: "https://imgur.com/images/asdasd.png")))
+                ],
+                completionHandler: { messageID, err in
+                    XCTAssertNil(err)
+
+                    bob!.fetchMessagesFromRoom(bob!.rooms.first(where: { $0.id == self.roomID })!, completionHandler: {
+                        messages, err in
+                        XCTAssertNil(err)
+                        XCTAssertEqual(messages!.last?.text, "senõr")
+                        XCTAssertEqual(messages!.last?.attachment?.link, "https://imgur.com/images/asdasd.png")
+                        XCTAssertEqual(messages!.last?.attachment?.type, "image")
+                        ex.fulfill()
+                    })
+                }
+            )
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+
+    func testURLRefreshOnExpiry() {
+        let ex = expectation(description: "refreshes url on expiry")
+
+        let htmlString = "<body>This is a test attachment body</body>"
+        let htmlData = htmlString.data(using: .utf8)
+        XCTAssertNotNil(htmlData)
+
+        let attachmentPart = PCPartRequest(
+            .attachment(
+                PCPartAttachmentRequest(
+                    type: "text/html",
+                    file: htmlData!,
+                    name: "test.html",
+                    customData: ["key": "value"]
+                )
+            )
+        )
+
+        let bobRoomDelegate = TestingRoomDelegate(onMultipartMessage: { message in
+            if case let .attachment(payload) = message.parts[0].payload {
+                XCTAssertEqual(payload.type, "text/html")
+                XCTAssertNotNil(payload.customData)
+                XCTAssertEqual(payload.customData!["key"] as! String, "value")
+                XCTAssertNotNil(payload.name)
+                XCTAssertEqual(payload.name!, "test.html")
+
+                // fetch once to make sure we get the right file
+                payload.url() { downloadUrl, error in
+                    XCTAssertNil(error)
+                    XCTAssertNotNil(downloadUrl)
+
+                    let (data, _, err) = synchronousHTTPRequest(
+                        url: downloadUrl!,
+                        method: "GET",
+                        headers: nil
+                    )
+
+                    XCTAssertNil(err)
+                    XCTAssertNotNil(data)
+                    XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
+                }
+
+                // set expiry to now
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+                dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+                let dateString = dateFormatter.string(from: Date())
+                payload.expiration = dateString
+
+                // fetch again
+                payload.url() { downloadUrl, error in
+                    XCTAssertNil(error)
+                    XCTAssertNotNil(downloadUrl)
+
+                    let (data, _, err) = synchronousHTTPRequest(
+                        url: downloadUrl!,
+                        method: "GET",
+                        headers: nil
+                    )
+
+                    XCTAssertNil(err)
+                    XCTAssertNotNil(data)
+                    XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
+                }
+            }
+
+            XCTAssertEqual(message.sender.id, "alice")
+            XCTAssertEqual(message.sender.name, "Alice")
+            XCTAssertEqual(message.room.id, self.roomID)
+            XCTAssertEqual(message.room.name, "mushroom")
+
+            ex.fulfill()
+        })
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.subscribeToRoomMultipart(
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
+                roomDelegate: bobRoomDelegate,
+                messageLimit: 0,
+                completionHandler: { err in
+                    XCTAssertNil(err)
+
+                    self.aliceChatManager.connect(
+                        delegate: TestingChatManagerDelegate()
+                    ) { alice, err in
+                        alice!.sendMultipartMessage(roomID: self.roomID, parts: [attachmentPart]){  _, err in
+                            XCTAssertNil(err)
+                        }
+                    }
+                }
+            )
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
+    func testMultipartMessageWithSimpleAttachmentRetrievedOnV3() {
+        let ex = expectation(description: "send multipart message with a text part and an attachment retrieved on v3")
+
+        let htmlString = "<body>This is a test attachment body</body>"
+        let htmlData = htmlString.data(using: .utf8)
+        XCTAssertNotNil(htmlData)
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: [
+                    PCPartRequest(.inline(PCPartInlineRequest(content: "Have a look at this"))),
+                    PCPartRequest(.attachment(PCPartAttachmentRequest(type: "text/html", file: htmlData!)))
+                ],
+                completionHandler: { messageID, err in
+                    XCTAssertNil(err)
+
+                    bob!.fetchMultipartMessages(
+                        bob!.rooms.first(where: { $0.id == self.roomID })!,
+                        direction: .newer
+                    ) { messages, err in
+                        XCTAssertNil(err)
+
+                        XCTAssertEqual(messages!.last!.id, messageID)
+                        XCTAssertEqual(messages!.last!.room.id, self.roomID)
+                        XCTAssertEqual(messages!.last!.sender.id, bob!.id)
+
+                        if case let .inline(payload) = messages!.last!.parts[0].payload {
+                            XCTAssertEqual(payload.type, "text/plain")
+                            XCTAssertEqual(payload.content, "Have a look at this")
+                        }
+
+                        if case let .attachment(payload) = messages!.last!.parts[1].payload {
+                            XCTAssertEqual(payload.type, "text/html")
+                            payload.url() { downloadUrl, error in
+                                XCTAssertNil(error)
+                                XCTAssertNotNil(downloadUrl)
+
+                                let (data, _, err) = synchronousHTTPRequest(
+                                    url: downloadUrl!,
+                                    method: "GET",
+                                    headers: nil
+                                )
+
+                                XCTAssertNil(err)
+                                XCTAssertNotNil(data)
+                                XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
+                            }
+                        }
+                        ex.fulfill()
+                    }
+                }
+            )
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
+    func testMultipartMessageWithMultipleAttachmentsRetrievedOnV3() {
+        let ex = expectation(description: "send multipart message with two attachments retrieved on v3")
+
+        let htmlString = "<body>This is a test attachment body</body>"
+        let htmlData = htmlString.data(using: .utf8)
+        XCTAssertNotNil(htmlData)
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: [
+                    PCPartRequest(.attachment(PCPartAttachmentRequest(type: "text/html", file: htmlData!))),
+                    PCPartRequest(.attachment(PCPartAttachmentRequest(type: "text/html", file: htmlData!)))
+                ],
+                completionHandler: { messageID, err in
+                    XCTAssertNil(err)
+
+                    bob!.fetchMultipartMessages(
+                        bob!.rooms.first(where: { $0.id == self.roomID })!,
+                        direction: .newer
+                    ) { messages, err in
+                        XCTAssertNil(err)
+
+                        XCTAssertEqual(messages!.last!.id, messageID)
+                        XCTAssertEqual(messages!.last!.room.id, self.roomID)
+                        XCTAssertEqual(messages!.last!.sender.id, bob!.id)
+
+                        if case let .attachment(payload) = messages!.last!.parts[0].payload {
+                            XCTAssertEqual(payload.type, "text/html")
+                            payload.url { downloadUrl, error in
+                                XCTAssertNil(error)
+                                XCTAssertNotNil(downloadUrl)
+
+                                let (data, _, err) = synchronousHTTPRequest(
+                                    url: downloadUrl!,
+                                    method: "GET",
+                                    headers: nil
+                                )
+
+                                XCTAssertNil(err)
+                                XCTAssertNotNil(data)
+                                XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
+                            }
+                        }
+
+                        if case let .attachment(payload) = messages!.last!.parts[1].payload {
+                            XCTAssertEqual(payload.type, "text/html")
+                            payload.url { downloadUrl, error in
+                                XCTAssertNil(error)
+                                XCTAssertNotNil(downloadUrl)
+
+                                let (data, _, err) = synchronousHTTPRequest(
+                                    url: downloadUrl!,
+                                    method: "GET",
+                                    headers: nil
+                                )
+
+                                XCTAssertNil(err)
+                                XCTAssertNotNil(data)
+                                XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
+                            }
+                        }
+                        ex.fulfill()
+                    }
+                }
+            )
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
+    func testMultipartMessageAttachmentUploadError() {
+        let ex = expectation(description: "send multipart message with a text part and an attachment without a type retrieved on v3")
+
+        let htmlString = "<body>This is a test attachment body</body>"
+        let htmlData = htmlString.data(using: .utf8)
+        XCTAssertNotNil(htmlData)
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: [
+                    PCPartRequest(.inline(PCPartInlineRequest(content: "Have a look at this"))),
+                    PCPartRequest(.attachment(PCPartAttachmentRequest(type: "", file: htmlData!)))
+                ],
+                completionHandler: { _, err in
+                    XCTAssertNotNil(err)
+
+                    let uploadError = err as? PPRequestTaskDelegateError
+                    XCTAssertNotNil(uploadError)
+
+                    if case let .badResponseStatusCodeWithMessage(_, errorMessage) = uploadError! {
+                        XCTAssertEqual(
+                            errorMessage,
+                            "services/chatkit/unprocessable_entity/validation_failed: Field `content_type` is invalid"
+                        )
+                    }
+
+                    ex.fulfill()
+                }
+            )
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
+    func testMultipartMessageWithAttachmentSentOnV3RetrievedOnV2() {
+        let ex = expectation(description: "send multipart message with a text part and an attachment from v3 retrieved on v2")
+
+        let jsonString = "{\"hi\": \"there\"}"
+        let jsonData = jsonString.data(using: .utf8)
+        XCTAssertNotNil(jsonData)
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: [
+                    PCPartRequest(.inline(PCPartInlineRequest(content: "Have a look at this"))),
+                    PCPartRequest(.attachment(PCPartAttachmentRequest(type: "application/json", file: jsonData!)))
+                ],
+                completionHandler: { messageID, err in
+                    XCTAssertNil(err)
+
+                    bob!.fetchMessagesFromRoom(
+                        bob!.rooms.first(where: { $0.id == self.roomID })!,
+                        direction: .newer
+                    ) { messages, err in
+                        XCTAssertNil(err)
+
+                        XCTAssertEqual(messages!.last!.id, messageID)
+                        XCTAssertEqual(messages!.last!.room.id, self.roomID)
+                        XCTAssertEqual(messages!.last!.sender.id, bob!.id)
+                        XCTAssertNotNil(messages!.last!.attachment)
+                        XCTAssertEqual(messages!.last!.attachment!.type, "file")
+
+
+
+                        let (data, _, err) = synchronousHTTPRequest(
+                            url: messages!.last!.attachment!.link,
+                            method: "GET",
+                            headers: nil
+                        )
+                        XCTAssertNil(err)
+                        XCTAssertNotNil(data)
+                        XCTAssertEqual(String(data: data!, encoding: .utf8), jsonString)
+                    }
+                    ex.fulfill()
+                }
+            )
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
+    func testMultipartMessageWithAttachmentMetadataRetrievedOnV3() {
+        let ex = expectation(description: "send multipart message with a text part and an attachment (with name and custom data retrieved on v3")
+
+        let htmlString = "<body>This is a test attachment body</body>"
+        let htmlData = htmlString.data(using: .utf8)
+        XCTAssertNotNil(htmlData)
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.sendMultipartMessage(
+                roomID: self.roomID,
+                parts: [
+                    PCPartRequest(.inline(PCPartInlineRequest(content: "Have a look at this"))),
+                    PCPartRequest(
+                        .attachment(
+                            PCPartAttachmentRequest(
+                                type: "text/html",
+                                file: htmlData!,
+                                name: "test.html",
+                                customData: ["key": "value"]
+                            )
+                        )
+                    )
+                ],
+                completionHandler: { messageID, err in
+                    XCTAssertNil(err)
+
+                    bob!.fetchMultipartMessages(
+                        bob!.rooms.first(where: { $0.id == self.roomID })!,
+                        direction: .newer
+                    ) { messages, err in
+                        XCTAssertNil(err)
+
+                        XCTAssertEqual(messages!.last!.id, messageID)
+                        XCTAssertEqual(messages!.last!.room.id, self.roomID)
+                        XCTAssertEqual(messages!.last!.sender.id, bob!.id)
+
+                        if case let .inline(payload) = messages!.last!.parts[0].payload {
+                            XCTAssertEqual(payload.type, "text/plain")
+                            XCTAssertEqual(payload.content, "Have a look at this")
+                        }
+
+                        if case let .attachment(payload) = messages!.last!.parts[1].payload {
+                            XCTAssertEqual(payload.type, "text/html")
+                            XCTAssertNotNil(payload.customData)
+                            XCTAssertEqual(payload.customData!["key"] as! String, "value")
+                            XCTAssertNotNil(payload.name)
+                            XCTAssertEqual(payload.name!, "test.html")
+                            payload.url { downloadUrl, error in
+                                XCTAssertNil(error)
+                                XCTAssertNotNil(downloadUrl)
+
+                                let (data, _, err) = synchronousHTTPRequest(
+                                    url: downloadUrl!,
+                                    method: "GET",
+                                    headers: nil
+                                )
+
+                                XCTAssertNil(err)
+                                XCTAssertNotNil(data)
+                                XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
+                            }
+                        }
+                        ex.fulfill()
+                    }
+            })
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
+    func testSendMessageWithLinkAttachmentV2RetreivedOnV3() {
+        let veryImportantImage = "https://i.imgur.com/rJbRKLU.gif"
+        let ex = expectation(description: "send v2 message with link, retrieved on v3")
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            self.aliceChatManager.connect(
+                delegate: TestingChatManagerDelegate()
+            ) { alice, err in
+                alice!.sendMessage(
+                    roomID: self.roomID,
+                    text: "see attached",
+                    attachment: .link(veryImportantImage, type: "image")
+                ) { messageID, err in
+                    XCTAssertNil(err)
+
+                    bob!.fetchMultipartMessages(
+                        bob!.rooms.first(where: { $0.id == self.roomID })!,
+                        direction: .newer
+                    ) { messages, err in
+                        XCTAssertNil(err)
+
+                        XCTAssertEqual(messages!.last!.id, messageID)
+                        XCTAssertEqual(messages!.last!.room.id, self.roomID)
+                        XCTAssertEqual(messages!.last!.sender.id, alice!.id)
+
+                        if case let .inline(payload) = messages!.last!.parts[0].payload {
+                            XCTAssertEqual(payload.type, "text/plain")
+                            XCTAssertEqual(payload.content, "see attached")
+                        }
+
+                        if case let .url(payload) = messages!.last!.parts[1].payload {
+                            XCTAssertEqual(payload.type, "image/x-pusher-img")
+                            XCTAssertEqual(payload.url, veryImportantImage)
+                        }
+                        ex.fulfill()
+                    }
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
+    func testSendMessageWithFileAttachmentV2RetrievedOnV3() {
+        let ex = expectation(description: "send v2 message with attachment, retrieved on v3")
+
+        let bundle = Bundle(for: type(of: self))
+        let veryImportantImage = bundle.path(
+            forResource: "test-image",
+            ofType: "gif"
+        )!
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            self.aliceChatManager.connect(
+                delegate: TestingChatManagerDelegate()
+            ) { alice, err in
+                alice!.sendMessage(
+                    roomID: self.roomID,
+                    text: "see attached",
+                    attachment: .fileURL(
+                        URL(fileURLWithPath: veryImportantImage),
+                        name: "test-image.gif"
+                    )
+                ) { messageID, err in
+                    XCTAssertNil(err)
+
+                    bob!.fetchMultipartMessages(
+                        bob!.rooms.first(where: { $0.id == self.roomID })!,
+                        direction: .newer
+                    ) { messages, err in
+                        XCTAssertNil(err)
+
+                        XCTAssertEqual(messages!.last!.id, messageID)
+                        XCTAssertEqual(messages!.last!.room.id, self.roomID)
+                        XCTAssertEqual(messages!.last!.sender.id, alice!.id)
+
+                        if case let .inline(payload) = messages!.last!.parts[0].payload {
+                            XCTAssertEqual(payload.type, "text/plain")
+                            XCTAssertEqual(payload.content, "see attached")
+                        }
+
+                        if case let .attachment(payload) = messages!.last!.parts[1].payload {
+                            XCTAssertEqual(payload.type, "image/x-pusher-img")
+                            XCTAssertNotNil(payload.name)
+                            XCTAssertEqual(payload.name!, "test-image.gif")
+                            payload.url { downloadUrl, error in
+                                XCTAssertNil(error)
+                                XCTAssertNotNil(downloadUrl)
+
+                                let (data, _, err) = synchronousHTTPRequest(
+                                    url: downloadUrl!,
+                                    method: "GET",
+                                    headers: nil
+                                )
+
+                                XCTAssertNil(err)
+                                XCTAssertNotNil(data)
+                            }
+                        }
+                        ex.fulfill()
+                    }
+                }
+            }
         }
 
         waitForExpectations(timeout: 15)
@@ -307,6 +1001,378 @@ class MessagesTests: XCTestCase {
                         ) { _, err in
                             XCTAssertNil(err)
                             messageSentEx.fulfill()
+                        }
+                    }
+                }
+            )
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+    
+    func testSubscribingToRoomAndRecievingSentSimpleMultipartMessageV2ToV3() {
+        let ex = expectation(description: "subscribe and receive sent multipart messages (v2 to v3)")
+        
+        let expectedMessageContent = "Hello!"
+        
+        let bobRoomDelegate = TestingRoomDelegate(onMultipartMessage: { message in
+            switch message.parts[0].payload {
+            case .inline(let payload):
+                XCTAssertEqual(payload.content, expectedMessageContent)
+                XCTAssertEqual(payload.type, "text/plain")
+            default:
+                XCTFail()
+            }
+            
+            XCTAssertEqual(message.sender.id, "alice")
+            XCTAssertEqual(message.sender.name, "Alice")
+            XCTAssertEqual(message.room.id, self.roomID)
+            XCTAssertEqual(message.room.name, "mushroom")
+            
+            ex.fulfill()
+        })
+        
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.subscribeToRoomMultipart(
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
+                roomDelegate: bobRoomDelegate,
+                messageLimit: 0,
+                completionHandler: { err in
+                    XCTAssertNil(err)
+                    
+                    self.aliceChatManager.connect(
+                        delegate: TestingChatManagerDelegate()
+                    ) { alice, err in
+                        alice!.sendSimpleMessage(roomID: self.roomID, text: expectedMessageContent, completionHandler: { _, _ in })
+                    }
+                }
+            )
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+
+    func testSubscribingToRoomAndRecievingSendMultipartMessagesWithAttachmentV3ToV3() {
+        let ex = expectation(description: "subscribe and receive sent multipart messages with attachment (v3 to v3)")
+
+        let htmlString = "<body>This is a test attachment body</body>"
+        let htmlData = htmlString.data(using: .utf8)
+        XCTAssertNotNil(htmlData)
+
+
+        let expectedTextPartContent = "Hello!"
+        let expectedTextPartType = "text/plain"
+        let expectedURLPartString = "https://images.com/cat.jpeg"
+        let expectedURLPartType = "image/jpeg"
+        let expectedAttachmentPartType = "text/html"
+
+        let textPart = PCPartRequest(.inline(PCPartInlineRequest(type: expectedTextPartType, content: expectedTextPartContent)))
+        let urlPart = PCPartRequest(.url(PCPartUrlRequest(type: expectedURLPartType, url: expectedURLPartString)))
+        let attachmentPart = PCPartRequest(
+            .attachment(
+                PCPartAttachmentRequest(
+                    type: "text/html",
+                    file: htmlData!,
+                    name: "test.html",
+                    customData: ["key": "value"]
+                )
+            )
+        )
+
+        let bobRoomDelegate = TestingRoomDelegate(onMultipartMessage: { message in
+            if case let .inline(payload) = message.parts[0].payload {
+                XCTAssertEqual(payload.type, expectedTextPartType)
+                XCTAssertEqual(payload.content, expectedTextPartContent)
+            }
+
+            if case let .url(payload) = message.parts[1].payload {
+                XCTAssertEqual(payload.type, expectedURLPartType)
+                XCTAssertEqual(payload.url, expectedURLPartString)
+            }
+
+            if case let .attachment(payload) = message.parts[2].payload {
+                XCTAssertEqual(payload.type, expectedAttachmentPartType)
+                XCTAssertNotNil(payload.customData)
+                XCTAssertEqual(payload.customData!["key"] as! String, "value")
+                XCTAssertNotNil(payload.name)
+                XCTAssertEqual(payload.name!, "test.html")
+
+                payload.url { downloadUrl, error in
+                    XCTAssertNil(error)
+                    XCTAssertNotNil(downloadUrl)
+
+                    let (data, _, err) = synchronousHTTPRequest(
+                        url: downloadUrl!,
+                        method: "GET",
+                        headers: nil
+                    )
+
+                    XCTAssertNil(err)
+                    XCTAssertNotNil(data)
+                    XCTAssertEqual(String(data: data!, encoding: .utf8), htmlString)
+                }
+            }
+
+            XCTAssertEqual(message.sender.id, "alice")
+            XCTAssertEqual(message.sender.name, "Alice")
+            XCTAssertEqual(message.room.id, self.roomID)
+            XCTAssertEqual(message.room.name, "mushroom")
+
+            ex.fulfill()
+        })
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.subscribeToRoomMultipart(
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
+                roomDelegate: bobRoomDelegate,
+                messageLimit: 0,
+                completionHandler: { err in
+                    XCTAssertNil(err)
+
+                    self.aliceChatManager.connect(
+                        delegate: TestingChatManagerDelegate()
+                    ) { alice, err in
+                        alice!.sendMultipartMessage(roomID: self.roomID, parts: [textPart, urlPart, attachmentPart], completionHandler: {_, _ in })
+                    }
+                }
+            )
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+    
+    func testSubscribingToRoomAndRecievingSentMultipartMessageV3ToV3() {
+        let ex = expectation(description: "subscribe and receive sent multipart messages with attachment (v3 to v3)")
+        
+        let expectedTextPartContent = "Hello!"
+        let expectedTextPartType = "text/plain"
+        let expectedURLPartString = "https://images.com/cat.jpeg"
+        let expectedURLPartType = "image/jpeg"
+        
+        let textPart = PCPartRequest(.inline(PCPartInlineRequest(type: expectedTextPartType, content: expectedTextPartContent)))
+        let urlPart = PCPartRequest(.url(PCPartUrlRequest(type: expectedURLPartType, url: expectedURLPartString)))
+        
+        let bobRoomDelegate = TestingRoomDelegate(onMultipartMessage: { message in
+            if case let .inline(payload) = message.parts[0].payload {
+                XCTAssertEqual(payload.type, "text/plain")
+                XCTAssertEqual(payload.content, expectedTextPartContent)
+            }
+
+            if case let .url(payload) = message.parts[1].payload {
+                XCTAssertEqual(payload.type, "image/jpeg")
+                XCTAssertEqual(payload.url, expectedURLPartString)
+            }
+            
+            XCTAssertEqual(message.sender.id, "alice")
+            XCTAssertEqual(message.sender.name, "Alice")
+            XCTAssertEqual(message.room.id, self.roomID)
+            XCTAssertEqual(message.room.name, "mushroom")
+            
+            ex.fulfill()
+        })
+        
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.subscribeToRoomMultipart(
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
+                roomDelegate: bobRoomDelegate,
+                messageLimit: 0,
+                completionHandler: { err in
+                    XCTAssertNil(err)
+                    
+                    self.aliceChatManager.connect(
+                        delegate: TestingChatManagerDelegate()
+                    ) { alice, err in
+                        alice!.sendMultipartMessage(roomID: self.roomID, parts: [textPart, urlPart], completionHandler: {_, _ in })
+                    }
+                }
+            )
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+    
+    func testSubscribingToRoomAndRecievingSentMultipartMessageV3ToV2() {
+        let ex = expectation(description: "subscribe and receive sent multipart messages (v3 to v2)")
+        
+        let expectedTextPartContent = "Hello!"
+        let expectedTextPartType = "text/plain"
+        let expectedURLPartString = "https://images.com/cat.jpeg"
+        let expectedURLPartType = "image/jpeg"
+        
+        let textPart = PCPartRequest(.inline(PCPartInlineRequest(type: expectedTextPartType, content: expectedTextPartContent)))
+        let urlPart = PCPartRequest(.url(PCPartUrlRequest(type: expectedURLPartType, url: expectedURLPartString)))
+        
+        let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
+            XCTAssertEqual(message.text, expectedTextPartContent)
+            XCTAssertNotNil(message.attachment)
+            XCTAssertEqual(message.attachment!.link, expectedURLPartString)
+            XCTAssertEqual(message.attachment!.type, "image")
+            
+            XCTAssertEqual(message.sender.id, "alice")
+            XCTAssertEqual(message.sender.name, "Alice")
+            XCTAssertEqual(message.room.id, self.roomID)
+            XCTAssertEqual(message.room.name, "mushroom")
+            
+            ex.fulfill()
+        })
+        
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+            
+            bob!.subscribeToRoom(
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
+                roomDelegate: bobRoomDelegate,
+                messageLimit: 0,
+                completionHandler: { err in
+                    XCTAssertNil(err)
+                    
+                    self.aliceChatManager.connect(
+                        delegate: TestingChatManagerDelegate()
+                    ) { alice, err in
+                        alice!.sendMultipartMessage(roomID: self.roomID, parts: [textPart, urlPart], completionHandler: {_, _ in })
+                    }
+                }
+            )
+        }
+        
+        waitForExpectations(timeout: 15)
+    }
+
+    func testSubscribingToRoomAndReceivingSentMultipartMessageWithAttachmentV3ToV2() {
+        let ex = expectation(description: "subscribe and receive sent multipart messages with attachment (v3 to v2)")
+
+        let jsonString = "{\"hi\": \"there\"}"
+        let jsonData = jsonString.data(using: .utf8)
+        XCTAssertNotNil(jsonData)
+
+        let textPart = PCPartRequest(.inline(PCPartInlineRequest(content: "Hello!")))
+        let attachmentPart = PCPartRequest(
+            .attachment(
+                PCPartAttachmentRequest(
+                    type: "application/json",
+                    file: jsonData!,
+                    name: "test.html"
+                )
+            )
+        )
+
+        let bobRoomDelegate = TestingRoomDelegate(onMessage: { message in
+            XCTAssertEqual(message.text, "Hello!")
+            XCTAssertNotNil(message.attachment)
+            XCTAssertEqual(message.attachment!.type, "file")
+
+            XCTAssertEqual(message.sender.id, "alice")
+            XCTAssertEqual(message.sender.name, "Alice")
+            XCTAssertEqual(message.room.id, self.roomID)
+            XCTAssertEqual(message.room.name, "mushroom")
+
+            let (data, _, err) = synchronousHTTPRequest(
+                url: message.attachment!.link,
+                method: "GET",
+                headers: nil
+            )
+
+            XCTAssertNil(err)
+            XCTAssertNotNil(data)
+            XCTAssertEqual(String(data: data!, encoding: .utf8), jsonString)
+            ex.fulfill()
+        })
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.subscribeToRoom(
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
+                roomDelegate: bobRoomDelegate,
+                messageLimit: 0,
+                completionHandler: { err in
+                    XCTAssertNil(err)
+
+                    self.aliceChatManager.connect(
+                        delegate: TestingChatManagerDelegate()
+                    ) { alice, err in
+                        alice!.sendMultipartMessage(roomID: self.roomID, parts: [textPart, attachmentPart]) { _, err in
+                            XCTAssertNil(err)
+                        }
+                    }
+                }
+            )
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
+    func testSubscribingToRoomAndRecevingSentMessageWithAttachmentV2OnV3() {
+        let ex = expectation(description: "subscribe and receive sent multipart messages with attachment (v2 to v3)")
+
+        let bundle = Bundle(for: type(of: self))
+        let veryImportantImage = bundle.path(
+            forResource: "test-image",
+            ofType: "gif"
+        )!
+
+        let bobRoomDelegate = TestingRoomDelegate(onMultipartMessage: { message in
+            if case let .inline(payload) = message.parts[0].payload {
+                XCTAssertEqual(payload.type, "text/plain")
+                XCTAssertEqual(payload.content, "see attached")
+            }
+
+            if case let .attachment(payload) = message.parts[1].payload {
+                XCTAssertEqual(payload.type, "image/x-pusher-img")
+                XCTAssertNotNil(payload.name)
+                XCTAssertEqual(payload.name!, "test-image.gif")
+
+                payload.url { downloadUrl, error in
+                    XCTAssertNil(error)
+                    XCTAssertNotNil(downloadUrl)
+
+                    let (data, _, err) = synchronousHTTPRequest(
+                        url: downloadUrl!,
+                        method: "GET",
+                        headers: nil
+                    )
+
+                    XCTAssertNil(err)
+                    XCTAssertNotNil(data)
+                }
+            }
+
+            XCTAssertEqual(message.sender.id, "alice")
+            XCTAssertEqual(message.sender.name, "Alice")
+            XCTAssertEqual(message.room.id, self.roomID)
+            XCTAssertEqual(message.room.name, "mushroom")
+
+            ex.fulfill()
+        })
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.subscribeToRoomMultipart(
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
+                roomDelegate: bobRoomDelegate,
+                messageLimit: 0,
+                completionHandler: { err in
+                    XCTAssertNil(err)
+
+                    self.aliceChatManager.connect(
+                        delegate: TestingChatManagerDelegate()
+                    ) { alice, err in
+                        alice!.sendMessage(
+                            roomID: self.roomID,
+                            text: "see attached",
+                            attachment: .fileURL(
+                                URL(fileURLWithPath: veryImportantImage),
+                                name: "test-image.gif"
+                            )
+                        ) { _, err in
+                            XCTAssertNil(err)
                         }
                     }
                 }
