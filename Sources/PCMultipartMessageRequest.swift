@@ -30,6 +30,11 @@ public struct PCPartUrlRequest {
     let type: String
     let url: String
 
+    public init(type: String, url: String) {
+        self.type = type
+        self.url = url
+    }
+
     func toMap() -> [String: Any] {
         return [
             "type": self.type,
