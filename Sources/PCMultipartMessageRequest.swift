@@ -4,7 +4,7 @@ import Foundation
 public struct PCPartRequest {
     let payload: PCPartRequestType
 
-    init(_ payload: PCPartRequestType) {
+    public init(_ payload: PCPartRequestType) {
         self.payload = payload
     }
 }
@@ -13,7 +13,7 @@ public struct PCPartInlineRequest {
     let type: String
     let content: String
 
-    init(type: String = "text/plain", content: String) {
+    public init(type: String = "text/plain", content: String) {
         self.type = type
         self.content = content
     }
@@ -49,7 +49,7 @@ public struct PCPartAttachmentRequest {
     let name: String?
     let customData: [String: Any]?
 
-    init(
+    public init(
         type: String,
         file: Data,
         name: String? = nil,

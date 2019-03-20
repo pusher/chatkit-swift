@@ -46,21 +46,21 @@ extension PCMultipartMessage: Hashable {
 }
 
 public struct PCPart {
-    let payload: PCMultipartPayload
+    public let payload: PCMultipartPayload
 
-    init(_ payload: PCMultipartPayload) {
+    public init(_ payload: PCMultipartPayload) {
         self.payload = payload
     }
 }
 
 public struct PCMultipartInlinePayload {
-    let type: String
-    let content: String
+    public let type: String
+    public let content: String
 }
 
 public struct PCMultipartURLPayload {
-    let type: String
-    let url: String
+    public let type: String
+    public let url: String
 }
 
 public enum PCMultipartPayload {
@@ -85,11 +85,11 @@ extension PCMultipartPayload: Equatable {
 }
 
 public class PCMultipartAttachmentPayload {
-    let type: String
-    let id: String
-    let name: String?
-    let customData: [String: Any]?
-    let size: Int
+    public let type: String
+    public let id: String
+    public let name: String?
+    public let customData: [String: Any]?
+    public let size: Int
     private let urlRefresher: PCMultipartAttachmentUrlRefresher
     internal let refreshUrl: String
     internal var downloadUrl: String
