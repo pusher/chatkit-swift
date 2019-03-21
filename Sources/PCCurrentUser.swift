@@ -654,6 +654,7 @@ public final class PCCurrentUser {
         )
     }
 
+    @available(*, deprecated, message: "Please use sendMultipartMessage")
     public func sendMessage(
         roomID: String,
         text: String,
@@ -779,6 +780,7 @@ public final class PCCurrentUser {
         )
     }
 
+    @available(*, deprecated, message: "Please use subscribeToRoomMultipart")
     public func subscribeToRoom(
         room: PCRoom,
         roomDelegate: PCRoomDelegate,
@@ -798,6 +800,7 @@ public final class PCCurrentUser {
     // TODO: Do we need a Last-Event-ID option here? Probably yes if we get to the point
     // of supporting offline or caching, or someone wants to do that themselves, then
     // offering this as a point to hook into would be an optimisation opportunity
+    @available(*, deprecated, message: "Please use subscribeToRoomMultipart")
     public func subscribeToRoom(
         id roomID: String,
         roomDelegate: PCRoomDelegate,
@@ -912,6 +915,7 @@ public final class PCCurrentUser {
         }
     }
 
+    @available(*, deprecated, message: "Please use fetchMultipartMessages")
     public func fetchMessagesFromRoom(
         _ room: PCRoom,
         initialID: String? = nil,
