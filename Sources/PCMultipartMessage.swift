@@ -117,7 +117,7 @@ public class PCMultipartAttachmentPayload {
         self.expiration = expiration
     }
 
-    func url(completionHandler: @escaping (String?, Error?) -> Void) {
+    public func url(completionHandler: @escaping (String?, Error?) -> Void) {
         if (Date().addingTimeInterval(30 * 60) > self.urlExpiry()) {
             self.urlRefresher.refresh(attachment: self) { newAttachment, error in
                 guard error == nil else {
