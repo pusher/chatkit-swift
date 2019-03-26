@@ -4,6 +4,7 @@ import PusherPlatform
 public protocol PCRoomDelegate: AnyObject {
     func onMessage(_ message: PCMessage)
     func onMultipartMessage(_ message: PCMultipartMessage)
+    func onMessageDeleted(_ messageID: Int)
 
     @available(*, deprecated, renamed: "onNewReadCursor")
     func onNewCursor(_ cursor: PCCursor)
@@ -25,6 +26,7 @@ public protocol PCRoomDelegate: AnyObject {
 public extension PCRoomDelegate {
     func onMessage(_ message: PCMessage) {}
     func onMultipartMessage(_ message: PCMultipartMessage) {}
+    func onMessageDeleted(_ messageID: Int) {}
     func onNewCursor(_ cursor: PCCursor) {}
     func onNewReadCursor(_ cursor: PCCursor) {}
     func onUserStartedTyping(user: PCUser) {}

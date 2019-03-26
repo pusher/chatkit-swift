@@ -36,7 +36,7 @@ class CurrentUserTests: XCTestCase {
         let userSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .server,
-            version: "v4",
+            version: "v5",
             path: "users"
         ).absoluteString
 

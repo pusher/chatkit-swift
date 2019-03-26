@@ -59,7 +59,7 @@ public final class PCRoomSubscription {
             }
         }
         
-        if version == "v3" {
+        if version == "v5" {
             self.multipartMessageSubscription = subscribeToRoomMultipartMessages(
                 room: room,
                 messageLimit: messageLimit,
@@ -87,6 +87,14 @@ public final class PCRoomSubscription {
                                 roomStartHook: roomDelegate?.onUserStartedTyping,
                                 roomStopHook: roomDelegate?.onUserStoppedTyping
                             )
+                        }
+                    }
+                },
+                onMessageDeletedHook: { [weak roomDelegate, weak self] messageID in
+                    instance.logger.log("Room received message_deleted event: \(messageID)", logLevel: .verbose)
+                    self?.eventBufferQueue.async {
+                        self?.callOrBuffer(room: room) {
+                            roomDelegate?.onMessageDeleted(messageID)
                         }
                     }
                 },
@@ -123,6 +131,7 @@ public final class PCRoomSubscription {
                         }
                     }
                 },
+                onMessageDeletedHook: { _ in }, // message_deleted is not sent over v2
                 completionHandler: combinedCompletionHandler
             )
             self.multipartMessageSubscription = nil
@@ -213,6 +222,7 @@ fileprivate func subscribeToRoomMessages(
     logger: PCLogger,
     onMessageHook: @escaping (PCMessage) -> Void,
     onIsTypingHook: @escaping (PCRoom, PCUser) -> Void,
+    onMessageDeletedHook: @escaping (Int) -> Void,
     completionHandler: @escaping PCErrorCompletionHandler
 ) -> PCMessageSubscription<PCBasicMessage, PCMessage> {
     let path = "/rooms/\(room.id)"
@@ -255,7 +265,8 @@ fileprivate func subscribeToRoomMessages(
         userStore: userStore,
         roomStore: roomStore,
         onMessageHook: onMessageHook,
-        onIsTypingHook: onIsTypingHook
+        onIsTypingHook: onIsTypingHook,
+        onMessageDeletedHook: onMessageDeletedHook
     )
 
     instance.subscribeWithResume(
@@ -281,6 +292,7 @@ fileprivate func subscribeToRoomMultipartMessages(
     urlRefresher: PCMultipartAttachmentUrlRefresher,
     onMessageHook: @escaping (PCMultipartMessage) -> Void,
     onIsTypingHook: @escaping (PCRoom, PCUser) -> Void,
+    onMessageDeletedHook: @escaping (Int) -> Void,
     completionHandler: @escaping PCErrorCompletionHandler
     ) -> PCMessageSubscription<PCBasicMultipartMessage, PCMultipartMessage> {
     let path = "/rooms/\(room.id)"
@@ -323,7 +335,8 @@ fileprivate func subscribeToRoomMultipartMessages(
         userStore: userStore,
         roomStore: roomStore,
         onMessageHook: onMessageHook,
-        onIsTypingHook: onIsTypingHook
+        onIsTypingHook: onIsTypingHook,
+        onMessageDeletedHook: onMessageDeletedHook
     )
     
     instance.subscribeWithResume(

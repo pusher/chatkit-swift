@@ -12,7 +12,7 @@ import NotificationCenter
 @objc public class ChatManager: NSObject {
     private let chatkitBeamsTokenProviderInstance: Instance
     public let v2Instance: Instance
-    public let v4Instance: Instance
+    public let v5Instance: Instance
     public let filesInstance: Instance
     public let cursorsInstance: Instance
     public let presenceInstance: Instance
@@ -31,7 +31,7 @@ import NotificationCenter
         didSet {
             connectionCoordinator.logger = logger
             v2Instance.logger = logger
-            v4Instance.logger = logger
+            v5Instance.logger = logger
             filesInstance.logger = logger
             cursorsInstance.logger = logger
             presenceInstance.logger = logger
@@ -66,10 +66,10 @@ import NotificationCenter
             serviceVersion: "v2",
             sharedOptions: sharedInstanceOptions
         )
-        
-        self.v4Instance = ChatManager.createInstance(
+
+        self.v5Instance = ChatManager.createInstance(
             serviceName: "chatkit",
-            serviceVersion: "v4",
+            serviceVersion: "v5",
             sharedOptions: sharedInstanceOptions
         )
 
@@ -116,7 +116,7 @@ import NotificationCenter
         self.basicCurrentUser = PCBasicCurrentUser(
             id: userID,
             pathFriendlyID: pathFriendlyUserID,
-            instance: v4Instance,
+            instance: v5Instance,
             chatkitBeamsTokenProviderInstance: chatkitBeamsTokenProviderInstance,
             filesInstance: filesInstance,
             presenceInstance: presenceInstance,
@@ -166,7 +166,7 @@ import NotificationCenter
                         id: strongSelf.userID,
                         pathFriendlyID: strongSelf.pathFriendlyUserID,
                         v2Instance: strongSelf.v2Instance,
-                        v4Instance: strongSelf.v4Instance,
+                        v5Instance: strongSelf.v5Instance,
                         chatkitBeamsTokenProviderInstance: strongSelf.chatkitBeamsTokenProviderInstance,
                         filesInstance: strongSelf.filesInstance,
                         cursorsInstance: strongSelf.cursorsInstance,
@@ -326,7 +326,7 @@ import NotificationCenter
                             return
                         }
                     } else if let err = err {
-                        self.v4Instance.logger.log(
+                        self.v5Instance.logger.log(
                             "Failed to set cursor in cursor store. Error: \(err.localizedDescription)",
                             logLevel: .debug
                         )
@@ -342,7 +342,7 @@ import NotificationCenter
                     }
                 }
             } catch let err {
-                self.v4Instance.logger.log(err.localizedDescription, logLevel: .debug)
+                self.v5Instance.logger.log(err.localizedDescription, logLevel: .debug)
                 result = InitialStateResult.error(err)
                 return
             }
