@@ -87,6 +87,7 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
     let handleUserLeft: (PCUser) -> Void
     let handleNewMessage: (PCMessage) -> Void
     let handleMultipartMessage: (PCMultipartMessage) -> Void
+    let handleMessageDeleted: (Int) -> Void
 
     init(
         onNewReadCursor: @escaping (PCCursor) -> Void = { _ in },
@@ -96,7 +97,8 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
         onUserJoined: @escaping (PCUser) -> Void = { _ in },
         onUserLeft: @escaping (PCUser) -> Void = { _ in },
         onMessage: @escaping (PCMessage) -> Void = { _ in },
-        onMultipartMessage: @escaping (PCMultipartMessage) -> Void = { _ in }
+        onMultipartMessage: @escaping (PCMultipartMessage) -> Void = { _ in },
+        onMessageDeleted: @escaping (Int) -> Void = { _ in }
     ) {
         handleNewReadCursor = onNewReadCursor
         handleUserStartedTyping = onUserStartedTyping
@@ -106,6 +108,7 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
         handleUserLeft = onUserLeft
         handleNewMessage = onMessage
         handleMultipartMessage = onMultipartMessage
+        handleMessageDeleted = onMessageDeleted
     }
 
     func onNewReadCursor(_ cursor: PCCursor) -> Void {
@@ -138,5 +141,9 @@ class TestingRoomDelegate: NSObject, PCRoomDelegate {
     
     func onMultipartMessage(_ message: PCMultipartMessage) {
         handleMultipartMessage(message)
+    }
+
+    func onMessageDeleted(_ messageID: Int) {
+        handleMessageDeleted(messageID)
     }
 }

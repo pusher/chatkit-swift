@@ -936,6 +936,7 @@ public final class PCCurrentUser {
                     text: basicMessage.text,
                     createdAt: basicMessage.createdAt,
                     updatedAt: basicMessage.updatedAt,
+                    deletedAt: basicMessage.deletedAt,
                     attachment: basicMessage.attachment,
                     sender: user,
                     room: room

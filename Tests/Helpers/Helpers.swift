@@ -169,6 +169,22 @@ func deleteInstanceResources(completionHandler: @escaping (TestHelperError?) -> 
     }.resume()
 }
 
+func deleteMessage(roomID: String, messageID: Int, completionHandler: @escaping (TestHelperError?) -> Void) {
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v5", "rooms/\(roomID)/messages/\(messageID)"))
+    request.httpMethod = "DELETE"
+    request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
+
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        guard error == nil else {
+            completionHandler(.generic("Error deleting message: \(error!.localizedDescription)"))
+            return
+        }
+
+        TestLogger().log("Message deleted successfully!", logLevel: .debug)
+        completionHandler(nil)
+    }.resume()
+}
+
 func synchronousHTTPRequest(
     url: String,
     method: String,
