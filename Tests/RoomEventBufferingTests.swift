@@ -191,7 +191,7 @@ class RoomEventBufferingTests: XCTestCase {
         let messageSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .server,
-            version: "v4",
+            version: "v5",
             path: "rooms/\(roomID)",
             queryItems: [URLQueryItem(name: "message_limit", value: String(messageLimit))]
         ).absoluteString
@@ -224,7 +224,7 @@ class RoomEventBufferingTests: XCTestCase {
         let membershipSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .server,
-            version: "v4",
+            version: "v5",
             path: "rooms/\(roomID)/memberships"
         ).absoluteString
 

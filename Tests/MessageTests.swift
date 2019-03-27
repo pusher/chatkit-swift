@@ -274,6 +274,49 @@ class MessagesTests: XCTestCase {
         waitForExpectations(timeout: 15)
     }
 
+    func testDeleteMessage() {
+        var messageID: Int = 0
+        let messageDeletedHookEx = expectation(description: "message deleted hook")
+        let messageDeletedEx = expectation(description: "message deleted")
+        let messageSentEx = expectation(description: "message sent")
+        let bobRoomDelegate = TestingRoomDelegate(onMessageDeleted: { deletedMessageID in
+            XCTAssertEqual(deletedMessageID, messageID)
+            messageDeletedHookEx.fulfill()
+        })
+
+        bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+            XCTAssertNil(err)
+
+            bob!.subscribeToRoomMultipart(
+                room: bob!.rooms.first(where: { $0.id == self.roomID })!,
+                roomDelegate: bobRoomDelegate,
+                messageLimit: 0,
+                completionHandler: { err in
+                    XCTAssertNil(err)
+
+                    bob!.sendMultipartMessage(
+                        roomID: self.roomID,
+                        parts: [
+                            PCPartRequest(.inline(PCPartInlineRequest(content: "Hello")))
+                        ],
+                        completionHandler: { msgID, err in
+                            messageID = msgID!
+                            XCTAssertNil(err)
+                            messageSentEx.fulfill()
+
+                            deleteMessage(roomID: self.roomID, messageID: messageID) { err in
+                                XCTAssertNil(err)
+                                messageDeletedEx.fulfill()
+                            }
+                        }
+                    )
+                }
+            )
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
     func testSubscribeToRoomAndFetchInitial() {
         let ex = expectation(description: "subscribe and get initial messages")
 

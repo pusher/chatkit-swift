@@ -109,6 +109,7 @@ struct PCPayloadDeserializer {
             text: messageText,
             createdAt: messageCreatedAt,
             updatedAt: messageUpdatedAt,
+            deletedAt: messagePayload["deleted_at"] as? String,
             attachment: createAttachmentFromPayload(messagePayload["attachment"])
         )
     }

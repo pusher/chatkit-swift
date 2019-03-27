@@ -19,5 +19,6 @@ public struct PCBasicMessage: PCCommonBasicMessage {
     let text: String
     let createdAt: String
     let updatedAt: String
+    let deletedAt: String?
     let attachment: PCAttachment?
 }
