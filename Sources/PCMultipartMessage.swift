@@ -155,7 +155,7 @@ public class PCMultipartAttachmentUrlRefresher {
         attachment: PCMultipartAttachmentPayload,
         completionHandler: @escaping (PCMultipartAttachmentPayload?, Error?) -> Void
     ) {
-        let request = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: attachment.refreshUrl)
+        let request = PPRequestOptions(method: HTTPMethod.GET.rawValue, destination: .absolute(attachment.refreshUrl))
         self.client.request(
             using: request,
             onSuccess: { data in
