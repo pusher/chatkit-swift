@@ -4,13 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/pusher/chatkit-swift/compare/1.4.3...HEAD) - 2019-03-21
+## [Unreleased](https://github.com/pusher/chatkit-swift/compare/1.4.4...HEAD)
+
+## [1.4.4](https://github.com/pusher/chatkit-swift/compare/1.4.3...1.4.4) - 2019-04-01
+
+## Fixed
+
+- Refresh URL's were incorrectly being constructed.
+
+## [1.4.3](https://github.com/pusher/chatkit-swift/compare/1.4.2...1.4.3) - 2019-03-20
 
 ## Fixed
 
-- PCMultipartAttachmentPayload.url is now public
-
-## [1.4.3](https://github.com/pusher/chatkit-swift/compare/1.4.2...1.4.3) - 2019-03-20
+- PCMultipartAttachmentPayload.url is now public.
 
 ## [1.4.2](https://github.com/pusher/chatkit-swift/compare/1.4.1...1.4.2) - 2019-03-20
 
