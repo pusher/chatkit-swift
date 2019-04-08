@@ -12,7 +12,7 @@ import NotificationCenter
 @objc public class ChatManager: NSObject {
     private let chatkitBeamsTokenProviderInstance: Instance
     public let v2Instance: Instance
-    public let v3Instance: Instance
+    public let v4Instance: Instance
     public let filesInstance: Instance
     public let cursorsInstance: Instance
     public let presenceInstance: Instance
@@ -31,7 +31,7 @@ import NotificationCenter
         didSet {
             connectionCoordinator.logger = logger
             v2Instance.logger = logger
-            v3Instance.logger = logger
+            v4Instance.logger = logger
             filesInstance.logger = logger
             cursorsInstance.logger = logger
             presenceInstance.logger = logger
@@ -67,9 +67,9 @@ import NotificationCenter
             sharedOptions: sharedInstanceOptions
         )
         
-        self.v3Instance = ChatManager.createInstance(
+        self.v4Instance = ChatManager.createInstance(
             serviceName: "chatkit",
-            serviceVersion: "v3",
+            serviceVersion: "v4",
             sharedOptions: sharedInstanceOptions
         )
 
@@ -116,7 +116,7 @@ import NotificationCenter
         self.basicCurrentUser = PCBasicCurrentUser(
             id: userID,
             pathFriendlyID: pathFriendlyUserID,
-            instance: v3Instance,
+            instance: v4Instance,
             chatkitBeamsTokenProviderInstance: chatkitBeamsTokenProviderInstance,
             filesInstance: filesInstance,
             cursorsInstance: cursorsInstance,
@@ -169,7 +169,7 @@ import NotificationCenter
                         id: strongSelf.userID,
                         pathFriendlyID: strongSelf.pathFriendlyUserID,
                         v2Instance: strongSelf.v2Instance,
-                        v3Instance: strongSelf.v3Instance,
+                        v4Instance: strongSelf.v4Instance,
                         chatkitBeamsTokenProviderInstance: strongSelf.chatkitBeamsTokenProviderInstance,
                         filesInstance: strongSelf.filesInstance,
                         cursorsInstance: strongSelf.cursorsInstance,
