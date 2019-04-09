@@ -113,7 +113,8 @@ class RoomEventBufferingTests: XCTestCase {
                             "name": "\(userID)",
                             "created_at": "2017-04-13T14:10:04Z",
                             "updated_at": "2017-04-13T14:10:04Z"
-                        }
+                        },
+                        "cursors": []
                     },
                     "timestamp": "2017-03-23T11:36:42Z"
                 }
@@ -156,28 +157,6 @@ class RoomEventBufferingTests: XCTestCase {
             return successResponseForRequest(req, withEvents: [])
         }
 
-        let cursorsSubscriptionURL = serviceURL(
-            instanceLocator: instanceLocator,
-            service: .cursors,
-            version: "v2",
-            path: "cursors/0/users/\(userID)"
-        ).absoluteString
-
-        stub(uri(cursorsSubscriptionURL)) { req in
-            let initialStateEventData = dataSubscriptionEventFor("""
-                {
-                    "event_name": "initial_state",
-                    "data": {
-                      "cursors": []
-                    },
-                    "timestamp": "2017-03-23T11:36:42Z"
-                }
-            """)
-
-            let initialStateSubEvent = SubscriptionEvent(data: initialStateEventData, delay: 0.0)
-            return successResponseForRequest(req, withEvents: [initialStateSubEvent])
-        }
-
         var user: PCCurrentUser!
 
         let cmDelegate = TestingChatManagerDelegate(
@@ -200,9 +179,9 @@ class RoomEventBufferingTests: XCTestCase {
         wait(for: [connectEx, addedToRoomEx], timeout: 15, enforceOrder: true)
 
         let roomDelegate = TestingRoomDelegate(
-            onMessage: { message in
+            onMultipartMessage: { message in
                 guard message.id == messageID else {
-                    XCTFail("onMessage called for a different message")
+                    XCTFail("onMultipartMessage called for a different message")
                     return
                 }
                 onMessageHookCalledEx.fulfill()
@@ -212,7 +191,7 @@ class RoomEventBufferingTests: XCTestCase {
         let messageSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .server,
-            version: "v2",
+            version: "v4",
             path: "rooms/\(roomID)",
             queryItems: [URLQueryItem(name: "message_limit", value: String(messageLimit))]
         ).absoluteString
@@ -225,7 +204,12 @@ class RoomEventBufferingTests: XCTestCase {
                         "id": \(messageID),
                         "user_id": "viv",
                         "room_id": "1",
-                        "text": "Hello",
+                        "parts": [
+                            {
+                                "type": "text/plain",
+                                "content": "hello"
+                            }
+                        ],
                         "created_at":"2017-03-23T11:36:42Z",
                         "updated_at":"2017-03-23T11:36:42Z"
                     },
@@ -240,7 +224,7 @@ class RoomEventBufferingTests: XCTestCase {
         let membershipSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .server,
-            version: "v2",
+            version: "v4",
             path: "rooms/\(roomID)/memberships"
         ).absoluteString
 
@@ -292,7 +276,7 @@ class RoomEventBufferingTests: XCTestCase {
             return successResponseForRequest(req, withEvents: [])
         }
 
-        user.subscribeToRoom(
+        user.subscribeToRoomMultipart(
             id: roomID,
             roomDelegate: roomDelegate,
             messageLimit: messageLimit
