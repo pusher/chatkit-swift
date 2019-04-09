@@ -10,6 +10,8 @@ public final class PCRoom {
     public internal(set) var updatedAt: String
     public internal(set) var deletedAt: String?
     public internal(set) var customData: [String: Any]?
+    public internal(set) var unreadCount: Int?
+    public internal(set) var lastMessageAt: String?
 
     public internal(set) var subscription: PCRoomSubscription?
     public internal(set) var userIDs: Set<String>
@@ -36,6 +38,12 @@ public final class PCRoom {
         }
         return PCDateFormatter.shared.formatString(deletedAt)
     }
+    public var lastMessageAtDate: Date? {
+        guard let lastMessageAt = self.lastMessageAt else {
+            return nil
+        }
+        return PCDateFormatter.shared.formatString(lastMessageAt)
+    }
 
     public init(
         id: String,
@@ -45,6 +53,8 @@ public final class PCRoom {
         createdAt: String,
         updatedAt: String,
         customData: [String: Any]? = nil,
+        unreadCount: Int? = nil,
+        lastMessageAt: String? = nil,
         userIDs: Set<String>? = nil,
         deletedAt: String? = nil
     ) {
@@ -56,6 +66,8 @@ public final class PCRoom {
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
         self.customData = customData
+        self.unreadCount = unreadCount
+        self.lastMessageAt = lastMessageAt
         self.userIDs = userIDs ?? []
         self.userStore = PCRoomUserStore()
     }
@@ -84,7 +96,9 @@ public final class PCRoom {
                 (self.customData != nil && room.customData != nil &&
                     (self.customData! as NSDictionary).isEqual(to: room.customData!)
                 )
-            )
+            ) &&
+            (self.unreadCount == room.unreadCount) &&
+            (self.lastMessageAt == room.lastMessageAt)
     }
 }
 
@@ -95,6 +109,8 @@ extension PCRoom: PCUpdatable {
         self.isPrivate = room.isPrivate
         self.updatedAt = room.updatedAt
         self.customData = room.customData
+        self.unreadCount = room.unreadCount
+        self.lastMessageAt = room.lastMessageAt
         self.userIDs = room.userIDs
         self.deletedAt = room.deletedAt
         return self
