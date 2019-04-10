@@ -4,12 +4,14 @@ import PusherPlatform
 
 class RoomTests: XCTestCase {
     var aliceChatManager: ChatManager!
+    var bobChatManager: ChatManager!
     var roomID: String!
 
     override func setUp() {
         super.setUp()
 
         aliceChatManager = newTestChatManager(userID: "alice")
+        bobChatManager = newTestChatManager(userID: "bob")
 
         let deleteResourcesEx = expectation(description: "delete resources")
         let createRolesEx = expectation(description: "create roles")
@@ -130,6 +132,139 @@ class RoomTests: XCTestCase {
                                 unassignAdminRoleEx.fulfill()
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
+    func testRoomUnreadCounts() {
+        let roomCreatedEx = expectation(description: "room created")
+        let messageSentEx = expectation(description: "message sent")
+        let bobConnectedEx = expectation(description: "room fetched")
+
+        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+            XCTAssertNil(err)
+            alice!.createRoom(
+                name: "mushroom",
+                isPrivate: true,
+                addUserIDs: ["bob"],
+                customData: ["testing": "some custom data", "and more": 123]
+            ) { room, err in
+                XCTAssertNil(err)
+                XCTAssertNotNil(room)
+                roomCreatedEx.fulfill()
+
+                alice!.sendSimpleMessage(roomID: room!.id, text: "test") { _, err in
+                    XCTAssertNil(err)
+                    messageSentEx.fulfill()
+                }
+
+                self.bobChatManager.connect(delegate: TestingChatManagerDelegate()) { bob, err in
+                    XCTAssertNil(err)
+                    let bobRoom = bob!.rooms.first(where: { $0.id == room!.id })
+                    XCTAssertNotNil(bobRoom)
+                    XCTAssertNotNil(bobRoom!.unreadCount)
+                    XCTAssertEqual(bobRoom!.unreadCount!, 1)
+                    XCTAssertNotNil(bobRoom!.lastMessageAt)
+                    bobConnectedEx.fulfill()
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
+    func testRoomUpdatedOnSendingNewMessage() {
+        let roomCreatedEx = expectation(description: "room created")
+        let messageSentEx = expectation(description: "message sent")
+        let roomUpdatedEx = expectation(description: "room updated")
+
+        let onRoomUpdated = { (room: PCRoom) in
+            XCTAssertNotNil(room.unreadCount)
+            XCTAssertEqual(room.unreadCount!, 1)
+            XCTAssertNotNil(room.lastMessageAt!)
+            roomUpdatedEx.fulfill()
+        }
+
+        let bobCMDelegate = TestingChatManagerDelegate(
+            onRoomUpdated: onRoomUpdated
+        )
+
+        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+            XCTAssertNil(err)
+            alice!.createRoom(
+                name: "mushroom",
+                isPrivate: true,
+                addUserIDs: ["bob"],
+                customData: ["testing": "some custom data", "and more": 123]
+            ) { room, err in
+                XCTAssertNil(err)
+                XCTAssertNotNil(room)
+                roomCreatedEx.fulfill()
+
+                self.bobChatManager.connect(delegate: bobCMDelegate) { bob, err in
+                    XCTAssertNil(err)
+                    alice!.sendSimpleMessage(roomID: room!.id, text: "test") { _, err in
+                        XCTAssertNil(err)
+                        messageSentEx.fulfill()
+                    }
+                }
+            }
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
+    func testRoomUpdatedAfterCursorSet() {
+        let roomCreatedEx = expectation(description: "room created")
+        let bobConnectedEx = expectation(description: "room fetched")
+        let roomUpdatedEx = expectation(description: "room updated")
+        let cursorSetEx = expectation(description: "cursor set")
+
+        let onRoomUpdated = { (room: PCRoom) in
+            XCTAssertNotNil(room.unreadCount)
+            XCTAssertEqual(room.unreadCount!, 0)
+            XCTAssertNotNil(room.lastMessageAt!)
+            roomUpdatedEx.fulfill()
+        }
+
+        let bobCMDelegate = TestingChatManagerDelegate(
+            onRoomUpdated: onRoomUpdated
+        )
+
+        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+            XCTAssertNil(err)
+            alice!.createRoom(
+                name: "mushroom",
+                isPrivate: true,
+                addUserIDs: ["bob"],
+                customData: ["testing": "some custom data", "and more": 123]
+            ) { room, err in
+                XCTAssertNil(err)
+                XCTAssertNotNil(room)
+                roomCreatedEx.fulfill()
+
+                alice!.sendSimpleMessage(roomID: room!.id, text: "test") { messageID, err in
+                    XCTAssertNotNil(messageID)
+                    XCTAssertNil(err)
+
+                    self.bobChatManager.connect(delegate: bobCMDelegate) { bob, err in
+                        XCTAssertNil(err)
+                        let bobRoom = bob!.rooms.first(where: { $0.id == room!.id })
+                        XCTAssertNotNil(bobRoom)
+                        XCTAssertNotNil(bobRoom!.unreadCount)
+                        XCTAssertEqual(bobRoom!.unreadCount!, 1)
+                        XCTAssertNotNil(bobRoom!.lastMessageAt)
+
+                        bob!.setReadCursor(position: messageID!, roomID: room!.id) { err in
+                            XCTAssertNil(err)
+                            cursorSetEx.fulfill()
+                        }
+
+                        bobConnectedEx.fulfill()
                     }
                 }
             }

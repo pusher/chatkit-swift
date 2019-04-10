@@ -81,6 +81,8 @@ struct PCPayloadDeserializer {
             createdAt: roomCreatedAt,
             updatedAt: roomUpdatedAt,
             customData: roomPayload["custom_data"] as? [String: Any],
+            unreadCount: roomPayload["unread_count"] as? Int,
+            lastMessageAt: roomPayload["last_message_at"] as? String,
             userIDs: memberUserIDsSet,
             deletedAt: roomPayload["deleted_at"] as? String
         )
