@@ -4,37 +4,37 @@ import PusherPlatform
 public final class PCUserSubscription {
     unowned let instance: Instance
     unowned let filesInstance: Instance
-    unowned let cursorsInstance: Instance
     unowned let presenceInstance: Instance
     public let resumableSubscription: PPResumableSubscription
     public let userStore: PCGlobalUserStore
+    public let cursorStore: PCCursorStore
     public internal(set) weak var delegate: PCChatManagerDelegate?
     let userID: String
     let pathFriendlyUserID: String
     let connectionCoordinator: PCConnectionCoordinator
-    let initialStateHandler: ((roomsPayload: [[String: Any]], currentUserPayload: [String: Any])) -> Void
+    let initialStateHandler: ((roomsPayload: [[String: Any]], cursorsPayload: [[String: Any]], currentUserPayload: [String: Any])) -> Void
 
     public weak var currentUser: PCCurrentUser?
 
     public init(
         instance: Instance,
         filesInstance: Instance,
-        cursorsInstance: Instance,
         presenceInstance: Instance,
         resumableSubscription: PPResumableSubscription,
         userStore: PCGlobalUserStore,
+        cursorStore: PCCursorStore,
         delegate: PCChatManagerDelegate,
         userID: String,
         pathFriendlyUserID: String,
         connectionCoordinator: PCConnectionCoordinator,
-        initialStateHandler: @escaping ((roomsPayload: [[String: Any]], currentUserPayload: [String: Any])) -> Void
+        initialStateHandler: @escaping ((roomsPayload: [[String: Any]], cursorsPayload: [[String: Any]], currentUserPayload: [String: Any])) -> Void
     ) {
         self.instance = instance
         self.filesInstance = filesInstance
-        self.cursorsInstance = cursorsInstance
         self.presenceInstance = presenceInstance
         self.resumableSubscription = resumableSubscription
         self.userStore = userStore
+        self.cursorStore = cursorStore
         self.delegate = delegate
         self.userID = userID
         self.pathFriendlyUserID = pathFriendlyUserID
@@ -76,6 +76,8 @@ public final class PCUserSubscription {
             parseRoomUpdatedPayload(eventName, data: apiEventData)
         case .room_deleted:
             parseRoomDeletedPayload(eventName, data: apiEventData)
+        case .new_cursor:
+            parseNewCursorPayload(eventName, data: apiEventData)
         }
     }
 
@@ -114,7 +116,23 @@ extension PCUserSubscription {
             return
         }
 
-        self.initialStateHandler((roomsPayload: roomsPayload, currentUserPayload: currentUserPayload))
+        guard let cursorsPayload = data["cursors"] as? [[String: Any]] else {
+            informConnectionCoordinatorOfCurrentUserCompletion(
+                currentUser: nil,
+                error: PCSubscriptionEventError.keyNotPresentInEventPayload(
+                    key: "cursors",
+                    eventName: eventName.rawValue,
+                    payload: data
+                )
+            )
+            return
+        }
+
+        self.initialStateHandler((
+            roomsPayload: roomsPayload,
+            cursorsPayload: cursorsPayload,
+            currentUserPayload: currentUserPayload
+        ))
     }
 
     fileprivate func parseAddedToRoomPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
@@ -260,6 +278,27 @@ extension PCUserSubscription {
             self.instance.logger.log("Room deleted: \(deletedRoom.name)", logLevel: .verbose)
         }
     }
+
+    fileprivate func parseNewCursorPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
+        do {
+            let basicCursor = try PCPayloadDeserializer.createBasicCursorFromPayload(data)
+            self.cursorStore.set(basicCursor) { cursor, err in
+                guard let cursor = cursor, err == nil else {
+                    self.instance.logger.log(
+                        "Error when adding basic cursor to cursor store: \(err!.localizedDescription)",
+                        logLevel: .error
+                    )
+                    return
+                }
+
+                self.instance.logger.log("New cursor: \(cursor.debugDescription)", logLevel: .verbose)
+                self.delegate?.onNewReadCursor(cursor)
+            }
+        } catch let err {
+            self.instance.logger.log(err.localizedDescription, logLevel: .debug)
+            // TODO: Should we call the delegate error func?
+        }
+    }
 }
 
 public enum PCError: Error {
@@ -305,6 +344,7 @@ public enum PCAPIEventName: String {
     case removed_from_room
     case room_updated
     case room_deleted
+    case new_cursor
 }
 
 public enum PCUserSubscriptionState {

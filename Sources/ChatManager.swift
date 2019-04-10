@@ -12,7 +12,7 @@ import NotificationCenter
 @objc public class ChatManager: NSObject {
     private let chatkitBeamsTokenProviderInstance: Instance
     public let v2Instance: Instance
-    public let v3Instance: Instance
+    public let v4Instance: Instance
     public let filesInstance: Instance
     public let cursorsInstance: Instance
     public let presenceInstance: Instance
@@ -31,7 +31,7 @@ import NotificationCenter
         didSet {
             connectionCoordinator.logger = logger
             v2Instance.logger = logger
-            v3Instance.logger = logger
+            v4Instance.logger = logger
             filesInstance.logger = logger
             cursorsInstance.logger = logger
             presenceInstance.logger = logger
@@ -67,9 +67,9 @@ import NotificationCenter
             sharedOptions: sharedInstanceOptions
         )
         
-        self.v3Instance = ChatManager.createInstance(
+        self.v4Instance = ChatManager.createInstance(
             serviceName: "chatkit",
-            serviceVersion: "v3",
+            serviceVersion: "v4",
             sharedOptions: sharedInstanceOptions
         )
 
@@ -116,10 +116,9 @@ import NotificationCenter
         self.basicCurrentUser = PCBasicCurrentUser(
             id: userID,
             pathFriendlyID: pathFriendlyUserID,
-            instance: v3Instance,
+            instance: v4Instance,
             chatkitBeamsTokenProviderInstance: chatkitBeamsTokenProviderInstance,
             filesInstance: filesInstance,
-            cursorsInstance: cursorsInstance,
             presenceInstance: presenceInstance,
             connectionCoordinator: connectionCoordinator,
             delegate: delegate,
@@ -143,8 +142,6 @@ import NotificationCenter
             strongSelf.basicCurrentUser?.userSubscription = nil
             cu.presenceSubscription = strongSelf.basicCurrentUser?.presenceSubscription
             strongSelf.basicCurrentUser?.presenceSubscription = nil
-            cu.cursorSubscription = strongSelf.basicCurrentUser?.cursorSubscription
-            strongSelf.basicCurrentUser?.cursorSubscription = nil
 
             strongSelf.wasPreviouslyConnected = true
 
@@ -153,13 +150,13 @@ import NotificationCenter
         }
 
         basicCurrentUser!.establishUserSubscription(
-            initialStateHandler: { [weak self] currentUserPayloadTuple in
+            initialStateHandler: { [weak self] currentUserPayloadTriple in
                 guard let strongSelf = self else {
                     print("self is nil in initialStateHandler for userSubscription")
                     return
                 }
 
-                let (roomsPayload, currentUserPayload) = currentUserPayloadTuple
+                let (roomsPayload, cursorsPayload, currentUserPayload) = currentUserPayloadTriple
 
                 let receivedCurrentUser: PCCurrentUser
 
@@ -169,7 +166,7 @@ import NotificationCenter
                         id: strongSelf.userID,
                         pathFriendlyID: strongSelf.pathFriendlyUserID,
                         v2Instance: strongSelf.v2Instance,
-                        v3Instance: strongSelf.v3Instance,
+                        v4Instance: strongSelf.v4Instance,
                         chatkitBeamsTokenProviderInstance: strongSelf.chatkitBeamsTokenProviderInstance,
                         filesInstance: strongSelf.filesInstance,
                         cursorsInstance: strongSelf.cursorsInstance,
@@ -237,39 +234,33 @@ import NotificationCenter
                     }
                 }
 
-                strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(currentUser: strongSelf.currentUser, error: nil)
-            }
-        )
-
-        basicCurrentUser!.establishPresenceSubscription()
-        basicCurrentUser!.establishCursorSubscription(
-            initialStateHandler: { [weak self] result in
-                guard let strongSelf = self else {
-                    return
-                }
-
+                let cursorsResult = strongSelf.parseCursorsInitialStatePayload(data: cursorsPayload)
                 if strongSelf.wasPreviouslyConnected, let currentUser = strongSelf.currentUser {
-                    switch result {
+                    switch  cursorsResult {
                     case .error(_):
                         return
                     case .success(let existing, let new):
                         reconcileCursors(
                             new: new,
-                            old: existing,
-                            onNewReadCursorHook: { [weak currentUser] cursor in
-                                currentUser?.delegate.onNewReadCursor(cursor)
-                                // We only do this here because we currently still deliver cursor updates
-                                // about the current user over the room level onNewReadCursor hook. Once
-                                // we no longer support that then this can be removed.
-                                if let room = currentUser?.rooms.first(where: { $0.id == cursor.room.id }) {
-                                    room.subscription?.delegate?.onNewReadCursor(cursor)
-                                }
+                            old: existing
+                        ) { [weak currentUser] cursor in
+                            currentUser?.delegate.onNewReadCursor(cursor)
+                            if let room = currentUser?.rooms.first(where: { $0.id == cursor.room.id }) {
+                                room.subscription?.delegate?.onNewReadCursor(cursor)
                             }
-                        )
+                        }
                     }
                 }
+
+                strongSelf.informConnectionCoordinatorOfCurrentUserCompletion(
+                    currentUser: strongSelf.currentUser,
+                    error: nil
+                )
             }
         )
+
+        basicCurrentUser!.establishPresenceSubscription()
+
 
         // This being here at the end seems necessary but bad - we want to
         // call the developer-provided completionHandler last because we
@@ -284,8 +275,6 @@ import NotificationCenter
         currentUser?.userSubscription = nil
         currentUser?.presenceSubscription?.end()
         currentUser?.presenceSubscription = nil
-        currentUser?.cursorSubscription?.end()
-        currentUser?.cursorSubscription = nil
         currentUser?.rooms.forEach { room in
             room.subscription?.end()
             room.subscription = nil
@@ -313,6 +302,53 @@ import NotificationCenter
 
     fileprivate func informConnectionCoordinatorOfCurrentUserCompletion(currentUser: PCCurrentUser?, error: Error?) {
         connectionCoordinator.connectionEventCompleted(PCConnectionEvent(currentUser: currentUser, error: error))
+    }
+
+    fileprivate func parseCursorsInitialStatePayload(
+        data: [[String: Any]]
+    ) -> InitialStateResult<PCCursor> {
+        let existingCursors = self.currentUser!.cursorStore.cursors.reduce(into: []) { res, cursorKeyValuePair in
+            res.append(cursorKeyValuePair.value.copy())
+        }
+        var newCursors: [PCCursor] = []
+
+        let cursorsProgressCounter = PCProgressCounter(totalCount: data.count, labelSuffix: "initial-state-cursors")
+
+        var result: InitialStateResult<PCCursor> = .success(existing: [], new: [])
+        data.forEach { cursorPayload in
+            do {
+                let basicCursor = try PCPayloadDeserializer.createBasicCursorFromPayload(cursorPayload)
+                self.currentUser!.cursorStore.set(basicCursor) { cursor, err in
+                    if err == nil, let cursor = cursor {
+                        newCursors.append(cursor)
+                        if cursorsProgressCounter.incrementSuccessAndCheckIfFinished() {
+                            result = InitialStateResult.success(existing: existingCursors, new: newCursors)
+                            return
+                        }
+                    } else if let err = err {
+                        self.v4Instance.logger.log(
+                            "Failed to set cursor in cursor store. Error: \(err.localizedDescription)",
+                            logLevel: .debug
+                        )
+                        if cursorsProgressCounter.incrementFailedAndCheckIfFinished() {
+                            result = InitialStateResult.error(err)
+                            return
+                        }
+                    } else {
+                        if cursorsProgressCounter.incrementFailedAndCheckIfFinished() {
+                            result = InitialStateResult.success(existing: existingCursors, new: newCursors)
+                            return
+                        }
+                    }
+                }
+            } catch let err {
+                self.v4Instance.logger.log(err.localizedDescription, logLevel: .debug)
+                result = InitialStateResult.error(err)
+                return
+            }
+        }
+
+        return result
     }
 }
 
@@ -351,7 +387,6 @@ func pathFriendlyVersion(of component: String) -> String {
     // TODO: When can percent encoding fail?
     return component.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? component
 }
-
 
 #if os(iOS) || os(macOS)
 // MARK: Beams

@@ -11,12 +11,10 @@ public final class PCBasicCurrentUser {
 
     public internal(set) var userSubscription: PCUserSubscription?
     public internal(set) var presenceSubscription: PCPresenceSubscription?
-    public internal(set) var cursorSubscription: PCCursorSubscription?
 
     private let chatkitBeamsTokenProviderInstance: Instance
     let instance: Instance
     let filesInstance: Instance
-    let cursorsInstance: Instance
     let presenceInstance: Instance
     let delegate: PCChatManagerDelegate
 
@@ -28,7 +26,6 @@ public final class PCBasicCurrentUser {
         instance: Instance,
         chatkitBeamsTokenProviderInstance: Instance,
         filesInstance: Instance,
-        cursorsInstance: Instance,
         presenceInstance: Instance,
         connectionCoordinator: PCConnectionCoordinator,
         delegate: PCChatManagerDelegate,
@@ -41,7 +38,6 @@ public final class PCBasicCurrentUser {
         self.instance = instance
         self.chatkitBeamsTokenProviderInstance = chatkitBeamsTokenProviderInstance
         self.filesInstance = filesInstance
-        self.cursorsInstance = cursorsInstance
         self.presenceInstance = presenceInstance
         self.connectionCoordinator = connectionCoordinator
         self.delegate = delegate
@@ -59,7 +55,7 @@ public final class PCBasicCurrentUser {
     }
 
     func establishUserSubscription(
-        initialStateHandler: @escaping ((roomsPayload: [[String: Any]], currentUserPayload: [String: Any])) -> Void
+        initialStateHandler: @escaping ((roomsPayload: [[String: Any]], cursorsPayload: [[String: Any]], currentUserPayload: [String: Any])) -> Void
     ) {
         let path = "/users"
         let subscribeRequest = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: path)
@@ -72,10 +68,10 @@ public final class PCBasicCurrentUser {
         let userSub = PCUserSubscription(
             instance: self.instance,
             filesInstance: self.filesInstance,
-            cursorsInstance: self.cursorsInstance,
             presenceInstance: self.presenceInstance,
             resumableSubscription: resumableSub,
             userStore: self.userStore,
+            cursorStore: self.cursorStore,
             delegate: self.delegate,
             userID: id,
             pathFriendlyUserID: pathFriendlyID,
@@ -131,71 +127,6 @@ public final class PCBasicCurrentUser {
             onError: { [unowned self] error in
                 self.connectionCoordinator.connectionEventCompleted(
                     PCConnectionEvent(presenceSubscription: nil, error: error)
-                )
-            }
-        )
-    }
-
-    func establishCursorSubscription(initialStateHandler: @escaping (InitialStateResult<PCCursor>) -> Void) {
-        let userCursorSubscriptionPath = "/cursors/\(PCCursorType.read.rawValue)/users/\(self.pathFriendlyID)"
-        let cursorSubscriptionRequestOptions = PPRequestOptions(
-            method: HTTPMethod.SUBSCRIBE.rawValue,
-            path: userCursorSubscriptionPath
-        )
-
-        var cursorResumableSub = PPResumableSubscription(
-            instance: self.cursorsInstance,
-            requestOptions: cursorSubscriptionRequestOptions
-        )
-
-        let cursorSub = PCCursorSubscription(
-            resumableSubscription: cursorResumableSub,
-            cursorStore: cursorStore,
-            logger: self.cursorsInstance.logger,
-            onNewReadCursorHook: { [weak delegate] cursor in
-                delegate?.onNewReadCursor(cursor)
-            },
-            initialStateHandler: { [weak self] result in
-                guard let strongSelf = self else {
-                    return
-                }
-
-                switch result {
-                case .error(let err):
-                    strongSelf.cursorsInstance.logger.log(err.localizedDescription, logLevel: .debug)
-
-                    // TODO: Should the connection coordinator get the error here?
-                    // Do we care if a single (in this weird case, only the last to be received)
-                    // basic cursor can't be enriched with information about its room and/or user?
-                    // We probably just want to log something
-                    strongSelf.connectionCoordinator.connectionEventCompleted(
-                        PCConnectionEvent(cursorSubscription: strongSelf.cursorSubscription, error: nil)
-                    )
-                case .success(_, _):
-                    // This needs to be called before the connection event is sent to the
-                    // connectionCoordinator to ensure that the state of the cursor store
-                    // is accurate before the currentUser object can be yielded to the
-                    // end-user's code
-                    initialStateHandler(result)
-
-                    strongSelf.connectionCoordinator.connectionEventCompleted(
-                        PCConnectionEvent(cursorSubscription: strongSelf.cursorSubscription, error: nil)
-                    )
-                }
-            }
-        )
-
-        self.cursorSubscription = cursorSub
-
-        self.cursorsInstance.subscribeWithResume(
-            with: &cursorResumableSub,
-            using: cursorSubscriptionRequestOptions,
-            onEvent: { [unowned cursorSub] eventID, headers, data in
-                cursorSub.handleEvent(eventID: eventID, headers: headers, data: data)
-            },
-            onError: { [unowned self] error in
-                self.connectionCoordinator.connectionEventCompleted(
-                    PCConnectionEvent(cursorSubscription: nil, error: error)
                 )
             }
         )
