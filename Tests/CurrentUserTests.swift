@@ -36,7 +36,7 @@ class CurrentUserTests: XCTestCase {
         let userSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .server,
-            version: "v3",
+            version: "v4",
             path: "users"
         ).absoluteString
 
@@ -51,7 +51,8 @@ class CurrentUserTests: XCTestCase {
                             "name": "\(userID)",
                             "created_at": "2017-04-13T14:10:04Z",
                             "updated_at": "2017-04-13T14:10:04Z"
-                        }
+                        },
+                        "cursors": []
                     },
                     "timestamp": "2017-03-23T11:36:42Z"
                 }
@@ -70,28 +71,6 @@ class CurrentUserTests: XCTestCase {
 
         stub(uri(presenceSubscriptionURL)) { req in
             return successResponseForRequest(req, withEvents: [])
-        }
-
-        let cursorsSubscriptionURL = serviceURL(
-            instanceLocator: instanceLocator,
-            service: .cursors,
-            version: "v2",
-            path: "cursors/0/users/\(userID)"
-        ).absoluteString
-
-        stub(uri(cursorsSubscriptionURL)) { req in
-            let initialStateEventData = dataSubscriptionEventFor("""
-                {
-                    "event_name": "initial_state",
-                    "data": {
-                      "cursors": []
-                    },
-                    "timestamp": "2017-03-23T11:36:42Z"
-                }
-            """)
-
-            let initialStateSubEvent = SubscriptionEvent(data: initialStateEventData, delay: 0.0)
-            return successResponseForRequest(req, withEvents: [initialStateSubEvent])
         }
 
         let ex = expectation(description: "current user returned upon connection")

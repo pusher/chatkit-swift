@@ -652,7 +652,6 @@ class ReconnectionTests: XCTestCase {
     func testNoHooksAreCalledOnFirstInitialStateWhenCurrentUserIsAlreadyAMemberOfARoom() {
         let roomCreatedEx = expectation(description: "room created")
         let subscribedToRoomEx = expectation(description: "subscribe to room")
-        let messageSentEx = expectation(description: "message sent")
 
         let roomName = "testroom"
 
@@ -684,25 +683,17 @@ class ReconnectionTests: XCTestCase {
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
-            alice!.subscribeToRoom(id: roomID, roomDelegate: TestingRoomDelegate()) { err in
+            alice!.subscribeToRoomMultipart(id: roomID, roomDelegate: TestingRoomDelegate()) { err in
                 XCTAssertNil(err)
                 subscribedToRoomEx.fulfill()
                 XCTAssertEqual(alice!.roomStore.rooms.count, 1)
                 XCTAssertEqual(alice!.roomStore.rooms.first!.id, roomID)
                 XCTAssertEqual(alice!.roomStore.rooms.first!.name, roomName)
                 XCTAssertTrue(alice!.roomStore.rooms.first!.userIDs.contains("alice"))
-
-                // We send a message to give some time for any cursor hook to be called
-                // otherwise it might have been going to be called but didn't have
-                // enough time
-                alice!.sendMessage(roomID: roomID, text: "blah") { _, err in
-                    XCTAssertNil(err)
-                    messageSentEx.fulfill()
-                }
             }
         }
 
-        wait(for: [subscribedToRoomEx, messageSentEx], timeout: 15)
+        wait(for: [subscribedToRoomEx], timeout: 15)
     }
 
 
@@ -922,7 +913,7 @@ class ReconnectionTests: XCTestCase {
 
         self.aliceChatManager.connect(delegate: aliceCMDelegate) { alice, err in
             XCTAssertNil(err)
-            alice!.subscribeToRoom(id: roomID, roomDelegate: aliceRoomDelegate) { err in
+            alice!.subscribeToRoomMultipart(id: roomID, roomDelegate: aliceRoomDelegate) { err in
                 XCTAssertNil(err)
                 subscribedToRoomEx.fulfill()
                 XCTAssertEqual(alice!.cursorStore.cursors.keys.count, 1)
@@ -932,7 +923,10 @@ class ReconnectionTests: XCTestCase {
                 // We send a message to give some time for any cursor hook to be called
                 // otherwise it might have been going to be called but didn't have
                 // enough time
-                alice!.sendMessage(roomID: roomID, text: "blah") { _, err in
+                alice!.sendMultipartMessage(
+                    roomID: roomID,
+                    parts: [PCPartRequest(.inline(PCPartInlineRequest(content:"hola!")))]
+                ) { _, err in
                     XCTAssertNil(err)
                     messageSentEx.fulfill()
                 }
@@ -1533,10 +1527,7 @@ class ReconnectionTests: XCTestCase {
         XCTAssertEqual(alice.cursorStore.cursors.keys.count, 1)
         XCTAssertEqual(alice.cursorStore.cursors.first!.value.position, 99)
 
-        // We want to simulate a reconnection that occurs without an explicit call to
-        // disconnect. As such, we end both cursor subscriptions before setting the
-        // new cursor position
-        self.aliceChatManager.currentUser?.cursorSubscription?.resumableSubscription.end()
+        self.aliceChatManager.currentUser?.userSubscription?.resumableSubscription.end()
         self.aliceChatManager.currentUser?.rooms.first(where: {
             $0.id == roomID
         })!.subscription!.cursorSubscription!.resumableSubscription.end()
@@ -1557,7 +1548,7 @@ class ReconnectionTests: XCTestCase {
         // subscriptions
         let error = PCError.currentUserIsNil
 
-        self.aliceChatManager.currentUser?.cursorSubscription?.resumableSubscription.handleOnError(error: error)
+        self.aliceChatManager.currentUser?.userSubscription?.resumableSubscription.handleOnError(error: error)
         self.aliceChatManager.currentUser?.rooms.first(where: {
             $0.id == roomID
         })!.subscription!.cursorSubscription!.resumableSubscription.handleOnError(error: error)
@@ -1641,8 +1632,7 @@ class ReconnectionTests: XCTestCase {
 
         XCTAssertEqual(alice.cursorStore.cursors.keys.count, 0)
 
-        // We end both cursor subscriptions before setting the new cursor position
-        self.aliceChatManager.currentUser?.cursorSubscription?.resumableSubscription.end()
+        self.aliceChatManager.currentUser?.userSubscription?.resumableSubscription.end()
         self.aliceChatManager.currentUser?.rooms.first(where: {
             $0.id == roomID
         })!.subscription!.cursorSubscription!.resumableSubscription.end()
@@ -1663,7 +1653,7 @@ class ReconnectionTests: XCTestCase {
         // subscriptions
         let error = PCError.currentUserIsNil
 
-        self.aliceChatManager.currentUser?.cursorSubscription?.resumableSubscription.handleOnError(error: error)
+        self.aliceChatManager.currentUser?.userSubscription?.resumableSubscription.handleOnError(error: error)
         self.aliceChatManager.currentUser?.rooms.first(where: {
             $0.id == roomID
         })!.subscription!.cursorSubscription!.resumableSubscription.handleOnError(error: error)
