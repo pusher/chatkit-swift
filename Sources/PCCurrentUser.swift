@@ -324,7 +324,7 @@ public final class PCCurrentUser {
         let path = "/rooms/\(roomID)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.DELETE.rawValue, path: path)
 
-        self.v5Instance.requestWithRetry(
+        self.v2Instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { _ in
               completionHandler(nil)
