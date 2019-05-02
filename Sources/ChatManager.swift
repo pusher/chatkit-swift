@@ -11,7 +11,7 @@ import NotificationCenter
 
 @objc public class ChatManager: NSObject {
     private let chatkitBeamsTokenProviderInstance: Instance
-    public let v2Instance: Instance
+    public let instance: Instance
     public let v5Instance: Instance
     public let filesInstance: Instance
     public let cursorsInstance: Instance
@@ -30,7 +30,7 @@ import NotificationCenter
     var logger: PCLogger {
         didSet {
             connectionCoordinator.logger = logger
-            v2Instance.logger = logger
+            instance.logger = logger
             v5Instance.logger = logger
             filesInstance.logger = logger
             cursorsInstance.logger = logger
@@ -61,7 +61,7 @@ import NotificationCenter
             logger: logger
         )
 
-        self.v2Instance = ChatManager.createInstance(
+        self.instance = ChatManager.createInstance(
             serviceName: "chatkit",
             serviceVersion: "v2",
             sharedOptions: sharedInstanceOptions
@@ -165,7 +165,7 @@ import NotificationCenter
                         currentUserPayload,
                         id: strongSelf.userID,
                         pathFriendlyID: strongSelf.pathFriendlyUserID,
-                        v2Instance: strongSelf.v2Instance,
+                        instance: strongSelf.instance,
                         v5Instance: strongSelf.v5Instance,
                         chatkitBeamsTokenProviderInstance: strongSelf.chatkitBeamsTokenProviderInstance,
                         filesInstance: strongSelf.filesInstance,
@@ -207,7 +207,7 @@ import NotificationCenter
                         let addedOrMergedRoom = strongSelf.currentUser!.roomStore.addOrMergeSync(room)
                         newRooms.insert(addedOrMergedRoom)
                     } catch let err {
-                        strongSelf.v2Instance.logger.log(
+                        strongSelf.instance.logger.log(
                             "Incomplete room payload in initial_state event: \(roomPayload). Error: \(err.localizedDescription)",
                             logLevel: .debug
                         )

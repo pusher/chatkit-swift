@@ -39,7 +39,7 @@ public final class PCCurrentUser {
     public var updatedAtDate: Date { return PCDateFormatter.shared.formatString(self.updatedAt) }
 
     private let chatkitBeamsTokenProviderInstance: Instance
-    let v2Instance: Instance
+    let instance: Instance
     let v5Instance: Instance
     let filesInstance: Instance
     let cursorsInstance: Instance
@@ -61,7 +61,7 @@ public final class PCCurrentUser {
         name: String?,
         avatarURL: String?,
         customData: [String: Any]?,
-        v2Instance: Instance,
+        instance: Instance,
         v5Instance: Instance,
         chatkitBeamsTokenProviderInstance: Instance,
         filesInstance: Instance,
@@ -80,7 +80,7 @@ public final class PCCurrentUser {
         self.name = name
         self.avatarURL = avatarURL
         self.customData = customData
-        self.v2Instance = v2Instance
+        self.instance = instance
         self.v5Instance = v5Instance
         self.chatkitBeamsTokenProviderInstance = chatkitBeamsTokenProviderInstance
         self.filesInstance = filesInstance
@@ -324,7 +324,7 @@ public final class PCCurrentUser {
         let path = "/rooms/\(roomID)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.DELETE.rawValue, path: path)
 
-        self.v2Instance.requestWithRetry(
+        self.instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { _ in
               completionHandler(nil)
@@ -607,7 +607,7 @@ public final class PCCurrentUser {
             reqOptions = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: "/rooms/\(roomID)/users/\(pathFriendlyID)/files/\(pathSafeName)")
             break
         default:
-            sendMessage(instance: self.v2Instance, messageObject, roomID: roomID, completionHandler: completionHandler)
+            sendMessage(instance: self.instance, messageObject, roomID: roomID, completionHandler: completionHandler)
             return
         }
 
@@ -634,16 +634,16 @@ public final class PCCurrentUser {
                         "type": attachmentUploadResponse.type
                     ]
 
-                    self.sendMessage(instance: self.v2Instance, mutableMessageObject, roomID: roomID, completionHandler: completionHandler)
+                    self.sendMessage(instance: self.instance, mutableMessageObject, roomID: roomID, completionHandler: completionHandler)
                 } catch let err {
                     completionHandler(nil, err)
-                    self.v2Instance.logger.log("Response from uploading attachment to room \(roomID) was invalid", logLevel: .verbose)
+                    self.instance.logger.log("Response from uploading attachment to room \(roomID) was invalid", logLevel: .verbose)
                     return
                 }
             },
             onError: { err in
                 completionHandler(nil, err)
-                self.v2Instance.logger.log("Failed to upload attachment to room \(roomID)", logLevel: .verbose)
+                self.instance.logger.log("Failed to upload attachment to room \(roomID)", logLevel: .verbose)
             },
             progressHandler: progressHandler
         )
@@ -662,7 +662,7 @@ public final class PCCurrentUser {
         ]
 
         guard let attachment = attachment else {
-            sendMessage(instance: self.v2Instance, messageObject, roomID: roomID, completionHandler: completionHandler)
+            sendMessage(instance: self.instance, messageObject, roomID: roomID, completionHandler: completionHandler)
             return
         }
 
@@ -680,7 +680,7 @@ public final class PCCurrentUser {
                 "resource_link": url,
                 "type": type
             ]
-            sendMessage(instance: self.v2Instance, messageObject, roomID: roomID, completionHandler: completionHandler)
+            sendMessage(instance: self.instance, messageObject, roomID: roomID, completionHandler: completionHandler)
             break
         }
     }
@@ -766,7 +766,7 @@ public final class PCCurrentUser {
             destination: .absolute(link),
             shouldFetchToken: false
         )
-        self.v2Instance.download(
+        self.instance.download(
             using: reqOptions,
             to: destination,
             onSuccess: onSuccess,
@@ -786,7 +786,7 @@ public final class PCCurrentUser {
             room,
             delegate: roomDelegate,
             messageLimit: messageLimit,
-            instance: self.v2Instance,
+            instance: self.instance,
             version: "v2",
             completionHandler: completionHandler
         )
@@ -804,7 +804,7 @@ public final class PCCurrentUser {
     ) {
         self.roomStore.room(id: roomID) { r, err in
             guard err == nil, let room = r else {
-                self.v2Instance.logger.log(
+                self.instance.logger.log(
                     "Error getting room from room store as part of room subscription process \(err!.localizedDescription)",
                     logLevel: .error
                 )
@@ -815,7 +815,7 @@ public final class PCCurrentUser {
                 room,
                 delegate: roomDelegate,
                 messageLimit: messageLimit,
-                instance: self.v2Instance,
+                instance: self.instance,
                 version: "v2",
                 completionHandler: completionHandler
             )
@@ -904,7 +904,7 @@ public final class PCCurrentUser {
                 instance: instance,
                 cursorsInstance: self.cursorsInstance,
                 version: version,
-                logger: self.v2Instance.logger,
+                logger: self.instance.logger,
                 completionHandler: completionHandler
             )
         }
@@ -923,7 +923,7 @@ public final class PCCurrentUser {
             initialID: initialID,
             limit: limit,
             direction: direction,
-            instance: self.v2Instance,
+            instance: self.instance,
             deserialise: PCPayloadDeserializer.createBasicMessageFromPayload,
             messageFactory: { (basicMessage, room, user) in
                 return PCMessage(
