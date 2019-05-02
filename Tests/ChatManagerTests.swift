@@ -21,7 +21,7 @@ class ChatManagerTests: XCTestCase {
         let sdkVersion = "1.5.0"
         let sdkLanguage = "swift"
 
-        let baseClientHeadersV2 = chatManager.v2Instance.client.generalRequestURLSession.configuration.httpAdditionalHeaders as! [String: String]
+        let baseClientHeadersV2 = chatManager.instance.client.generalRequestURLSession.configuration.httpAdditionalHeaders as! [String: String]
         let baseClientHeadersV3 = chatManager.v5Instance.client.generalRequestURLSession.configuration.httpAdditionalHeaders as! [String: String]
 
         XCTAssertEqual(baseClientHeadersV2["X-SDK-Product"], sdkProductName)
