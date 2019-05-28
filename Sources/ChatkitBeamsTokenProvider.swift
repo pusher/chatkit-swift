@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 #if os(iOS) || os(macOS)
-import BeamsChatkit
+import PushNotifications
 
 private struct ChatkitBeamsToken: Decodable {
     let token: String
@@ -15,7 +15,7 @@ private struct ChatkitBeamsToken: Decodable {
         self.instance = instance
     }
 
-    func fetchToken(userId: String, completionHandler completion: @escaping (String, Error?) -> Void) {
+    func fetchToken(userId: String, completionHandler completion: @escaping (String, Error?) -> Void) throws {
         let request = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: "/beams-tokens")
         request.addQueryItems([URLQueryItem(name: "user_id", value: userId)])
         self.instance?.request(using: request, onSuccess: { (data) in

@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 #if os(iOS) || os(macOS)
-import BeamsChatkit
+import PushNotifications
 #endif
 #if os(iOS)
 import UserNotifications
@@ -434,11 +434,9 @@ extension ChatManager {
      Disable push notifications service.
      */
     public static func disablePushNotifications() {
-        pushNotifications.clearAllState { (error) in
-            guard error == nil else {
-                let logger = PCDefaultLogger()
-                return logger.log("Error occured while clearing the state: \(error!)", logLevel: .error)
-            }
+        pushNotifications.clearAllState {
+            let logger = PCDefaultLogger()
+            logger.log("Push Notifications Disabled 🚫", logLevel: .debug)
         }
     }
 }
