@@ -1,8 +1,5 @@
 import XCTest
 import PusherPlatform
-#if os(iOS) || os(macOS)
-import BeamsChatkit
-#endif
 @testable import PusherChatkit
 
 class ChatManagerTests: XCTestCase {
