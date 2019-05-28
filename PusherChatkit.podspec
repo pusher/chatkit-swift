@@ -12,8 +12,8 @@ Pod::Spec.new do |s|
   s.source_files = 'Sources/*.swift'
 
   s.dependency 'PusherPlatform', '~> 0.7.1'
-  s.ios.dependency 'BeamsChatkit', '~> 1.2'
-  s.macos.dependency 'BeamsChatkit', '~> 1.2'
+  s.ios.dependency 'PushNotifications', '~> 2.0.1'
+  s.macos.dependency 'PushNotifications', '~> 2.0.1'
 
   s.ios.deployment_target = '10.0'
   s.macos.deployment_target = '10.11'
