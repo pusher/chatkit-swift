@@ -1,8 +1,5 @@
 import XCTest
 import PusherPlatform
-#if os(iOS) || os(macOS)
-import BeamsChatkit
-#endif
 @testable import PusherChatkit
 
 class ChatManagerTests: XCTestCase {
@@ -18,7 +15,7 @@ class ChatManagerTests: XCTestCase {
         )
 
         let sdkProductName = "chatkit"
-        let sdkVersion = "1.5.0"
+        let sdkVersion = "1.5.1"
         let sdkLanguage = "swift"
 
         let baseClientHeadersV2 = chatManager.v2Instance.client.generalRequestURLSession.configuration.httpAdditionalHeaders as! [String: String]

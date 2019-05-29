@@ -1,8 +1,5 @@
 import Foundation
 import PusherPlatform
-#if os(iOS) || os(macOS)
-import BeamsChatkit
-#endif
 
 public final class PCCurrentUser {
     public let id: String
@@ -1250,8 +1247,9 @@ public typealias PCErrorCompletionHandler = (Error?) -> Void
 public typealias PCRoomCompletionHandler = (PCRoom?, Error?) -> Void
 public typealias PCRoomsCompletionHandler = ([PCRoom]?, Error?) -> Void
 
-#if os(iOS) || os(macOS)
 // MARK: Beams
+#if os(iOS) || os(macOS)
+import PushNotifications
 
 private let pushNotifications: PushNotifications = PushNotifications.shared
 
@@ -1260,44 +1258,19 @@ extension PCCurrentUser {
      Start PushNotifications service.
      */
     public func enablePushNotifications() {
-        let chatkitBeamsTokenProvider = ChatkitBeamsTokenProvider(instance: self.chatkitBeamsTokenProviderInstance)
-
-        pushNotifications.start(instanceId: self.v4Instance.id, tokenProvider: chatkitBeamsTokenProvider)
-        pushNotifications.clearAllState { error in
-            guard error == nil else {
-                return self.v4Instance.logger.log("Error occured while clearing the state: \(error!)", logLevel: .error)
-            }
-
-            self.setUser()
-        }
-
+        pushNotifications.start(instanceId: self.v4Instance.id)
+        self.setUser(self.id)
         ChatManager.registerForRemoteNotifications()
     }
 
-    private func setUser() {
-        do {
-            try pushNotifications.setUserId(self.id, completion: { error in
-                guard error == nil else {
-                    return self.v4Instance.logger.log("Error occured while setting the user: \(error!)", logLevel: .error)
-                }
+    private func setUser(_ userId: String) {
+        let chatkitBeamsTokenProvider = ChatkitBeamsTokenProvider(instance: self.chatkitBeamsTokenProviderInstance)
+        pushNotifications.setUserId(userId, tokenProvider: chatkitBeamsTokenProvider) { error in
+             guard error == nil else {
+                return self.v4Instance.logger.log("Error occured while setting the user: \(error!)", logLevel: .error)
+            }
 
-                self.v4Instance.logger.log("Push Notifications service enabled 🎉", logLevel: .debug)
-            })
-        }
-        catch UserValidationtError.userAlreadyExists {
-            self.v4Instance.logger.log("User already exists.", logLevel: .error)
-        }
-        catch UserValidationtError.beamsTokenProviderNotSetException {
-            self.v4Instance.logger.log("Beams Token Provider not set.", logLevel: .error)
-        }
-        catch TokenProviderError.error(let error) {
-            self.v4Instance.logger.log("\(error)", logLevel: .error)
-        }
-        catch PCTokenProviderError.failedToDeserializeJSON(let error) {
-            self.v4Instance.logger.log("Failed to deserialize JSON: \(error)", logLevel: .error)
-        }
-        catch {
-            self.v4Instance.logger.log("Unexpected error: \(error)", logLevel: .error)
+            self.v4Instance.logger.log("Push Notifications service enabled 🎉", logLevel: .debug)
         }
     }
 }
