@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Fixed
 
-- Updated dependency Pusher Beams to the latest version (2.0.1).
+- Updated dependency Pusher Beams to the latest version (2.0.2).
 
 ## [1.5.0](https://github.com/pusher/chatkit-swift/compare/1.4.4...1.5.0) - 2019-04-24
 
