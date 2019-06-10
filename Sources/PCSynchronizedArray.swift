@@ -2,12 +2,12 @@ import Foundation
 
 public final class PCSynchronizedArray<T> {
     internal var underlyingArray: [T] = []
-    private let accessQueue = DispatchQueue(label: "synchronized.array.access.\(UUID().uuidString)", attributes: .concurrent)
+    private let accessQueue = DispatchQueue(label: "synchronized.array.access.\(UUID().uuidString)")
 
     public init() {}
 
     public func append(_ newElement: T, completionHandler: (() -> Void)? = nil) {
-        self.accessQueue.async(flags: .barrier) {
+        self.accessQueue.async {
             self.underlyingArray.append(newElement)
             completionHandler?()
         }
@@ -22,14 +22,14 @@ public final class PCSynchronizedArray<T> {
     }
 
     func appendAndComplete(_ newElement: T, completionHandler: @escaping (T) -> Void) {
-        self.accessQueue.async(flags: .barrier) {
+        self.accessQueue.async {
             self.underlyingArray.append(newElement)
             completionHandler(newElement)
         }
     }
 
     public func remove(where predicate: @escaping (T) -> Bool, completionHandler: ((T?) -> Void)? = nil) {
-        self.accessQueue.async(flags: .barrier) {
+        self.accessQueue.async {
             guard let index = self.underlyingArray.index(where: predicate) else {
                 completionHandler?(nil)
                 return
@@ -51,7 +51,7 @@ public final class PCSynchronizedArray<T> {
     }
 
     public func remove(at index: Int, completionHandler: ((T) -> Void)? = nil) {
-        self.accessQueue.async(flags: .barrier) {
+        self.accessQueue.async {
             let element = self.underlyingArray.remove(at: index)
             completionHandler?(element)
         }
@@ -96,7 +96,7 @@ public final class PCSynchronizedArray<T> {
     }
 
     public func remove(where predicate: @escaping (T) -> Bool, completion: ((T) -> Void)? = nil) {
-        self.accessQueue.async(flags: .barrier) {
+        self.accessQueue.async {
             guard let index = self.underlyingArray.index(where: predicate) else { return }
             let element = self.underlyingArray.remove(at: index)
             completion?(element)
@@ -127,7 +127,7 @@ public final class PCSynchronizedArray<T> {
 
     public subscript(index: Int) -> T {
         set {
-            self.accessQueue.async(flags: .barrier) {
+            self.accessQueue.async {
                 self.underlyingArray[index] = newValue
             }
         }
@@ -148,7 +148,7 @@ extension PCSynchronizedArray where T: PCUpdatable {
         predicate: @escaping (T) -> Bool,
         completionHandler: @escaping (T) -> Void
     ) {
-        self.accessQueue.async(flags: .barrier) {
+        self.accessQueue.async {
             if let existingValue = self.underlyingArray.first(where: predicate) {
                 existingValue.updateWithPropertiesOf(value)
                 completionHandler(existingValue)

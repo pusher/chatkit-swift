@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/pusher/chatkit-swift/compare/1.5.1...HEAD)
 
+## Fixed
+
+- Potential memory corruptions in PCSynchronizedArrays
+
 ## [1.5.1](https://github.com/pusher/chatkit-swift/compare/1.5.0...1.5.1) - 2019-05-28
 
 ## Fixed
