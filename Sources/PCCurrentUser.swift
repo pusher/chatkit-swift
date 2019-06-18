@@ -154,10 +154,9 @@ public final class PCCurrentUser {
 
                 do {
                     let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-                    self.roomStore.addOrMerge(room) { room in
-                        self.populateRoomUserStore(room) { room in
-                            completionHandler(room, nil)
-                        }
+                    self.roomStore.addOrMerge(room)
+                    self.populateRoomUserStore(room) { room in
+                        completionHandler(room, nil)
                     }
                 } catch let err {
                     completionHandler(nil, err)
@@ -405,10 +404,9 @@ public final class PCCurrentUser {
 
                 do {
                     let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-                    self.roomStore.addOrMerge(room) { room in
-                        self.populateRoomUserStore(room) { room in
-                            completionHandler(room, nil)
-                        }
+                    self.roomStore.addOrMerge(room)
+                    self.populateRoomUserStore(room) { room in
+                        completionHandler(room, nil)
                     }
                 } catch let err {
                     self.v4Instance.logger.log(err.localizedDescription, logLevel: .debug)
@@ -1046,7 +1044,7 @@ public final class PCCurrentUser {
                     )
         
                     basicMessages.forEach { basicMessage in
-                        messageEnricher.enrich(basicMessage) { message, err in
+                        messageEnricher.enrich(basicMessage) {	 message, err in
                             guard let message = message, err == nil else {
                                 instance.logger.log(err!.localizedDescription, logLevel: .debug)
                                 
@@ -1057,15 +1055,14 @@ public final class PCCurrentUser {
                                 return
                             }
                             
-                            messages.append(message) {
-                                if progressCounter.incrementSuccessAndCheckIfFinished() {
-                                    completionHandler(
-                                        messages.underlyingArray.sorted(
-                                            by: { $0.id < $1.id }
-                                        ),
-                                        nil
-                                    )
-                                }
+                            messages.appendSync(message)
+                            if progressCounter.incrementSuccessAndCheckIfFinished() {
+                                completionHandler(
+                                    messages.underlyingArray.sorted(
+                                        by: { $0.id < $1.id }
+                                    ),
+                                    nil
+                                )
                             }
                         }
                     }

@@ -6,38 +6,12 @@ public final class PCSynchronizedArray<T> {
 
     public init() {}
 
-    public func append(_ newElement: T, completionHandler: (() -> Void)? = nil) {
-        self.accessQueue.async {
-            self.underlyingArray.append(newElement)
-            completionHandler?()
-        }
-    }
-
     func appendSync(_ newElement: T) -> T {
         self.accessQueue.sync {
             self.underlyingArray.append(newElement)
         }
 
         return newElement
-    }
-
-    func appendAndComplete(_ newElement: T, completionHandler: @escaping (T) -> Void) {
-        self.accessQueue.async {
-            self.underlyingArray.append(newElement)
-            completionHandler(newElement)
-        }
-    }
-
-    public func remove(where predicate: @escaping (T) -> Bool, completionHandler: ((T?) -> Void)? = nil) {
-        self.accessQueue.async {
-            guard let index = self.underlyingArray.index(where: predicate) else {
-                completionHandler?(nil)
-                return
-            }
-
-            let element = self.underlyingArray.remove(at: index)
-            completionHandler?(element)
-        }
     }
 
     public func removeSync(where predicate: @escaping (T) -> Bool) -> T? {
@@ -47,13 +21,6 @@ public final class PCSynchronizedArray<T> {
             }
 
             return self.underlyingArray.remove(at: index)
-        }
-    }
-
-    public func remove(at index: Int, completionHandler: ((T) -> Void)? = nil) {
-        self.accessQueue.async {
-            let element = self.underlyingArray.remove(at: index)
-            completionHandler?(element)
         }
     }
 
@@ -127,7 +94,7 @@ public final class PCSynchronizedArray<T> {
 
     public subscript(index: Int) -> T {
         set {
-            self.accessQueue.async {
+            self.accessQueue.sync {
                 self.underlyingArray[index] = newValue
             }
         }
@@ -143,22 +110,6 @@ public final class PCSynchronizedArray<T> {
 }
 
 extension PCSynchronizedArray where T: PCUpdatable {
-    func appendOrUpdate(
-        _ value: T,
-        predicate: @escaping (T) -> Bool,
-        completionHandler: @escaping (T) -> Void
-    ) {
-        self.accessQueue.async {
-            if let existingValue = self.underlyingArray.first(where: predicate) {
-                existingValue.updateWithPropertiesOf(value)
-                completionHandler(existingValue)
-            } else {
-                self.underlyingArray.append(value)
-                completionHandler(value)
-            }
-        }
-    }
-
     func appendOrUpdateSync(_ value: T, predicate: @escaping (T) -> Bool) -> T {
         return self.accessQueue.sync {
             if let existingValue = self.underlyingArray.first(where: predicate) {
