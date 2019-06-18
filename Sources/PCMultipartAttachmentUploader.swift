@@ -37,7 +37,7 @@ class PCMultipartAttachmentUploader {
                 self.uploadMultipartAttachment(task: task) { (attachmentID, error) in
                     defer { self.dispatchGroup.leave() }
                     guard error == nil else {
-                        self.uploadFailures.appendSync(error!)
+                        self.uploadFailures.append(error!)
                         self.instance.logger.log(
                             "Failed to upload multipart attachment: \(error.debugDescription)",
                             logLevel: .error
@@ -45,7 +45,7 @@ class PCMultipartAttachmentUploader {
                         return
                     }
 
-                    self.uploadSuccesses.appendSync(
+                    self.uploadSuccesses.append(
                         PCMultipartAttachmentUploadResult(
                             attachmentID: attachmentID!,
                             partNumber: task.partNumber,

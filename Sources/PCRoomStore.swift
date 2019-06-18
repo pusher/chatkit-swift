@@ -16,7 +16,7 @@ public final class PCRoomStore {
     }
 
     func addOrMerge(_ room: PCRoom) -> PCRoom {
-        return self.rooms.appendOrUpdateSync(
+        return self.rooms.appendOrUpdate(
             room,
             predicate: { $0.id == room.id }
         )
@@ -24,11 +24,11 @@ public final class PCRoomStore {
 
     @discardableResult
     func addOrMergeSync(_ room: PCRoom) -> PCRoom {
-        return self.rooms.appendOrUpdateSync(room, predicate: { $0.id == room.id })
+        return self.rooms.appendOrUpdate(room, predicate: { $0.id == room.id })
     }
 
     func removeSync(id: String) -> PCRoom? {
-        return self.rooms.removeSync(where: { $0.id == id })
+        return self.rooms.remove(where: { $0.id == id })
     }
 
     func findOrGetRoom(id: String, completionHandler: @escaping (PCRoom?, Error?) -> Void) {

@@ -1055,7 +1055,7 @@ public final class PCCurrentUser {
                                 return
                             }
                             
-                            messages.appendSync(message)
+                            messages.append(message)
                             if progressCounter.incrementSuccessAndCheckIfFinished() {
                                 completionHandler(
                                     messages.underlyingArray.sorted(

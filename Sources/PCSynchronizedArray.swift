@@ -6,7 +6,7 @@ public final class PCSynchronizedArray<T> {
 
     public init() {}
 
-    func appendSync(_ newElement: T) -> T {
+    func append(_ newElement: T) -> T {
         self.accessQueue.sync {
             self.underlyingArray.append(newElement)
         }
@@ -14,7 +14,7 @@ public final class PCSynchronizedArray<T> {
         return newElement
     }
 
-    public func removeSync(where predicate: @escaping (T) -> Bool) -> T? {
+    public func remove(where predicate: @escaping (T) -> Bool) -> T? {
         return self.accessQueue.sync {
             guard let index = self.underlyingArray.index(where: predicate) else {
                 return nil
@@ -110,7 +110,7 @@ public final class PCSynchronizedArray<T> {
 }
 
 extension PCSynchronizedArray where T: PCUpdatable {
-    func appendOrUpdateSync(_ value: T, predicate: @escaping (T) -> Bool) -> T {
+    func appendOrUpdate(_ value: T, predicate: @escaping (T) -> Bool) -> T {
         return self.accessQueue.sync {
             if let existingValue = self.underlyingArray.first(where: predicate) {
                 existingValue.updateWithPropertiesOf(value)
