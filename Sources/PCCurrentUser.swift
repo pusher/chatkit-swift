@@ -27,7 +27,7 @@ public final class PCCurrentUser {
     }
 
     public var rooms: [PCRoom] {
-        return self.roomStore.rooms.underlyingArray
+        return self.roomStore.rooms.clone()
     }
 
     public let pathFriendlyID: String
@@ -1044,21 +1044,21 @@ public final class PCCurrentUser {
                     )
         
                     basicMessages.forEach { basicMessage in
-                        messageEnricher.enrich(basicMessage) {	 message, err in
+                        messageEnricher.enrich(basicMessage) { message, err in
                             guard let message = message, err == nil else {
                                 instance.logger.log(err!.localizedDescription, logLevel: .debug)
                                 
                                 if progressCounter.incrementFailedAndCheckIfFinished() {
-                                    completionHandler(messages.underlyingArray.sorted(by: { $0.id > $1.id }), nil)
+                                    completionHandler(messages.clone().sorted(by: { $0.id > $1.id }), nil)
                                 }
-                                
+
                                 return
                             }
                             
                             messages.append(message)
                             if progressCounter.incrementSuccessAndCheckIfFinished() {
                                 completionHandler(
-                                    messages.underlyingArray.sorted(
+                                    messages.clone().sorted(
                                         by: { $0.id < $1.id }
                                     ),
                                     nil

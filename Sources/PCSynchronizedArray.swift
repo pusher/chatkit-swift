@@ -1,10 +1,18 @@
 import Foundation
 
 public final class PCSynchronizedArray<T> {
-    internal var underlyingArray: [T] = []
+    private var underlyingArray: [T] = []
     private let accessQueue = DispatchQueue(label: "synchronized.array.access.\(UUID().uuidString)")
 
     public init() {}
+
+    func clone() -> [T] {
+        var clone: [T] = []
+        self.accessQueue.sync {
+            clone = underlyingArray
+        }
+        return clone
+    }
 
     func append(_ newElement: T) -> T {
         self.accessQueue.sync {

@@ -7,7 +7,7 @@ public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: Expre
     typealias Index = Dictionary<KeyType, ValueType>.Index
     typealias Element = Dictionary<KeyType, ValueType>.Element
 
-    var underlyingDictionary: [KeyType: ValueType]
+    private var underlyingDictionary: [KeyType: ValueType]
     private let queue = DispatchQueue(
         label: "synchronized.dictionary.access.\(UUID().uuidString)"
     )
