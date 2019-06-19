@@ -7,11 +7,9 @@ public final class PCSynchronizedArray<T> {
     public init() {}
 
     func clone() -> [T] {
-        var clone: [T] = []
-        self.accessQueue.sync {
-            clone = underlyingArray
+        return self.accessQueue.sync {
+            return underlyingArray
         }
-        return clone
     }
 
     func append(_ newElement: T) -> T {
@@ -33,41 +31,33 @@ public final class PCSynchronizedArray<T> {
     }
 
     public var count: Int {
-        var count = 0
-
-        self.accessQueue.sync {
-            count = self.underlyingArray.count
+        return self.accessQueue.sync {
+            return self.underlyingArray.count
         }
-
-        return count
     }
 
     public var isEmpty: Bool {
-        var result = false
-        self.accessQueue.sync { result = self.underlyingArray.isEmpty }
-        return result
+        return self.accessQueue.sync {
+            return self.underlyingArray.isEmpty
+        }
     }
 
     public func first(where predicate: (T) -> Bool) -> T? {
-        var element: T?
-
-        self.accessQueue.sync {
-            element = self.underlyingArray.first(where: predicate)
+        return self.accessQueue.sync {
+            return self.underlyingArray.first(where: predicate)
         }
-
-        return element
     }
 
     public var first: T? {
-        var result: T?
-        self.accessQueue.sync { result = self.underlyingArray.first }
-        return result
+        return self.accessQueue.sync {
+            return self.underlyingArray.first
+        }
     }
 
     public var last: T? {
-        var result: T?
-        self.accessQueue.sync { result = self.underlyingArray.last }
-        return result
+        return self.accessQueue.sync {
+            return self.underlyingArray.last
+        }
     }
 
     public func remove(where predicate: @escaping (T) -> Bool, completion: ((T) -> Void)? = nil) {
@@ -79,25 +69,27 @@ public final class PCSynchronizedArray<T> {
     }
 
     public func filter(_ isIncluded: @escaping (T) -> Bool) -> [T] {
-        var result = [T]()
-        self.accessQueue.sync { result = self.underlyingArray.filter(isIncluded) }
-        return result
+        return self.accessQueue.sync {
+            return self.underlyingArray.filter(isIncluded)
+        }
     }
 
     public func sorted(by areInIncreasingOrder: (T, T) -> Bool) -> [T] {
-        var result = [T]()
-        self.accessQueue.sync { result = self.underlyingArray.sorted(by: areInIncreasingOrder) }
-        return result
+        return self.accessQueue.sync {
+            return self.underlyingArray.sorted(by: areInIncreasingOrder)
+        }
     }
 
     public func compactMap<ElementOfResult>(_ transform: @escaping (T) -> ElementOfResult?) -> [ElementOfResult] {
-        var result = [ElementOfResult]()
-        self.accessQueue.sync { result = self.underlyingArray.compactMap(transform) }
-        return result
+        return self.accessQueue.sync {
+            return self.underlyingArray.compactMap(transform)
+        }
     }
 
     public func forEach(_ body: (T) -> Void) {
-        self.accessQueue.sync { self.underlyingArray.forEach(body) }
+        self.accessQueue.sync {
+            self.underlyingArray.forEach(body)
+        }
     }
 
     public subscript(index: Int) -> T {
@@ -107,12 +99,9 @@ public final class PCSynchronizedArray<T> {
             }
         }
         get {
-            var element: T!
-            self.accessQueue.sync {
-                element = self.underlyingArray[index]
+            return self.accessQueue.sync {
+                return self.underlyingArray[index]
             }
-
-            return element
         }
     }
 }
