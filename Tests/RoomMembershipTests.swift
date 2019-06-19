@@ -52,6 +52,30 @@ class RoomMembershipTests: XCTestCase {
 
     // MARK: Chat manager delegate tests
 
+    func testMembersAreAvailableImmediatelyAfterCreation() {
+        let roomCreatedEx = expectation(description: "room was created")
+
+        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+            XCTAssertNil(err)
+            alice!.createRoom(
+                name: "mushroom",
+                addUserIDs: ["bob"]
+            ) { room, err in
+                XCTAssertNil(err)
+                XCTAssertNotNil(room)
+                XCTAssertEqual(room!.userIDs.sorted(), ["alice", "bob"], "Room user IDs were not populated")
+                XCTAssertEqual(room!.users.map {$0.id}.sorted(), ["alice", "bob"], "Room users were not populated")
+                room!.users.forEach { user in
+                    XCTAssertTrue(alice!.users.contains(user))
+                }
+
+                roomCreatedEx.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
     func testChatManagerUserJoinedRoomHookWhenUserJoins() {
         let userJoinedRoomHookEx = expectation(description: "user joined room hook called")
         let bobJoinedRoomEx = expectation(description: "bob joined room")
