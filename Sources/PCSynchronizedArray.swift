@@ -60,14 +60,6 @@ public final class PCSynchronizedArray<T> {
         }
     }
 
-    public func remove(where predicate: @escaping (T) -> Bool, completion: ((T) -> Void)? = nil) {
-        self.accessQueue.async {
-            guard let index = self.underlyingArray.index(where: predicate) else { return }
-            let element = self.underlyingArray.remove(at: index)
-            completion?(element)
-        }
-    }
-
     public func filter(_ isIncluded: @escaping (T) -> Bool) -> [T] {
         return self.accessQueue.sync {
             return self.underlyingArray.filter(isIncluded)
