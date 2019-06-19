@@ -182,17 +182,6 @@ class RoomTests: XCTestCase {
         let messageSentEx = expectation(description: "message sent")
         let roomUpdatedEx = expectation(description: "room updated")
 
-        let onRoomUpdated = { (room: PCRoom) in
-            XCTAssertNotNil(room.unreadCount)
-            XCTAssertEqual(room.unreadCount!, 1)
-            XCTAssertNotNil(room.lastMessageAt!)
-            roomUpdatedEx.fulfill()
-        }
-
-        let bobCMDelegate = TestingChatManagerDelegate(
-            onRoomUpdated: onRoomUpdated
-        )
-
         self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
             XCTAssertNil(err)
             alice!.createRoom(
@@ -204,6 +193,19 @@ class RoomTests: XCTestCase {
                 XCTAssertNil(err)
                 XCTAssertNotNil(room)
                 roomCreatedEx.fulfill()
+
+                let onRoomUpdated = { (updatedRoom: PCRoom) in
+                    if (updatedRoom.id == room!.id) {
+                        XCTAssertNotNil(updatedRoom.unreadCount)
+                        XCTAssertEqual(updatedRoom.unreadCount!, 1)
+                        XCTAssertNotNil(updatedRoom.lastMessageAt!)
+                        roomUpdatedEx.fulfill()
+                    }
+                }
+
+                let bobCMDelegate = TestingChatManagerDelegate(
+                    onRoomUpdated: onRoomUpdated
+                )
 
                 self.bobChatManager.connect(delegate: bobCMDelegate) { bob, err in
                     XCTAssertNil(err)
@@ -224,17 +226,6 @@ class RoomTests: XCTestCase {
         let roomUpdatedEx = expectation(description: "room updated")
         let cursorSetEx = expectation(description: "cursor set")
 
-        let onRoomUpdated = { (room: PCRoom) in
-            XCTAssertNotNil(room.unreadCount)
-            XCTAssertEqual(room.unreadCount!, 0)
-            XCTAssertNotNil(room.lastMessageAt!)
-            roomUpdatedEx.fulfill()
-        }
-
-        let bobCMDelegate = TestingChatManagerDelegate(
-            onRoomUpdated: onRoomUpdated
-        )
-
         self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
             XCTAssertNil(err)
             alice!.createRoom(
@@ -246,6 +237,19 @@ class RoomTests: XCTestCase {
                 XCTAssertNil(err)
                 XCTAssertNotNil(room)
                 roomCreatedEx.fulfill()
+
+                let onRoomUpdated = { (updatedRoom: PCRoom) in
+                    if (updatedRoom.id == room!.id) {
+                        XCTAssertNotNil(updatedRoom.unreadCount)
+                        XCTAssertEqual(updatedRoom.unreadCount!, 0)
+                        XCTAssertNotNil(updatedRoom.lastMessageAt!)
+                        roomUpdatedEx.fulfill()
+                    }
+                }
+
+                let bobCMDelegate = TestingChatManagerDelegate(
+                    onRoomUpdated: onRoomUpdated
+                )
 
                 alice!.sendSimpleMessage(roomID: room!.id, text: "test") { messageID, err in
                     XCTAssertNotNil(messageID)
