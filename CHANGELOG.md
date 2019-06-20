@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/pusher/chatkit-swift/compare/1.5.2...HEAD)
 
+### Fixed
+
+- Remove unnecessary async operations (internal ones)
+
 ## [1.5.2](https://github.com/pusher/chatkit-swift/compare/1.5.1...1.5.2) - 2019-06-11
 
 ## Fixed
