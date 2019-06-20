@@ -8,57 +8,57 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.5.2](https://github.com/pusher/chatkit-swift/compare/1.5.1...1.5.2) - 2019-06-11
 
-## Fixed
+### Fixed
 
 - Potential memory corruptions in PCSynchronizedArrays
 
 ## [1.5.1](https://github.com/pusher/chatkit-swift/compare/1.5.0...1.5.1) - 2019-05-28
 
-## Fixed
+### Fixed
 
 - Updated dependency Pusher Beams to the latest version (2.0.2).
 
 ## [1.5.0](https://github.com/pusher/chatkit-swift/compare/1.4.4...1.5.0) - 2019-04-24
 
-## Added
+### Added
 
 - `unreadCount` and `lastMessageAt` properties added to rooms. These reflect values
   of unread messages and when the last message was sent at in the room.
 
 ## [1.4.4](https://github.com/pusher/chatkit-swift/compare/1.4.3...1.4.4) - 2019-04-01
 
-## Fixed
+### Fixed
 
 - Refresh URL's were incorrectly being constructed.
 
 ## [1.4.3](https://github.com/pusher/chatkit-swift/compare/1.4.2...1.4.3) - 2019-03-20
 
-## Fixed
+### Fixed
 
 - PCMultipartAttachmentPayload.url is now public.
 
 ## [1.4.2](https://github.com/pusher/chatkit-swift/compare/1.4.1...1.4.2) - 2019-03-20
 
-## Fixed
+### Fixed
 
 - Publicly exposed Multipart structs were previously using the `internal` access modifier
   by default. This has now been changed to `public`.
 
 ## [1.4.1](https://github.com/pusher/chatkit-swift/compare/1.4.0...1.4.1) - 2019-03-12
 
-## Fixed
+### Fixed
 
 - Added public initialiser to `PCPartUrlRequest`
 
 ## [1.4.0](https://github.com/pusher/chatkit-swift/compare/1.3.1...1.4.0) - 2019-03-08
 
-## Added
+### Added
 
 - Multipart messaging support:
  - `sendMultipartMessage`, `sendSimpleMessage`, `subscribeToRoomMultipart` and `fetchMultipartMessages` methods.
  - `onMultipartMessage` delegate method.
 
-## Deprecated
+### Deprecated
 
 - `sendMessage`, `subscribeToRoom` and `fetchMessagesFromRoom` are deprecated in favour of
   their multipart counterparts. They will be removed in a future major release of the SDK.
