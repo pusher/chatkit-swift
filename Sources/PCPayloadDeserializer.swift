@@ -19,8 +19,8 @@ struct PCPayloadDeserializer {
         _ userPayload: [String: Any],
         id: String,
         pathFriendlyID: String,
-        v2Instance: Instance,
-        v4Instance: Instance,
+        instance: Instance,
+        v5Instance: Instance,
         chatkitBeamsTokenProviderInstance: Instance,
         filesInstance: Instance,
         cursorsInstance: Instance,
@@ -41,8 +41,8 @@ struct PCPayloadDeserializer {
             name: userPayload["name"] as? String,
             avatarURL: userPayload["avatar_url"] as? String,
             customData: userPayload["custom_data"] as? [String: Any],
-            v2Instance: v2Instance,
-            v4Instance: v4Instance,
+            instance: instance,
+            v5Instance: v5Instance,
             chatkitBeamsTokenProviderInstance: chatkitBeamsTokenProviderInstance,
             filesInstance: filesInstance,
             cursorsInstance: cursorsInstance,
@@ -109,6 +109,7 @@ struct PCPayloadDeserializer {
             text: messageText,
             createdAt: messageCreatedAt,
             updatedAt: messageUpdatedAt,
+            deletedAt: messagePayload["deleted_at"] as? String,
             attachment: createAttachmentFromPayload(messagePayload["attachment"])
         )
     }

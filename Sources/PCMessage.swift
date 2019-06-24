@@ -5,18 +5,26 @@ public final class PCMessage: PCEnrichedMessage {
     public let text: String
     public let createdAt: String
     public let updatedAt: String
+    public let deletedAt: String?
     public let attachment: PCAttachment?
     public let sender: PCUser
     public let room: PCRoom
 
     public var createdAtDate: Date { return PCDateFormatter.shared.formatString(self.createdAt) }
     public var updatedAtDate: Date { return PCDateFormatter.shared.formatString(self.updatedAt) }
+    public var deletedAtDate: Date? {
+        guard let deletedAt = self.deletedAt else {
+            return nil
+        }
+        return PCDateFormatter.shared.formatString(deletedAt)
+    }
 
     public init(
         id: Int,
         text: String,
         createdAt: String,
         updatedAt: String,
+        deletedAt: String?,
         attachment: PCAttachment?,
         sender: PCUser,
         room: PCRoom
@@ -25,6 +33,7 @@ public final class PCMessage: PCEnrichedMessage {
         self.text = text
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
         self.attachment = attachment
         self.sender = sender
         self.room = room

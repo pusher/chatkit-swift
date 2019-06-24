@@ -11,6 +11,7 @@ public final class PCMessageSubscription<A: PCCommonBasicMessage, B: PCEnrichedM
     let roomStore: PCRoomStore
     let onMessageHook: (B) -> Void
     let onIsTypingHook: (PCRoom, PCUser) -> Void
+    let onMessageDeletedHook: (Int) -> Void
 
     init(
         roomID: String,
@@ -21,7 +22,8 @@ public final class PCMessageSubscription<A: PCCommonBasicMessage, B: PCEnrichedM
         userStore: PCGlobalUserStore,
         roomStore: PCRoomStore,
         onMessageHook: @escaping (B) -> Void,
-        onIsTypingHook: @escaping (PCRoom, PCUser) -> Void
+        onIsTypingHook: @escaping (PCRoom, PCUser) -> Void,
+        onMessageDeletedHook: @escaping (Int) -> Void
     ) {
         self.roomID = roomID
         self.resumableSubscription = resumableSubscription
@@ -32,6 +34,7 @@ public final class PCMessageSubscription<A: PCCommonBasicMessage, B: PCEnrichedM
         self.roomStore = roomStore
         self.onMessageHook = onMessageHook
         self.onIsTypingHook = onIsTypingHook
+        self.onMessageDeletedHook = onMessageDeletedHook
     }
 
     func handleEvent(eventID _: String, headers _: [String: String], data: Any) {
@@ -58,6 +61,8 @@ public final class PCMessageSubscription<A: PCCommonBasicMessage, B: PCEnrichedM
             onNewMessage(data: eventData)
         case "is_typing":
             onIsTyping(data: eventData)
+        case "message_deleted":
+            onMessageDeleted(data: eventData)
         default:
             self.logger.log("Unknown message subscription event \(eventName)", logLevel: .error)
             return
@@ -122,6 +127,18 @@ public final class PCMessageSubscription<A: PCCommonBasicMessage, B: PCEnrichedM
                 strongSelf.onIsTypingHook(room, user)
             }
         }
+    }
+
+    func onMessageDeleted(data: [String: Any]) {
+        guard let messageID = data["message_id"] as? Int else {
+            self.logger.log(
+                "message_id missing or not an Int \(data)",
+                logLevel: .error
+            )
+            return
+        }
+
+        self.onMessageDeletedHook(messageID)
     }
 
     func end() {

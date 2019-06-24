@@ -44,7 +44,7 @@ class RoomEventBufferingTests: XCTestCase {
         let fetchUsersURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .server,
-            version: "v4",
+            version: "v5",
             path: "users_by_ids",
             queryItems: [
                 URLQueryItem(name: "id", value: userID),
@@ -55,7 +55,7 @@ class RoomEventBufferingTests: XCTestCase {
         let fetchUsersURLTwo = serviceURL(
             instanceLocator: instanceLocator,
             service: .server,
-            version: "v4",
+            version: "v5",
             path: "users_by_ids",
             queryItems: [
                 URLQueryItem(name: "id", value: "viv"),
@@ -84,7 +84,7 @@ class RoomEventBufferingTests: XCTestCase {
         let fetchVivURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .server,
-            version: "v4",
+            version: "v5",
             path: "users/viv"
         ).absoluteString
 
@@ -98,7 +98,7 @@ class RoomEventBufferingTests: XCTestCase {
         let userSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .server,
-            version: "v4",
+            version: "v5",
             path: "users"
         ).absoluteString
 
@@ -191,7 +191,7 @@ class RoomEventBufferingTests: XCTestCase {
         let messageSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .server,
-            version: "v4",
+            version: "v5",
             path: "rooms/\(roomID)",
             queryItems: [URLQueryItem(name: "message_limit", value: String(messageLimit))]
         ).absoluteString
@@ -224,7 +224,7 @@ class RoomEventBufferingTests: XCTestCase {
         let membershipSubscriptionURL = serviceURL(
             instanceLocator: instanceLocator,
             service: .server,
-            version: "v4",
+            version: "v5",
             path: "rooms/\(roomID)/memberships"
         ).absoluteString
 
