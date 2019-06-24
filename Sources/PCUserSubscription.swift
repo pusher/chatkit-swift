@@ -150,10 +150,9 @@ extension PCUserSubscription {
         do {
             let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
 
-            self.currentUser?.roomStore.addOrMerge(room) { room in
-                self.delegate?.onAddedToRoom(room)
-                self.instance.logger.log("Added to room: \(room.name)", logLevel: .verbose)
-            }
+            self.currentUser?.roomStore.addOrMerge(room)
+            self.delegate?.onAddedToRoom(room)
+            self.instance.logger.log("Added to room: \(room.name)", logLevel: .verbose)
 
             // TODO: Use the soon-to-be-created new version of fetchUsersWithIDs from the
             // userStore
@@ -207,15 +206,13 @@ extension PCUserSubscription {
             return
         }
 
-        self.currentUser?.roomStore.remove(id: roomID) { room in
-            guard let roomRemovedFrom = room else {
-                self.instance.logger.log("Received \(eventName.rawValue) API event but room \(roomID) not found in local store of joined rooms", logLevel: .debug)
-                return
-            }
-
-            self.delegate?.onRemovedFromRoom(roomRemovedFrom)
-            self.instance.logger.log("Removed from room: \(roomRemovedFrom.name)", logLevel: .verbose)
+        guard let roomRemovedFrom = self.currentUser?.roomStore.removeSync(id: roomID) else {
+            self.instance.logger.log("Received \(eventName.rawValue) API event but room \(roomID) not found in local store of joined rooms", logLevel: .debug)
+            return
         }
+
+        self.delegate?.onRemovedFromRoom(roomRemovedFrom)
+        self.instance.logger.log("Removed from room: \(roomRemovedFrom.name)", logLevel: .verbose)
     }
 
     fileprivate func parseRoomUpdatedPayload(_ eventName: PCAPIEventName, data: [String: Any]) {
@@ -268,15 +265,13 @@ extension PCUserSubscription {
             return
         }
 
-        currentUser.roomStore.remove(id: roomID) { room in
-            guard let deletedRoom = room else {
-                self.instance.logger.log("Room \(roomID) was deleted but was not found in local store of joined rooms", logLevel: .debug)
-                return
-            }
-
-            self.delegate?.onRoomDeleted(room: deletedRoom)
-            self.instance.logger.log("Room deleted: \(deletedRoom.name)", logLevel: .verbose)
+        guard let deletedRoom = currentUser.roomStore.removeSync(id: roomID) else {
+            self.instance.logger.log("Room \(roomID) was deleted but was not found in local store of joined rooms", logLevel: .debug)
+            return
         }
+
+        self.delegate?.onRoomDeleted(room: deletedRoom)
+        self.instance.logger.log("Room deleted: \(deletedRoom.name)", logLevel: .verbose)
     }
 
     fileprivate func parseNewCursorPayload(_ eventName: PCAPIEventName, data: [String: Any]) {

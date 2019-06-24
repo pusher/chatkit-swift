@@ -61,9 +61,9 @@ class PCMultipartAttachmentUploader {
 
         self.dispatchGroup.notify(queue: .main) {
             if self.uploadFailures.count > 0 {
-                completionHandler(nil, self.uploadFailures.underlyingArray)
+                completionHandler(nil, self.uploadFailures.clone())
             } else {
-                completionHandler(self.uploadSuccesses.underlyingArray, nil)
+                completionHandler(self.uploadSuccesses.clone(), nil)
             }
         }
     }
