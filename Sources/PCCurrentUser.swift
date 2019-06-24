@@ -153,8 +153,7 @@ public final class PCCurrentUser {
                 }
 
                 do {
-                    let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-                    self.roomStore.addOrMerge(room)
+                    let room = self.roomStore.addOrMerge(try PCPayloadDeserializer.createRoomFromPayload(roomPayload))
                     self.populateRoomUserStore(room) { room in
                         completionHandler(room, nil)
                     }
@@ -403,8 +402,7 @@ public final class PCCurrentUser {
                 }
 
                 do {
-                    let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
-                    self.roomStore.addOrMerge(room)
+                    let room = self.roomStore.addOrMerge(try PCPayloadDeserializer.createRoomFromPayload(roomPayload))
                     self.populateRoomUserStore(room) { room in
                         completionHandler(room, nil)
                     }

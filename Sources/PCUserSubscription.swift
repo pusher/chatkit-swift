@@ -148,9 +148,15 @@ extension PCUserSubscription {
         }
 
         do {
-            let room = try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
+            guard let currentUser = self.currentUser else {
+                print("currentUser is nil when parsing added to room event")
+                return
+            }
 
-            self.currentUser?.roomStore.addOrMerge(room)
+            let room = currentUser.roomStore.addOrMerge(
+                try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
+            )
+
             self.delegate?.onAddedToRoom(room)
             self.instance.logger.log("Added to room: \(room.name)", logLevel: .verbose)
 
