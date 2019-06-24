@@ -56,11 +56,21 @@ public struct PCPart {
 public struct PCMultipartInlinePayload {
     public let type: String
     public let content: String
+    
+    public init(type: String, content: String) {
+        self.type = type
+        self.content = content
+    }
 }
 
 public struct PCMultipartURLPayload {
     public let type: String
     public let url: String
+    
+    public init(type: String, url: String) {
+        self.type = type
+        self.url = url
+    }
 }
 
 public enum PCMultipartPayload {
