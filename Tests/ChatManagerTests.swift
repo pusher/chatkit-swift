@@ -15,7 +15,7 @@ class ChatManagerTests: XCTestCase {
         )
 
         let sdkProductName = "chatkit"
-        let sdkVersion = "1.6.0"
+        let sdkVersion = "1.7.0"
         let sdkLanguage = "swift"
 
         let baseClientHeadersV2 = chatManager.instance.client.generalRequestURLSession.configuration.httpAdditionalHeaders as! [String: String]

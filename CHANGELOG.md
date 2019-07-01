@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/pusher/chatkit-swift/compare/1.6.0...HEAD)
 
+## [1.7.0](https://github.com/pusher/chatkit-swift/compare/1.6.0...1.7.0) - 2019-07-01
+
+### Added
+
+- `createRoom` now allows passing an `id` parameter. This `id` is then used to refer to
+  the room thereafter. If an `id` is not provided, a generated `id` is returned.
+- Moved to v6 HTTP API.
+
 ## [1.6.0](https://github.com/pusher/chatkit-swift/compare/1.5.3...1.6.0) - 2019-06-24
 
 - Don't allow references to newly deserialised entities to escape once their
