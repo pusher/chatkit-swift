@@ -59,7 +59,7 @@ public final class PCRoomSubscription {
             }
         }
         
-        if version == "v5" {
+        if version == "v6" {
             self.multipartMessageSubscription = subscribeToRoomMultipartMessages(
                 room: room,
                 messageLimit: messageLimit,

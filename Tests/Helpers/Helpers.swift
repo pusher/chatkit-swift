@@ -170,7 +170,7 @@ func deleteInstanceResources(completionHandler: @escaping (TestHelperError?) -> 
 }
 
 func deleteMessage(roomID: String, messageID: Int, completionHandler: @escaping (TestHelperError?) -> Void) {
-    var request = URLRequest(url: testInstanceServiceURL(.server, "v5", "rooms/\(roomID)/messages/\(messageID)"))
+    var request = URLRequest(url: testInstanceServiceURL(.server, "v6", "rooms/\(roomID)/messages/\(messageID)"))
     request.httpMethod = "DELETE"
     request.addValue("Bearer \(generateSuperuserToken())", forHTTPHeaderField: "Authorization")
 
