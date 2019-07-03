@@ -76,6 +76,31 @@ class RoomTests: XCTestCase {
         waitForExpectations(timeout: 15)
     }
 
+    func testCreatingARoomWithSuppliedID() {
+        let roomCreatedEx = expectation(description: "room with id created")
+
+        self.aliceChatManager.connect(delegate: TestingChatManagerDelegate()) { alice, err in
+            XCTAssertNil(err)
+
+            alice!.createRoom(
+                id: "alices-room",
+                name: "mushroom",
+                isPrivate: true,
+                customData: ["testing": "custom data"]
+            ) { room, err in
+                XCTAssertNil(err)
+                XCTAssertNotNil(room)
+                XCTAssertEqual(room!.name, "mushroom")
+                XCTAssertEqual(room!.id, "alices-room")
+                XCTAssertEqual(room!.customData!.keys.count, 1)
+                XCTAssertEqual((room!.customData!["testing"] as! String), "custom data")
+                roomCreatedEx.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: 15)
+    }
+
     func testUpdatingARoom() {
         let assignAdminRoleEx = expectation(description: "assign alice admin role")
         let unassignAdminRoleEx = expectation(description: "unassign alice admin role")

@@ -40,7 +40,7 @@ public final class PCCurrentUser {
 
     private let chatkitBeamsTokenProviderInstance: Instance
     let instance: Instance
-    let v5Instance: Instance
+    let v6Instance: Instance
     let filesInstance: Instance
     let cursorsInstance: Instance
     let presenceInstance: Instance
@@ -62,7 +62,7 @@ public final class PCCurrentUser {
         avatarURL: String?,
         customData: [String: Any]?,
         instance: Instance,
-        v5Instance: Instance,
+        v6Instance: Instance,
         chatkitBeamsTokenProviderInstance: Instance,
         filesInstance: Instance,
         cursorsInstance: Instance,
@@ -81,7 +81,7 @@ public final class PCCurrentUser {
         self.avatarURL = avatarURL
         self.customData = customData
         self.instance = instance
-        self.v5Instance = v5Instance
+        self.v6Instance = v6Instance
         self.chatkitBeamsTokenProviderInstance = chatkitBeamsTokenProviderInstance
         self.filesInstance = filesInstance
         self.cursorsInstance = cursorsInstance
@@ -91,11 +91,11 @@ public final class PCCurrentUser {
         self.cursorStore = cursorStore
         self.connectionCoordinator = connectionCoordinator
         self.delegate = delegate
-        self.typingIndicatorManager = PCTypingIndicatorManager(instance: v5Instance)
+        self.typingIndicatorManager = PCTypingIndicatorManager(instance: v6Instance)
 
         self.userStore.onUserStoredHooks.append { [weak self] user in
             guard let strongSelf = self else {
-                v5Instance.logger.log(
+                v6Instance.logger.log(
                     "PCCurrentUser (self) is nil when going to subscribe to user presence after storing user in store",
                     logLevel: .verbose
                 )
@@ -106,6 +106,7 @@ public final class PCCurrentUser {
     }
 
     public func createRoom(
+        id: String? = nil,
         name: String,
         isPrivate: Bool = false,
         addUserIDs userIDs: [String]? = nil,
@@ -117,6 +118,10 @@ public final class PCCurrentUser {
             "created_by_id": self.id,
             "private": isPrivate,
         ]
+
+        if id != nil {
+            roomObject["id"] = id!
+        }
 
         if userIDs != nil && userIDs!.count > 0 {
             roomObject["user_ids"] = userIDs
@@ -139,7 +144,7 @@ public final class PCCurrentUser {
         let path = "/rooms"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path, body: data)
 
-        self.v5Instance.requestWithRetry(
+        self.v6Instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -287,7 +292,7 @@ public final class PCCurrentUser {
         let path = "/rooms/\(roomID)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.PUT.rawValue, path: path, body: data)
 
-        self.v5Instance.requestWithRetry(
+        self.v6Instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { _ in
                 completionHandler(nil)
@@ -355,7 +360,7 @@ public final class PCCurrentUser {
         let path = "/rooms/\(roomID)/users/\(membershipChange.rawValue)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.PUT.rawValue, path: path, body: data)
 
-        self.v5Instance.requestWithRetry(
+        self.v6Instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { _ in
                 completionHandler(nil)
@@ -388,7 +393,7 @@ public final class PCCurrentUser {
         let path = "/users/\(self.pathFriendlyID)/rooms/\(roomID)/join"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
 
-        self.v5Instance.requestWithRetry(
+        self.v6Instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -408,7 +413,7 @@ public final class PCCurrentUser {
                     }
                 } catch let err {
 
-                    self.v5Instance.logger.log(err.localizedDescription, logLevel: .debug)
+                    self.v6Instance.logger.log(err.localizedDescription, logLevel: .debug)
                     completionHandler(nil, err)
                     return
                 }
@@ -433,14 +438,14 @@ public final class PCCurrentUser {
                 }
 
                 guard let user = user, err == nil else {
-                    strongSelf.v5Instance.logger.log(
+                    strongSelf.v6Instance.logger.log(
                         "Unable to add user with id \(userID) to room \(room.name): \(err!.localizedDescription)",
                         logLevel: .debug
                     )
 
                     if roomUsersProgressCounter.incrementFailedAndCheckIfFinished() {
                         room.subscription?.delegate?.onUsersUpdated()
-                        strongSelf.v5Instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
+                        strongSelf.v6Instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
                         completionHandler(room)
                     }
 
@@ -451,7 +456,7 @@ public final class PCCurrentUser {
 
                 if roomUsersProgressCounter.incrementSuccessAndCheckIfFinished() {
                     room.subscription?.delegate?.onUsersUpdated()
-                    strongSelf.v5Instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
+                    strongSelf.v6Instance.logger.log("Users updated in room \(room.name)", logLevel: .verbose)
                     completionHandler(room)
                 }
             }
@@ -470,7 +475,7 @@ public final class PCCurrentUser {
         let path = "/users/\(self.pathFriendlyID)/rooms/\(roomID)/leave"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
 
-        self.v5Instance.requestWithRetry(
+        self.v6Instance.requestWithRetry(
             using: generalRequest,
             onSuccess: { _ in
                 completionHandler(nil)
@@ -497,7 +502,7 @@ public final class PCCurrentUser {
     }
 
     fileprivate func getRooms(request: PPRequestOptions, completionHandler: @escaping PCRoomsCompletionHandler) {
-        self.v5Instance.requestWithRetry(
+        self.v6Instance.requestWithRetry(
             using: request,
             onSuccess: { data in
                 guard let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) else {
@@ -515,7 +520,7 @@ public final class PCCurrentUser {
                         // TODO: Do we need to fetch users in the room here?
                         return try PCPayloadDeserializer.createRoomFromPayload(roomPayload)
                     } catch let err {
-                        self.v5Instance.logger.log(err.localizedDescription, logLevel: .debug)
+                        self.v6Instance.logger.log(err.localizedDescription, logLevel: .debug)
                         return nil
                     }
                 }
@@ -690,7 +695,7 @@ public final class PCCurrentUser {
             ]
         ]
 
-        sendMessage(instance: self.v5Instance, messageObject, roomID: roomID, completionHandler: completionHandler)
+        sendMessage(instance: self.v6Instance, messageObject, roomID: roomID, completionHandler: completionHandler)
     }
     
     public func sendMultipartMessage(
@@ -728,7 +733,7 @@ public final class PCCurrentUser {
 
         let sendMessage: ([[String: Any]]) -> Void = { partsToSend in
             self.sendMessage(
-                instance: self.v5Instance,
+                instance: self.v6Instance,
                 ["parts": partsToSend],
                 roomID: roomID,
                 completionHandler: completionHandler
@@ -736,7 +741,7 @@ public final class PCCurrentUser {
         }
 
         if uploadTasks.count > 0 {
-            let uploader = PCMultipartAttachmentUploader(instance: self.v5Instance, uploadTasks: uploadTasks)
+            let uploader = PCMultipartAttachmentUploader(instance: self.v6Instance, uploadTasks: uploadTasks)
             uploader.upload() { results, errors in
                 guard errors == nil else {
                     completionHandler(nil, errors!.first!)
@@ -830,8 +835,8 @@ public final class PCCurrentUser {
             room,
             delegate: roomDelegate,
             messageLimit: messageLimit,
-            instance: self.v5Instance,
-            version: "v5",
+            instance: self.v6Instance,
+            version: "v6",
             completionHandler: completionHandler
         )
     }
@@ -844,7 +849,7 @@ public final class PCCurrentUser {
     ) {
         self.roomStore.room(id: roomID) { r, err in
             guard err == nil, let room = r else {
-                self.v5Instance.logger.log(
+                self.v6Instance.logger.log(
                     "Error getting room from room store as part of multipart message subscription \(err!.localizedDescription)",
                     logLevel: .error
                 )
@@ -855,8 +860,8 @@ public final class PCCurrentUser {
                 room,
                 delegate: roomDelegate,
                 messageLimit: messageLimit,
-                instance: self.v5Instance,
-                version: "v5",
+                instance: self.v6Instance,
+                version: "v6",
                 completionHandler: completionHandler
             )
         }
@@ -951,11 +956,11 @@ public final class PCCurrentUser {
             initialID: initialID,
             limit: limit,
             direction: direction,
-            instance: self.v5Instance,
+            instance: self.v6Instance,
             deserialise: { rawPayload in
                 return try PCPayloadDeserializer.createMultipartMessageFromPayload(
                     rawPayload,
-                    urlRefresher: PCMultipartAttachmentUrlRefresher(client: self.v5Instance)
+                    urlRefresher: PCMultipartAttachmentUrlRefresher(client: self.v6Instance)
                 )
             },
             messageFactory: { (basicMessage, room, user) in
@@ -1255,7 +1260,7 @@ extension PCCurrentUser {
      Start PushNotifications service.
      */
     public func enablePushNotifications() {
-        pushNotifications.start(instanceId: self.v5Instance.id)
+        pushNotifications.start(instanceId: self.v6Instance.id)
         self.setUser(self.id)
         ChatManager.registerForRemoteNotifications()
     }
@@ -1264,10 +1269,10 @@ extension PCCurrentUser {
         let chatkitBeamsTokenProvider = ChatkitBeamsTokenProvider(instance: self.chatkitBeamsTokenProviderInstance)
         pushNotifications.setUserId(userId, tokenProvider: chatkitBeamsTokenProvider) { error in
              guard error == nil else {
-                return self.v5Instance.logger.log("Error occured while setting the user: \(error!)", logLevel: .error)
+                return self.v6Instance.logger.log("Error occured while setting the user: \(error!)", logLevel: .error)
             }
 
-            self.v5Instance.logger.log("Push Notifications service enabled 🎉", logLevel: .debug)
+            self.v6Instance.logger.log("Push Notifications service enabled 🎉", logLevel: .debug)
         }
     }
 }
