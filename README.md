@@ -69,7 +69,7 @@ To integrate Chatkit into your Xcode project using Carthage, specify it in your 
 github "pusher/chatkit-swift"
 ```
 
-Run `carthage update` to build the framework and drag the built `PusherChatkit.framework` and `PusherPlatform.framework` into your Xcode project.
+Run `carthage update` to build the framework and drag the built `PusherChatkit.framework`, `PusherPlatform.framework` and `PushNotifications.framework` into your Xcode project.
 
 ## Deprecated versions
 
