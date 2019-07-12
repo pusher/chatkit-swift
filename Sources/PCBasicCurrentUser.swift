@@ -1,16 +1,16 @@
 import Foundation
 import PusherPlatform
 
-public final class PCBasicCurrentUser {
-    public let id: String
-    public let pathFriendlyID: String
+final class PCBasicCurrentUser {
+    let id: String
+    let pathFriendlyID: String
 
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
     let cursorStore: PCCursorStore
 
-    public internal(set) var userSubscription: PCUserSubscription?
-    public internal(set) var presenceSubscription: PCPresenceSubscription?
+    var userSubscription: PCUserSubscription?
+    var presenceSubscription: PCPresenceSubscription?
 
     private let chatkitBeamsTokenProviderInstance: Instance
     let instance: Instance
@@ -20,7 +20,7 @@ public final class PCBasicCurrentUser {
 
     let connectionCoordinator: PCConnectionCoordinator
 
-    public init(
+    init(
         id: String,
         pathFriendlyID: String,
         instance: Instance,
@@ -43,7 +43,7 @@ public final class PCBasicCurrentUser {
         self.delegate = delegate
 
         let us = userStore ?? PCGlobalUserStore(instance: instance)
-        let rs = roomStore ?? PCRoomStore(rooms: PCSynchronizedArray<PCRoom>(), instance: instance)
+        let rs = roomStore ?? PCRoomStore(rooms: [PCRoom](), instance: instance)
         self.userStore = us
         self.roomStore = rs
 

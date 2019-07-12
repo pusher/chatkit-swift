@@ -270,12 +270,12 @@ struct PCPayloadDeserializer {
     }
 }
 
-public enum PCPayloadDeserializerError: Error {
+enum PCPayloadDeserializerError: Error {
     case incompleteOrInvalidPayloadToCreteEntity(type: String, payload: [String: Any])
 }
 
 extension PCPayloadDeserializerError: LocalizedError {
-    public var errorDescription: String? {
+    var errorDescription: String? {
         switch self {
         case let .incompleteOrInvalidPayloadToCreteEntity(type, payload):
             return "Incomplete or invalid data in order to create \(type) in provided payload: \(payload)"

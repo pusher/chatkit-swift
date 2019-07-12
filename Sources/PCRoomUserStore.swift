@@ -1,13 +1,13 @@
 import Foundation
 import PusherPlatform
 
-public final class PCRoomUserStore {
+final class PCRoomUserStore {
 
-    public var users: Set<PCUser> {
+    var users: Set<PCUser> {
         return self.userStoreCore.users
     }
 
-    public internal(set) var userStoreCore: PCUserStoreCore
+    var userStoreCore: PCUserStoreCore
 
     init(userStoreCore: PCUserStoreCore = PCUserStoreCore()) {
         self.userStoreCore = userStoreCore

@@ -13,7 +13,7 @@ public final class PCRoom {
     public internal(set) var unreadCount: Int?
     public internal(set) var lastMessageAt: String?
 
-    public internal(set) var subscription: PCRoomSubscription?
+    var subscription: PCRoomSubscription?
     public internal(set) var userIDs: Set<String>
     var subscriptionPreviouslyEstablished = false
 
@@ -28,7 +28,7 @@ public final class PCRoom {
         return Array(self.userStore.users).sorted(by: { $0.id > $1.id })
     }
 
-    public internal(set) var userStore: PCRoomUserStore
+    var userStore: PCRoomUserStore
 
     public var createdAtDate: Date { return PCDateFormatter.shared.formatString(self.createdAt) }
     public var updatedAtDate: Date { return PCDateFormatter.shared.formatString(self.updatedAt) }
@@ -45,7 +45,7 @@ public final class PCRoom {
         return PCDateFormatter.shared.formatString(lastMessageAt)
     }
 
-    public init(
+    init(
         id: String,
         name: String,
         isPrivate: Bool,

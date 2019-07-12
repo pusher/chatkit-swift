@@ -1,11 +1,11 @@
 import Foundation
 import PusherPlatform
 
-public final class PCMembershipSubscription {
+final class PCMembershipSubscription {
     let resumableSubscription: PPResumableSubscription
-    public let userStore: PCGlobalUserStore
-    public let roomStore: PCRoomStore
-    public var logger: PPLogger
+    let userStore: PCGlobalUserStore
+    let roomStore: PCRoomStore
+    var logger: PPLogger
     let onUserJoinedHook: (PCUser) -> Void
     let onUserLeftHook: (PCUser) -> Void
     var initialStateHandler: (InitialStateResult<PCUser>) -> Void
@@ -228,7 +228,7 @@ extension PCMembershipSubscription {
 
 }
 
-public enum PCMembershipEventName: String {
+enum PCMembershipEventName: String {
     case initial_state
     case user_joined
     case user_left

@@ -1,15 +1,15 @@
 import Foundation
 import PusherPlatform
 
-public final class PCUserPresenceSubscription {
-    public let userID: String
-    public let resumableSubscription: PPResumableSubscription
-    public let userStore: PCGlobalUserStore
-    public let roomStore: PCRoomStore
-    public internal(set) weak var delegate: PCChatManagerDelegate?
-    public var logger: PCLogger
+final class PCUserPresenceSubscription {
+    let userID: String
+    let resumableSubscription: PPResumableSubscription
+    let userStore: PCGlobalUserStore
+    let roomStore: PCRoomStore
+    weak var delegate: PCChatManagerDelegate?
+    var logger: PCLogger
 
-    public init(
+    init(
         userID: String,
         resumableSubscription: PPResumableSubscription,
         userStore: PCGlobalUserStore,
@@ -25,7 +25,7 @@ public final class PCUserPresenceSubscription {
         self.logger = logger
     }
 
-    public func handleEvent(eventID _: String, headers _: [String: String], data: Any) {
+    func handleEvent(eventID _: String, headers _: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
             self.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
             return
@@ -128,6 +128,6 @@ extension PCUserPresenceSubscription {
     }
 }
 
-public enum PCUserPresenceEventName: String {
+enum PCUserPresenceEventName: String {
     case presence_state
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-public class PCConnectionCoordinator {
+class PCConnectionCoordinator {
     private var queue = DispatchQueue(label: "com.pusher.chatkit.connection-coordinator-\(UUID().uuidString)")
     var completedConnectionEvents: Set<PCConnectionEvent> = []
     var connectionEventHandlers: [PCConnectionEventHandler] = []
@@ -80,11 +80,11 @@ public class PCConnectionCoordinator {
     }
 }
 
-public class PCConnectionEventHandler {
-    public let handler: ([PCConnectionEvent]) -> Void
-    public let dependencies: Set<PCConnectionEvent>
+class PCConnectionEventHandler {
+    let handler: ([PCConnectionEvent]) -> Void
+    let dependencies: Set<PCConnectionEvent>
 
-    public init(
+    init(
         handler: @escaping ([PCConnectionEvent]) -> Void,
         dependencies: Set<PCConnectionEvent>
     ) {
@@ -94,9 +94,9 @@ public class PCConnectionEventHandler {
 }
 
 // TODO: Sourcery should be used for all of this generation stuff
-public class PCConnectionEvent {
-    public let type: PCConnectionEventType
-    public let result: PCConnectionEventResult
+class PCConnectionEvent {
+    let type: PCConnectionEventType
+    let result: PCConnectionEventResult
 
     fileprivate init(type: PCConnectionEventType, result: PCConnectionEventResult) {
         self.type = type
@@ -121,13 +121,13 @@ public class PCConnectionEvent {
 }
 
 extension PCConnectionEvent: CustomDebugStringConvertible {
-    public var debugDescription: String {
+    var debugDescription: String {
         return "Connection event type: \(self.type.rawValue), with result: \(self.result.debugDescription)"
     }
 }
 
-public let PCUserSubscriptionInitEvent = PCConnectionEvent.userSubscriptionInit()
-public let PCPresenceSubscriptionInitEvent = PCConnectionEvent.presenceSubscriptionInit()
+let PCUserSubscriptionInitEvent = PCConnectionEvent.userSubscriptionInit()
+let PCPresenceSubscriptionInitEvent = PCConnectionEvent.presenceSubscriptionInit()
 
 fileprivate let allConnectionEvents: Set<PCConnectionEvent> = [
     PCUserSubscriptionInitEvent,
@@ -135,22 +135,22 @@ fileprivate let allConnectionEvents: Set<PCConnectionEvent> = [
 ]
 
 extension PCConnectionEvent: Hashable {
-    public var hashValue: Int {
+    var hashValue: Int {
         return self.type.hashValue
     }
 
-    public static func ==(lhs: PCConnectionEvent, rhs: PCConnectionEvent) -> Bool {
+    static func ==(lhs: PCConnectionEvent, rhs: PCConnectionEvent) -> Bool {
         return lhs.hashValue == rhs.hashValue
     }
 }
 
-public enum PCConnectionEventResult {
+enum PCConnectionEventResult {
     case userSubscriptionInit(currentUser: PCCurrentUser?, error: Error?)
     case presenceSubscriptionInit(presenceSubscription: PCPresenceSubscription?, error: Error?)
 }
 
 extension PCConnectionEventResult: CustomDebugStringConvertible {
-    public var debugDescription: String {
+    var debugDescription: String {
         switch self {
         case .userSubscriptionInit(_, let error), .presenceSubscriptionInit(_, let error):
             return error == nil ? "success" : "\(error!.localizedDescription)"
@@ -158,13 +158,13 @@ extension PCConnectionEventResult: CustomDebugStringConvertible {
     }
 }
 
-public enum PCConnectionEventType: String {
+enum PCConnectionEventType: String {
     case userSubscriptionInit
     case presenceSubscriptionInit
 }
 
 extension PCConnectionEventResult: Hashable {
-    public var hashValue: Int {
+    var hashValue: Int {
         switch self {
         case .userSubscriptionInit(_, _):
             return 0
@@ -173,7 +173,7 @@ extension PCConnectionEventResult: Hashable {
         }
     }
 
-    public static func ==(lhs: PCConnectionEventResult, rhs: PCConnectionEventResult) -> Bool {
+    static func ==(lhs: PCConnectionEventResult, rhs: PCConnectionEventResult) -> Bool {
         return lhs.hashValue == rhs.hashValue
     }
 }

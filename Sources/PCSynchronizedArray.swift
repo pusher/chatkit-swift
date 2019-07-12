@@ -1,10 +1,13 @@
 import Foundation
 
-public final class PCSynchronizedArray<T> {
-    private var underlyingArray: [T] = []
-    private let accessQueue = DispatchQueue(label: "synchronized.array.access.\(UUID().uuidString)")
-
-    public init() {}
+final class PCSynchronizedArray<T> {
+    private var underlyingArray: [T]
+    private let accessQueue: DispatchQueue
+    
+    init(_ values: [T] = []) {
+        self.underlyingArray = values
+        self.accessQueue = DispatchQueue(label: "synchronized.array.access.\(UUID().uuidString)")
+    }
 
     func clone() -> [T] {
         return self.accessQueue.sync {
@@ -20,7 +23,7 @@ public final class PCSynchronizedArray<T> {
         return newElement
     }
 
-    public func remove(where predicate: @escaping (T) -> Bool) -> T? {
+    func remove(where predicate: @escaping (T) -> Bool) -> T? {
         return self.accessQueue.sync {
             guard let index = self.underlyingArray.index(where: predicate) else {
                 return nil
@@ -30,61 +33,61 @@ public final class PCSynchronizedArray<T> {
         }
     }
 
-    public var count: Int {
+    var count: Int {
         return self.accessQueue.sync {
             return self.underlyingArray.count
         }
     }
 
-    public var isEmpty: Bool {
+    var isEmpty: Bool {
         return self.accessQueue.sync {
             return self.underlyingArray.isEmpty
         }
     }
 
-    public func first(where predicate: (T) -> Bool) -> T? {
+    func first(where predicate: (T) -> Bool) -> T? {
         return self.accessQueue.sync {
             return self.underlyingArray.first(where: predicate)
         }
     }
 
-    public var first: T? {
+    var first: T? {
         return self.accessQueue.sync {
             return self.underlyingArray.first
         }
     }
 
-    public var last: T? {
+    var last: T? {
         return self.accessQueue.sync {
             return self.underlyingArray.last
         }
     }
 
-    public func filter(_ isIncluded: @escaping (T) -> Bool) -> [T] {
+    func filter(_ isIncluded: @escaping (T) -> Bool) -> [T] {
         return self.accessQueue.sync {
             return self.underlyingArray.filter(isIncluded)
         }
     }
 
-    public func sorted(by areInIncreasingOrder: (T, T) -> Bool) -> [T] {
+    func sorted(by areInIncreasingOrder: (T, T) -> Bool) -> [T] {
         return self.accessQueue.sync {
             return self.underlyingArray.sorted(by: areInIncreasingOrder)
         }
     }
 
-    public func compactMap<ElementOfResult>(_ transform: @escaping (T) -> ElementOfResult?) -> [ElementOfResult] {
+    func compactMap<ElementOfResult>(_ transform: @escaping (T) -> ElementOfResult?) -> [ElementOfResult] {
         return self.accessQueue.sync {
             return self.underlyingArray.compactMap(transform)
         }
     }
 
-    public func forEach(_ body: (T) -> Void) {
+    func forEach(_ body: (T) -> Void) {
         self.accessQueue.sync {
             self.underlyingArray.forEach(body)
         }
     }
 
-    public subscript(index: Int) -> T {
+    subscript(index: Int) -> T {
         set {
             self.accessQueue.sync {
                 self.underlyingArray[index] = newValue

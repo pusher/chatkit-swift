@@ -1,22 +1,22 @@
 import Foundation
 import PusherPlatform
 
-public final class PCUserSubscription {
+final class PCUserSubscription {
     unowned let instance: Instance
     unowned let filesInstance: Instance
     unowned let presenceInstance: Instance
-    public let resumableSubscription: PPResumableSubscription
-    public let userStore: PCGlobalUserStore
-    public let cursorStore: PCCursorStore
-    public internal(set) weak var delegate: PCChatManagerDelegate?
+    let resumableSubscription: PPResumableSubscription
+    let userStore: PCGlobalUserStore
+    let cursorStore: PCCursorStore
+    weak var delegate: PCChatManagerDelegate?
     let userID: String
     let pathFriendlyUserID: String
     let connectionCoordinator: PCConnectionCoordinator
     let initialStateHandler: ((roomsPayload: [[String: Any]], cursorsPayload: [[String: Any]], currentUserPayload: [String: Any])) -> Void
 
-    public weak var currentUser: PCCurrentUser?
+    weak var currentUser: PCCurrentUser?
 
-    public init(
+    init(
         instance: Instance,
         filesInstance: Instance,
         presenceInstance: Instance,
@@ -42,7 +42,7 @@ public final class PCUserSubscription {
         self.initialStateHandler = initialStateHandler
     }
 
-    public func handleEvent(eventID _: String, headers _: [String: String], data: Any) {
+    func handleEvent(eventID _: String, headers _: [String: String], data: Any) {
         guard let json = data as? [String: Any] else {
             self.instance.logger.log("Failed to cast JSON object to Dictionary: \(data)", logLevel: .debug)
             return
@@ -334,12 +334,12 @@ extension PCError: LocalizedError {
     }
 }
 
-public enum PCAPIEventType: String {
+enum PCAPIEventType: String {
     case api
     case user
 }
 
-public enum PCAPIEventName: String {
+enum PCAPIEventName: String {
     case initial_state
     case added_to_room
     case removed_from_room
@@ -348,7 +348,7 @@ public enum PCAPIEventName: String {
     case new_cursor
 }
 
-public enum PCUserSubscriptionState {
+enum PCUserSubscriptionState {
     case opening
     case open
     case resuming

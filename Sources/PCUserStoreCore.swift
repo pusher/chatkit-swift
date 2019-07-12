@@ -1,9 +1,9 @@
 import Foundation
 
-public final class PCUserStoreCore {
+final class PCUserStoreCore {
     fileprivate let userStoreQueue = DispatchQueue(label: "com.pusher.chatkit.user-store-core")
 
-    public internal(set) var users: Set<PCUser>
+    var users: Set<PCUser>
 
     init(users: Set<PCUser> = []) {
         self.users = users

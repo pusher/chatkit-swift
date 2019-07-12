@@ -22,7 +22,7 @@ public final class PCUser {
         }
     }
 
-    public init(
+    init(
         id: String,
         createdAt: String,
         updatedAt: String,

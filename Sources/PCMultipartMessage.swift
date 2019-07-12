@@ -12,7 +12,7 @@ public final class PCMultipartMessage: PCEnrichedMessage {
     public var createdAtDate: Date { return PCDateFormatter.shared.formatString(self.createdAt) }
     public var updatedAtDate: Date { return PCDateFormatter.shared.formatString(self.updatedAt) }
     
-    public init(
+    init(
         id: Int,
         sender: PCUser,
         room: PCRoom,
@@ -48,7 +48,7 @@ extension PCMultipartMessage: Hashable {
 public struct PCPart {
     public let payload: PCMultipartPayload
 
-    public init(_ payload: PCMultipartPayload) {
+    init(_ payload: PCMultipartPayload) {
         self.payload = payload
     }
 }
@@ -57,7 +57,7 @@ public struct PCMultipartInlinePayload {
     public let type: String
     public let content: String
     
-    public init(type: String, content: String) {
+    init(type: String, content: String) {
         self.type = type
         self.content = content
     }
@@ -67,7 +67,7 @@ public struct PCMultipartURLPayload {
     public let type: String
     public let url: String
     
-    public init(type: String, url: String) {
+    init(type: String, url: String) {
         self.type = type
         self.url = url
     }

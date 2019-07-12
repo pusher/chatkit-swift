@@ -1,10 +1,10 @@
 import Foundation
 import PusherPlatform
 
-public final class PCCursorSubscription {
+final class PCCursorSubscription {
     let resumableSubscription: PPResumableSubscription
     let cursorStore: PCCursorStore
-    public var logger: PPLogger
+    var logger: PPLogger
     var onNewReadCursorHook: ((PCCursor) -> Void)?
     var initialStateHandler: ((InitialStateResult<PCCursor>) -> Void)?
 
@@ -136,7 +136,7 @@ extension PCCursorSubscription {
 
 }
 
-public enum PCCursorEventName: String {
+enum PCCursorEventName: String {
     case initial_state
     case new_cursor
 }

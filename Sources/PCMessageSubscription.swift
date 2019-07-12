@@ -1,10 +1,10 @@
 import Foundation
 import PusherPlatform
 
-public final class PCMessageSubscription<A: PCCommonBasicMessage, B: PCEnrichedMessage> {
+final class PCMessageSubscription<A: PCCommonBasicMessage, B: PCEnrichedMessage> {
     let roomID: String
     let resumableSubscription: PPResumableSubscription
-    public var logger: PPLogger
+    var logger: PPLogger
     let basicMessageEnricher: PCBasicMessageEnricher<A, B>
     let deserialise: ([String: Any]) throws -> A
     let userStore: PCGlobalUserStore

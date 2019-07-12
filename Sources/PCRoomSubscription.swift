@@ -1,13 +1,13 @@
 import Foundation
 import PusherPlatform
 
-public final class PCRoomSubscription {
-    public var messageSubscription: PCMessageSubscription<PCBasicMessage, PCMessage>?
-    public var multipartMessageSubscription: PCMessageSubscription<PCBasicMultipartMessage, PCMultipartMessage>?
-    public var cursorSubscription: PCCursorSubscription?
-    public var membershipSubscription: PCMembershipSubscription?
-    public weak var delegate: PCRoomDelegate?
-    public var version: String
+final class PCRoomSubscription {
+    var messageSubscription: PCMessageSubscription<PCBasicMessage, PCMessage>?
+    var multipartMessageSubscription: PCMessageSubscription<PCBasicMultipartMessage, PCMultipartMessage>?
+    var cursorSubscription: PCCursorSubscription?
+    var membershipSubscription: PCMembershipSubscription?
+    weak var delegate: PCRoomDelegate?
+    var version: String
     weak var room: PCRoom?
 
     fileprivate let eventBufferQueue = DispatchQueue(label: "com.pusher.chatkit.room-event-buffer-\(UUID().uuidString)")

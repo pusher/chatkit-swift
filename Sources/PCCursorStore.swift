@@ -1,15 +1,18 @@
 import Foundation
 import PusherPlatform
 
-public final class PCCursorStore {
-    public unowned let instance: Instance
+final class PCCursorStore {
+    unowned let instance: Instance
     let roomStore: PCRoomStore
     let userStore: PCGlobalUserStore
     let basicCursorEnricher: PCBasicCursorEnricher
+    private var synchronizedCursors: PCSynchronizedDictionary<PCCursorKey, PCCursor> = [:]
+    
+    var cursors: [PCCursorKey : PCCursor] {
+        return synchronizedCursors.dictionary()
+    }
 
-    public var cursors: PCSynchronizedDictionary<PCCursorKey, PCCursor> = [:]
-
-    public init(instance: Instance, roomStore: PCRoomStore, userStore: PCGlobalUserStore) {
+    init(instance: Instance, roomStore: PCRoomStore, userStore: PCGlobalUserStore) {
         self.instance = instance
         self.roomStore = roomStore
         self.userStore = userStore
@@ -20,15 +23,15 @@ public final class PCCursorStore {
         )
     }
 
-    public func get(userID: String, roomID: String, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
+    func get(userID: String, roomID: String, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
         self.findOrGetCursor(userID: userID, roomID: roomID, completionHandler: completionHandler)
     }
 
-    public func getSync(userID: String, roomID: String) -> PCCursor? {
-        return self.cursors.first(where: { $0.key == cursorKey(userID, roomID) })?.value
+    func getSync(userID: String, roomID: String) -> PCCursor? {
+        return self.synchronizedCursors.first(where: { $0.key == cursorKey(userID, roomID) })?.value
     }
 
-    public func set(_ basicCursor: PCBasicCursor, completionHandler: ((PCCursor?, Error?) -> Void)? = nil) {
+    func set(_ basicCursor: PCBasicCursor, completionHandler: ((PCCursor?, Error?) -> Void)? = nil) {
         self.basicCursorEnricher.enrich(basicCursor) { cursor, err in
             guard let cursor = cursor, err == nil else {
                 self.instance.logger.log(
@@ -44,11 +47,11 @@ public final class PCCursorStore {
     }
 
     fileprivate func set(userID: String, roomID: String, cursor: PCCursor) {
-        self.cursors[cursorKey(userID, roomID)] = cursor
+        self.synchronizedCursors[cursorKey(userID, roomID)] = cursor
     }
 
     func findOrGetCursor(userID: String, roomID: String, completionHandler: @escaping (PCCursor?, Error?) -> Void) {
-        if let cursorObj = self.cursors.first(where: { $0.key == cursorKey(userID, roomID) }) {
+        if let cursorObj = self.synchronizedCursors.first(where: { $0.key == cursorKey(userID, roomID) }) {
             completionHandler(cursorObj.value, nil)
         } else {
             self.getCursor(userID: userID, roomID: roomID) { cursor, err in
@@ -110,7 +113,7 @@ public final class PCCursorStore {
     }
 }
 
-public struct PCCursorKey: Hashable {
+struct PCCursorKey: Hashable {
     let userID: String
     let roomID: String
 }

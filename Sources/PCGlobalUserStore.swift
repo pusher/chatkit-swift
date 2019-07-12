@@ -1,13 +1,13 @@
 import Foundation
 import PusherPlatform
 
-public final class PCGlobalUserStore {
+final class PCGlobalUserStore {
 
-    public var users: Set<PCUser> {
+    var users: Set<PCUser> {
         return self.userStoreCore.users
     }
 
-    public internal(set) var userStoreCore: PCUserStoreCore
+    var userStoreCore: PCUserStoreCore
     unowned let instance: Instance
     var onUserStoredHooks: [(PCUser) -> Void]
 
@@ -17,7 +17,7 @@ public final class PCGlobalUserStore {
         self.onUserStoredHooks = []
     }
 
-    public func user(id: String, completionHandler: @escaping (PCUser?, Error?) -> Void) {
+    func user(id: String, completionHandler: @escaping (PCUser?, Error?) -> Void) {
         self.findOrGetUser(id: id, completionHandler: completionHandler)
     }
 

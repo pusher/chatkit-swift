@@ -2,8 +2,8 @@ import Foundation
 import PusherPlatform
 
 final class PCBasicMessageEnricher<A: PCCommonBasicMessage, B: PCEnrichedMessage> {
-    public let userStore: PCGlobalUserStore
-    public let room: PCRoom
+    let userStore: PCGlobalUserStore
+    let room: PCRoom
     let logger: PPLogger
     let messageFactory: (A, PCRoom, PCUser) -> B
 

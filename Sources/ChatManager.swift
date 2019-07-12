@@ -11,11 +11,11 @@ import NotificationCenter
 
 @objc public class ChatManager: NSObject {
     private let chatkitBeamsTokenProviderInstance: Instance
-    public let instance: Instance
-    public let v6Instance: Instance
-    public let filesInstance: Instance
-    public let cursorsInstance: Instance
-    public let presenceInstance: Instance
+    let instance: Instance
+    let v6Instance: Instance
+    let filesInstance: Instance
+    let cursorsInstance: Instance
+    let presenceInstance: Instance
 
     public let userID: String
     public let pathFriendlyUserID: String
@@ -285,7 +285,7 @@ import NotificationCenter
         basicCurrentUser = nil
     }
 
-    fileprivate static func createInstance(
+    private static func createInstance(
         serviceName: String,
         serviceVersion: String,
         sharedOptions options: PCSharedInstanceOptions
@@ -300,11 +300,11 @@ import NotificationCenter
         )
     }
 
-    fileprivate func informConnectionCoordinatorOfCurrentUserCompletion(currentUser: PCCurrentUser?, error: Error?) {
+    private func informConnectionCoordinatorOfCurrentUserCompletion(currentUser: PCCurrentUser?, error: Error?) {
         connectionCoordinator.connectionEventCompleted(PCConnectionEvent(currentUser: currentUser, error: error))
     }
 
-    fileprivate func parseCursorsInitialStatePayload(
+    private func parseCursorsInitialStatePayload(
         data: [[String: Any]]
     ) -> InitialStateResult<PCCursor> {
         let existingCursors = self.currentUser!.cursorStore.cursors.reduce(into: []) { res, cursorKeyValuePair in

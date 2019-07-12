@@ -4,10 +4,10 @@ import PusherPlatform
 public final class PCCurrentUser {
     public let id: String
     public let createdAt: String
-    public var updatedAt: String
-    public var name: String?
-    public var avatarURL: String?
-    public var customData: [String: Any]?
+    public private(set) var updatedAt: String
+    public private(set) var name: String?
+    public private(set) var avatarURL: String?
+    public private(set) var customData: [String: Any]?
 
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
@@ -27,13 +27,13 @@ public final class PCCurrentUser {
     }
 
     public var rooms: [PCRoom] {
-        return self.roomStore.rooms.clone()
+        return self.roomStore.rooms
     }
 
     public let pathFriendlyID: String
 
-    public internal(set) var userSubscription: PCUserSubscription?
-    public internal(set) var presenceSubscription: PCPresenceSubscription?
+    var userSubscription: PCUserSubscription?
+    var presenceSubscription: PCPresenceSubscription?
 
     public var createdAtDate: Date { return PCDateFormatter.shared.formatString(self.createdAt) }
     public var updatedAtDate: Date { return PCDateFormatter.shared.formatString(self.updatedAt) }
@@ -51,9 +51,9 @@ public final class PCCurrentUser {
         return PCReadCursorDebouncerManager(currentUser: self)
     }()
 
-    public internal(set) var userPresenceSubscriptions = PCSynchronizedDictionary<String, PCUserPresenceSubscription>()
+    var userPresenceSubscriptions = PCSynchronizedDictionary<String, PCUserPresenceSubscription>()
 
-    public init(
+    init(
         id: String,
         pathFriendlyID: String,
         createdAt: String,
@@ -259,7 +259,7 @@ public final class PCCurrentUser {
         )
     }
 
-    fileprivate func updateRoom(
+    private func updateRoom(
         roomID: String,
         name: String?,
         isPrivate: Bool?,
@@ -324,7 +324,7 @@ public final class PCCurrentUser {
         self.deleteRoom(roomID: id, completionHandler: completionHandler)
     }
 
-    fileprivate func deleteRoom(roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
+    private func deleteRoom(roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
         let path = "/rooms/\(roomID)"
         let generalRequest = PPRequestOptions(method: HTTPMethod.DELETE.rawValue, path: path)
 
@@ -339,7 +339,7 @@ public final class PCCurrentUser {
         )
     }
 
-    fileprivate func addOrRemoveUsers(
+    private func addOrRemoveUsers(
         in roomID: String,
         userIDs: [String],
         membershipChange: PCUserMembershipChange,
@@ -371,7 +371,7 @@ public final class PCCurrentUser {
         )
     }
 
-    fileprivate enum PCUserMembershipChange: String {
+    private enum PCUserMembershipChange: String {
         case add
         case remove
     }
@@ -384,7 +384,7 @@ public final class PCCurrentUser {
         self.joinRoom(roomID: id, completionHandler: completionHandler)
     }
 
-    fileprivate func joinRoom(roomID: String, completionHandler: @escaping PCRoomCompletionHandler) {
+    private func joinRoom(roomID: String, completionHandler: @escaping PCRoomCompletionHandler) {
         if let room = self.rooms.first(where: { $0.id == roomID }) {
             completionHandler(room, nil)
             return
@@ -424,7 +424,7 @@ public final class PCCurrentUser {
         )
     }
 
-    fileprivate func populateRoomUserStore(_ room: PCRoom, completionHandler: @escaping (PCRoom) -> Void) {
+    private func populateRoomUserStore(_ room: PCRoom, completionHandler: @escaping (PCRoom) -> Void) {
         let roomUsersProgressCounter = PCProgressCounter(totalCount: room.userIDs.count, labelSuffix: "room-users")
 
         // TODO: Use the soon-to-be-created new version of fetchUsersWithIDs from the
@@ -471,7 +471,7 @@ public final class PCCurrentUser {
         self.leaveRoom(roomID: roomID, completionHandler: completionHandler)
     }
 
-    fileprivate func leaveRoom(roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
+    private func leaveRoom(roomID: String, completionHandler: @escaping PCErrorCompletionHandler) {
         let path = "/users/\(self.pathFriendlyID)/rooms/\(roomID)/leave"
         let generalRequest = PPRequestOptions(method: HTTPMethod.POST.rawValue, path: path)
 
@@ -492,7 +492,7 @@ public final class PCCurrentUser {
         self.getUserRooms(onlyJoinable: true, completionHandler: completionHandler)
     }
 
-    fileprivate func getUserRooms(onlyJoinable: Bool = false, completionHandler: @escaping PCRoomsCompletionHandler) {
+    private func getUserRooms(onlyJoinable: Bool = false, completionHandler: @escaping PCRoomsCompletionHandler) {
         let path = "/users/\(self.pathFriendlyID)/rooms"
         let generalRequest = PPRequestOptions(method: HTTPMethod.GET.rawValue, path: path)
 
@@ -501,7 +501,7 @@ public final class PCCurrentUser {
         self.getRooms(request: generalRequest, completionHandler: completionHandler)
     }
 
-    fileprivate func getRooms(request: PPRequestOptions, completionHandler: @escaping PCRoomsCompletionHandler) {
+    private func getRooms(request: PPRequestOptions, completionHandler: @escaping PCRoomsCompletionHandler) {
         self.v6Instance.requestWithRetry(
             using: request,
             onSuccess: { data in
@@ -867,7 +867,7 @@ public final class PCCurrentUser {
         }
     }
 
-    fileprivate func subscribeToRoom(
+    private func subscribeToRoom(
         _ room: PCRoom,
         delegate: PCRoomDelegate,
         messageLimit: Int = 20,
@@ -978,7 +978,7 @@ public final class PCCurrentUser {
         )
     }
     
-    fileprivate func fetchEnrichedMessages<A: PCCommonBasicMessage, B: PCEnrichedMessage>(
+    private func fetchEnrichedMessages<A: PCCommonBasicMessage, B: PCEnrichedMessage>(
         _ room: PCRoom,
         initialID: String? = nil,
         limit: Int? = nil,
@@ -1126,7 +1126,7 @@ public final class PCCurrentUser {
         )
     }
 
-    fileprivate func subscribeToUserPresence(user: PCUser) {
+    private func subscribeToUserPresence(user: PCUser) {
         guard user.id != self.id else {
             return // don't subscribe to own presence
         }
@@ -1175,7 +1175,7 @@ public final class PCCurrentUser {
     }
 }
 
-struct PartObjectWithIndex {
+private struct PartObjectWithIndex {
     let object: [String: Any]
     let index: Int
 }

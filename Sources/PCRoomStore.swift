@@ -1,22 +1,27 @@
 import Foundation
 import PusherPlatform
 
-public final class PCRoomStore {
+final class PCRoomStore {
 
-    public var rooms: PCSynchronizedArray<PCRoom>
-    public unowned let instance: Instance
+    var rooms: [PCRoom] {
+        return synchronizedRooms.clone()
+    }
+    
+    private var synchronizedRooms: PCSynchronizedArray<PCRoom>
+    private unowned let instance: Instance
 
-    public init(rooms: PCSynchronizedArray<PCRoom>, instance: Instance) {
-        self.rooms = rooms
+    init(rooms: [PCRoom], instance: Instance) {
         self.instance = instance
+        
+        self.synchronizedRooms = PCSynchronizedArray(rooms)
     }
 
-    public func room(id: String, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
+    func room(id: String, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
         self.findOrGetRoom(id: id, completionHandler: completionHandler)
     }
 
     func addOrMerge(_ room: PCRoom) -> PCRoom {
-        return self.rooms.appendOrUpdate(
+        return self.synchronizedRooms.appendOrUpdate(
             room,
             predicate: { $0.id == room.id }
         )
@@ -24,15 +29,15 @@ public final class PCRoomStore {
 
     @discardableResult
     func addOrMergeSync(_ room: PCRoom) -> PCRoom {
-        return self.rooms.appendOrUpdate(room, predicate: { $0.id == room.id })
+        return self.synchronizedRooms.appendOrUpdate(room, predicate: { $0.id == room.id })
     }
 
     func removeSync(id: String) -> PCRoom? {
-        return self.rooms.remove(where: { $0.id == id })
+        return self.synchronizedRooms.remove(where: { $0.id == id })
     }
 
     func findOrGetRoom(id: String, completionHandler: @escaping (PCRoom?, Error?) -> Void) {
-        if let room = self.rooms.first(where: { $0.id == id }) {
+        if let room = self.synchronizedRooms.first(where: { $0.id == id }) {
             completionHandler(room, nil)
         } else {
             self.getRoom(id: id) { room, err in

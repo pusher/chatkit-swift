@@ -3,8 +3,8 @@ import PusherPlatform
 
 public final class PCTokenProvider: PPTokenProvider {
     public let url: String
-    public let requestInjector: ((PCTokenProviderRequest) -> PCTokenProviderRequest)?
-    public var userID: String? = nil {
+    let requestInjector: ((PCTokenProviderRequest) -> PCTokenProviderRequest)?
+    var userID: String? = nil {
         willSet {
             guard newValue != nil else {
                 return
@@ -20,7 +20,7 @@ public final class PCTokenProvider: PPTokenProvider {
 
     let queue = DispatchQueue(label: "com.pusher.chatkit.token-provider")
 
-    public var logger: PPLogger? {
+    var logger: PPLogger? {
         willSet {
             self.internalTokenProvider?.logger = newValue
         }

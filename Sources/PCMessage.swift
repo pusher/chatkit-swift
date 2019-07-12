@@ -19,7 +19,7 @@ public final class PCMessage: PCEnrichedMessage {
         return PCDateFormatter.shared.formatString(deletedAt)
     }
 
-    public init(
+    init(
         id: Int,
         text: String,
         createdAt: String,

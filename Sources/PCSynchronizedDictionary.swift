@@ -3,7 +3,7 @@ import Foundation
 // PCSynchronizedDictionary is a thead-safe dictionary
 // A serial DispatchQueue is used to control access to it
 // Reads and writes are both synchronous
-public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: ExpressibleByDictionaryLiteral {
+final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: ExpressibleByDictionaryLiteral {
     typealias Index = Dictionary<KeyType, ValueType>.Index
     typealias Element = Dictionary<KeyType, ValueType>.Element
 
@@ -16,7 +16,7 @@ public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: Expre
         self.underlyingDictionary = dictionary
     }
 
-    public convenience init(dictionaryLiteral elements: (KeyType, ValueType)...) {
+    convenience init(dictionaryLiteral elements: (KeyType, ValueType)...) {
         var dict = [KeyType: ValueType]()
         for (key, value) in elements {
             dict[key] = value
@@ -103,4 +103,11 @@ public final class PCSynchronizedDictionary<KeyType: Hashable, ValueType>: Expre
             return try underlyingDictionary.reduce(into: initialResult, updateAccumulatingResult)
         }
     }
+    
+    func dictionary() -> [KeyType: ValueType] {
+        return queue.sync {
+            return underlyingDictionary
+        }
+    }
+    
 }

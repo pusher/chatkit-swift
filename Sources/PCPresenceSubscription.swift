@@ -1,10 +1,10 @@
 import Foundation
 import PusherPlatform
 
-public final class PCPresenceSubscription {
-    public let resumableSubscription: PPResumableSubscription
+final class PCPresenceSubscription {
+    let resumableSubscription: PPResumableSubscription
 
-    public init(resumableSubscription: PPResumableSubscription) {
+    init(resumableSubscription: PPResumableSubscription) {
         self.resumableSubscription = resumableSubscription
     }
 
