@@ -50,9 +50,9 @@ Whenever you make a change to a dependency in one of the [`Cartfile`](https://gi
 
 Most dependencies will be used for all platforms that the SDK targets: iOS, macOS, tvOS, and watchOS. However, there are times when you only want a dependency to be included for certain platforms.
 
-The `beams-chatkit-swift` dependency is one such dependency. We only want it to be included for iOS and macOS.
+The `push-notifications-swift` dependency is one such dependency. We only want it to be included for iOS and macOS.
 
-Specifying this in the podspec is [simple enough](https://github.com/pusher/chatkit-swift/blob/3f6bd93a5939480a99b1811cf0a3764c323b5b4b/PusherChatkit.podspec#L15-L16).
+Specifying this in the podspec is [simple enough](https://github.com/pusher/chatkit-swift/blob/master/PusherChatkit.podspec#L15-L16).
 
 However, making this work with Carthage is a bit more involved.
 
