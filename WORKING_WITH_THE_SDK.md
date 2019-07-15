@@ -9,7 +9,7 @@ We use [Carthage](https://github.com/Carthage/Carthage#installing-carthage) to m
 At the time of writing the dependencies are:
 
 * [`pusher-platform-swift`](https://github.com/pusher/pusher-platform-swift): this is a low(er) level SDK that is shared by all Pusher SDKs that interact with products running on the shared Pusher platform.
-* [`beams-chatkit-swift`](https://github.com/pusher/beams-chatkit-swift): this is a Chatkit-only "fork" of the [Beams Swift SDK](https://github.com/pusher/push-notifications-swift). Once it's possible to we should be using the [Beams Swift SDK](https://github.com/pusher/push-notifications-swift) instead of the Chatkit fork.
+* [`push-notifications-swift`](https://github.com/pusher/push-notifications-swift): this is [Beams Swift SDK](https://www.pusher.com/beams).
 
 Any dependencies that are only required for testing are defined in [`Cartfile.private`](https://github.com/pusher/chatkit-swift/blob/master/Cartfile.private).
 
