@@ -16,22 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "33831C881A9CF61600B124F1"
                BuildableName = "PusherChatkit.framework"
-               BlueprintName = "PusherChatkit"
-               ReferencedContainer = "container:PusherChatkit.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "33831C931A9CF61600B124F1"
-               BuildableName = "PusherChatkitTests.xctest"
-               BlueprintName = "PusherChatkitTests"
-               ReferencedContainer = "container:PusherChatkit.xcodeproj">
+               BlueprintName = "Chatkit"
+               ReferencedContainer = "container:Chatkit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -48,9 +34,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "33831C931A9CF61600B124F1"
-               BuildableName = "PusherChatkitTests.xctest"
-               BlueprintName = "PusherChatkitTests"
-               ReferencedContainer = "container:PusherChatkit.xcodeproj">
+               BuildableName = "Integration Tests.xctest"
+               BlueprintName = "Integration Tests"
+               ReferencedContainer = "container:Chatkit.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -59,11 +45,21 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "33831C881A9CF61600B124F1"
             BuildableName = "PusherChatkit.framework"
-            BlueprintName = "PusherChatkit"
-            ReferencedContainer = "container:PusherChatkit.xcodeproj">
+            BlueprintName = "Chatkit"
+            ReferencedContainer = "container:Chatkit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
+         <AdditionalOption
+            key = "MallocStackLogging"
+            value = ""
+            isEnabled = "YES">
+         </AdditionalOption>
+         <AdditionalOption
+            key = "PrefersMallocStackLoggingLite"
+            value = ""
+            isEnabled = "YES">
+         </AdditionalOption>
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
@@ -81,8 +77,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "33831C881A9CF61600B124F1"
             BuildableName = "PusherChatkit.framework"
-            BlueprintName = "PusherChatkit"
-            ReferencedContainer = "container:PusherChatkit.xcodeproj">
+            BlueprintName = "Chatkit"
+            ReferencedContainer = "container:Chatkit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -109,8 +105,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "33831C881A9CF61600B124F1"
             BuildableName = "PusherChatkit.framework"
-            BlueprintName = "PusherChatkit"
-            ReferencedContainer = "container:PusherChatkit.xcodeproj">
+            BlueprintName = "Chatkit"
+            ReferencedContainer = "container:Chatkit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

@@ -35,7 +35,7 @@
 		33BA5639200E473A00FFC587 /* PusherPlatform.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PusherPlatform.framework; path = ../Carthage/Build/iOS/PusherPlatform.framework; sourceTree = "<group>"; };
 		33E3EBBB200E0C41003D888D /* Carthage.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Carthage.xcconfig; sourceTree = "<group>"; };
 		33E3EBC4200E1837003D888D /* somedog.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = somedog.jpg; sourceTree = "<group>"; };
-		33FD74E4200E09A8001D8185 /* ChatkitiOSExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatkitiOSExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		33FD74E4200E09A8001D8185 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33FD74E7200E09A8001D8185 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33FD74E9200E09A8001D8185 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		33FD74EC200E09A8001D8185 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -43,7 +43,7 @@
 		33FD74F1200E09A8001D8185 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		33FD74F3200E09A8001D8185 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37C6095D21B1A4FF00862CC9 /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A1C023812189CB2E004C1728 /* ChatkitiOSExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChatkitiOSExample.entitlements; sourceTree = "<group>"; };
+		A1C023812189CB2E004C1728 /* Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Example.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +58,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		22FDEC4222DDFA7A00788E81 /* Application Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				33FD74E7200E09A8001D8185 /* AppDelegate.swift */,
+			);
+			path = "Application Delegate";
+			sourceTree = "<group>";
+		};
+		22FDEC4322DDFA8A00788E81 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				33FD74E9200E09A8001D8185 /* ViewController.swift */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		22FDEC4422DDFAA900788E81 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				33FD74EE200E09A8001D8185 /* Assets.xcassets */,
+				33E3EBBB200E0C41003D888D /* Carthage.xcconfig */,
+				A1C023812189CB2E004C1728 /* Example.entitlements */,
+				33FD74F3200E09A8001D8185 /* Info.plist */,
+				33FD74F0200E09A8001D8185 /* LaunchScreen.storyboard */,
+				33FD74EB200E09A8001D8185 /* Main.storyboard */,
+				33E3EBC4200E1837003D888D /* somedog.jpg */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		33E3EBBE200E0C98003D888D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -70,42 +100,36 @@
 		33FD74DB200E09A8001D8185 = {
 			isa = PBXGroup;
 			children = (
-				33FD74E6200E09A8001D8185 /* ChatkitiOSExample */,
-				33FD74E5200E09A8001D8185 /* Products */,
+				33FD74E6200E09A8001D8185 /* Example */,
 				33E3EBBE200E0C98003D888D /* Frameworks */,
+				33FD74E5200E09A8001D8185 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
 		33FD74E5200E09A8001D8185 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				33FD74E4200E09A8001D8185 /* ChatkitiOSExample.app */,
+				33FD74E4200E09A8001D8185 /* Example.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		33FD74E6200E09A8001D8185 /* ChatkitiOSExample */ = {
+		33FD74E6200E09A8001D8185 /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				A1C023812189CB2E004C1728 /* ChatkitiOSExample.entitlements */,
-				33FD74E7200E09A8001D8185 /* AppDelegate.swift */,
-				33FD74E9200E09A8001D8185 /* ViewController.swift */,
-				33FD74EB200E09A8001D8185 /* Main.storyboard */,
-				33FD74EE200E09A8001D8185 /* Assets.xcassets */,
-				33FD74F0200E09A8001D8185 /* LaunchScreen.storyboard */,
-				33FD74F3200E09A8001D8185 /* Info.plist */,
-				33E3EBBB200E0C41003D888D /* Carthage.xcconfig */,
-				33E3EBC4200E1837003D888D /* somedog.jpg */,
+				22FDEC4222DDFA7A00788E81 /* Application Delegate */,
+				22FDEC4422DDFAA900788E81 /* Supporting Files */,
+				22FDEC4322DDFA8A00788E81 /* View Controllers */,
 			);
-			path = ChatkitiOSExample;
+			path = Example;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		33FD74E3200E09A8001D8185 /* ChatkitiOSExample */ = {
+		33FD74E3200E09A8001D8185 /* Example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 33FD74F6200E09A8001D8185 /* Build configuration list for PBXNativeTarget "ChatkitiOSExample" */;
+			buildConfigurationList = 33FD74F6200E09A8001D8185 /* Build configuration list for PBXNativeTarget "Example" */;
 			buildPhases = (
 				33FD74E0200E09A8001D8185 /* Sources */,
 				33FD74E1200E09A8001D8185 /* Frameworks */,
@@ -117,9 +141,9 @@
 			);
 			dependencies = (
 			);
-			name = ChatkitiOSExample;
+			name = Example;
 			productName = ChatkitiOSExample;
-			productReference = 33FD74E4200E09A8001D8185 /* ChatkitiOSExample.app */;
+			productReference = 33FD74E4200E09A8001D8185 /* Example.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -144,7 +168,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 33FD74DF200E09A8001D8185 /* Build configuration list for PBXProject "ChatkitiOSExample" */;
+			buildConfigurationList = 33FD74DF200E09A8001D8185 /* Build configuration list for PBXProject "Example" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -157,7 +181,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				33FD74E3200E09A8001D8185 /* ChatkitiOSExample */,
+				33FD74E3200E09A8001D8185 /* Example */,
 			);
 		};
 /* End PBXProject section */
@@ -262,10 +286,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = H7FL434D9W;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -279,11 +303,15 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -321,7 +349,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = H7FL434D9W;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -333,9 +361,13 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -344,15 +376,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = ChatkitiOSExample/ChatkitiOSExample.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = H7FL434D9W;
-				INFOPLIST_FILE = ChatkitiOSExample/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.pusher.ChatkitiOSExample;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				CODE_SIGN_ENTITLEMENTS = "Example/Supporting Files/Example.entitlements";
+				INFOPLIST_FILE = "Example/Supporting Files/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pusher.chatkit.$(PRODUCT_NAME:rfc1034identifier)";
 			};
 			name = Debug;
 		};
@@ -360,22 +386,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = ChatkitiOSExample/ChatkitiOSExample.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = H7FL434D9W;
-				INFOPLIST_FILE = ChatkitiOSExample/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.pusher.ChatkitiOSExample;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				CODE_SIGN_ENTITLEMENTS = "Example/Supporting Files/Example.entitlements";
+				INFOPLIST_FILE = "Example/Supporting Files/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pusher.chatkit.$(PRODUCT_NAME:rfc1034identifier)";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		33FD74DF200E09A8001D8185 /* Build configuration list for PBXProject "ChatkitiOSExample" */ = {
+		33FD74DF200E09A8001D8185 /* Build configuration list for PBXProject "Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				33FD74F4200E09A8001D8185 /* Debug */,
@@ -384,7 +404,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		33FD74F6200E09A8001D8185 /* Build configuration list for PBXNativeTarget "ChatkitiOSExample" */ = {
+		33FD74F6200E09A8001D8185 /* Build configuration list for PBXNativeTarget "Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				33FD74F7200E09A8001D8185 /* Debug */,

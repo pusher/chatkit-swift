@@ -61,5 +61,5 @@ fastlane/screenshots
 
 .swift-version
 
-Tests/Config/TestConfig.swift
+Integration Tests/Config/TestConfig.swift
 *.DS_Store

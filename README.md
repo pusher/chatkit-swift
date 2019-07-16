@@ -92,10 +92,10 @@ Some of the tests require a valid Chatkit instance locator, key, and token provi
 To set this up, run the following command:
 
 ```bash
-cp Tests/Config/TestConfigExample.swift Tests/Config/TestConfig.swift
+cp Integration\ Tests/Config/TestConfigExample.swift Integration\ Tests/Config/TestConfig.swift
 ```
 
-Then edit `Tests/Config/TestConfig.swift` to include a valid Chatkit instance locator, key, and token provider URL.
+Then edit `Integration\ Tests/Config/TestConfig.swift` to include a valid Chatkit instance locator, key, and token provider URL.
 
 ## Communication
 
