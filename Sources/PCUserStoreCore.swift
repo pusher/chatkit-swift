@@ -9,6 +9,14 @@ public final class PCUserStoreCore {
         self.users = users
     }
 
+    func find(_ id: String) -> PCUser? {
+        return self.userStoreQueue.sync {
+            return users.first { user in
+                user.id == id
+            }
+        }
+    }
+
     func addOrMerge(_ user: PCUser) -> PCUser {
         return self.userStoreQueue.sync {
             let insertResult = self.users.insert(user)
