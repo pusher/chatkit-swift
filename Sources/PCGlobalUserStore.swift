@@ -4,7 +4,7 @@ import PusherPlatform
 public final class PCGlobalUserStore {
 
     public var users: Set<PCUser> {
-        return self.userStoreCore.users
+        return self.userStoreCore.copy()
     }
 
     public internal(set) var userStoreCore: PCUserStoreCore
