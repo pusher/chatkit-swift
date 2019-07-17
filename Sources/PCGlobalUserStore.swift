@@ -4,7 +4,7 @@ import PusherPlatform
 public final class PCGlobalUserStore {
 
     public var users: Set<PCUser> {
-        return self.userStoreCore.users
+        return self.userStoreCore.copy()
     }
 
     public internal(set) var userStoreCore: PCUserStoreCore
@@ -34,7 +34,7 @@ public final class PCGlobalUserStore {
     }
 
     func findOrGetUser(id: String, completionHandler: @escaping (PCUser?, Error?) -> Void) {
-        if let user = self.userStoreCore.users.first(where: { $0.id == id }) {
+        if let user = self.userStoreCore.find(id) {
             completionHandler(user, nil)
         } else {
             self.getUser(id: id) { [weak self] user, err in

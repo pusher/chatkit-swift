@@ -3,10 +3,24 @@ import Foundation
 public final class PCUserStoreCore {
     fileprivate let userStoreQueue = DispatchQueue(label: "com.pusher.chatkit.user-store-core")
 
-    public internal(set) var users: Set<PCUser>
+    private var users: Set<PCUser>
 
     init(users: Set<PCUser> = []) {
         self.users = users
+    }
+
+    func copy() -> Set<PCUser> {
+        return userStoreQueue.sync {
+            return Set(self.users)
+        }
+    }
+
+    func find(_ id: String) -> PCUser? {
+        return self.userStoreQueue.sync {
+            return users.first { user in
+                user.id == id
+            }
+        }
     }
 
     func addOrMerge(_ user: PCUser) -> PCUser {
