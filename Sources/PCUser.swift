@@ -14,7 +14,7 @@ public final class PCUser {
     private var _customData: [String: Any]?
     private var _presenceState: PCPresenceState
 
-    // Guarded setters for mutable properties
+    // Guarded getters and setters for mutable properties
     public var updatedAt: String {
         get { return self.lock.synchronized { self._updatedAt } }
         set(v) { self.lock.synchronized { self._updatedAt = v } }

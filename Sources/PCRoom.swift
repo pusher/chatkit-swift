@@ -2,34 +2,83 @@ import Foundation
 import PusherPlatform
 
 public final class PCRoom {
+    private let lock = DispatchSemaphore(value: 1)
+
+    // Immutable properies are safe to be public
     public let id: String
     public let createdByUserID: String
     public let createdAt: String
 
-    public private(set) var name: String
-    public private(set) var isPrivate: Bool
-    public private(set) var updatedAt: String
-    public private(set) var deletedAt: String?
-    public private(set) var customData: [String: Any]?
-    public private(set) var unreadCount: Int?
-    public private(set) var lastMessageAt: String?
+    // Mutable properties must be protected, these should only be referenced in the constructor and guarded setters
+    private var _name: String
+    private var _isPrivate: Bool
+    private var _updatedAt: String
+    private var _deletedAt: String?
+    private var _customData: [String: Any]?
+    private var _unreadCount: Int?
+    private var _lastMessageAt: String?
 
-    public internal(set) var subscription: PCRoomSubscription?
-    public internal(set) var userIDs: Set<String>
-    var subscriptionPreviouslyEstablished = false
-
-    // TODO: Should each Room instead have access to the user store and then the users
-    // property would become a func with a completion handler that queried the user store
-    // based on the user ids that are being tracked in the Room objects
-    public var users: [PCUser] {
-        // TODO: Is this going to be expensive if this is used as a datasource for a
-        // tableview, or similar?
-        // TODO: This will also not work well if references to users are stored by
-        // a customer
-        return Array(self.userStore.users).sorted(by: { $0.id > $1.id })
-    }
+    private var _subscription: PCRoomSubscription?
+    private var _userIDs: Set<String>
+    private var _subscriptionPreviouslyEstablished = false
 
     public private(set) var userStore: PCRoomUserStore
+
+    // Guarded getters and setters for mutable properties
+    public private(set) var name: String {
+        get { return self.lock.synchronized { self._name } }
+        set(v) { self.lock.synchronized { self._name = v } }
+    }
+
+    public private(set) var isPrivate: Bool {
+        get { return self.lock.synchronized { self._isPrivate } }
+        set(v) { self.lock.synchronized { self._isPrivate = v } }
+    }
+
+    public private(set) var updatedAt: String {
+        get { return self.lock.synchronized { self._updatedAt } }
+        set(v) { self.lock.synchronized { self._updatedAt = v } }
+    }
+
+    public private(set) var deletedAt: String? {
+        get { return self.lock.synchronized { self._deletedAt } }
+        set(v) { self.lock.synchronized { self._deletedAt = v } }
+    }
+
+    public private(set) var customData: [String: Any]? {
+        get { return self.lock.synchronized { self._customData } }
+        set(v) { self.lock.synchronized { self._customData = v } }
+    }
+
+    public private(set) var unreadCount: Int? {
+        get { return self.lock.synchronized { self._unreadCount } }
+        set(v) { self.lock.synchronized { self._unreadCount = v } }
+    }
+
+    public private(set) var lastMessageAt: String? {
+        get { return self.lock.synchronized { self._lastMessageAt } }
+        set(v) { self.lock.synchronized { self._lastMessageAt = v } }
+    }
+
+    public internal(set) var subscription: PCRoomSubscription? {
+        get { return self.lock.synchronized { self._subscription } }
+        set(v) { self.lock.synchronized { self._subscription = v } }
+    }
+
+    public internal(set) var userIDs: Set<String> {
+        get { return self.lock.synchronized { self._userIDs } }
+        set(v) { self.lock.synchronized { self._userIDs = v } }
+    }
+
+    internal var subscriptionPreviouslyEstablished: Bool {
+        get { return self.lock.synchronized { self._subscriptionPreviouslyEstablished } }
+        set(v) { self.lock.synchronized { self._subscriptionPreviouslyEstablished = v } }
+    }
+
+    // True computed properties
+    public var users: [PCUser] {
+        return Array(self.userStore.users).sorted(by: { $0.id > $1.id })
+    }
 
     public var createdAtDate: Date { return PCDateFormatter.shared.formatString(self.createdAt) }
     public var updatedAtDate: Date { return PCDateFormatter.shared.formatString(self.updatedAt) }
@@ -60,16 +109,17 @@ public final class PCRoom {
         deletedAt: String? = nil
     ) {
         self.id = id
-        self.name = name
-        self.isPrivate = isPrivate
         self.createdByUserID = createdByUserID
         self.createdAt = createdAt
-        self.updatedAt = updatedAt
-        self.deletedAt = deletedAt
-        self.customData = customData
-        self.unreadCount = unreadCount
-        self.lastMessageAt = lastMessageAt
-        self.userIDs = userIDs ?? []
+        self._name = name
+        self._isPrivate = isPrivate
+        self._updatedAt = updatedAt
+        self._deletedAt = deletedAt
+        self._customData = customData
+        self._unreadCount = unreadCount
+        self._lastMessageAt = lastMessageAt
+        self._userIDs = userIDs ?? []
+
         self.userStore = PCRoomUserStore()
     }
 
