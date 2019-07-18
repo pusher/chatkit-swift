@@ -1,26 +1,50 @@
 import Foundation
 
 public final class PCUser {
+    private let lock = DispatchSemaphore(value: 1)
+
+    // Immutable properties are safe
     public let id: String
     public let createdAt: String
-    public var updatedAt: String
-    public var name: String?
-    public var avatarURL: String?
-    public var customData: [String: Any]?
-    public internal(set) var presenceState: PCPresenceState
 
-    public lazy var pathFriendlyID: String = {
-        return pathFriendlyVersion(of: self.id)
-    }()
+    // Mutable properties must be protected, these should only be referenced in the constructor and guarded setters
+    private var _updatedAt: String
+    private var _name: String?
+    private var _avatarURL: String?
+    private var _customData: [String: Any]?
+    private var _presenceState: PCPresenceState
 
+    // Guarded getters and setters for mutable properties
+    public var updatedAt: String {
+        get { return self.lock.synchronized { self._updatedAt } }
+        set(v) { self.lock.synchronized { self._updatedAt = v } }
+    }
+
+    public var name: String? {
+        get { return self.lock.synchronized { self._name } }
+        set(v) { self.lock.synchronized { self._name = v } }
+    }
+
+    public var avatarURL: String? {
+        get { return self.lock.synchronized { self._avatarURL } }
+        set(v) { self.lock.synchronized { self._avatarURL = v } }
+    }
+
+    public var customData: [String: Any]? {
+        get { return self.lock.synchronized { self._customData } }
+        set(v) { self.lock.synchronized { self._customData = v } }
+    }
+
+    public var presenceState: PCPresenceState {
+        get { return self.lock.synchronized { self._presenceState } }
+        set(v) { self.lock.synchronized { self._presenceState = v } }
+    }
+
+    // True computed properties
+    public var pathFriendlyID: String { return pathFriendlyVersion(of: self.id) }
     public var createdAtDate: Date { return PCDateFormatter.shared.formatString(self.createdAt) }
     public var updatedAtDate: Date { return PCDateFormatter.shared.formatString(self.updatedAt) }
-
-    public var displayName: String {
-        get {
-            return self.name ?? self.id
-        }
-    }
+    public var displayName: String { return self.name ?? self.id }
 
     public init(
         id: String,
@@ -32,11 +56,11 @@ public final class PCUser {
     ) {
         self.id = id
         self.createdAt = createdAt
-        self.updatedAt = updatedAt
-        self.name = name
-        self.avatarURL = avatarURL
-        self.customData = customData
-        self.presenceState = .unknown
+        self._updatedAt = updatedAt
+        self._name = name
+        self._avatarURL = avatarURL
+        self._customData = customData
+        self._presenceState = .unknown
     }
 
     func updatePresenceInfoIfAppropriate(newInfoPayload: PCPresencePayload) {
