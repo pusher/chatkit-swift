@@ -3,15 +3,16 @@ import PusherPlatform
 
 public final class PCRoom {
     public let id: String
-    public internal(set) var name: String
-    public private(set) var isPrivate: Bool
     public let createdByUserID: String
     public let createdAt: String
-    public internal(set) var updatedAt: String
-    public internal(set) var deletedAt: String?
-    public internal(set) var customData: [String: Any]?
-    public internal(set) var unreadCount: Int?
-    public internal(set) var lastMessageAt: String?
+
+    public private(set) var name: String
+    public private(set) var isPrivate: Bool
+    public private(set) var updatedAt: String
+    public private(set) var deletedAt: String?
+    public private(set) var customData: [String: Any]?
+    public private(set) var unreadCount: Int?
+    public private(set) var lastMessageAt: String?
 
     public internal(set) var subscription: PCRoomSubscription?
     public internal(set) var userIDs: Set<String>
@@ -28,7 +29,7 @@ public final class PCRoom {
         return Array(self.userStore.users).sorted(by: { $0.id > $1.id })
     }
 
-    public internal(set) var userStore: PCRoomUserStore
+    public private(set) var userStore: PCRoomUserStore
 
     public var createdAtDate: Date { return PCDateFormatter.shared.formatString(self.createdAt) }
     public var updatedAtDate: Date { return PCDateFormatter.shared.formatString(self.updatedAt) }
