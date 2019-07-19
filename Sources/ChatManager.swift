@@ -23,7 +23,12 @@ import NotificationCenter
     public let pathFriendlyUserID: String
 
     let connectionCoordinator: PCConnectionCoordinator
-    var currentUser: PCCurrentUser?
+    
+    private var _currentUser: PCCurrentUser?
+    var currentUser: PCCurrentUser? {
+        get { return self.lock.synchronized { self._currentUser } }
+        set(v) { self.lock.synchronized { self._currentUser = v } }
+    }
 
     private var _basicCurrentUser: PCBasicCurrentUser?
     var basicCurrentUser: PCBasicCurrentUser? {
