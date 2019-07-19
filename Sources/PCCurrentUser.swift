@@ -9,6 +9,8 @@ public final class PCCurrentUser {
     public var avatarURL: String?
     public var customData: [String: Any]?
 
+    private let lock = DispatchSemaphore(value: 1)
+    
     let userStore: PCGlobalUserStore
     let roomStore: PCRoomStore
     let cursorStore: PCCursorStore
@@ -33,7 +35,12 @@ public final class PCCurrentUser {
     public let pathFriendlyID: String
 
     public internal(set) var userSubscription: PCUserSubscription?
-    public internal(set) var presenceSubscription: PCPresenceSubscription?
+    
+    private var _presenceSubscription: PCPresenceSubscription?
+    public internal(set) var presenceSubscription: PCPresenceSubscription? {
+        get { return self.lock.synchronized { self._presenceSubscription } }
+        set(v) { self.lock.synchronized { self._presenceSubscription = v } }
+    }
 
     public var createdAtDate: Date { return PCDateFormatter.shared.formatString(self.createdAt) }
     public var updatedAtDate: Date { return PCDateFormatter.shared.formatString(self.updatedAt) }
