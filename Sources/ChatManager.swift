@@ -17,13 +17,24 @@ import NotificationCenter
     public let cursorsInstance: Instance
     public let presenceInstance: Instance
 
+    private let lock = DispatchSemaphore(value: 1)
+    
     public let userID: String
     public let pathFriendlyUserID: String
 
     let connectionCoordinator: PCConnectionCoordinator
-    var currentUser: PCCurrentUser?
+    
+    private var _currentUser: PCCurrentUser?
+    var currentUser: PCCurrentUser? {
+        get { return self.lock.synchronized { self._currentUser } }
+        set(v) { self.lock.synchronized { self._currentUser = v } }
+    }
 
-    var basicCurrentUser: PCBasicCurrentUser?
+    private var _basicCurrentUser: PCBasicCurrentUser?
+    var basicCurrentUser: PCBasicCurrentUser? {
+        get { return self.lock.synchronized { self._basicCurrentUser } }
+        set(v) { self.lock.synchronized { self._basicCurrentUser = v } }
+    }
 
     var wasPreviouslyConnected: Bool = false
 
