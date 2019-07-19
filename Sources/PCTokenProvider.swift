@@ -2,6 +2,8 @@ import Foundation
 import PusherPlatform
 
 public final class PCTokenProvider: PPTokenProvider {
+    private let lock = DispatchSemaphore(value: 1)
+    
     public let url: String
     public let requestInjector: ((PCTokenProviderRequest) -> PCTokenProviderRequest)?
     public var userID: String? = nil {
@@ -16,7 +18,12 @@ public final class PCTokenProvider: PPTokenProvider {
     var pathFriendUserID: String? = nil
 
     var fetchingToken: Bool = false
-    var queuedTokenRecipients: [(PPTokenProviderResult) -> Void] = []
+    
+    private var _queuedTokenRecipients: [(PPTokenProviderResult) -> Void] = []
+    var queuedTokenRecipients: [(PPTokenProviderResult) -> Void] {
+        get { return self.lock.synchronized { self._queuedTokenRecipients } }
+        set(v) { self.lock.synchronized { self._queuedTokenRecipients = v } }
+    }
 
     let queue = DispatchQueue(label: "com.pusher.chatkit.token-provider")
 
