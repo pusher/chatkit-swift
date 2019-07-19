@@ -21,10 +21,17 @@ class PCReadCursorDebouncerManager {
 }
 
 class PCReadCursorDebouncer {
+    private let lock = DispatchSemaphore(value: 1)
+    
     private var roomID: String
     private weak var currentUser: PCCurrentUser?
     private var interval: TimeInterval
-    private var timer: PPRepeater?
+    
+    private var _timer: PPRepeater?
+    var timer: PPRepeater? {
+        get { return self.lock.synchronized { self._timer } }
+        set(v) { self.lock.synchronized { self._timer = v } }
+    }
 
     private var sendReadCursorPayload: (position: Int, completionHandlers: [PCErrorCompletionHandler])? = nil
 
