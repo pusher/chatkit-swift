@@ -11,6 +11,7 @@ public final class PCRoom {
 
     // Mutable properties must be protected, these should only be referenced in the constructor and guarded setters
     private var _name: String
+    private var _pushNotificationTitleOverride: String?
     private var _isPrivate: Bool
     private var _updatedAt: String
     private var _deletedAt: String?
@@ -28,6 +29,11 @@ public final class PCRoom {
     public private(set) var name: String {
         get { return self.lock.synchronized { self._name } }
         set(v) { self.lock.synchronized { self._name = v } }
+    }
+
+    public private(set) var pushNotificationTitleOverride: String? {
+        get { return self.lock.synchronized { self._pushNotificationTitleOverride } }
+        set(v) { self.lock.synchronized { self._pushNotificationTitleOverride = v } }
     }
 
     public private(set) var isPrivate: Bool {
@@ -98,6 +104,7 @@ public final class PCRoom {
     public init(
         id: String,
         name: String,
+        pushNotificationTitleOverride: String? = nil,
         isPrivate: Bool,
         createdByUserID: String,
         createdAt: String,
@@ -112,6 +119,7 @@ public final class PCRoom {
         self.createdByUserID = createdByUserID
         self.createdAt = createdAt
         self._name = name
+        self._pushNotificationTitleOverride = pushNotificationTitleOverride
         self._isPrivate = isPrivate
         self._updatedAt = updatedAt
         self._deletedAt = deletedAt
@@ -141,6 +149,7 @@ public final class PCRoom {
     func deepEqual(to room: PCRoom) -> Bool {
         return
             self.name == room.name &&
+            self.pushNotificationTitleOverride == room.pushNotificationTitleOverride &&
             self.isPrivate == room.isPrivate &&
             (
                 (self.customData == nil && room.customData == nil) ||
@@ -157,6 +166,7 @@ extension PCRoom: PCUpdatable {
     @discardableResult
     func updateWithPropertiesOf(_ room: PCRoom) -> PCRoom {
         self.name = room.name
+        self.pushNotificationTitleOverride = room.pushNotificationTitleOverride
         self.isPrivate = room.isPrivate
         self.updatedAt = room.updatedAt
         self.customData = room.customData
@@ -189,6 +199,7 @@ extension PCRoom {
         return PCRoom(
             id: self.id,
             name: self.name,
+            pushNotificationTitleOverride: self.pushNotificationTitleOverride,
             isPrivate: self.isPrivate,
             createdByUserID: self.createdByUserID,
             createdAt: self.createdAt,

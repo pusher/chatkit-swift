@@ -67,6 +67,8 @@ struct PCPayloadDeserializer {
             throw PCPayloadDeserializerError.incompleteOrInvalidPayloadToCreteEntity(type: String(describing: PCRoom.self), payload: roomPayload)
         }
 
+        let pushNotificationTitleOverride = roomPayload["push_notification_title_override"] as? String? ?? nil
+
         var memberUserIDsSet: Set<String>?
 
         if let memberUserIDs = roomPayload["member_user_ids"] as? [String] {
@@ -76,6 +78,7 @@ struct PCPayloadDeserializer {
         return PCRoom(
             id: roomID,
             name: roomName,
+            pushNotificationTitleOverride: pushNotificationTitleOverride,
             isPrivate: isPrivate,
             createdByUserID: roomCreatorUserID,
             createdAt: roomCreatedAt,
