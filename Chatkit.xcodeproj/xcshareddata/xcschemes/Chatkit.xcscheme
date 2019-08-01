@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "229093D422F1DDB4003DDE2C"
-               BuildableName = "Chatkit.framework"
+               BuildableName = "PusherChatkit.framework"
                BlueprintName = "Chatkit"
                ReferencedContainer = "container:Chatkit.xcodeproj">
             </BuildableReference>
@@ -55,7 +55,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "229093D422F1DDB4003DDE2C"
-            BuildableName = "Chatkit.framework"
+            BuildableName = "PusherChatkit.framework"
             BlueprintName = "Chatkit"
             ReferencedContainer = "container:Chatkit.xcodeproj">
          </BuildableReference>
@@ -78,7 +78,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "229093D422F1DDB4003DDE2C"
-            BuildableName = "Chatkit.framework"
+            BuildableName = "PusherChatkit.framework"
             BlueprintName = "Chatkit"
             ReferencedContainer = "container:Chatkit.xcodeproj">
          </BuildableReference>
@@ -96,7 +96,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "229093D422F1DDB4003DDE2C"
-            BuildableName = "Chatkit.framework"
+            BuildableName = "PusherChatkit.framework"
             BlueprintName = "Chatkit"
             ReferencedContainer = "container:Chatkit.xcodeproj">
          </BuildableReference>

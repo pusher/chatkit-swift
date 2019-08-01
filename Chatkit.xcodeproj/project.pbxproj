@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2244FC2F22F2FBD900FE8D50 /* TokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2244FC2E22F2FBD900FE8D50 /* TokenProvider.swift */; };
 		224B803D22F1E009003CB8DC /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229093D522F1DDB4003DDE2C /* PusherChatkit.framework */; };
 		224B804C22F1E028003CB8DC /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229093D522F1DDB4003DDE2C /* PusherChatkit.framework */; };
+		224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805822F2DADC003CB8DC /* Chatkit.swift */; };
+		224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */; };
 		229093DA22F1DDB4003DDE2C /* PusherChatkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 229093D822F1DDB4003DDE2C /* PusherChatkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -30,10 +33,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2244FC2E22F2FBD900FE8D50 /* TokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenProvider.swift; sourceTree = "<group>"; };
 		224B803822F1E009003CB8DC /* Unit Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		224B803C22F1E009003CB8DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		224B804722F1E028003CB8DC /* Integration Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Integration Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		224B804B22F1E028003CB8DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		224B805822F2DADC003CB8DC /* Chatkit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chatkit.swift; sourceTree = "<group>"; };
+		224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatkitTests.swift; sourceTree = "<group>"; };
 		229093D522F1DDB4003DDE2C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229093D822F1DDB4003DDE2C /* PusherChatkit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PusherChatkit.h; sourceTree = "<group>"; };
 		229093D922F1DDB4003DDE2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -66,10 +72,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2244FC2D22F2FBC600FE8D50 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				2244FC2E22F2FBD900FE8D50 /* TokenProvider.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		224B803922F1E009003CB8DC /* Unit Tests */ = {
 			isa = PBXGroup;
 			children = (
+				2244FC2D22F2FBC600FE8D50 /* Helpers */,
 				224B805322F1E15C003CB8DC /* Supporting Files */,
+				224B805A22F2E0B1003CB8DC /* Tests */,
 			);
 			path = "Unit Tests";
 			sourceTree = "<group>";
@@ -107,6 +123,22 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		224B805722F2DAD3003CB8DC /* Chatkit */ = {
+			isa = PBXGroup;
+			children = (
+				224B805822F2DADC003CB8DC /* Chatkit.swift */,
+			);
+			path = Chatkit;
+			sourceTree = "<group>";
+		};
+		224B805A22F2E0B1003CB8DC /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 		229093CB22F1DDB4003DDE2C = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +162,7 @@
 		229093D722F1DDB4003DDE2C /* Chatkit */ = {
 			isa = PBXGroup;
 			children = (
+				224B805722F2DAD3003CB8DC /* Chatkit */,
 				224B805222F1E154003CB8DC /* Supporting Files */,
 			);
 			path = Chatkit;
@@ -156,6 +189,7 @@
 				224B803422F1E009003CB8DC /* Sources */,
 				224B803522F1E009003CB8DC /* Frameworks */,
 				224B803622F1E009003CB8DC /* Resources */,
+				2244FC3022F2FE3600FE8D50 /* Copy Carthage Frameworks */,
 			);
 			buildRules = (
 			);
@@ -174,6 +208,7 @@
 				224B804322F1E028003CB8DC /* Sources */,
 				224B804422F1E028003CB8DC /* Frameworks */,
 				224B804522F1E028003CB8DC /* Resources */,
+				2244FC3122F2FE7F00FE8D50 /* Copy Carthage Frameworks */,
 			);
 			buildRules = (
 			);
@@ -215,12 +250,14 @@
 				TargetAttributes = {
 					224B803722F1E009003CB8DC = {
 						CreatedOnToolsVersion = 10.3;
+						LastSwiftMigration = 1030;
 					};
 					224B804622F1E028003CB8DC = {
 						CreatedOnToolsVersion = 10.3;
 					};
 					229093D422F1DDB4003DDE2C = {
 						CreatedOnToolsVersion = 10.3;
+						LastSwiftMigration = 1030;
 					};
 				};
 			};
@@ -267,11 +304,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		2244FC3022F2FE3600FE8D50 /* Copy Carthage Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				PusherPlatform,
+			);
+			name = "Copy Carthage Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "case \"$PLATFORM_NAME\" in\nmacosx) plat=Mac;;\niphone*) plat=iOS;;\nwatch*) plat=watchOS;;\ntv*) plat=tvOS;;\nappletv*) plat=tvOS;;\n*) echo \"error: Unknown PLATFORM_NAME: $PLATFORM_NAME\"; exit 1;;\nesac\n\nif [[ $plat != \"tvOS\" ]] && [[ $plat != \"watchOS\" ]]\nthen\nexport SCRIPT_INPUT_FILE_$SCRIPT_INPUT_FILE_COUNT=\"PushNotifications\"\nexport SCRIPT_INPUT_FILE_COUNT=$(($SCRIPT_INPUT_FILE_COUNT+1))\nfi\n\nfor (( n = 0; n < SCRIPT_INPUT_FILE_COUNT; n++ )); do\nVAR=SCRIPT_INPUT_FILE_$n\nframework=$(basename \"${!VAR}\")\nexport SCRIPT_INPUT_FILE_$n=\"$SRCROOT\"/Carthage/Build/$plat/\"$framework\".framework\ndone\n\n/usr/local/bin/carthage copy-frameworks || exit\n\nfor (( n = 0; n < SCRIPT_INPUT_FILE_COUNT; n++ )); do\nVAR=SCRIPT_INPUT_FILE_$n\nsource=${!VAR}.dSYM\ndest=${BUILT_PRODUCTS_DIR}/$(basename \"$source\")\nditto \"$source\" \"$dest\" || exit\ndone\n";
+		};
+		2244FC3122F2FE7F00FE8D50 /* Copy Carthage Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				PusherPlatform,
+			);
+			name = "Copy Carthage Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "case \"$PLATFORM_NAME\" in\nmacosx) plat=Mac;;\niphone*) plat=iOS;;\nwatch*) plat=watchOS;;\ntv*) plat=tvOS;;\nappletv*) plat=tvOS;;\n*) echo \"error: Unknown PLATFORM_NAME: $PLATFORM_NAME\"; exit 1;;\nesac\n\nif [[ $plat != \"tvOS\" ]] && [[ $plat != \"watchOS\" ]]\nthen\nexport SCRIPT_INPUT_FILE_$SCRIPT_INPUT_FILE_COUNT=\"PushNotifications\"\nexport SCRIPT_INPUT_FILE_COUNT=$(($SCRIPT_INPUT_FILE_COUNT+1))\nfi\n\nfor (( n = 0; n < SCRIPT_INPUT_FILE_COUNT; n++ )); do\nVAR=SCRIPT_INPUT_FILE_$n\nframework=$(basename \"${!VAR}\")\nexport SCRIPT_INPUT_FILE_$n=\"$SRCROOT\"/Carthage/Build/$plat/\"$framework\".framework\ndone\n\n/usr/local/bin/carthage copy-frameworks || exit\n\nfor (( n = 0; n < SCRIPT_INPUT_FILE_COUNT; n++ )); do\nVAR=SCRIPT_INPUT_FILE_$n\nsource=${!VAR}.dSYM\ndest=${BUILT_PRODUCTS_DIR}/$(basename \"$source\")\nditto \"$source\" \"$dest\" || exit\ndone\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		224B803422F1E009003CB8DC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2244FC2F22F2FBD900FE8D50 /* TokenProvider.swift in Sources */,
+				224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,6 +366,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,6 +458,34 @@
 				DEVELOPMENT_TEAM = H7FL434D9W;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				"FRAMEWORK_SEARCH_PATHS[sdk=appletvos*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=appletvsimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=watchos*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=watchsimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -457,6 +566,34 @@
 				DEVELOPMENT_TEAM = H7FL434D9W;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"FRAMEWORK_SEARCH_PATHS[sdk=appletvos*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=appletvsimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/tvOS",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=watchos*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=watchsimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
