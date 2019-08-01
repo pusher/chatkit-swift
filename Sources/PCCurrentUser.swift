@@ -115,6 +115,7 @@ public final class PCCurrentUser {
     public func createRoom(
         id: String? = nil,
         name: String,
+        pushNotificationTitleOverride: String? = nil,
         isPrivate: Bool = false,
         addUserIDs userIDs: [String]? = nil,
         customData: [String: Any]? = nil,
@@ -128,6 +129,10 @@ public final class PCCurrentUser {
 
         if id != nil {
             roomObject["id"] = id!
+        }
+
+        if pushNotificationTitleOverride != nil {
+            roomObject["push_notification_title_override"] = pushNotificationTitleOverride
         }
 
         if userIDs != nil && userIDs!.count > 0 {
@@ -215,6 +220,11 @@ public final class PCCurrentUser {
         self.addOrRemoveUsers(in: roomID, userIDs: ids, membershipChange: .remove, completionHandler: completionHandler)
     }
 
+    public enum RoomPushNotificationTitle {
+        case Override(String)
+        case NoOverride
+    }
+
     //MARK: Update Room
     /**
      *  Update a room
@@ -228,6 +238,7 @@ public final class PCCurrentUser {
     public func updateRoom(
         _ room: PCRoom,
         name: String? = nil,
+        pushNotificationTitleOverride: RoomPushNotificationTitle? = nil,
         isPrivate: Bool? = nil,
         customData: [String: Any]? = nil,
         completionHandler: @escaping PCErrorCompletionHandler
@@ -235,6 +246,7 @@ public final class PCCurrentUser {
         self.updateRoom(
             roomID: room.id,
             name: name,
+            pushNotificationTitleOverride: pushNotificationTitleOverride,
             isPrivate: isPrivate,
             customData: customData,
             completionHandler: completionHandler
@@ -253,6 +265,7 @@ public final class PCCurrentUser {
     public func updateRoom(
         id: String,
         name: String? = nil,
+        pushNotificationTitleOverride: RoomPushNotificationTitle? = nil,
         isPrivate: Bool? = nil,
         customData: [String: Any]? = nil,
         completionHandler: @escaping PCErrorCompletionHandler
@@ -260,6 +273,7 @@ public final class PCCurrentUser {
         self.updateRoom(
             roomID: id,
             name: name,
+            pushNotificationTitleOverride: pushNotificationTitleOverride,
             isPrivate: isPrivate,
             customData: customData,
             completionHandler: completionHandler
@@ -269,17 +283,28 @@ public final class PCCurrentUser {
     fileprivate func updateRoom(
         roomID: String,
         name: String?,
+        pushNotificationTitleOverride: RoomPushNotificationTitle?,
         isPrivate: Bool?,
         customData: [String: Any]?,
         completionHandler: @escaping PCErrorCompletionHandler
     ) {
-        guard name != nil || isPrivate != nil || customData != nil else {
+        guard name != nil || pushNotificationTitleOverride != nil || isPrivate != nil || customData != nil else {
             completionHandler(nil)
             return
         }
 
         var roomPayload: [String: Any] = [:]
         roomPayload["name"] = name
+
+        if let pnTitleOverride = pushNotificationTitleOverride {
+            switch pnTitleOverride {
+            case .Override(let title):
+                roomPayload["push_notification_title_override"] = title
+            case .NoOverride:
+                roomPayload["push_notification_title_override"] = NSNull() // Forcing `null` to be serialized.
+            }
+        }
+
         roomPayload["private"] = isPrivate
 
         if customData != nil {
