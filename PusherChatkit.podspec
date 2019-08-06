@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.macos.dependency 'PushNotifications', '~> 2.1.2'
 
   s.ios.deployment_target = '10.0'
-  s.macos.deployment_target = '10.11'
-  s.tvos.deployment_target = '9.0'
-  s.watchos.deployment_target = '2.0'
+  s.macos.deployment_target = '10.12'
+  s.tvos.deployment_target = '10.0'
+  s.watchos.deployment_target = '3.0'
 end
