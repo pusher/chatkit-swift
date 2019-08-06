@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/pusher/chatkit-swift/compare/1.8.1...HEAD)
 
-## [1.8.1](https://github.com/pusher/chatkit-swift/compare/1.8.1...1.8.1) - 2019-08-06
+## [1.8.1](https://github.com/pusher/chatkit-swift/compare/1.8.0...1.8.1) - 2019-08-06
 
 ### Fixed
 
