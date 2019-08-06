@@ -9,7 +9,7 @@ We use [Carthage](https://github.com/Carthage/Carthage#installing-carthage) to m
 At the time of writing the dependencies are:
 
 * [`pusher-platform-swift`](https://github.com/pusher/pusher-platform-swift): this is a low(er) level SDK that is shared by all Pusher SDKs that interact with products running on the shared Pusher platform.
-* [`beams-chatkit-swift`](https://github.com/pusher/beams-chatkit-swift): this is a Chatkit-only "fork" of the [Beams Swift SDK](https://github.com/pusher/push-notifications-swift). Once it's possible to we should be using the [Beams Swift SDK](https://github.com/pusher/push-notifications-swift) instead of the Chatkit fork.
+* [`push-notifications-swift`](https://github.com/pusher/push-notifications-swift): this is [Beams Swift SDK](https://www.pusher.com/beams).
 
 Any dependencies that are only required for testing are defined in [`Cartfile.private`](https://github.com/pusher/chatkit-swift/blob/master/Cartfile.private).
 
@@ -50,9 +50,9 @@ Whenever you make a change to a dependency in one of the [`Cartfile`](https://gi
 
 Most dependencies will be used for all platforms that the SDK targets: iOS, macOS, tvOS, and watchOS. However, there are times when you only want a dependency to be included for certain platforms.
 
-The `beams-chatkit-swift` dependency is one such dependency. We only want it to be included for iOS and macOS.
+The `push-notifications-swift` dependency is one such dependency. We only want it to be included for iOS and macOS.
 
-Specifying this in the podspec is [simple enough](https://github.com/pusher/chatkit-swift/blob/3f6bd93a5939480a99b1811cf0a3764c323b5b4b/PusherChatkit.podspec#L15-L16).
+Specifying this in the podspec is [simple enough](https://github.com/pusher/chatkit-swift/blob/master/PusherChatkit.podspec#L15-L16).
 
 However, making this work with Carthage is a bit more involved.
 
