@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.source_files = 'Sources/*.swift'
 
-  s.dependency 'PusherPlatform', '~> 0.7.1'
+  s.dependency 'PusherPlatform', '~> 0.7.2'
   s.ios.dependency 'PushNotifications', '~> 2.1.2'
   s.macos.dependency 'PushNotifications', '~> 2.1.2'
 
