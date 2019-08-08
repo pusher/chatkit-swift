@@ -8,10 +8,10 @@ class ChatkitTests: XCTestCase {
     func testConfiguration() {
         
         let testTokenProvider = TestTokenProvider()
-        let chatkit = Chatkit(instanceLocator: "testInstanceLocator", tokenProvider: testTokenProvider)
+        let chatkit = try? Chatkit(instanceLocator: "testInstanceLocator", tokenProvider: testTokenProvider)
         
-        XCTAssertEqual(chatkit.instanceLocator, "testInstanceLocator")
-        XCTAssertNotNil(chatkit.tokenProvider as? TestTokenProvider)
+        XCTAssertEqual(chatkit?.instanceLocator, "testInstanceLocator")
+        XCTAssertNotNil(chatkit?.tokenProvider as? TestTokenProvider)
     }
     
 }
