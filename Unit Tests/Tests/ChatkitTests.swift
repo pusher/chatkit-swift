@@ -1,17 +1,23 @@
 import XCTest
+import PusherPlatform
 @testable import PusherChatkit
 
 class ChatkitTests: XCTestCase {
     
     //MARK: - Tests
     
-    func testConfiguration() {
-        
-        let testTokenProvider = TestTokenProvider()
-        let chatkit = try? Chatkit(instanceLocator: "testInstanceLocator", tokenProvider: testTokenProvider)
+    func testShouldSetRequiredConfiguration() {
+        let chatkit = try? Chatkit(instanceLocator: "testInstanceLocator", tokenProvider: TestTokenProvider(), logger: PPDefaultLogger())
         
         XCTAssertEqual(chatkit?.instanceLocator, "testInstanceLocator")
-        XCTAssertNotNil(chatkit?.tokenProvider as? TestTokenProvider)
+        XCTAssertNotNil(chatkit?.tokenProvider)
+        XCTAssertNotNil(chatkit?.logger)
+    }
+    
+    func testShouldNotSetLoggerByDefault() {
+        let chatkit = try? Chatkit(instanceLocator: "testInstanceLocator", tokenProvider: TestTokenProvider())
+        
+        XCTAssertNil(chatkit?.logger)
     }
     
 }
