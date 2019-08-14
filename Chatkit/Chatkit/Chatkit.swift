@@ -10,6 +10,10 @@ public class Chatkit {
     public let tokenProvider: PPTokenProvider
     public let logger: Logger?
     
+    public let roomProvider: RoomProvider
+    public let userProvider: UserProvider
+    public let messageProvider: MessageProvider
+    
     private let persistenceController: PersistenceController
     
     // MARK: - Initializers
@@ -30,6 +34,10 @@ public class Chatkit {
                 logger?.log("Failed to load persistent stores with error: \(error.localizedDescription).", logLevel: .error)
             }
         }
+        
+        self.roomProvider = RoomProvider(persistenceController: self.persistenceController)
+        self.userProvider = UserProvider(persistenceController: self.persistenceController)
+        self.messageProvider = MessageProvider(persistenceController: self.persistenceController)
     }
     
 }
