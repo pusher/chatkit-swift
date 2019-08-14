@@ -4,7 +4,7 @@ import PusherPlatform
 
 public class Chatkit {
     
-    //MARK: - Properties
+    // MARK: - Properties
     
     public let instanceLocator: String
     public let tokenProvider: PPTokenProvider
@@ -12,7 +12,7 @@ public class Chatkit {
     
     private let persistenceController: PersistenceController
     
-    //MARK: - Initializers
+    // MARK: - Initializers
     
     public init(instanceLocator: String, tokenProvider: PPTokenProvider, logger: Logger? = nil) throws {
         self.instanceLocator = instanceLocator

@@ -4,7 +4,7 @@ import PusherPlatform
 
 class ChatkitTests: XCTestCase {
     
-    //MARK: - Tests
+    // MARK: - Tests
     
     func testShouldSetRequiredConfiguration() {
         let chatkit = try? Chatkit(instanceLocator: "testInstanceLocator", tokenProvider: TestTokenProvider(), logger: PPDefaultLogger())
