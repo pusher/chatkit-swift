@@ -10,8 +10,8 @@ class ChatkitTests: XCTestCase {
         let chatkit = try? Chatkit(instanceLocator: "testInstanceLocator", tokenProvider: TestTokenProvider(), logger: PPDefaultLogger())
         
         XCTAssertEqual(chatkit?.instanceLocator, "testInstanceLocator")
-        XCTAssertNotNil(chatkit?.tokenProvider)
-        XCTAssertNotNil(chatkit?.logger)
+        XCTAssertTrue(chatkit?.tokenProvider is TestTokenProvider)
+        XCTAssertTrue(chatkit?.logger is PPDefaultLogger)
     }
     
     func testShouldNotSetLoggerByDefault() {
