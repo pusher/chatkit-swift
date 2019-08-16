@@ -8,6 +8,6 @@ protocol Snapshotable {
     
     // MARK: - Methods
     
-    func snapshot() -> Snapshot
+    func snapshot() throws -> Snapshot
     
 }

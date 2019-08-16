@@ -29,7 +29,12 @@ class Store<T: NSManagedObject & Snapshotable> {
             object = context.fetch(T.self, sortDescriptors: sortDescriptors, predicate: predicate)
         }
         
-        return object?.snapshot()
+        if let object = object {
+            return try? object.snapshot()
+        }
+        else {
+            return nil
+        }
     }
     
     func objects(for predicate: NSPredicate? = nil, orderedBy sortDescriptors: [NSSortDescriptor]? = nil) -> [T.Snapshot]? {
@@ -41,7 +46,7 @@ class Store<T: NSManagedObject & Snapshotable> {
         }
         
         if let objects = objects {
-            return objects.map { $0.snapshot() }
+            return objects.compactMap { try? $0.snapshot() }
         }
         else {
             return nil

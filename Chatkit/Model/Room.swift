@@ -1,4 +1,9 @@
 import Foundation
 
-public struct Room: Model {
+public struct Room {
+}
+
+// MARK: - Model
+
+extension Room: Model {
 }

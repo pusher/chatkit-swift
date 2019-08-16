@@ -1,4 +1,9 @@
 import Foundation
 
-public struct Message: Model {
+public struct Message {
+}
+
+// MARK: - Model
+
+extension Message: Model {
 }

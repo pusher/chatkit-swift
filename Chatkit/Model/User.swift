@@ -1,4 +1,9 @@
 import Foundation
 
-public struct User: Model {
+public struct User {
+}
+
+// MARK: - Model
+
+extension User: Model {
 }

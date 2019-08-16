@@ -29,6 +29,7 @@
 		224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805822F2DADC003CB8DC /* Chatkit.swift */; };
 		224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */; };
 		229093DA22F1DDB4003DDE2C /* PusherChatkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 229093D822F1DDB4003DDE2C /* PusherChatkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22C5F3ED2306B06E009A7383 /* SnapshotError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3EC2306B06E009A7383 /* SnapshotError.swift */; };
 		22CEBB4F22FC5499005CB021 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 22CEBB4D22FC5499005CB021 /* Model.xcdatamodeld */; };
 		22CEBB5522FC6F37005CB021 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEBB5422FC6F37005CB021 /* Types.swift */; };
 		22D537CA2302BCE800A92341 /* RoomProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537C92302BCE800A92341 /* RoomProvider.swift */; };
@@ -89,6 +90,7 @@
 		229093D522F1DDB4003DDE2C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229093D822F1DDB4003DDE2C /* PusherChatkit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PusherChatkit.h; sourceTree = "<group>"; };
 		229093D922F1DDB4003DDE2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		22C5F3EC2306B06E009A7383 /* SnapshotError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotError.swift; sourceTree = "<group>"; };
 		22CEBB4E22FC5499005CB021 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		22CEBB5422FC6F37005CB021 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		22D537C92302BCE800A92341 /* RoomProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomProvider.swift; sourceTree = "<group>"; };
@@ -233,6 +235,14 @@
 			path = Chatkit;
 			sourceTree = "<group>";
 		};
+		22C5F3EA2306B040009A7383 /* Error Handling */ = {
+			isa = PBXGroup;
+			children = (
+				22C5F3EC2306B06E009A7383 /* SnapshotError.swift */,
+			);
+			path = "Error Handling";
+			sourceTree = "<group>";
+		};
 		22CEBB4B22FC5484005CB021 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
@@ -307,6 +317,7 @@
 		22D537DB2302E18700A92341 /* Snapshots */ = {
 			isa = PBXGroup;
 			children = (
+				22C5F3EA2306B040009A7383 /* Error Handling */,
 				22D537DA2302D40400A92341 /* Types */,
 				22D537E52302F57600A92341 /* MessageEntity.swift */,
 				22D537DC2302E19C00A92341 /* RoomEntity.swift */,
@@ -544,6 +555,7 @@
 				22D537CD2302BDD700A92341 /* Store.swift in Sources */,
 				2225769B2305488E00FAFAEC /* InlinePartEntity+CoreDataClass.swift in Sources */,
 				222576A32305488E00FAFAEC /* URLPartEntity+CoreDataProperties.swift in Sources */,
+				22C5F3ED2306B06E009A7383 /* SnapshotError.swift in Sources */,
 				222576982305488E00FAFAEC /* AttachmentPartEntity+CoreDataProperties.swift in Sources */,
 				222576A02305488E00FAFAEC /* URLPartEntity+CoreDataClass.swift in Sources */,
 				22D537D52302D25B00A92341 /* Room.swift in Sources */,
