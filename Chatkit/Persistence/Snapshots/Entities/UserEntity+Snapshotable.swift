@@ -6,9 +6,9 @@ extension UserEntity: Snapshotable {
     
     typealias Snapshot = User
     
-    // MARK: - Methods
+    // MARK: - Internal methods
     
-    func snapshot() -> User {
+    func snapshot() throws -> User {
         // TODO: Implement
         return User()
     }

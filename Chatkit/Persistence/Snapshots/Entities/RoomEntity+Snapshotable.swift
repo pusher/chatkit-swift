@@ -6,9 +6,9 @@ extension RoomEntity: Snapshotable {
     
     typealias Snapshot = Room
     
-    // MARK: - Methods
+    // MARK: - Internal methods
     
-    func snapshot() -> Room {
+    func snapshot() throws -> Room {
         // TODO: Implement
         return Room()
     }

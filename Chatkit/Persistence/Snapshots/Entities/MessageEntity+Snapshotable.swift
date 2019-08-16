@@ -6,9 +6,9 @@ extension MessageEntity: Snapshotable {
     
     typealias Snapshot = Message
     
-    // MARK: - Methods
+    // MARK: - Internal methods
     
-    func snapshot() -> Message {
+    func snapshot() throws -> Message {
         // TODO: Implement
         return Message()
     }
