@@ -1,6 +1,60 @@
 import Foundation
 
 public struct Room {
+    
+    // MARK: - Properties
+    
+    public let identifier: String
+    public let name: String?
+    public let isPrivate: Bool
+    public let creator: User
+    public let members: Set<User>?
+    public let typingMembers: Set<User>?
+    public let unreadCount: Int64
+    public let lastMessage: Message?
+    public let metadata: Metadata?
+    public let createdAt: Date
+    public let updatedAt: Date
+    public let deletedAt: Date?
+    
+    // MARK: - Initializers
+    
+    init(identifier: String, name: String?, isPrivate: Bool, creator: User, members: Set<User>?, typingMembers: Set<User>?, unreadCount: Int64, lastMessage: Message?, metadata: Metadata?, createdAt: Date, updatedAt: Date, deletedAt: Date?) {
+        self.identifier = identifier
+        self.name = name
+        self.isPrivate = isPrivate
+        self.creator = creator
+        self.members = members
+        self.typingMembers = typingMembers
+        self.unreadCount = unreadCount
+        self.lastMessage = lastMessage
+        self.metadata = metadata
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.deletedAt = deletedAt
+    }
+    
+}
+
+// MARK: - Hashable
+
+extension Room: Hashable {
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.identifier)
+    }
+    
+}
+
+// MARK: - Equatable
+
+extension Room: Equatable {
+    
+    public static func == (lhs: Room, rhs: Room) -> Bool {
+        // Metadata is intentionally excluded from this comparison.
+        return lhs.identifier == rhs.identifier && lhs.name == rhs.name && lhs.isPrivate == rhs.isPrivate && lhs.creator == rhs.creator && lhs.members == rhs.members && lhs.typingMembers == rhs.typingMembers && lhs.unreadCount == rhs.unreadCount && lhs.lastMessage == rhs.lastMessage && lhs.createdAt == rhs.createdAt && lhs.updatedAt == rhs.updatedAt && lhs.deletedAt == rhs.deletedAt
+    }
+    
 }
 
 // MARK: - Model

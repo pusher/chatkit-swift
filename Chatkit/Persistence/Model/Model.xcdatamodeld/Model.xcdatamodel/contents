@@ -37,7 +37,6 @@
         <attribute name="deletedAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="identifier" attributeType="String" syncable="YES"/>
         <attribute name="isPrivate" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="lastMessageAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="metadata" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="unreadCount" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -71,7 +70,7 @@
         <element name="InlinePartEntity" positionX="-437.19921875" positionY="550.703125" width="128" height="60"/>
         <element name="MessageEntity" positionX="-258.15234375" positionY="206.734375" width="128" height="165"/>
         <element name="PartEntity" positionX="-258.35546875" positionY="418.3828125" width="128" height="30"/>
-        <element name="RoomEntity" positionX="-257.5234375" positionY="-96.3046875" width="128" height="255"/>
+        <element name="RoomEntity" positionX="-257.5234375" positionY="-96.3046875" width="128" height="240"/>
         <element name="URLPartEntity" positionX="-257.734375" positionY="553.296875" width="128" height="60"/>
         <element name="UserEntity" positionX="16.46484375" positionY="-98.0546875" width="128" height="225"/>
     </elements>
