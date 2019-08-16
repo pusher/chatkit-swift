@@ -36,6 +36,7 @@
 		22C5F3F72306B9FE009A7383 /* AttachmentPartEntity+Snapshotable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3F62306B9FE009A7383 /* AttachmentPartEntity+Snapshotable.swift */; };
 		22C5F3FA2306BDE8009A7383 /* MetadataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3F92306BDE8009A7383 /* MetadataParser.swift */; };
 		22C5F3FD2306BEE0009A7383 /* MetadataParserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3FC2306BEE0009A7383 /* MetadataParserError.swift */; };
+		22C5F3FF2306C7AB009A7383 /* PresenceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3FE2306C7AB009A7383 /* PresenceState.swift */; };
 		22CEBB4F22FC5499005CB021 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 22CEBB4D22FC5499005CB021 /* Model.xcdatamodeld */; };
 		22CEBB5522FC6F37005CB021 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEBB5422FC6F37005CB021 /* Types.swift */; };
 		22D537CA2302BCE800A92341 /* RoomProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537C92302BCE800A92341 /* RoomProvider.swift */; };
@@ -103,6 +104,7 @@
 		22C5F3F62306B9FE009A7383 /* AttachmentPartEntity+Snapshotable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttachmentPartEntity+Snapshotable.swift"; sourceTree = "<group>"; };
 		22C5F3F92306BDE8009A7383 /* MetadataParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataParser.swift; sourceTree = "<group>"; };
 		22C5F3FC2306BEE0009A7383 /* MetadataParserError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataParserError.swift; sourceTree = "<group>"; };
+		22C5F3FE2306C7AB009A7383 /* PresenceState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresenceState.swift; sourceTree = "<group>"; };
 		22CEBB4E22FC5499005CB021 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		22CEBB5422FC6F37005CB021 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		22D537C92302BCE800A92341 /* RoomProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomProvider.swift; sourceTree = "<group>"; };
@@ -336,6 +338,7 @@
 				22D537D32302D25100A92341 /* Types */,
 				22D537D82302D2EB00A92341 /* Message.swift */,
 				22C5F3EE2306B08C009A7383 /* MessagePart.swift */,
+				22C5F3FE2306C7AB009A7383 /* PresenceState.swift */,
 				22D537D42302D25B00A92341 /* Room.swift */,
 				22D537D62302D2CE00A92341 /* User.swift */,
 			);
@@ -627,6 +630,7 @@
 				22D537E82302F57D00A92341 /* MessageProvider.swift in Sources */,
 				22CEBB4F22FC5499005CB021 /* Model.xcdatamodeld in Sources */,
 				22C5F3EF2306B08C009A7383 /* MessagePart.swift in Sources */,
+				22C5F3FF2306C7AB009A7383 /* PresenceState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
