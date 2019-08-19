@@ -15,7 +15,7 @@ extension UserEntity {
     @NSManaged var presenceState: String?
     @NSManaged var updatedAt: Date
     @NSManaged var createdRooms: Set<RoomEntity>?
-    @NSManaged var cursor: Set<CursorEntity>?
+    @NSManaged var cursors: Set<CursorEntity>?
     @NSManaged var messages: NSOrderedSet?
     @NSManaged var room: Set<RoomEntity>?
     @NSManaged var typingInRooms: Set<RoomEntity>?
@@ -39,20 +39,20 @@ extension UserEntity {
     
 }
 
-// MARK: Generated accessors for cursor
+// MARK: Generated accessors for cursors
 extension UserEntity {
     
-    @objc(addCursorObject:)
-    @NSManaged func addToCursor(_ value: CursorEntity)
+    @objc(addCursorsObject:)
+    @NSManaged func addToCursors(_ value: CursorEntity)
     
-    @objc(removeCursorObject:)
-    @NSManaged func removeFromCursor(_ value: CursorEntity)
+    @objc(removeCursorsObject:)
+    @NSManaged func removeFromCursors(_ value: CursorEntity)
     
-    @objc(addCursor:)
-    @NSManaged func addToCursor(_ values: Set<CursorEntity>)
+    @objc(addCursors:)
+    @NSManaged func addToCursors(_ values: Set<CursorEntity>)
     
-    @objc(removeCursor:)
-    @NSManaged func removeFromCursor(_ values: Set<CursorEntity>)
+    @objc(removeCursors:)
+    @NSManaged func removeFromCursors(_ values: Set<CursorEntity>)
     
 }
 

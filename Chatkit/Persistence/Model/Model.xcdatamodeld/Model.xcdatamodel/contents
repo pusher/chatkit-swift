@@ -11,9 +11,9 @@
     </entity>
     <entity name="CursorEntity" representedClassName="CursorEntity" syncable="YES">
         <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="message" maxCount="1" deletionRule="Nullify" destinationEntity="MessageEntity" inverseName="cursor" inverseEntity="MessageEntity" syncable="YES"/>
+        <relationship name="readMessages" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="MessageEntity" inverseName="cursors" inverseEntity="MessageEntity" syncable="YES"/>
         <relationship name="room" maxCount="1" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="cursors" inverseEntity="RoomEntity" syncable="YES"/>
-        <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="cursor" inverseEntity="UserEntity" syncable="YES"/>
+        <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="cursors" inverseEntity="UserEntity" syncable="YES"/>
     </entity>
     <entity name="InlinePartEntity" representedClassName="InlinePartEntity" parentEntity="PartEntity" syncable="YES">
         <attribute name="content" attributeType="String" syncable="YES"/>
@@ -23,7 +23,7 @@
         <attribute name="deletedAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="identifier" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="cursor" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CursorEntity" inverseName="message" inverseEntity="CursorEntity" syncable="YES"/>
+        <relationship name="cursors" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CursorEntity" inverseName="readMessages" inverseEntity="CursorEntity" syncable="YES"/>
         <relationship name="parts" toMany="YES" deletionRule="Cascade" destinationEntity="PartEntity" inverseName="message" inverseEntity="PartEntity" syncable="YES"/>
         <relationship name="room" maxCount="1" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="messages" inverseEntity="RoomEntity" syncable="YES"/>
         <relationship name="sender" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="messages" inverseEntity="UserEntity" syncable="YES"/>
@@ -59,7 +59,7 @@
         <attribute name="presenceState" optional="YES" transient="YES" attributeType="String" syncable="YES"/>
         <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="createdRooms" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="RoomEntity" inverseName="creator" inverseEntity="RoomEntity" syncable="YES"/>
-        <relationship name="cursor" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CursorEntity" inverseName="user" inverseEntity="CursorEntity" syncable="YES"/>
+        <relationship name="cursors" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CursorEntity" inverseName="user" inverseEntity="CursorEntity" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="MessageEntity" inverseName="sender" inverseEntity="MessageEntity" syncable="YES"/>
         <relationship name="room" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="members" inverseEntity="RoomEntity" syncable="YES"/>
         <relationship name="typingInRooms" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="typingMembers" inverseEntity="RoomEntity" syncable="YES"/>

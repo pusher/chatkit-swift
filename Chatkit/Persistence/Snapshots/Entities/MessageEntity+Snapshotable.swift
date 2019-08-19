@@ -11,8 +11,17 @@ extension MessageEntity: Snapshotable {
     func snapshot() throws -> Message {
         let sender = try self.sender.snapshot()
         let parts = try snapshotParts()
+        let readByUsers: Set<User>? = snapshotReadByUsers()
+        let lastReadByUsers: Set<User>? = snapshotLastReadByUsers()
         
-        return Message(identifier: self.identifier, sender: sender, parts: parts, createdAt: self.createdAt, updatedAt: self.updatedAt, deletedAt: self.deletedAt)
+        return Message(identifier: self.identifier,
+                       sender: sender,
+                       parts: parts,
+                       readByUsers: readByUsers,
+                       lastReadByUsers: lastReadByUsers,
+                       createdAt: self.createdAt,
+                       updatedAt: self.updatedAt,
+                       deletedAt: self.deletedAt)
     }
     
     // MARK: - Private methods
@@ -38,6 +47,24 @@ extension MessageEntity: Snapshotable {
         }
         
         return Set(parts)
+    }
+    
+    private func snapshotReadByUsers() -> Set<User>? {
+        guard let cursors = self.cursors else {
+            return nil
+        }
+        
+        let users = cursors.compactMap { try? $0.user.snapshot() }
+        return users.count > 0 ? Set(users) : nil
+    }
+    
+    private func snapshotLastReadByUsers() -> Set<User>? {
+        guard let cursors = self.cursors else {
+            return nil
+        }
+        
+        let users = cursors.compactMap { $0.readMessages.lastObject as? MessageEntity == self ? try? $0.user.snapshot() : nil }
+        return users.count > 0 ? Set(users) : nil
     }
     
 }
