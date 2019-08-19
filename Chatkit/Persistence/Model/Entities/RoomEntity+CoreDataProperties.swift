@@ -20,6 +20,7 @@ extension RoomEntity {
     @NSManaged var members: Set<UserEntity>?
     @NSManaged var messages: NSOrderedSet?
     @NSManaged var typingMembers: Set<UserEntity>?
+    @NSManaged var instance: InstanceEntity
     
 }
 

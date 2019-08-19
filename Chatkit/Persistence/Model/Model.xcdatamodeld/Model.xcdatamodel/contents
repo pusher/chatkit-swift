@@ -18,6 +18,11 @@
     <entity name="InlinePartEntity" representedClassName="InlinePartEntity" parentEntity="PartEntity" syncable="YES">
         <attribute name="content" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="InstanceEntity" representedClassName="InstanceEntity" syncable="YES">
+        <attribute name="locator" attributeType="String" syncable="YES"/>
+        <relationship name="rooms" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="RoomEntity" inverseName="instance" inverseEntity="RoomEntity" syncable="YES"/>
+        <relationship name="users" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UserEntity" inverseName="instance" inverseEntity="UserEntity" syncable="YES"/>
+    </entity>
     <entity name="MessageEntity" representedClassName="MessageEntity" syncable="YES">
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="deletedAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
@@ -43,6 +48,7 @@
         <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="creator" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="createdRooms" inverseEntity="UserEntity" syncable="YES"/>
         <relationship name="cursors" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CursorEntity" inverseName="room" inverseEntity="CursorEntity" syncable="YES"/>
+        <relationship name="instance" maxCount="1" deletionRule="Nullify" destinationEntity="InstanceEntity" inverseName="rooms" inverseEntity="InstanceEntity" syncable="YES"/>
         <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="room" inverseEntity="UserEntity" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="MessageEntity" inverseName="room" inverseEntity="MessageEntity" syncable="YES"/>
         <relationship name="typingMembers" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="typingInRooms" inverseEntity="UserEntity" syncable="YES"/>
@@ -60,6 +66,7 @@
         <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="createdRooms" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="RoomEntity" inverseName="creator" inverseEntity="RoomEntity" syncable="YES"/>
         <relationship name="cursors" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CursorEntity" inverseName="user" inverseEntity="CursorEntity" syncable="YES"/>
+        <relationship name="instance" maxCount="1" deletionRule="Nullify" destinationEntity="InstanceEntity" inverseName="users" inverseEntity="InstanceEntity" syncable="YES"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="MessageEntity" inverseName="sender" inverseEntity="MessageEntity" syncable="YES"/>
         <relationship name="room" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="members" inverseEntity="RoomEntity" syncable="YES"/>
         <relationship name="typingInRooms" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="typingMembers" inverseEntity="RoomEntity" syncable="YES"/>
@@ -70,8 +77,9 @@
         <element name="InlinePartEntity" positionX="-437.19921875" positionY="550.703125" width="128" height="60"/>
         <element name="MessageEntity" positionX="-258.15234375" positionY="206.734375" width="128" height="165"/>
         <element name="PartEntity" positionX="-258.35546875" positionY="418.3828125" width="128" height="30"/>
-        <element name="RoomEntity" positionX="-257.5234375" positionY="-96.3046875" width="128" height="240"/>
+        <element name="RoomEntity" positionX="-257.5234375" positionY="-96.3046875" width="128" height="255"/>
         <element name="URLPartEntity" positionX="-257.734375" positionY="553.296875" width="128" height="60"/>
-        <element name="UserEntity" positionX="16.46484375" positionY="-98.0546875" width="128" height="225"/>
+        <element name="UserEntity" positionX="16.46484375" positionY="-98.0546875" width="128" height="240"/>
+        <element name="InstanceEntity" positionX="-123.609375" positionY="-244.75390625" width="128" height="90"/>
     </elements>
 </model>

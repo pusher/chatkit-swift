@@ -28,6 +28,8 @@
 		224B804C22F1E028003CB8DC /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229093D522F1DDB4003DDE2C /* PusherChatkit.framework */; };
 		224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805822F2DADC003CB8DC /* Chatkit.swift */; };
 		224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */; };
+		224E339E230AEBD9005168E3 /* InstanceEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E339C230AEBD9005168E3 /* InstanceEntity+CoreDataClass.swift */; };
+		224E339F230AEBD9005168E3 /* InstanceEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E339D230AEBD9005168E3 /* InstanceEntity+CoreDataProperties.swift */; };
 		229093DA22F1DDB4003DDE2C /* PusherChatkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 229093D822F1DDB4003DDE2C /* PusherChatkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22C5F3ED2306B06E009A7383 /* SnapshotError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3EC2306B06E009A7383 /* SnapshotError.swift */; };
 		22C5F3EF2306B08C009A7383 /* MessagePart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3EE2306B08C009A7383 /* MessagePart.swift */; };
@@ -94,6 +96,8 @@
 		224B804B22F1E028003CB8DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		224B805822F2DADC003CB8DC /* Chatkit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chatkit.swift; sourceTree = "<group>"; };
 		224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatkitTests.swift; sourceTree = "<group>"; };
+		224E339C230AEBD9005168E3 /* InstanceEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InstanceEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		224E339D230AEBD9005168E3 /* InstanceEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InstanceEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		229093D522F1DDB4003DDE2C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229093D822F1DDB4003DDE2C /* PusherChatkit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PusherChatkit.h; sourceTree = "<group>"; };
 		229093D922F1DDB4003DDE2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -380,6 +384,8 @@
 				222576862305488D00FAFAEC /* CursorEntity+CoreDataProperties.swift */,
 				2225768B2305488E00FAFAEC /* InlinePartEntity+CoreDataClass.swift */,
 				2225768E2305488E00FAFAEC /* InlinePartEntity+CoreDataProperties.swift */,
+				224E339C230AEBD9005168E3 /* InstanceEntity+CoreDataClass.swift */,
+				224E339D230AEBD9005168E3 /* InstanceEntity+CoreDataProperties.swift */,
 				2225768D2305488E00FAFAEC /* MessageEntity+CoreDataClass.swift */,
 				2225768C2305488E00FAFAEC /* MessageEntity+CoreDataProperties.swift */,
 				222576922305488E00FAFAEC /* PartEntity+CoreDataClass.swift */,
@@ -615,8 +621,10 @@
 				222576992305488E00FAFAEC /* CursorEntity+CoreDataClass.swift in Sources */,
 				222576B323055E1900FAFAEC /* RoomEntity+CoreDataProperties.swift in Sources */,
 				224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */,
+				224E339E230AEBD9005168E3 /* InstanceEntity+CoreDataClass.swift in Sources */,
 				22C5F3FA2306BDE8009A7383 /* MetadataParser.swift in Sources */,
 				22D537E42302F2D200A92341 /* UserProvider.swift in Sources */,
+				224E339F230AEBD9005168E3 /* InstanceEntity+CoreDataProperties.swift in Sources */,
 				222576A52305488E00FAFAEC /* PartEntity+CoreDataProperties.swift in Sources */,
 				222576B523055E1900FAFAEC /* RoomEntity+CoreDataClass.swift in Sources */,
 				22D537D72302D2CE00A92341 /* User.swift in Sources */,
