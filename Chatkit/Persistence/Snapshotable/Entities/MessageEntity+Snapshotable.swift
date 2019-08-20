@@ -21,7 +21,8 @@ extension MessageEntity: Snapshotable {
                        lastReadByUsers: lastReadByUsers,
                        createdAt: self.createdAt,
                        updatedAt: self.updatedAt,
-                       deletedAt: self.deletedAt)
+                       deletedAt: self.deletedAt,
+                       objectID: self.objectID)
     }
     
     // MARK: - Private methods

@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-class Store<T: NSManagedObject & Snapshotable> {
+class Store<T: NSManagedObject & Snapshotable & Identifiable> where T.Snapshot: Identifiable {
     
     // MARK: - Properties
     

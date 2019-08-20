@@ -23,7 +23,8 @@ extension UserEntity: Snapshotable {
                     presenceState: presenceState,
                     metadata: metadata,
                     createdAt: self.createdAt,
-                    updatedAt: self.updatedAt)
+                    updatedAt: self.updatedAt,
+                    objectID: self.objectID)
     }
     
 }

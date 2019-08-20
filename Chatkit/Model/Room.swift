@@ -1,4 +1,5 @@
 import Foundation
+import CoreData
 
 public struct Room {
     
@@ -17,9 +18,11 @@ public struct Room {
     public let updatedAt: Date
     public let deletedAt: Date?
     
+    let objectID: NSManagedObjectID
+    
     // MARK: - Initializers
     
-    init(identifier: String, name: String?, isPrivate: Bool, creator: User, members: Set<User>?, typingMembers: Set<User>?, unreadCount: Int64, lastMessage: Message?, metadata: Metadata?, createdAt: Date, updatedAt: Date, deletedAt: Date?) {
+    init(identifier: String, name: String?, isPrivate: Bool, creator: User, members: Set<User>?, typingMembers: Set<User>?, unreadCount: Int64, lastMessage: Message?, metadata: Metadata?, createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
         self.identifier = identifier
         self.name = name
         self.isPrivate = isPrivate
@@ -32,6 +35,7 @@ public struct Room {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
+        self.objectID = objectID
     }
     
 }
@@ -52,7 +56,7 @@ extension Room: Equatable {
     
     public static func == (lhs: Room, rhs: Room) -> Bool {
         // Metadata is intentionally excluded from this comparison.
-        return lhs.identifier == rhs.identifier && lhs.name == rhs.name && lhs.isPrivate == rhs.isPrivate && lhs.creator == rhs.creator && lhs.members == rhs.members && lhs.typingMembers == rhs.typingMembers && lhs.unreadCount == rhs.unreadCount && lhs.lastMessage == rhs.lastMessage && lhs.createdAt == rhs.createdAt && lhs.updatedAt == rhs.updatedAt && lhs.deletedAt == rhs.deletedAt
+        return lhs.identifier == rhs.identifier && lhs.name == rhs.name && lhs.isPrivate == rhs.isPrivate && lhs.creator == rhs.creator && lhs.members == rhs.members && lhs.typingMembers == rhs.typingMembers && lhs.unreadCount == rhs.unreadCount && lhs.lastMessage == rhs.lastMessage && lhs.createdAt == rhs.createdAt && lhs.updatedAt == rhs.updatedAt && lhs.deletedAt == rhs.deletedAt && lhs.objectID == rhs.objectID
     }
     
 }
@@ -60,4 +64,9 @@ extension Room: Equatable {
 // MARK: - Model
 
 extension Room: Model {
+}
+
+// MARK: - Identifiable
+
+extension Room: Identifiable {
 }

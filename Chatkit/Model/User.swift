@@ -1,4 +1,5 @@
 import Foundation
+import CoreData
 
 public struct User {
     
@@ -12,9 +13,11 @@ public struct User {
     public let createdAt: Date
     public let updatedAt: Date
     
+    let objectID: NSManagedObjectID
+    
     // MARK: - Initializers
     
-    init(identifier: String, name: String?, avatar: URL?, presenceState: PresenceState, metadata: Metadata?, createdAt: Date, updatedAt: Date) {
+    init(identifier: String, name: String?, avatar: URL?, presenceState: PresenceState, metadata: Metadata?, createdAt: Date, updatedAt: Date, objectID: NSManagedObjectID) {
         self.identifier = identifier
         self.name = name
         self.avatar = avatar
@@ -22,6 +25,7 @@ public struct User {
         self.metadata = metadata
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        self.objectID = objectID
     }
     
 }
@@ -42,7 +46,7 @@ extension User: Equatable {
     
     public static func == (lhs: User, rhs: User) -> Bool {
         // Metadata is intentionally excluded from this comparison.
-        return lhs.identifier == rhs.identifier && lhs.name == rhs.name && lhs.avatar == rhs.avatar && lhs.presenceState == rhs.presenceState && lhs.createdAt == rhs.createdAt && lhs.updatedAt == rhs.updatedAt
+        return lhs.identifier == rhs.identifier && lhs.name == rhs.name && lhs.avatar == rhs.avatar && lhs.presenceState == rhs.presenceState && lhs.createdAt == rhs.createdAt && lhs.updatedAt == rhs.updatedAt && lhs.objectID == rhs.objectID
     }
     
 }
@@ -50,4 +54,9 @@ extension User: Equatable {
 // MARK: - Model
 
 extension User: Model {
+}
+
+// MARK: - Identifiable
+
+extension User: Identifiable {
 }
