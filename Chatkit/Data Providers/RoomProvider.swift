@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-public class RoomProvider {
+public struct RoomProvider {
     
     // MARK: - Properties
     
@@ -10,8 +10,7 @@ public class RoomProvider {
     // MARK: - Accessors
     
     public var rooms: [Room]? {
-        // TODO: Implement
-        return nil
+        return self.store.objects()
     }
     
     // MARK: - Initializers
@@ -23,18 +22,23 @@ public class RoomProvider {
     // MARK: - Public methods
     
     public func room(with identifier: String) -> Room? {
-        // TODO: Implement
-        return nil
+        let predicate = NSPredicate(format: "%K = %@", #keyPath(RoomEntity.identifier), identifier)
+        return self.store.object(for: predicate)
     }
     
     public func room(for message: Message) -> Room? {
-        // TODO: Implement
-        return nil
+        let predicate = NSPredicate(format: "%@ IN %K", message.objectID, #keyPath(RoomEntity.messages))
+        return self.store.object(for: predicate)
     }
     
     public func rooms(of user: User) -> [Room]? {
-        // TODO: Implement
-        return nil
+        let predicate = NSPredicate(format: "%@ IN %K", user.objectID, #keyPath(RoomEntity.members))
+        return self.store.objects(for: predicate)
+    }
+    
+    public func rooms(createdBy user: User) -> [Room]? {
+        let predicate = NSPredicate(format: "%K == %@", #keyPath(RoomEntity.creator), user.objectID)
+        return self.store.objects(for: predicate)
     }
     
 }
