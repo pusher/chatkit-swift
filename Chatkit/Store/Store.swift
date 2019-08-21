@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-class Store<T: NSManagedObject & Snapshotable & Identifiable> where T.Snapshot: Identifiable {
+struct Store<Entity: NSManagedObject & Snapshotable & Identifiable> where Entity.Snapshot: Identifiable {
     
     // MARK: - Properties
     
@@ -16,41 +16,33 @@ class Store<T: NSManagedObject & Snapshotable & Identifiable> where T.Snapshot: 
     
     // MARK: - Internal methods
     
-//    func object(with identifier: String) -> T.Snapshot? {
-//        let predicate = NSPredicate(format: "%K = %@", "identifier", identifier)
-//        return self.object(for: predicate)
-//    }
-    
-    func object(for predicate: NSPredicate, orderedBy sortDescriptors: [NSSortDescriptor]? = nil) -> T.Snapshot? {
-        var object: T? = nil
+    func object(for predicate: NSPredicate? = nil, orderedBy sortDescriptors: [NSSortDescriptor]? = nil) -> Entity.Snapshot? {
+        var snapshot: Entity.Snapshot? = nil
         let context = self.persistenceController.mainContext
         
         context.performAndWait {
-            object = context.fetch(T.self, sortDescriptors: sortDescriptors, predicate: predicate)
+            if let object = context.fetch(Entity.self, sortDescriptors: sortDescriptors, predicate: predicate) {
+                snapshot = try? object.snapshot()
+            }
         }
         
-        if let object = object {
-            return try? object.snapshot()
-        }
-        else {
-            return nil
-        }
+        return snapshot
     }
     
-    func objects(for predicate: NSPredicate? = nil, orderedBy sortDescriptors: [NSSortDescriptor]? = nil) -> [T.Snapshot]? {
-        var objects: [T]? = nil
+    func objects(for predicate: NSPredicate? = nil, orderedBy sortDescriptors: [NSSortDescriptor]? = nil) -> [Entity.Snapshot]? {
+        var snapshots: [Entity.Snapshot]? = nil
         let context = self.persistenceController.mainContext
         
         context.performAndWait {
-            objects = context.fetchAll(T.self, sortDescriptors: sortDescriptors, predicate: predicate)
+            let objects = context.fetchAll(Entity.self, sortDescriptors: sortDescriptors, predicate: predicate)
+            snapshots = objects.compactMap { try? $0.snapshot() }
         }
         
-        if let objects = objects {
-            return objects.compactMap { try? $0.snapshot() }
-        }
-        else {
+        guard let result = snapshots, result.count > 0 else {
             return nil
         }
+        
+        return result
     }
     
 }
