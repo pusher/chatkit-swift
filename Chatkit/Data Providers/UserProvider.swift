@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-public class UserProvider {
+public struct UserProvider {
     
     // MARK: - Properties
     
@@ -22,13 +22,13 @@ public class UserProvider {
     // MARK: - Public methods
     
     public func user(with identifier: String) -> User? {
-        // TODO: Implement
-        return nil
+        let predicate = NSPredicate(format: "%K = %@", #keyPath(UserEntity.identifier), identifier)
+        return self.store.object(for: predicate)
     }
     
     public func users(sharingRoomWith user: User) -> [User]? {
-        // TODO: Implement
-        return nil
+        let predicate = NSPredicate(format: "ANY %K IN SUBQUERY(%K, $room, %@ IN $room.%K) AND SELF != %@", #keyPath(UserEntity.room), #keyPath(UserEntity.room), user.objectID, #keyPath(RoomEntity.members), user.objectID)
+        return self.store.objects(for: predicate)
     }
     
 }
