@@ -6,6 +6,12 @@ extension AttachmentPartEntity: Snapshotable {
     
     typealias Snapshot = MessagePart
     
+    // MARK: - Properties
+    
+    static var prefetchedRelationships: [String]? {
+        return nil
+    }
+    
     // MARK: - Internal methods
     
     func snapshot() throws -> MessagePart {

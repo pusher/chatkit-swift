@@ -6,6 +6,12 @@ extension UserEntity: Snapshotable {
     
     typealias Snapshot = User
     
+    // MARK: - Properties
+    
+    static var prefetchedRelationships: [String]? {
+        return nil
+    }
+    
     // MARK: - Internal methods
     
     func snapshot() throws -> User {

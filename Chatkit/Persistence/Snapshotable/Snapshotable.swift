@@ -6,6 +6,10 @@ protocol Snapshotable {
     
     associatedtype Snapshot: Model
     
+    // MARK: - Properties
+    
+    static var prefetchedRelationships: [String]? { get }
+    
     // MARK: - Methods
     
     func snapshot() throws -> Snapshot

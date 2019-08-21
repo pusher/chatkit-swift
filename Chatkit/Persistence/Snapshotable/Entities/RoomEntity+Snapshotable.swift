@@ -6,11 +6,31 @@ extension RoomEntity: Snapshotable {
     
     typealias Snapshot = Room
     
+    // MARK: - Properties
+    
+    static var prefetchedRelationships: [String]? {
+        return [#keyPath(RoomEntity.creator),
+                #keyPath(RoomEntity.members),
+                #keyPath(RoomEntity.typingMembers),
+                #keyPath(RoomEntity.lastMessage),
+                #keyPath(RoomEntity.lastMessage.sender),
+                #keyPath(RoomEntity.lastMessage.parts),
+                #keyPath(RoomEntity.lastMessage.cursors),
+                #keyPath(RoomEntity.lastMessage.cursors.user),
+                #keyPath(RoomEntity.lastMessage.cursors.readMessages)]
+    }
+    
+    // MARK: - Accessors
+    
+    @objc var lastMessage: MessageEntity? {
+        return self.messages?.lastObject as? MessageEntity
+    }
+    
     // MARK: - Internal methods
     
     func snapshot() throws -> Room {
         let creator = try self.creator.snapshot()
-        let lastMessage = self.messages?.lastObject as? Message
+        let lastMessage = (try? self.lastMessage?.snapshot()) ?? nil
         let members = snapshot(self.members)
         let typingMembers = snapshot(self.typingMembers)
         let metadata = (try? MetadataParser.deserialize(data: self.metadata)) ?? nil

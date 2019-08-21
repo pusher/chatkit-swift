@@ -6,6 +6,16 @@ extension MessageEntity: Snapshotable {
     
     typealias Snapshot = Message
     
+    // MARK: - Properties
+    
+    static var prefetchedRelationships: [String]? {
+        return [#keyPath(MessageEntity.sender),
+                #keyPath(MessageEntity.parts),
+                #keyPath(MessageEntity.cursors),
+                #keyPath(MessageEntity.cursors.user),
+                #keyPath(MessageEntity.cursors.readMessages)]
+    }
+    
     // MARK: - Internal methods
     
     func snapshot() throws -> Message {
