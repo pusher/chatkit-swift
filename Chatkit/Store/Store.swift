@@ -21,7 +21,7 @@ struct Store<Entity: NSManagedObject & Snapshotable & Identifiable> where Entity
         let context = self.persistenceController.mainContext
         
         context.performAndWait {
-            if let object = context.fetch(Entity.self, sortDescriptors: sortDescriptors, predicate: predicate) {
+            if let object = context.fetch(Entity.self, sortedBy: sortDescriptors, filteredBy: predicate) {
                 snapshot = try? object.snapshot()
             }
         }
@@ -34,7 +34,7 @@ struct Store<Entity: NSManagedObject & Snapshotable & Identifiable> where Entity
         let context = self.persistenceController.mainContext
         
         context.performAndWait {
-            let objects = context.fetchAll(Entity.self, sortDescriptors: sortDescriptors, predicate: predicate)
+            let objects = context.fetchAll(Entity.self, sortedBy: sortDescriptors, filteredBy: predicate)
             snapshots = objects.compactMap { try? $0.snapshot() }
         }
         
