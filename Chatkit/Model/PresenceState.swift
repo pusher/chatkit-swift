@@ -9,7 +9,7 @@ public enum PresenceState {
     // MARK: - Initializers
     
     init(state: String?) {
-        switch state {
+        switch state?.lowercased() {
         case "offline":
             self = .offline
             
