@@ -58,16 +58,24 @@ extension MessagePart: Equatable {
         switch (lhs, rhs) {
         case (let .text(lhsMIMEType, lhsContent),
               let .text(rhsMIMEType, rhsContent)):
-            return lhsMIMEType == rhsMIMEType && lhsContent == rhsContent
+            return lhsMIMEType == rhsMIMEType
+                && lhsContent == rhsContent
             
         case (let .link(lhsMIMEType, lhsURL),
               let .link(rhsMIMEType, rhsURL)):
-            return lhsMIMEType == rhsMIMEType && lhsURL == rhsURL
+            return lhsMIMEType == rhsMIMEType
+                && lhsURL == rhsURL
             
         case (let .attachment(lhsMIMEType, lhsIdentifier, lhsDownloadURL, lhsRefreshURL, lhsSize, lhsExpiration, lhsName, _),
               let .attachment(rhsMIMEType, rhsIdentifier, rhsDownloadURL, rhsRefreshURL, rhsSize, rhsExpiration, rhsName, _)):
             // Metadata is intentionally excluded from this comparison.
-            return lhsMIMEType == rhsMIMEType && lhsIdentifier == rhsIdentifier && lhsDownloadURL == rhsDownloadURL && lhsRefreshURL == rhsRefreshURL && lhsSize == rhsSize && lhsExpiration == rhsExpiration && lhsName == rhsName
+            return lhsMIMEType == rhsMIMEType
+                && lhsIdentifier == rhsIdentifier
+                && lhsDownloadURL == rhsDownloadURL
+                && lhsRefreshURL == rhsRefreshURL
+                && lhsSize == rhsSize
+                && lhsExpiration == rhsExpiration
+                && lhsName == rhsName
             
         default:
             return false
