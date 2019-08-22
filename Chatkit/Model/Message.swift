@@ -45,7 +45,15 @@ extension Message: Hashable {
 extension Message: Equatable {
     
     public static func == (lhs: Message, rhs: Message) -> Bool {
-        return lhs.identifier == rhs.identifier && lhs.sender == rhs.sender && lhs.parts == rhs.parts && lhs.readByUsers == rhs.readByUsers && lhs.lastReadByUsers == rhs.lastReadByUsers && lhs.createdAt == rhs.createdAt && lhs.updatedAt == rhs.updatedAt && lhs.deletedAt == rhs.deletedAt && lhs.objectID == rhs.objectID
+        return lhs.identifier == rhs.identifier
+            && lhs.sender == rhs.sender
+            && lhs.parts == rhs.parts
+            && lhs.readByUsers == rhs.readByUsers
+            && lhs.lastReadByUsers == rhs.lastReadByUsers
+            && lhs.createdAt == rhs.createdAt
+            && lhs.updatedAt == rhs.updatedAt
+            && lhs.deletedAt == rhs.deletedAt
+            && lhs.objectID == rhs.objectID
     }
     
 }

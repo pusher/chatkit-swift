@@ -32,6 +32,7 @@
 		224E339F230AEBD9005168E3 /* InstanceEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E339D230AEBD9005168E3 /* InstanceEntity+CoreDataProperties.swift */; };
 		224E33C0230B07C2005168E3 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E33BF230B07C2005168E3 /* Identifiable.swift */; };
 		228E1D69230D87660014B1A9 /* IdentifiableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D68230D87660014B1A9 /* IdentifiableTests.swift */; };
+		228E1D6D230D9FDC0014B1A9 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */; };
 		229093DA22F1DDB4003DDE2C /* PusherChatkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 229093D822F1DDB4003DDE2C /* PusherChatkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		229A6C8E230BE6F0002997CF /* MessageEntity+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229A6C8D230BE6F0002997CF /* MessageEntity+Identifiable.swift */; };
 		229A6C90230BE744002997CF /* UserEntity+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229A6C8F230BE744002997CF /* UserEntity+Identifiable.swift */; };
@@ -105,6 +106,7 @@
 		224E339D230AEBD9005168E3 /* InstanceEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InstanceEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		224E33BF230B07C2005168E3 /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 		228E1D68230D87660014B1A9 /* IdentifiableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableTests.swift; sourceTree = "<group>"; };
+		228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
 		229093D522F1DDB4003DDE2C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229093D822F1DDB4003DDE2C /* PusherChatkit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PusherChatkit.h; sourceTree = "<group>"; };
 		229093D922F1DDB4003DDE2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 			children = (
 				224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */,
 				228E1D68230D87660014B1A9 /* IdentifiableTests.swift */,
+				228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -606,6 +609,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2244FC2F22F2FBD900FE8D50 /* TokenProvider.swift in Sources */,
+				228E1D6D230D9FDC0014B1A9 /* MessageTests.swift in Sources */,
 				224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */,
 				228E1D69230D87660014B1A9 /* IdentifiableTests.swift in Sources */,
 			);
