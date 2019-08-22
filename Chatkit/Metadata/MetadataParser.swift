@@ -4,17 +4,16 @@ struct MetadataParser {
     
     // MARK: - Public methods
     
-    static func deserialize(data: Data?) throws -> Metadata? {
+    static func deserialize(data: Data?) -> Metadata? {
         guard let data = data else {
             return nil
         }
         
-        do {
-            let metadata = try JSONSerialization.jsonObject(with: data)
-            return metadata as? Metadata ?? nil
-        } catch {
-            throw MetadataParserError.deserializationFailure
+        guard let metadata = try? JSONSerialization.jsonObject(with: data) else {
+            return nil
         }
+        
+        return metadata as? Metadata ?? nil
     }
     
 }

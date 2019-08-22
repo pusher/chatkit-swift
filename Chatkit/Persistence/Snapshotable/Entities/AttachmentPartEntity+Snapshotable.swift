@@ -19,7 +19,7 @@ extension AttachmentPartEntity: Snapshotable {
             throw SnapshotError.snapshotFailure
         }
         
-        let metadata = (try? MetadataParser.deserialize(data: self.metadata)) ?? nil
+        let metadata =  MetadataParser.deserialize(data: self.metadata)
         
         return MessagePart.attachment(self.type, self.identifier, downloadURL, refreshURL, self.size, self.expiration, self.name, metadata)
     }

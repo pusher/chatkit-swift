@@ -33,7 +33,7 @@ extension RoomEntity: Snapshotable {
         let lastMessage = (try? self.lastMessage?.snapshot()) ?? nil
         let members = snapshot(self.members)
         let typingMembers = snapshot(self.typingMembers)
-        let metadata = (try? MetadataParser.deserialize(data: self.metadata)) ?? nil
+        let metadata = MetadataParser.deserialize(data: self.metadata)
         
         return Room(identifier: self.identifier,
                     name: self.name,
