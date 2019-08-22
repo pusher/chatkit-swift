@@ -230,13 +230,37 @@
 		224B805A22F2E0B1003CB8DC /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */,
-				228E1D68230D87660014B1A9 /* IdentifiableTests.swift */,
+				227B8400230EAC3200921E0D /* Chatkit */,
+				227B83FF230EAC2A00921E0D /* Model */,
+				227B8401230EAC3F00921E0D /* Store */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		227B83FF230EAC2A00921E0D /* Model */ = {
+			isa = PBXGroup;
+			children = (
 				227B83FB230E9D7C00921E0D /* MessagePartTests.swift */,
 				228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */,
 				227B83FD230EAA4800921E0D /* PresenceStateTests.swift */,
 			);
-			path = Tests;
+			path = Model;
+			sourceTree = "<group>";
+		};
+		227B8400230EAC3200921E0D /* Chatkit */ = {
+			isa = PBXGroup;
+			children = (
+				224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */,
+			);
+			path = Chatkit;
+			sourceTree = "<group>";
+		};
+		227B8401230EAC3F00921E0D /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				228E1D68230D87660014B1A9 /* IdentifiableTests.swift */,
+			);
+			path = Store;
 			sourceTree = "<group>";
 		};
 		229093CB22F1DDB4003DDE2C = {
