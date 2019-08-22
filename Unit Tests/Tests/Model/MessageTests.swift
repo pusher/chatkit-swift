@@ -10,7 +10,6 @@ class MessageTests: XCTestCase {
     
     var testTextPart: MessagePart!
     var testLinkPart: MessagePart!
-    var testAttachmentPart: MessagePart!
     
     var firstTestUser: User!
     var secondTestUser: User!
@@ -87,7 +86,6 @@ class MessageTests: XCTestCase {
         
         self.testTextPart = .text("text/plain", "test")
         self.testLinkPart = .link("image/png", testURL)
-        self.testAttachmentPart = .attachment("image/jpeg", "testIdentifier", testURL, testURL, 12345, Date.distantFuture, "testName", nil)
     }
     
     // MARK: - Tests
@@ -138,7 +136,7 @@ class MessageTests: XCTestCase {
                                    readByUsers: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
                                    lastReadByUsers: [self.secondTestUser],
                                    createdAt: Date.distantPast,
-                                   updatedAt: self.now,
+                                   updatedAt: Date.distantPast,
                                    deletedAt: Date.distantFuture,
                                    objectID: self.firstTestManagedObjectID)
         

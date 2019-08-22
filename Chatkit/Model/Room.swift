@@ -56,7 +56,18 @@ extension Room: Equatable {
     
     public static func == (lhs: Room, rhs: Room) -> Bool {
         // Metadata is intentionally excluded from this comparison.
-        return lhs.identifier == rhs.identifier && lhs.name == rhs.name && lhs.isPrivate == rhs.isPrivate && lhs.creator == rhs.creator && lhs.members == rhs.members && lhs.typingMembers == rhs.typingMembers && lhs.unreadCount == rhs.unreadCount && lhs.lastMessage == rhs.lastMessage && lhs.createdAt == rhs.createdAt && lhs.updatedAt == rhs.updatedAt && lhs.deletedAt == rhs.deletedAt && lhs.objectID == rhs.objectID
+        return lhs.identifier == rhs.identifier
+            && lhs.name == rhs.name
+            && lhs.isPrivate == rhs.isPrivate
+            && lhs.creator == rhs.creator
+            && lhs.members == rhs.members
+            && lhs.typingMembers == rhs.typingMembers
+            && lhs.unreadCount == rhs.unreadCount
+            && lhs.lastMessage == rhs.lastMessage
+            && lhs.createdAt == rhs.createdAt
+            && lhs.updatedAt == rhs.updatedAt
+            && lhs.deletedAt == rhs.deletedAt
+            && lhs.objectID == rhs.objectID
     }
     
 }
