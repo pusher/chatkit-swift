@@ -36,6 +36,7 @@
 		227B8403230EAC7900921E0D /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8402230EAC7900921E0D /* UserTests.swift */; };
 		227B8405230ECA7400921E0D /* RoomTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8404230ECA7400921E0D /* RoomTests.swift */; };
 		227B8407230ED76400921E0D /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8406230ED76400921E0D /* StoreTests.swift */; };
+		227B840A230EE6C900921E0D /* MetadataParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8409230EE6C900921E0D /* MetadataParserTests.swift */; };
 		228E1D69230D87660014B1A9 /* IdentifiableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D68230D87660014B1A9 /* IdentifiableTests.swift */; };
 		228E1D6D230D9FDC0014B1A9 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */; };
 		229093DA22F1DDB4003DDE2C /* PusherChatkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 229093D822F1DDB4003DDE2C /* PusherChatkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -114,6 +115,7 @@
 		227B8402230EAC7900921E0D /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
 		227B8404230ECA7400921E0D /* RoomTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTests.swift; sourceTree = "<group>"; };
 		227B8406230ED76400921E0D /* StoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTests.swift; sourceTree = "<group>"; };
+		227B8409230EE6C900921E0D /* MetadataParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataParserTests.swift; sourceTree = "<group>"; };
 		228E1D68230D87660014B1A9 /* IdentifiableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableTests.swift; sourceTree = "<group>"; };
 		228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
 		229093D522F1DDB4003DDE2C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -235,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				227B8400230EAC3200921E0D /* Chatkit */,
+				227B8408230EE6B800921E0D /* Metadata */,
 				227B83FF230EAC2A00921E0D /* Model */,
 				227B8401230EAC3F00921E0D /* Store */,
 			);
@@ -268,6 +271,14 @@
 				227B8406230ED76400921E0D /* StoreTests.swift */,
 			);
 			path = Store;
+			sourceTree = "<group>";
+		};
+		227B8408230EE6B800921E0D /* Metadata */ = {
+			isa = PBXGroup;
+			children = (
+				227B8409230EE6C900921E0D /* MetadataParserTests.swift */,
+			);
+			path = Metadata;
 			sourceTree = "<group>";
 		};
 		229093CB22F1DDB4003DDE2C = {
@@ -645,6 +656,7 @@
 				227B83FE230EAA4800921E0D /* PresenceStateTests.swift in Sources */,
 				228E1D69230D87660014B1A9 /* IdentifiableTests.swift in Sources */,
 				227B8407230ED76400921E0D /* StoreTests.swift in Sources */,
+				227B840A230EE6C900921E0D /* MetadataParserTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
