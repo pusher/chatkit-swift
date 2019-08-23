@@ -26,9 +26,4 @@ public struct UserProvider {
         return self.store.object(for: predicate)
     }
     
-    public func users(sharingRoomWith user: User) -> [User]? {
-        let predicate = NSPredicate(format: "ANY %K IN SUBQUERY(%K, $room, %@ IN $room.%K) AND SELF != %@", #keyPath(UserEntity.room), #keyPath(UserEntity.room), user.objectID, #keyPath(RoomEntity.members), user.objectID)
-        return self.store.objects(for: predicate)
-    }
-    
 }

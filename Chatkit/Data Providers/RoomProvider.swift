@@ -31,14 +31,4 @@ public struct RoomProvider {
         return self.store.object(for: predicate)
     }
     
-    public func rooms(of user: User) -> [Room]? {
-        let predicate = NSPredicate(format: "%@ IN %K", user.objectID, #keyPath(RoomEntity.members))
-        return self.store.objects(for: predicate)
-    }
-    
-    public func rooms(createdBy user: User) -> [Room]? {
-        let predicate = NSPredicate(format: "%K == %@", #keyPath(RoomEntity.creator), user.objectID)
-        return self.store.objects(for: predicate)
-    }
-    
 }
