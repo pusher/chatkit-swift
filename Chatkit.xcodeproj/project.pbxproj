@@ -54,6 +54,8 @@
 		22CEBB5522FC6F37005CB021 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEBB5422FC6F37005CB021 /* Types.swift */; };
 		22D2A2D2231961060095757C /* PPSDKInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2D1231961060095757C /* PPSDKInfo+Extensions.swift */; };
 		22D2A2D5231963C70095757C /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2D4231963C70095757C /* Bundle+Extensions.swift */; };
+		22D2A2D823196B9F0095757C /* PCBaseClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2D723196B9F0095757C /* PCBaseClient+Extensions.swift */; };
+		22D2A2DB23196FDE0095757C /* NetworkingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2DA23196FDE0095757C /* NetworkingError.swift */; };
 		22D2A2EF2319BA520095757C /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2EE2319BA520095757C /* DataProvider.swift */; };
 		22D537CA2302BCE800A92341 /* RoomProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537C92302BCE800A92341 /* RoomProvider.swift */; };
 		22D537CD2302BDD700A92341 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537CC2302BDD700A92341 /* Store.swift */; };
@@ -138,6 +140,8 @@
 		22CEBB5422FC6F37005CB021 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		22D2A2D1231961060095757C /* PPSDKInfo+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PPSDKInfo+Extensions.swift"; sourceTree = "<group>"; };
 		22D2A2D4231963C70095757C /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
+		22D2A2D723196B9F0095757C /* PCBaseClient+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PCBaseClient+Extensions.swift"; sourceTree = "<group>"; };
+		22D2A2DA23196FDE0095757C /* NetworkingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingError.swift; sourceTree = "<group>"; };
 		22D2A2EE2319BA520095757C /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		22D537C92302BCE800A92341 /* RoomProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomProvider.swift; sourceTree = "<group>"; };
 		22D537CC2302BDD700A92341 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
@@ -401,6 +405,8 @@
 		22D2A2CD231960770095757C /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				22D2A2D623196B940095757C /* Client */,
+				22D2A2D923196FC60095757C /* Error Handling */,
 				22D2A2CE231960820095757C /* SDK Info */,
 			);
 			path = Networking;
@@ -420,6 +426,22 @@
 				22D2A2D4231963C70095757C /* Bundle+Extensions.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		22D2A2D623196B940095757C /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				22D2A2D723196B9F0095757C /* PCBaseClient+Extensions.swift */,
+			);
+			path = Client;
+			sourceTree = "<group>";
+		};
+		22D2A2D923196FC60095757C /* Error Handling */ = {
+			isa = PBXGroup;
+			children = (
+				22D2A2DA23196FDE0095757C /* NetworkingError.swift */,
+			);
+			path = "Error Handling";
 			sourceTree = "<group>";
 		};
 		22D2A2ED2319BA450095757C /* Types */ = {
@@ -734,6 +756,7 @@
 				222576A12305488E00FAFAEC /* AttachmentPartEntity+CoreDataClass.swift in Sources */,
 				222576B423055E1900FAFAEC /* UserEntity+CoreDataProperties.swift in Sources */,
 				222576962305488E00FAFAEC /* CursorEntity+CoreDataProperties.swift in Sources */,
+				22D2A2D823196B9F0095757C /* PCBaseClient+Extensions.swift in Sources */,
 				2225769C2305488E00FAFAEC /* MessageEntity+CoreDataProperties.swift in Sources */,
 				22C5F3F52306B9F9009A7383 /* URLPartEntity+Snapshotable.swift in Sources */,
 				222576992305488E00FAFAEC /* CursorEntity+CoreDataClass.swift in Sources */,
@@ -760,6 +783,7 @@
 				22CEBB4F22FC5499005CB021 /* Model.xcdatamodeld in Sources */,
 				22C5F3EF2306B08C009A7383 /* MessagePart.swift in Sources */,
 				22C5F3FF2306C7AB009A7383 /* PresenceState.swift in Sources */,
+				22D2A2DB23196FDE0095757C /* NetworkingError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
