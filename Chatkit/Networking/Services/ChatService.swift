@@ -44,8 +44,19 @@ class ChatService: Service {
     
     // MARK: - Internal methods
     
-    func subscribe() {
-        self.instance.subscribeWithResume(with: &self.resumableSubscription, using: self.requestOptions, onEvent: { [weak self] _, _, jsonObject in
+    func subscribe(completionHandler: CompletionHandler? = nil) {
+        self.instance.subscribeWithResume(with: &self.resumableSubscription, using: self.requestOptions, onOpen: { [weak self] in
+            guard let self = self else {
+                return
+            }
+            
+            self.resumableSubscription.onOpen = nil
+            self.resumableSubscription.onError = nil
+            
+            if let completionHandler = completionHandler {
+                completionHandler(nil)
+            }
+        }, onEvent: { [weak self] _, _, jsonObject in
             guard let self = self, let event = Event(with: jsonObject) else {
                 return
             }
@@ -57,6 +68,14 @@ class ChatService: Service {
             }
             
             self.logger.log("Chat service subscription failed with error: \(error.localizedDescription)", logLevel: .warning)
+            
+            self.resumableSubscription.onOpen = nil
+            self.resumableSubscription.onError = nil
+            self.resumableSubscription.end()
+            
+            if let completionHandler = completionHandler {
+                completionHandler(error)
+            }
         })
     }
     

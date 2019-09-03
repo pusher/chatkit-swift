@@ -56,8 +56,8 @@ public class Chatkit {
     
     // MARK: - Public methods
     
-    public func connect() {
-        self.networkingController.connect()
+    public func connect(completionHandler: CompletionHandler? = nil) {
+        self.networkingController.connect(completionHandler: completionHandler)
     }
     
     public func disconnect() {

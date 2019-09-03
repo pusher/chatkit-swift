@@ -37,8 +37,8 @@ class NetworkingController {
     
     // MARK: - Internal methods
     
-    func connect() {
-        self.chatService.subscribe()
+    func connect(completionHandler: CompletionHandler? = nil) {
+        self.chatService.subscribe(completionHandler: completionHandler)
     }
     
     func disconnect() {
