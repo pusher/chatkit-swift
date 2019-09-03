@@ -7,6 +7,7 @@ class NetworkingController {
     
     let instanceLocator: String
     let tokenProvider: PPTokenProvider
+    let eventParser: EventParser
     let logger: PPLogger
     
     let multipurposeService: MultipurposeService
@@ -21,9 +22,10 @@ class NetworkingController {
     
     // MARK: - Initializers
     
-    init(instanceLocator: String, tokenProvider: PPTokenProvider, logger: PPLogger) throws {
+    init(instanceLocator: String, tokenProvider: PPTokenProvider, eventParser: EventParser, logger: PPLogger) throws {
         self.instanceLocator = instanceLocator
         self.tokenProvider = tokenProvider
+        self.eventParser = eventParser
         self.logger = logger
         
         let host = try PPBaseClient.host(for: self.instanceLocator)
@@ -50,6 +52,11 @@ class NetworkingController {
 extension NetworkingController: ServiceDelegate {
     
     func service(_ service: Service, didReceiveEvent event: Event) {
+        do {
+            try self.eventParser.parse(event: event)
+        } catch {
+            self.logger.log("Failed to parse event with error: \(error.localizedDescription)", logLevel: .warning)
+        }
     }
     
 }

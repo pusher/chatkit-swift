@@ -29,11 +29,11 @@ extension RoomEntity: Snapshotable {
     // MARK: - Internal methods
     
     func snapshot() throws -> Room {
-        let creator = try self.creator.snapshot()
+        let creator = try self.creator?.snapshot()
         let lastMessage = (try? self.lastMessage?.snapshot()) ?? nil
         let members = snapshot(self.members)
         let typingMembers = snapshot(self.typingMembers)
-        let metadata = MetadataParser.deserialize(data: self.metadata)
+        let metadata = MetadataSerializer.deserialize(data: self.metadata)
         
         return Room(identifier: self.identifier,
                     name: self.name,

@@ -1,8 +1,12 @@
 import Foundation
 
-struct MetadataParser {
+struct MetadataSerializer {
     
     // MARK: - Public methods
+    
+    static func serialize(metadata: Metadata) -> Data? {
+        return try? JSONSerialization.data(withJSONObject: metadata)
+    }
     
     static func deserialize(data: Data?) -> Metadata? {
         guard let data = data else {

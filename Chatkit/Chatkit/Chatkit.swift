@@ -46,7 +46,8 @@ public class Chatkit {
             }
         }
         
-        self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, logger: self.logger)
+        let eventParser = PersistenceEventParser(persistenceController: self.persistenceController, logger: self.logger)
+        self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, eventParser: eventParser, logger: self.logger)
         
         self.roomProvider = RoomProvider(persistenceController: self.persistenceController)
         self.userProvider = UserProvider(persistenceController: self.persistenceController)

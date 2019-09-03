@@ -29,26 +29,20 @@ class StoreTests: XCTestCase {
         self.store = Store(persistenceController: persistenceController)
         
         persistenceController.mainContext.performAndWait {
-            let instanceEntity = persistenceController.mainContext.create(InstanceEntity.self)
-            instanceEntity.locator = "testLocator"
-            
             let firstUserEntity = persistenceController.mainContext.create(UserEntity.self)
             firstUserEntity.identifier = "firstIdentifier"
             firstUserEntity.createdAt = Date()
             firstUserEntity.updatedAt = firstUserEntity.createdAt
-            firstUserEntity.instance = instanceEntity
             
             let secondUserEntity = persistenceController.mainContext.create(UserEntity.self)
             secondUserEntity.identifier = "secondIdentifier"
             secondUserEntity.createdAt = Date()
             secondUserEntity.updatedAt = firstUserEntity.createdAt
-            secondUserEntity.instance = instanceEntity
             
             let thirdUserEntity = persistenceController.mainContext.create(UserEntity.self)
             thirdUserEntity.identifier = "thirdIdentifier"
             thirdUserEntity.createdAt = Date()
             thirdUserEntity.updatedAt = firstUserEntity.createdAt
-            thirdUserEntity.instance = instanceEntity
         }
         
         persistenceController.save()

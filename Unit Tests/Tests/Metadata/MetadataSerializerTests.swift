@@ -1,7 +1,7 @@
 import XCTest
 @testable import PusherChatkit
 
-class MetadataParserTests: XCTestCase {
+class MetadataSerializerTests: XCTestCase {
     
     // MARK: - Tests
     
@@ -16,7 +16,7 @@ class MetadataParserTests: XCTestCase {
             return
         }
         
-        let deserializedMetadata = MetadataParser.deserialize(data: data)
+        let deserializedMetadata = MetadataSerializer.deserialize(data: data)
         
         XCTAssertEqual(deserializedMetadata as? [String : String], sourceMetadata)
     }
@@ -29,7 +29,7 @@ class MetadataParserTests: XCTestCase {
             return
         }
         
-        let deserializedMetadata = MetadataParser.deserialize(data: data)
+        let deserializedMetadata = MetadataSerializer.deserialize(data: data)
         
         XCTAssertNil(deserializedMetadata)
     }
@@ -37,13 +37,13 @@ class MetadataParserTests: XCTestCase {
     func testShouldNotDeserializeMetadataFromDataThatIsNotInJSONFormat() {
         let data = Data(capacity: 1234)
         
-        let deserializedMetadata = MetadataParser.deserialize(data: data)
+        let deserializedMetadata = MetadataSerializer.deserialize(data: data)
         
         XCTAssertNil(deserializedMetadata)
     }
     
     func testShouldReturnNilWhenTryingToDeserializeNil() {
-        let deserializedMetadata = MetadataParser.deserialize(data: nil)
+        let deserializedMetadata = MetadataSerializer.deserialize(data: nil)
         
         XCTAssertNil(deserializedMetadata)
     }

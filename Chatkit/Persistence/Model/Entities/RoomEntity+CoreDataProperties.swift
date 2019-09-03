@@ -12,15 +12,14 @@ extension RoomEntity {
     @NSManaged var identifier: String
     @NSManaged var isPrivate: Bool
     @NSManaged var metadata: Data?
-    @NSManaged var name: String?
+    @NSManaged var name: String
     @NSManaged var unreadCount: Int64
     @NSManaged var updatedAt: Date
-    @NSManaged var creator: UserEntity
+    @NSManaged var creator: UserEntity?
     @NSManaged var cursors: Set<CursorEntity>?
     @NSManaged var members: Set<UserEntity>?
     @NSManaged var messages: NSOrderedSet?
     @NSManaged var typingMembers: Set<UserEntity>?
-    @NSManaged var instance: InstanceEntity
     
 }
 
