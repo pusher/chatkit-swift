@@ -75,6 +75,7 @@
 		22D537E42302F2D200A92341 /* UserProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537E32302F2D200A92341 /* UserProvider.swift */; };
 		22D537E62302F57600A92341 /* MessageEntity+Snapshotable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537E52302F57600A92341 /* MessageEntity+Snapshotable.swift */; };
 		22D537E82302F57D00A92341 /* MessageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537E72302F57D00A92341 /* MessageProvider.swift */; };
+		22EDCB7B231D0FA300419C75 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB7A231D0FA300419C75 /* Event.swift */; };
 		22EDCB80231D2D6D00419C75 /* NetworkingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB7F231D2D6D00419C75 /* NetworkingController.swift */; };
 /* End PBXBuildFile section */
 
@@ -168,6 +169,7 @@
 		22D537E32302F2D200A92341 /* UserProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProvider.swift; sourceTree = "<group>"; };
 		22D537E52302F57600A92341 /* MessageEntity+Snapshotable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageEntity+Snapshotable.swift"; sourceTree = "<group>"; };
 		22D537E72302F57D00A92341 /* MessageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageProvider.swift; sourceTree = "<group>"; };
+		22EDCB7A231D0FA300419C75 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		22EDCB7F231D2D6D00419C75 /* NetworkingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -432,6 +434,7 @@
 				22D2A2E823197E6A0095757C /* Connection Status */,
 				22EDCB7C231D2D4000419C75 /* Controller */,
 				22D2A2D923196FC60095757C /* Error Handling */,
+				22EDCB78231D0F8E00419C75 /* Events */,
 				22D2A2CE231960820095757C /* SDK Info */,
 				22D2A2DE231977DE0095757C /* Services */,
 			);
@@ -581,12 +584,28 @@
 			path = Entities;
 			sourceTree = "<group>";
 		};
+		22EDCB78231D0F8E00419C75 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				22EDCB81231D6C4A00419C75 /* Types */,
+			);
+			path = Events;
+			sourceTree = "<group>";
+		};
 		22EDCB7C231D2D4000419C75 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				22EDCB7F231D2D6D00419C75 /* NetworkingController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		22EDCB81231D6C4A00419C75 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				22EDCB7A231D0FA300419C75 /* Event.swift */,
+			);
+			path = Types;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -832,6 +851,7 @@
 				222576B323055E1900FAFAEC /* RoomEntity+CoreDataProperties.swift in Sources */,
 				224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */,
 				224E339E230AEBD9005168E3 /* InstanceEntity+CoreDataClass.swift in Sources */,
+				22EDCB7B231D0FA300419C75 /* Event.swift in Sources */,
 				22C5F3FA2306BDE8009A7383 /* MetadataParser.swift in Sources */,
 				224E33C0230B07C2005168E3 /* Identifiable.swift in Sources */,
 				229A6C90230BE744002997CF /* UserEntity+Identifiable.swift in Sources */,
