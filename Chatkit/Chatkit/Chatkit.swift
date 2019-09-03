@@ -6,8 +6,6 @@ public class Chatkit {
     
     // MARK: - Properties
     
-    public let instanceLocator: String
-    public let tokenProvider: PPTokenProvider
     public let logger: PPLogger
     
     public let roomProvider: RoomProvider
@@ -15,11 +13,24 @@ public class Chatkit {
     public let messageProvider: MessageProvider
     
     private let persistenceController: PersistenceController
+    private let networkingController: NetworkingController
+    
+    // MARK: - Accessors
+    
+    public var instanceLocator: String {
+        return self.networkingController.instanceLocator
+    }
+    
+    public var tokenProvider: PPTokenProvider {
+        return self.networkingController.tokenProvider
+    }
+    
+    public var connectionStatus: ConnectionStatus {
+        return self.networkingController.connectionStatus
+    }
     
     // MARK: - Initializers
     
-        self.instanceLocator = instanceLocator
-        self.tokenProvider = tokenProvider
     public init(instanceLocator: String, tokenProvider: PPTokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
         self.logger = logger
         
@@ -35,9 +46,21 @@ public class Chatkit {
             }
         }
         
+        self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, logger: self.logger)
+        
         self.roomProvider = RoomProvider(persistenceController: self.persistenceController)
         self.userProvider = UserProvider(persistenceController: self.persistenceController)
         self.messageProvider = MessageProvider(persistenceController: self.persistenceController)
+    }
+    
+    // MARK: - Public methods
+    
+    public func connect() {
+        self.networkingController.connect()
+    }
+    
+    public func disconnect() {
+        self.networkingController.disconnect()
     }
     
 }
