@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-class MultipurposeService: Service {
+class ChatService: Service {
     
     // MARK: - Properties
     
@@ -20,7 +20,7 @@ class MultipurposeService: Service {
         case .open:
             return .connected
             
-        case .opening, .resuming:
+        case .resuming:
             return .connecting
             
         default:
@@ -33,7 +33,7 @@ class MultipurposeService: Service {
     required init(instanceLocator: String, client: PPBaseClient, tokenProvider: PPTokenProvider, logger: PPLogger) {
         self.logger = logger
         self.instance = Instance(locator: instanceLocator,
-                                 serviceName: ServiceName.multipurpose.rawValue,
+                                 serviceName: ServiceName.chat.rawValue,
                                  serviceVersion: ServiceVersion.version6.rawValue,
                                  client: client,
                                  tokenProvider: tokenProvider,
@@ -56,7 +56,7 @@ class MultipurposeService: Service {
                 return
             }
             
-            self.logger.log("Multipurpose service subscription failed with error: \(error.localizedDescription)", logLevel: .warning)
+            self.logger.log("Chat service subscription failed with error: \(error.localizedDescription)", logLevel: .warning)
         })
     }
     

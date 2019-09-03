@@ -10,14 +10,14 @@ class NetworkingController {
     let eventParser: EventParser
     let logger: PPLogger
     
-    let multipurposeService: MultipurposeService
+    let chatService: ChatService
     
     let client: PPBaseClient
     
     // MARK: - Accessors
     
     var connectionStatus: ConnectionStatus {
-        return self.multipurposeService.connectionStatus
+        return self.chatService.connectionStatus
     }
     
     // MARK: - Initializers
@@ -31,18 +31,18 @@ class NetworkingController {
         let host = try PPBaseClient.host(for: self.instanceLocator)
         self.client = PPBaseClient(host: host, sdkInfo: PPSDKInfo.current)
         
-        self.multipurposeService = MultipurposeService(instanceLocator: self.instanceLocator, client: self.client, tokenProvider: self.tokenProvider, logger: logger)
-        self.multipurposeService.delegate = self
+        self.chatService = ChatService(instanceLocator: self.instanceLocator, client: self.client, tokenProvider: self.tokenProvider, logger: logger)
+        self.chatService.delegate = self
     }
     
     // MARK: - Internal methods
     
     func connect() {
-        self.multipurposeService.subscribe()
+        self.chatService.subscribe()
     }
     
     func disconnect() {
-        self.multipurposeService.unsubscribe()
+        self.chatService.unsubscribe()
     }
     
 }

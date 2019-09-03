@@ -59,7 +59,7 @@
 		22D2A2E1231978010095757C /* ServiceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2E0231978010095757C /* ServiceName.swift */; };
 		22D2A2E32319780F0095757C /* ServiceVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2E22319780F0095757C /* ServiceVersion.swift */; };
 		22D2A2E523197AD50095757C /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2E423197AD50095757C /* Service.swift */; };
-		22D2A2E723197B620095757C /* MultipurposeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2E623197B620095757C /* MultipurposeService.swift */; };
+		22D2A2E723197B620095757C /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2E623197B620095757C /* ChatService.swift */; };
 		22D2A2EA23197E7F0095757C /* ConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2E923197E7F0095757C /* ConnectionStatus.swift */; };
 		22D2A2EF2319BA520095757C /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2EE2319BA520095757C /* DataProvider.swift */; };
 		22D537CA2302BCE800A92341 /* RoomProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537C92302BCE800A92341 /* RoomProvider.swift */; };
@@ -153,7 +153,7 @@
 		22D2A2E0231978010095757C /* ServiceName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceName.swift; sourceTree = "<group>"; };
 		22D2A2E22319780F0095757C /* ServiceVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceVersion.swift; sourceTree = "<group>"; };
 		22D2A2E423197AD50095757C /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
-		22D2A2E623197B620095757C /* MultipurposeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipurposeService.swift; sourceTree = "<group>"; };
+		22D2A2E623197B620095757C /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
 		22D2A2E923197E7F0095757C /* ConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStatus.swift; sourceTree = "<group>"; };
 		22D2A2EB2319B60E0095757C /* TokenProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenProvider.swift; sourceTree = "<group>"; };
 		22D2A2EE2319BA520095757C /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
@@ -480,7 +480,7 @@
 			isa = PBXGroup;
 			children = (
 				22D2A2DF231977F20095757C /* Types */,
-				22D2A2E623197B620095757C /* MultipurposeService.swift */,
+				22D2A2E623197B620095757C /* ChatService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -850,7 +850,7 @@
 				22D2A2E523197AD50095757C /* Service.swift in Sources */,
 				222576982305488E00FAFAEC /* AttachmentPartEntity+CoreDataProperties.swift in Sources */,
 				222576A02305488E00FAFAEC /* URLPartEntity+CoreDataClass.swift in Sources */,
-				22D2A2E723197B620095757C /* MultipurposeService.swift in Sources */,
+				22D2A2E723197B620095757C /* ChatService.swift in Sources */,
 				22D2A2E1231978010095757C /* ServiceName.swift in Sources */,
 				22EDCB80231D2D6D00419C75 /* NetworkingController.swift in Sources */,
 				22D537D52302D25B00A92341 /* Room.swift in Sources */,
