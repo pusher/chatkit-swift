@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2200BB8E231E601600BF9545 /* TokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2EB2319B60E0095757C /* TokenProvider.swift */; };
 		222576962305488E00FAFAEC /* CursorEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222576862305488D00FAFAEC /* CursorEntity+CoreDataProperties.swift */; };
 		222576982305488E00FAFAEC /* AttachmentPartEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222576882305488E00FAFAEC /* AttachmentPartEntity+CoreDataProperties.swift */; };
 		222576992305488E00FAFAEC /* CursorEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222576892305488E00FAFAEC /* CursorEntity+CoreDataClass.swift */; };
@@ -153,6 +154,7 @@
 		22D2A2E423197AD50095757C /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		22D2A2E623197B620095757C /* MultipurposeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipurposeService.swift; sourceTree = "<group>"; };
 		22D2A2E923197E7F0095757C /* ConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStatus.swift; sourceTree = "<group>"; };
+		22D2A2EB2319B60E0095757C /* TokenProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenProvider.swift; sourceTree = "<group>"; };
 		22D2A2EE2319BA520095757C /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		22D537C92302BCE800A92341 /* RoomProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomProvider.swift; sourceTree = "<group>"; };
 		22D537CC2302BDD700A92341 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
@@ -196,6 +198,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2200BB8D231E600400BF9545 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				22D2A2EB2319B60E0095757C /* TokenProvider.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		2244FC2D22F2FBC600FE8D50 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -217,6 +227,7 @@
 		224B804822F1E028003CB8DC /* Integration Tests */ = {
 			isa = PBXGroup;
 			children = (
+				2200BB8D231E600400BF9545 /* Helpers */,
 				224B805422F1E163003CB8DC /* Supporting Files */,
 			);
 			path = "Integration Tests";
@@ -778,6 +789,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2200BB8E231E601600BF9545 /* TokenProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
