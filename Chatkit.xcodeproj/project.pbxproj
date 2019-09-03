@@ -56,6 +56,11 @@
 		22D2A2D5231963C70095757C /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2D4231963C70095757C /* Bundle+Extensions.swift */; };
 		22D2A2D823196B9F0095757C /* PCBaseClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2D723196B9F0095757C /* PCBaseClient+Extensions.swift */; };
 		22D2A2DB23196FDE0095757C /* NetworkingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2DA23196FDE0095757C /* NetworkingError.swift */; };
+		22D2A2E1231978010095757C /* ServiceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2E0231978010095757C /* ServiceName.swift */; };
+		22D2A2E32319780F0095757C /* ServiceVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2E22319780F0095757C /* ServiceVersion.swift */; };
+		22D2A2E523197AD50095757C /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2E423197AD50095757C /* Service.swift */; };
+		22D2A2E723197B620095757C /* MultipurposeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2E623197B620095757C /* MultipurposeService.swift */; };
+		22D2A2EA23197E7F0095757C /* ConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2E923197E7F0095757C /* ConnectionStatus.swift */; };
 		22D2A2EF2319BA520095757C /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2EE2319BA520095757C /* DataProvider.swift */; };
 		22D537CA2302BCE800A92341 /* RoomProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537C92302BCE800A92341 /* RoomProvider.swift */; };
 		22D537CD2302BDD700A92341 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537CC2302BDD700A92341 /* Store.swift */; };
@@ -142,6 +147,11 @@
 		22D2A2D4231963C70095757C /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
 		22D2A2D723196B9F0095757C /* PCBaseClient+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PCBaseClient+Extensions.swift"; sourceTree = "<group>"; };
 		22D2A2DA23196FDE0095757C /* NetworkingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingError.swift; sourceTree = "<group>"; };
+		22D2A2E0231978010095757C /* ServiceName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceName.swift; sourceTree = "<group>"; };
+		22D2A2E22319780F0095757C /* ServiceVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceVersion.swift; sourceTree = "<group>"; };
+		22D2A2E423197AD50095757C /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		22D2A2E623197B620095757C /* MultipurposeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipurposeService.swift; sourceTree = "<group>"; };
+		22D2A2E923197E7F0095757C /* ConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStatus.swift; sourceTree = "<group>"; };
 		22D2A2EE2319BA520095757C /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		22D537C92302BCE800A92341 /* RoomProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomProvider.swift; sourceTree = "<group>"; };
 		22D537CC2302BDD700A92341 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
@@ -406,8 +416,10 @@
 			isa = PBXGroup;
 			children = (
 				22D2A2D623196B940095757C /* Client */,
+				22D2A2E823197E6A0095757C /* Connection Status */,
 				22D2A2D923196FC60095757C /* Error Handling */,
 				22D2A2CE231960820095757C /* SDK Info */,
+				22D2A2DE231977DE0095757C /* Services */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -442,6 +454,33 @@
 				22D2A2DA23196FDE0095757C /* NetworkingError.swift */,
 			);
 			path = "Error Handling";
+			sourceTree = "<group>";
+		};
+		22D2A2DE231977DE0095757C /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				22D2A2DF231977F20095757C /* Types */,
+				22D2A2E623197B620095757C /* MultipurposeService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		22D2A2DF231977F20095757C /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				22D2A2E423197AD50095757C /* Service.swift */,
+				22D2A2E0231978010095757C /* ServiceName.swift */,
+				22D2A2E22319780F0095757C /* ServiceVersion.swift */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
+		22D2A2E823197E6A0095757C /* Connection Status */ = {
+			isa = PBXGroup;
+			children = (
+				22D2A2E923197E7F0095757C /* ConnectionStatus.swift */,
+			);
+			path = "Connection Status";
 			sourceTree = "<group>";
 		};
 		22D2A2ED2319BA450095757C /* Types */ = {
@@ -747,10 +786,14 @@
 				2225769B2305488E00FAFAEC /* InlinePartEntity+CoreDataClass.swift in Sources */,
 				222576A32305488E00FAFAEC /* URLPartEntity+CoreDataProperties.swift in Sources */,
 				22C5F3ED2306B06E009A7383 /* SnapshotError.swift in Sources */,
+				22D2A2E523197AD50095757C /* Service.swift in Sources */,
 				222576982305488E00FAFAEC /* AttachmentPartEntity+CoreDataProperties.swift in Sources */,
 				222576A02305488E00FAFAEC /* URLPartEntity+CoreDataClass.swift in Sources */,
+				22D2A2E723197B620095757C /* MultipurposeService.swift in Sources */,
+				22D2A2E1231978010095757C /* ServiceName.swift in Sources */,
 				22D537D52302D25B00A92341 /* Room.swift in Sources */,
 				22CEBB5522FC6F37005CB021 /* Types.swift in Sources */,
+				22D2A2EA23197E7F0095757C /* ConnectionStatus.swift in Sources */,
 				229A6C8E230BE6F0002997CF /* MessageEntity+Identifiable.swift in Sources */,
 				229A6C92230BE74D002997CF /* RoomEntity+Identifiable.swift in Sources */,
 				222576A12305488E00FAFAEC /* AttachmentPartEntity+CoreDataClass.swift in Sources */,
@@ -759,6 +802,7 @@
 				22D2A2D823196B9F0095757C /* PCBaseClient+Extensions.swift in Sources */,
 				2225769C2305488E00FAFAEC /* MessageEntity+CoreDataProperties.swift in Sources */,
 				22C5F3F52306B9F9009A7383 /* URLPartEntity+Snapshotable.swift in Sources */,
+				22D2A2E32319780F0095757C /* ServiceVersion.swift in Sources */,
 				222576992305488E00FAFAEC /* CursorEntity+CoreDataClass.swift in Sources */,
 				22D2A2D5231963C70095757C /* Bundle+Extensions.swift in Sources */,
 				222576B323055E1900FAFAEC /* RoomEntity+CoreDataProperties.swift in Sources */,
