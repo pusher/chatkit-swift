@@ -1,11 +1,11 @@
 import Foundation
 import PusherPlatform
 
-public struct MessageProvider {
+public struct MessageProvider: DataProvider {
     
     // MARK: - Properties
     
-    private let store: Store<MessageEntity>
+    let store: Store<MessageEntity>
     
     // MARK: - Initializers
     

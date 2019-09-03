@@ -1,11 +1,11 @@
 import Foundation
 import PusherPlatform
 
-public struct UserProvider {
+public struct UserProvider: DataProvider {
     
     // MARK: - Properties
     
-    private let store: Store<UserEntity>
+    let store: Store<UserEntity>
     
     // MARK: - Accessors
     
