@@ -23,7 +23,7 @@ public class Chatkit {
     public init(instanceLocator: String, tokenProvider: PPTokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
         self.logger = logger
         
-        guard let model = NSManagedObjectModel.mergedModel(from: [Bundle(for: type(of: self))]) else {
+        guard let model = NSManagedObjectModel.mergedModel(from: [Bundle.current]) else {
             logger.log("Failed to load Chatkit data model.", logLevel: .error)
             throw PersistenceError.objectModelNotFound
         }
