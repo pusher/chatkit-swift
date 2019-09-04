@@ -5,6 +5,9 @@ protocol Service {
     
     // MARK: - Properties
     
+    var name: ServiceName { get }
+    var version: ServiceVersion { get }
+    
     var connectionStatus: ConnectionStatus { get }
     
     var instance: Instance { get }

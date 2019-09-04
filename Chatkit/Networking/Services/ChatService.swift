@@ -5,6 +5,9 @@ class ChatService: Service {
     
     // MARK: - Properties
     
+    let name: ServiceName
+    let version: ServiceVersion
+    
     let instance: Instance
     let logger: PPLogger
     
@@ -31,10 +34,12 @@ class ChatService: Service {
     // MARK: - Initializers
     
     required init(instanceLocator: String, client: PPBaseClient, tokenProvider: PPTokenProvider, logger: PPLogger) {
+        self.name = .chat
+        self.version = .version6
         self.logger = logger
         self.instance = Instance(locator: instanceLocator,
-                                 serviceName: ServiceName.chat.rawValue,
-                                 serviceVersion: ServiceVersion.version6.rawValue,
+                                 serviceName: self.name.rawValue,
+                                 serviceVersion: self.version.rawValue,
                                  client: client,
                                  tokenProvider: tokenProvider,
                                  logger: self.logger)

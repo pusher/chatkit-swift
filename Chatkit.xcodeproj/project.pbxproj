@@ -40,6 +40,7 @@
 		227B840A230EE6C900921E0D /* MetadataSerializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8409230EE6C900921E0D /* MetadataSerializerTests.swift */; };
 		227E946D231FBDAB0025B691 /* chat-initial_state.json in Resources */ = {isa = PBXBuildFile; fileRef = 227E946C231FBDAB0025B691 /* chat-initial_state.json */; };
 		227E946F231FC5950025B691 /* XCTest+Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227E946E231FC5950025B691 /* XCTest+Networking.swift */; };
+		227E947223200DBD0025B691 /* ModularEventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227E947123200DBD0025B691 /* ModularEventParser.swift */; };
 		228E1D69230D87660014B1A9 /* IdentifiableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D68230D87660014B1A9 /* IdentifiableTests.swift */; };
 		228E1D6D230D9FDC0014B1A9 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */; };
 		229093DA22F1DDB4003DDE2C /* PusherChatkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 229093D822F1DDB4003DDE2C /* PusherChatkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -80,7 +81,7 @@
 		22EDCB7B231D0FA300419C75 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB7A231D0FA300419C75 /* Event.swift */; };
 		22EDCB80231D2D6D00419C75 /* NetworkingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB7F231D2D6D00419C75 /* NetworkingController.swift */; };
 		22EDCB84231D6C6000419C75 /* EventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB83231D6C6000419C75 /* EventParser.swift */; };
-		22EDCB87231D762A00419C75 /* PersistenceEventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB86231D762A00419C75 /* PersistenceEventParser.swift */; };
+		22EDCB87231D762A00419C75 /* ChatEventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB86231D762A00419C75 /* ChatEventParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +136,7 @@
 		227B8409230EE6C900921E0D /* MetadataSerializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataSerializerTests.swift; sourceTree = "<group>"; };
 		227E946C231FBDAB0025B691 /* chat-initial_state.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "chat-initial_state.json"; sourceTree = "<group>"; };
 		227E946E231FC5950025B691 /* XCTest+Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+Networking.swift"; sourceTree = "<group>"; };
+		227E947123200DBD0025B691 /* ModularEventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModularEventParser.swift; sourceTree = "<group>"; };
 		228E1D68230D87660014B1A9 /* IdentifiableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableTests.swift; sourceTree = "<group>"; };
 		228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
 		229093D522F1DDB4003DDE2C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,7 +180,7 @@
 		22EDCB7A231D0FA300419C75 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		22EDCB7F231D2D6D00419C75 /* NetworkingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingController.swift; sourceTree = "<group>"; };
 		22EDCB83231D6C6000419C75 /* EventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventParser.swift; sourceTree = "<group>"; };
-		22EDCB86231D762A00419C75 /* PersistenceEventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceEventParser.swift; sourceTree = "<group>"; };
+		22EDCB86231D762A00419C75 /* ChatEventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatEventParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -639,7 +641,8 @@
 			isa = PBXGroup;
 			children = (
 				22EDCB85231D741100419C75 /* Types */,
-				22EDCB86231D762A00419C75 /* PersistenceEventParser.swift */,
+				22EDCB86231D762A00419C75 /* ChatEventParser.swift */,
+				227E947123200DBD0025B691 /* ModularEventParser.swift */,
 			);
 			path = Parsing;
 			sourceTree = "<group>";
@@ -874,6 +877,7 @@
 				22D537DD2302E19C00A92341 /* RoomEntity+Snapshotable.swift in Sources */,
 				22D537CD2302BDD700A92341 /* Store.swift in Sources */,
 				2225769B2305488E00FAFAEC /* InlinePartEntity+CoreDataClass.swift in Sources */,
+				227E947223200DBD0025B691 /* ModularEventParser.swift in Sources */,
 				222576A32305488E00FAFAEC /* URLPartEntity+CoreDataProperties.swift in Sources */,
 				22C5F3ED2306B06E009A7383 /* SnapshotError.swift in Sources */,
 				22D2A2E523197AD50095757C /* Service.swift in Sources */,
@@ -920,7 +924,7 @@
 				22C5F3EF2306B08C009A7383 /* MessagePart.swift in Sources */,
 				22C5F3FF2306C7AB009A7383 /* PresenceState.swift in Sources */,
 				22D2A2DB23196FDE0095757C /* NetworkingError.swift in Sources */,
-				22EDCB87231D762A00419C75 /* PersistenceEventParser.swift in Sources */,
+				22EDCB87231D762A00419C75 /* ChatEventParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

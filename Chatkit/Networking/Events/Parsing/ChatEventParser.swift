@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-struct PersistenceEventParser: EventParser {
+struct ChatEventParser: EventParser {
     
     // MARK: - Properties
     
@@ -18,7 +18,7 @@ struct PersistenceEventParser: EventParser {
     
     // MARK: - Internal methods
     
-    func parse(event: Event) {
+    func parse(event: Event, from service: ServiceName, version: ServiceVersion) {
         switch event.name {
         case .initialState:
             parseInitialState(payload: event.payload)

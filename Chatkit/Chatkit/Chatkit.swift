@@ -46,7 +46,9 @@ public class Chatkit {
             }
         }
         
-        let eventParser = PersistenceEventParser(persistenceController: self.persistenceController, logger: self.logger)
+        let eventParser = ModularEventParser(logger: self.logger)
+        eventParser.register(parser: ChatEventParser(persistenceController: self.persistenceController, logger: self.logger), for: .chat, with: .version6)
+        
         self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, eventParser: eventParser, logger: self.logger)
         
         self.roomProvider = RoomProvider(persistenceController: self.persistenceController)
