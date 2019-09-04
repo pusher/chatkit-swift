@@ -14,7 +14,7 @@ internal extension PPBaseClient {
     class func host(for instanceLocator: String) throws -> String {
         let components = instanceLocator.split(separator: PPBaseClient.instanceLocatorSeparator)
         
-        guard components.count >= 3 else {
+        guard components.count == 3 else {
             throw NetworkingError.invalidInstanceLocator
         }
         

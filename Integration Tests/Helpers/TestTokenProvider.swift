@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-class TokenProvider: PPTokenProvider {
+class TestTokenProvider: PPTokenProvider {
     
     let url: String
     let requestInjector: ((PPHTTPEndpointTokenProviderRequest) -> PPHTTPEndpointTokenProviderRequest)?
@@ -90,6 +90,7 @@ class TokenProvider: PPTokenProvider {
     }
     
     private func pathFriendlyVersion(of component: String) -> String {
+//        return "testToken"
         let allowedCharacterSet = CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[] ").inverted
         // TODO: When can percent encoding fail?
         return component.addingPercentEncoding(withAllowedCharacters: allowedCharacterSet) ?? component

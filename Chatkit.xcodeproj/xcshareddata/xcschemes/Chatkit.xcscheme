@@ -39,6 +39,14 @@
                BlueprintName = "Unit Tests"
                ReferencedContainer = "container:Chatkit.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "ChatkitTests/testShouldBeHaveConnectionStatusSetToDisconnectedAfterUnsuccessfulConnection()">
+               </Test>
+               <Test
+                  Identifier = "ChatkitTests/testShouldReturnErrorAfterUnsuccessfulConnection()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">

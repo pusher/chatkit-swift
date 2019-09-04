@@ -1,0 +1,14 @@
+{
+	"event_name": "initial_state",
+	"data": {
+		"rooms": [],
+		"current_user": {
+			"id": "test",
+			"name": "Test User",
+			"created_at": "2017-04-13T14:10:04Z",
+			"updated_at": "2017-04-13T14:10:04Z"
+		},
+		"cursors": []
+	},
+	"timestamp": "2017-03-23T11:36:42Z"
+}
