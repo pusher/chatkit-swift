@@ -5,7 +5,7 @@ struct MetadataSerializer {
     // MARK: - Public methods
     
     static func serialize(metadata: Metadata) -> Data? {
-        return try? JSONSerialization.data(withJSONObject: metadata)
+        return JSONSerialization.isValidJSONObject(metadata) ? try? JSONSerialization.data(withJSONObject: metadata) : nil
     }
     
     static func deserialize(data: Data?) -> Metadata? {

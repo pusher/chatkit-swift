@@ -5,6 +5,28 @@ class MetadataSerializerTests: XCTestCase {
     
     // MARK: - Tests
     
+    func testShouldSerializeMetadataWithCorrectValues() {
+        let metadata = ["first" : "abc",
+                        "second" : "def",
+                        "third" : "ghi",
+                        "fourth" : "jkl"]
+        
+        let data = MetadataSerializer.serialize(metadata: metadata)
+        
+        XCTAssertNotNil(data)
+    }
+    
+    func testShouldNotSerializeMetadataWithIncorrectValues() {
+        let metadata: Metadata = ["first" : "abc",
+                                  "second" : "def",
+                                  "third" : Date.distantPast,
+                                  "fourth" : "jkl"]
+        
+        let data = MetadataSerializer.serialize(metadata: metadata)
+        
+        XCTAssertNil(data)
+    }
+    
     func testShouldDeserializeMetadataWithCorrectValues() {
         let sourceMetadata = ["first" : "abc",
                               "second" : "def",
@@ -46,6 +68,18 @@ class MetadataSerializerTests: XCTestCase {
         let deserializedMetadata = MetadataSerializer.deserialize(data: nil)
         
         XCTAssertNil(deserializedMetadata)
+    }
+    
+    func testShouldSerializeAndDeserializeTheSameMetadata() {
+        let sourceMetadata = ["first" : "abc",
+                              "second" : "def",
+                              "third" : "ghi",
+                              "fourth" : "jkl"]
+        
+        let data = MetadataSerializer.serialize(metadata: sourceMetadata)
+        let deserializedMetadata = MetadataSerializer.deserialize(data: data) as? [String : String]
+        
+        XCTAssertEqual(deserializedMetadata, sourceMetadata)
     }
     
 }
