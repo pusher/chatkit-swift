@@ -9,6 +9,6 @@ internal extension PPSDKInfo {
     private static let unknownVersion = "unknown"
     
     static let current: PPSDKInfo = PPSDKInfo(productName: PPSDKInfo.productName,
-                                              sdkVersion: Bundle.current.infoDictionary?["CFBundleShortVersionString"] as? String ?? PPSDKInfo.unknownVersion)
+                                              sdkVersion: Bundle.current.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? PPSDKInfo.unknownVersion)
     
 }
