@@ -34,6 +34,7 @@
 		224E33C0230B07C2005168E3 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E33BF230B07C2005168E3 /* Identifiable.swift */; };
 		227498472321028700D10C76 /* DateFormatterExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227498462321028700D10C76 /* DateFormatterExtensionsTests.swift */; };
 		227498492321040100D10C76 /* BundleExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227498482321040100D10C76 /* BundleExtensionsTests.swift */; };
+		2274984C2321098B00D10C76 /* PCBaseClientExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2274984B2321098B00D10C76 /* PCBaseClientExtensionsTests.swift */; };
 		227B83FC230E9D7C00921E0D /* MessagePartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B83FB230E9D7C00921E0D /* MessagePartTests.swift */; };
 		227B83FE230EAA4800921E0D /* PresenceStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B83FD230EAA4800921E0D /* PresenceStateTests.swift */; };
 		227B8403230EAC7900921E0D /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8402230EAC7900921E0D /* UserTests.swift */; };
@@ -132,6 +133,7 @@
 		224E33BF230B07C2005168E3 /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 		227498462321028700D10C76 /* DateFormatterExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterExtensionsTests.swift; sourceTree = "<group>"; };
 		227498482321040100D10C76 /* BundleExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtensionsTests.swift; sourceTree = "<group>"; };
+		2274984B2321098B00D10C76 /* PCBaseClientExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCBaseClientExtensionsTests.swift; sourceTree = "<group>"; };
 		227B83FB230E9D7C00921E0D /* MessagePartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePartTests.swift; sourceTree = "<group>"; };
 		227B83FD230EAA4800921E0D /* PresenceStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenceStateTests.swift; sourceTree = "<group>"; };
 		227B8402230EAC7900921E0D /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
@@ -291,6 +293,7 @@
 				227B8400230EAC3200921E0D /* Chatkit */,
 				227B8408230EE6B800921E0D /* Metadata */,
 				227B83FF230EAC2A00921E0D /* Model */,
+				2274984A232107F700D10C76 /* Networking */,
 				227B8401230EAC3F00921E0D /* Store */,
 				227498452321010300D10C76 /* Utilities */,
 			);
@@ -304,6 +307,14 @@
 				227498462321028700D10C76 /* DateFormatterExtensionsTests.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		2274984A232107F700D10C76 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				2274984B2321098B00D10C76 /* PCBaseClientExtensionsTests.swift */,
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 		227B83FF230EAC2A00921E0D /* Model */ = {
@@ -868,6 +879,7 @@
 				227498472321028700D10C76 /* DateFormatterExtensionsTests.swift in Sources */,
 				227B8407230ED76400921E0D /* StoreTests.swift in Sources */,
 				227B840A230EE6C900921E0D /* MetadataSerializerTests.swift in Sources */,
+				2274984C2321098B00D10C76 /* PCBaseClientExtensionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
