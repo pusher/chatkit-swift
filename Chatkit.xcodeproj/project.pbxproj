@@ -32,6 +32,7 @@
 		224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805822F2DADC003CB8DC /* Chatkit.swift */; };
 		224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */; };
 		224E33C0230B07C2005168E3 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E33BF230B07C2005168E3 /* Identifiable.swift */; };
+		227498472321028700D10C76 /* DateFormatterExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227498462321028700D10C76 /* DateFormatterExtensionsTests.swift */; };
 		227B83FC230E9D7C00921E0D /* MessagePartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B83FB230E9D7C00921E0D /* MessagePartTests.swift */; };
 		227B83FE230EAA4800921E0D /* PresenceStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B83FD230EAA4800921E0D /* PresenceStateTests.swift */; };
 		227B8403230EAC7900921E0D /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8402230EAC7900921E0D /* UserTests.swift */; };
@@ -128,6 +129,7 @@
 		224B805822F2DADC003CB8DC /* Chatkit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chatkit.swift; sourceTree = "<group>"; };
 		224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatkitTests.swift; sourceTree = "<group>"; };
 		224E33BF230B07C2005168E3 /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
+		227498462321028700D10C76 /* DateFormatterExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterExtensionsTests.swift; sourceTree = "<group>"; };
 		227B83FB230E9D7C00921E0D /* MessagePartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePartTests.swift; sourceTree = "<group>"; };
 		227B83FD230EAA4800921E0D /* PresenceStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenceStateTests.swift; sourceTree = "<group>"; };
 		227B8402230EAC7900921E0D /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
@@ -288,8 +290,17 @@
 				227B8408230EE6B800921E0D /* Metadata */,
 				227B83FF230EAC2A00921E0D /* Model */,
 				227B8401230EAC3F00921E0D /* Store */,
+				227498452321010300D10C76 /* Utilities */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		227498452321010300D10C76 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				227498462321028700D10C76 /* DateFormatterExtensionsTests.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		227B83FF230EAC2A00921E0D /* Model */ = {
@@ -850,6 +861,7 @@
 				224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */,
 				227B83FE230EAA4800921E0D /* PresenceStateTests.swift in Sources */,
 				228E1D69230D87660014B1A9 /* IdentifiableTests.swift in Sources */,
+				227498472321028700D10C76 /* DateFormatterExtensionsTests.swift in Sources */,
 				227B8407230ED76400921E0D /* StoreTests.swift in Sources */,
 				227B840A230EE6C900921E0D /* MetadataSerializerTests.swift in Sources */,
 			);
