@@ -36,6 +36,8 @@
 		227498492321040100D10C76 /* BundleExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227498482321040100D10C76 /* BundleExtensionsTests.swift */; };
 		2274984C2321098B00D10C76 /* PCBaseClientExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2274984B2321098B00D10C76 /* PCBaseClientExtensionsTests.swift */; };
 		2274984E23210D6500D10C76 /* PPSDKInfoExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2274984D23210D6500D10C76 /* PPSDKInfoExtensionsTests.swift */; };
+		22749855232146EA00D10C76 /* ServiceNameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22749854232146EA00D10C76 /* ServiceNameTests.swift */; };
+		22749857232147AD00D10C76 /* ServiceVersionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22749856232147AD00D10C76 /* ServiceVersionTests.swift */; };
 		227B83FC230E9D7C00921E0D /* MessagePartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B83FB230E9D7C00921E0D /* MessagePartTests.swift */; };
 		227B83FE230EAA4800921E0D /* PresenceStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B83FD230EAA4800921E0D /* PresenceStateTests.swift */; };
 		227B8403230EAC7900921E0D /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8402230EAC7900921E0D /* UserTests.swift */; };
@@ -136,6 +138,8 @@
 		227498482321040100D10C76 /* BundleExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtensionsTests.swift; sourceTree = "<group>"; };
 		2274984B2321098B00D10C76 /* PCBaseClientExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCBaseClientExtensionsTests.swift; sourceTree = "<group>"; };
 		2274984D23210D6500D10C76 /* PPSDKInfoExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPSDKInfoExtensionsTests.swift; sourceTree = "<group>"; };
+		22749854232146EA00D10C76 /* ServiceNameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceNameTests.swift; sourceTree = "<group>"; };
+		22749856232147AD00D10C76 /* ServiceVersionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceVersionTests.swift; sourceTree = "<group>"; };
 		227B83FB230E9D7C00921E0D /* MessagePartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePartTests.swift; sourceTree = "<group>"; };
 		227B83FD230EAA4800921E0D /* PresenceStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenceStateTests.swift; sourceTree = "<group>"; };
 		227B8402230EAC7900921E0D /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
@@ -314,10 +318,52 @@
 		2274984A232107F700D10C76 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				2274984B2321098B00D10C76 /* PCBaseClientExtensionsTests.swift */,
-				2274984D23210D6500D10C76 /* PPSDKInfoExtensionsTests.swift */,
+				22749852232146D900D10C76 /* Services */,
+				22749851232146C700D10C76 /* Client */,
+				22749850232146BE00D10C76 /* SDK Info */,
 			);
 			path = Networking;
+			sourceTree = "<group>";
+		};
+		2274984F2321469100D10C76 /* Identifiable */ = {
+			isa = PBXGroup;
+			children = (
+				228E1D68230D87660014B1A9 /* IdentifiableTests.swift */,
+			);
+			path = Identifiable;
+			sourceTree = "<group>";
+		};
+		22749850232146BE00D10C76 /* SDK Info */ = {
+			isa = PBXGroup;
+			children = (
+				2274984D23210D6500D10C76 /* PPSDKInfoExtensionsTests.swift */,
+			);
+			path = "SDK Info";
+			sourceTree = "<group>";
+		};
+		22749851232146C700D10C76 /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				2274984B2321098B00D10C76 /* PCBaseClientExtensionsTests.swift */,
+			);
+			path = Client;
+			sourceTree = "<group>";
+		};
+		22749852232146D900D10C76 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				22749853232146DE00D10C76 /* Types */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		22749853232146DE00D10C76 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				22749854232146EA00D10C76 /* ServiceNameTests.swift */,
+				22749856232147AD00D10C76 /* ServiceVersionTests.swift */,
+			);
+			path = Types;
 			sourceTree = "<group>";
 		};
 		227B83FF230EAC2A00921E0D /* Model */ = {
@@ -343,7 +389,7 @@
 		227B8401230EAC3F00921E0D /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				228E1D68230D87660014B1A9 /* IdentifiableTests.swift */,
+				2274984F2321469100D10C76 /* Identifiable */,
 				227B8406230ED76400921E0D /* StoreTests.swift */,
 			);
 			path = Store;
@@ -877,10 +923,12 @@
 				227E946F231FC5950025B691 /* XCTest+Networking.swift in Sources */,
 				227B8403230EAC7900921E0D /* UserTests.swift in Sources */,
 				224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */,
+				22749855232146EA00D10C76 /* ServiceNameTests.swift in Sources */,
 				227B83FE230EAA4800921E0D /* PresenceStateTests.swift in Sources */,
 				2274984E23210D6500D10C76 /* PPSDKInfoExtensionsTests.swift in Sources */,
 				228E1D69230D87660014B1A9 /* IdentifiableTests.swift in Sources */,
 				227498472321028700D10C76 /* DateFormatterExtensionsTests.swift in Sources */,
+				22749857232147AD00D10C76 /* ServiceVersionTests.swift in Sources */,
 				227B8407230ED76400921E0D /* StoreTests.swift in Sources */,
 				227B840A230EE6C900921E0D /* MetadataSerializerTests.swift in Sources */,
 				2274984C2321098B00D10C76 /* PCBaseClientExtensionsTests.swift in Sources */,
