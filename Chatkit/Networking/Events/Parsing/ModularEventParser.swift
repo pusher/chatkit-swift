@@ -8,11 +8,17 @@ class ModularEventParser: EventParser {
     
     private var parsers: [ServiceIdentifier : EventParser]
     
-    let logger: PPLogger
+    let logger: PPLogger?
+    
+    // MARK: - Accessors
+    
+    var numberOfRegistrations: Int {
+        return self.parsers.count
+    }
     
     // MARK: - Initializers
     
-    init(logger: PPLogger) {
+    init(logger: PPLogger? = nil) {
         self.parsers = [ServiceIdentifier : EventParser]()
         self.logger = logger
     }
@@ -36,7 +42,7 @@ class ModularEventParser: EventParser {
     
     func parse(event: Event, from service: ServiceName, version: ServiceVersion) throws {
         guard let parser = parser(for: service, with: version) else {
-            self.logger.log("Unsupported event with name: '\(event.name)' from service: '\(service)' with version: '\(version)'", logLevel: .warning)
+            self.logger?.log("Unsupported event with name: '\(event.name)' from service: '\(service)' with version: '\(version)'", logLevel: .warning)
             return
         }
         

@@ -41,6 +41,8 @@
 		2274985B232148E700D10C76 /* EventNameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2274985A232148E700D10C76 /* EventNameTests.swift */; };
 		2274985D2321494300D10C76 /* EventKeyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2274985C2321494300D10C76 /* EventKeyTests.swift */; };
 		2274985F232152BE00D10C76 /* EventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2274985E232152BE00D10C76 /* EventTests.swift */; };
+		2274986223215F5800D10C76 /* ModularEventParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2274986123215F5800D10C76 /* ModularEventParserTests.swift */; };
+		227498642321639600D10C76 /* TestEventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227498632321639600D10C76 /* TestEventParser.swift */; };
 		227B83FC230E9D7C00921E0D /* MessagePartTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B83FB230E9D7C00921E0D /* MessagePartTests.swift */; };
 		227B83FE230EAA4800921E0D /* PresenceStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B83FD230EAA4800921E0D /* PresenceStateTests.swift */; };
 		227B8403230EAC7900921E0D /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8402230EAC7900921E0D /* UserTests.swift */; };
@@ -146,6 +148,8 @@
 		2274985A232148E700D10C76 /* EventNameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventNameTests.swift; sourceTree = "<group>"; };
 		2274985C2321494300D10C76 /* EventKeyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventKeyTests.swift; sourceTree = "<group>"; };
 		2274985E232152BE00D10C76 /* EventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
+		2274986123215F5800D10C76 /* ModularEventParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModularEventParserTests.swift; sourceTree = "<group>"; };
+		227498632321639600D10C76 /* TestEventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestEventParser.swift; sourceTree = "<group>"; };
 		227B83FB230E9D7C00921E0D /* MessagePartTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePartTests.swift; sourceTree = "<group>"; };
 		227B83FD230EAA4800921E0D /* PresenceStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenceStateTests.swift; sourceTree = "<group>"; };
 		227B8402230EAC7900921E0D /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
@@ -240,6 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				2200BB96231EA5C200BF9545 /* TestLogger.swift */,
+				227498632321639600D10C76 /* TestEventParser.swift */,
 				2244FC2E22F2FBD900FE8D50 /* TestTokenProvider.swift */,
 				227E946E231FC5950025B691 /* XCTest+Networking.swift */,
 			);
@@ -376,6 +381,7 @@
 		22749858232148CB00D10C76 /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				2274986023215F4C00D10C76 /* Parsing */,
 				22749859232148D800D10C76 /* Types */,
 			);
 			path = Events;
@@ -389,6 +395,14 @@
 				2274985E232152BE00D10C76 /* EventTests.swift */,
 			);
 			path = Types;
+			sourceTree = "<group>";
+		};
+		2274986023215F4C00D10C76 /* Parsing */ = {
+			isa = PBXGroup;
+			children = (
+				2274986123215F5800D10C76 /* ModularEventParserTests.swift */,
+			);
+			path = Parsing;
 			sourceTree = "<group>";
 		};
 		227B83FF230EAC2A00921E0D /* Model */ = {
@@ -949,7 +963,9 @@
 				227E946F231FC5950025B691 /* XCTest+Networking.swift in Sources */,
 				227B8403230EAC7900921E0D /* UserTests.swift in Sources */,
 				224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */,
+				2274986223215F5800D10C76 /* ModularEventParserTests.swift in Sources */,
 				2274985F232152BE00D10C76 /* EventTests.swift in Sources */,
+				227498642321639600D10C76 /* TestEventParser.swift in Sources */,
 				2274985B232148E700D10C76 /* EventNameTests.swift in Sources */,
 				22749855232146EA00D10C76 /* ServiceNameTests.swift in Sources */,
 				227B83FE230EAA4800921E0D /* PresenceStateTests.swift in Sources */,
