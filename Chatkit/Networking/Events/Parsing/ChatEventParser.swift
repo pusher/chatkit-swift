@@ -31,7 +31,7 @@ struct ChatEventParser: EventParser {
     
     private func parseInitialState(payload: [String : Any]) {
         self.persistenceController.performBackgroundTask { backgroundContext in
-            guard let roomsPayload = payload["rooms"] as? [[String: Any]] else {
+            guard let roomsPayload = payload[Event.Key.rooms] as? [[String: Any]] else {
                 return
             }
             
