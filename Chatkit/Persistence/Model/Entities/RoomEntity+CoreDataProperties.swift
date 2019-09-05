@@ -11,7 +11,6 @@ extension RoomEntity {
     @NSManaged var deletedAt: Date?
     @NSManaged var identifier: String
     @NSManaged var isPrivate: Bool
-    @NSManaged var lastMessageAt: Date?
     @NSManaged var metadata: Data?
     @NSManaged var name: String?
     @NSManaged var unreadCount: Int64
@@ -21,6 +20,7 @@ extension RoomEntity {
     @NSManaged var members: Set<UserEntity>?
     @NSManaged var messages: NSOrderedSet?
     @NSManaged var typingMembers: Set<UserEntity>?
+    @NSManaged var instance: InstanceEntity
     
 }
 

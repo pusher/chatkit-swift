@@ -4,15 +4,19 @@ import PusherPlatform
 
 public class Chatkit {
     
-    //MARK: - Properties
+    // MARK: - Properties
     
     public let instanceLocator: String
     public let tokenProvider: PPTokenProvider
     public let logger: Logger?
     
+    public let roomProvider: RoomProvider
+    public let userProvider: UserProvider
+    public let messageProvider: MessageProvider
+    
     private let persistenceController: PersistenceController
     
-    //MARK: - Initializers
+    // MARK: - Initializers
     
     public init(instanceLocator: String, tokenProvider: PPTokenProvider, logger: Logger? = nil) throws {
         self.instanceLocator = instanceLocator
@@ -30,6 +34,10 @@ public class Chatkit {
                 logger?.log("Failed to load persistent stores with error: \(error.localizedDescription).", logLevel: .error)
             }
         }
+        
+        self.roomProvider = RoomProvider(persistenceController: self.persistenceController)
+        self.userProvider = UserProvider(persistenceController: self.persistenceController)
+        self.messageProvider = MessageProvider(persistenceController: self.persistenceController)
     }
     
 }

@@ -1,4 +1,4 @@
-github "pusher/pusher-platform-swift" "1a256a8c47399cc131bcbd42dcbf6684dd9cf848"
+github "pusher/pusher-platform-swift" "a0985cfae957d137f1eb8b6628f884a008250bcd"
 github "pusher/push-notifications-swift" ~> 2.1.2
 
 # you'll need something like this if working locally and you want

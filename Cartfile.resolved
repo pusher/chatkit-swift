@@ -1,4 +1,4 @@
 github "hamchapman/Mockingjay" "6bbe3ad2139609e56c0bd5f2fa0e7911dc13a6f8"
 github "krzyzanowskim/CryptoSwift" "1.0.0"
 github "pusher/push-notifications-swift" "2.1.2"
-github "pusher/pusher-platform-swift" "1a256a8c47399cc131bcbd42dcbf6684dd9cf848"
+github "pusher/pusher-platform-swift" "a0985cfae957d137f1eb8b6628f884a008250bcd"

@@ -11,10 +11,27 @@ extension MessageEntity {
     @NSManaged var deletedAt: Date?
     @NSManaged var identifier: String
     @NSManaged var updatedAt: Date
-    @NSManaged var cursor: CursorEntity?
+    @NSManaged var cursors: Set<CursorEntity>?
     @NSManaged var parts: Set<PartEntity>
     @NSManaged var room: RoomEntity
     @NSManaged var sender: UserEntity
+    
+}
+
+// MARK: Generated accessors for cursors
+extension MessageEntity {
+    
+    @objc(addCursorsObject:)
+    @NSManaged func addToCursors(_ value: CursorEntity)
+    
+    @objc(removeCursorsObject:)
+    @NSManaged func removeFromCursors(_ value: CursorEntity)
+    
+    @objc(addCursors:)
+    @NSManaged func addToCursors(_ values: Set<CursorEntity>)
+    
+    @objc(removeCursors:)
+    @NSManaged func removeFromCursors(_ values: Set<CursorEntity>)
     
 }
 
