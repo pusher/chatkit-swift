@@ -52,10 +52,10 @@ class NetworkingController {
 extension NetworkingController: ServiceDelegate {
     
     func service(_ service: Service, didReceiveEvent event: Event) {
-        do {
-            try self.eventParser.parse(event: event, from: service.name, version: service.version)
-        } catch {
-            self.logger.log("Failed to parse event with error: \(error.localizedDescription)", logLevel: .warning)
+        self.eventParser.parse(event: event, from: service.name, version: service.version) { error in
+            if let error = error {
+                self.logger.log("Failed to parse event with error: \(error.localizedDescription)", logLevel: .warning)
+            }
         }
     }
     

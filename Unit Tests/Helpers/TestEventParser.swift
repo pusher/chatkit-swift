@@ -10,29 +10,30 @@ struct TestEventParser: EventParser {
     // MARK: - Properties
     
     let name: String
-    let shouldThrowError: Bool
+    let shouldReturnError: Bool
     let callback: Callback?
     
     // MARK: - Initializers
     
-    init(name: String, shouldThrowError: Bool = false, callback: Callback? = nil) {
+    init(name: String, shouldReturnError: Bool = false, callback: Callback? = nil) {
         self.name = name
-        self.shouldThrowError = shouldThrowError
+        self.shouldReturnError = shouldReturnError
         self.callback = callback
     }
     
     // MARK: - Internal methods
     
-    func parse(event: Event, from service: ServiceName, version: ServiceVersion) throws {
-        if shouldThrowError {
-            throw NetworkingError.invalidEvent
+    func parse(event: Event, from service: ServiceName, version: ServiceVersion, completionHandler: @escaping CompletionHandler) {
+        if self.shouldReturnError {
+            completionHandler(NetworkingError.invalidEvent)
         }
-        
-        guard let callback = callback else {
-            return
+        else {
+            if let callback = self.callback {
+                callback(event, service, version)
+            }
+            
+            completionHandler(nil)
         }
-        
-        callback(event, service, version)
     }
     
 }

@@ -7,21 +7,27 @@ struct ChatEventParser: EventParser {
     // MARK: - Properties
     
     let persistenceController: PersistenceController
-    let logger: PPLogger
+    let logger: PPLogger?
     
     // MARK: - Initializers
     
-    init(persistenceController: PersistenceController, logger: PPLogger) {
+    init(persistenceController: PersistenceController, logger: PPLogger? = nil) {
         self.persistenceController = persistenceController
         self.logger = logger
     }
     
     // MARK: - Internal methods
     
-    func parse(event: Event, from service: ServiceName, version: ServiceVersion) {
+    func parse(event: Event, from service: ServiceName, version: ServiceVersion, completionHandler: @escaping CompletionHandler) {
+        guard service == .chat && version == .version6 else {
+            self.logger?.log("Received event from an unsupported service.", logLevel: .warning)
+            completionHandler(NetworkingError.invalidEvent)
+            return
+        }
+        
         switch event.name {
         case .initialState:
-            parseInitialState(payload: event.payload)
+            parseInitialState(payload: event.payload, completionHandler: completionHandler)
         }
         
         self.persistenceController.save()
@@ -29,14 +35,14 @@ struct ChatEventParser: EventParser {
     
     // MARK: - Private methods
     
-    private func parseInitialState(payload: [String : Any]) {
+    private func parseInitialState(payload: [String : Any], completionHandler: @escaping CompletionHandler) {
         self.persistenceController.performBackgroundTask { backgroundContext in
-            guard let roomsPayload = payload[Event.Key.rooms] as? [[String: Any]] else {
+            guard let roomsPayload = payload[Event.Key.rooms] as? [[String : Any]] else {
                 return
             }
             
             for roomPayload in roomsPayload {
-                if let _ = try? self.room(for: roomPayload, in: backgroundContext) {
+                if let _ = self.room(for: roomPayload, in: backgroundContext) {
                     // TODO: Attach relationships in future.
                 }
             }
@@ -44,12 +50,14 @@ struct ChatEventParser: EventParser {
             do {
                 try backgroundContext.save()
             } catch {
-                self.logger.log("Failed to save '\(Event.Name.initialState)' event with error: \(error.localizedDescription)", logLevel: .warning)
+                self.logger?.log("Failed to save '\(Event.Name.initialState)' event with error: \(error.localizedDescription)", logLevel: .warning)
             }
+            
+            completionHandler(nil)
         }
     }
     
-    private func room(for payload: [String : Any], in context: NSManagedObjectContext) throws -> RoomEntity? {
+    private func room(for payload: [String : Any], in context: NSManagedObjectContext) -> RoomEntity? {
         guard let identifier = payload[Event.Key.identifier] as? String,
             let name = payload[Event.Key.name] as? String,
             let isPrivate = payload[Event.Key.private] as? Bool,
@@ -58,7 +66,7 @@ struct ChatEventParser: EventParser {
             let createdAt = DateFormatter.default.date(from: createdAtString),
             let updatedAtString = payload[Event.Key.updatedAt] as? String,
             let updatedAt = DateFormatter.default.date(from: updatedAtString) else {
-                throw NetworkingError.invalidEvent
+                return nil
         }
         
         let room = context.fetch(RoomEntity.self, filteredBy: "%K == %@", #keyPath(RoomEntity.identifier), identifier) ?? context.create(RoomEntity.self)

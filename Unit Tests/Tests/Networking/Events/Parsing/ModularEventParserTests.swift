@@ -121,87 +121,93 @@ class ModularEventParserTests: XCTestCase {
     func testShouldInvokeParseMethodOnCorrectParser() {
         let eventParser = ModularEventParser()
         
-        let firstTestEventParser = TestEventParser(name: "firstTestEventParser", shouldThrowError: false) { event, serviceName, serviceVersion in
+        let firstTestEventParser = TestEventParser(name: "firstTestEventParser") { event, serviceName, serviceVersion in
             XCTFail("Parse method on this parser should not be invoked by ModularEventParser.")
         }
         eventParser.register(parser: firstTestEventParser, for: .chat, with: .version1)
         
-        let secondTestEventParser = TestEventParser(name: "secondTestEventParser", shouldThrowError: false) { event, serviceName, serviceVersion in
+        let secondTestEventParser = TestEventParser(name: "secondTestEventParser") { event, serviceName, serviceVersion in
             XCTAssertEqual(event.payload as? [String : String], self.payload)
             XCTAssertEqual(serviceName, ServiceName.chat)
             XCTAssertEqual(serviceVersion, ServiceVersion.version2)
         }
         eventParser.register(parser: secondTestEventParser, for: .chat, with: .version2)
         
-        let thirdTestEventParser = TestEventParser(name: "thirdTestEventParser", shouldThrowError: false) { event, serviceName, serviceVersion in
+        let thirdTestEventParser = TestEventParser(name: "thirdTestEventParser") { event, serviceName, serviceVersion in
             XCTFail("Parse method on this parser should not be invoked by ModularEventParser.")
         }
         eventParser.register(parser: thirdTestEventParser, for: .cursors, with: .version1)
         
-        XCTAssertNoThrow(try eventParser.parse(event: self.event, from: .chat, version: .version2))
+        eventParser.parse(event: self.event, from: .chat, version: .version2) { error in
+            XCTAssertNil(error)
+        }
     }
     
     func testShouldNotInvokeParseMethodOnAnyParserWhenEventArrivedFromUnregisteredServiceName() {
         let eventParser = ModularEventParser()
         
-        let firstTestEventParser = TestEventParser(name: "firstTestEventParser", shouldThrowError: false) { event, serviceName, serviceVersion in
+        let firstTestEventParser = TestEventParser(name: "firstTestEventParser") { event, serviceName, serviceVersion in
             XCTFail("Parse method on this parser should not be invoked by ModularEventParser.")
         }
         eventParser.register(parser: firstTestEventParser, for: .chat, with: .version1)
         
-        let secondTestEventParser = TestEventParser(name: "secondTestEventParser", shouldThrowError: false) { event, serviceName, serviceVersion in
+        let secondTestEventParser = TestEventParser(name: "secondTestEventParser") { event, serviceName, serviceVersion in
             XCTFail("Parse method on this parser should not be invoked by ModularEventParser.")
         }
         eventParser.register(parser: secondTestEventParser, for: .chat, with: .version2)
         
-        let thirdTestEventParser = TestEventParser(name: "thirdTestEventParser", shouldThrowError: false) { event, serviceName, serviceVersion in
+        let thirdTestEventParser = TestEventParser(name: "thirdTestEventParser") { event, serviceName, serviceVersion in
             XCTFail("Parse method on this parser should not be invoked by ModularEventParser.")
         }
         eventParser.register(parser: thirdTestEventParser, for: .cursors, with: .version1)
         
-        XCTAssertNoThrow(try eventParser.parse(event: self.event, from: .presence, version: .version2))
+        eventParser.parse(event: self.event, from: .presence, version: .version2) { error in
+            XCTAssertNil(error)
+        }
     }
     
     func testShouldNotInvokeParseMethodOnAnyParserWhenEventArrivedFromUnregisteredServiceVersion() {
         let eventParser = ModularEventParser()
         
-        let firstTestEventParser = TestEventParser(name: "firstTestEventParser", shouldThrowError: false) { event, serviceName, serviceVersion in
+        let firstTestEventParser = TestEventParser(name: "firstTestEventParser") { event, serviceName, serviceVersion in
             XCTFail("Parse method on this parser should not be invoked by ModularEventParser.")
         }
         eventParser.register(parser: firstTestEventParser, for: .chat, with: .version1)
         
-        let secondTestEventParser = TestEventParser(name: "secondTestEventParser", shouldThrowError: false) { event, serviceName, serviceVersion in
+        let secondTestEventParser = TestEventParser(name: "secondTestEventParser") { event, serviceName, serviceVersion in
             XCTFail("Parse method on this parser should not be invoked by ModularEventParser.")
         }
         eventParser.register(parser: secondTestEventParser, for: .chat, with: .version2)
         
-        let thirdTestEventParser = TestEventParser(name: "thirdTestEventParser", shouldThrowError: false) { event, serviceName, serviceVersion in
+        let thirdTestEventParser = TestEventParser(name: "thirdTestEventParser") { event, serviceName, serviceVersion in
             XCTFail("Parse method on this parser should not be invoked by ModularEventParser.")
         }
         eventParser.register(parser: thirdTestEventParser, for: .cursors, with: .version1)
         
-        XCTAssertNoThrow(try eventParser.parse(event: self.event, from: .chat, version: .version6))
+        eventParser.parse(event: self.event, from: .chat, version: .version6) { error in
+            XCTAssertNil(error)
+        }
     }
     
-    func testShouldThrowErrorWhenParserWasNotAbleToParseEvent() {
+    func testShouldReturnErrorWhenParserWasNotAbleToParseEvent() {
         let eventParser = ModularEventParser()
         
-        let firstTestEventParser = TestEventParser(name: "firstTestEventParser", shouldThrowError: false) { event, serviceName, serviceVersion in
+        let firstTestEventParser = TestEventParser(name: "firstTestEventParser") { event, serviceName, serviceVersion in
             XCTFail("Parse method on this parser should not be invoked by ModularEventParser.")
         }
         eventParser.register(parser: firstTestEventParser, for: .chat, with: .version1)
         
-        let secondTestEventParser = TestEventParser(name: "secondTestEventParser", shouldThrowError: true) { event, serviceName, serviceVersion in
+        let secondTestEventParser = TestEventParser(name: "secondTestEventParser", shouldReturnError: true) { event, serviceName, serviceVersion in
             XCTFail("Parse method on this parser should not be invoked by ModularEventParser.")
         }
         eventParser.register(parser: secondTestEventParser, for: .chat, with: .version2)
         
-        let thirdTestEventParser = TestEventParser(name: "thirdTestEventParser", shouldThrowError: false) { event, serviceName, serviceVersion in
+        let thirdTestEventParser = TestEventParser(name: "thirdTestEventParser") { event, serviceName, serviceVersion in
             XCTFail("Parse method on this parser should not be invoked by ModularEventParser.")
         }
         eventParser.register(parser: thirdTestEventParser, for: .cursors, with: .version1)
         
-        XCTAssertThrowsError(try eventParser.parse(event: self.event, from: .chat, version: .version2), "Failed to catch an error for invalid event.") { error in
+        eventParser.parse(event: self.event, from: .chat, version: .version2) { error in
             guard let error = error as? NetworkingError else {
                 return
             }

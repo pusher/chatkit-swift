@@ -40,13 +40,13 @@ class ModularEventParser: EventParser {
         return self.parsers[identifier]
     }
     
-    func parse(event: Event, from service: ServiceName, version: ServiceVersion) throws {
+    func parse(event: Event, from service: ServiceName, version: ServiceVersion, completionHandler: @escaping CompletionHandler) {
         guard let parser = parser(for: service, with: version) else {
             self.logger?.log("Unsupported event with name: '\(event.name)' from service: '\(service)' with version: '\(version)'", logLevel: .warning)
             return
         }
         
-        try parser.parse(event: event, from: service, version: version)
+        parser.parse(event: event, from: service, version: version, completionHandler: completionHandler)
     }
     
 }
