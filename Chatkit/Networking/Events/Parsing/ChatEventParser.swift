@@ -61,7 +61,7 @@ struct ChatEventParser: EventParser {
         guard let identifier = payload[Event.Key.identifier] as? String,
             let name = payload[Event.Key.name] as? String,
             let isPrivate = payload[Event.Key.private] as? Bool,
-            let unreadCount = payload[Event.Key.unreadCount] as? Int64,
+            let unreadCount = payload[Event.Key.unreadCount] as? Int,
             let createdAtString = payload[Event.Key.createdAt] as? String,
             let createdAt = DateFormatter.default.date(from: createdAtString),
             let updatedAtString = payload[Event.Key.updatedAt] as? String,
@@ -73,16 +73,22 @@ struct ChatEventParser: EventParser {
         room.identifier = identifier
         room.name = name
         room.isPrivate = isPrivate
-        room.unreadCount = unreadCount
+        room.unreadCount = Int64(unreadCount)
         room.createdAt = createdAt
         room.updatedAt = updatedAt
         
         if let metadata = payload[Event.Key.customData] as? Metadata {
             room.metadata = MetadataSerializer.serialize(metadata: metadata)
         }
+        else {
+            room.metadata = nil
+        }
         
         if let deletedAtString = payload[Event.Key.deletedAt] as? String {
             room.deletedAt = DateFormatter.default.date(from: deletedAtString)
+        }
+        else {
+            room.deletedAt = nil
         }
         
         return room
