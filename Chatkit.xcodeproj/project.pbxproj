@@ -54,6 +54,7 @@
 		227E946D231FBDAB0025B691 /* chat-initial_state.json in Resources */ = {isa = PBXBuildFile; fileRef = 227E946C231FBDAB0025B691 /* chat-initial_state.json */; };
 		227E946F231FC5950025B691 /* XCTest+Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227E946E231FC5950025B691 /* XCTest+Networking.swift */; };
 		227E947223200DBD0025B691 /* ModularEventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227E947123200DBD0025B691 /* ModularEventParser.swift */; };
+		228AD276232675D400AB280B /* NetworkingControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228AD275232675D400AB280B /* NetworkingControllerTests.swift */; };
 		228E1D69230D87660014B1A9 /* IdentifiableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D68230D87660014B1A9 /* IdentifiableTests.swift */; };
 		228E1D6D230D9FDC0014B1A9 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */; };
 		229093DA22F1DDB4003DDE2C /* PusherChatkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 229093D822F1DDB4003DDE2C /* PusherChatkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -164,6 +165,7 @@
 		227E946C231FBDAB0025B691 /* chat-initial_state.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "chat-initial_state.json"; sourceTree = "<group>"; };
 		227E946E231FC5950025B691 /* XCTest+Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+Networking.swift"; sourceTree = "<group>"; };
 		227E947123200DBD0025B691 /* ModularEventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModularEventParser.swift; sourceTree = "<group>"; };
+		228AD275232675D400AB280B /* NetworkingControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingControllerTests.swift; sourceTree = "<group>"; };
 		228E1D68230D87660014B1A9 /* IdentifiableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableTests.swift; sourceTree = "<group>"; };
 		228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
 		229093D522F1DDB4003DDE2C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -337,6 +339,7 @@
 			isa = PBXGroup;
 			children = (
 				22749851232146C700D10C76 /* Client */,
+				228AD274232675C400AB280B /* Controller */,
 				22749858232148CB00D10C76 /* Events */,
 				22749850232146BE00D10C76 /* SDK Info */,
 				22749852232146D900D10C76 /* Services */,
@@ -465,6 +468,14 @@
 				227E946C231FBDAB0025B691 /* chat-initial_state.json */,
 			);
 			path = Chat;
+			sourceTree = "<group>";
+		};
+		228AD274232675C400AB280B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				228AD275232675D400AB280B /* NetworkingControllerTests.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		229093CB22F1DDB4003DDE2C = {
@@ -980,6 +991,7 @@
 				2274985B232148E700D10C76 /* EventNameTests.swift in Sources */,
 				22749855232146EA00D10C76 /* ServiceNameTests.swift in Sources */,
 				227B83FE230EAA4800921E0D /* PresenceStateTests.swift in Sources */,
+				228AD276232675D400AB280B /* NetworkingControllerTests.swift in Sources */,
 				2274984E23210D6500D10C76 /* PPSDKInfoExtensionsTests.swift in Sources */,
 				228E1D69230D87660014B1A9 /* IdentifiableTests.swift in Sources */,
 				227498472321028700D10C76 /* DateFormatterExtensionsTests.swift in Sources */,

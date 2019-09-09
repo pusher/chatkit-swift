@@ -52,6 +52,12 @@
                <Test
                   Identifier = "ChatkitTests/testShouldReturnErrorAfterUnsuccessfulConnection()">
                </Test>
+               <Test
+                  Identifier = "NetworkingControllerTests/testShouldHaveConnectionStatusSetToDisconnectedAfterUnsuccessfulConnection()">
+               </Test>
+               <Test
+                  Identifier = "NetworkingControllerTests/testShouldReturnErrorAfterUnsuccessfulConnection()">
+               </Test>
             </SkippedTests>
          </TestableReference>
          <TestableReference

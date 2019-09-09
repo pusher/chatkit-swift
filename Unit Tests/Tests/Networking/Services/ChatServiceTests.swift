@@ -109,7 +109,7 @@ class ChatServiceTests: XCTestCase {
         waitForExpectations(timeout: 1.0)
     }
     
-    func testShouldBeHaveConnectionStatusSetToDisconnectedAfterSuccessfullyDisconnecting() {
+    func testShouldHaveConnectionStatusSetToDisconnectedAfterSuccessfullyDisconnecting() {
         stubSubscription(of: .chat, version: .version6, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
         
         let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())

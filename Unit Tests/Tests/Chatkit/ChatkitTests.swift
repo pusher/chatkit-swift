@@ -29,7 +29,7 @@ class ChatkitTests: XCTestCase {
         XCTAssertNotNil(chatkit?.logger)
     }
     
-    func testShouldInstantiateWithInstanceLocatorInIncorrectFormat() {
+    func testShouldNotInstantiateWithInstanceLocatorInIncorrectFormat() {
         let chatkit = try? Chatkit(instanceLocator: "invalidInstanceLocator", tokenProvider: TestTokenProvider())
         
         XCTAssertNil(chatkit)
@@ -91,7 +91,7 @@ class ChatkitTests: XCTestCase {
         waitForExpectations(timeout: 1.0)
     }
     
-    func testShouldBeHaveConnectionStatusSetToDisconnectedAfterSuccessfullyDisconnecting() {
+    func testShouldHaveConnectionStatusSetToDisconnectedAfterSuccessfullyDisconnecting() {
         stubSubscription(of: .chat, version: .version6, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
         
         let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: TestTokenProvider())
