@@ -10,7 +10,6 @@ protocol Service {
     
     var connectionStatus: ConnectionStatus { get }
     
-    var instance: Instance { get }
     var logger: PPLogger { get }
     
     var delegate: ServiceDelegate? { get }

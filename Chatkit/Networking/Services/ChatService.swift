@@ -8,11 +8,11 @@ class ChatService: Service {
     let name: ServiceName
     let version: ServiceVersion
     
-    let instance: Instance
     let logger: PPLogger
     
     weak var delegate: ServiceDelegate?
     
+    private let instance: Instance
     private let requestOptions: PPRequestOptions
     private var resumableSubscription: PPResumableSubscription
     

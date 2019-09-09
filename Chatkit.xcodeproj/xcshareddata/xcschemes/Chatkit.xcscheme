@@ -41,7 +41,13 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "ChatkitTests/testShouldBeHaveConnectionStatusSetToDisconnectedAfterUnsuccessfulConnection()">
+                  Identifier = "ChatServiceTests/testShouldBeHaveConnectionStatusSetToDisconnectedAfterUnsuccessfulConnection()">
+               </Test>
+               <Test
+                  Identifier = "ChatServiceTests/testShouldReturnErrorAfterUnsuccessfulConnection()">
+               </Test>
+               <Test
+                  Identifier = "ChatkitTests/testShouldHaveConnectionStatusSetToDisconnectedAfterUnsuccessfulConnection()">
                </Test>
                <Test
                   Identifier = "ChatkitTests/testShouldReturnErrorAfterUnsuccessfulConnection()">

@@ -35,7 +35,7 @@ class ChatkitTests: XCTestCase {
         XCTAssertNil(chatkit)
     }
     
-    func testShouldBeHaveConnectionStatusSetToDisconnectedAfterInstantiation() {
+    func testShouldHaveConnectionStatusSetToDisconnectedAfterInstantiation() {
         let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: TestTokenProvider())
         
         XCTAssertEqual(chatkit?.connectionStatus, ConnectionStatus.disconnected)
@@ -75,7 +75,7 @@ class ChatkitTests: XCTestCase {
         waitForExpectations(timeout: 1.0)
     }
     
-    func testShouldBeHaveConnectionStatusSetToConnectedAfterSuccessfulConnection() {
+    func testShouldHaveConnectionStatusSetToConnectedAfterSuccessfulConnection() {
         stubSubscription(of: .chat, version: .version6, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
         
         let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: TestTokenProvider())
@@ -109,7 +109,7 @@ class ChatkitTests: XCTestCase {
         waitForExpectations(timeout: 1.0)
     }
     
-    func testShouldBeHaveConnectionStatusSetToDisconnectedAfterUnsuccessfulConnection() {
+    func testShouldHaveConnectionStatusSetToDisconnectedAfterUnsuccessfulConnection() {
         // FIXME: This test is disabled in both test schemes due to an issue with handling HTTP status codes in PusherPlatform SDK.
         
         stubSubscription(of: .chat, version: .version6, instanceLocator: Networking.testInstanceLocator, path: .users, with: 404)
