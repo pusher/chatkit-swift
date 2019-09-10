@@ -13,7 +13,7 @@ class StoreTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        guard let url = Bundle(for: Chatkit.self).url(forResource: "Model", withExtension: "momd"), let model = NSManagedObjectModel(contentsOf: url) else {
+        guard let url = Bundle.current.url(forResource: "Model", withExtension: "momd"), let model = NSManagedObjectModel(contentsOf: url) else {
             assertionFailure("Unable to locate test model.")
             return
         }
@@ -22,33 +22,27 @@ class StoreTests: XCTestCase {
         storeDescription.shouldAddStoreAsynchronously = false
         
         guard let persistenceController = try? PersistenceController(model: model, storeDescriptions: [storeDescription]) else {
-            assertionFailure("Failed to instantiat persistence controller.")
+            assertionFailure("Failed to instantiate persistence controller.")
             return
         }
         
         self.store = Store(persistenceController: persistenceController)
         
         persistenceController.mainContext.performAndWait {
-            let instanceEntity = persistenceController.mainContext.create(InstanceEntity.self)
-            instanceEntity.locator = "testLocator"
-            
             let firstUserEntity = persistenceController.mainContext.create(UserEntity.self)
             firstUserEntity.identifier = "firstIdentifier"
             firstUserEntity.createdAt = Date()
             firstUserEntity.updatedAt = firstUserEntity.createdAt
-            firstUserEntity.instance = instanceEntity
             
             let secondUserEntity = persistenceController.mainContext.create(UserEntity.self)
             secondUserEntity.identifier = "secondIdentifier"
             secondUserEntity.createdAt = Date()
             secondUserEntity.updatedAt = firstUserEntity.createdAt
-            secondUserEntity.instance = instanceEntity
             
             let thirdUserEntity = persistenceController.mainContext.create(UserEntity.self)
             thirdUserEntity.identifier = "thirdIdentifier"
             thirdUserEntity.createdAt = Date()
             thirdUserEntity.updatedAt = firstUserEntity.createdAt
-            thirdUserEntity.instance = instanceEntity
         }
         
         persistenceController.save()

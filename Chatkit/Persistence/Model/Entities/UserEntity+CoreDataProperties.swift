@@ -19,7 +19,6 @@ extension UserEntity {
     @NSManaged var messages: NSOrderedSet?
     @NSManaged var room: Set<RoomEntity>?
     @NSManaged var typingInRooms: Set<RoomEntity>?
-    @NSManaged var instance: InstanceEntity
     
 }
 

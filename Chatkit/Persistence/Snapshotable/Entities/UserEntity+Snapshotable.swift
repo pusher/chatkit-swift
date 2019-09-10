@@ -21,7 +21,7 @@ extension UserEntity: Snapshotable {
         }
         
         let presenceState = PresenceState(state: self.presenceState)
-        let metadata = MetadataParser.deserialize(data: self.metadata)
+        let metadata = MetadataSerializer.deserialize(data: self.metadata)
         
         return User(identifier: self.identifier,
                     name: self.name,

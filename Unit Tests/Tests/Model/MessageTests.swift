@@ -25,7 +25,7 @@ class MessageTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        guard let url = Bundle(for: Chatkit.self).url(forResource: "Model", withExtension: "momd"), let model = NSManagedObjectModel(contentsOf: url) else {
+        guard let url = Bundle.current.url(forResource: "Model", withExtension: "momd"), let model = NSManagedObjectModel(contentsOf: url) else {
             assertionFailure("Unable to locate test model.")
             return
         }
@@ -34,7 +34,7 @@ class MessageTests: XCTestCase {
         storeDescription.shouldAddStoreAsynchronously = false
         
         guard let persistenceController = try? PersistenceController(model: model, storeDescriptions: [storeDescription]) else {
-            assertionFailure("Failed to instantiat persistence controller.")
+            assertionFailure("Failed to instantiate persistence controller.")
             return
         }
         
