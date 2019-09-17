@@ -1,0 +1,7 @@
+github "pusher/pusher-platform-swift" "a0985cfae957d137f1eb8b6628f884a008250bcd"
+github "pusher/push-notifications-swift" ~> 2.1.2
+
+# you'll need something like this if working locally and you want
+# to test changes to pusher-platform-swift
+
+# git "file:///Users/hami/pusher/pusher-platform-swift" "branch-name"

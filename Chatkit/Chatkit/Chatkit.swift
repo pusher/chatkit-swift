@@ -10,7 +10,7 @@ public class Chatkit {
     
     public let roomProvider: RoomProvider
     public let userProvider: UserProvider
-    public let messageProvider: MessageProvider
+    public let messageProvider: OldMessageProvider
     
     private let persistenceController: PersistenceController
     private let networkingController: NetworkingController
@@ -53,7 +53,7 @@ public class Chatkit {
         
         self.roomProvider = RoomProvider(persistenceController: self.persistenceController)
         self.userProvider = UserProvider(persistenceController: self.persistenceController)
-        self.messageProvider = MessageProvider(persistenceController: self.persistenceController)
+        self.messageProvider = OldMessageProvider(persistenceController: self.persistenceController)
     }
     
     // MARK: - Public methods
