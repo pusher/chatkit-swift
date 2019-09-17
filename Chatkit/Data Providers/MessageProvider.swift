@@ -12,6 +12,7 @@ public class MessageProvider: NSObject, DataProvider {
     public weak var delegate: MessageProviderDelegate?
     
     private let persistenceController: PersistenceController
+    private let chatkitClient: ChatkitClient
     private let roomIdentifier: NSManagedObjectID
     private var messages: [MessageEntity]
     
@@ -23,8 +24,14 @@ public class MessageProvider: NSObject, DataProvider {
     
     // MARK: - Initializers
     
-    init(room: Room, persistenceController: PersistenceController, logger: PPLogger? = nil) {
+    init(
+        room: Room,
+        persistenceController: PersistenceController,
+        chatkitClient: ChatkitClient,
+        logger: PPLogger? = nil
+    ) {
         self.persistenceController = persistenceController
+        self.chatkitClient = chatkitClient
         self.roomIdentifier = room.objectID
         self.isFetchingOlderMessages = false
         self.logger = logger
@@ -59,20 +66,16 @@ public class MessageProvider: NSObject, DataProvider {
         
         self.isFetchingOlderMessages = true
         
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-//            self.isFetchingOlderMessages = false
-//
-//            let receivedMessages = Factory.createMessages(amount: numberOfMessages)
-//            self.messages.insert(contentsOf: receivedMessages, at: 0)
-//
-//            self.delegate?.messageProvider(self, didReceiveMessagesWithRange: 0..<Int(numberOfMessages))
-//
-//            if let completionHandler = completionHandler {
-//                completionHandler(nil)
-//            }
-//        }
+        self.chatkitClient.fetchMessages(
+            room: "TODO",
+            from: self.message(at: 0)?.identifier,
+            order: "older",
+            amount: numberOfMessages
+        ) { _ in
+            self.isFetchingOlderMessages = false
+        }
     }
-    
+
     // MARK: - Private methods
     
     private func registerForNotifications() {
