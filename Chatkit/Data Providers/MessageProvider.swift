@@ -13,29 +13,29 @@ public class MessageProvider: NSObject, DataProvider {
     
     private let persistenceController: PersistenceController
     private let chatkitClient: ChatkitClient
-    private let roomIdentifier: NSManagedObjectID
-    private var messages: [MessageEntity]
+    private let roomIdentifier: String
+    private var messageEntities: [MessageEntity]
     
     // MARK: - Accessors
     
     public var numberOfAvailableMessages: Int {
-        return self.messages.count
+        return self.messageEntities.count
     }
     
     // MARK: - Initializers
     
     init(
-        room: Room,
+        roomIdentifier: String,
         persistenceController: PersistenceController,
         chatkitClient: ChatkitClient,
         logger: PPLogger? = nil
     ) {
         self.persistenceController = persistenceController
         self.chatkitClient = chatkitClient
-        self.roomIdentifier = room.objectID
+        self.roomIdentifier = roomIdentifier
         self.isFetchingOlderMessages = false
         self.logger = logger
-        self.messages = []
+        self.messageEntities = []
         
         super.init()
         
@@ -46,12 +46,11 @@ public class MessageProvider: NSObject, DataProvider {
     // MARK: - Public methods
     
     public func message(at index: Int) -> Message? {
-        // UInt would allow us to remove the first comparison, but it would force developers to cast Int to UInt.
-        guard index >= 0, index < self.messages.count else {
+        guard index >= 0, index < self.messageEntities.count else {
             return nil
         }
         
-        return (try? self.messages[index].snapshot()) ?? nil
+        return (try? self.messageEntities[index].snapshot()) ?? nil
     }
     
     public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: ((Error?) -> Void)? = nil) {
@@ -67,7 +66,7 @@ public class MessageProvider: NSObject, DataProvider {
         self.isFetchingOlderMessages = true
         
         self.chatkitClient.fetchMessages(
-            room: "TODO",
+            room: self.roomIdentifier,
             from: self.message(at: 0)?.identifier,
             order: "older",
             amount: numberOfMessages
@@ -92,7 +91,7 @@ public class MessageProvider: NSObject, DataProvider {
         fetchRequest.fetchBatchSize = 30
         
         do {
-            self.messages = try self.persistenceController.mainContext.fetch(fetchRequest)
+            self.messageEntities = try self.persistenceController.mainContext.fetch(fetchRequest)
         } catch {
             self.logger?.log("Failed to reload messages with error: \(error.localizedDescription)", logLevel: .warning)
         }
@@ -111,10 +110,27 @@ public class MessageProvider: NSObject, DataProvider {
     }
     
     private func filterUpdates(_ objects: Set<NSManagedObject>) {
-        let messages = objects.compactMap { $0 as? MessageEntity }
+        let messageEntities = objects.compactMap { $0 as? MessageEntity }
         
-        for message in messages {
-            // TODO: Notification
+        guard messageEntities.count > 0 else {
+            return
+        }
+        
+        self.reloadData()
+        
+        for messageEntity in messageEntities {
+            guard let index = self.messageEntities.index(of: messageEntity) else {
+                self.logger?.log("Unable to locate message with identifier: \(messageEntity.identifier)", logLevel: .warning)
+                continue
+            }
+            
+            // TODO: Previous value
+            guard let previousValue = try? messageEntity.snapshot() else {
+                self.logger?.log("Failed to snapshot previous value for an updated message with identifier: \(messageEntity.identifier)", logLevel: .warning)
+                continue
+            }
+            
+            self.delegate?.messageProvider(self, didChangeMessageAtIndex: index, previousValue: previousValue)
         }
     }
     

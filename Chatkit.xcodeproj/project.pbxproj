@@ -94,6 +94,7 @@
 		22D537E62302F57600A92341 /* MessageEntity+Snapshotable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537E52302F57600A92341 /* MessageEntity+Snapshotable.swift */; };
 		22D537E82302F57D00A92341 /* OldMessageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537E72302F57D00A92341 /* OldMessageProvider.swift */; };
 		22D777432322B6B0009773D0 /* ChatServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D777422322B6B0009773D0 /* ChatServiceTests.swift */; };
+		22DACBEC233138D900573D12 /* TestDataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DACBEB233138D900573D12 /* TestDataFactory.swift */; };
 		22EDCB7B231D0FA300419C75 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB7A231D0FA300419C75 /* Event.swift */; };
 		22EDCB80231D2D6D00419C75 /* NetworkingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB7F231D2D6D00419C75 /* NetworkingController.swift */; };
 		22EDCB84231D6C6000419C75 /* EventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB83231D6C6000419C75 /* EventParser.swift */; };
@@ -220,6 +221,7 @@
 		22D537E52302F57600A92341 /* MessageEntity+Snapshotable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageEntity+Snapshotable.swift"; sourceTree = "<group>"; };
 		22D537E72302F57D00A92341 /* OldMessageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldMessageProvider.swift; sourceTree = "<group>"; };
 		22D777422322B6B0009773D0 /* ChatServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatServiceTests.swift; sourceTree = "<group>"; };
+		22DACBEB233138D900573D12 /* TestDataFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDataFactory.swift; sourceTree = "<group>"; };
 		22EDCB7A231D0FA300419C75 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		22EDCB7F231D2D6D00419C75 /* NetworkingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingController.swift; sourceTree = "<group>"; };
 		22EDCB83231D6C6000419C75 /* EventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventParser.swift; sourceTree = "<group>"; };
@@ -644,6 +646,7 @@
 				EDE2D9F22331250D0076E7A7 /* MessageTestDataProvider.swift */,
 				EDE2D9F523312B120076E7A7 /* MessageTestDataDriver.swift */,
 				2200BB92231E727000BF9545 /* DateFormatter+Extensions.swift */,
+				22DACBEB233138D900573D12 /* TestDataFactory.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1068,6 +1071,7 @@
 				22D2A2D2231961060095757C /* PPSDKInfo+Extensions.swift in Sources */,
 				22D2A2EF2319BA520095757C /* DataProvider.swift in Sources */,
 				22D537DD2302E19C00A92341 /* RoomEntity+Snapshotable.swift in Sources */,
+				22DACBEC233138D900573D12 /* TestDataFactory.swift in Sources */,
 				22D537CD2302BDD700A92341 /* Store.swift in Sources */,
 				2225769B2305488E00FAFAEC /* InlinePartEntity+CoreDataClass.swift in Sources */,
 				EDE2D9F32331250D0076E7A7 /* MessageTestDataProvider.swift in Sources */,
