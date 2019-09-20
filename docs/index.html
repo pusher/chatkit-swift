@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>PusherChatkit  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="PusherChatkit  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">PusherChatkit Docs</a> (8% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">PusherChatkit Reference</a>
+        <img id="carat" src="img/carat.png" />
+        PusherChatkit  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/Chatkit.html">Chatkit</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/MessageProvider.html">MessageProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/RoomProvider.html">RoomProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/TestDataFactory.html">TestDataFactory</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/UserProvider.html">UserProvider</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/ConnectionStatus.html">ConnectionStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/MessagePart.html">MessagePart</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/PresenceState.html">PresenceState</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/MessageProviderDelegate.html">MessageProviderDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/Message.html">Message</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Room.html">Room</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/User.html">User</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:13PusherChatkit17CompletionHandlera">CompletionHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:13PusherChatkit8Metadataa">Metadata</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <h1 id='pusherchatkit-chatkit-swift' class='heading'>PusherChatkit (chatkit-swift)</h1>
+
+<p><a href="https://app.bitrise.io/app/b991488f69c6c503"><img src="https://app.bitrise.io/app/b991488f69c6c503/status.svg?token=k8uHB_7_HNRSCzlVcghexg&branch=master" alt="Build Status"></a>
+<a href="https://docs.pusher.com/chatkit/reference/swift"><img src="https://img.shields.io/badge/read_the-docs-92A8D1.svg" alt="Read the docs"></a>
+<a href="http://twitter.com/Pusher"><img src="https://img.shields.io/badge/twitter-@Pusher-blue.svg?style=flat" alt="Twitter"></a>
+<a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/carthage-compatible-4BC51D.svg?style=flat" alt="Carthage"></a>
+<a href="https://cocoapods.org/pods/PusherChatkit"><img src="https://img.shields.io/cocoapods/v/PusherChatkit.svg" alt="CocoaPods"></a>
+<a href="https://github.com/pusher/chatkit-swift/blob/master/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-lightgrey.svg" alt="GitHub license"></a></p>
+
+<p>Find out more about Chatkit <a href="https://pusher.com/chatkit">here</a>.</p>
+<h2 id='building-and-running' class='heading'>Building and Running</h2>
+<h3 id='minimum-requirements' class='heading'>Minimum Requirements</h3>
+
+<ul>
+<li><p><a href="https://itunes.apple.com/us/app/xcode/id497799835">Xcode</a> - The easiest way to get Xcode is from the <a href="https://itunes.apple.com/us/app/xcode/id497799835?mt=12">App Store</a>, but you can also download it from <a href="https://developer.apple.com/">developer.apple.com</a> if you have an AppleID registered with an Apple Developer account.</p></li>
+<li><p>Swift version 4.1 and above</p></li>
+<li><p>iOS version 10.0</p></li>
+</ul>
+
+<p>Before building &amp; running in Xcode, install all of the required dependencies with <a href="https://github.com/pusher/chatkit-tutorial-ios#carthage">Carthage</a> or <a href="https://github.com/pusher/chatkit-tutorial-ios#cocoapods">CocoaPods</a>.</p>
+<h2 id='installation' class='heading'>Installation</h2>
+<h3 id='cocoapods' class='heading'>CocoaPods</h3>
+
+<p><a href="http://cocoapods.org">CocoaPods</a> is a dependency manager for Cocoa projects. You can install it with the following command:</p>
+<pre class="highlight shell"><code><span class="nv">$ </span>gem <span class="nb">install </span>cocoapods
+</code></pre>
+
+<p>To integrate Chatkit into your Xcode project using CocoaPods, specify it in your <code>Podfile</code>:</p>
+<pre class="highlight ruby"><code><span class="n">source</span> <span class="s1">'https://github.com/CocoaPods/Specs.git'</span>
+<span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'11.0'</span>
+<span class="n">use_frameworks!</span>
+
+<span class="c1"># Replace `&lt;Your Target Name&gt;` with your app's target name.</span>
+<span class="n">target</span> <span class="s1">'&lt;Your Target Name&gt;'</span> <span class="k">do</span>
+  <span class="n">pod</span> <span class="s1">'PusherChatkit'</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>Then, run the following command:</p>
+<pre class="highlight shell"><code><span class="nv">$ </span>pod <span class="nb">install</span>
+</code></pre>
+
+<blockquote>
+<p>You might need to use the <code>--repo-update</code> flag to ensure the specs repository is aware of the latest version of PusherChatkit.</p>
+</blockquote>
+<h3 id='carthage' class='heading'>Carthage</h3>
+
+<p><a href="https://github.com/Carthage/Carthage">Carthage</a> is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.</p>
+
+<p>You can install Carthage with <a href="http://brew.sh/">Homebrew</a> using the following command:</p>
+<pre class="highlight shell"><code><span class="nv">$ </span>brew update
+<span class="nv">$ </span>brew <span class="nb">install </span>carthage
+</code></pre>
+
+<p>To integrate Chatkit into your Xcode project using Carthage, specify it in your <code>Cartfile</code>:</p>
+<pre class="highlight plaintext"><code>github "pusher/chatkit-swift"
+</code></pre>
+
+<p>Run <code>carthage update</code> to build the framework and drag the built <code>PusherChatkit.framework</code>, <code>PusherPlatform.framework</code> and <code>PushNotifications.framework</code> into your Xcode project.</p>
+<h2 id='deprecated-versions' class='heading'>Deprecated versions</h2>
+
+<p>Versions of the library below
+ <a href="https://github.com/pusher/chatkit-swift/releases/tag/1.0.0">1.0.0</a> are
+ deprecated and support for them will soon be dropped.</p>
+
+<p>It is highly recommended that you upgrade to the latest version if you&rsquo;re on
+ an older version. To view a list of changes, please refer to the
+ <a href="CHANGELOG.md">CHANGELOG</a>.</p>
+<h2 id='getting-started' class='heading'>Getting started</h2>
+
+<p>Head over to <a href="https://docs.pusher.com/chatkit/reference/swift">our documentation</a>.</p>
+<h2 id='running-tests' class='heading'>Running tests</h2>
+
+<p>Some of the tests require a valid Chatkit instance locator, key, and token provider URL.</p>
+
+<p>To set this up, run the following command:</p>
+<pre class="highlight shell"><code><span class="nb">cp </span>Tests/Config/TestConfigExample.swift Tests/Config/TestConfig.swift
+</code></pre>
+
+<p>Then edit <code>Tests/Config/TestConfig.swift</code> to include a valid Chatkit instance locator, key, and token provider URL.</p>
+<h2 id='communication' class='heading'>Communication</h2>
+
+<ul>
+<li>Found a bug? Please open an <a href="https://github.com/pusher/chatkit-swift/issues">issue</a>.</li>
+<li>Have a feature request. Please open an <a href="https://github.com/pusher/chatkit-swift/issues">issue</a>.</li>
+<li>If you want to contribute, please submit a <a href="https://github.com/pusher/chatkit-swift/pulls">pull request</a> (preferrably with some tests 🙂 ).</li>
+</ul>
+<h2 id='credits' class='heading'>Credits</h2>
+
+<p>PusherChatkit is owned and maintained by <a href="https://pusher.com">Pusher</a>.</p>
+<h2 id='license' class='heading'>License</h2>
+
+<p>PusherChatkit is released under the MIT license. See <a href="https://github.com/pusher/chatkit-swift/blob/master/LICENSE.md">LICENSE</a> for details.</p>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Hamilton Chapman</a>. All rights reserved. (Last updated: 2019-09-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.10.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
