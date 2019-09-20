@@ -22,6 +22,14 @@ class ViewController: UITableViewController {
     @IBAction func loadMore(sender: UIBarButtonItem) {
         self.messageProvider.fetchOlderMessages(numberOfMessages: 5)
     }
+    
+    private func scrollToBottomIfNeeded() {
+        let indexPath = IndexPath(row: messageProvider.numberOfAvailableMessages - 1, section: 0)
+        
+        if self.tableView.indexPathsForVisibleRows?.last?.row == indexPath.row {
+            self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        }
+    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.messageProvider.numberOfAvailableMessages
@@ -46,17 +54,20 @@ class ViewController: UITableViewController {
 extension ViewController: MessageProviderDelegate {
     
     func messageProvider(_ messageProvider: MessageProvider, didReceiveMessagesWithRange range: Range<Int>) {
-        if range.endIndex == messageProvider.numberOfAvailableMessages {
-            let indexPath = IndexPath(row: range.endIndex - 1, section: 0)
-            
-            self.tableView.beginUpdates()
-            self.tableView.insertRows(at: [indexPath], with: .fade)
-            self.tableView.endUpdates()
-            
-            self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        if self.tableView.numberOfRows(inSection: 0) == 0 {
+            self.tableView.reloadData()
         }
         else {
-            self.tableView.reloadData()
+            self.tableView.beginUpdates()
+            
+            range.forEach {
+                let indexPath = IndexPath(row: $0, section: 0)
+                self.tableView.insertRows(at: [indexPath], with: .fade)
+            }
+            
+            self.tableView.endUpdates()
+            
+            self.scrollToBottomIfNeeded()
         }
     }
     

@@ -100,9 +100,6 @@
 		22EDCB80231D2D6D00419C75 /* NetworkingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB7F231D2D6D00419C75 /* NetworkingController.swift */; };
 		22EDCB84231D6C6000419C75 /* EventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB83231D6C6000419C75 /* EventParser.swift */; };
 		22EDCB87231D762A00419C75 /* ChatEventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB86231D762A00419C75 /* ChatEventParser.swift */; };
-		EDE2D9F32331250D0076E7A7 /* MessageTestDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE2D9F22331250D0076E7A7 /* MessageTestDataProvider.swift */; };
-		EDE2D9F623312B120076E7A7 /* MessageTestDataDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE2D9F523312B120076E7A7 /* MessageTestDataDriver.swift */; };
-		EDE2D9FC233131720076E7A7 /* ChatkitClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE2D9FA233131720076E7A7 /* ChatkitClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -228,9 +225,6 @@
 		22EDCB7F231D2D6D00419C75 /* NetworkingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingController.swift; sourceTree = "<group>"; };
 		22EDCB83231D6C6000419C75 /* EventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventParser.swift; sourceTree = "<group>"; };
 		22EDCB86231D762A00419C75 /* ChatEventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatEventParser.swift; sourceTree = "<group>"; };
-		EDE2D9F22331250D0076E7A7 /* MessageTestDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MessageTestDataProvider.swift; path = Chatkit/Utilities/MessageTestDataProvider.swift; sourceTree = SOURCE_ROOT; };
-		EDE2D9F523312B120076E7A7 /* MessageTestDataDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTestDataDriver.swift; sourceTree = "<group>"; };
-		EDE2D9FA233131720076E7A7 /* ChatkitClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatkitClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -530,6 +524,7 @@
 				22CEBB4B22FC5484005CB021 /* Persistence */,
 				22D537CB2302BDCD00A92341 /* Store */,
 				224B805222F1E154003CB8DC /* Supporting Files */,
+				229AEEEE23351DA300A5E159 /* Test Data */,
 				22CEBB5322FC6F2B005CB021 /* Types */,
 				22D2A2D3231963BC0095757C /* Utilities */,
 			);
@@ -561,6 +556,14 @@
 				229A6C8F230BE744002997CF /* UserEntity+Identifiable.swift */,
 			);
 			path = Entities;
+			sourceTree = "<group>";
+		};
+		229AEEEE23351DA300A5E159 /* Test Data */ = {
+			isa = PBXGroup;
+			children = (
+				22DACBEB233138D900573D12 /* TestDataFactory.swift */,
+			);
+			path = "Test Data";
 			sourceTree = "<group>";
 		};
 		22C5F3EA2306B040009A7383 /* Error Handling */ = {
@@ -643,12 +646,8 @@
 		22D2A2D3231963BC0095757C /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				EDE2D9FA233131720076E7A7 /* ChatkitClient.swift */,
 				22D2A2D4231963C70095757C /* Bundle+Extensions.swift */,
-				EDE2D9F22331250D0076E7A7 /* MessageTestDataProvider.swift */,
-				EDE2D9F523312B120076E7A7 /* MessageTestDataDriver.swift */,
 				2200BB92231E727000BF9545 /* DateFormatter+Extensions.swift */,
-				22DACBEB233138D900573D12 /* TestDataFactory.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1077,7 +1076,6 @@
 				22DACBEC233138D900573D12 /* TestDataFactory.swift in Sources */,
 				22D537CD2302BDD700A92341 /* Store.swift in Sources */,
 				2225769B2305488E00FAFAEC /* InlinePartEntity+CoreDataClass.swift in Sources */,
-				EDE2D9F32331250D0076E7A7 /* MessageTestDataProvider.swift in Sources */,
 				227E947223200DBD0025B691 /* ModularEventParser.swift in Sources */,
 				222576A32305488E00FAFAEC /* URLPartEntity+CoreDataProperties.swift in Sources */,
 				22C5F3ED2306B06E009A7383 /* SnapshotError.swift in Sources */,
@@ -1113,7 +1111,6 @@
 				22D537E42302F2D200A92341 /* UserProvider.swift in Sources */,
 				222576A52305488E00FAFAEC /* PartEntity+CoreDataProperties.swift in Sources */,
 				222576B523055E1900FAFAEC /* RoomEntity+CoreDataClass.swift in Sources */,
-				EDE2D9F623312B120076E7A7 /* MessageTestDataDriver.swift in Sources */,
 				229656FB232FCE920016DA7C /* MessageProvider.swift in Sources */,
 				22D537D72302D2CE00A92341 /* User.swift in Sources */,
 				22C5F3F32306B9F3009A7383 /* InlinePartEntity+Snapshotable.swift in Sources */,
@@ -1125,7 +1122,6 @@
 				22D537CF2302C62C00A92341 /* Snapshotable.swift in Sources */,
 				22D537E82302F57D00A92341 /* OldMessageProvider.swift in Sources */,
 				22CEBB4F22FC5499005CB021 /* Model.xcdatamodeld in Sources */,
-				EDE2D9FC233131720076E7A7 /* ChatkitClient.swift in Sources */,
 				22C5F3EF2306B08C009A7383 /* MessagePart.swift in Sources */,
 				22C5F3FF2306C7AB009A7383 /* PresenceState.swift in Sources */,
 				22D2A2DB23196FDE0095757C /* NetworkingError.swift in Sources */,

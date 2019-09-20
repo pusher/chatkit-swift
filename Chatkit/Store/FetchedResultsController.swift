@@ -81,7 +81,7 @@ class FetchedResultsController<ResultType> : NSObject, NSFetchedResultsControlle
         self.insertedObjects.sort { $0 < $1 }
         
         if let lower = self.insertedObjects.first, let upper = self.insertedObjects.last {
-            let range = Range<Int>(uncheckedBounds: (lower: lower, upper: upper))
+            let range = Range<Int>(uncheckedBounds: (lower: lower, upper: upper + 1))
             
             self.delegate?.fetchedResultsController(self, didInsertObjectsWithRange: range)
         }
@@ -92,15 +92,23 @@ class FetchedResultsController<ResultType> : NSObject, NSFetchedResultsControlle
     // MARK: - NSFetchedResultsControllerDelegate
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        guard let object = anObject as? ResultType, let index = indexPath?.row else {
+        guard let object = anObject as? ResultType else {
             return
         }
         
         switch type {
         case .insert:
+            guard let index = newIndexPath?.row else {
+                return
+            }
+            
             self.insertedObjects.append(index)
         
         case .update:
+            guard let index = indexPath?.row else {
+                return
+            }
+            
             self.delegate?.fetchedResultsController(self, didUpdateObject: object, at: index)
             
         case .move:
@@ -108,6 +116,10 @@ class FetchedResultsController<ResultType> : NSObject, NSFetchedResultsControlle
             break
             
         case .delete:
+            guard let index = indexPath?.row else {
+                return
+            }
+            
             self.delegate?.fetchedResultsController(self, didDeleteObject: object, at: index)
         }
     }

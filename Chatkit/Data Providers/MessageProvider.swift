@@ -12,9 +12,10 @@ public class MessageProvider: NSObject, DataProvider {
     public weak var delegate: MessageProviderDelegate?
     
     private let persistenceController: PersistenceController
-    private let driver: MessageTestDataDriver
     private let roomIdentifier: String
     private let fetchedResultsController: FetchedResultsController<MessageEntity>
+    
+    private let testDataFactory: TestDataFactory
     
     // MARK: - Accessors
     
@@ -24,22 +25,32 @@ public class MessageProvider: NSObject, DataProvider {
     
     // MARK: - Initializers
     
-    init(roomIdentifier: String, persistenceController: PersistenceController, driver: MessageTestDataDriver, logger: PPLogger? = nil) {
+    init(roomIdentifier: String, persistenceController: PersistenceController, logger: PPLogger? = nil) {
         self.persistenceController = persistenceController
-        self.driver = driver
         self.roomIdentifier = roomIdentifier
         self.isFetchingOlderMessages = false
         self.logger = logger
         
-        let predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.room.identifier), self.roomIdentifier)
-        let sortDescriptors = [NSSortDescriptor(key: #keyPath(MessageEntity.identifier), ascending: true)]
-        let context = self.persistenceController.mainContext
+        self.testDataFactory = TestDataFactory(persistenceController: self.persistenceController)
         
-        self.fetchedResultsController = FetchedResultsController(sortDescriptors: sortDescriptors, predicate: predicate, context: context)
+        let context = self.persistenceController.mainContext
+        let predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.room.identifier), self.roomIdentifier)
+        let sortDescriptor = NSSortDescriptor(key: #keyPath(MessageEntity.identifier), ascending: true) { (lhs, rhs) -> ComparisonResult in
+            guard let lhsString = lhs as? String, let lhs = Int(lhsString), let rhsString = rhs as? String, let rhs = Int(rhsString) else {
+                return .orderedSame
+            }
+            
+            return NSNumber(value: lhs).compare(NSNumber(value: rhs))
+        }
+        
+        self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
         
         super.init()
         
         self.fetchedResultsController.delegate = self
+        
+        self.testDataFactory.receiveInitialMessages(numberOfMessages: 10, delay: 1.0)
+        self.testDataFactory.startReceivingNewMessages()
     }
     
     // MARK: - Public methods
@@ -49,7 +60,7 @@ public class MessageProvider: NSObject, DataProvider {
     }
     
     public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: ((Error?) -> Void)? = nil) {
-        guard !self.isFetchingOlderMessages else {
+        guard !self.isFetchingOlderMessages, let lastMessageIdentifier = self.message(at: 0)?.identifier else {
             if let completionHandler = completionHandler {
                 // TODO: Return error
                 completionHandler(nil)
@@ -60,9 +71,7 @@ public class MessageProvider: NSObject, DataProvider {
         
         self.isFetchingOlderMessages = true
         
-        let message = self.message(at: 0)?.identifier
-        
-        self.driver.fetchMessages(room: self.roomIdentifier, from: message, order: "older", amount: numberOfMessages) { _ in
+        self.testDataFactory.receiveOldMessages(numberOfMessages: 5, lastMessageIdentifier: lastMessageIdentifier, delay: 1.0) {
             self.isFetchingOlderMessages = false
         }
     }
