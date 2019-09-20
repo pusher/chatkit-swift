@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-public struct OldMessageProvider: DataProvider {
+class OldMessageProvider: DataProvider {
     
     // MARK: - Properties
     

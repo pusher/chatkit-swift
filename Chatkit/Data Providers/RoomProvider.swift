@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-public struct RoomProvider: DataProvider {
+public class RoomProvider: DataProvider {
     
     // MARK: - Properties
     
