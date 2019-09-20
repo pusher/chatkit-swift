@@ -32,4 +32,13 @@ public class MessageTestDataDriver {
         self.lowMessageId = lowMessageId - amount
         let _ = self.testDataProvider.createMessages(ids: self.lowMessageId...(self.lowMessageId+amount))
     }
+    
+}
+
+extension MessageTestDataDriver: ChatkitClient {
+    
+    func fetchMessages(room: String, from: String?, order: String, amount: UInt, completionHandler: (Error?) -> ()) {
+        completionHandler(nil)
+    }
+    
 }

@@ -12,45 +12,40 @@ public class MessageProvider: NSObject, DataProvider {
     public weak var delegate: MessageProviderDelegate?
     
     private let persistenceController: PersistenceController
-    private let chatkitClient: ChatkitClient
+    private let driver: MessageTestDataDriver
     private let roomIdentifier: String
-    private var messageEntities: [MessageEntity]
+    private let fetchedResultsController: FetchedResultsController<MessageEntity>
     
     // MARK: - Accessors
     
     public var numberOfAvailableMessages: Int {
-        return self.messageEntities.count
+        return self.fetchedResultsController.numberOfObjects
     }
     
     // MARK: - Initializers
     
-    init(
-        roomIdentifier: String,
-        persistenceController: PersistenceController,
-        chatkitClient: ChatkitClient,
-        logger: PPLogger? = nil
-    ) {
+    init(roomIdentifier: String, persistenceController: PersistenceController, driver: MessageTestDataDriver, logger: PPLogger? = nil) {
         self.persistenceController = persistenceController
-        self.chatkitClient = chatkitClient
+        self.driver = driver
         self.roomIdentifier = roomIdentifier
         self.isFetchingOlderMessages = false
         self.logger = logger
-        self.messageEntities = []
+        
+        let predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.room.identifier), self.roomIdentifier)
+        let sortDescriptors = [NSSortDescriptor(key: #keyPath(MessageEntity.identifier), ascending: true)]
+        let context = self.persistenceController.mainContext
+        
+        self.fetchedResultsController = FetchedResultsController(sortDescriptors: sortDescriptors, predicate: predicate, context: context)
         
         super.init()
         
-        self.registerForNotifications()
-        self.reloadData()
+        self.fetchedResultsController.delegate = self
     }
     
     // MARK: - Public methods
     
     public func message(at index: Int) -> Message? {
-        guard index >= 0, index < self.messageEntities.count else {
-            return nil
-        }
-        
-        return (try? self.messageEntities[index].snapshot()) ?? nil
+        return (try? self.fetchedResultsController.object(at: index)?.snapshot()) ?? nil
     }
     
     public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: ((Error?) -> Void)? = nil) {
@@ -65,102 +60,34 @@ public class MessageProvider: NSObject, DataProvider {
         
         self.isFetchingOlderMessages = true
         
-        self.chatkitClient.fetchMessages(
-            room: self.roomIdentifier,
-            from: self.message(at: 0)?.identifier,
-            order: "older",
-            amount: numberOfMessages
-        ) { _ in
+        let message = self.message(at: 0)?.identifier
+        
+        self.driver.fetchMessages(room: self.roomIdentifier, from: message, order: "older", amount: numberOfMessages) { _ in
             self.isFetchingOlderMessages = false
         }
     }
+    
+}
 
-    // MARK: - Private methods
-    
-    private func registerForNotifications() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(managedObjectContextObjectsDidChange(_:)),
-                                               name: .NSManagedObjectContextObjectsDidChange,
-                                               object: self.persistenceController.mainContext)
+extension MessageProvider: FetchedResultsControllerDelegate {
+    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>) where ResultType : NSManagedObject {
+        self.delegate?.messageProvider(self, didReceiveMessagesWithRange: range)
     }
     
-    private func reloadData() {
-        let fetchRequest = NSFetchRequest<MessageEntity>(entityName: String(describing: MessageEntity.self))
-        fetchRequest.predicate = NSPredicate(format: "%K == #@", #keyPath(MessageEntity.room), self.roomIdentifier)
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(MessageEntity.identifier), ascending: true)]
-        fetchRequest.fetchBatchSize = 30
-        
-        do {
-            self.messageEntities = try self.persistenceController.mainContext.fetch(fetchRequest)
-        } catch {
-            self.logger?.log("Failed to reload messages with error: \(error.localizedDescription)", logLevel: .warning)
-        }
-    }
-    
-    private func filterInsertions(_ objects: Set<NSManagedObject>) {
-        let messages = objects.compactMap { $0 as? MessageEntity }
-        
-        guard messages.count > 0 else {
+    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject: ResultType, at index: Int) where ResultType : NSManagedObject {
+        guard let object = self.fetchedResultsController.object(at: index), let message = try? object.snapshot() else {
             return
         }
         
-        // TODO: Insertion position?
-        
-        // TODO: Notification
+        self.delegate?.messageProvider(self, didChangeMessageAtIndex: index, previousValue: message)
     }
     
-    private func filterUpdates(_ objects: Set<NSManagedObject>) {
-        let messageEntities = objects.compactMap { $0 as? MessageEntity }
-        
-        guard messageEntities.count > 0 else {
+    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject: ResultType, at index: Int) where ResultType : NSManagedObject {
+        guard let object = self.fetchedResultsController.object(at: index), let message = try? object.snapshot() else {
             return
         }
         
-        self.reloadData()
-        
-        for messageEntity in messageEntities {
-            guard let index = self.messageEntities.index(of: messageEntity) else {
-                self.logger?.log("Unable to locate message with identifier: \(messageEntity.identifier)", logLevel: .warning)
-                continue
-            }
-            
-            // TODO: Previous value
-            guard let previousValue = try? messageEntity.snapshot() else {
-                self.logger?.log("Failed to snapshot previous value for an updated message with identifier: \(messageEntity.identifier)", logLevel: .warning)
-                continue
-            }
-            
-            self.delegate?.messageProvider(self, didChangeMessageAtIndex: index, previousValue: previousValue)
-        }
-    }
-    
-    private func filterDeletions(_ objects: Set<NSManagedObject>) {
-    }
-    
-    // MARK: - Notifications
-    
-    @objc private func managedObjectContextObjectsDidChange(_ notification: Notification) {
-        guard let userInfo = notification.userInfo else {
-            return
-        }
-        
-        if let insertedObjects = (userInfo[NSInsertedObjectsKey] as? Set<NSManagedObject>), insertedObjects.count > 0 {
-            self.filterInsertions(insertedObjects)
-        }
-        
-        if let updatedObjects = userInfo[NSUpdatedObjectsKey] as? Set<NSManagedObject>, updatedObjects.count > 0 {
-            self.filterUpdates(updatedObjects)
-        }
-        
-        if let deletedObjects = userInfo[NSDeletedObjectsKey] as? Set<NSManagedObject>, deletedObjects.count > 0 {
-            self.filterDeletions(deletedObjects)
-        }
-    }
-    
-    // MARK: - Memory management
-    
-    deinit {
-        // TODO: Unsubscribe
+        self.delegate?.messageProvider(self, didDeleteMessageAtIndex: index, previousValue: message)
     }
     
 }

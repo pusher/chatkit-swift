@@ -11,7 +11,7 @@ import PusherChatkit
 
 class ViewController: UITableViewController {
     
-    var messageProvider = MessageProvider(roomIdentifier: "testRoomIdentifier")
+    var messageProvider = TestDataFactory.createMessageProvider()
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -13,12 +13,12 @@ public struct TestDataFactory {
         return try! PersistenceController(model: model, storeDescriptions: [storeDescription])
     }()
     
-    public static func createMessageTestDataProvider() -> MessageTestDataProvider {
+    static func createMessageTestDataProvider() -> MessageTestDataProvider {
         let persistenceController = TestDataFactory.persistenceController
         return MessageTestDataProvider(persistenceController: persistenceController)
     }
     
-    public static func createMessageTestDataDriver() -> MessageTestDataDriver {
+    static func createMessageTestDataDriver() -> MessageTestDataDriver {
         let testDataProvider = TestDataFactory.createMessageTestDataProvider()
         return MessageTestDataDriver(testDataProvider: testDataProvider)
     }
@@ -31,8 +31,8 @@ public struct TestDataFactory {
         
         let persistenceController = try! PersistenceController(model: model, storeDescriptions: [storeDescription])
     
-        let messageTestDataDriver = MessageTestDataDriver(testDataProvider: MessageTestDataProvider(persistenceController: persistenceController))
+        let driver = TestDataFactory.createMessageTestDataDriver()
         
-        return MessageProvider(roomIdentifier: "blah", persistenceController: persistenceController, chatkitClient: messageTestDataDriver)
+        return MessageProvider(roomIdentifier: "blah", persistenceController: persistenceController, driver: driver)
     }
 }
