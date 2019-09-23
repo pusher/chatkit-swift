@@ -13,9 +13,6 @@ class FetchedResultsController<ResultType> : NSObject, NSFetchedResultsControlle
     private let controller: NSFetchedResultsController<ResultType>
     
     private var insertedObjects: [Int] = []
-//    private var updatedObjects: [ResultType] = []
-//    private var movedObjects: [ResultType] = []
-//    private var deletedObjects: [ResultType] = []
     
     // MARK: - Accessors
     
@@ -66,13 +63,13 @@ class FetchedResultsController<ResultType> : NSObject, NSFetchedResultsControlle
     
     func index(for object: ResultType) -> Int? {
         let indexPath = self.controller.indexPath(forObject: object)
-        return indexPath?.row
+        return indexPath?.item
     }
     
     // MARK: - Private methods
     
     private func indexPath(for index: Int) -> IndexPath {
-        return IndexPath(row: index, section: 0)
+        return IndexPath(item: index, section: 0)
     }
     
     private func commitInsertions() {
@@ -98,14 +95,14 @@ class FetchedResultsController<ResultType> : NSObject, NSFetchedResultsControlle
         
         switch type {
         case .insert:
-            guard let index = newIndexPath?.row else {
+            guard let index = newIndexPath?.item else {
                 return
             }
             
             self.insertedObjects.append(index)
         
         case .update:
-            guard let index = indexPath?.row else {
+            guard let index = indexPath?.item else {
                 return
             }
             
@@ -116,7 +113,7 @@ class FetchedResultsController<ResultType> : NSObject, NSFetchedResultsControlle
             break
             
         case .delete:
-            guard let index = indexPath?.row else {
+            guard let index = indexPath?.item else {
                 return
             }
             
@@ -129,6 +126,8 @@ class FetchedResultsController<ResultType> : NSObject, NSFetchedResultsControlle
     }
     
 }
+
+// MARK: - Delegate
 
 protocol FetchedResultsControllerDelegate: class {
     
