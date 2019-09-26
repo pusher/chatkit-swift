@@ -7,27 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		228865CF233BC5940044BCD8 /* RoomListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228865CE233BC5940044BCD8 /* RoomListViewController.swift */; };
 		229656D6232FC8880016DA7C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656D5232FC8880016DA7C /* AppDelegate.swift */; };
-		229656D8232FC8880016DA7C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656D7232FC8880016DA7C /* ViewController.swift */; };
+		229656D8232FC8880016DA7C /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656D7232FC8880016DA7C /* MessageViewController.swift */; };
 		229656DB232FC8880016DA7C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 229656D9232FC8880016DA7C /* Main.storyboard */; };
 		229656DD232FC8890016DA7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 229656DC232FC8890016DA7C /* Assets.xcassets */; };
 		229656E0232FC8890016DA7C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 229656DE232FC8890016DA7C /* LaunchScreen.storyboard */; };
 		229656EF232FC8BB0016DA7C /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229656EE232FC8BB0016DA7C /* PusherChatkit.framework */; };
 		229656F8232FCAE90016DA7C /* PusherPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229656F7232FCAE90016DA7C /* PusherPlatform.framework */; };
-		229656FE232FD2C40016DA7C /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656FD232FD2C40016DA7C /* MessageTableViewCell.swift */; };
+		229656FE232FD2C40016DA7C /* TestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656FD232FD2C40016DA7C /* TestTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		228865CE233BC5940044BCD8 /* RoomListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListViewController.swift; sourceTree = "<group>"; };
 		229656D2232FC8880016DA7C /* Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		229656D5232FC8880016DA7C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		229656D7232FC8880016DA7C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		229656D7232FC8880016DA7C /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 		229656DA232FC8880016DA7C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		229656DC232FC8890016DA7C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		229656DF232FC8890016DA7C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		229656E1232FC8890016DA7C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		229656EE232FC8BB0016DA7C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229656F7232FCAE90016DA7C /* PusherPlatform.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PusherPlatform.framework; path = Carthage/Build/iOS/PusherPlatform.framework; sourceTree = "<group>"; };
-		229656FD232FD2C40016DA7C /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
+		229656FD232FD2C40016DA7C /* TestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,7 +104,8 @@
 		229656F2232FC8CC0016DA7C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				229656D7232FC8880016DA7C /* ViewController.swift */,
+				229656D7232FC8880016DA7C /* MessageViewController.swift */,
+				228865CE233BC5940044BCD8 /* RoomListViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -110,7 +113,7 @@
 		229656FC232FD2AD0016DA7C /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				229656FD232FD2C40016DA7C /* MessageTableViewCell.swift */,
+				229656FD232FD2C40016DA7C /* TestTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -208,9 +211,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				229656D8232FC8880016DA7C /* ViewController.swift in Sources */,
+				229656D8232FC8880016DA7C /* MessageViewController.swift in Sources */,
 				229656D6232FC8880016DA7C /* AppDelegate.swift in Sources */,
-				229656FE232FD2C40016DA7C /* MessageTableViewCell.swift in Sources */,
+				229656FE232FD2C40016DA7C /* TestTableViewCell.swift in Sources */,
+				228865CF233BC5940044BCD8 /* RoomListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

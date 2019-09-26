@@ -32,6 +32,10 @@ class FetchedResultsController<ResultType> : NSObject, NSFetchedResultsControlle
         return self.controller.fetchedObjects?.count ?? 0
     }
     
+    var objects: [ResultType] {
+        return self.controller.fetchedObjects ?? []
+    }
+    
     // MARK: - Initializers
     
     init(sortDescriptors: [NSSortDescriptor], predicate: NSPredicate? = nil, fetchBatchSize: Int = 50, context: NSManagedObjectContext) {

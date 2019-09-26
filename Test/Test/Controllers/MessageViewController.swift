@@ -1,29 +1,32 @@
-//
-//  ViewController.swift
-//  Test
-//
-//  Created by Grzegorz Kozłowski on 16/09/2019.
-//  Copyright © 2019 Pusher Limited. All rights reserved.
-//
-
 import UIKit
 import PusherChatkit
 
-class ViewController: UITableViewController {
+class MessageViewController: UITableViewController {
     
-    var messageProvider = TestDataFactory.createMessageProvider()
+    var messageProvider: MessageProvider?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        self.messageProvider.delegate = self
+        self.tableView.reloadData()
+        self.messageProvider?.delegate = self
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.messageProvider?.delegate = nil
+        
+        super.viewWillAppear(animated)
     }
     
     @IBAction func loadMore(sender: UIBarButtonItem) {
-        self.messageProvider.fetchOlderMessages(numberOfMessages: 5)
+        self.messageProvider?.fetchOlderMessages(numberOfMessages: 5)
     }
     
     private func scrollToBottomIfNeeded() {
+        guard let messageProvider = self.messageProvider else {
+            return
+        }
+        
         let indexPath = IndexPath(row: messageProvider.numberOfAvailableMessages - 1, section: 0)
         
         if self.tableView.indexPathsForVisibleRows?.last?.row == indexPath.row {
@@ -32,14 +35,14 @@ class ViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.messageProvider.numberOfAvailableMessages
+        return self.messageProvider?.numberOfAvailableMessages ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "testCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)
         
-        if let messageCell = cell as? MessageTableViewCell {
-            let message = self.messageProvider.message(at: indexPath.row)
+        if let messageCell = cell as? TestTableViewCell {
+            let message = self.messageProvider?.message(at: indexPath.row)
             
             if case let MessagePart.text(_, content) = message!.parts.first! {
                 messageCell.messageLabel.text = content
@@ -51,7 +54,7 @@ class ViewController: UITableViewController {
     
 }
 
-extension ViewController: MessageProviderDelegate {
+extension MessageViewController: MessageProviderDelegate {
     
     func messageProvider(_ messageProvider: MessageProvider, didReceiveMessagesWithRange range: Range<Int>) {
         if self.tableView.numberOfRows(inSection: 0) == 0 {

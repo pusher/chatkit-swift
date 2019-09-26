@@ -9,13 +9,22 @@ public class MessageProvider: NSObject, DataProvider {
     public private(set) var isFetchingOlderMessages: Bool
     public let logger: PPLogger?
     
-    public weak var delegate: MessageProviderDelegate?
+    public weak var delegate: MessageProviderDelegate? {
+        didSet {
+            if delegate == nil {
+                self.messageFactory.stopReceivingNewMessages()
+            }
+            else {
+                self.messageFactory.startReceivingNewMessages()
+            }
+        }
+    }
     
     private let persistenceController: PersistenceController
-    private let roomIdentifier: String
+    private let roomID: NSManagedObjectID
     private let fetchedResultsController: FetchedResultsController<MessageEntity>
     
-    private let testDataFactory: TestDataFactory
+    private let messageFactory: MessageFactory
     
     // MARK: - Accessors
     
@@ -25,16 +34,16 @@ public class MessageProvider: NSObject, DataProvider {
     
     // MARK: - Initializers
     
-    init(roomIdentifier: String, persistenceController: PersistenceController, logger: PPLogger? = nil) {
+    init(room: Room, persistenceController: PersistenceController, logger: PPLogger? = nil) {
         self.persistenceController = persistenceController
-        self.roomIdentifier = roomIdentifier
+        self.roomID = room.objectID
         self.isFetchingOlderMessages = false
         self.logger = logger
         
-        self.testDataFactory = TestDataFactory(persistenceController: self.persistenceController)
+        self.messageFactory = MessageFactory(roomID: room.objectID, persistenceController: self.persistenceController)
         
         let context = self.persistenceController.mainContext
-        let predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.room.identifier), self.roomIdentifier)
+        let predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.room), self.roomID)
         let sortDescriptor = NSSortDescriptor(key: #keyPath(MessageEntity.identifier), ascending: true) { (lhs, rhs) -> ComparisonResult in
             guard let lhsString = lhs as? String, let lhs = Int(lhsString), let rhsString = rhs as? String, let rhs = Int(rhsString) else {
                 return .orderedSame
@@ -49,8 +58,7 @@ public class MessageProvider: NSObject, DataProvider {
         
         self.fetchedResultsController.delegate = self
         
-        self.testDataFactory.receiveInitialMessages(numberOfMessages: 10, delay: 1.0)
-        self.testDataFactory.startReceivingNewMessages()
+        self.messageFactory.receiveInitialMessages(numberOfMessages: 10, delay: 1.0)
     }
     
     // MARK: - Public methods
@@ -59,7 +67,7 @@ public class MessageProvider: NSObject, DataProvider {
         return (try? self.fetchedResultsController.object(at: index)?.snapshot()) ?? nil
     }
     
-    public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: ((Error?) -> Void)? = nil) {
+    public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: CompletionHandler? = nil) {
         guard !self.isFetchingOlderMessages, let lastMessageIdentifier = self.message(at: 0)?.identifier else {
             if let completionHandler = completionHandler {
                 // TODO: Return error
@@ -71,7 +79,7 @@ public class MessageProvider: NSObject, DataProvider {
         
         self.isFetchingOlderMessages = true
         
-        self.testDataFactory.receiveOldMessages(numberOfMessages: 5, lastMessageIdentifier: lastMessageIdentifier, delay: 1.0) {
+        self.messageFactory.receiveOldMessages(numberOfMessages: Int(numberOfMessages), lastMessageIdentifier: lastMessageIdentifier, delay: 1.0) {
             self.isFetchingOlderMessages = false
         }
     }
