@@ -125,13 +125,6 @@
 			remoteGlobalIDString = 229093D422F1DDB4003DDE2C;
 			remoteInfo = Chatkit;
 		};
-		229656EB232FC8950016DA7C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 229656E7232FC8950016DA7C /* Test.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 229656D2232FC8880016DA7C;
-			remoteInfo = Test;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -193,7 +186,6 @@
 		229093D522F1DDB4003DDE2C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229093D822F1DDB4003DDE2C /* PusherChatkit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PusherChatkit.h; sourceTree = "<group>"; };
 		229093D922F1DDB4003DDE2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		229656E7232FC8950016DA7C /* Test.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Test.xcodeproj; path = Test/Test.xcodeproj; sourceTree = "<group>"; };
 		229656FA232FCE920016DA7C /* MessageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageProvider.swift; sourceTree = "<group>"; };
 		229A6C8D230BE6F0002997CF /* MessageEntity+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageEntity+Identifiable.swift"; sourceTree = "<group>"; };
 		229A6C8F230BE744002997CF /* UserEntity+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserEntity+Identifiable.swift"; sourceTree = "<group>"; };
@@ -525,7 +517,6 @@
 				224B803922F1E009003CB8DC /* Unit Tests */,
 				224B804822F1E028003CB8DC /* Integration Tests */,
 				229093D622F1DDB4003DDE2C /* Products */,
-				229656E7232FC8950016DA7C /* Test.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -555,14 +546,6 @@
 				22D2A2D3231963BC0095757C /* Utilities */,
 			);
 			path = Chatkit;
-			sourceTree = "<group>";
-		};
-		229656E8232FC8950016DA7C /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				229656EC232FC8950016DA7C /* Test.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		229A6C8B230BE664002997CF /* Identifiable */ = {
@@ -958,12 +941,6 @@
 			mainGroup = 229093CB22F1DDB4003DDE2C;
 			productRefGroup = 229093D622F1DDB4003DDE2C /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 229656E8232FC8950016DA7C /* Products */;
-					ProjectRef = 229656E7232FC8950016DA7C /* Test.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				229093D422F1DDB4003DDE2C /* Chatkit */,
@@ -972,16 +949,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		229656EC232FC8950016DA7C /* Test.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = Test.app;
-			remoteRef = 229656EB232FC8950016DA7C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		224B803622F1E009003CB8DC /* Resources */ = {
