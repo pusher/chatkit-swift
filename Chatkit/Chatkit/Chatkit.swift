@@ -8,8 +8,8 @@ public class Chatkit {
     
     public let logger: PPLogger
     
-    public let roomProvider: RoomProvider
-    public let userProvider: UserProvider
+//    public let roomProvider: RoomProvider
+//    public let userProvider: UserProvider
 //    public let messageProvider: MessageProvider
     
     private let persistenceController: PersistenceController
@@ -51,8 +51,8 @@ public class Chatkit {
         
         self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, eventParser: eventParser, logger: self.logger)
         
-        self.roomProvider = RoomProvider(persistenceController: self.persistenceController)
-        self.userProvider = UserProvider(persistenceController: self.persistenceController)
+//        self.roomProvider = RoomProvider(persistenceController: self.persistenceController)
+//        self.userProvider = UserProvider(persistenceController: self.persistenceController)
 //        self.messageProvider = MessageProvider.createMessageProvider()
     }
     

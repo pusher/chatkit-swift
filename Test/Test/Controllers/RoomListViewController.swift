@@ -42,7 +42,7 @@ class RoomListViewController: UITableViewController {
         if let roomCell = cell as? TestTableViewCell {
             let room = self.roomListProvider.room(at: indexPath.row)
             
-            roomCell.messageLabel.text = room?.name
+            roomCell.testLabel.text = room?.name
         }
         
         return cell

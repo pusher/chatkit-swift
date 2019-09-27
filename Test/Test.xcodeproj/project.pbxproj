@@ -16,6 +16,8 @@
 		229656EF232FC8BB0016DA7C /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229656EE232FC8BB0016DA7C /* PusherChatkit.framework */; };
 		229656F8232FCAE90016DA7C /* PusherPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229656F7232FCAE90016DA7C /* PusherPlatform.framework */; };
 		229656FE232FD2C40016DA7C /* TestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656FD232FD2C40016DA7C /* TestTableViewCell.swift */; };
+		22FC112F233E58600013A9D7 /* RoomPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC112E233E58600013A9D7 /* RoomPickerViewController.swift */; };
+		22FC1131233E5CD80013A9D7 /* UserPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC1130233E5CD80013A9D7 /* UserPickerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		229656EE232FC8BB0016DA7C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229656F7232FCAE90016DA7C /* PusherPlatform.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PusherPlatform.framework; path = Carthage/Build/iOS/PusherPlatform.framework; sourceTree = "<group>"; };
 		229656FD232FD2C40016DA7C /* TestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTableViewCell.swift; sourceTree = "<group>"; };
+		22FC112E233E58600013A9D7 /* RoomPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPickerViewController.swift; sourceTree = "<group>"; };
+		22FC1130233E5CD80013A9D7 /* UserPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPickerViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +110,8 @@
 			children = (
 				229656D7232FC8880016DA7C /* MessageViewController.swift */,
 				228865CE233BC5940044BCD8 /* RoomListViewController.swift */,
+				22FC112E233E58600013A9D7 /* RoomPickerViewController.swift */,
+				22FC1130233E5CD80013A9D7 /* UserPickerViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -213,6 +219,8 @@
 			files = (
 				229656D8232FC8880016DA7C /* MessageViewController.swift in Sources */,
 				229656D6232FC8880016DA7C /* AppDelegate.swift in Sources */,
+				22FC112F233E58600013A9D7 /* RoomPickerViewController.swift in Sources */,
+				22FC1131233E5CD80013A9D7 /* UserPickerViewController.swift in Sources */,
 				229656FE232FD2C40016DA7C /* TestTableViewCell.swift in Sources */,
 				228865CF233BC5940044BCD8 /* RoomListViewController.swift in Sources */,
 			);

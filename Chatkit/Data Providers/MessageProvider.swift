@@ -24,7 +24,7 @@ public class MessageProvider: NSObject, DataProvider {
     private let roomID: NSManagedObjectID
     private let fetchedResultsController: FetchedResultsController<MessageEntity>
     
-    private let messageFactory: MessageFactory
+    private let messageFactory: MessageEntityFactory
     
     // MARK: - Accessors
     
@@ -40,7 +40,7 @@ public class MessageProvider: NSObject, DataProvider {
         self.isFetchingOlderMessages = false
         self.logger = logger
         
-        self.messageFactory = MessageFactory(roomID: room.objectID, persistenceController: self.persistenceController)
+        self.messageFactory = MessageEntityFactory(roomID: room.objectID, persistenceController: self.persistenceController)
         
         let context = self.persistenceController.mainContext
         let predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.room), self.roomID)
@@ -81,6 +81,10 @@ public class MessageProvider: NSObject, DataProvider {
         
         self.messageFactory.receiveOldMessages(numberOfMessages: Int(numberOfMessages), lastMessageIdentifier: lastMessageIdentifier, delay: 1.0) {
             self.isFetchingOlderMessages = false
+            
+            if let completionHandler = completionHandler {
+                completionHandler(nil)
+            }
         }
     }
     

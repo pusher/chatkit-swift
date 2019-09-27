@@ -18,7 +18,7 @@ class MessageViewController: UITableViewController {
         super.viewWillAppear(animated)
     }
     
-    @IBAction func loadMore(sender: UIBarButtonItem) {
+    @IBAction func loadMore(_ sender: UIBarButtonItem) {
         self.messageProvider?.fetchOlderMessages(numberOfMessages: 5)
     }
     
@@ -45,7 +45,7 @@ class MessageViewController: UITableViewController {
             let message = self.messageProvider?.message(at: indexPath.row)
             
             if case let MessagePart.text(_, content) = message!.parts.first! {
-                messageCell.messageLabel.text = content
+                messageCell.testLabel.text = content
             }
         }
         

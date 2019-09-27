@@ -13,7 +13,7 @@ public class JoinedRoomListProvider: NSObject, DataProvider {
     private let persistenceController: PersistenceController
     private let fetchedResultsController: FetchedResultsController<RoomEntity>
     
-    private let roomFactory: RoomFactory
+    private let roomFactory: RoomEntityFactory
     
     // MARK: - Accessors
     
@@ -31,10 +31,16 @@ public class JoinedRoomListProvider: NSObject, DataProvider {
         self.persistenceController = persistenceController
         self.logger = logger
         
-        self.roomFactory = RoomFactory(persistenceController: self.persistenceController)
+        self.roomFactory = RoomEntityFactory(persistenceController: self.persistenceController)
+        
+        var currentUserID = UserEntityFactory.currentUserID
+        persistenceController.mainContext.performAndWait {
+            currentUserID = persistenceController.mainContext.object(with: currentUserID).objectID
+        }
         
         let context = self.persistenceController.mainContext
-        let sortDescriptor = NSSortDescriptor(key: #keyPath(MessageEntity.identifier), ascending: true) { (lhs, rhs) -> ComparisonResult in
+        let predicate = NSPredicate(format: "ANY %K == %@", #keyPath(RoomEntity.members), currentUserID)
+        let sortDescriptor = NSSortDescriptor(key: #keyPath(RoomEntity.identifier), ascending: true) { (lhs, rhs) -> ComparisonResult in
             guard let lhsString = lhs as? String, let lhs = Int(lhsString), let rhsString = rhs as? String, let rhs = Int(rhsString) else {
                 return .orderedSame
             }
@@ -42,7 +48,7 @@ public class JoinedRoomListProvider: NSObject, DataProvider {
             return NSNumber(value: lhs).compare(NSNumber(value: rhs))
         }
         
-        self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], context: context)
+        self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
         
         super.init()
         

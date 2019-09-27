@@ -17,6 +17,14 @@ public class TestDataFactory {
         return JoinedRoomListProvider(persistenceController: TestDataFactory.persistenceController)
     }
     
+    public static func createRoomListProvider() -> RoomListProvider {
+        return RoomListProvider()
+    }
+    
+    public static func createUserProvider() -> UserProvider {
+        return UserProvider()
+    }
+    
     public static func createMessageProvider(for room: Room) -> MessageProvider {
         return MessageProvider(room: room, persistenceController: TestDataFactory.persistenceController)
     }

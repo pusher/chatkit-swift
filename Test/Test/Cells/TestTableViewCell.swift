@@ -2,6 +2,6 @@ import UIKit
 
 class TestTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var messageLabel: UILabel!
+    @IBOutlet weak var testLabel: UILabel!
 
 }

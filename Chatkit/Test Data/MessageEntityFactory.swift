@@ -2,19 +2,17 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-class MessageFactory {
+class MessageEntityFactory {
     
     private let persistenceController: PersistenceController
     
     private var timer: Timer?
     
-    private let userID: NSManagedObjectID
     private let roomID: NSManagedObjectID
     
     init(roomID: NSManagedObjectID, persistenceController: PersistenceController) {
         self.persistenceController = persistenceController
         self.timer = nil
-        self.userID = MessageFactory.createUser(persistenceController: persistenceController)
         self.roomID = roomID
     }
     
@@ -26,7 +24,7 @@ class MessageFactory {
                 }
                 
                 (0..<numberOfMessages).forEach {
-                    self.createMessage(in: context, identifier: "\($0)", userID: self.userID, roomID: self.roomID)
+                    self.createMessage(in: context, identifier: "\($0)", userID: UserEntityFactory.currentUserID, roomID: self.roomID)
                 }
                 
                 do {
@@ -49,7 +47,7 @@ class MessageFactory {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             self.persistenceController.performBackgroundTask { context in
                 ((lastMessageIdentifier - numberOfMessages)..<lastMessageIdentifier).forEach {
-                    self.createMessage(in: context, identifier: "\($0)", userID: self.userID, roomID: self.roomID)
+                    self.createMessage(in: context, identifier: "\($0)", userID: UserEntityFactory.currentUserID, roomID: self.roomID)
                 }
                 
                 do {
@@ -76,24 +74,6 @@ class MessageFactory {
     func stopReceivingNewMessages() {
         self.timer?.invalidate()
         self.timer = nil
-    }
-    
-    private static func createUser(persistenceController: PersistenceController) -> NSManagedObjectID {
-        var user: UserEntity? = nil
-        let now = Date()
-        
-        persistenceController.mainContext.performAndWait {
-            user = persistenceController.mainContext.create(UserEntity.self)
-            user?.identifier = "testUserIdentifier"
-            user?.name = "User: testUserIdentifier"
-            user?.avatar = "http://www.gravatar.com/avatar/grzesiekko?d=identicon"
-            user?.createdAt = now
-            user?.updatedAt = now
-            
-            persistenceController.save()
-        }
-        
-        return user!.objectID
     }
     
     @discardableResult private func createMessage(in context: NSManagedObjectContext, identifier: String, userID: NSManagedObjectID, roomID: NSManagedObjectID) -> MessageEntity {
@@ -129,7 +109,7 @@ class MessageFactory {
                     return
             }
             
-            self.createMessage(in: context, identifier: "\(lastIdentifier + 1)", userID: self.userID, roomID: self.roomID)
+            self.createMessage(in: context, identifier: "\(lastIdentifier + 1)", userID: UserEntityFactory.currentUserID, roomID: self.roomID)
             
             do {
                 try context.save()
