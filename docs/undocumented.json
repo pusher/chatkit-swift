@@ -16,20 +16,6 @@
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
-      "line": 11,
-      "symbol": "Chatkit.roomProvider",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
-      "line": 12,
-      "symbol": "Chatkit.userProvider",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
       "line": 20,
       "symbol": "Chatkit.instanceLocator",
       "symbol_kind": "source.lang.swift.decl.var.instance",
@@ -107,35 +93,35 @@
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomListProvider.swift",
-      "line": 56,
+      "line": 62,
       "symbol": "JoinedRoomListProvider.room(at:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomListProvider.swift",
-      "line": 87,
+      "line": 93,
       "symbol": "JoinedRoomListProviderDelegate",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomListProvider.swift",
-      "line": 89,
+      "line": 95,
       "symbol": "JoinedRoomListProviderDelegate.joinedRoomListProvider(_:didJoinRoomsAtIndexRange:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomListProvider.swift",
-      "line": 90,
+      "line": 96,
       "symbol": "JoinedRoomListProviderDelegate.joinedRoomListProvider(_:didUpdateRoomAtIndex:previousValue:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomListProvider.swift",
-      "line": 91,
+      "line": 97,
       "symbol": "JoinedRoomListProviderDelegate.joinedRoomListProvider(_:didLeaveRoomAtIndex:previousValue:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -219,50 +205,155 @@
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/MessageProvider.swift",
-      "line": 114,
+      "line": 118,
       "symbol": "MessageProviderDelegate",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/MessageProvider.swift",
-      "line": 116,
+      "line": 120,
       "symbol": "MessageProviderDelegate.messageProvider(_:didReceiveMessagesWithRange:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/MessageProvider.swift",
-      "line": 117,
+      "line": 121,
       "symbol": "MessageProviderDelegate.messageProvider(_:didChangeMessageAtIndex:previousValue:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/MessageProvider.swift",
-      "line": 118,
+      "line": 122,
       "symbol": "MessageProviderDelegate.messageProvider(_:didDeleteMessageAtIndex:previousValue:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomListProvider.swift",
+      "line": 5,
+      "symbol": "RoomListProvider",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomListProvider.swift",
+      "line": 9,
+      "symbol": "RoomListProvider.isFetchingMoreRooms",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomListProvider.swift",
+      "line": 10,
+      "symbol": "RoomListProvider.logger",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomListProvider.swift",
+      "line": 12,
+      "symbol": "RoomListProvider.delegate",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomListProvider.swift",
+      "line": 20,
+      "symbol": "RoomListProvider.numberOfRooms",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomListProvider.swift",
+      "line": 36,
+      "symbol": "RoomListProvider.room(at:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomListProvider.swift",
+      "line": 40,
+      "symbol": "RoomListProvider.fetchMoreRooms(numberOfRooms:completionHandler:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomListProvider.swift",
+      "line": 73,
+      "symbol": "RoomListProviderDelegate",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomListProvider.swift",
+      "line": 75,
+      "symbol": "RoomListProviderDelegate.roomListProvider(_:didAddRoomsAtIndexRange:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UserProvider.swift",
-      "line": 4,
+      "line": 5,
       "symbol": "UserProvider",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UserProvider.swift",
-      "line": 12,
-      "symbol": "UserProvider.users",
+      "line": 9,
+      "symbol": "UserProvider.isFetchingMoreUsers",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UserProvider.swift",
-      "line": 24,
-      "symbol": "UserProvider.user(with:)",
+      "line": 10,
+      "symbol": "UserProvider.logger",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UserProvider.swift",
+      "line": 12,
+      "symbol": "UserProvider.delegate",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UserProvider.swift",
+      "line": 20,
+      "symbol": "UserProvider.numberOfUsers",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UserProvider.swift",
+      "line": 36,
+      "symbol": "UserProvider.user(at:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UserProvider.swift",
+      "line": 40,
+      "symbol": "UserProvider.fetchMoreUsers(numberOfUsers:completionHandler:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UserProvider.swift",
+      "line": 73,
+      "symbol": "UserProviderDelegate",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UserProvider.swift",
+      "line": 75,
+      "symbol": "UserProviderDelegate.userProvider(_:didAddUsersAtIndexRange:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
@@ -689,6 +780,20 @@
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Test Data/TestDataFactory.swift",
       "line": 20,
+      "symbol": "TestDataFactory.createRoomListProvider()",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Test Data/TestDataFactory.swift",
+      "line": 24,
+      "symbol": "TestDataFactory.createUserProvider()",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Test Data/TestDataFactory.swift",
+      "line": 28,
       "symbol": "TestDataFactory.createMessageProvider(for:)",
       "symbol_kind": "source.lang.swift.decl.function.method.static",
       "warning": "undocumented"

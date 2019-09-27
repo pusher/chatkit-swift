@@ -14,7 +14,7 @@
     <a title="UserProvider Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">PusherChatkit Docs</a> (7% documented)</p>
+        <p><a href="../index.html">PusherChatkit Docs</a> (6% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -38,6 +38,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/MessageProvider.html">MessageProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/RoomListProvider.html">RoomListProvider</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/RoomProvider.html">RoomProvider</a>
@@ -72,6 +75,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/MessageProviderDelegate.html">MessageProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/RoomListProviderDelegate.html">RoomListProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/UserProviderDelegate.html">UserProviderDelegate</a>
               </li>
             </ul>
           </li>
@@ -108,7 +117,7 @@
             <h1>UserProvider</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">UserProvider</span> <span class="p">:</span> <span class="kt">DataProvider</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">UserProvider</span> <span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">DataProvider</span></code></pre>
 
                 </div>
               </div>
@@ -118,19 +127,19 @@
           <section class="section task-group-section">
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Accessors"></a>
-                <a name="//apple_ref/swift/Section/Accessors" class="dashAnchor"></a>
-                <a href="#/Accessors">
-                  <h3 class="section-name">Accessors</h3>
+                <a name="/Properties"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <a href="#/Properties">
+                  <h3 class="section-name">Properties</h3>
                 </a>
               </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit12UserProviderC5usersSayAA0C0VGSgvp"></a>
-                    <a name="//apple_ref/swift/Property/users" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit12UserProviderC5usersSayAA0C0VGSgvp">users</a>
+                    <a name="/s:13PusherChatkit12UserProviderC19isFetchingMoreUsersSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isFetchingMoreUsers" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit12UserProviderC19isFetchingMoreUsersSbvp">isFetchingMoreUsers</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -145,7 +154,99 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">users</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/User.html">User</a></span><span class="p">]?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">isFetchingMoreUsers</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit12UserProviderC6logger0A8Platform8PPLogger_pSgvp"></a>
+                    <a name="//apple_ref/swift/Property/logger" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit12UserProviderC6logger0A8Platform8PPLogger_pSgvp">logger</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">logger</span><span class="p">:</span> <span class="kt">PPLogger</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit12UserProviderC8delegateAA0cD8Delegate_pSgvp"></a>
+                    <a name="//apple_ref/swift/Property/delegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit12UserProviderC8delegateAA0cD8Delegate_pSgvp">delegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/UserProviderDelegate.html">UserProviderDelegate</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Accessors"></a>
+                <a name="//apple_ref/swift/Section/Accessors" class="dashAnchor"></a>
+                <a href="#/Accessors">
+                  <h3 class="section-name">Accessors</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit12UserProviderC13numberOfUsersSivp"></a>
+                    <a name="//apple_ref/swift/Property/numberOfUsers" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit12UserProviderC13numberOfUsersSivp">numberOfUsers</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">numberOfUsers</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -166,9 +267,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit12UserProviderC4user4withAA0C0VSgSS_tF"></a>
-                    <a name="//apple_ref/swift/Method/user(with:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit12UserProviderC4user4withAA0C0VSgSS_tF">user(with:)</a>
+                    <a name="/s:13PusherChatkit12UserProviderC4user2atAA0C0VSgSi_tF"></a>
+                    <a name="//apple_ref/swift/Method/user(at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit12UserProviderC4user2atAA0C0VSgSi_tF">user(at:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -183,7 +284,34 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">user</span><span class="p">(</span><span class="n">with</span> <span class="nv">identifier</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/User.html">User</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">user</span><span class="p">(</span><span class="n">at</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/User.html">User</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit12UserProviderC14fetchMoreUsers08numberOfG017completionHandlerySu_ys5Error_pSgcSgtF"></a>
+                    <a name="//apple_ref/swift/Method/fetchMoreUsers(numberOfUsers:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit12UserProviderC14fetchMoreUsers08numberOfG017completionHandlerySu_ys5Error_pSgcSgtF">fetchMoreUsers(numberOfUsers:completionHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">fetchMoreUsers</span><span class="p">(</span><span class="nv">numberOfUsers</span><span class="p">:</span> <span class="kt">UInt</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:13PusherChatkit17CompletionHandlera">CompletionHandler</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -195,7 +323,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Hamilton Chapman</a>. All rights reserved. (Last updated: 2019-09-26)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Hamilton Chapman</a>. All rights reserved. (Last updated: 2019-09-27)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

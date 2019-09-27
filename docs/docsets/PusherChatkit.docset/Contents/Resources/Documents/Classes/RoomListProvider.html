@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Chatkit Class Reference</title>
+    <title>RoomListProvider Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/Chatkit" class="dashAnchor"></a>
-    <a title="Chatkit Class Reference"></a>
+    <a name="//apple_ref/swift/Class/RoomListProvider" class="dashAnchor"></a>
+    <a title="RoomListProvider Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">PusherChatkit Docs</a> (6% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">PusherChatkit Reference</a>
         <img id="carat" src="../img/carat.png" />
-        Chatkit Class Reference
+        RoomListProvider Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -114,10 +114,10 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Chatkit</h1>
+            <h1>RoomListProvider</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Chatkit</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomListProvider</span> <span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">DataProvider</span></code></pre>
 
                 </div>
               </div>
@@ -137,9 +137,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit0B0C6logger0A8Platform8PPLogger_pvp"></a>
-                    <a name="//apple_ref/swift/Property/logger" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit0B0C6logger0A8Platform8PPLogger_pvp">logger</a>
+                    <a name="/s:13PusherChatkit16RoomListProviderC19isFetchingMoreRoomsSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isFetchingMoreRooms" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit16RoomListProviderC19isFetchingMoreRoomsSbvp">isFetchingMoreRooms</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -154,7 +154,61 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">logger</span><span class="p">:</span> <span class="kt">PPLogger</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">isFetchingMoreRooms</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit16RoomListProviderC6logger0A8Platform8PPLogger_pSgvp"></a>
+                    <a name="//apple_ref/swift/Property/logger" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit16RoomListProviderC6logger0A8Platform8PPLogger_pSgvp">logger</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">logger</span><span class="p">:</span> <span class="kt">PPLogger</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit16RoomListProviderC8delegateAA0cdE8Delegate_pSgvp"></a>
+                    <a name="//apple_ref/swift/Property/delegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit16RoomListProviderC8delegateAA0cdE8Delegate_pSgvp">delegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/RoomListProviderDelegate.html">RoomListProviderDelegate</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -175,9 +229,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit0B0C15instanceLocatorSSvp"></a>
-                    <a name="//apple_ref/swift/Property/instanceLocator" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit0B0C15instanceLocatorSSvp">instanceLocator</a>
+                    <a name="/s:13PusherChatkit16RoomListProviderC13numberOfRoomsSivp"></a>
+                    <a name="//apple_ref/swift/Property/numberOfRooms" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit16RoomListProviderC13numberOfRoomsSivp">numberOfRooms</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -192,99 +246,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">instanceLocator</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:13PusherChatkit0B0C13tokenProvider0A8Platform07PPTokenD0_pvp"></a>
-                    <a name="//apple_ref/swift/Property/tokenProvider" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit0B0C13tokenProvider0A8Platform07PPTokenD0_pvp">tokenProvider</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">tokenProvider</span><span class="p">:</span> <span class="kt">PPTokenProvider</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:13PusherChatkit0B0C16connectionStatusAA010ConnectionD0Ovp"></a>
-                    <a name="//apple_ref/swift/Property/connectionStatus" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit0B0C16connectionStatusAA010ConnectionD0Ovp">connectionStatus</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">connectionStatus</span><span class="p">:</span> <span class="kt"><a href="../Enums/ConnectionStatus.html">ConnectionStatus</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Initializers"></a>
-                <a name="//apple_ref/swift/Section/Initializers" class="dashAnchor"></a>
-                <a href="#/Initializers">
-                  <h3 class="section-name">Initializers</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:13PusherChatkit0B0C15instanceLocator13tokenProvider6loggerACSS_0A8Platform07PPTokenF0_pAG8PPLogger_ptKcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(instanceLocator:tokenProvider:logger:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit0B0C15instanceLocator13tokenProvider6loggerACSS_0A8Platform07PPTokenF0_pAG8PPLogger_ptKcfc">init(instanceLocator:tokenProvider:logger:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">instanceLocator</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">tokenProvider</span><span class="p">:</span> <span class="kt">PPTokenProvider</span><span class="p">,</span> <span class="nv">logger</span><span class="p">:</span> <span class="kt">PPLogger</span> <span class="o">=</span> <span class="kt">PPDefaultLogger</span><span class="p">())</span> <span class="k">throws</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">numberOfRooms</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -305,9 +267,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit0B0C7connect17completionHandleryys5Error_pSgcSg_tF"></a>
-                    <a name="//apple_ref/swift/Method/connect(completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit0B0C7connect17completionHandleryys5Error_pSgcSg_tF">connect(completionHandler:)</a>
+                    <a name="/s:13PusherChatkit16RoomListProviderC4room2atAA0C0VSgSi_tF"></a>
+                    <a name="//apple_ref/swift/Method/room(at:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit16RoomListProviderC4room2atAA0C0VSgSi_tF">room(at:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -322,7 +284,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">connect</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:13PusherChatkit17CompletionHandlera">CompletionHandler</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">room</span><span class="p">(</span><span class="n">at</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Room.html">Room</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -332,9 +294,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit0B0C10disconnectyyF"></a>
-                    <a name="//apple_ref/swift/Method/disconnect()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit0B0C10disconnectyyF">disconnect()</a>
+                    <a name="/s:13PusherChatkit16RoomListProviderC14fetchMoreRooms08numberOfH017completionHandlerySu_ys5Error_pSgcSgtF"></a>
+                    <a name="//apple_ref/swift/Method/fetchMoreRooms(numberOfRooms:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit16RoomListProviderC14fetchMoreRooms08numberOfH017completionHandlerySu_ys5Error_pSgcSgtF">fetchMoreRooms(numberOfRooms:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -349,7 +311,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">disconnect</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">fetchMoreRooms</span><span class="p">(</span><span class="nv">numberOfRooms</span><span class="p">:</span> <span class="kt">UInt</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:13PusherChatkit17CompletionHandlera">CompletionHandler</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
