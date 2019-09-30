@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-public class RoomListProvider: DataProvider {
+public class AvailableRoomsProvider: DataProvider {
     
     // MARK: - Properties
     
@@ -11,7 +11,7 @@ public class RoomListProvider: DataProvider {
     public private(set) var hasMoreRooms: Bool
     public private(set) var rooms: [Room]
     
-    public weak var delegate: RoomListProviderDelegate?
+    public weak var delegate: AvailableRoomsProviderDelegate?
     
     private let roomFactory: RoomFactory
     
@@ -59,7 +59,7 @@ public class RoomListProvider: DataProvider {
             
             self.isFetchingMoreRooms = false
             
-            self.delegate?.roomListProvider(self, didAddRoomsAtIndexRange: range)
+            self.delegate?.availableRoomsProvider(self, didAddRoomsAtIndexRange: range)
             
             if let completionHandler = completionHandler {
                 completionHandler(nil)
@@ -71,8 +71,8 @@ public class RoomListProvider: DataProvider {
 
 // MARK: - Delegate
 
-public protocol RoomListProviderDelegate: class {
+public protocol AvailableRoomsProviderDelegate: class {
     
-    func roomListProvider(_ roomListProvider: RoomListProvider, didAddRoomsAtIndexRange range: Range<Int>)
+    func availableRoomsProvider(_ availableRoomsProvider: AvailableRoomsProvider, didAddRoomsAtIndexRange range: Range<Int>)
     
 }
