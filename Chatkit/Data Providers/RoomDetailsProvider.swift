@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-public class MessageProvider: DataProvider {
+public class RoomDetailsProvider: DataProvider {
     
     // MARK: - Properties
     
@@ -11,7 +11,7 @@ public class MessageProvider: DataProvider {
     public private(set) var hasMoreOldMessages: Bool
     public private(set) var isFetchingOldMessages: Bool
     
-    public weak var delegate: MessageProviderDelegate? {
+    public weak var delegate: RoomDetailsProviderDelegate? {
         didSet {
             if delegate == nil {
                 self.messageFactory.stopReceivingNewMessages()
@@ -90,10 +90,10 @@ public class MessageProvider: DataProvider {
 
 // MARK: - FetchedResultsControllerDelegate
 
-extension MessageProvider: FetchedResultsControllerDelegate {
+extension RoomDetailsProvider: FetchedResultsControllerDelegate {
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>) where ResultType : NSManagedObject {
-        self.delegate?.messageProvider(self, didReceiveMessagesAtIndexRange: range)
+        self.delegate?.roomDetailsProvider(self, didReceiveMessagesAtIndexRange: range)
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject: ResultType, at index: Int) where ResultType : NSManagedObject {
@@ -101,7 +101,7 @@ extension MessageProvider: FetchedResultsControllerDelegate {
             return
         }
         
-        self.delegate?.messageProvider(self, didChangeMessageAtIndex: index, previousValue: message)
+        self.delegate?.roomDetailsProvider(self, didChangeMessageAtIndex: index, previousValue: message)
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject: ResultType, at index: Int) where ResultType : NSManagedObject {
@@ -109,17 +109,17 @@ extension MessageProvider: FetchedResultsControllerDelegate {
             return
         }
         
-        self.delegate?.messageProvider(self, didDeleteMessageAtIndex: index, previousValue: message)
+        self.delegate?.roomDetailsProvider(self, didDeleteMessageAtIndex: index, previousValue: message)
     }
     
 }
 
 // MARK: - Delegate
 
-public protocol MessageProviderDelegate: class {
+public protocol RoomDetailsProviderDelegate: class {
     
-    func messageProvider(_ messageProvider: MessageProvider, didReceiveMessagesAtIndexRange range: Range<Int>)
-    func messageProvider(_ messageProvider: MessageProvider, didChangeMessageAtIndex index: Int, previousValue: Message)
-    func messageProvider(_ messageProvider: MessageProvider, didDeleteMessageAtIndex index: Int, previousValue: Message)
+    func roomDetailsProvider(_ roomDetailsProvider: RoomDetailsProvider, didReceiveMessagesAtIndexRange range: Range<Int>)
+    func roomDetailsProvider(_ roomDetailsProvider: RoomDetailsProvider, didChangeMessageAtIndex index: Int, previousValue: Message)
+    func roomDetailsProvider(_ roomDetailsProvider: RoomDetailsProvider, didDeleteMessageAtIndex index: Int, previousValue: Message)
     
 }
