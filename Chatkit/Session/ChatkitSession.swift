@@ -62,7 +62,13 @@ public class ChatkitSession {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.connectionStatus = .connected
+            self.createCurrentUserIfNeeded()
+            
             self.delegate?.chatkitSession(self, didChangeConnectionStatus: self.connectionStatus)
+            
+            if let currentUser = self.currentUser {
+                self.delegate?.chatkitSession(self, didUpdateCurrentUser: currentUser)
+            }
             
             if let completionHandler = completionHandler {
                 completionHandler(nil)
@@ -79,12 +85,27 @@ public class ChatkitSession {
         self.delegate?.chatkitSession(self, didChangeConnectionStatus: self.connectionStatus)
     }
     
+    private func createCurrentUserIfNeeded() {
+        guard self.currentUser == nil else {
+            return
+        }
+        
+        self.persistenceController.mainContext.performAndWait {
+            let userEntity = UserEntityFactory.createCurrentUser(in: self.persistenceController.mainContext)
+            
+            self.persistenceController.save()
+            
+            self.currentUser = try! userEntity.snapshot()
+        }
+    }
+    
 }
 
 // MARK: - Delegate
 
 public protocol ChatkitSessionDelegate: class {
     
+    func chatkitSession(_ chatkitSession: ChatkitSession, didUpdateCurrentUser currentUser: User)
     func chatkitSession(_ chatkitSession: ChatkitSession, didChangeConnectionStatus connectionStatus: ConnectionStatus)
     
 }
