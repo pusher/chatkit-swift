@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>PresenceState Enumeration Reference</title>
+    <title>RoomDetailsProviderDelegate Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Enum/PresenceState" class="dashAnchor"></a>
-    <a title="PresenceState Enumeration Reference"></a>
+    <a name="//apple_ref/swift/Protocol/RoomDetailsProviderDelegate" class="dashAnchor"></a>
+    <a title="RoomDetailsProviderDelegate Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">PusherChatkit Docs</a> (6% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">PusherChatkit Reference</a>
         <img id="carat" src="../img/carat.png" />
-        PresenceState Enumeration Reference
+        RoomDetailsProviderDelegate Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -111,10 +111,10 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>PresenceState</h1>
+            <h1>RoomDetailsProviderDelegate</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">PresenceState</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">RoomDetailsProviderDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                 </div>
               </div>
@@ -127,9 +127,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit13PresenceStateO7unknownyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/unknown" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit13PresenceStateO7unknownyA2CmF">unknown</a>
+                    <a name="/s:13PusherChatkit27RoomDetailsProviderDelegateP04roomdE0_30didReceiveMessagesAtIndexRangeyAA0cdE0C_SnySiGtF"></a>
+                    <a name="//apple_ref/swift/Method/roomDetailsProvider(_:didReceiveMessagesAtIndexRange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit27RoomDetailsProviderDelegateP04roomdE0_30didReceiveMessagesAtIndexRangeyAA0cdE0C_SnySiGtF">roomDetailsProvider(_:didReceiveMessagesAtIndexRange:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -144,7 +144,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">unknown</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">roomDetailsProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">roomDetailsProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a></span><span class="p">,</span> <span class="n">didReceiveMessagesAtIndexRange</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -154,9 +154,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit13PresenceStateO7offlineyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/offline" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit13PresenceStateO7offlineyA2CmF">offline</a>
+                    <a name="/s:13PusherChatkit27RoomDetailsProviderDelegateP04roomdE0_23didChangeMessageAtIndex13previousValueyAA0cdE0C_SiAA0J0VtF"></a>
+                    <a name="//apple_ref/swift/Method/roomDetailsProvider(_:didChangeMessageAtIndex:previousValue:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit27RoomDetailsProviderDelegateP04roomdE0_23didChangeMessageAtIndex13previousValueyAA0cdE0C_SiAA0J0VtF">roomDetailsProvider(_:didChangeMessageAtIndex:previousValue:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -171,7 +171,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">offline</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">roomDetailsProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">roomDetailsProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a></span><span class="p">,</span> <span class="n">didChangeMessageAtIndex</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">previousValue</span><span class="p">:</span> <span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -181,9 +181,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit13PresenceStateO6onlineyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/online" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit13PresenceStateO6onlineyA2CmF">online</a>
+                    <a name="/s:13PusherChatkit27RoomDetailsProviderDelegateP04roomdE0_23didDeleteMessageAtIndex13previousValueyAA0cdE0C_SiAA0J0VtF"></a>
+                    <a name="//apple_ref/swift/Method/roomDetailsProvider(_:didDeleteMessageAtIndex:previousValue:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit27RoomDetailsProviderDelegateP04roomdE0_23didDeleteMessageAtIndex13previousValueyAA0cdE0C_SiAA0J0VtF">roomDetailsProvider(_:didDeleteMessageAtIndex:previousValue:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -198,7 +198,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">online</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">roomDetailsProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">roomDetailsProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a></span><span class="p">,</span> <span class="n">didDeleteMessageAtIndex</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">previousValue</span><span class="p">:</span> <span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>

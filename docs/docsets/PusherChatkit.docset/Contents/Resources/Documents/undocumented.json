@@ -155,27 +155,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/Lagacy/LegacyUserProvider.swift",
-      "line": 4,
-      "symbol": "LegacyUserProvider",
-      "symbol_kind": "source.lang.swift.decl.class",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/Lagacy/LegacyUserProvider.swift",
-      "line": 12,
-      "symbol": "LegacyUserProvider.users",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/Lagacy/LegacyUserProvider.swift",
-      "line": 24,
-      "symbol": "LegacyUserProvider.user(with:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/MessageProvider.swift",
       "line": 5,
       "symbol": "MessageProvider",
