@@ -21,8 +21,4 @@ public class TestDataFactory {
         return UserProvider()
     }
     
-    public static func createMessageProvider(for room: Room) -> MessageProvider {
-        return MessageProvider(room: room, persistenceController: TestDataFactory.persistenceController)
-    }
-    
 }

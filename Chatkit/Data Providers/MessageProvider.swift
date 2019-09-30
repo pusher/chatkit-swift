@@ -2,12 +2,14 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-public class MessageProvider: NSObject, DataProvider {
+public class MessageProvider: DataProvider {
     
     // MARK: - Properties
     
-    public private(set) var isFetchingOlderMessages: Bool
-    public let logger: PPLogger?
+    public let roomIdentifier: String
+    public let session: ChatkitSession
+    public private(set) var hasMoreOldMessages: Bool
+    public private(set) var isFetchingOldMessages: Bool
     
     public weak var delegate: MessageProviderDelegate? {
         didSet {
@@ -20,30 +22,29 @@ public class MessageProvider: NSObject, DataProvider {
         }
     }
     
-    private let persistenceController: PersistenceController
-    private let roomID: NSManagedObjectID
+    private let roomManagedObjectID: NSManagedObjectID
     private let fetchedResultsController: FetchedResultsController<MessageEntity>
-    
     private let messageFactory: MessageEntityFactory
     
     // MARK: - Accessors
     
-    public var numberOfAvailableMessages: Int {
+    public var numberOfMessages: Int {
         return self.fetchedResultsController.numberOfObjects
     }
     
     // MARK: - Initializers
     
-    init(room: Room, persistenceController: PersistenceController, logger: PPLogger? = nil) {
-        self.persistenceController = persistenceController
-        self.roomID = room.objectID
-        self.isFetchingOlderMessages = false
-        self.logger = logger
+    public init(room: Room, session: ChatkitSession) {
+        self.roomIdentifier = room.identifier
+        self.session = session
+        self.hasMoreOldMessages = true
+        self.isFetchingOldMessages = false
         
-        self.messageFactory = MessageEntityFactory(roomID: room.objectID, persistenceController: self.persistenceController)
+        self.roomManagedObjectID = room.objectID
+        self.messageFactory = MessageEntityFactory(roomID: self.roomManagedObjectID, persistenceController: self.session.persistenceController)
         
-        let context = self.persistenceController.mainContext
-        let predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.room), self.roomID)
+        let context = self.session.persistenceController.mainContext
+        let predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.room), self.roomManagedObjectID)
         let sortDescriptor = NSSortDescriptor(key: #keyPath(MessageEntity.identifier), ascending: true) { (lhs, rhs) -> ComparisonResult in
             guard let lhsString = lhs as? String, let lhs = Int(lhsString), let rhsString = rhs as? String, let rhs = Int(rhsString) else {
                 return .orderedSame
@@ -53,9 +54,6 @@ public class MessageProvider: NSObject, DataProvider {
         }
         
         self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
-        
-        super.init()
-        
         self.fetchedResultsController.delegate = self
         
         self.messageFactory.receiveInitialMessages(numberOfMessages: 10, delay: 1.0)
@@ -68,7 +66,7 @@ public class MessageProvider: NSObject, DataProvider {
     }
     
     public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: CompletionHandler? = nil) {
-        guard !self.isFetchingOlderMessages, let lastMessageIdentifier = self.message(at: 0)?.identifier else {
+        guard !self.isFetchingOldMessages, let lastMessageIdentifier = self.message(at: 0)?.identifier else {
             if let completionHandler = completionHandler {
                 // TODO: Return error
                 completionHandler(nil)
@@ -77,10 +75,10 @@ public class MessageProvider: NSObject, DataProvider {
             return
         }
         
-        self.isFetchingOlderMessages = true
+        self.isFetchingOldMessages = true
         
         self.messageFactory.receiveOldMessages(numberOfMessages: Int(numberOfMessages), lastMessageIdentifier: lastMessageIdentifier, delay: 1.0) {
-            self.isFetchingOlderMessages = false
+            self.isFetchingOldMessages = false
             
             if let completionHandler = completionHandler {
                 completionHandler(nil)
@@ -90,9 +88,12 @@ public class MessageProvider: NSObject, DataProvider {
     
 }
 
+// MARK: - FetchedResultsControllerDelegate
+
 extension MessageProvider: FetchedResultsControllerDelegate {
+    
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>) where ResultType : NSManagedObject {
-        self.delegate?.messageProvider(self, didReceiveMessagesWithRange: range)
+        self.delegate?.messageProvider(self, didReceiveMessagesAtIndexRange: range)
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject: ResultType, at index: Int) where ResultType : NSManagedObject {
@@ -117,7 +118,7 @@ extension MessageProvider: FetchedResultsControllerDelegate {
 
 public protocol MessageProviderDelegate: class {
     
-    func messageProvider(_ messageProvider: MessageProvider, didReceiveMessagesWithRange range: Range<Int>)
+    func messageProvider(_ messageProvider: MessageProvider, didReceiveMessagesAtIndexRange range: Range<Int>)
     func messageProvider(_ messageProvider: MessageProvider, didChangeMessageAtIndex index: Int, previousValue: Message)
     func messageProvider(_ messageProvider: MessageProvider, didDeleteMessageAtIndex index: Int, previousValue: Message)
     
