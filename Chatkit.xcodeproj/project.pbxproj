@@ -107,7 +107,7 @@
 		22FC1127233E42CA0013A9D7 /* RoomEntityFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC1126233E42CA0013A9D7 /* RoomEntityFactory.swift */; };
 		22FC1129233E42F70013A9D7 /* RoomFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC1128233E42F70013A9D7 /* RoomFactory.swift */; };
 		22FC112B233E50030013A9D7 /* UserFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC112A233E50030013A9D7 /* UserFactory.swift */; };
-		22FC112D233E50FB0013A9D7 /* UserProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC112C233E50FB0013A9D7 /* UserProvider.swift */; };
+		22FC112D233E50FB0013A9D7 /* UsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC112C233E50FB0013A9D7 /* UsersProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -232,7 +232,7 @@
 		22FC1126233E42CA0013A9D7 /* RoomEntityFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomEntityFactory.swift; sourceTree = "<group>"; };
 		22FC1128233E42F70013A9D7 /* RoomFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFactory.swift; sourceTree = "<group>"; };
 		22FC112A233E50030013A9D7 /* UserFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFactory.swift; sourceTree = "<group>"; };
-		22FC112C233E50FB0013A9D7 /* UserProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProvider.swift; sourceTree = "<group>"; };
+		22FC112C233E50FB0013A9D7 /* UsersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -725,7 +725,7 @@
 				222EA2AE23424A7D004EE90F /* AvailableRoomsProvider.swift */,
 				222EA2AC23424A11004EE90F /* JoinedRoomsProvider.swift */,
 				229656FA232FCE920016DA7C /* MessageProvider.swift */,
-				22FC112C233E50FB0013A9D7 /* UserProvider.swift */,
+				22FC112C233E50FB0013A9D7 /* UsersProvider.swift */,
 			);
 			path = "Data Providers";
 			sourceTree = "<group>";
@@ -1081,7 +1081,7 @@
 				227E947223200DBD0025B691 /* ModularEventParser.swift in Sources */,
 				222576A32305488E00FAFAEC /* URLPartEntity+CoreDataProperties.swift in Sources */,
 				22C5F3ED2306B06E009A7383 /* SnapshotError.swift in Sources */,
-				22FC112D233E50FB0013A9D7 /* UserProvider.swift in Sources */,
+				22FC112D233E50FB0013A9D7 /* UsersProvider.swift in Sources */,
 				22D2A2E523197AD50095757C /* Service.swift in Sources */,
 				222576982305488E00FAFAEC /* AttachmentPartEntity+CoreDataProperties.swift in Sources */,
 				222576A02305488E00FAFAEC /* URLPartEntity+CoreDataClass.swift in Sources */,

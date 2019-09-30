@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-public class UserProvider: DataProvider {
+public class UsersProvider: DataProvider {
     
     // MARK: - Properties
     
@@ -11,7 +11,7 @@ public class UserProvider: DataProvider {
     public private(set) var hasMoreUsers: Bool
     public private(set) var users: [User]
     
-    public weak var delegate: UserProviderDelegate?
+    public weak var delegate: UsersProviderDelegate?
     
     private let userFactory: UserFactory
     
@@ -59,7 +59,7 @@ public class UserProvider: DataProvider {
             
             self.isFetchingMoreUsers = false
             
-            self.delegate?.userProvider(self, didAddUsersAtIndexRange: range)
+            self.delegate?.usersProvider(self, didAddUsersAtIndexRange: range)
             
             if let completionHandler = completionHandler {
                 completionHandler(nil)
@@ -71,8 +71,8 @@ public class UserProvider: DataProvider {
 
 // MARK: - Delegate
 
-public protocol UserProviderDelegate: class {
+public protocol UsersProviderDelegate: class {
     
-    func userProvider(_ userProvider: UserProvider, didAddUsersAtIndexRange range: Range<Int>)
+    func usersProvider(_ usersProvider: UsersProvider, didAddUsersAtIndexRange range: Range<Int>)
     
 }
