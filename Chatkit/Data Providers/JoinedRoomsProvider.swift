@@ -2,13 +2,13 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-public class JoinedRoomListProvider: DataProvider {
+public class JoinedRoomsProvider: DataProvider {
     
     // MARK: - Properties
     
     public let session: ChatkitSession
     
-    public weak var delegate: JoinedRoomListProviderDelegate?
+    public weak var delegate: JoinedRoomsProviderDelegate?
     
     private let fetchedResultsController: FetchedResultsController<RoomEntity>
     private let roomFactory: RoomEntityFactory
@@ -61,9 +61,9 @@ public class JoinedRoomListProvider: DataProvider {
 
 // MARK: - FetchedResultsControllerDelegate
 
-extension JoinedRoomListProvider: FetchedResultsControllerDelegate {
+extension JoinedRoomsProvider: FetchedResultsControllerDelegate {
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>) where ResultType : NSManagedObject {
-        self.delegate?.joinedRoomListProvider(self, didJoinRoomsAtIndexRange: range)
+        self.delegate?.joinedRoomsProvider(self, didJoinRoomsAtIndexRange: range)
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject: ResultType, at index: Int) where ResultType : NSManagedObject {
@@ -71,7 +71,7 @@ extension JoinedRoomListProvider: FetchedResultsControllerDelegate {
             return
         }
         
-        self.delegate?.joinedRoomListProvider(self, didUpdateRoomAtIndex: index, previousValue: room)
+        self.delegate?.joinedRoomsProvider(self, didUpdateRoomAtIndex: index, previousValue: room)
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject: ResultType, at index: Int) where ResultType : NSManagedObject {
@@ -79,17 +79,17 @@ extension JoinedRoomListProvider: FetchedResultsControllerDelegate {
             return
         }
         
-        self.delegate?.joinedRoomListProvider(self, didLeaveRoomAtIndex: index, previousValue: room)
+        self.delegate?.joinedRoomsProvider(self, didLeaveRoomAtIndex: index, previousValue: room)
     }
     
 }
 
 // MARK: - Delegate
 
-public protocol JoinedRoomListProviderDelegate: class {
+public protocol JoinedRoomsProviderDelegate: class {
     
-    func joinedRoomListProvider(_ joinedRoomListProvider: JoinedRoomListProvider, didJoinRoomsAtIndexRange range: Range<Int>)
-    func joinedRoomListProvider(_ joinedRoomListProvider: JoinedRoomListProvider, didUpdateRoomAtIndex index: Int, previousValue: Room)
-    func joinedRoomListProvider(_ joinedRoomListProvider: JoinedRoomListProvider, didLeaveRoomAtIndex index: Int, previousValue: Room)
+    func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didJoinRoomsAtIndexRange range: Range<Int>)
+    func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didUpdateRoomAtIndex index: Int, previousValue: Room)
+    func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didLeaveRoomAtIndex index: Int, previousValue: Room)
     
 }
