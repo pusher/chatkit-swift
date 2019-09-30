@@ -2,16 +2,16 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-public class UserProvider: NSObject, DataProvider {
+public class UserProvider: DataProvider {
     
     // MARK: - Properties
     
+    public let session: ChatkitSession
     public private(set) var isFetchingMoreUsers: Bool
-    public let logger: PPLogger?
+    public private(set) var hasMoreUsers: Bool
+    public private(set) var users: [User]
     
     public weak var delegate: UserProviderDelegate?
-    
-    private var users: [User]
     
     private let userFactory: UserFactory
     
@@ -23,11 +23,12 @@ public class UserProvider: NSObject, DataProvider {
     
     // MARK: - Initializers
     
-    init(logger: PPLogger? = nil) {
+    public init(session: ChatkitSession) {
+        self.session = session
         self.isFetchingMoreUsers = false
-        self.logger = logger
-        self.users = []
+        self.hasMoreUsers = true
         
+        self.users = []
         self.userFactory = UserFactory()
     }
     

@@ -13,8 +13,4 @@ public class TestDataFactory {
         return try! PersistenceController(model: model, storeDescriptions: [storeDescription])
     }()
     
-    public static func createUserProvider() -> UserProvider {
-        return UserProvider()
-    }
-    
 }
