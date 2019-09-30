@@ -33,7 +33,7 @@
 		2244FC2F22F2FBD900FE8D50 /* TestTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2244FC2E22F2FBD900FE8D50 /* TestTokenProvider.swift */; };
 		224B803D22F1E009003CB8DC /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229093D522F1DDB4003DDE2C /* PusherChatkit.framework */; };
 		224B804C22F1E028003CB8DC /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229093D522F1DDB4003DDE2C /* PusherChatkit.framework */; };
-		224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805822F2DADC003CB8DC /* Chatkit.swift */; };
+		224B805922F2DADC003CB8DC /* ChatkitSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805822F2DADC003CB8DC /* ChatkitSession.swift */; };
 		224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */; };
 		224E33C0230B07C2005168E3 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E33BF230B07C2005168E3 /* Identifiable.swift */; };
 		226EA0C0233A541900B04C15 /* JoinedRoomListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226EA0BF233A541900B04C15 /* JoinedRoomListProvider.swift */; };
@@ -155,7 +155,7 @@
 		224B803C22F1E009003CB8DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		224B804722F1E028003CB8DC /* Integration Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Integration Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		224B804B22F1E028003CB8DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		224B805822F2DADC003CB8DC /* Chatkit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chatkit.swift; sourceTree = "<group>"; };
+		224B805822F2DADC003CB8DC /* ChatkitSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatkitSession.swift; sourceTree = "<group>"; };
 		224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatkitTests.swift; sourceTree = "<group>"; };
 		224E33BF230B07C2005168E3 /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 		226EA0BF233A541900B04C15 /* JoinedRoomListProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomListProvider.swift; sourceTree = "<group>"; };
@@ -327,12 +327,12 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		224B805722F2DAD3003CB8DC /* Chatkit */ = {
+		224B805722F2DAD3003CB8DC /* Session */ = {
 			isa = PBXGroup;
 			children = (
-				224B805822F2DADC003CB8DC /* Chatkit.swift */,
+				224B805822F2DADC003CB8DC /* ChatkitSession.swift */,
 			);
-			path = Chatkit;
+			path = Session;
 			sourceTree = "<group>";
 		};
 		224B805A22F2E0B1003CB8DC /* Tests */ = {
@@ -533,12 +533,12 @@
 		229093D722F1DDB4003DDE2C /* Chatkit */ = {
 			isa = PBXGroup;
 			children = (
-				224B805722F2DAD3003CB8DC /* Chatkit */,
 				22D537C82302BCD600A92341 /* Data Providers */,
 				22C5F3F82306BD4D009A7383 /* Metadata */,
 				22D537D22302D24200A92341 /* Model */,
 				22D2A2CD231960770095757C /* Networking */,
 				22CEBB4B22FC5484005CB021 /* Persistence */,
+				224B805722F2DAD3003CB8DC /* Session */,
 				22D537CB2302BDCD00A92341 /* Store */,
 				224B805222F1E154003CB8DC /* Supporting Files */,
 				229AEEEE23351DA300A5E159 /* Test Data */,
@@ -937,6 +937,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 229093CB22F1DDB4003DDE2C;
 			productRefGroup = 229093D622F1DDB4003DDE2C /* Products */;
@@ -1110,7 +1111,7 @@
 				222576992305488E00FAFAEC /* CursorEntity+CoreDataClass.swift in Sources */,
 				22D2A2D5231963C70095757C /* Bundle+Extensions.swift in Sources */,
 				222576B323055E1900FAFAEC /* RoomEntity+CoreDataProperties.swift in Sources */,
-				224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */,
+				224B805922F2DADC003CB8DC /* ChatkitSession.swift in Sources */,
 				22EDCB7B231D0FA300419C75 /* Event.swift in Sources */,
 				22C5F3FA2306BDE8009A7383 /* MetadataSerializer.swift in Sources */,
 				224E33C0230B07C2005168E3 /* Identifiable.swift in Sources */,

@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-public class RoomProvider: DataProvider {
+class LegacyRoomProvider: DataProvider {
     
     // MARK: - Properties
     

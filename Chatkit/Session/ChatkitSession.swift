@@ -2,18 +2,18 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-public class Chatkit {
+public class ChatkitSession {
     
     // MARK: - Properties
     
+    public private(set) var currentUser: User?
+    public private(set) var connectionStatus: ConnectionStatus
     public let logger: PPLogger
     
-//    public let roomProvider: RoomProvider
-//    public let userProvider: UserProvider
-//    public let messageProvider: MessageProvider
+    public weak var delegate: ChatkitSessionDelegate?
     
-    private let persistenceController: PersistenceController
-    private let networkingController: NetworkingController
+    let persistenceController: PersistenceController
+    let networkingController: NetworkingController
     
     // MARK: - Accessors
     
@@ -23,10 +23,6 @@ public class Chatkit {
     
     public var tokenProvider: PPTokenProvider {
         return self.networkingController.tokenProvider
-    }
-    
-    public var connectionStatus: ConnectionStatus {
-        return self.networkingController.connectionStatus
     }
     
     // MARK: - Initializers
@@ -46,24 +42,49 @@ public class Chatkit {
             }
         }
         
+        self.connectionStatus = .disconnected
+        
         let eventParser = ModularEventParser(logger: self.logger)
         eventParser.register(parser: ChatEventParser(persistenceController: self.persistenceController, logger: self.logger), for: .chat, with: .version6)
         
         self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, eventParser: eventParser, logger: self.logger)
-        
-//        self.roomProvider = RoomProvider(persistenceController: self.persistenceController)
-//        self.userProvider = UserProvider(persistenceController: self.persistenceController)
-//        self.messageProvider = MessageProvider.createMessageProvider()
     }
     
     // MARK: - Public methods
     
     public func connect(completionHandler: CompletionHandler? = nil) {
-        self.networkingController.connect(completionHandler: completionHandler)
+        guard self.connectionStatus == .disconnected else {
+            return
+        }
+        
+        self.connectionStatus = .connecting
+        self.delegate?.chatkitSession(self, didChangeConnectionStatus: self.connectionStatus)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.connectionStatus = .connected
+            self.delegate?.chatkitSession(self, didChangeConnectionStatus: self.connectionStatus)
+            
+            if let completionHandler = completionHandler {
+                completionHandler(nil)
+            }
+        }
     }
     
     public func disconnect() {
-        self.networkingController.disconnect()
+        guard self.connectionStatus == .connected else {
+            return
+        }
+        
+        self.connectionStatus = .disconnected
+        self.delegate?.chatkitSession(self, didChangeConnectionStatus: self.connectionStatus)
     }
+    
+}
+
+// MARK: - Delegate
+
+public protocol ChatkitSessionDelegate: class {
+    
+    func chatkitSession(_ chatkitSession: ChatkitSession, didChangeConnectionStatus connectionStatus: ConnectionStatus)
     
 }
