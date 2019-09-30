@@ -27,11 +27,11 @@ public class JoinedRoomsProvider: DataProvider {
     
     public init(session: ChatkitSession) {
         self.session = session
-        self.roomFactory = RoomEntityFactory(persistenceController: self.session.persistenceController)
+        self.roomFactory = RoomEntityFactory(currentUserManagedObjectID: self.session.hiddenCurrentUser.objectID, persistenceController: self.session.persistenceController)
         
         let context = self.session.persistenceController.mainContext
         
-        var currentUserID = UserEntityFactory.currentUserID
+        var currentUserID = self.session.hiddenCurrentUser.objectID
         context.performAndWait {
             currentUserID = context.object(with: currentUserID).objectID
         }

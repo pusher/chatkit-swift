@@ -3,13 +3,13 @@ import PusherChatkit
 
 class RoomPickerViewController: UITableViewController {
     
-    let roomListProvider = TestDataFactory.createRoomListProvider()
+    var roomProvider: AvailableRoomsProvider?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.tableView.reloadData()
-        self.roomListProvider.delegate = self
+        self.roomProvider?.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -19,7 +19,7 @@ class RoomPickerViewController: UITableViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.roomListProvider.delegate = nil
+        self.roomProvider?.delegate = nil
         
         super.viewWillAppear(animated)
     }
@@ -33,22 +33,22 @@ class RoomPickerViewController: UITableViewController {
     }
     
     private func loadMoreRoomsIfNeeded(force: Bool = false) {
-        guard force || self.roomListProvider.numberOfRooms == 0 else {
+        guard force || self.roomProvider?.numberOfRooms == 0 else {
             return
         }
         
-        self.roomListProvider.fetchMoreRooms(numberOfRooms: 5)
+        self.roomProvider?.fetchMoreRooms(numberOfRooms: 5)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.roomListProvider.numberOfRooms
+        return self.roomProvider?.numberOfRooms ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "roomCell", for: indexPath)
         
         if let roomCell = cell as? TestTableViewCell {
-            let room = self.roomListProvider.room(at: indexPath.row)
+            let room = self.roomProvider?.room(at: indexPath.row)
             
             roomCell.testLabel.text = room?.name
         }
@@ -57,9 +57,9 @@ class RoomPickerViewController: UITableViewController {
     }
 }
 
-extension RoomPickerViewController: RoomListProviderDelegate {
+extension RoomPickerViewController: AvailableRoomsProviderDelegate {
     
-    func roomListProvider(_ roomListProvider: RoomListProvider, didAddRoomsAtIndexRange range: Range<Int>) {
+    func availableRoomsProvider(_ availableRoomsProvider: AvailableRoomsProvider, didAddRoomsAtIndexRange range: Range<Int>) {
         if self.tableView.numberOfRows(inSection: 0) == 0 {
             self.tableView.reloadData()
         }

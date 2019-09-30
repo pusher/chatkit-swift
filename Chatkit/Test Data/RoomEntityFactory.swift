@@ -4,16 +4,18 @@ import PusherPlatform
 
 class RoomEntityFactory {
     
+    private let currentUserManagedObjectID: NSManagedObjectID
     private let persistenceController: PersistenceController
     
-    init(persistenceController: PersistenceController) {
+    init(currentUserManagedObjectID: NSManagedObjectID, persistenceController: PersistenceController) {
+        self.currentUserManagedObjectID = currentUserManagedObjectID
         self.persistenceController = persistenceController
     }
     
     func receiveInitialListOfRooms(numberOfRooms: Int, delay: TimeInterval) {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             self.persistenceController.performBackgroundTask { context in
-                guard let currentUser = context.object(with: UserEntityFactory.currentUserID) as? UserEntity else {
+                guard let currentUser = context.object(with: self.currentUserManagedObjectID) as? UserEntity else {
                     return
                 }
                 

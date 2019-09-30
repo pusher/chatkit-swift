@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		222EA2B223425823004EE90F /* TestTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EA2B123425823004EE90F /* TestTokenProvider.swift */; };
 		228865CF233BC5940044BCD8 /* RoomListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228865CE233BC5940044BCD8 /* RoomListViewController.swift */; };
 		229656D6232FC8880016DA7C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656D5232FC8880016DA7C /* AppDelegate.swift */; };
 		229656D8232FC8880016DA7C /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656D7232FC8880016DA7C /* MessageViewController.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		222EA2B123425823004EE90F /* TestTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTokenProvider.swift; sourceTree = "<group>"; };
 		228865CE233BC5940044BCD8 /* RoomListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListViewController.swift; sourceTree = "<group>"; };
 		229656D2232FC8880016DA7C /* Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		229656D5232FC8880016DA7C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -49,6 +51,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		222EA2B023425810004EE90F /* Token Provider */ = {
+			isa = PBXGroup;
+			children = (
+				222EA2B123425823004EE90F /* TestTokenProvider.swift */,
+			);
+			path = "Token Provider";
+			sourceTree = "<group>";
+		};
 		229656C9232FC8880016DA7C = {
 			isa = PBXGroup;
 			children = (
@@ -73,6 +83,7 @@
 				229656FC232FD2AD0016DA7C /* Cells */,
 				229656F2232FC8CC0016DA7C /* Controllers */,
 				229656F1232FC8C90016DA7C /* Supporting Files */,
+				222EA2B023425810004EE90F /* Token Provider */,
 			);
 			path = Test;
 			sourceTree = "<group>";
@@ -222,6 +233,7 @@
 				22FC112F233E58600013A9D7 /* RoomPickerViewController.swift in Sources */,
 				22FC1131233E5CD80013A9D7 /* UserPickerViewController.swift in Sources */,
 				229656FE232FD2C40016DA7C /* TestTableViewCell.swift in Sources */,
+				222EA2B223425823004EE90F /* TestTokenProvider.swift in Sources */,
 				228865CF233BC5940044BCD8 /* RoomListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

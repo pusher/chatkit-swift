@@ -41,7 +41,9 @@ public class RoomDetailsProvider: DataProvider {
         self.isFetchingOldMessages = false
         
         self.roomManagedObjectID = room.objectID
-        self.messageFactory = MessageEntityFactory(roomID: self.roomManagedObjectID, persistenceController: self.session.persistenceController)
+        self.messageFactory = MessageEntityFactory(roomID: self.roomManagedObjectID,
+                                                   currentUserManagedObjectID: self.session.hiddenCurrentUser.objectID,
+                                                   persistenceController: self.session.persistenceController)
         
         let context = self.session.persistenceController.mainContext
         let predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.room), self.roomManagedObjectID)

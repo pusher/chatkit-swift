@@ -15,6 +15,8 @@ public class ChatkitSession {
     let persistenceController: PersistenceController
     let networkingController: NetworkingController
     
+    var hiddenCurrentUser: User!
+    
     // MARK: - Accessors
     
     public var instanceLocator: String {
@@ -48,6 +50,18 @@ public class ChatkitSession {
         eventParser.register(parser: ChatEventParser(persistenceController: self.persistenceController, logger: self.logger), for: .chat, with: .version6)
         
         self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, eventParser: eventParser, logger: self.logger)
+        
+        var hiddenCurrentUser: User? = nil
+        
+        self.persistenceController.mainContext.performAndWait {
+            let userEntity = UserEntityFactory.createCurrentUser(in: self.persistenceController.mainContext)
+            
+            self.persistenceController.save()
+            
+            hiddenCurrentUser = try! userEntity.snapshot()
+        }
+        
+        self.hiddenCurrentUser = hiddenCurrentUser!
     }
     
     // MARK: - Public methods
@@ -62,7 +76,7 @@ public class ChatkitSession {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.connectionStatus = .connected
-            self.createCurrentUserIfNeeded()
+            self.currentUser = self.hiddenCurrentUser
             
             self.delegate?.chatkitSession(self, didChangeConnectionStatus: self.connectionStatus)
             
@@ -83,20 +97,6 @@ public class ChatkitSession {
         
         self.connectionStatus = .disconnected
         self.delegate?.chatkitSession(self, didChangeConnectionStatus: self.connectionStatus)
-    }
-    
-    private func createCurrentUserIfNeeded() {
-        guard self.currentUser == nil else {
-            return
-        }
-        
-        self.persistenceController.mainContext.performAndWait {
-            let userEntity = UserEntityFactory.createCurrentUser(in: self.persistenceController.mainContext)
-            
-            self.persistenceController.save()
-            
-            self.currentUser = try! userEntity.snapshot()
-        }
     }
     
 }

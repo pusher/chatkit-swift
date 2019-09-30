@@ -3,13 +3,13 @@ import PusherChatkit
 
 class UserPickerViewController: UITableViewController {
     
-    let userProvider = TestDataFactory.createUserProvider()
+    var usersProvider: UsersProvider?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.tableView.reloadData()
-        self.userProvider.delegate = self
+        self.usersProvider?.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -19,7 +19,7 @@ class UserPickerViewController: UITableViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.userProvider.delegate = nil
+        self.usersProvider?.delegate = nil
         
         super.viewWillAppear(animated)
     }
@@ -33,22 +33,22 @@ class UserPickerViewController: UITableViewController {
     }
     
     private func loadMoreUsersIfNeeded(force: Bool = false) {
-        guard force || self.userProvider.numberOfUsers == 0 else {
+        guard force || self.usersProvider?.numberOfUsers == 0 else {
             return
         }
         
-        self.userProvider.fetchMoreUsers(numberOfUsers: 5)
+        self.usersProvider?.fetchMoreUsers(numberOfUsers: 5)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.userProvider.numberOfUsers
+        return self.usersProvider?.numberOfUsers ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)
         
         if let userCell = cell as? TestTableViewCell {
-            let user = self.userProvider.user(at: indexPath.row)
+            let user = self.usersProvider?.user(at: indexPath.row)
             
             userCell.testLabel.text = user?.name
         }
@@ -57,9 +57,9 @@ class UserPickerViewController: UITableViewController {
     }
 }
 
-extension UserPickerViewController: UserProviderDelegate {
+extension UserPickerViewController: UsersProviderDelegate {
     
-    func userProvider(_ userProvider: UserProvider, didAddUsersAtIndexRange range: Range<Int>) {
+    func usersProvider(_ usersProvider: UsersProvider, didAddUsersAtIndexRange range: Range<Int>) {
         if self.tableView.numberOfRows(inSection: 0) == 0 {
             self.tableView.reloadData()
         }
