@@ -2,17 +2,15 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-public class JoinedRoomListProvider: NSObject, DataProvider {
+public class JoinedRoomListProvider: DataProvider {
     
     // MARK: - Properties
     
-    public let logger: PPLogger?
+    public let session: ChatkitSession
     
     public weak var delegate: JoinedRoomListProviderDelegate?
     
-    private let persistenceController: PersistenceController
     private let fetchedResultsController: FetchedResultsController<RoomEntity>
-    
     private let roomFactory: RoomEntityFactory
     
     // MARK: - Accessors
@@ -27,18 +25,17 @@ public class JoinedRoomListProvider: NSObject, DataProvider {
     
     // MARK: - Initializers
     
-    init(persistenceController: PersistenceController, logger: PPLogger? = nil) {
-        self.persistenceController = persistenceController
-        self.logger = logger
+    public init(session: ChatkitSession) {
+        self.session = session
+        self.roomFactory = RoomEntityFactory(persistenceController: self.session.persistenceController)
         
-        self.roomFactory = RoomEntityFactory(persistenceController: self.persistenceController)
+        let context = self.session.persistenceController.mainContext
         
         var currentUserID = UserEntityFactory.currentUserID
-        persistenceController.mainContext.performAndWait {
-            currentUserID = persistenceController.mainContext.object(with: currentUserID).objectID
+        context.performAndWait {
+            currentUserID = context.object(with: currentUserID).objectID
         }
         
-        let context = self.persistenceController.mainContext
         let predicate = NSPredicate(format: "ANY %K == %@", #keyPath(RoomEntity.members), currentUserID)
         let sortDescriptor = NSSortDescriptor(key: #keyPath(RoomEntity.identifier), ascending: true) { (lhs, rhs) -> ComparisonResult in
             guard let lhsString = lhs as? String, let lhs = Int(lhsString), let rhsString = rhs as? String, let rhs = Int(rhsString) else {
@@ -49,9 +46,6 @@ public class JoinedRoomListProvider: NSObject, DataProvider {
         }
         
         self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
-        
-        super.init()
-        
         self.fetchedResultsController.delegate = self
         
         self.roomFactory.receiveInitialListOfRooms(numberOfRooms: 10, delay: 1.0)
@@ -64,6 +58,8 @@ public class JoinedRoomListProvider: NSObject, DataProvider {
     }
     
 }
+
+// MARK: - FetchedResultsControllerDelegate
 
 extension JoinedRoomListProvider: FetchedResultsControllerDelegate {
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>) where ResultType : NSManagedObject {

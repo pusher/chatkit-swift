@@ -13,10 +13,6 @@ public class TestDataFactory {
         return try! PersistenceController(model: model, storeDescriptions: [storeDescription])
     }()
     
-    public static func createJoinedRoomListProvider() -> JoinedRoomListProvider {
-        return JoinedRoomListProvider(persistenceController: TestDataFactory.persistenceController)
-    }
-    
     public static func createRoomListProvider() -> RoomListProvider {
         return RoomListProvider()
     }
