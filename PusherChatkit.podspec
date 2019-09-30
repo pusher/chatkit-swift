@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name             = 'PusherChatkit'
-  s.version          = '1.8.1'
+  s.version          = '2.0.0'
   s.summary          = 'Pusher Chatkit SDK in Swift'
   s.homepage         = 'https://github.com/pusher/chatkit-swift'
   s.license          = 'MIT'
-  s.author           = { "Hamilton Chapman" => "hamchapman@gmail.com" }
+  s.author           = { "Pusher Limited" => "support@pusher.com" }
   s.source           = { git: "https://github.com/pusher/chatkit-swift.git", tag: s.version.to_s }
   s.social_media_url = 'https://twitter.com/pusher'
 
