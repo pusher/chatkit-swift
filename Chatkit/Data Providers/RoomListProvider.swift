@@ -2,16 +2,16 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-public class RoomListProvider: NSObject, DataProvider {
+public class RoomListProvider: DataProvider {
     
     // MARK: - Properties
     
+    public let session: ChatkitSession
     public private(set) var isFetchingMoreRooms: Bool
-    public let logger: PPLogger?
+    public private(set) var hasMoreRooms: Bool
+    public private(set) var rooms: [Room]
     
     public weak var delegate: RoomListProviderDelegate?
-    
-    private var rooms: [Room]
     
     private let roomFactory: RoomFactory
     
@@ -23,11 +23,12 @@ public class RoomListProvider: NSObject, DataProvider {
     
     // MARK: - Initializers
     
-    init(logger: PPLogger? = nil) {
+    public init(session: ChatkitSession) {
+        self.session = session
         self.isFetchingMoreRooms = false
-        self.logger = logger
-        self.rooms = []
+        self.hasMoreRooms = true
         
+        self.rooms = []
         self.roomFactory = RoomFactory()
     }
     
