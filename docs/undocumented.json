@@ -1,6 +1,125 @@
 {
   "warnings": [
     {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 5,
+      "symbol": "Chatkit",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 9,
+      "symbol": "Chatkit.currentUser",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 10,
+      "symbol": "Chatkit.connectionStatus",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 11,
+      "symbol": "Chatkit.logger",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 13,
+      "symbol": "Chatkit.delegate",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 22,
+      "symbol": "Chatkit.instanceLocator",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 26,
+      "symbol": "Chatkit.tokenProvider",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 32,
+      "symbol": "Chatkit.init(instanceLocator:tokenProvider:logger:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 69,
+      "symbol": "Chatkit.connect(completionHandler:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 93,
+      "symbol": "Chatkit.disconnect()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 102,
+      "symbol": "Chatkit.createUsersProvider()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 106,
+      "symbol": "Chatkit.createAvailableRoomsProvider()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 110,
+      "symbol": "Chatkit.createJoinedRoomsProvider()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 114,
+      "symbol": "Chatkit.createRoomDetailsProvider(for:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 122,
+      "symbol": "ChatkitDelegate",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 124,
+      "symbol": "ChatkitDelegate.chatkit(_:didUpdateCurrentUser:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Chatkit/Chatkit.swift",
+      "line": 125,
+      "symbol": "ChatkitDelegate.chatkit(_:didChangeConnectionStatus:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/AvailableRoomsProvider.swift",
       "line": 5,
       "symbol": "AvailableRoomsProvider",
@@ -10,76 +129,62 @@
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/AvailableRoomsProvider.swift",
       "line": 9,
-      "symbol": "AvailableRoomsProvider.session",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/AvailableRoomsProvider.swift",
-      "line": 10,
       "symbol": "AvailableRoomsProvider.isFetchingMoreRooms",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/AvailableRoomsProvider.swift",
-      "line": 11,
+      "line": 10,
       "symbol": "AvailableRoomsProvider.hasMoreRooms",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/AvailableRoomsProvider.swift",
-      "line": 12,
+      "line": 11,
       "symbol": "AvailableRoomsProvider.rooms",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/AvailableRoomsProvider.swift",
-      "line": 14,
+      "line": 13,
       "symbol": "AvailableRoomsProvider.delegate",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/AvailableRoomsProvider.swift",
-      "line": 20,
+      "line": 19,
       "symbol": "AvailableRoomsProvider.numberOfRooms",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/AvailableRoomsProvider.swift",
-      "line": 26,
-      "symbol": "AvailableRoomsProvider.init(session:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/AvailableRoomsProvider.swift",
-      "line": 37,
+      "line": 35,
       "symbol": "AvailableRoomsProvider.room(at:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/AvailableRoomsProvider.swift",
-      "line": 41,
+      "line": 39,
       "symbol": "AvailableRoomsProvider.fetchMoreRooms(numberOfRooms:completionHandler:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/AvailableRoomsProvider.swift",
-      "line": 74,
+      "line": 72,
       "symbol": "AvailableRoomsProviderDelegate",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/AvailableRoomsProvider.swift",
-      "line": 76,
+      "line": 74,
       "symbol": "AvailableRoomsProviderDelegate.availableRoomsProvider(_:didAddRoomsAtIndexRange:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -94,69 +199,55 @@
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomsProvider.swift",
       "line": 9,
-      "symbol": "JoinedRoomsProvider.session",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomsProvider.swift",
-      "line": 11,
       "symbol": "JoinedRoomsProvider.delegate",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomsProvider.swift",
-      "line": 18,
+      "line": 16,
       "symbol": "JoinedRoomsProvider.rooms",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomsProvider.swift",
-      "line": 22,
+      "line": 20,
       "symbol": "JoinedRoomsProvider.numberOfRooms",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomsProvider.swift",
-      "line": 28,
-      "symbol": "JoinedRoomsProvider.init(session:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomsProvider.swift",
-      "line": 56,
+      "line": 53,
       "symbol": "JoinedRoomsProvider.room(at:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomsProvider.swift",
-      "line": 89,
+      "line": 86,
       "symbol": "JoinedRoomsProviderDelegate",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomsProvider.swift",
-      "line": 91,
+      "line": 88,
       "symbol": "JoinedRoomsProviderDelegate.joinedRoomsProvider(_:didJoinRoomsAtIndexRange:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomsProvider.swift",
-      "line": 92,
+      "line": 89,
       "symbol": "JoinedRoomsProviderDelegate.joinedRoomsProvider(_:didUpdateRoomAtIndex:previousValue:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/JoinedRoomsProvider.swift",
-      "line": 93,
+      "line": 90,
       "symbol": "JoinedRoomsProviderDelegate.joinedRoomsProvider(_:didLeaveRoomAtIndex:previousValue:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -178,83 +269,69 @@
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomDetailsProvider.swift",
       "line": 10,
-      "symbol": "RoomDetailsProvider.session",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomDetailsProvider.swift",
-      "line": 11,
       "symbol": "RoomDetailsProvider.hasMoreOldMessages",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomDetailsProvider.swift",
-      "line": 12,
+      "line": 11,
       "symbol": "RoomDetailsProvider.isFetchingOldMessages",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomDetailsProvider.swift",
-      "line": 14,
+      "line": 13,
       "symbol": "RoomDetailsProvider.delegate",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomDetailsProvider.swift",
-      "line": 31,
+      "line": 30,
       "symbol": "RoomDetailsProvider.numberOfMessages",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomDetailsProvider.swift",
-      "line": 37,
-      "symbol": "RoomDetailsProvider.init(room:session:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomDetailsProvider.swift",
-      "line": 66,
+      "line": 64,
       "symbol": "RoomDetailsProvider.message(at:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomDetailsProvider.swift",
-      "line": 70,
+      "line": 68,
       "symbol": "RoomDetailsProvider.fetchOlderMessages(numberOfMessages:completionHandler:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomDetailsProvider.swift",
-      "line": 121,
+      "line": 119,
       "symbol": "RoomDetailsProviderDelegate",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomDetailsProvider.swift",
-      "line": 123,
+      "line": 121,
       "symbol": "RoomDetailsProviderDelegate.roomDetailsProvider(_:didReceiveMessagesAtIndexRange:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomDetailsProvider.swift",
-      "line": 124,
+      "line": 122,
       "symbol": "RoomDetailsProviderDelegate.roomDetailsProvider(_:didChangeMessageAtIndex:previousValue:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/RoomDetailsProvider.swift",
-      "line": 125,
+      "line": 123,
       "symbol": "RoomDetailsProviderDelegate.roomDetailsProvider(_:didDeleteMessageAtIndex:previousValue:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -269,76 +346,62 @@
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UsersProvider.swift",
       "line": 9,
-      "symbol": "UsersProvider.session",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UsersProvider.swift",
-      "line": 10,
       "symbol": "UsersProvider.isFetchingMoreUsers",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UsersProvider.swift",
-      "line": 11,
+      "line": 10,
       "symbol": "UsersProvider.hasMoreUsers",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UsersProvider.swift",
-      "line": 12,
+      "line": 11,
       "symbol": "UsersProvider.users",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UsersProvider.swift",
-      "line": 14,
+      "line": 13,
       "symbol": "UsersProvider.delegate",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UsersProvider.swift",
-      "line": 20,
+      "line": 19,
       "symbol": "UsersProvider.numberOfUsers",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UsersProvider.swift",
-      "line": 26,
-      "symbol": "UsersProvider.init(session:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UsersProvider.swift",
-      "line": 37,
+      "line": 35,
       "symbol": "UsersProvider.user(at:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UsersProvider.swift",
-      "line": 41,
+      "line": 39,
       "symbol": "UsersProvider.fetchMoreUsers(numberOfUsers:completionHandler:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UsersProvider.swift",
-      "line": 74,
+      "line": 72,
       "symbol": "UsersProviderDelegate",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/UsersProvider.swift",
-      "line": 76,
+      "line": 74,
       "symbol": "UsersProviderDelegate.usersProvider(_:didAddUsersAtIndexRange:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -747,97 +810,6 @@
       "line": 7,
       "symbol": "ConnectionStatus.disconnected",
       "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Session/ChatkitSession.swift",
-      "line": 5,
-      "symbol": "ChatkitSession",
-      "symbol_kind": "source.lang.swift.decl.class",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Session/ChatkitSession.swift",
-      "line": 9,
-      "symbol": "ChatkitSession.currentUser",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Session/ChatkitSession.swift",
-      "line": 10,
-      "symbol": "ChatkitSession.connectionStatus",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Session/ChatkitSession.swift",
-      "line": 11,
-      "symbol": "ChatkitSession.logger",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Session/ChatkitSession.swift",
-      "line": 13,
-      "symbol": "ChatkitSession.delegate",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Session/ChatkitSession.swift",
-      "line": 22,
-      "symbol": "ChatkitSession.instanceLocator",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Session/ChatkitSession.swift",
-      "line": 26,
-      "symbol": "ChatkitSession.tokenProvider",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Session/ChatkitSession.swift",
-      "line": 32,
-      "symbol": "ChatkitSession.init(instanceLocator:tokenProvider:logger:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Session/ChatkitSession.swift",
-      "line": 69,
-      "symbol": "ChatkitSession.connect(completionHandler:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Session/ChatkitSession.swift",
-      "line": 93,
-      "symbol": "ChatkitSession.disconnect()",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Session/ChatkitSession.swift",
-      "line": 106,
-      "symbol": "ChatkitSessionDelegate",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Session/ChatkitSession.swift",
-      "line": 108,
-      "symbol": "ChatkitSessionDelegate.chatkitSession(_:didUpdateCurrentUser:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Session/ChatkitSession.swift",
-      "line": 109,
-      "symbol": "ChatkitSessionDelegate.chatkitSession(_:didChangeConnectionStatus:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
