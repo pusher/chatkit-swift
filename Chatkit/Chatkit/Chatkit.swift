@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-public class ChatkitSession {
+public class Chatkit {
     
     // MARK: - Properties
     
@@ -10,7 +10,7 @@ public class ChatkitSession {
     public private(set) var connectionStatus: ConnectionStatus
     public let logger: PPLogger
     
-    public weak var delegate: ChatkitSessionDelegate?
+    public weak var delegate: ChatkitDelegate?
     
     let persistenceController: PersistenceController
     let networkingController: NetworkingController
@@ -72,16 +72,16 @@ public class ChatkitSession {
         }
         
         self.connectionStatus = .connecting
-        self.delegate?.chatkitSession(self, didChangeConnectionStatus: self.connectionStatus)
+        self.delegate?.chatkit(self, didChangeConnectionStatus: self.connectionStatus)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.connectionStatus = .connected
             self.currentUser = self.hiddenCurrentUser
             
-            self.delegate?.chatkitSession(self, didChangeConnectionStatus: self.connectionStatus)
+            self.delegate?.chatkit(self, didChangeConnectionStatus: self.connectionStatus)
             
             if let currentUser = self.currentUser {
-                self.delegate?.chatkitSession(self, didUpdateCurrentUser: currentUser)
+                self.delegate?.chatkit(self, didUpdateCurrentUser: currentUser)
             }
             
             if let completionHandler = completionHandler {
@@ -96,16 +96,32 @@ public class ChatkitSession {
         }
         
         self.connectionStatus = .disconnected
-        self.delegate?.chatkitSession(self, didChangeConnectionStatus: self.connectionStatus)
+        self.delegate?.chatkit(self, didChangeConnectionStatus: self.connectionStatus)
+    }
+    
+    public func createUsersProvider() -> UsersProvider {
+        return UsersProvider()
+    }
+    
+    public func createAvailableRoomsProvider() -> AvailableRoomsProvider {
+        return AvailableRoomsProvider()
+    }
+    
+    public func createJoinedRoomsProvider() -> JoinedRoomsProvider {
+        return JoinedRoomsProvider(currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController)
+    }
+    
+    public func createRoomDetailsProvider(for room: Room) -> RoomDetailsProvider {
+        return RoomDetailsProvider(room: room, currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController)
     }
     
 }
 
 // MARK: - Delegate
 
-public protocol ChatkitSessionDelegate: class {
+public protocol ChatkitDelegate: class {
     
-    func chatkitSession(_ chatkitSession: ChatkitSession, didUpdateCurrentUser currentUser: User)
-    func chatkitSession(_ chatkitSession: ChatkitSession, didChangeConnectionStatus connectionStatus: ConnectionStatus)
+    func chatkit(_ chatkit: Chatkit, didUpdateCurrentUser currentUser: User)
+    func chatkit(_ chatkit: Chatkit, didChangeConnectionStatus connectionStatus: ConnectionStatus)
     
 }

@@ -7,7 +7,6 @@ public class RoomDetailsProvider: DataProvider {
     // MARK: - Properties
     
     public let roomIdentifier: String
-    public let session: ChatkitSession
     public private(set) var hasMoreOldMessages: Bool
     public private(set) var isFetchingOldMessages: Bool
     
@@ -34,18 +33,17 @@ public class RoomDetailsProvider: DataProvider {
     
     // MARK: - Initializers
     
-    public init(room: Room, session: ChatkitSession) {
+    init(room: Room, currentUser: User, persistenceController: PersistenceController) {
         self.roomIdentifier = room.identifier
-        self.session = session
         self.hasMoreOldMessages = true
         self.isFetchingOldMessages = false
         
         self.roomManagedObjectID = room.objectID
         self.messageFactory = MessageEntityFactory(roomID: self.roomManagedObjectID,
-                                                   currentUserManagedObjectID: self.session.hiddenCurrentUser.objectID,
-                                                   persistenceController: self.session.persistenceController)
+                                                   currentUserManagedObjectID: currentUser.objectID,
+                                                   persistenceController: persistenceController)
         
-        let context = self.session.persistenceController.mainContext
+        let context = persistenceController.mainContext
         let predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.room), self.roomManagedObjectID)
         let sortDescriptor = NSSortDescriptor(key: #keyPath(MessageEntity.identifier), ascending: true) { (lhs, rhs) -> ComparisonResult in
             guard let lhsString = lhs as? String, let lhs = Int(lhsString), let rhsString = rhs as? String, let rhs = Int(rhsString) else {

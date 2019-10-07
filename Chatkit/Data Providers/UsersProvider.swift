@@ -6,7 +6,6 @@ public class UsersProvider: DataProvider {
     
     // MARK: - Properties
     
-    public let session: ChatkitSession
     public private(set) var isFetchingMoreUsers: Bool
     public private(set) var hasMoreUsers: Bool
     public private(set) var users: [User]
@@ -23,8 +22,7 @@ public class UsersProvider: DataProvider {
     
     // MARK: - Initializers
     
-    public init(session: ChatkitSession) {
-        self.session = session
+    init() {
         self.isFetchingMoreUsers = false
         self.hasMoreUsers = true
         

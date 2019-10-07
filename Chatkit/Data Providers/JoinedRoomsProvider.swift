@@ -6,8 +6,6 @@ public class JoinedRoomsProvider: DataProvider {
     
     // MARK: - Properties
     
-    public let session: ChatkitSession
-    
     public weak var delegate: JoinedRoomsProviderDelegate?
     
     private let fetchedResultsController: FetchedResultsController<RoomEntity>
@@ -25,13 +23,12 @@ public class JoinedRoomsProvider: DataProvider {
     
     // MARK: - Initializers
     
-    public init(session: ChatkitSession) {
-        self.session = session
-        self.roomFactory = RoomEntityFactory(currentUserManagedObjectID: self.session.hiddenCurrentUser.objectID, persistenceController: self.session.persistenceController)
+    init(currentUser: User, persistenceController: PersistenceController) {
+        self.roomFactory = RoomEntityFactory(currentUserManagedObjectID: currentUser.objectID, persistenceController: persistenceController)
         
-        let context = self.session.persistenceController.mainContext
+        let context = persistenceController.mainContext
         
-        var currentUserID = self.session.hiddenCurrentUser.objectID
+        var currentUserID = currentUser.objectID
         context.performAndWait {
             currentUserID = context.object(with: currentUserID).objectID
         }

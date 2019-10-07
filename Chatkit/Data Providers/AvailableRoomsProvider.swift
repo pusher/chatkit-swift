@@ -6,7 +6,6 @@ public class AvailableRoomsProvider: DataProvider {
     
     // MARK: - Properties
     
-    public let session: ChatkitSession
     public private(set) var isFetchingMoreRooms: Bool
     public private(set) var hasMoreRooms: Bool
     public private(set) var rooms: [Room]
@@ -23,8 +22,7 @@ public class AvailableRoomsProvider: DataProvider {
     
     // MARK: - Initializers
     
-    public init(session: ChatkitSession) {
-        self.session = session
+    init() {
         self.isFetchingMoreRooms = false
         self.hasMoreRooms = true
         

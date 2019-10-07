@@ -3,18 +3,18 @@ import PusherChatkit
 
 class RoomListViewController: UITableViewController {
     
-    var session: ChatkitSession?
+    var chatkit: Chatkit?
     var roomProvider: JoinedRoomsProvider?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let session = try? ChatkitSession(instanceLocator: "test:Instance:Locator", tokenProvider: TestTokenProvider()) else {
+        guard let chatkit = try? Chatkit(instanceLocator: "test:Instance:Locator", tokenProvider: TestTokenProvider()) else {
             return
         }
         
-        self.session = session
-        self.roomProvider = JoinedRoomsProvider(session: session)
+        self.chatkit = chatkit
+        self.roomProvider = self.chatkit?.createJoinedRoomsProvider()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -36,31 +36,28 @@ class RoomListViewController: UITableViewController {
         if segue.identifier == "displayMessages" {
             guard let cell = sender as? UITableViewCell,
                 let indexPath = self.tableView.indexPath(for: cell),
-                let session = self.session,
                 let room = self.roomProvider?.room(at: indexPath.row),
                 let messageViewController = segue.destination as? MessageViewController else {
                     return
             }
             
-            messageViewController.roomDetailsProvider = RoomDetailsProvider(room: room, session: session)
+            messageViewController.roomDetailsProvider = self.chatkit?.createRoomDetailsProvider(for: room)
         }
         else if segue.identifier == "displayRoomPicker" {
             guard let navigationController = segue.destination as? UINavigationController,
-                let roomPickerViewController = navigationController.topViewController as? RoomPickerViewController,
-                let session = self.session else {
+                let roomPickerViewController = navigationController.topViewController as? RoomPickerViewController else {
                     return
             }
             
-            roomPickerViewController.roomProvider = AvailableRoomsProvider(session: session)
+            roomPickerViewController.roomProvider = self.chatkit?.createAvailableRoomsProvider()
         }
         else if segue.identifier == "displayUserPicker" {
             guard let navigationController = segue.destination as? UINavigationController,
-                let userPickerViewController = navigationController.topViewController as? UserPickerViewController,
-                let session = self.session else {
+                let userPickerViewController = navigationController.topViewController as? UserPickerViewController else {
                     return
             }
             
-            userPickerViewController.usersProvider = UsersProvider(session: session)
+            userPickerViewController.usersProvider = self.chatkit?.createUsersProvider()
         }
     }
     

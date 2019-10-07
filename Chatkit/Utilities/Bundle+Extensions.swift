@@ -4,6 +4,6 @@ internal extension Bundle {
     
     // MARK: - Properties
     
-    static let current = Bundle(for: ChatkitSession.self)
+    static let current = Bundle(for: Chatkit.self)
     
 }
