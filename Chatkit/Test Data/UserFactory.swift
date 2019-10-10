@@ -2,7 +2,7 @@ import Foundation
 
 class UserFactory {
     
-    func receiveMoreUsers(numberOfUsers: Int, lastUserIdentifier: String, delay: TimeInterval, completionHandler: @escaping ([User]) -> Void) {
+    func receiveUsers(numberOfUsers: Int, lastUserIdentifier: String, delay: TimeInterval, completionHandler: @escaping ([User]) -> Void) {
         guard let lastUserIdentifier = Int(lastUserIdentifier) else {
             completionHandler([])
             return
@@ -13,7 +13,7 @@ class UserFactory {
             let firstUserIdentifier = lastUserIdentifier + 1
             
             let users = (firstUserIdentifier..<(firstUserIdentifier + numberOfUsers)).map {
-                User(identifier: "\($0)",
+                User(identifier: "user\($0)@pusher.com",
                     name: "User \($0)",
                     avatar: nil,
                     presenceState: .unknown,

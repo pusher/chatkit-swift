@@ -2,7 +2,7 @@ import Foundation
 
 class RoomFactory {
     
-    func receiveMoreRooms(numberOfRooms: Int, lastRoomIdentifier: String, delay: TimeInterval, completionHandler: @escaping ([Room]) -> Void) {
+    func receiveRooms(numberOfRooms: Int, lastRoomIdentifier: String, delay: TimeInterval, completionHandler: @escaping ([Room]) -> Void) {
         guard let lastRoomIdentifier = Int(lastRoomIdentifier) else {
             completionHandler([])
             return

@@ -6,8 +6,7 @@ public class UsersProvider: DataProvider {
     
     // MARK: - Properties
     
-    public private(set) var isFetchingMoreUsers: Bool
-    public private(set) var hasMoreUsers: Bool
+    public private(set) var state: PagedCollectionState
     public private(set) var users: [User]
     
     public weak var delegate: UsersProviderDelegate?
@@ -23,11 +22,11 @@ public class UsersProvider: DataProvider {
     // MARK: - Initializers
     
     init() {
-        self.isFetchingMoreUsers = false
-        self.hasMoreUsers = true
-        
+        self.state = .initializing
         self.users = []
         self.userFactory = UserFactory()
+        
+        self.fetchData()
     }
     
     // MARK: - Public methods
@@ -37,7 +36,7 @@ public class UsersProvider: DataProvider {
     }
     
     public func fetchMoreUsers(numberOfUsers: UInt, completionHandler: CompletionHandler? = nil) {
-        guard !self.isFetchingMoreUsers else {
+        guard self.state == .partiallyPopulated else {
             if let completionHandler = completionHandler {
                 // TODO: Return error
                 completionHandler(nil)
@@ -46,22 +45,42 @@ public class UsersProvider: DataProvider {
             return
         }
         
-        self.isFetchingMoreUsers = true
+        self.state = .fetching
         
         let lastUserIdentifier = self.users.last?.identifier ?? "-1"
         
-        self.userFactory.receiveMoreUsers(numberOfUsers: Int(numberOfUsers), lastUserIdentifier: lastUserIdentifier, delay: 1.0) { users in
+        self.userFactory.receiveUsers(numberOfUsers: Int(numberOfUsers), lastUserIdentifier: lastUserIdentifier, delay: 1.0) { users in
             let range = Range<Int>(uncheckedBounds: (lower: self.users.count, upper: self.users.count + users.count))
             
             self.users.append(contentsOf: users)
             
-            self.isFetchingMoreUsers = false
+            self.state = .partiallyPopulated
             
             self.delegate?.usersProvider(self, didAddUsersAtIndexRange: range)
             
             if let completionHandler = completionHandler {
                 completionHandler(nil)
             }
+        }
+    }
+    
+    // MARK: - Private methods
+    
+    private func fetchData() {
+        guard self.state == .initializing else {
+            return
+        }
+        
+        self.state = .fetching
+        
+        self.userFactory.receiveUsers(numberOfUsers: 5, lastUserIdentifier: "-1", delay: 1.0) { users in
+            let range = Range<Int>(uncheckedBounds: (lower: self.users.count, upper: self.users.count + users.count))
+            
+            self.users.append(contentsOf: users)
+            
+            self.state = .partiallyPopulated
+            
+            self.delegate?.usersProvider(self, didAddUsersAtIndexRange: range)
         }
     }
     

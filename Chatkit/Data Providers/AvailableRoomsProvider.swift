@@ -6,8 +6,7 @@ public class AvailableRoomsProvider: DataProvider {
     
     // MARK: - Properties
     
-    public private(set) var isFetchingMoreRooms: Bool
-    public private(set) var hasMoreRooms: Bool
+    public private(set) var state: PagedCollectionState
     public private(set) var rooms: [Room]
     
     public weak var delegate: AvailableRoomsProviderDelegate?
@@ -23,11 +22,11 @@ public class AvailableRoomsProvider: DataProvider {
     // MARK: - Initializers
     
     init() {
-        self.isFetchingMoreRooms = false
-        self.hasMoreRooms = true
-        
+        self.state = .initializing
         self.rooms = []
         self.roomFactory = RoomFactory()
+        
+        self.fetchData()
     }
     
     // MARK: - Public methods
@@ -37,7 +36,7 @@ public class AvailableRoomsProvider: DataProvider {
     }
     
     public func fetchMoreRooms(numberOfRooms: UInt, completionHandler: CompletionHandler? = nil) {
-        guard !self.isFetchingMoreRooms else {
+        guard self.state == .partiallyPopulated else {
             if let completionHandler = completionHandler {
                 // TODO: Return error
                 completionHandler(nil)
@@ -46,22 +45,42 @@ public class AvailableRoomsProvider: DataProvider {
             return
         }
         
-        self.isFetchingMoreRooms = true
+        self.state = .fetching
         
         let lastRoomIdentifier = self.rooms.last?.identifier ?? "-1"
         
-        self.roomFactory.receiveMoreRooms(numberOfRooms: Int(numberOfRooms), lastRoomIdentifier: lastRoomIdentifier, delay: 1.0) { rooms in
+        self.roomFactory.receiveRooms(numberOfRooms: Int(numberOfRooms), lastRoomIdentifier: lastRoomIdentifier, delay: 1.0) { rooms in
             let range = Range<Int>(uncheckedBounds: (lower: self.rooms.count, upper: self.rooms.count + rooms.count))
             
             self.rooms.append(contentsOf: rooms)
             
-            self.isFetchingMoreRooms = false
+            self.state = .partiallyPopulated
             
             self.delegate?.availableRoomsProvider(self, didAddRoomsAtIndexRange: range)
             
             if let completionHandler = completionHandler {
                 completionHandler(nil)
             }
+        }
+    }
+    
+    // MARK: - Private methods
+    
+    private func fetchData() {
+        guard self.state == .initializing else {
+            return
+        }
+        
+        self.state = .fetching
+        
+        self.roomFactory.receiveRooms(numberOfRooms: 5, lastRoomIdentifier: "-1", delay: 1.0) { rooms in
+            let range = Range<Int>(uncheckedBounds: (lower: self.rooms.count, upper: self.rooms.count + rooms.count))
+            
+            self.rooms.append(contentsOf: rooms)
+            
+            self.state = .partiallyPopulated
+            
+            self.delegate?.availableRoomsProvider(self, didAddRoomsAtIndexRange: range)
         }
     }
     

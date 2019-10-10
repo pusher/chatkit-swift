@@ -6,6 +6,7 @@ public class JoinedRoomsProvider: DataProvider {
     
     // MARK: - Properties
     
+    public private(set) var state: RealTimeCollectionState
     public weak var delegate: JoinedRoomsProviderDelegate?
     
     private let fetchedResultsController: FetchedResultsController<RoomEntity>
@@ -24,6 +25,7 @@ public class JoinedRoomsProvider: DataProvider {
     // MARK: - Initializers
     
     init(currentUser: User, persistenceController: PersistenceController) {
+        self.state = .initializing
         self.roomFactory = RoomEntityFactory(currentUserManagedObjectID: currentUser.objectID, persistenceController: persistenceController)
         
         let context = persistenceController.mainContext
@@ -45,13 +47,25 @@ public class JoinedRoomsProvider: DataProvider {
         self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
         self.fetchedResultsController.delegate = self
         
-        self.roomFactory.receiveInitialListOfRooms(numberOfRooms: 10, delay: 1.0)
+        self.fetchData()
     }
     
     // MARK: - Public methods
     
     public func room(at index: Int) -> Room? {
         return (try? self.fetchedResultsController.object(at: index)?.snapshot()) ?? nil
+    }
+    
+    // MARK: - Private methods
+    
+    private func fetchData() {
+        guard self.state == .initializing else {
+            return
+        }
+        
+        self.state = .online
+        
+        self.roomFactory.receiveInitialListOfRooms(numberOfRooms: 10, delay: 1.0)
     }
     
 }

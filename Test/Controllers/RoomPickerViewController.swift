@@ -12,12 +12,6 @@ class RoomPickerViewController: UITableViewController {
         self.roomProvider?.delegate = self
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        self.loadMoreRoomsIfNeeded()
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         self.roomProvider?.delegate = nil
         
@@ -29,14 +23,6 @@ class RoomPickerViewController: UITableViewController {
     }
     
     @IBAction func loadMore(_ sender: UIBarButtonItem) {
-        self.loadMoreRoomsIfNeeded(force: true)
-    }
-    
-    private func loadMoreRoomsIfNeeded(force: Bool = false) {
-        guard force || self.roomProvider?.numberOfRooms == 0 else {
-            return
-        }
-        
         self.roomProvider?.fetchMoreRooms(numberOfRooms: 5)
     }
     

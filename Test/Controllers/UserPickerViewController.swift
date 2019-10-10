@@ -12,12 +12,6 @@ class UserPickerViewController: UITableViewController {
         self.usersProvider?.delegate = self
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        self.loadMoreUsersIfNeeded()
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         self.usersProvider?.delegate = nil
         
@@ -29,14 +23,6 @@ class UserPickerViewController: UITableViewController {
     }
     
     @IBAction func loadMore(_ sender: UIBarButtonItem) {
-        self.loadMoreUsersIfNeeded(force: true)
-    }
-    
-    private func loadMoreUsersIfNeeded(force: Bool = false) {
-        guard force || self.usersProvider?.numberOfUsers == 0 else {
-            return
-        }
-        
         self.usersProvider?.fetchMoreUsers(numberOfUsers: 5)
     }
     

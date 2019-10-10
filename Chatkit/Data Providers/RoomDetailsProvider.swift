@@ -7,8 +7,8 @@ public class RoomDetailsProvider: DataProvider {
     // MARK: - Properties
     
     public let roomIdentifier: String
-    public private(set) var hasMoreOldMessages: Bool
-    public private(set) var isFetchingOldMessages: Bool
+    public private(set) var realTimeState: RealTimeCollectionState
+    public private(set) var pagedState: PagedCollectionState
     
     public weak var delegate: RoomDetailsProviderDelegate? {
         didSet {
@@ -35,8 +35,8 @@ public class RoomDetailsProvider: DataProvider {
     
     init(room: Room, currentUser: User, persistenceController: PersistenceController) {
         self.roomIdentifier = room.identifier
-        self.hasMoreOldMessages = true
-        self.isFetchingOldMessages = false
+        self.realTimeState = .initializing
+        self.pagedState = .initializing
         
         self.roomManagedObjectID = room.objectID
         self.messageFactory = MessageEntityFactory(roomID: self.roomManagedObjectID,
@@ -56,7 +56,7 @@ public class RoomDetailsProvider: DataProvider {
         self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
         self.fetchedResultsController.delegate = self
         
-        self.messageFactory.receiveInitialMessages(numberOfMessages: 10, delay: 1.0)
+        self.fetchData()
     }
     
     // MARK: - Public methods
@@ -66,7 +66,7 @@ public class RoomDetailsProvider: DataProvider {
     }
     
     public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: CompletionHandler? = nil) {
-        guard !self.isFetchingOldMessages, let lastMessageIdentifier = self.message(at: 0)?.identifier else {
+        guard self.pagedState == .partiallyPopulated, let lastMessageIdentifier = self.message(at: 0)?.identifier else {
             if let completionHandler = completionHandler {
                 // TODO: Return error
                 completionHandler(nil)
@@ -75,14 +75,28 @@ public class RoomDetailsProvider: DataProvider {
             return
         }
         
-        self.isFetchingOldMessages = true
+        self.pagedState = .fetching
         
         self.messageFactory.receiveOldMessages(numberOfMessages: Int(numberOfMessages), lastMessageIdentifier: lastMessageIdentifier, delay: 1.0) {
-            self.isFetchingOldMessages = false
+            self.pagedState = .partiallyPopulated
             
             if let completionHandler = completionHandler {
                 completionHandler(nil)
             }
+        }
+    }
+    
+    // MARK: - Private methods
+    
+    private func fetchData() {
+        guard self.realTimeState == .initializing else {
+            return
+        }
+        
+        self.realTimeState = .online
+        
+        self.messageFactory.receiveInitialMessages(numberOfMessages: 10, delay: 1.0) {
+            self.pagedState = .partiallyPopulated
         }
     }
     

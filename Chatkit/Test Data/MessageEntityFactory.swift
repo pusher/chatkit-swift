@@ -16,10 +16,11 @@ class MessageEntityFactory {
         self.timer = nil
     }
     
-    func receiveInitialMessages(numberOfMessages: Int, delay: TimeInterval) {
+    func receiveInitialMessages(numberOfMessages: Int, delay: TimeInterval, completionHandler: @escaping () -> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             self.persistenceController.performBackgroundTask { context in
                 guard context.count(MessageEntity.self, filteredBy: "%K == %@", #keyPath(MessageEntity.room), self.roomID) == 0 else {
+                    completionHandler()
                     return
                 }
                 
@@ -34,6 +35,8 @@ class MessageEntityFactory {
                 }
                 
                 self.persistenceController.save()
+                
+                completionHandler()
             }
         }
     }
