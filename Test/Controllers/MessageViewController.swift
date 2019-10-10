@@ -3,13 +3,37 @@ import PusherChatkit
 
 class MessageViewController: UITableViewController {
     
+    var room: Room?
+    var chatkit: Chatkit?
     var roomDetailsProvider: RoomDetailsProvider?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        guard let room = self.room else {
+            return
+        }
+        
+        self.chatkit?.createRoomDetailsProvider(for: room) { roomDetailsProvider, error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+            }
+            else if let roomDetailsProvider = roomDetailsProvider {
+                self.roomDetailsProvider = roomDetailsProvider
+                self.roomDetailsProvider?.delegate = self
+                
+                self.tableView.reloadData()
+            }
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.tableView.reloadData()
-        self.roomDetailsProvider?.delegate = self
+        if let roomDetailsProvider = self.roomDetailsProvider {
+            self.tableView.reloadData()
+            roomDetailsProvider.delegate = self
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

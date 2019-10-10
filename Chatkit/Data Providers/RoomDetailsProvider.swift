@@ -33,7 +33,7 @@ public class RoomDetailsProvider: DataProvider {
     
     // MARK: - Initializers
     
-    init(room: Room, currentUser: User, persistenceController: PersistenceController) {
+    init(room: Room, currentUser: User, persistenceController: PersistenceController, completionHandler: @escaping CompletionHandler) {
         self.roomIdentifier = room.identifier
         self.realTimeState = .initializing
         self.pagedState = .initializing
@@ -56,7 +56,7 @@ public class RoomDetailsProvider: DataProvider {
         self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
         self.fetchedResultsController.delegate = self
         
-        self.fetchData()
+        self.fetchData(completionHandler: completionHandler)
     }
     
     // MARK: - Public methods
@@ -88,7 +88,7 @@ public class RoomDetailsProvider: DataProvider {
     
     // MARK: - Private methods
     
-    private func fetchData() {
+    private func fetchData(completionHandler: @escaping CompletionHandler) {
         guard self.realTimeState == .initializing else {
             return
         }
@@ -97,6 +97,10 @@ public class RoomDetailsProvider: DataProvider {
         
         self.messageFactory.receiveInitialMessages(numberOfMessages: 10, delay: 1.0) {
             self.pagedState = .partiallyPopulated
+            
+            DispatchQueue.main.async {
+                completionHandler(nil)
+            }
         }
     }
     

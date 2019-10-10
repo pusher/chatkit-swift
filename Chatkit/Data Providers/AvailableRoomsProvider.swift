@@ -21,12 +21,12 @@ public class AvailableRoomsProvider: DataProvider {
     
     // MARK: - Initializers
     
-    init() {
+    init(completionHandler: @escaping CompletionHandler) {
         self.state = .initializing
         self.rooms = []
         self.roomFactory = RoomFactory()
         
-        self.fetchData()
+        self.fetchData(completionHandler: completionHandler)
     }
     
     // MARK: - Public methods
@@ -66,7 +66,7 @@ public class AvailableRoomsProvider: DataProvider {
     
     // MARK: - Private methods
     
-    private func fetchData() {
+    private func fetchData(completionHandler: @escaping CompletionHandler) {
         guard self.state == .initializing else {
             return
         }
@@ -74,13 +74,13 @@ public class AvailableRoomsProvider: DataProvider {
         self.state = .fetching
         
         self.roomFactory.receiveRooms(numberOfRooms: 5, lastRoomIdentifier: "-1", delay: 1.0) { rooms in
-            let range = Range<Int>(uncheckedBounds: (lower: self.rooms.count, upper: self.rooms.count + rooms.count))
-            
             self.rooms.append(contentsOf: rooms)
             
             self.state = .partiallyPopulated
             
-            self.delegate?.availableRoomsProvider(self, didAddRoomsAtIndexRange: range)
+            DispatchQueue.main.async {
+                completionHandler(nil)
+            }
         }
     }
     

@@ -14,14 +14,27 @@ class RoomListViewController: UITableViewController {
         }
         
         self.chatkit = chatkit
-        self.roomProvider = self.chatkit?.createJoinedRoomsProvider()
+        
+        self.chatkit?.createJoinedRoomsProvider { joinedRoomsProvider, error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+            }
+            else if let joinedRoomsProvider = joinedRoomsProvider {
+                self.roomProvider = joinedRoomsProvider
+                self.roomProvider?.delegate = self
+                
+                self.tableView.reloadData()
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.tableView.reloadData()
-        self.roomProvider?.delegate = self
+        if let roomProvider = self.roomProvider {
+            self.tableView.reloadData()
+            roomProvider.delegate = self
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -41,7 +54,8 @@ class RoomListViewController: UITableViewController {
                     return
             }
             
-            messageViewController.roomDetailsProvider = self.chatkit?.createRoomDetailsProvider(for: room)
+            messageViewController.room = room
+            messageViewController.chatkit = self.chatkit
         }
         else if segue.identifier == "displayRoomPicker" {
             guard let navigationController = segue.destination as? UINavigationController,
@@ -49,7 +63,7 @@ class RoomListViewController: UITableViewController {
                     return
             }
             
-            roomPickerViewController.roomProvider = self.chatkit?.createAvailableRoomsProvider()
+            roomPickerViewController.chatkit = self.chatkit
         }
         else if segue.identifier == "displayUserPicker" {
             guard let navigationController = segue.destination as? UINavigationController,
@@ -57,7 +71,7 @@ class RoomListViewController: UITableViewController {
                     return
             }
             
-            userPickerViewController.usersProvider = self.chatkit?.createUsersProvider()
+            userPickerViewController.chatkit = self.chatkit
         }
     }
     

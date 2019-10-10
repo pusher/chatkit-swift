@@ -24,7 +24,7 @@ public class JoinedRoomsProvider: DataProvider {
     
     // MARK: - Initializers
     
-    init(currentUser: User, persistenceController: PersistenceController) {
+    init(currentUser: User, persistenceController: PersistenceController, completionHandler: @escaping CompletionHandler) {
         self.state = .initializing
         self.roomFactory = RoomEntityFactory(currentUserManagedObjectID: currentUser.objectID, persistenceController: persistenceController)
         
@@ -47,7 +47,7 @@ public class JoinedRoomsProvider: DataProvider {
         self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
         self.fetchedResultsController.delegate = self
         
-        self.fetchData()
+        self.fetchData(completionHandler: completionHandler)
     }
     
     // MARK: - Public methods
@@ -58,14 +58,18 @@ public class JoinedRoomsProvider: DataProvider {
     
     // MARK: - Private methods
     
-    private func fetchData() {
+    private func fetchData(completionHandler: @escaping CompletionHandler) {
         guard self.state == .initializing else {
             return
         }
         
         self.state = .online
         
-        self.roomFactory.receiveInitialListOfRooms(numberOfRooms: 10, delay: 1.0)
+        self.roomFactory.receiveInitialListOfRooms(numberOfRooms: 10, delay: 1.0) {
+            DispatchQueue.main.async {
+                completionHandler(nil)
+            }
+        }
     }
     
 }

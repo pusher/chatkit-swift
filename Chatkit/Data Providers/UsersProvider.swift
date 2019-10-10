@@ -21,12 +21,12 @@ public class UsersProvider: DataProvider {
     
     // MARK: - Initializers
     
-    init() {
+    init(completionHandler: @escaping CompletionHandler) {
         self.state = .initializing
         self.users = []
         self.userFactory = UserFactory()
         
-        self.fetchData()
+        self.fetchData(completionHandler: completionHandler)
     }
     
     // MARK: - Public methods
@@ -66,7 +66,7 @@ public class UsersProvider: DataProvider {
     
     // MARK: - Private methods
     
-    private func fetchData() {
+    private func fetchData(completionHandler: @escaping CompletionHandler) {
         guard self.state == .initializing else {
             return
         }
@@ -74,13 +74,13 @@ public class UsersProvider: DataProvider {
         self.state = .fetching
         
         self.userFactory.receiveUsers(numberOfUsers: 5, lastUserIdentifier: "-1", delay: 1.0) { users in
-            let range = Range<Int>(uncheckedBounds: (lower: self.users.count, upper: self.users.count + users.count))
-            
             self.users.append(contentsOf: users)
             
             self.state = .partiallyPopulated
             
-            self.delegate?.usersProvider(self, didAddUsersAtIndexRange: range)
+            DispatchQueue.main.async {
+                completionHandler(nil)
+            }
         }
     }
     

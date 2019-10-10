@@ -3,13 +3,32 @@ import PusherChatkit
 
 class UserPickerViewController: UITableViewController {
     
+    var chatkit: Chatkit?
     var usersProvider: UsersProvider?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.chatkit?.createUsersProvider { usersProvider, error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+            }
+            else if let usersProvider = usersProvider {
+                self.usersProvider = usersProvider
+                self.usersProvider?.delegate = self
+                
+                self.tableView.reloadData()
+            }
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.tableView.reloadData()
-        self.usersProvider?.delegate = self
+        if let usersProvider = self.usersProvider {
+            self.tableView.reloadData()
+            usersProvider.delegate = self
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

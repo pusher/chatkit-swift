@@ -17,6 +17,11 @@ public class Chatkit {
     
     var hiddenCurrentUser: User!
     
+    var usersProviderCache: [UUID : UsersProvider]
+    var availableRoomsProviderCache: [UUID : AvailableRoomsProvider]
+    var joinedRoomsProviderCache: [UUID : JoinedRoomsProvider]
+    var roomDetailsProviderCache: [UUID : RoomDetailsProvider]
+    
     // MARK: - Accessors
     
     public var instanceLocator: String {
@@ -30,6 +35,11 @@ public class Chatkit {
     // MARK: - Initializers
     
     public init(instanceLocator: String, tokenProvider: PPTokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
+        self.usersProviderCache = [:]
+        self.availableRoomsProviderCache = [:]
+        self.joinedRoomsProviderCache = [:]
+        self.roomDetailsProviderCache = [:]
+        
         self.logger = logger
         
         guard let model = NSManagedObjectModel.mergedModel(from: [Bundle.current]) else {
@@ -99,20 +109,60 @@ public class Chatkit {
         self.delegate?.chatkit(self, didChangeConnectionStatus: self.connectionStatus)
     }
     
-    public func createUsersProvider() -> UsersProvider {
-        return UsersProvider()
+    public func createUsersProvider(completionHandler: @escaping (UsersProvider?, Error?) -> Void) {
+        let identifier = UUID()
+        self.usersProviderCache[identifier] = UsersProvider { error in
+            if let error = error {
+                completionHandler(nil, error)
+            }
+            else if let usersProvider = self.usersProviderCache[identifier] {
+                completionHandler(usersProvider, nil)
+            }
+            
+            self.usersProviderCache.removeValue(forKey: identifier)
+        }
     }
     
-    public func createAvailableRoomsProvider() -> AvailableRoomsProvider {
-        return AvailableRoomsProvider()
+    public func createAvailableRoomsProvider(completionHandler: @escaping (AvailableRoomsProvider?, Error?) -> Void) {
+        let identifier = UUID()
+        self.availableRoomsProviderCache[identifier] = AvailableRoomsProvider { error in
+            if let error = error {
+                completionHandler(nil, error)
+            }
+            else if let availableRoomsProvider = self.availableRoomsProviderCache[identifier] {
+                completionHandler(availableRoomsProvider, nil)
+            }
+            
+            self.availableRoomsProviderCache.removeValue(forKey: identifier)
+        }
     }
     
-    public func createJoinedRoomsProvider() -> JoinedRoomsProvider {
-        return JoinedRoomsProvider(currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController)
+    public func createJoinedRoomsProvider(completionHandler: @escaping (JoinedRoomsProvider?, Error?) -> Void) {
+        let identifier = UUID()
+        self.joinedRoomsProviderCache[identifier] = JoinedRoomsProvider(currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController) { error in
+            if let error = error {
+                completionHandler(nil, error)
+            }
+            else if let joinedRoomsProvider = self.joinedRoomsProviderCache[identifier] {
+                completionHandler(joinedRoomsProvider, nil)
+            }
+            
+            self.joinedRoomsProviderCache.removeValue(forKey: identifier)
+        }
     }
     
-    public func createRoomDetailsProvider(for room: Room) -> RoomDetailsProvider {
-        return RoomDetailsProvider(room: room, currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController)
+    public func createRoomDetailsProvider(for room: Room, completionHandler: @escaping (RoomDetailsProvider?, Error?) -> Void) {
+        let identifier = UUID()
+        self.roomDetailsProviderCache[identifier] = RoomDetailsProvider(room: room, currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController) { error in
+            if let error = error {
+                completionHandler(nil, error)
+            }
+            else if let roomDetailsProvider = self.roomDetailsProviderCache[identifier] {
+                completionHandler(roomDetailsProvider, nil)
+            }
+            
+            self.roomDetailsProviderCache.removeValue(forKey: identifier)
+        }
     }
     
 }

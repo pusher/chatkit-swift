@@ -12,10 +12,11 @@ class RoomEntityFactory {
         self.persistenceController = persistenceController
     }
     
-    func receiveInitialListOfRooms(numberOfRooms: Int, delay: TimeInterval) {
+    func receiveInitialListOfRooms(numberOfRooms: Int, delay: TimeInterval, completionHandler: @escaping () -> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             self.persistenceController.performBackgroundTask { context in
                 guard let currentUser = context.object(with: self.currentUserManagedObjectID) as? UserEntity else {
+                    completionHandler()
                     return
                 }
                 
@@ -30,6 +31,8 @@ class RoomEntityFactory {
                 }
                 
                 self.persistenceController.save()
+                
+                completionHandler()
             }
         }
     }
