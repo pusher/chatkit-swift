@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-public class AvailableRoomsProvider: DataProvider {
+public class AvailableRoomsProvider {
     
     // MARK: - Properties
     

@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-class LagacyMessageProvider: DataProvider {
+class LagacyMessageProvider {
     
     // MARK: - Properties
     

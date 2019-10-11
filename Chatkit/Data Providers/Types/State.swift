@@ -1,8 +1,5 @@
 import Foundation
 
-protocol DataProvider {
-}
-
 public enum RealTimeCollectionState {
     
     case initializing

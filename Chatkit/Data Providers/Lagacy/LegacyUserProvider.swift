@@ -1,7 +1,7 @@
 import Foundation
 import PusherPlatform
 
-class LegacyUserProvider: DataProvider {
+class LegacyUserProvider {
     
     // MARK: - Properties
     
