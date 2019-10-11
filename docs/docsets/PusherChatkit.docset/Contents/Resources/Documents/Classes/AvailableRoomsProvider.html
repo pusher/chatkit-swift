@@ -14,7 +14,7 @@
     <a title="AvailableRoomsProvider Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">PusherChatkit Docs</a> (6% documented)</p>
+        <p><a href="../index.html">PusherChatkit Docs</a> (36% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -57,7 +57,13 @@
                 <a href="../Enums/MessagePart.html">MessagePart</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Enums/PagedCollectionState.html">PagedCollectionState</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Enums/PresenceState.html">PresenceState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/RealTimeCollectionState.html">RealTimeCollectionState</a>
               </li>
             </ul>
           </li>
@@ -114,11 +120,12 @@
             <h1>AvailableRoomsProvider</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">AvailableRoomsProvider</span> <span class="p">:</span> <span class="kt">DataProvider</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">AvailableRoomsProvider</span></code></pre>
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p>A provider which maintains a collection of all rooms availble in the Chatkit instance and retrieved from
+the web service.</p>
 
           </section>
           <section class="section task-group-section">
@@ -134,9 +141,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit22AvailableRoomsProviderC014isFetchingMoreD0Sbvp"></a>
-                    <a name="//apple_ref/swift/Property/isFetchingMoreRooms" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit22AvailableRoomsProviderC014isFetchingMoreD0Sbvp">isFetchingMoreRooms</a>
+                    <a name="/s:13PusherChatkit22AvailableRoomsProviderC5stateAA20PagedCollectionStateOvp"></a>
+                    <a name="//apple_ref/swift/Property/state" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit22AvailableRoomsProviderC5stateAA20PagedCollectionStateOvp">state</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -144,41 +151,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The current state of the provider.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">isFetchingMoreRooms</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:13PusherChatkit22AvailableRoomsProviderC07hasMoreD0Sbvp"></a>
-                    <a name="//apple_ref/swift/Property/hasMoreRooms" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit22AvailableRoomsProviderC07hasMoreD0Sbvp">hasMoreRooms</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">hasMoreRooms</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Enums/PagedCollectionState.html">PagedCollectionState</a></span></code></pre>
 
                         </div>
                       </div>
@@ -198,7 +178,12 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The array of all available rooms stored locally.</p>
+
+<p>This array contains all rooms availble in the Chatkit instance and retrieved from the web service
+as a result of an implicit initial call made to the web service during the initialization of the class
+as well as all explicit calls triggered as a result of calling
+<code><a href="../Classes/AvailableRoomsProvider.html#/s:13PusherChatkit22AvailableRoomsProviderC09fetchMoreD008numberOfD017completionHandlerySu_ys5Error_pSgcSgtF">fetchMoreRooms(numberOfRooms:completionHandler:)</a></code> method.</p>
 
                       </div>
                       <div class="declaration">
@@ -225,7 +210,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The object that is notified when the content of the maintained collection of rooms changed.</p>
 
                       </div>
                       <div class="declaration">
@@ -239,17 +224,6 @@
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Accessors"></a>
-                <a name="//apple_ref/swift/Section/Accessors" class="dashAnchor"></a>
-                <a href="#/Accessors">
-                  <h3 class="section-name">Accessors</h3>
-                </a>
-              </div>
-              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -263,7 +237,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Returns the number of rooms stored locally in the maintained collection of rooms.</p>
 
                       </div>
                       <div class="declaration">
@@ -281,10 +255,10 @@
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Public%20methods"></a>
-                <a name="//apple_ref/swift/Section/Public methods" class="dashAnchor"></a>
-                <a href="#/Public%20methods">
-                  <h3 class="section-name">Public methods</h3>
+                <a name="/Methods"></a>
+                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
+                <a href="#/Methods">
+                  <h3 class="section-name">Methods</h3>
                 </a>
               </div>
               <ul>
@@ -301,7 +275,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Returns the room at the given index in the maintained collection of rooms.</p>
 
                       </div>
                       <div class="declaration">
@@ -311,6 +285,31 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">room</span><span class="p">(</span><span class="n">at</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Room.html">Room</a></span><span class="p">?</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of object that should be returned from the maintained collection of
+rooms.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An instance of <code><a href="../Structs/Room.html">Room</a></code> from the maintained collection of rooms or <code>nil</code> when
+the object could not be found.</p>
                       </div>
                     </section>
                   </div>
@@ -328,7 +327,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Triggers an asynchronous call to the web service that extends the maintained collection of rooms
+by the given maximum number of entries.</p>
 
                       </div>
                       <div class="declaration">
@@ -339,6 +339,39 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>numberOfRooms</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The maximum number of rooms that should be retrieved from the web
+service.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional completion handler called when the call to the web
+service finishes with either a successful result or an error.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -347,7 +380,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-07)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-11)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

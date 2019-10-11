@@ -14,7 +14,7 @@
     <a title="JoinedRoomsProviderDelegate Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">PusherChatkit Docs</a> (6% documented)</p>
+        <p><a href="../index.html">PusherChatkit Docs</a> (36% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -57,7 +57,13 @@
                 <a href="../Enums/MessagePart.html">MessagePart</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Enums/PagedCollectionState.html">PagedCollectionState</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Enums/PresenceState.html">PresenceState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/RealTimeCollectionState.html">RealTimeCollectionState</a>
               </li>
             </ul>
           </li>
@@ -118,7 +124,8 @@
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p>A delegate protocol that describes the methods that will be called by the associated
+<code><a href="../Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a></code> when the maintainted collection of rooms have changed.</p>
 
           </section>
           <section class="section task-group-section">
@@ -137,7 +144,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Notifies the receiver that new rooms have been added to the maintened collection of rooms.</p>
 
                       </div>
                       <div class="declaration">
@@ -147,6 +154,37 @@
                           <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">joinedRoomsProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">joinedRoomsProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a></span><span class="p">,</span> <span class="n">didJoinRoomsAtIndexRange</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>joinedRoomsProvider</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a></code> that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>range</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The range of added objects in the maintened collection of rooms.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -164,7 +202,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Notifies the receiver that a room from the maintened collection of rooms have been updated.</p>
 
                       </div>
                       <div class="declaration">
@@ -174,6 +212,49 @@
                           <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">joinedRoomsProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">joinedRoomsProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a></span><span class="p">,</span> <span class="n">didUpdateRoomAtIndex</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">previousValue</span><span class="p">:</span> <span class="kt"><a href="../Structs/Room.html">Room</a></span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>joinedRoomsProvider</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a></code> that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of the updated object in the maintened collection of rooms.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>previousValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The value of the room prior to the update.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -191,7 +272,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Notifies the receiver that a room from the maintened collection of rooms have been removed.</p>
 
                       </div>
                       <div class="declaration">
@@ -202,6 +283,49 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>joinedRoomsProvider</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a></code> that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of the removed object in the maintened collection of rooms.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>previousValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The value of the room prior to the removal.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -210,7 +334,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-07)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-11)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

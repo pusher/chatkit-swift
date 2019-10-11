@@ -2,22 +2,30 @@ import Foundation
 import CoreData
 import PusherPlatform
 
+/// A provider which maintains a collection of all rooms joined by the user which have been retrieved from
+/// the web service.
 public class JoinedRoomsProvider {
     
     // MARK: - Properties
     
+    /// The current state of the provider.
     public private(set) var state: RealTimeCollectionState
+    
+    /// The object that is notified when the content of the maintained collection of rooms changed.
     public weak var delegate: JoinedRoomsProviderDelegate?
     
     private let fetchedResultsController: FetchedResultsController<RoomEntity>
     private let roomFactory: RoomEntityFactory
     
-    // MARK: - Accessors
-    
+    /// The array of all rooms joined by the user.
+    ///
+    /// This array contains all rooms joined by the user and retrieved from the web service as a result
+    /// of an internal real time subscription to the web service.
     public var rooms: [Room] {
         return self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
     }
     
+    /// Returns the number of rooms stored locally in the maintained collection of rooms.
     public var numberOfRooms: Int {
         return self.fetchedResultsController.numberOfObjects
     }
@@ -50,8 +58,15 @@ public class JoinedRoomsProvider {
         self.fetchData(completionHandler: completionHandler)
     }
     
-    // MARK: - Public methods
+    // MARK: - Methods
     
+    /// Returns the room at the given index in the maintained collection of rooms.
+    /// - Parameters:
+    ///     - index: The index of object that should be returned from the maintained collection of
+    ///     rooms.
+    ///
+    /// - Returns: An instance of `Room` from the maintained collection of rooms or `nil` when
+    /// the object could not be found.
     public func room(at index: Int) -> Room? {
         return (try? self.fetchedResultsController.object(at: index)?.snapshot()) ?? nil
     }
@@ -101,10 +116,31 @@ extension JoinedRoomsProvider: FetchedResultsControllerDelegate {
 
 // MARK: - Delegate
 
+/// A delegate protocol that describes the methods that will be called by the associated
+/// `JoinedRoomsProvider` when the maintainted collection of rooms have changed.
 public protocol JoinedRoomsProviderDelegate: class {
     
+    /// Notifies the receiver that new rooms have been added to the maintened collection of rooms.
+    ///
+    /// - Parameters:
+    ///     - joinedRoomsProvider: The `JoinedRoomsProvider` that called the method.
+    ///     - range: The range of added objects in the maintened collection of rooms.
     func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didJoinRoomsAtIndexRange range: Range<Int>)
+    
+    /// Notifies the receiver that a room from the maintened collection of rooms have been updated.
+    ///
+    /// - Parameters:
+    ///     - joinedRoomsProvider: The `JoinedRoomsProvider` that called the method.
+    ///     - index: The index of the updated object in the maintened collection of rooms.
+    ///     - previousValue: The value of the room prior to the update.
     func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didUpdateRoomAtIndex index: Int, previousValue: Room)
+    
+    /// Notifies the receiver that a room from the maintened collection of rooms have been removed.
+    ///
+    /// - Parameters:
+    ///     - joinedRoomsProvider: The `JoinedRoomsProvider` that called the method.
+    ///     - index: The index of the removed object in the maintened collection of rooms.
+    ///     - previousValue: The value of the room prior to the removal.
     func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didLeaveRoomAtIndex index: Int, previousValue: Room)
     
 }

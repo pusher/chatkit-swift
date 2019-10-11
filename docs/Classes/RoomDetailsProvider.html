@@ -14,7 +14,7 @@
     <a title="RoomDetailsProvider Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">PusherChatkit Docs</a> (6% documented)</p>
+        <p><a href="../index.html">PusherChatkit Docs</a> (36% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -57,7 +57,13 @@
                 <a href="../Enums/MessagePart.html">MessagePart</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Enums/PagedCollectionState.html">PagedCollectionState</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Enums/PresenceState.html">PresenceState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/RealTimeCollectionState.html">RealTimeCollectionState</a>
               </li>
             </ul>
           </li>
@@ -114,11 +120,12 @@
             <h1>RoomDetailsProvider</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomDetailsProvider</span> <span class="p">:</span> <span class="kt">DataProvider</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomDetailsProvider</span></code></pre>
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p>A provider which maintains a collection of messages for a given room which have been retrieved from
+the web service.</p>
 
           </section>
           <section class="section task-group-section">
@@ -144,7 +151,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The identifier of the room for which the provider manages a collection of messages.</p>
 
                       </div>
                       <div class="declaration">
@@ -161,9 +168,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit19RoomDetailsProviderC18hasMoreOldMessagesSbvp"></a>
-                    <a name="//apple_ref/swift/Property/hasMoreOldMessages" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit19RoomDetailsProviderC18hasMoreOldMessagesSbvp">hasMoreOldMessages</a>
+                    <a name="/s:13PusherChatkit19RoomDetailsProviderC13realTimeStateAA04Realg10CollectionH0Ovp"></a>
+                    <a name="//apple_ref/swift/Property/realTimeState" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit19RoomDetailsProviderC13realTimeStateAA04Realg10CollectionH0Ovp">realTimeState</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -171,14 +178,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The current state of the provider related to the real time web service.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">hasMoreOldMessages</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">realTimeState</span><span class="p">:</span> <span class="kt"><a href="../Enums/RealTimeCollectionState.html">RealTimeCollectionState</a></span></code></pre>
 
                         </div>
                       </div>
@@ -188,9 +195,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit19RoomDetailsProviderC21isFetchingOldMessagesSbvp"></a>
-                    <a name="//apple_ref/swift/Property/isFetchingOldMessages" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit19RoomDetailsProviderC21isFetchingOldMessagesSbvp">isFetchingOldMessages</a>
+                    <a name="/s:13PusherChatkit19RoomDetailsProviderC10pagedStateAA015PagedCollectionG0Ovp"></a>
+                    <a name="//apple_ref/swift/Property/pagedState" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit19RoomDetailsProviderC10pagedStateAA015PagedCollectionG0Ovp">pagedState</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -198,14 +205,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The current state of the provider related to the non-real time web service.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">isFetchingOldMessages</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">pagedState</span><span class="p">:</span> <span class="kt"><a href="../Enums/PagedCollectionState.html">PagedCollectionState</a></span></code></pre>
 
                         </div>
                       </div>
@@ -225,7 +232,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The object that is notified when the content of the maintained collection of messages changed.</p>
 
                       </div>
                       <div class="declaration">
@@ -239,17 +246,38 @@
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Accessors"></a>
-                <a name="//apple_ref/swift/Section/Accessors" class="dashAnchor"></a>
-                <a href="#/Accessors">
-                  <h3 class="section-name">Accessors</h3>
-                </a>
-              </div>
-              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit19RoomDetailsProviderC8messagesSayAA7MessageVGvp"></a>
+                    <a name="//apple_ref/swift/Property/messages" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit19RoomDetailsProviderC8messagesSayAA7MessageVGvp">messages</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The array of messages for the given room.</p>
+
+<p>This array contains all messages for the given room and retrieved from the web service as a result
+of either an internal real time subscription to the web service or explicit calls triggered
+as a result of calling `fetchOlderMessages(numberOfMessages:completionHandler:)
+method.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">messages</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -263,7 +291,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Returns the number of messages stored locally in the maintained collection of messages.</p>
 
                       </div>
                       <div class="declaration">
@@ -281,10 +309,10 @@
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Public%20methods"></a>
-                <a name="//apple_ref/swift/Section/Public methods" class="dashAnchor"></a>
-                <a href="#/Public%20methods">
-                  <h3 class="section-name">Public methods</h3>
+                <a name="/Methods"></a>
+                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
+                <a href="#/Methods">
+                  <h3 class="section-name">Methods</h3>
                 </a>
               </div>
               <ul>
@@ -301,7 +329,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Returns the messages at the given index in the maintained collection of messages.</p>
 
                       </div>
                       <div class="declaration">
@@ -311,6 +339,31 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">message</span><span class="p">(</span><span class="n">at</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="p">?</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of object that should be returned from the maintained collection of
+messages.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An instance of <code><a href="../Structs/Message.html">Message</a></code> from the maintained collection of messages or <code>nil</code>
+when the object could not be found.</p>
                       </div>
                     </section>
                   </div>
@@ -328,7 +381,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Triggers an asynchronous call to the web service that retrieves a batch of historical
+currently not present in the maintained collection of messages.</p>
 
                       </div>
                       <div class="declaration">
@@ -339,6 +393,39 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>numberOfMessages</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The maximum number of messages that should be retrieved from
+the web service.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional completion handler called when the call to the web
+service finishes with either a successful result or an error.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -347,7 +434,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-07)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-11)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
