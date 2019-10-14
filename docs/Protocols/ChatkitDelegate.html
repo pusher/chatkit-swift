@@ -14,7 +14,7 @@
     <a title="ChatkitDelegate Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">PusherChatkit Docs</a> (36% documented)</p>
+        <p><a href="../index.html">PusherChatkit Docs</a> (48% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -124,7 +124,8 @@
 
                 </div>
               </div>
-            <p>Undocumented</p>
+            <p>A delegate protocol that describes methods that will be called by the associated
+<code><a href="../Classes/Chatkit.html">Chatkit</a></code> class when the status of the maintained connection to Chatkit web service have changed.</p>
 
           </section>
           <section class="section task-group-section">
@@ -143,7 +144,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Notifies the receiver that the currently logged in user have changed.</p>
 
                       </div>
                       <div class="declaration">
@@ -153,6 +154,38 @@
                           <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">chatkit</span><span class="p">(</span><span class="n">_</span> <span class="nv">chatkit</span><span class="p">:</span> <span class="kt"><a href="../Classes/Chatkit.html">Chatkit</a></span><span class="p">,</span> <span class="n">didUpdateCurrentUser</span> <span class="nv">currentUser</span><span class="p">:</span> <span class="kt"><a href="../Structs/User.html">User</a></span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>chatkit</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/Chatkit.html">Chatkit</a></code> class that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>currentUser</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The new current user have established the connection to Chatkit web
+service.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -170,7 +203,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Notifies the receiver that the status of the maintained connection to Chatkit web service have
+changed.</p>
 
                       </div>
                       <div class="declaration">
@@ -181,6 +215,37 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>chatkit</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/Chatkit.html">Chatkit</a></code> class that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>currentUser</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The new status of the connection to the web service.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
@@ -189,7 +254,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-11)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-14)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

@@ -2,14 +2,24 @@ import Foundation
 import CoreData
 import PusherPlatform
 
+/// This class represents an entry point to Chatkit SDK allowing to establish a connection to the web service
+/// and retrieve data from it.
 public class Chatkit {
     
     // MARK: - Properties
     
+    /// Returns the users who is currently logged in to the web service.
+    /// - Returns: An instance of `User` when a connection to Chatkit web service has been
+    /// established or `nil` when offline.
     public private(set) var currentUser: User?
+    
+    /// The current status of the connection to Chatkit web service.
     public private(set) var connectionStatus: ConnectionStatus
+    
+    /// The logger used by the SDK.
     public let logger: PPLogger
     
+    /// The object that is notified when the status of the connection to Chatkit web service changed.
     public weak var delegate: ChatkitDelegate?
     
     let persistenceController: PersistenceController
@@ -22,18 +32,25 @@ public class Chatkit {
     var joinedRoomsProviderCache: [UUID : JoinedRoomsProvider]
     var roomDetailsProviderCache: [UUID : RoomDetailsProvider]
     
-    // MARK: - Accessors
-    
+    /// The instance locator used to identify the Chatkit instance.
     public var instanceLocator: String {
         return self.networkingController.instanceLocator
     }
     
+    /// The token provider used to authenticate as a user of Chatkit web service.
     public var tokenProvider: PPTokenProvider {
         return self.networkingController.tokenProvider
     }
     
     // MARK: - Initializers
     
+    /// Creates and returns an instance of `Chatkit` entry point.
+    /// - Parameters:
+    ///     - instanceLocator: The instance locator used to identify the Chatkit instance.
+    ///     - tokenProvider: The token provider used to authenticate as a user of Chatkit web service.
+    ///     - logger: The logger used by the SDK.
+    ///
+    /// - Returns: An instance of `Chatkit` or throws an error when the initialization failed.
     public init(instanceLocator: String, tokenProvider: PPTokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
         self.usersProviderCache = [:]
         self.availableRoomsProviderCache = [:]
@@ -74,8 +91,12 @@ public class Chatkit {
         self.hiddenCurrentUser = hiddenCurrentUser!
     }
     
-    // MARK: - Public methods
+    // MARK: - Methods
     
+    /// Establishes a connection to the Chatkit web service.
+    /// - Parameters:
+    ///     - completionHandler: An optional completion handler called when a connection has
+    ///     been successfuly established or failed due to an error.
     public func connect(completionHandler: CompletionHandler? = nil) {
         guard self.connectionStatus == .disconnected else {
             return
@@ -100,6 +121,7 @@ public class Chatkit {
         }
     }
     
+    /// Terminates the previously established connection to the Chatkit web service.
     public func disconnect() {
         guard self.connectionStatus == .connected else {
             return
@@ -109,6 +131,11 @@ public class Chatkit {
         self.delegate?.chatkit(self, didChangeConnectionStatus: self.connectionStatus)
     }
     
+    /// Creates an instance of `UsersProvider`.
+    /// - Parameters:
+    ///     - completionHandler: A completion handler called when an instance of an instance
+    ///     of `UsersProvider` has been successfuly created or the instantiation failed due to
+    ///     an error.
     public func createUsersProvider(completionHandler: @escaping (UsersProvider?, Error?) -> Void) {
         let identifier = UUID()
         self.usersProviderCache[identifier] = UsersProvider { error in
@@ -123,6 +150,11 @@ public class Chatkit {
         }
     }
     
+    /// Creates an instance of `AvailableRoomsProvider`.
+    /// - Parameters:
+    ///     - completionHandler: A completion handler called when an instance of an instance
+    ///     of `AvailableRoomsProvider` has been successfuly created or the instantiation failed
+    ///     due to an error.
     public func createAvailableRoomsProvider(completionHandler: @escaping (AvailableRoomsProvider?, Error?) -> Void) {
         let identifier = UUID()
         self.availableRoomsProviderCache[identifier] = AvailableRoomsProvider { error in
@@ -137,6 +169,11 @@ public class Chatkit {
         }
     }
     
+    /// Creates an instance of `JoinedRoomsProvider`.
+    /// - Parameters:
+    ///     - completionHandler: A completion handler called when an instance of an instance
+    ///     of `JoinedRoomsProvider` has been successfuly created or the instantiation failed due to
+    ///     an error.
     public func createJoinedRoomsProvider(completionHandler: @escaping (JoinedRoomsProvider?, Error?) -> Void) {
         let identifier = UUID()
         self.joinedRoomsProviderCache[identifier] = JoinedRoomsProvider(currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController) { error in
@@ -151,6 +188,11 @@ public class Chatkit {
         }
     }
     
+    /// Creates an instance of `RoomDetailsProvider`.
+    /// - Parameters:
+    ///     - completionHandler: A completion handler called when an instance of an instance
+    ///     of `RoomDetailsProvider` has been successfuly created or the instantiation failed due to
+    ///     an error.
     public func createRoomDetailsProvider(for room: Room, completionHandler: @escaping (RoomDetailsProvider?, Error?) -> Void) {
         let identifier = UUID()
         self.roomDetailsProviderCache[identifier] = RoomDetailsProvider(room: room, currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController) { error in
@@ -169,9 +211,24 @@ public class Chatkit {
 
 // MARK: - Delegate
 
+/// A delegate protocol that describes methods that will be called by the associated
+/// `Chatkit` class when the status of the maintained connection to Chatkit web service have changed.
 public protocol ChatkitDelegate: class {
     
+    /// Notifies the receiver that the currently logged in user have changed.
+    ///
+    /// - Parameters:
+    ///     - chatkit: The `Chatkit` class that called the method.
+    ///     - currentUser: The new current user have established the connection to Chatkit web
+    ///     service.
     func chatkit(_ chatkit: Chatkit, didUpdateCurrentUser currentUser: User)
+    
+    /// Notifies the receiver that the status of the maintained connection to Chatkit web service have
+    /// changed.
+    ///
+    /// - Parameters:
+    ///     - chatkit: The `Chatkit` class that called the method.
+    ///     - currentUser: The new status of the connection to the web service.
     func chatkit(_ chatkit: Chatkit, didChangeConnectionStatus connectionStatus: ConnectionStatus)
     
 }

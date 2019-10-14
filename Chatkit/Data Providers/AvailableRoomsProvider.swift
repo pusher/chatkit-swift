@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-/// A provider which maintains a collection of all rooms availble in the Chatkit instance and retrieved from
+/// A provider which maintains a collection of all rooms available to the user which have been retrieved from
 /// the web service.
 public class AvailableRoomsProvider {
     
@@ -11,9 +11,9 @@ public class AvailableRoomsProvider {
     /// The current state of the provider.
     public private(set) var state: PagedCollectionState
     
-    /// The array of all available rooms stored locally.
+    /// The array of all rooms available to the user.
     ///
-    /// This array contains all rooms availble in the Chatkit instance and retrieved from the web service
+    /// This array contains all rooms available to the user which have been retrieved from the web service
     /// as a result of an implicit initial call made to the web service during the initialization of the class
     /// as well as all explicit calls triggered as a result of calling
     /// `fetchMoreRooms(numberOfRooms:completionHandler:)` method.
@@ -113,7 +113,7 @@ public class AvailableRoomsProvider {
 
 // MARK: - Delegate
 
-/// A delegate protocol that describes the methods that will be called by the associated
+/// A delegate protocol that describes methods that will be called by the associated
 /// `AvailableRoomsProvider` when the maintainted collection of rooms have changed.
 public protocol AvailableRoomsProviderDelegate: class {
     

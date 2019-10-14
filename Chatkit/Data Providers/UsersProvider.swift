@@ -111,7 +111,7 @@ public class UsersProvider {
 
 // MARK: - Delegate
 
-/// A delegate protocol that describes the methods that will be called by the associated `UsersProvider`
+/// A delegate protocol that describes methods that will be called by the associated `UsersProvider`
 /// when the maintainted collection of users have changed.
 public protocol UsersProviderDelegate: class {
     

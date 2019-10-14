@@ -98,7 +98,7 @@ extension MessageViewController: RoomDetailsProviderDelegate {
         }
     }
     
-    func roomDetailsProvider(_ roomDetailsProvider: RoomDetailsProvider, didChangeMessageAtIndex index: Int, previousValue: Message) {
+    func roomDetailsProvider(_ roomDetailsProvider: RoomDetailsProvider, didUpdateMessageAtIndex index: Int, previousValue: Message) {
         self.tableView.beginUpdates()
         
         let indexPath = IndexPath(row: index, section: 0)
@@ -107,7 +107,7 @@ extension MessageViewController: RoomDetailsProviderDelegate {
         self.tableView.endUpdates()
     }
     
-    func roomDetailsProvider(_ roomDetailsProvider: RoomDetailsProvider, didDeleteMessageAtIndex index: Int, previousValue: Message) {
+    func roomDetailsProvider(_ roomDetailsProvider: RoomDetailsProvider, didRemoveMessageAtIndex index: Int, previousValue: Message) {
         self.tableView.beginUpdates()
         
         let indexPath = IndexPath(row: index, section: 0)

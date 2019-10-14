@@ -116,7 +116,7 @@ extension JoinedRoomsProvider: FetchedResultsControllerDelegate {
 
 // MARK: - Delegate
 
-/// A delegate protocol that describes the methods that will be called by the associated
+/// A delegate protocol that describes methods that will be called by the associated
 /// `JoinedRoomsProvider` when the maintainted collection of rooms have changed.
 public protocol JoinedRoomsProviderDelegate: class {
     

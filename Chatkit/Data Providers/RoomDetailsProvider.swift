@@ -166,7 +166,7 @@ extension RoomDetailsProvider: FetchedResultsControllerDelegate {
 
 // MARK: - Delegate
 
-/// A delegate protocol that describes the methods that will be called by the associated
+/// A delegate protocol that describes methods that will be called by the associated
 /// `RoomDetailsProvider` when the maintainted collection of messages have changed.
 public protocol RoomDetailsProviderDelegate: class {
     
