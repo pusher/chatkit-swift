@@ -8,7 +8,6 @@ public struct Room {
     public let identifier: String
     public let name: String?
     public let isPrivate: Bool
-    public let creator: User?
     public let members: [User]
     public let typingMembers: [User]
     public let unreadCount: UInt64
@@ -22,11 +21,10 @@ public struct Room {
     
     // MARK: - Initializers
     
-    init(identifier: String, name: String?, isPrivate: Bool, creator: User?, members: [User], typingMembers: [User], unreadCount: UInt64, lastMessage: Message?, userData: UserData?, createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
+    init(identifier: String, name: String?, isPrivate: Bool, members: [User], typingMembers: [User], unreadCount: UInt64, lastMessage: Message?, userData: UserData?, createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
         self.identifier = identifier
         self.name = name
         self.isPrivate = isPrivate
-        self.creator = creator
         self.members = members
         self.typingMembers = typingMembers
         self.unreadCount = unreadCount
@@ -59,7 +57,6 @@ extension Room: Equatable {
         return lhs.identifier == rhs.identifier
             && lhs.name == rhs.name
             && lhs.isPrivate == rhs.isPrivate
-            && lhs.creator == rhs.creator
             && lhs.members == rhs.members
             && lhs.typingMembers == rhs.typingMembers
             && lhs.unreadCount == rhs.unreadCount

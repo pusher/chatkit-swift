@@ -16,7 +16,6 @@ class RoomFactory {
                 Room(identifier: "\($0)",
                     name: "Room \($0)",
                     isPrivate: false,
-                    creator: nil,
                     members: [],
                     typingMembers: [],
                     unreadCount: 3,

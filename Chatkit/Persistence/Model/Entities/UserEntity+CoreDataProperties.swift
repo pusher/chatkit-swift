@@ -14,28 +14,10 @@ extension UserEntity {
     @NSManaged var name: String?
     @NSManaged var presenceState: String?
     @NSManaged var updatedAt: Date
-    @NSManaged var createdRooms: Set<RoomEntity>?
     @NSManaged var cursors: Set<CursorEntity>?
     @NSManaged var messages: NSOrderedSet?
     @NSManaged var room: Set<RoomEntity>?
     @NSManaged var typingInRooms: Set<RoomEntity>?
-    
-}
-
-// MARK: Generated accessors for createdRooms
-extension UserEntity {
-    
-    @objc(addCreatedRoomsObject:)
-    @NSManaged func addToCreatedRooms(_ value: RoomEntity)
-    
-    @objc(removeCreatedRoomsObject:)
-    @NSManaged func removeFromCreatedRooms(_ value: RoomEntity)
-    
-    @objc(addCreatedRooms:)
-    @NSManaged func addToCreatedRooms(_ values: Set<RoomEntity>)
-    
-    @objc(removeCreatedRooms:)
-    @NSManaged func removeFromCreatedRooms(_ values: Set<RoomEntity>)
     
 }
 

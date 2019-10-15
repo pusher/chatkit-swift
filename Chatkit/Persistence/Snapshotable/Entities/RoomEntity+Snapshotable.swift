@@ -9,8 +9,7 @@ extension RoomEntity: Snapshotable {
     // MARK: - Properties
     
     static var prefetchedRelationships: [String]? {
-        return [#keyPath(RoomEntity.creator),
-                #keyPath(RoomEntity.members),
+        return [#keyPath(RoomEntity.members),
                 #keyPath(RoomEntity.typingMembers),
                 #keyPath(RoomEntity.lastMessage),
                 #keyPath(RoomEntity.lastMessage.sender),
@@ -29,7 +28,6 @@ extension RoomEntity: Snapshotable {
     // MARK: - Internal methods
     
     func snapshot() throws -> Room {
-        let creator = try self.creator?.snapshot()
         let lastMessage = (try? self.lastMessage?.snapshot()) ?? nil
         let members = snapshot(self.members)
         let typingMembers = snapshot(self.typingMembers)
@@ -38,7 +36,6 @@ extension RoomEntity: Snapshotable {
         return Room(identifier: self.identifier,
                     name: self.name,
                     isPrivate: self.isPrivate,
-                    creator: creator,
                     members: members,
                     typingMembers: typingMembers,
                     unreadCount: UInt64(self.unreadCount),
