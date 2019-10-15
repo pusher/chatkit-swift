@@ -440,48 +440,6 @@
       "symbol": "User",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Networking/Connection Status/ConnectionStatus.swift",
-      "line": 3,
-      "symbol": "ConnectionStatus",
-      "symbol_kind": "source.lang.swift.decl.enum",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Networking/Connection Status/ConnectionStatus.swift",
-      "line": 5,
-      "symbol": "ConnectionStatus.connected",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Networking/Connection Status/ConnectionStatus.swift",
-      "line": 6,
-      "symbol": "ConnectionStatus.connecting",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Networking/Connection Status/ConnectionStatus.swift",
-      "line": 7,
-      "symbol": "ConnectionStatus.disconnected",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Types/Types.swift",
-      "line": 3,
-      "symbol": "Metadata",
-      "symbol_kind": "source.lang.swift.decl.typealias",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Types/Types.swift",
-      "line": 4,
-      "symbol": "CompletionHandler",
-      "symbol_kind": "source.lang.swift.decl.typealias",
-      "warning": "undocumented"
     }
   ],
   "source_directory": "/Users/Grzesiek/Developer/Pusher/Chatkit"

@@ -9,7 +9,7 @@ public class JoinedRoomsProvider {
     // MARK: - Properties
     
     /// The current state of the provider.
-    public private(set) var state: RealTimeCollectionState
+    public private(set) var state: RealTimeProviderState
     
     /// The object that is notified when the content of the maintained collection of rooms changed.
     public weak var delegate: JoinedRoomsProviderDelegate?
@@ -33,7 +33,7 @@ public class JoinedRoomsProvider {
     // MARK: - Initializers
     
     init(currentUser: User, persistenceController: PersistenceController, completionHandler: @escaping CompletionHandler) {
-        self.state = .initializing
+        self.state = .degraded
         self.roomFactory = RoomEntityFactory(currentUserManagedObjectID: currentUser.objectID, persistenceController: persistenceController)
         
         let context = persistenceController.mainContext
@@ -74,11 +74,7 @@ public class JoinedRoomsProvider {
     // MARK: - Private methods
     
     private func fetchData(completionHandler: @escaping CompletionHandler) {
-        guard self.state == .initializing else {
-            return
-        }
-        
-        self.state = .online
+        self.state = .connected
         
         self.roomFactory.receiveInitialListOfRooms(numberOfRooms: 10, delay: 1.0) {
             DispatchQueue.main.async {

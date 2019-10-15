@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>AvailableRoomsProviderDelegate Protocol Reference</title>
+    <title>RealTimeProviderState Enumeration Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Protocol/AvailableRoomsProviderDelegate" class="dashAnchor"></a>
-    <a title="AvailableRoomsProviderDelegate Protocol Reference"></a>
+    <a name="//apple_ref/swift/Enum/RealTimeProviderState" class="dashAnchor"></a>
+    <a title="RealTimeProviderState Enumeration Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">PusherChatkit Docs</a> (60% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">PusherChatkit Reference</a>
         <img id="carat" src="../img/carat.png" />
-        AvailableRoomsProviderDelegate Protocol Reference
+        RealTimeProviderState Enumeration Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -120,15 +120,15 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>AvailableRoomsProviderDelegate</h1>
+            <h1>RealTimeProviderState</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">AvailableRoomsProviderDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">RealTimeProviderState</span></code></pre>
 
                 </div>
               </div>
-            <p>A delegate protocol that describes methods that will be called by the associated
-<code><a href="../Classes/AvailableRoomsProvider.html">AvailableRoomsProvider</a></code> when the maintainted collection of rooms have changed.</p>
+            <p>An enumeration representing the state of a data provider which serves real time data retrieved from
+the Chatkit web service.</p>
 
           </section>
           <section class="section task-group-section">
@@ -137,9 +137,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit30AvailableRoomsProviderDelegateP09availabledE0_06didAddD12AtIndexRangeyAA0cdE0C_SnySiGtF"></a>
-                    <a name="//apple_ref/swift/Method/availableRoomsProvider(_:didAddRoomsAtIndexRange:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit30AvailableRoomsProviderDelegateP09availabledE0_06didAddD12AtIndexRangeyAA0cdE0C_SnySiGtF">availableRoomsProvider(_:didAddRoomsAtIndexRange:)</a>
+                    <a name="/s:13PusherChatkit21RealTimeProviderStateO9connectedyA2CmF"></a>
+                    <a name="//apple_ref/swift/Element/connected" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit21RealTimeProviderStateO9connectedyA2CmF">connected</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -147,48 +147,43 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Notifies the receiver that new rooms have been added to the maintened collection of rooms.</p>
+                        <p>The case representing an open connection to the Chatkit web service.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">availableRoomsProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">availableRoomsProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/AvailableRoomsProvider.html">AvailableRoomsProvider</a></span><span class="p">,</span> <span class="n">didAddRoomsAtIndexRange</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">connected</span></code></pre>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>availableRoomsProvider</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The <code><a href="../Classes/AvailableRoomsProvider.html">AvailableRoomsProvider</a></code> that called
-the method.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>range</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The range of added objects in the maintened collection of rooms.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit21RealTimeProviderStateO8degradedyA2CmF"></a>
+                    <a name="//apple_ref/swift/Element/degraded" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit21RealTimeProviderStateO8degradedyA2CmF">degraded</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The case representing a problem with the connection to the Chatkit web service.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">degraded</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>

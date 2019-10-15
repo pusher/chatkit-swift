@@ -9,7 +9,7 @@ public class AvailableRoomsProvider {
     // MARK: - Properties
     
     /// The current state of the provider.
-    public private(set) var state: PagedCollectionState
+    public private(set) var state: PagedProviderState
     
     /// The array of all rooms available to the user.
     ///
@@ -32,7 +32,7 @@ public class AvailableRoomsProvider {
     // MARK: - Initializers
     
     init(completionHandler: @escaping CompletionHandler) {
-        self.state = .initializing
+        self.state = .partiallyPopulated
         self.rooms = []
         self.roomFactory = RoomFactory()
         
@@ -92,10 +92,6 @@ public class AvailableRoomsProvider {
     // MARK: - Private methods
     
     private func fetchData(completionHandler: @escaping CompletionHandler) {
-        guard self.state == .initializing else {
-            return
-        }
-        
         self.state = .fetching
         
         self.roomFactory.receiveRooms(numberOfRooms: 5, lastRoomIdentifier: "-1", delay: 1.0) { rooms in

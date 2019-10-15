@@ -8,7 +8,7 @@ public class UsersProvider {
     // MARK: - Properties
     
     /// The current state of the provider.
-    public private(set) var state: PagedCollectionState
+    public private(set) var state: PagedProviderState
     
     /// The array of all users stored locally.
     ///
@@ -30,7 +30,7 @@ public class UsersProvider {
     // MARK: - Initializers
     
     init(completionHandler: @escaping CompletionHandler) {
-        self.state = .initializing
+        self.state = .partiallyPopulated
         self.users = []
         self.userFactory = UserFactory()
         
@@ -90,10 +90,6 @@ public class UsersProvider {
     // MARK: - Private methods
     
     private func fetchData(completionHandler: @escaping CompletionHandler) {
-        guard self.state == .initializing else {
-            return
-        }
-        
         self.state = .fetching
         
         self.userFactory.receiveUsers(numberOfUsers: 5, lastUserIdentifier: "-1", delay: 1.0) { users in

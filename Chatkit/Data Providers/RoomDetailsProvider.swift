@@ -12,10 +12,10 @@ public class RoomDetailsProvider {
     public let roomIdentifier: String
     
     /// The current state of the provider related to the real time web service.
-    public private(set) var realTimeState: RealTimeCollectionState
+    public private(set) var realTimeState: RealTimeProviderState
     
     /// The current state of the provider related to the non-real time web service.
-    public private(set) var pagedState: PagedCollectionState
+    public private(set) var pagedState: PagedProviderState
     
     /// The object that is notified when the content of the maintained collection of messages changed.
     public weak var delegate: RoomDetailsProviderDelegate? {
@@ -52,8 +52,8 @@ public class RoomDetailsProvider {
     
     init(room: Room, currentUser: User, persistenceController: PersistenceController, completionHandler: @escaping CompletionHandler) {
         self.roomIdentifier = room.identifier
-        self.realTimeState = .initializing
-        self.pagedState = .initializing
+        self.realTimeState = .degraded
+        self.pagedState = .partiallyPopulated
         
         self.roomManagedObjectID = room.objectID
         self.messageFactory = MessageEntityFactory(roomID: self.roomManagedObjectID,
@@ -121,11 +121,7 @@ public class RoomDetailsProvider {
     // MARK: - Private methods
     
     private func fetchData(completionHandler: @escaping CompletionHandler) {
-        guard self.realTimeState == .initializing else {
-            return
-        }
-        
-        self.realTimeState = .online
+        self.realTimeState = .connected
         
         self.messageFactory.receiveInitialMessages(numberOfMessages: 10, delay: 1.0) {
             self.pagedState = .partiallyPopulated

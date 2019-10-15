@@ -1,69 +1,6 @@
 {
   "warnings": [
     {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/Types/State.swift",
-      "line": 3,
-      "symbol": "RealTimeCollectionState",
-      "symbol_kind": "source.lang.swift.decl.enum",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/Types/State.swift",
-      "line": 5,
-      "symbol": "RealTimeCollectionState.initializing",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/Types/State.swift",
-      "line": 6,
-      "symbol": "RealTimeCollectionState.online",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/Types/State.swift",
-      "line": 7,
-      "symbol": "RealTimeCollectionState.degraded",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/Types/State.swift",
-      "line": 11,
-      "symbol": "PagedCollectionState",
-      "symbol_kind": "source.lang.swift.decl.enum",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/Types/State.swift",
-      "line": 13,
-      "symbol": "PagedCollectionState.initializing",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/Types/State.swift",
-      "line": 14,
-      "symbol": "PagedCollectionState.partiallyPopulated",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/Types/State.swift",
-      "line": 15,
-      "symbol": "PagedCollectionState.fullyPopulated",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Data Providers/Types/State.swift",
-      "line": 16,
-      "symbol": "PagedCollectionState.fetching",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Model/Message.swift",
       "line": 4,
       "symbol": "Message",
