@@ -1,77 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14492.1" systemVersion="18G95" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15400" systemVersion="18G103" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AttachmentPartEntity" representedClassName="AttachmentPartEntity" parentEntity="PartEntity" syncable="YES">
-        <attribute name="downloadURL" attributeType="String" syncable="YES"/>
-        <attribute name="expiration" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="identifier" attributeType="String" syncable="YES"/>
-        <attribute name="metadata" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="refreshURL" attributeType="String" syncable="YES"/>
-        <attribute name="size" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="downloadURL" attributeType="String"/>
+        <attribute name="expiration" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="identifier" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="refreshURL" attributeType="String"/>
+        <attribute name="size" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="userData" optional="YES" attributeType="Binary"/>
     </entity>
     <entity name="CursorEntity" representedClassName="CursorEntity" syncable="YES">
-        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="readMessages" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="MessageEntity" inverseName="cursors" inverseEntity="MessageEntity" syncable="YES"/>
-        <relationship name="room" maxCount="1" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="cursors" inverseEntity="RoomEntity" syncable="YES"/>
-        <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="cursors" inverseEntity="UserEntity" syncable="YES"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="readMessages" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="MessageEntity" inverseName="cursors" inverseEntity="MessageEntity"/>
+        <relationship name="room" maxCount="1" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="cursors" inverseEntity="RoomEntity"/>
+        <relationship name="user" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="cursors" inverseEntity="UserEntity"/>
     </entity>
     <entity name="InlinePartEntity" representedClassName="InlinePartEntity" parentEntity="PartEntity" syncable="YES">
-        <attribute name="content" attributeType="String" syncable="YES"/>
+        <attribute name="content" attributeType="String"/>
     </entity>
     <entity name="MessageEntity" representedClassName="MessageEntity" syncable="YES">
-        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="deletedAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="identifier" attributeType="String" syncable="YES"/>
-        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="cursors" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CursorEntity" inverseName="readMessages" inverseEntity="CursorEntity" syncable="YES"/>
-        <relationship name="parts" toMany="YES" deletionRule="Cascade" destinationEntity="PartEntity" inverseName="message" inverseEntity="PartEntity" syncable="YES"/>
-        <relationship name="room" maxCount="1" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="messages" inverseEntity="RoomEntity" syncable="YES"/>
-        <relationship name="sender" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="messages" inverseEntity="UserEntity" syncable="YES"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="deletedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="identifier" attributeType="String"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="cursors" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CursorEntity" inverseName="readMessages" inverseEntity="CursorEntity"/>
+        <relationship name="parts" toMany="YES" deletionRule="Cascade" destinationEntity="PartEntity" inverseName="message" inverseEntity="PartEntity"/>
+        <relationship name="room" maxCount="1" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="messages" inverseEntity="RoomEntity"/>
+        <relationship name="sender" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="messages" inverseEntity="UserEntity"/>
     </entity>
     <entity name="PartEntity" representedClassName="PartEntity" isAbstract="YES" syncable="YES">
-        <attribute name="type" attributeType="String" syncable="YES"/>
-        <relationship name="message" maxCount="1" deletionRule="Nullify" destinationEntity="MessageEntity" inverseName="parts" inverseEntity="MessageEntity" syncable="YES"/>
+        <attribute name="type" attributeType="String"/>
+        <relationship name="message" maxCount="1" deletionRule="Nullify" destinationEntity="MessageEntity" inverseName="parts" inverseEntity="MessageEntity"/>
     </entity>
     <entity name="RoomEntity" representedClassName="RoomEntity" syncable="YES">
-        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="deletedAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="identifier" attributeType="String" syncable="YES"/>
-        <attribute name="isPrivate" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="metadata" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="name" attributeType="String" syncable="YES"/>
-        <attribute name="unreadCount" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="createdRooms" inverseEntity="UserEntity" syncable="YES"/>
-        <relationship name="cursors" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CursorEntity" inverseName="room" inverseEntity="CursorEntity" syncable="YES"/>
-        <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="room" inverseEntity="UserEntity" syncable="YES"/>
-        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="MessageEntity" inverseName="room" inverseEntity="MessageEntity" syncable="YES"/>
-        <relationship name="typingMembers" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="typingInRooms" inverseEntity="UserEntity" syncable="YES"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="deletedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="identifier" attributeType="String"/>
+        <attribute name="isPrivate" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="unreadCount" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="userData" optional="YES" attributeType="Binary"/>
+        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="createdRooms" inverseEntity="UserEntity"/>
+        <relationship name="cursors" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CursorEntity" inverseName="room" inverseEntity="CursorEntity"/>
+        <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="room" inverseEntity="UserEntity"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="MessageEntity" inverseName="room" inverseEntity="MessageEntity"/>
+        <relationship name="typingMembers" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="typingInRooms" inverseEntity="UserEntity"/>
     </entity>
     <entity name="URLPartEntity" representedClassName="URLPartEntity" parentEntity="PartEntity" syncable="YES">
-        <attribute name="url" attributeType="String" syncable="YES"/>
+        <attribute name="url" attributeType="String"/>
     </entity>
     <entity name="UserEntity" representedClassName="UserEntity" syncable="YES">
-        <attribute name="avatar" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="identifier" attributeType="String" syncable="YES"/>
-        <attribute name="metadata" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="presenceState" optional="YES" transient="YES" attributeType="String" syncable="YES"/>
-        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <relationship name="createdRooms" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="RoomEntity" inverseName="creator" inverseEntity="RoomEntity" syncable="YES"/>
-        <relationship name="cursors" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CursorEntity" inverseName="user" inverseEntity="CursorEntity" syncable="YES"/>
-        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="MessageEntity" inverseName="sender" inverseEntity="MessageEntity" syncable="YES"/>
-        <relationship name="room" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="members" inverseEntity="RoomEntity" syncable="YES"/>
-        <relationship name="typingInRooms" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="typingMembers" inverseEntity="RoomEntity" syncable="YES"/>
+        <attribute name="avatar" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="identifier" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="presenceState" optional="YES" transient="YES" attributeType="String"/>
+        <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="userData" optional="YES" attributeType="Binary"/>
+        <relationship name="createdRooms" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="RoomEntity" inverseName="creator" inverseEntity="RoomEntity"/>
+        <relationship name="cursors" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CursorEntity" inverseName="user" inverseEntity="CursorEntity"/>
+        <relationship name="messages" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="MessageEntity" inverseName="sender" inverseEntity="MessageEntity"/>
+        <relationship name="room" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="members" inverseEntity="RoomEntity"/>
+        <relationship name="typingInRooms" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="typingMembers" inverseEntity="RoomEntity"/>
     </entity>
     <elements>
-        <element name="AttachmentPartEntity" positionX="-76.32421875" positionY="560.5078125" width="128" height="150"/>
-        <element name="CursorEntity" positionX="19.9296875" positionY="214.15625" width="128" height="105"/>
-        <element name="InlinePartEntity" positionX="-437.19921875" positionY="550.703125" width="128" height="60"/>
-        <element name="MessageEntity" positionX="-258.15234375" positionY="206.734375" width="128" height="165"/>
-        <element name="PartEntity" positionX="-258.35546875" positionY="418.3828125" width="128" height="30"/>
-        <element name="RoomEntity" positionX="-257.5234375" positionY="-96.3046875" width="128" height="238"/>
-        <element name="URLPartEntity" positionX="-257.734375" positionY="553.296875" width="128" height="60"/>
-        <element name="UserEntity" positionX="16.46484375" positionY="-98.0546875" width="128" height="223"/>
+        <element name="AttachmentPartEntity" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CursorEntity" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="InlinePartEntity" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="MessageEntity" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="PartEntity" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="RoomEntity" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="URLPartEntity" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="UserEntity" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

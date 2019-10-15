@@ -10,7 +10,7 @@ extension UserEntity {
     @NSManaged var avatar: String?
     @NSManaged var createdAt: Date
     @NSManaged var identifier: String
-    @NSManaged var metadata: Data?
+    @NSManaged var userData: Data?
     @NSManaged var name: String?
     @NSManaged var presenceState: String?
     @NSManaged var updatedAt: Date

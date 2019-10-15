@@ -4,7 +4,7 @@ import Foundation
 ///
 /// All objects stored in the dictionary must conform to a valid JSON data type. In addition to that keys used
 /// by the dictionary must be represented by `String` objects.
-public typealias Metadata = [String : Any]
+public typealias UserData = [String : Any]
 
 /// A closure that is being executed by the SDK when an asynchronous operation has been completed.
 ///

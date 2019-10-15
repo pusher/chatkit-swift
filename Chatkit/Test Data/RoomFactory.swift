@@ -21,7 +21,7 @@ class RoomFactory {
                     typingMembers: nil,
                     unreadCount: 3,
                     lastMessage: nil,
-                    metadata: nil,
+                    userData: nil,
                     createdAt: now,
                     updatedAt: now,
                     deletedAt: nil,

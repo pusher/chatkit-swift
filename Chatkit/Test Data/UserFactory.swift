@@ -17,7 +17,7 @@ class UserFactory {
                     name: "User \($0)",
                     avatar: nil,
                     presenceState: .unknown,
-                    metadata: nil,
+                    userData: nil,
                     createdAt: now,
                     updatedAt: now,
                     objectID: UserEntityFactory.currentUserID)

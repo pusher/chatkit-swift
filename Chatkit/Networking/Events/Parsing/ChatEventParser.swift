@@ -77,11 +77,11 @@ struct ChatEventParser: EventParser {
         room.createdAt = createdAt
         room.updatedAt = updatedAt
         
-        if let metadata = payload[Event.Key.customData] as? Metadata {
-            room.metadata = MetadataSerializer.serialize(metadata: metadata)
+        if let userData = payload[Event.Key.customData] as? UserData {
+            room.userData = UserDataSerializer.serialize(userData: userData)
         }
         else {
-            room.metadata = nil
+            room.userData = nil
         }
         
         if let deletedAtString = payload[Event.Key.deletedAt] as? String {

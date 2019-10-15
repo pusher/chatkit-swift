@@ -33,7 +33,7 @@ extension RoomEntity: Snapshotable {
         let lastMessage = (try? self.lastMessage?.snapshot()) ?? nil
         let members = snapshot(self.members)
         let typingMembers = snapshot(self.typingMembers)
-        let metadata = MetadataSerializer.deserialize(data: self.metadata)
+        let userData = UserDataSerializer.deserialize(data: self.userData)
         
         return Room(identifier: self.identifier,
                     name: self.name,
@@ -43,7 +43,7 @@ extension RoomEntity: Snapshotable {
                     typingMembers: typingMembers,
                     unreadCount: self.unreadCount,
                     lastMessage: lastMessage,
-                    metadata: metadata,
+                    userData: userData,
                     createdAt: self.createdAt,
                     updatedAt: self.updatedAt,
                     deletedAt: self.deletedAt,

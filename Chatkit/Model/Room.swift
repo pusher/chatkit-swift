@@ -13,7 +13,7 @@ public struct Room {
     public let typingMembers: Set<User>?
     public let unreadCount: Int64
     public let lastMessage: Message?
-    public let metadata: Metadata?
+    public let userData: UserData?
     public let createdAt: Date
     public let updatedAt: Date
     public let deletedAt: Date?
@@ -22,7 +22,7 @@ public struct Room {
     
     // MARK: - Initializers
     
-    init(identifier: String, name: String?, isPrivate: Bool, creator: User?, members: Set<User>?, typingMembers: Set<User>?, unreadCount: Int64, lastMessage: Message?, metadata: Metadata?, createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
+    init(identifier: String, name: String?, isPrivate: Bool, creator: User?, members: Set<User>?, typingMembers: Set<User>?, unreadCount: Int64, lastMessage: Message?, userData: UserData?, createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
         self.identifier = identifier
         self.name = name
         self.isPrivate = isPrivate
@@ -31,7 +31,7 @@ public struct Room {
         self.typingMembers = typingMembers
         self.unreadCount = unreadCount
         self.lastMessage = lastMessage
-        self.metadata = metadata
+        self.userData = userData
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
@@ -55,7 +55,7 @@ extension Room: Hashable {
 extension Room: Equatable {
     
     public static func == (lhs: Room, rhs: Room) -> Bool {
-        // Metadata is intentionally excluded from this comparison.
+        // User data is intentionally excluded from this comparison.
         return lhs.identifier == rhs.identifier
             && lhs.name == rhs.name
             && lhs.isPrivate == rhs.isPrivate

@@ -11,7 +11,7 @@ extension RoomEntity {
     @NSManaged var deletedAt: Date?
     @NSManaged var identifier: String
     @NSManaged var isPrivate: Bool
-    @NSManaged var metadata: Data?
+    @NSManaged var userData: Data?
     @NSManaged var name: String
     @NSManaged var unreadCount: Int64
     @NSManaged var updatedAt: Date

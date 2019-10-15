@@ -19,9 +19,9 @@ extension AttachmentPartEntity: Snapshotable {
             throw SnapshotError.snapshotFailure
         }
         
-        let metadata =  MetadataSerializer.deserialize(data: self.metadata)
+        let userData =  UserDataSerializer.deserialize(data: self.userData)
         
-        return MessagePart.attachment(self.type, self.identifier, downloadURL, refreshURL, self.size, self.expiration, self.name, metadata)
+        return MessagePart.attachment(self.type, self.identifier, downloadURL, refreshURL, self.size, self.expiration, self.name, userData)
     }
     
 }

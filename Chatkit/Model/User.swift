@@ -9,7 +9,7 @@ public struct User {
     public let name: String?
     public let avatar: URL?
     public let presenceState: PresenceState
-    public let metadata: Metadata?
+    public let userData: UserData?
     public let createdAt: Date
     public let updatedAt: Date
     
@@ -17,12 +17,12 @@ public struct User {
     
     // MARK: - Initializers
     
-    init(identifier: String, name: String?, avatar: URL?, presenceState: PresenceState, metadata: Metadata?, createdAt: Date, updatedAt: Date, objectID: NSManagedObjectID) {
+    init(identifier: String, name: String?, avatar: URL?, presenceState: PresenceState, userData: UserData?, createdAt: Date, updatedAt: Date, objectID: NSManagedObjectID) {
         self.identifier = identifier
         self.name = name
         self.avatar = avatar
         self.presenceState = presenceState
-        self.metadata = metadata
+        self.userData = userData
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.objectID = objectID
@@ -45,7 +45,7 @@ extension User: Hashable {
 extension User: Equatable {
     
     public static func == (lhs: User, rhs: User) -> Bool {
-        // Metadata is intentionally excluded from this comparison.
+        // User data is intentionally excluded from this comparison.
         return lhs.identifier == rhs.identifier
             && lhs.name == rhs.name
             && lhs.avatar == rhs.avatar

@@ -58,7 +58,7 @@ class MessageTests: XCTestCase {
                                       name: "firstUser",
                                       avatar: nil,
                                       presenceState: .unknown,
-                                      metadata: nil,
+                                      userData: nil,
                                       createdAt: Date.distantPast,
                                       updatedAt: self.now,
                                       objectID: userEntityObjectID)
@@ -67,7 +67,7 @@ class MessageTests: XCTestCase {
                                        name: "secondUser",
                                        avatar: nil,
                                        presenceState: .unknown,
-                                       metadata: nil,
+                                       userData: nil,
                                        createdAt: Date.distantPast,
                                        updatedAt: self.now,
                                        objectID: userEntityObjectID)
@@ -76,7 +76,7 @@ class MessageTests: XCTestCase {
                                       name: "thirdUser",
                                       avatar: nil,
                                       presenceState: .unknown,
-                                      metadata: nil,
+                                      userData: nil,
                                       createdAt: Date.distantPast,
                                       updatedAt: self.now,
                                       objectID: userEntityObjectID)

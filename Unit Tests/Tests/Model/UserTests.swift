@@ -1,4 +1,5 @@
 import XCTest
+import CoreData
 import PusherPlatform
 @testable import PusherChatkit
 
@@ -11,8 +12,8 @@ class UserTests: XCTestCase {
     var firstTestURL: URL!
     var secondTestURL: URL!
     
-    var firstTestMetadata: Metadata!
-    var secondTestMetadata: Metadata!
+    var firstTestUserData: UserData!
+    var secondTestUserData: UserData!
     
     var firstTestManagedObjectID: NSManagedObjectID!
     var secondTestManagedObjectID: NSManagedObjectID!
@@ -50,8 +51,8 @@ class UserTests: XCTestCase {
         self.firstTestURL = URL(fileURLWithPath: "/dev/null")
         self.secondTestURL = URL(fileURLWithPath: "/dev/zero")
         
-        self.firstTestMetadata = ["firstKey" : "firstValue"]
-        self.secondTestMetadata = ["secondKey" : "secondValue"]
+        self.firstTestUserData = ["firstKey" : "firstValue"]
+        self.secondTestUserData = ["secondKey" : "secondValue"]
     }
     
     // MARK: - Tests
@@ -61,7 +62,7 @@ class UserTests: XCTestCase {
                         name: "testName",
                         avatar: self.firstTestURL,
                         presenceState: .offline,
-                        metadata: self.firstTestMetadata,
+                        userData: self.firstTestUserData,
                         createdAt: Date.distantPast,
                         updatedAt: Date.distantFuture,
                         objectID: self.firstTestManagedObjectID)
@@ -70,8 +71,8 @@ class UserTests: XCTestCase {
         XCTAssertEqual(user.name, "testName")
         XCTAssertEqual(user.avatar, self.firstTestURL)
         XCTAssertEqual(user.presenceState, PresenceState.offline)
-        XCTAssertNotNil(user.metadata)
-        XCTAssertEqual(user.metadata as? [String : String], self.firstTestMetadata as? [String : String])
+        XCTAssertNotNil(user.userData)
+        XCTAssertEqual(user.userData as? [String : String], self.firstTestUserData as? [String : String])
         XCTAssertEqual(user.createdAt, Date.distantPast)
         XCTAssertEqual(user.updatedAt, Date.distantFuture)
         XCTAssertEqual(user.objectID, self.firstTestManagedObjectID)
@@ -82,7 +83,7 @@ class UserTests: XCTestCase {
                              name: "testName",
                              avatar: self.firstTestURL,
                              presenceState: .offline,
-                             metadata: self.firstTestMetadata,
+                             userData: self.firstTestUserData,
                              createdAt: Date.distantPast,
                              updatedAt: Date.distantFuture,
                              objectID: self.firstTestManagedObjectID)
@@ -91,7 +92,7 @@ class UserTests: XCTestCase {
                               name: "anotherName",
                               avatar: self.secondTestURL,
                               presenceState: .online,
-                              metadata: self.secondTestMetadata,
+                              userData: self.secondTestUserData,
                               createdAt: Date.distantFuture,
                               updatedAt: Date.distantPast,
                               objectID: self.secondTestManagedObjectID)
@@ -104,7 +105,7 @@ class UserTests: XCTestCase {
                              name: "testName",
                              avatar: self.firstTestURL,
                              presenceState: .offline,
-                             metadata: self.firstTestMetadata,
+                             userData: self.firstTestUserData,
                              createdAt: Date.distantPast,
                              updatedAt: Date.distantFuture,
                              objectID: self.firstTestManagedObjectID)
@@ -113,7 +114,7 @@ class UserTests: XCTestCase {
                               name: "testName",
                               avatar: self.firstTestURL,
                               presenceState: .offline,
-                              metadata: self.firstTestMetadata,
+                              userData: self.firstTestUserData,
                               createdAt: Date.distantPast,
                               updatedAt: Date.distantFuture,
                               objectID: self.firstTestManagedObjectID)
@@ -126,7 +127,7 @@ class UserTests: XCTestCase {
                              name: "testName",
                              avatar: self.firstTestURL,
                              presenceState: .offline,
-                             metadata: self.firstTestMetadata,
+                             userData: self.firstTestUserData,
                              createdAt: Date.distantPast,
                              updatedAt: Date.distantFuture,
                              objectID: self.firstTestManagedObjectID)
@@ -135,7 +136,7 @@ class UserTests: XCTestCase {
                               name: "testName",
                               avatar: self.firstTestURL,
                               presenceState: .offline,
-                              metadata: self.firstTestMetadata,
+                              userData: self.firstTestUserData,
                               createdAt: Date.distantPast,
                               updatedAt: Date.distantFuture,
                               objectID: self.firstTestManagedObjectID)
@@ -148,7 +149,7 @@ class UserTests: XCTestCase {
                              name: "testName",
                              avatar: self.firstTestURL,
                              presenceState: .offline,
-                             metadata: self.firstTestMetadata,
+                             userData: self.firstTestUserData,
                              createdAt: Date.distantPast,
                              updatedAt: Date.distantFuture,
                              objectID: self.firstTestManagedObjectID)
@@ -157,7 +158,7 @@ class UserTests: XCTestCase {
                               name: "testName",
                               avatar: self.firstTestURL,
                               presenceState: .offline,
-                              metadata: self.firstTestMetadata,
+                              userData: self.firstTestUserData,
                               createdAt: Date.distantPast,
                               updatedAt: Date.distantFuture,
                               objectID: self.firstTestManagedObjectID)
@@ -170,7 +171,7 @@ class UserTests: XCTestCase {
                              name: "testName",
                              avatar: self.firstTestURL,
                              presenceState: .offline,
-                             metadata: self.firstTestMetadata,
+                             userData: self.firstTestUserData,
                              createdAt: Date.distantPast,
                              updatedAt: Date.distantFuture,
                              objectID: self.firstTestManagedObjectID)
@@ -179,7 +180,7 @@ class UserTests: XCTestCase {
                               name: "anotherName",
                               avatar: self.firstTestURL,
                               presenceState: .offline,
-                              metadata: self.firstTestMetadata,
+                              userData: self.firstTestUserData,
                               createdAt: Date.distantPast,
                               updatedAt: Date.distantFuture,
                               objectID: self.firstTestManagedObjectID)
@@ -192,7 +193,7 @@ class UserTests: XCTestCase {
                              name: "testName",
                              avatar: self.firstTestURL,
                              presenceState: .offline,
-                             metadata: self.firstTestMetadata,
+                             userData: self.firstTestUserData,
                              createdAt: Date.distantPast,
                              updatedAt: Date.distantFuture,
                              objectID: self.firstTestManagedObjectID)
@@ -201,7 +202,7 @@ class UserTests: XCTestCase {
                               name: "testName",
                               avatar: self.secondTestURL,
                               presenceState: .offline,
-                              metadata: self.firstTestMetadata,
+                              userData: self.firstTestUserData,
                               createdAt: Date.distantPast,
                               updatedAt: Date.distantFuture,
                               objectID: self.firstTestManagedObjectID)
@@ -214,7 +215,7 @@ class UserTests: XCTestCase {
                              name: "testName",
                              avatar: self.firstTestURL,
                              presenceState: .offline,
-                             metadata: self.firstTestMetadata,
+                             userData: self.firstTestUserData,
                              createdAt: Date.distantPast,
                              updatedAt: Date.distantFuture,
                              objectID: self.firstTestManagedObjectID)
@@ -223,7 +224,7 @@ class UserTests: XCTestCase {
                               name: "testName",
                               avatar: self.firstTestURL,
                               presenceState: .online,
-                              metadata: self.firstTestMetadata,
+                              userData: self.firstTestUserData,
                               createdAt: Date.distantPast,
                               updatedAt: Date.distantFuture,
                               objectID: self.firstTestManagedObjectID)
@@ -231,12 +232,12 @@ class UserTests: XCTestCase {
         XCTAssertNotEqual(firstUser, secondUser)
     }
     
-    func testShouldCompareTwoUsersAsEqualWhenMetadataValuesAreDifferent() {
+    func testShouldCompareTwoUsersAsEqualWhenUserDataValuesAreDifferent() {
         let firstUser = User(identifier: "testIdentifier",
                              name: "testName",
                              avatar: self.firstTestURL,
                              presenceState: .offline,
-                             metadata: self.firstTestMetadata,
+                             userData: self.firstTestUserData,
                              createdAt: Date.distantPast,
                              updatedAt: Date.distantFuture,
                              objectID: self.firstTestManagedObjectID)
@@ -245,7 +246,7 @@ class UserTests: XCTestCase {
                               name: "testName",
                               avatar: self.firstTestURL,
                               presenceState: .offline,
-                              metadata: self.secondTestMetadata,
+                              userData: self.secondTestUserData,
                               createdAt: Date.distantPast,
                               updatedAt: Date.distantFuture,
                               objectID: self.firstTestManagedObjectID)
@@ -258,7 +259,7 @@ class UserTests: XCTestCase {
                              name: "testName",
                              avatar: self.firstTestURL,
                              presenceState: .offline,
-                             metadata: self.firstTestMetadata,
+                             userData: self.firstTestUserData,
                              createdAt: Date.distantPast,
                              updatedAt: Date.distantFuture,
                              objectID: self.firstTestManagedObjectID)
@@ -267,7 +268,7 @@ class UserTests: XCTestCase {
                               name: "testName",
                               avatar: self.firstTestURL,
                               presenceState: .offline,
-                              metadata: self.firstTestMetadata,
+                              userData: self.firstTestUserData,
                               createdAt: Date.distantFuture,
                               updatedAt: Date.distantFuture,
                               objectID: self.firstTestManagedObjectID)
@@ -280,7 +281,7 @@ class UserTests: XCTestCase {
                              name: "testName",
                              avatar: self.firstTestURL,
                              presenceState: .offline,
-                             metadata: self.firstTestMetadata,
+                             userData: self.firstTestUserData,
                              createdAt: Date.distantPast,
                              updatedAt: Date.distantFuture,
                              objectID: self.firstTestManagedObjectID)
@@ -289,7 +290,7 @@ class UserTests: XCTestCase {
                               name: "testName",
                               avatar: self.firstTestURL,
                               presenceState: .offline,
-                              metadata: self.firstTestMetadata,
+                              userData: self.firstTestUserData,
                               createdAt: Date.distantPast,
                               updatedAt: Date.distantPast,
                               objectID: self.firstTestManagedObjectID)
@@ -302,7 +303,7 @@ class UserTests: XCTestCase {
                              name: "testName",
                              avatar: self.firstTestURL,
                              presenceState: .offline,
-                             metadata: self.firstTestMetadata,
+                             userData: self.firstTestUserData,
                              createdAt: Date.distantPast,
                              updatedAt: Date.distantFuture,
                              objectID: self.firstTestManagedObjectID)
@@ -311,7 +312,7 @@ class UserTests: XCTestCase {
                               name: "testName",
                               avatar: self.firstTestURL,
                               presenceState: .offline,
-                              metadata: self.firstTestMetadata,
+                              userData: self.firstTestUserData,
                               createdAt: Date.distantPast,
                               updatedAt: Date.distantFuture,
                               objectID: self.secondTestManagedObjectID)

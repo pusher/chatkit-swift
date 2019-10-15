@@ -8,8 +8,8 @@ class MessagePartTests: XCTestCase {
     var firstTestURL: URL!
     var secondTestURL: URL!
     
-    var firstTestMetadata: Metadata!
-    var secondTestMetadata: Metadata!
+    var firstTestUserData: UserData!
+    var secondTestUserData: UserData!
     
     // MARK: - Tests lifecycle
     
@@ -19,8 +19,8 @@ class MessagePartTests: XCTestCase {
         self.firstTestURL = URL(fileURLWithPath: "/dev/null")
         self.secondTestURL = URL(fileURLWithPath: "/dev/zero")
         
-        self.firstTestMetadata = ["firstKey" : "firstValue"]
-        self.secondTestMetadata = ["secondKey" : "secondValue"]
+        self.firstTestUserData = ["firstKey" : "firstValue"]
+        self.secondTestUserData = ["secondKey" : "secondValue"]
     }
     
     // MARK: - Tests
@@ -50,9 +50,9 @@ class MessagePartTests: XCTestCase {
     }
     
     func testShouldCreateAttachmentMessagePartWithCorrectValues() {
-        let messagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
+        let messagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
         
-        if case let MessagePart.attachment(mimeType, identifier, downloadURL, refreshURL, size, expiration, name, metadata) = messagePart {
+        if case let MessagePart.attachment(mimeType, identifier, downloadURL, refreshURL, size, expiration, name, userData) = messagePart {
             XCTAssertEqual(mimeType, "image/png")
             XCTAssertEqual(identifier, "testIdentifier")
             XCTAssertEqual(downloadURL, self.firstTestURL)
@@ -60,8 +60,8 @@ class MessagePartTests: XCTestCase {
             XCTAssertEqual(size, 1234)
             XCTAssertEqual(expiration, Date.distantFuture)
             XCTAssertEqual(name, "testName")
-            XCTAssertNotNil(metadata)
-            XCTAssertEqual(metadata as? [String : String], self.firstTestMetadata as? [String : String])
+            XCTAssertNotNil(userData)
+            XCTAssertEqual(userData as? [String : String], self.firstTestUserData as? [String : String])
         }
         else {
             XCTFail("Failed to create attachment part.")
@@ -111,64 +111,64 @@ class MessagePartTests: XCTestCase {
     }
     
     func testShouldHaveTheSameHashForTheSameAttachmentMessageParts() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
         
         XCTAssertEqual(firstMessagePart.hashValue, secondMessagePart.hashValue)
     }
     
     func testShouldNotHaveTheSameHashForAttachmentMessagePartsWithDifferentMIMETypeValues() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/jpeg", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/jpeg", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
         
         XCTAssertNotEqual(firstMessagePart.hashValue, secondMessagePart.hashValue)
     }
     
     func testShouldNotHaveTheSameHashForAttachmentMessagePartsWithDifferentIdentifierValues() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "anotherIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "anotherIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
         
         XCTAssertNotEqual(firstMessagePart.hashValue, secondMessagePart.hashValue)
     }
     
     func testShouldNotHaveTheSameHashForAttachmentMessagePartsWithDifferentDownloadURLValues() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.secondTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.secondTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
         
         XCTAssertNotEqual(firstMessagePart.hashValue, secondMessagePart.hashValue)
     }
     
     func testShouldNotHaveTheSameHashForAttachmentMessagePartsWithDifferentRefreshURLValues() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.firstTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.firstTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
         
         XCTAssertNotEqual(firstMessagePart.hashValue, secondMessagePart.hashValue)
     }
     
     func testShouldNotHaveTheSameHashForAttachmentMessagePartsWithDifferentSizeValues() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 9876, Date.distantFuture, "testName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 9876, Date.distantFuture, "testName", self.firstTestUserData)
         
         XCTAssertNotEqual(firstMessagePart.hashValue, secondMessagePart.hashValue)
     }
     
     func testShouldNotHaveTheSameHashForAttachmentMessagePartsWithDifferentExpirationValues() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantPast, "testName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantPast, "testName", self.firstTestUserData)
         
         XCTAssertNotEqual(firstMessagePart.hashValue, secondMessagePart.hashValue)
     }
     
     func testShouldNotHaveTheSameHashForAttachmentMessagePartsWithDifferentNameValues() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "anotherName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "anotherName", self.firstTestUserData)
         
         XCTAssertNotEqual(firstMessagePart.hashValue, secondMessagePart.hashValue)
     }
     
-    func testShouldNotIncludeMetadataValueWhenCalculatingHashForAttachmentMessageParts() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.secondTestMetadata)
+    func testShouldNotIncludeUserDataValueWhenCalculatingHashForAttachmentMessageParts() {
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.secondTestUserData)
         
         XCTAssertEqual(firstMessagePart.hashValue, secondMessagePart.hashValue)
     }
@@ -216,64 +216,64 @@ class MessagePartTests: XCTestCase {
     }
     
     func testShouldCompareTwoAttachmentMessagePartsAsEqualWhenValuesOfAllPropertiesAreTheSame() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
         
         XCTAssertEqual(firstMessagePart, secondMessagePart)
     }
     
     func testShouldNotCompareTwoAttachmentMessagePartsAsEqualWhenMIMETypeValuesAreDifferent() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/jpeg", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/jpeg", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
         
         XCTAssertNotEqual(firstMessagePart, secondMessagePart)
     }
     
     func testShouldNotCompareTwoAttachmentMessagePartsAsEqualWhenIdentifierValuesAreDifferent() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "anotherIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "anotherIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
         
         XCTAssertNotEqual(firstMessagePart, secondMessagePart)
     }
     
     func testShouldNotCompareTwoAttachmentMessagePartsAsEqualWhenDownloadURLValuesAreDifferent() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.secondTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.secondTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
         
         XCTAssertNotEqual(firstMessagePart, secondMessagePart)
     }
     
     func testShouldNotCompareTwoAttachmentMessagePartsAsEqualWhenRefreshURLValuesAreDifferent() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.firstTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.firstTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
         
         XCTAssertNotEqual(firstMessagePart, secondMessagePart)
     }
     
     func testShouldNotCompareTwoAttachmentMessagePartsAsEqualWhenSizeValuesAreDifferent() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 9876, Date.distantFuture, "testName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 9876, Date.distantFuture, "testName", self.firstTestUserData)
         
         XCTAssertNotEqual(firstMessagePart, secondMessagePart)
     }
     
     func testShouldNotCompareTwoAttachmentMessagePartsAsEqualWhenExpirationValuesAreDifferent() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantPast, "testName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantPast, "testName", self.firstTestUserData)
         
         XCTAssertNotEqual(firstMessagePart, secondMessagePart)
     }
     
     func testShouldNotCompareTwoAttachmentMessagePartsAsEqualWhenNameValuesAreDifferent() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "anotherName", self.firstTestMetadata)
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "anotherName", self.firstTestUserData)
         
         XCTAssertNotEqual(firstMessagePart, secondMessagePart)
     }
     
-    func testShouldCompareTwoAttachmentMessagePartsAsEqualWhenMetadataValuesAreDifferent() {
-        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestMetadata)
-        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.secondTestMetadata)
+    func testShouldCompareTwoAttachmentMessagePartsAsEqualWhenUserDataValuesAreDifferent() {
+        let firstMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.firstTestUserData)
+        let secondMessagePart = MessagePart.attachment("image/png", "testIdentifier", self.firstTestURL, self.secondTestURL, 1234, Date.distantFuture, "testName", self.secondTestUserData)
         
         XCTAssertEqual(firstMessagePart, secondMessagePart)
     }

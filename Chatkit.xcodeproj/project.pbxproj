@@ -53,7 +53,7 @@
 		227B8403230EAC7900921E0D /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8402230EAC7900921E0D /* UserTests.swift */; };
 		227B8405230ECA7400921E0D /* RoomTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8404230ECA7400921E0D /* RoomTests.swift */; };
 		227B8407230ED76400921E0D /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8406230ED76400921E0D /* StoreTests.swift */; };
-		227B840A230EE6C900921E0D /* MetadataSerializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8409230EE6C900921E0D /* MetadataSerializerTests.swift */; };
+		227B840A230EE6C900921E0D /* UserDataSerializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8409230EE6C900921E0D /* UserDataSerializerTests.swift */; };
 		227E946D231FBDAB0025B691 /* chat-initial_state.json in Resources */ = {isa = PBXBuildFile; fileRef = 227E946C231FBDAB0025B691 /* chat-initial_state.json */; };
 		227E946F231FC5950025B691 /* XCTest+Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227E946E231FC5950025B691 /* XCTest+Networking.swift */; };
 		227E947223200DBD0025B691 /* ModularEventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227E947123200DBD0025B691 /* ModularEventParser.swift */; };
@@ -72,7 +72,7 @@
 		22C5F3F32306B9F3009A7383 /* InlinePartEntity+Snapshotable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3F22306B9F3009A7383 /* InlinePartEntity+Snapshotable.swift */; };
 		22C5F3F52306B9F9009A7383 /* URLPartEntity+Snapshotable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3F42306B9F9009A7383 /* URLPartEntity+Snapshotable.swift */; };
 		22C5F3F72306B9FE009A7383 /* AttachmentPartEntity+Snapshotable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3F62306B9FE009A7383 /* AttachmentPartEntity+Snapshotable.swift */; };
-		22C5F3FA2306BDE8009A7383 /* MetadataSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3F92306BDE8009A7383 /* MetadataSerializer.swift */; };
+		22C5F3FA2306BDE8009A7383 /* UserDataSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3F92306BDE8009A7383 /* UserDataSerializer.swift */; };
 		22C5F3FF2306C7AB009A7383 /* PresenceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3FE2306C7AB009A7383 /* PresenceState.swift */; };
 		22CEBB4F22FC5499005CB021 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 22CEBB4D22FC5499005CB021 /* Model.xcdatamodeld */; };
 		22CEBB5522FC6F37005CB021 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEBB5422FC6F37005CB021 /* Types.swift */; };
@@ -175,7 +175,7 @@
 		227B8402230EAC7900921E0D /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
 		227B8404230ECA7400921E0D /* RoomTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTests.swift; sourceTree = "<group>"; };
 		227B8406230ED76400921E0D /* StoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTests.swift; sourceTree = "<group>"; };
-		227B8409230EE6C900921E0D /* MetadataSerializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataSerializerTests.swift; sourceTree = "<group>"; };
+		227B8409230EE6C900921E0D /* UserDataSerializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataSerializerTests.swift; sourceTree = "<group>"; };
 		227E946C231FBDAB0025B691 /* chat-initial_state.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "chat-initial_state.json"; sourceTree = "<group>"; };
 		227E946E231FC5950025B691 /* XCTest+Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+Networking.swift"; sourceTree = "<group>"; };
 		227E947123200DBD0025B691 /* ModularEventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModularEventParser.swift; sourceTree = "<group>"; };
@@ -196,7 +196,7 @@
 		22C5F3F22306B9F3009A7383 /* InlinePartEntity+Snapshotable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InlinePartEntity+Snapshotable.swift"; sourceTree = "<group>"; };
 		22C5F3F42306B9F9009A7383 /* URLPartEntity+Snapshotable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLPartEntity+Snapshotable.swift"; sourceTree = "<group>"; };
 		22C5F3F62306B9FE009A7383 /* AttachmentPartEntity+Snapshotable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttachmentPartEntity+Snapshotable.swift"; sourceTree = "<group>"; };
-		22C5F3F92306BDE8009A7383 /* MetadataSerializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataSerializer.swift; sourceTree = "<group>"; };
+		22C5F3F92306BDE8009A7383 /* UserDataSerializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataSerializer.swift; sourceTree = "<group>"; };
 		22C5F3FE2306C7AB009A7383 /* PresenceState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresenceState.swift; sourceTree = "<group>"; };
 		22CEBB4E22FC5499005CB021 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		22CEBB5422FC6F37005CB021 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
@@ -481,7 +481,7 @@
 		227B8408230EE6B800921E0D /* Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				227B8409230EE6C900921E0D /* MetadataSerializerTests.swift */,
+				227B8409230EE6C900921E0D /* UserDataSerializerTests.swift */,
 			);
 			path = Metadata;
 			sourceTree = "<group>";
@@ -535,7 +535,6 @@
 			children = (
 				224B805722F2DAD3003CB8DC /* Chatkit */,
 				22D537C82302BCD600A92341 /* Data Providers */,
-				22C5F3F82306BD4D009A7383 /* Metadata */,
 				22D537D22302D24200A92341 /* Model */,
 				22D2A2CD231960770095757C /* Networking */,
 				22CEBB4B22FC5484005CB021 /* Persistence */,
@@ -543,6 +542,7 @@
 				224B805222F1E154003CB8DC /* Supporting Files */,
 				229AEEEE23351DA300A5E159 /* Test Data */,
 				22CEBB5322FC6F2B005CB021 /* Types */,
+				22C5F3F82306BD4D009A7383 /* User Data */,
 				22D2A2D3231963BC0095757C /* Utilities */,
 			);
 			path = Chatkit;
@@ -601,12 +601,12 @@
 			path = Entities;
 			sourceTree = "<group>";
 		};
-		22C5F3F82306BD4D009A7383 /* Metadata */ = {
+		22C5F3F82306BD4D009A7383 /* User Data */ = {
 			isa = PBXGroup;
 			children = (
-				22C5F3F92306BDE8009A7383 /* MetadataSerializer.swift */,
+				22C5F3F92306BDE8009A7383 /* UserDataSerializer.swift */,
 			);
-			path = Metadata;
+			path = "User Data";
 			sourceTree = "<group>";
 		};
 		22CEBB4B22FC5484005CB021 /* Persistence */ = {
@@ -1048,7 +1048,7 @@
 				22749857232147AD00D10C76 /* ServiceVersionTests.swift in Sources */,
 				22D777432322B6B0009773D0 /* ChatServiceTests.swift in Sources */,
 				227B8407230ED76400921E0D /* StoreTests.swift in Sources */,
-				227B840A230EE6C900921E0D /* MetadataSerializerTests.swift in Sources */,
+				227B840A230EE6C900921E0D /* UserDataSerializerTests.swift in Sources */,
 				2274984C2321098B00D10C76 /* PCBaseClientExtensionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1113,7 +1113,7 @@
 				222576B323055E1900FAFAEC /* RoomEntity+CoreDataProperties.swift in Sources */,
 				224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */,
 				22EDCB7B231D0FA300419C75 /* Event.swift in Sources */,
-				22C5F3FA2306BDE8009A7383 /* MetadataSerializer.swift in Sources */,
+				22C5F3FA2306BDE8009A7383 /* UserDataSerializer.swift in Sources */,
 				224E33C0230B07C2005168E3 /* Identifiable.swift in Sources */,
 				229A6C90230BE744002997CF /* UserEntity+Identifiable.swift in Sources */,
 				22D537E42302F2D200A92341 /* LegacyUserProvider.swift in Sources */,

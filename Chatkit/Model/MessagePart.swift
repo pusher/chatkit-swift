@@ -4,7 +4,7 @@ public enum MessagePart {
     
     case text(MIMEType, String)
     case link(MIMEType, URL)
-    case attachment(MIMEType, Identifier, DownloadURL, RefreshURL, Size, Expiration, Name?, Metadata?)
+    case attachment(MIMEType, Identifier, DownloadURL, RefreshURL, Size, Expiration, Name?, UserData?)
     
 }
 
@@ -37,7 +37,7 @@ extension MessagePart: Hashable {
             hasher.combine(url)
             
         case let .attachment(mimeType, identifier, downloadURL, refreshURL, size, expiration, name, _):
-            // Metadata is intentionally excluded from this calculation.
+            // User data is intentionally excluded from this calculation.
             hasher.combine(mimeType)
             hasher.combine(identifier)
             hasher.combine(downloadURL)
@@ -68,7 +68,7 @@ extension MessagePart: Equatable {
             
         case (let .attachment(lhsMIMEType, lhsIdentifier, lhsDownloadURL, lhsRefreshURL, lhsSize, lhsExpiration, lhsName, _),
               let .attachment(rhsMIMEType, rhsIdentifier, rhsDownloadURL, rhsRefreshURL, rhsSize, rhsExpiration, rhsName, _)):
-            // Metadata is intentionally excluded from this comparison.
+            // User data is intentionally excluded from this comparison.
             return lhsMIMEType == rhsMIMEType
                 && lhsIdentifier == rhsIdentifier
                 && lhsDownloadURL == rhsDownloadURL
