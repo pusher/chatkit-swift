@@ -37,7 +37,7 @@ public class RoomDetailsProvider {
     ///
     /// This array contains all messages for the given room and retrieved from the web service as a result
     /// of either an internal real time subscription to the web service or explicit calls triggered
-    /// as a result of calling `fetchOlderMessages(numberOfMessages:completionHandler:)
+    /// as a result of calling `fetchOlderMessages(numberOfMessages:completionHandler:)`
     /// method.
     public var messages: [Message] {
         return self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
@@ -79,6 +79,7 @@ public class RoomDetailsProvider {
     // MARK: - Methods
     
     /// Returns the messages at the given index in the maintained collection of messages.
+    /// 
     /// - Parameters:
     ///     - index: The index of object that should be returned from the maintained collection of
     ///     messages.

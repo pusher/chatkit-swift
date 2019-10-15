@@ -42,6 +42,7 @@ public class AvailableRoomsProvider {
     // MARK: - Methods
     
     /// Returns the room at the given index in the maintained collection of rooms.
+    /// 
     /// - Parameters:
     ///     - index: The index of object that should be returned from the maintained collection of
     ///     rooms.

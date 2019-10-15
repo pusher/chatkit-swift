@@ -40,6 +40,7 @@ public class UsersProvider {
     // MARK: - Methods
     
     /// Returns the user at the given index in the maintained collection of users.
+    /// 
     /// - Parameters:
     ///     - index: The index of object that should be returned from the maintained collection of
     ///     users.

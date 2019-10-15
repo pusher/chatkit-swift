@@ -1,16 +1,30 @@
 import Foundation
 import CoreData
 
+/// A structure representing a user retrieved from the Chatkit web service.
 public struct User {
     
     // MARK: - Properties
     
+    /// The unique identifier for the user assigned by the Chatkit web service.
     public let identifier: String
+    
+    /// The human readable name of the user. This is not required to be unique.
     public let name: String?
+    
+    /// The location represented as an `URL` of an avatar for the user.
     public let avatar: URL?
+    
+    /// The current presence state of the user.
     public let presenceState: PresenceState
+    
+    /// The dictionary of arbitrary data which you may attach to the user.
     public let userData: UserData?
+    
+    /// The `Date` at which the user was created.
     public let createdAt: Date
+    
+    /// The `Date` at which the user was last updated.
     public let updatedAt: Date
     
     let objectID: NSManagedObjectID
@@ -34,6 +48,10 @@ public struct User {
 
 extension User: Hashable {
     
+    /// Hashes the essential components of this value by feeding them into the given hasher.
+    ///
+    /// - Parameters:
+    ///     - hasher: The hasher to use when combining the components of this instance.
     public func hash(into hasher: inout Hasher) {
         hasher.combine(self.identifier)
     }
@@ -44,6 +62,14 @@ extension User: Hashable {
 
 extension User: Equatable {
     
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`, `a == b` implies that
+    /// `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///     - lhs: A value to compare.
+    ///     - rhs: Another value to compare.
     public static func == (lhs: User, rhs: User) -> Bool {
         // User data is intentionally excluded from this comparison.
         return lhs.identifier == rhs.identifier

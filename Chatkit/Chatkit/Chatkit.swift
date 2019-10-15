@@ -45,6 +45,7 @@ public class Chatkit {
     // MARK: - Initializers
     
     /// Creates and returns an instance of `Chatkit` entry point.
+    ///
     /// - Parameters:
     ///     - instanceLocator: The instance locator used to identify the Chatkit instance.
     ///     - tokenProvider: The token provider used to authenticate as a user of Chatkit web service.
@@ -94,6 +95,7 @@ public class Chatkit {
     // MARK: - Methods
     
     /// Establishes a connection to the Chatkit web service.
+    ///
     /// - Parameters:
     ///     - completionHandler: An optional completion handler called when a connection has
     ///     been successfuly established or failed due to an error.
@@ -132,6 +134,7 @@ public class Chatkit {
     }
     
     /// Creates an instance of `UsersProvider`.
+    ///
     /// - Parameters:
     ///     - completionHandler: A completion handler called when an instance of an instance
     ///     of `UsersProvider` has been successfuly created or the instantiation failed due to
@@ -151,6 +154,7 @@ public class Chatkit {
     }
     
     /// Creates an instance of `AvailableRoomsProvider`.
+    ///
     /// - Parameters:
     ///     - completionHandler: A completion handler called when an instance of an instance
     ///     of `AvailableRoomsProvider` has been successfuly created or the instantiation failed
@@ -170,6 +174,7 @@ public class Chatkit {
     }
     
     /// Creates an instance of `JoinedRoomsProvider`.
+    ///
     /// - Parameters:
     ///     - completionHandler: A completion handler called when an instance of an instance
     ///     of `JoinedRoomsProvider` has been successfuly created or the instantiation failed due to
@@ -189,6 +194,7 @@ public class Chatkit {
     }
     
     /// Creates an instance of `RoomDetailsProvider`.
+    /// 
     /// - Parameters:
     ///     - completionHandler: A completion handler called when an instance of an instance
     ///     of `RoomDetailsProvider` has been successfuly created or the instantiation failed due to

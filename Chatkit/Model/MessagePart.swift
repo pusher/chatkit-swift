@@ -1,9 +1,15 @@
 import Foundation
 
+/// An enumeration representing a message part retrieved from the Chatkit web service.
 public enum MessagePart {
     
+    /// A message part representing a text content.
     case text(MIMEType, String)
+    
+    /// A message part representing a URL destination.
     case link(MIMEType, URL)
+    
+    /// A message part representing an attachment.
     case attachment(MIMEType, Identifier, DownloadURL, RefreshURL, Size, Expiration, Name?, UserData?)
     
 }
@@ -12,12 +18,25 @@ public enum MessagePart {
 
 public extension MessagePart {
     
+    /// The MIME type of the content.
     typealias MIMEType = String
+    
+    /// The unique identifier of the attachment.
     typealias Identifier = String
+    
+    /// Download `URL` of the attachment.
     typealias DownloadURL = URL
+    
+    /// Refresh `URL` of the attachment.
     typealias RefreshURL = URL
+    
+    /// The size of the attachment in bytes.
     typealias Size = Int64
+    
+    /// Expiration `Date` of the attachment.
     typealias Expiration = Date
+    
+    /// The filename associated with the attachment.
     typealias Name = String
     
 }
@@ -25,7 +44,11 @@ public extension MessagePart {
 // MARK: - Hashable
 
 extension MessagePart: Hashable {
-
+    
+    /// Hashes the essential components of this value by feeding them into the given hasher.
+    ///
+    /// - Parameters:
+    ///     - hasher: The hasher to use when combining the components of this instance.
     public func hash(into hasher: inout Hasher) {
         switch self {
         case let .text(mimeType, content):
@@ -47,13 +70,21 @@ extension MessagePart: Hashable {
             hasher.combine(name)
         }
     }
-
+    
 }
 
 // MARK: - Equatable
 
 extension MessagePart: Equatable {
     
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`, `a == b` implies that
+    /// `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///     - lhs: A value to compare.
+    ///     - rhs: Another value to compare.
     public static func == (lhs: MessagePart, rhs: MessagePart) -> Bool {
         switch (lhs, rhs) {
         case (let .text(lhsMIMEType, lhsContent),
