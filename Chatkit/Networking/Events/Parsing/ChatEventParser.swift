@@ -61,7 +61,7 @@ struct ChatEventParser: EventParser {
         guard let identifier = payload[Event.Key.identifier] as? String,
             let name = payload[Event.Key.name] as? String,
             let isPrivate = payload[Event.Key.private] as? Bool,
-            let unreadCount = payload[Event.Key.unreadCount] as? Int,
+            let unreadCount = payload[Event.Key.unreadCount] as? UInt32,
             let createdAtString = payload[Event.Key.createdAt] as? String,
             let createdAt = DateFormatter.default.date(from: createdAtString),
             let updatedAtString = payload[Event.Key.updatedAt] as? String,

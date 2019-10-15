@@ -11,7 +11,7 @@ public struct Room {
     public let creator: User?
     public let members: Set<User>?
     public let typingMembers: Set<User>?
-    public let unreadCount: Int64
+    public let unreadCount: UInt64
     public let lastMessage: Message?
     public let userData: UserData?
     public let createdAt: Date
@@ -22,7 +22,7 @@ public struct Room {
     
     // MARK: - Initializers
     
-    init(identifier: String, name: String?, isPrivate: Bool, creator: User?, members: Set<User>?, typingMembers: Set<User>?, unreadCount: Int64, lastMessage: Message?, userData: UserData?, createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
+    init(identifier: String, name: String?, isPrivate: Bool, creator: User?, members: Set<User>?, typingMembers: Set<User>?, unreadCount: UInt64, lastMessage: Message?, userData: UserData?, createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
         self.identifier = identifier
         self.name = name
         self.isPrivate = isPrivate

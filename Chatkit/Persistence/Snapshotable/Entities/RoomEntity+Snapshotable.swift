@@ -41,7 +41,7 @@ extension RoomEntity: Snapshotable {
                     creator: creator,
                     members: members,
                     typingMembers: typingMembers,
-                    unreadCount: self.unreadCount,
+                    unreadCount: UInt64(self.unreadCount),
                     lastMessage: lastMessage,
                     userData: userData,
                     createdAt: self.createdAt,
