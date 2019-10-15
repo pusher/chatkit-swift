@@ -16,8 +16,8 @@ extension RoomEntity: Snapshotable {
                 #keyPath(RoomEntity.lastMessage.sender),
                 #keyPath(RoomEntity.lastMessage.parts),
                 #keyPath(RoomEntity.lastMessage.cursors),
-                #keyPath(RoomEntity.lastMessage.cursors.user),
-                #keyPath(RoomEntity.lastMessage.cursors.readMessages)]
+                "\(#keyPath(RoomEntity.lastMessage.cursors)).\(#keyPath(CursorEntity.user))",           // Perhaps in future this could be replaced with #keyPath(RoomEntity.lastMessage.cursors.user)
+                "\(#keyPath(RoomEntity.lastMessage.cursors)).\(#keyPath(CursorEntity.readMessages))"]   // Perhaps in future this could be replaced with #keyPath(RoomEntity.lastMessage.cursors.readMessages)
     }
     
     // MARK: - Accessors
@@ -52,12 +52,14 @@ extension RoomEntity: Snapshotable {
     
     // MARK: - Private methods
     
-    private func snapshot(_ members: Set<UserEntity>?) -> Set<User>? {
-        guard let snapshot = (members?.compactMap { try? $0.snapshot() }) else {
-            return nil
+    private func snapshot(_ members: NSOrderedSet?) -> [User] {
+        guard let members = members?.array as? [UserEntity] else {
+            return []
         }
         
-        return snapshot.count > 0 ? Set(snapshot) : nil
+        let snapshot = members.compactMap { try? $0.snapshot() }
+        
+        return snapshot.count > 0 ? snapshot : []
     }
     
 }

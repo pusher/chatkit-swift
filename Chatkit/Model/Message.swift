@@ -5,9 +5,9 @@ public struct Message {
     
     public let identifier: String
     public let sender: User
-    public let parts: Set<MessagePart>
-    public let readByUsers: Set<User>?
-    public let lastReadByUsers: Set<User>?
+    public let parts: [MessagePart]
+    public let readByUsers: [User]
+    public let lastReadByUsers: [User]
     public let createdAt: Date
     public let updatedAt: Date
     public let deletedAt: Date?
@@ -16,7 +16,7 @@ public struct Message {
     
     // MARK: - Initializers
     
-    init(identifier: String, sender: User, parts: Set<MessagePart>, readByUsers: Set<User>?, lastReadByUsers: Set<User>?, createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
+    init(identifier: String, sender: User, parts: [MessagePart], readByUsers: [User], lastReadByUsers: [User], createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
         self.identifier = identifier
         self.sender = sender
         self.parts = parts

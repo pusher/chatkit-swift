@@ -12,8 +12,8 @@ extension MessageEntity: Snapshotable {
         return [#keyPath(MessageEntity.sender),
                 #keyPath(MessageEntity.parts),
                 #keyPath(MessageEntity.cursors),
-                #keyPath(MessageEntity.cursors.user),
-                #keyPath(MessageEntity.cursors.readMessages)]
+                "\(#keyPath(MessageEntity.cursors)).\(#keyPath(CursorEntity.user))",            // Perhaps in future this could be replaced with #keyPath(MessageEntity.cursors.user)
+                "\(#keyPath(MessageEntity.cursors)).\(#keyPath(CursorEntity.readMessages))"]    // Perhaps in future this could be replaced with #keyPath(MessageEntity.cursors.readMessages)
     }
     
     // MARK: - Internal methods
@@ -21,8 +21,8 @@ extension MessageEntity: Snapshotable {
     func snapshot() throws -> Message {
         let sender = try self.sender.snapshot()
         let parts = try snapshotParts()
-        let readByUsers: Set<User>? = snapshotReadByUsers()
-        let lastReadByUsers: Set<User>? = snapshotLastReadByUsers()
+        let readByUsers = snapshotReadByUsers()
+        let lastReadByUsers = snapshotLastReadByUsers()
         
         return Message(identifier: self.identifier,
                        sender: sender,
@@ -37,7 +37,7 @@ extension MessageEntity: Snapshotable {
     
     // MARK: - Private methods
     
-    private func snapshotParts() throws -> Set<MessagePart> {
+    private func snapshotParts() throws -> [MessagePart] {
         let parts: [MessagePart] = self.parts.compactMap { part in
             if let part = part as? InlinePartEntity {
                 return try? part.snapshot()
@@ -57,25 +57,25 @@ extension MessageEntity: Snapshotable {
             throw SnapshotError.snapshotFailure
         }
         
-        return Set(parts)
+        return parts
     }
     
-    private func snapshotReadByUsers() -> Set<User>? {
-        guard let cursors = self.cursors else {
-            return nil
+    private func snapshotReadByUsers() -> [User] {
+        guard let cursors = self.cursors?.array as? [CursorEntity] else {
+            return []
         }
         
         let users = cursors.compactMap { try? $0.user.snapshot() }
-        return users.count > 0 ? Set(users) : nil
+        return users.count > 0 ? users : []
     }
     
-    private func snapshotLastReadByUsers() -> Set<User>? {
-        guard let cursors = self.cursors else {
-            return nil
+    private func snapshotLastReadByUsers() -> [User] {
+        guard let cursors = self.cursors?.array as? [CursorEntity] else {
+            return []
         }
         
         let users = cursors.compactMap { $0.readMessages.lastObject as? MessageEntity == self ? try? $0.user.snapshot() : nil }
-        return users.count > 0 ? Set(users) : nil
+        return users.count > 0 ? users : []
     }
     
 }

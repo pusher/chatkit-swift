@@ -17,9 +17,9 @@ extension RoomEntity {
     @NSManaged var updatedAt: Date
     @NSManaged var creator: UserEntity?
     @NSManaged var cursors: Set<CursorEntity>?
-    @NSManaged var members: Set<UserEntity>?
+    @NSManaged var members: NSOrderedSet?
     @NSManaged var messages: NSOrderedSet?
-    @NSManaged var typingMembers: Set<UserEntity>?
+    @NSManaged var typingMembers: NSOrderedSet?
     
 }
 
@@ -43,6 +43,24 @@ extension RoomEntity {
 // MARK: Generated accessors for members
 extension RoomEntity {
     
+    @objc(insertObject:inMembersAtIndex:)
+    @NSManaged func insertIntoMembers(_ value: UserEntity, at idx: Int)
+    
+    @objc(removeObjectFromMembersAtIndex:)
+    @NSManaged func removeFromMembers(at idx: Int)
+    
+    @objc(insertMembers:atIndexes:)
+    @NSManaged func insertIntoMembers(_ values: [UserEntity], at indexes: NSIndexSet)
+    
+    @objc(removeMembersAtIndexes:)
+    @NSManaged func removeFromMembers(at indexes: NSIndexSet)
+    
+    @objc(replaceObjectInMembersAtIndex:withObject:)
+    @NSManaged func replaceMembers(at idx: Int, with value: UserEntity)
+    
+    @objc(replaceMembersAtIndexes:withMembers:)
+    @NSManaged func replaceMembers(at indexes: NSIndexSet, with values: [UserEntity])
+    
     @objc(addMembersObject:)
     @NSManaged func addToMembers(_ value: UserEntity)
     
@@ -50,10 +68,10 @@ extension RoomEntity {
     @NSManaged func removeFromMembers(_ value: UserEntity)
     
     @objc(addMembers:)
-    @NSManaged func addToMembers(_ values: Set<UserEntity>)
+    @NSManaged func addToMembers(_ values: NSOrderedSet)
     
     @objc(removeMembers:)
-    @NSManaged func removeFromMembers(_ values: Set<UserEntity>)
+    @NSManaged func removeFromMembers(_ values: NSOrderedSet)
     
 }
 
@@ -95,6 +113,24 @@ extension RoomEntity {
 // MARK: Generated accessors for typingMembers
 extension RoomEntity {
     
+    @objc(insertObject:inTypingMembersAtIndex:)
+    @NSManaged func insertIntoTypingMembers(_ value: UserEntity, at idx: Int)
+    
+    @objc(removeObjectFromTypingMembersAtIndex:)
+    @NSManaged func removeFromTypingMembers(at idx: Int)
+    
+    @objc(insertTypingMembers:atIndexes:)
+    @NSManaged func insertIntoTypingMembers(_ values: [UserEntity], at indexes: NSIndexSet)
+    
+    @objc(removeTypingMembersAtIndexes:)
+    @NSManaged func removeFromTypingMembers(at indexes: NSIndexSet)
+    
+    @objc(replaceObjectInTypingMembersAtIndex:withObject:)
+    @NSManaged func replaceTypingMembers(at idx: Int, with value: UserEntity)
+    
+    @objc(replaceTypingMembersAtIndexes:withTypingMembers:)
+    @NSManaged func replaceTypingMembers(at indexes: NSIndexSet, with values: [UserEntity])
+    
     @objc(addTypingMembersObject:)
     @NSManaged func addToTypingMembers(_ value: UserEntity)
     
@@ -102,9 +138,9 @@ extension RoomEntity {
     @NSManaged func removeFromTypingMembers(_ value: UserEntity)
     
     @objc(addTypingMembers:)
-    @NSManaged func addToTypingMembers(_ values: Set<UserEntity>)
+    @NSManaged func addToTypingMembers(_ values: NSOrderedSet)
     
     @objc(removeTypingMembers:)
-    @NSManaged func removeFromTypingMembers(_ values: Set<UserEntity>)
+    @NSManaged func removeFromTypingMembers(_ values: NSOrderedSet)
     
 }
