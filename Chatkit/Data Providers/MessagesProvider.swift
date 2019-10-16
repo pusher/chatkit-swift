@@ -4,7 +4,7 @@ import PusherPlatform
 
 /// A provider which maintains a collection of messages for a given room which have been retrieved from
 /// the web service.
-public class RoomDetailsProvider {
+public class MessagesProvider {
     
     // MARK: - Properties
     
@@ -18,7 +18,7 @@ public class RoomDetailsProvider {
     public private(set) var pagedState: PagedProviderState
     
     /// The object that is notified when the content of the maintained collection of messages changed.
-    public weak var delegate: RoomDetailsProviderDelegate? {
+    public weak var delegate: MessagesProviderDelegate? {
         didSet {
             if delegate == nil {
                 self.messageFactory.stopReceivingNewMessages()
@@ -79,7 +79,7 @@ public class RoomDetailsProvider {
     // MARK: - Methods
     
     /// Returns the messages at the given index in the maintained collection of messages.
-    /// 
+    ///
     /// - Parameters:
     ///     - index: The index of object that should be returned from the maintained collection of
     ///     messages.
@@ -137,10 +137,10 @@ public class RoomDetailsProvider {
 
 // MARK: - FetchedResultsControllerDelegate
 
-extension RoomDetailsProvider: FetchedResultsControllerDelegate {
+extension MessagesProvider: FetchedResultsControllerDelegate {
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>) where ResultType : NSManagedObject {
-        self.delegate?.roomDetailsProvider(self, didReceiveMessagesAtIndexRange: range)
+        self.delegate?.messagesProvider(self, didReceiveMessagesAtIndexRange: range)
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject: ResultType, at index: Int) where ResultType : NSManagedObject {
@@ -148,7 +148,7 @@ extension RoomDetailsProvider: FetchedResultsControllerDelegate {
             return
         }
         
-        self.delegate?.roomDetailsProvider(self, didUpdateMessageAtIndex: index, previousValue: message)
+        self.delegate?.messagesProvider(self, didUpdateMessageAtIndex: index, previousValue: message)
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject: ResultType, at index: Int) where ResultType : NSManagedObject {
@@ -156,41 +156,41 @@ extension RoomDetailsProvider: FetchedResultsControllerDelegate {
             return
         }
         
-        self.delegate?.roomDetailsProvider(self, didRemoveMessageAtIndex: index, previousValue: message)
+        self.delegate?.messagesProvider(self, didRemoveMessageAtIndex: index, previousValue: message)
     }
     
 }
 
 // MARK: - Delegate
 
-/// A delegate protocol that describes methods that will be called by the associated
-/// `RoomDetailsProvider` when the maintainted collection of messages have changed.
-public protocol RoomDetailsProviderDelegate: class {
+/// A delegate protocol that describes methods that will be called by the associated `MessagesProvider`
+/// when the maintainted collection of messages have changed.
+public protocol MessagesProviderDelegate: class {
     
     /// Notifies the receiver that new messages have been added to the maintened collection of
     /// messages.
     ///
     /// - Parameters:
-    ///     - roomDetailsProvider: The `RoomDetailsProvider` that called the method.
+    ///     - messagesProvider: The `MessagesProvider` that called the method.
     ///     - range: The range of added objects in the maintened collection of messages.
-    func roomDetailsProvider(_ roomDetailsProvider: RoomDetailsProvider, didReceiveMessagesAtIndexRange range: Range<Int>)
+    func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveMessagesAtIndexRange range: Range<Int>)
     
     /// Notifies the receiver that a message from the maintened collection of messages have been
     /// updated.
     ///
     /// - Parameters:
-    ///     - joinedRoomsProvider: The `RoomDetailsProvider` that called the method.
+    ///     - messagesProvider: The `MessagesProvider` that called the method.
     ///     - index: The index of the updated object in the maintened collection of messages.
     ///     - previousValue: The value of the message prior to the update.
-    func roomDetailsProvider(_ roomDetailsProvider: RoomDetailsProvider, didUpdateMessageAtIndex index: Int, previousValue: Message)
+    func messagesProvider(_ messagesProvider: MessagesProvider, didUpdateMessageAtIndex index: Int, previousValue: Message)
     
     /// Notifies the receiver that a message from the maintened collection of messages have been
     /// removed.
     ///
     /// - Parameters:
-    ///     - joinedRoomsProvider: The `RoomDetailsProvider` that called the method.
+    ///     - messagesProvider: The `MessagesProvider` that called the method.
     ///     - index: The index of the removed object in the maintened collection of messages.
     ///     - previousValue: The value of the message prior to the removal.
-    func roomDetailsProvider(_ roomDetailsProvider: RoomDetailsProvider, didRemoveMessageAtIndex index: Int, previousValue: Message)
+    func messagesProvider(_ messagesProvider: MessagesProvider, didRemoveMessageAtIndex index: Int, previousValue: Message)
     
 }

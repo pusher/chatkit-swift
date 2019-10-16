@@ -31,6 +31,7 @@ public class Chatkit {
     var availableRoomsProviderCache: [UUID : AvailableRoomsProvider]
     var joinedRoomsProviderCache: [UUID : JoinedRoomsProvider]
     var roomDetailsProviderCache: [UUID : RoomDetailsProvider]
+    var messagesProviderCache: [UUID : MessagesProvider]
     
     /// The instance locator used to identify the Chatkit instance.
     public var instanceLocator: String {
@@ -57,6 +58,7 @@ public class Chatkit {
         self.availableRoomsProviderCache = [:]
         self.joinedRoomsProviderCache = [:]
         self.roomDetailsProviderCache = [:]
+        self.messagesProviderCache = [:]
         
         self.logger = logger
         
@@ -136,9 +138,8 @@ public class Chatkit {
     /// Creates an instance of `UsersProvider`.
     ///
     /// - Parameters:
-    ///     - completionHandler: A completion handler called when an instance of an instance
-    ///     of `UsersProvider` has been successfuly created or the instantiation failed due to
-    ///     an error.
+    ///     - completionHandler: A completion handler called when an instance of
+    ///     `UsersProvider` has been successfuly created or the instantiation failed due to an error.
     public func createUsersProvider(completionHandler: @escaping (UsersProvider?, Error?) -> Void) {
         let identifier = UUID()
         self.usersProviderCache[identifier] = UsersProvider { error in
@@ -156,8 +157,8 @@ public class Chatkit {
     /// Creates an instance of `AvailableRoomsProvider`.
     ///
     /// - Parameters:
-    ///     - completionHandler: A completion handler called when an instance of an instance
-    ///     of `AvailableRoomsProvider` has been successfuly created or the instantiation failed
+    ///     - completionHandler: A completion handler called when an instance of
+    ///     `AvailableRoomsProvider` has been successfuly created or the instantiation failed
     ///     due to an error.
     public func createAvailableRoomsProvider(completionHandler: @escaping (AvailableRoomsProvider?, Error?) -> Void) {
         let identifier = UUID()
@@ -176,8 +177,8 @@ public class Chatkit {
     /// Creates an instance of `JoinedRoomsProvider`.
     ///
     /// - Parameters:
-    ///     - completionHandler: A completion handler called when an instance of an instance
-    ///     of `JoinedRoomsProvider` has been successfuly created or the instantiation failed due to
+    ///     - completionHandler: A completion handler called when an instance of
+    ///     `JoinedRoomsProvider` has been successfuly created or the instantiation failed due to
     ///     an error.
     public func createJoinedRoomsProvider(completionHandler: @escaping (JoinedRoomsProvider?, Error?) -> Void) {
         let identifier = UUID()
@@ -194,10 +195,10 @@ public class Chatkit {
     }
     
     /// Creates an instance of `RoomDetailsProvider`.
-    /// 
+    ///
     /// - Parameters:
-    ///     - completionHandler: A completion handler called when an instance of an instance
-    ///     of `RoomDetailsProvider` has been successfuly created or the instantiation failed due to
+    ///     - completionHandler: A completion handler called when an instance of
+    ///     `RoomDetailsProvider` has been successfuly created or the instantiation failed due to
     ///     an error.
     public func createRoomDetailsProvider(for room: Room, completionHandler: @escaping (RoomDetailsProvider?, Error?) -> Void) {
         let identifier = UUID()
@@ -210,6 +211,26 @@ public class Chatkit {
             }
             
             self.roomDetailsProviderCache.removeValue(forKey: identifier)
+        }
+    }
+    
+    /// Creates an instance of `MessagesProvider`.
+    ///
+    /// - Parameters:
+    ///     - completionHandler: A completion handler called when an instance of
+    ///     `MessagesProvider` has been successfuly created or the instantiation failed due to
+    ///     an error.
+    public func createMessagesProvider(for room: Room, completionHandler: @escaping (MessagesProvider?, Error?) -> Void) {
+        let identifier = UUID()
+        self.messagesProviderCache[identifier] = MessagesProvider(room: room, currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController) { error in
+            if let error = error {
+                completionHandler(nil, error)
+            }
+            else if let messagesProvider = self.messagesProviderCache[identifier] {
+                completionHandler(messagesProvider, nil)
+            }
+            
+            self.messagesProviderCache.removeValue(forKey: identifier)
         }
     }
     

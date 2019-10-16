@@ -19,7 +19,7 @@ public class JoinedRoomsProvider {
     
     /// The array of all rooms joined by the user.
     ///
-    /// This array contains all rooms joined by the user and retrieved from the web service as a result
+    /// This array contains all rooms joined by the user, retrieved from the web service as a result
     /// of an internal real time subscription to the web service.
     public var rooms: [Room] {
         return self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
