@@ -93,16 +93,16 @@ extension JoinedRoomsProvider: FetchedResultsControllerDelegate {
         self.delegate?.joinedRoomsProvider(self, didJoinRoomsAtIndexRange: range)
     }
     
-    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject: ResultType, at index: Int) where ResultType : NSManagedObject {
-        guard let object = self.fetchedResultsController.object(at: index), let room = try? object.snapshot() else {
+    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
+        guard let object = object as? RoomEntity, let room = try? object.snapshot() else {
             return
         }
         
         self.delegate?.joinedRoomsProvider(self, didUpdateRoomAtIndex: index, previousValue: room)
     }
     
-    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject: ResultType, at index: Int) where ResultType : NSManagedObject {
-        guard let object = self.fetchedResultsController.object(at: index), let room = try? object.snapshot() else {
+    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
+        guard let object = object as? RoomEntity, let room = try? object.snapshot() else {
             return
         }
         

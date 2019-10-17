@@ -143,16 +143,16 @@ extension MessagesProvider: FetchedResultsControllerDelegate {
         self.delegate?.messagesProvider(self, didReceiveMessagesAtIndexRange: range)
     }
     
-    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject: ResultType, at index: Int) where ResultType : NSManagedObject {
-        guard let object = self.fetchedResultsController.object(at: index), let message = try? object.snapshot() else {
+    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
+        guard let object = object as? MessageEntity, let message = try? object.snapshot() else {
             return
         }
         
         self.delegate?.messagesProvider(self, didUpdateMessageAtIndex: index, previousValue: message)
     }
     
-    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject: ResultType, at index: Int) where ResultType : NSManagedObject {
-        guard let object = self.fetchedResultsController.object(at: index), let message = try? object.snapshot() else {
+    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
+        guard let object = object as? MessageEntity, let message = try? object.snapshot() else {
             return
         }
         

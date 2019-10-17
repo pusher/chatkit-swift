@@ -136,7 +136,7 @@ class FetchedResultsController<ResultType> : NSObject, NSFetchedResultsControlle
 protocol FetchedResultsControllerDelegate: class {
     
     func fetchedResultsController<ResultType: NSManagedObject>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>)
-    func fetchedResultsController<ResultType: NSManagedObject>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject: ResultType, at index: Int)
-    func fetchedResultsController<ResultType: NSManagedObject>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject: ResultType, at index: Int)
+    func fetchedResultsController<ResultType: NSManagedObject>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject object: ResultType, at index: Int)
+    func fetchedResultsController<ResultType: NSManagedObject>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject object: ResultType, at index: Int)
     
 }

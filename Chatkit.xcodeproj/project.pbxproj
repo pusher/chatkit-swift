@@ -12,6 +12,7 @@
 		2200BB97231EA5C200BF9545 /* TestLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2200BB96231EA5C200BF9545 /* TestLogger.swift */; };
 		2207CE9F233CE4DE00D85E52 /* UserEntityFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2207CE9E233CE4DE00D85E52 /* UserEntityFactory.swift */; };
 		2212EC55235725B8002212A4 /* MessagesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC54235725B8002212A4 /* MessagesProvider.swift */; };
+		2212EC5723572A3F002212A4 /* RoomMembersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC5623572A3F002212A4 /* RoomMembersProvider.swift */; };
 		222576962305488E00FAFAEC /* CursorEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222576862305488D00FAFAEC /* CursorEntity+CoreDataProperties.swift */; };
 		222576982305488E00FAFAEC /* AttachmentPartEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222576882305488E00FAFAEC /* AttachmentPartEntity+CoreDataProperties.swift */; };
 		222576992305488E00FAFAEC /* CursorEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222576892305488E00FAFAEC /* CursorEntity+CoreDataClass.swift */; };
@@ -130,6 +131,7 @@
 		2200BB96231EA5C200BF9545 /* TestLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestLogger.swift; sourceTree = "<group>"; };
 		2207CE9E233CE4DE00D85E52 /* UserEntityFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEntityFactory.swift; sourceTree = "<group>"; };
 		2212EC54235725B8002212A4 /* MessagesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesProvider.swift; sourceTree = "<group>"; };
+		2212EC5623572A3F002212A4 /* RoomMembersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMembersProvider.swift; sourceTree = "<group>"; };
 		222576862305488D00FAFAEC /* CursorEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CursorEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		222576882305488E00FAFAEC /* AttachmentPartEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AttachmentPartEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		222576892305488E00FAFAEC /* CursorEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CursorEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -709,8 +711,9 @@
 				22D2A2ED2319BA450095757C /* Types */,
 				222EA2AE23424A7D004EE90F /* AvailableRoomsProvider.swift */,
 				222EA2AC23424A11004EE90F /* JoinedRoomsProvider.swift */,
-				229656FA232FCE920016DA7C /* RoomDetailsProvider.swift */,
 				2212EC54235725B8002212A4 /* MessagesProvider.swift */,
+				229656FA232FCE920016DA7C /* RoomDetailsProvider.swift */,
+				2212EC5623572A3F002212A4 /* RoomMembersProvider.swift */,
 				22FC112C233E50FB0013A9D7 /* UsersProvider.swift */,
 			);
 			path = "Data Providers";
@@ -1062,6 +1065,7 @@
 				22D537DD2302E19C00A92341 /* RoomEntity+Snapshotable.swift in Sources */,
 				22DACBEC233138D900573D12 /* MessageEntityFactory.swift in Sources */,
 				22FFA6AE2355F5A500156A7F /* MessageEntity+CoreDataProperties.swift in Sources */,
+				2212EC5723572A3F002212A4 /* RoomMembersProvider.swift in Sources */,
 				22D537CD2302BDD700A92341 /* Store.swift in Sources */,
 				2225769B2305488E00FAFAEC /* InlinePartEntity+CoreDataClass.swift in Sources */,
 				227E947223200DBD0025B691 /* ModularEventParser.swift in Sources */,

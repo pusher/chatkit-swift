@@ -1,7 +1,9 @@
 import UIKit
 import PusherChatkit
 
-class MessageViewController: UITableViewController {
+class MessageViewController: UIViewController {
+    
+    @IBOutlet weak var tableView: UITableView!
     
     var room: Room?
     var chatkit: Chatkit?
@@ -42,27 +44,47 @@ class MessageViewController: UITableViewController {
         super.viewWillAppear(animated)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
+        if segue.identifier == "displayMembers" {
+            guard let membersViewController = segue.destination as? MembersViewController else {
+                    return
+            }
+            
+            membersViewController.room = self.room
+            membersViewController.chatkit = self.chatkit
+        }
+    }
+    
     @IBAction func loadMore(_ sender: UIBarButtonItem) {
         self.roomDetailsProvider?.fetchOlderMessages(numberOfMessages: 5)
     }
     
     private func scrollToBottomIfNeeded() {
-        guard let roomDetailsProvider = self.roomDetailsProvider else {
+        guard let lastVisibleRow = self.tableView.indexPathsForVisibleRows?.last?.row else {
             return
         }
         
-        let indexPath = IndexPath(row: roomDetailsProvider.numberOfMessages - 1, section: 0)
+        let numberOfRows = self.tableView.numberOfRows(inSection: 0)
+        let lastRow = numberOfRows - 2
+        let addedRow = numberOfRows - 1
         
-        if self.tableView.indexPathsForVisibleRows?.last?.row == indexPath.row {
+        if lastVisibleRow == lastRow || lastVisibleRow == addedRow {
+            let indexPath = IndexPath(row: addedRow, section: 0)
             self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
         }
     }
+    
+}
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+extension MessageViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.roomDetailsProvider?.numberOfMessages ?? 0
     }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)
         
         if let messageCell = cell as? TestTableViewCell {

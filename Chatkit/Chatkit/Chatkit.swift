@@ -32,6 +32,7 @@ public class Chatkit {
     var joinedRoomsProviderCache: [UUID : JoinedRoomsProvider]
     var roomDetailsProviderCache: [UUID : RoomDetailsProvider]
     var messagesProviderCache: [UUID : MessagesProvider]
+    var roomMembersProviderCache: [UUID : RoomMembersProvider]
     
     /// The instance locator used to identify the Chatkit instance.
     public var instanceLocator: String {
@@ -59,6 +60,7 @@ public class Chatkit {
         self.joinedRoomsProviderCache = [:]
         self.roomDetailsProviderCache = [:]
         self.messagesProviderCache = [:]
+        self.roomMembersProviderCache = [:]
         
         self.logger = logger
         
@@ -231,6 +233,26 @@ public class Chatkit {
             }
             
             self.messagesProviderCache.removeValue(forKey: identifier)
+        }
+    }
+    
+    /// Creates an instance of `RoomMembersProvider`.
+    ///
+    /// - Parameters:
+    ///     - completionHandler: A completion handler called when an instance of
+    ///     `RoomMembersProvider` has been successfuly created or the instantiation failed due to
+    ///     an error.
+    public func createRoomMembersProvider(for room: Room, completionHandler: @escaping (RoomMembersProvider?, Error?) -> Void) {
+        let identifier = UUID()
+        self.roomMembersProviderCache[identifier] = RoomMembersProvider(room: room, currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController) { error in
+            if let error = error {
+                completionHandler(nil, error)
+            }
+            else if let roomMembersProvider = self.roomMembersProviderCache[identifier] {
+                completionHandler(roomMembersProvider, nil)
+            }
+            
+            self.roomMembersProviderCache.removeValue(forKey: identifier)
         }
     }
     
