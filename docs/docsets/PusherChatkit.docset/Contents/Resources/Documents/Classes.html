@@ -40,7 +40,13 @@
                 <a href="Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/MessagesProvider.html">MessagesProvider</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/RoomDetailsProvider.html">RoomDetailsProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/RoomMembersProvider.html">RoomMembersProvider</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/UsersProvider.html">UsersProvider</a>
@@ -83,7 +89,13 @@
                 <a href="Protocols/JoinedRoomsProviderDelegate.html">JoinedRoomsProviderDelegate</a>
               </li>
               <li class="nav-group-task">
+                <a href="Protocols/MessagesProviderDelegate.html">MessagesProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/RoomDetailsProviderDelegate.html">RoomDetailsProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/RoomMembersProviderDelegate.html">RoomMembersProviderDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/UsersProviderDelegate.html">UsersProviderDelegate</a>
@@ -206,8 +218,9 @@ the web service.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A provider which maintains a collection of all rooms joined by the user which have been retrieved from
-the web service.</p>
+                        <p>A provider which exposes a collection of all rooms joined by the user.</p>
+
+<p>The collection is updated in real time when the user joins or leaves a room.</p>
 
                         <a href="Classes/JoinedRoomsProvider.html" class="slightly-smaller">See more</a>
                       </div>
@@ -216,6 +229,41 @@ the web service.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">JoinedRoomsProvider</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit16MessagesProviderC"></a>
+                    <a name="//apple_ref/swift/Class/MessagesProvider" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit16MessagesProviderC">MessagesProvider</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A provider which exposes a collection of messages for a given room.</p>
+
+<p>Initialy the N most recent messages are available. New messages are automatically added in real time.
+More older messages can be added on request.</p>
+
+                        <a href="Classes/MessagesProvider.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">MessagesProvider</span></code></pre>
 
                         </div>
                       </div>
@@ -239,8 +287,10 @@ the web service.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A provider which maintains a collection of messages for a given room which have been retrieved from
-the web service.</p>
+                        <p>A provider which exposes a collection of messages for a given room.</p>
+
+<p>Initialy the N most recent messages are available. New messages are automatically added in real time.
+More older messages can be added on request.</p>
 
                         <a href="Classes/RoomDetailsProvider.html" class="slightly-smaller">See more</a>
                       </div>
@@ -249,6 +299,40 @@ the web service.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomDetailsProvider</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit19RoomMembersProviderC"></a>
+                    <a name="//apple_ref/swift/Class/RoomMembersProvider" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit19RoomMembersProviderC">RoomMembersProvider</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A provider which exposes a collection of members for a given room.</p>
+
+<p>The collection is updated in real time when a user joins or leaves a room.</p>
+
+                        <a href="Classes/RoomMembersProvider.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomMembersProvider</span></code></pre>
 
                         </div>
                       </div>
@@ -292,7 +376,7 @@ the web service.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-16)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-17)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

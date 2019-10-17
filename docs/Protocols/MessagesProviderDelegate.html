@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>RoomDetailsProviderDelegate Protocol Reference</title>
+    <title>MessagesProviderDelegate Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Protocol/RoomDetailsProviderDelegate" class="dashAnchor"></a>
-    <a title="RoomDetailsProviderDelegate Protocol Reference"></a>
+    <a name="//apple_ref/swift/Protocol/MessagesProviderDelegate" class="dashAnchor"></a>
+    <a title="MessagesProviderDelegate Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">PusherChatkit Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">PusherChatkit Reference</a>
         <img id="carat" src="../img/carat.png" />
-        RoomDetailsProviderDelegate Protocol Reference
+        MessagesProviderDelegate Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -132,15 +132,15 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>RoomDetailsProviderDelegate</h1>
+            <h1>MessagesProviderDelegate</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">RoomDetailsProviderDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">MessagesProviderDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                 </div>
               </div>
-            <p>A delegate protocol that describes methods that will be called by the associated
-<code><a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a></code> when the maintainted collection of messages have changed.</p>
+            <p>A delegate protocol that describes methods that will be called by the associated <code><a href="../Classes/MessagesProvider.html">MessagesProvider</a></code>
+when the maintainted collection of messages have changed.</p>
 
           </section>
           <section class="section task-group-section">
@@ -149,9 +149,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit27RoomDetailsProviderDelegateP04roomdE0_30didReceiveMessagesAtIndexRangeyAA0cdE0C_SnySiGtF"></a>
-                    <a name="//apple_ref/swift/Method/roomDetailsProvider(_:didReceiveMessagesAtIndexRange:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit27RoomDetailsProviderDelegateP04roomdE0_30didReceiveMessagesAtIndexRangeyAA0cdE0C_SnySiGtF">roomDetailsProvider(_:didReceiveMessagesAtIndexRange:)</a>
+                    <a name="/s:13PusherChatkit24MessagesProviderDelegateP08messagesD0_010didReceiveC12AtIndexRangeyAA0cD0C_SnySiGtF"></a>
+                    <a name="//apple_ref/swift/Method/messagesProvider(_:didReceiveMessagesAtIndexRange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit24MessagesProviderDelegateP08messagesD0_010didReceiveC12AtIndexRangeyAA0cD0C_SnySiGtF">messagesProvider(_:didReceiveMessagesAtIndexRange:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -167,7 +167,7 @@ messages.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">roomDetailsProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">roomDetailsProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a></span><span class="p">,</span> <span class="n">didReceiveMessagesAtIndexRange</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">messagesProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">messagesProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesProvider.html">MessagesProvider</a></span><span class="p">,</span> <span class="n">didReceiveMessagesAtIndexRange</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -178,12 +178,12 @@ messages.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>roomDetailsProvider</em>
+                                <em>messagesProvider</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The <code><a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a></code> that called the method.</p>
+                                  <p>The <code><a href="../Classes/MessagesProvider.html">MessagesProvider</a></code> that called the method.</p>
                                 </div>
                               </td>
                             </tr>
@@ -208,9 +208,9 @@ messages.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit27RoomDetailsProviderDelegateP04roomdE0_23didUpdateMessageAtIndex13previousValueyAA0cdE0C_SiAA0J0VtF"></a>
-                    <a name="//apple_ref/swift/Method/roomDetailsProvider(_:didUpdateMessageAtIndex:previousValue:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit27RoomDetailsProviderDelegateP04roomdE0_23didUpdateMessageAtIndex13previousValueyAA0cdE0C_SiAA0J0VtF">roomDetailsProvider(_:didUpdateMessageAtIndex:previousValue:)</a>
+                    <a name="/s:13PusherChatkit24MessagesProviderDelegateP08messagesD0_23didUpdateMessageAtIndex13previousValueyAA0cD0C_SiAA0I0VtF"></a>
+                    <a name="//apple_ref/swift/Method/messagesProvider(_:didUpdateMessageAtIndex:previousValue:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit24MessagesProviderDelegateP08messagesD0_23didUpdateMessageAtIndex13previousValueyAA0cD0C_SiAA0I0VtF">messagesProvider(_:didUpdateMessageAtIndex:previousValue:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -226,7 +226,7 @@ updated.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">roomDetailsProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">roomDetailsProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a></span><span class="p">,</span> <span class="n">didUpdateMessageAtIndex</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">previousValue</span><span class="p">:</span> <span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">messagesProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">messagesProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesProvider.html">MessagesProvider</a></span><span class="p">,</span> <span class="n">didUpdateMessageAtIndex</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">previousValue</span><span class="p">:</span> <span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -237,12 +237,12 @@ updated.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>joinedRoomsProvider</em>
+                                <em>messagesProvider</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The <code><a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a></code> that called the method.</p>
+                                  <p>The <code><a href="../Classes/MessagesProvider.html">MessagesProvider</a></code> that called the method.</p>
                                 </div>
                               </td>
                             </tr>
@@ -279,9 +279,9 @@ updated.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit27RoomDetailsProviderDelegateP04roomdE0_23didRemoveMessageAtIndex13previousValueyAA0cdE0C_SiAA0J0VtF"></a>
-                    <a name="//apple_ref/swift/Method/roomDetailsProvider(_:didRemoveMessageAtIndex:previousValue:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit27RoomDetailsProviderDelegateP04roomdE0_23didRemoveMessageAtIndex13previousValueyAA0cdE0C_SiAA0J0VtF">roomDetailsProvider(_:didRemoveMessageAtIndex:previousValue:)</a>
+                    <a name="/s:13PusherChatkit24MessagesProviderDelegateP08messagesD0_23didRemoveMessageAtIndex13previousValueyAA0cD0C_SiAA0I0VtF"></a>
+                    <a name="//apple_ref/swift/Method/messagesProvider(_:didRemoveMessageAtIndex:previousValue:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit24MessagesProviderDelegateP08messagesD0_23didRemoveMessageAtIndex13previousValueyAA0cD0C_SiAA0I0VtF">messagesProvider(_:didRemoveMessageAtIndex:previousValue:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -297,7 +297,7 @@ removed.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">roomDetailsProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">roomDetailsProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a></span><span class="p">,</span> <span class="n">didRemoveMessageAtIndex</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">previousValue</span><span class="p">:</span> <span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">messagesProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">messagesProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesProvider.html">MessagesProvider</a></span><span class="p">,</span> <span class="n">didRemoveMessageAtIndex</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">previousValue</span><span class="p">:</span> <span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -308,12 +308,12 @@ removed.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>joinedRoomsProvider</em>
+                                <em>messagesProvider</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The <code><a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a></code> that called the method.</p>
+                                  <p>The <code><a href="../Classes/MessagesProvider.html">MessagesProvider</a></code> that called the method.</p>
                                 </div>
                               </td>
                             </tr>

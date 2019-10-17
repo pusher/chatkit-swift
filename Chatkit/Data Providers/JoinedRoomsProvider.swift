@@ -2,8 +2,9 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-/// A provider which maintains a collection of all rooms joined by the user which have been retrieved from
-/// the web service.
+/// A provider which exposes a collection of all rooms joined by the user.
+///
+/// The collection is updated in real time when the user joins or leaves a room.
 public class JoinedRoomsProvider {
     
     // MARK: - Properties
@@ -18,9 +19,6 @@ public class JoinedRoomsProvider {
     private let roomFactory: RoomEntityFactory
     
     /// The array of all rooms joined by the user.
-    ///
-    /// This array contains all rooms joined by the user, retrieved from the web service as a result
-    /// of an internal real time subscription to the web service.
     public var rooms: [Room] {
         return self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
     }

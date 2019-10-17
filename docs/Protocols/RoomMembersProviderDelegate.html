@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>RealTimeProviderState Enumeration Reference</title>
+    <title>RoomMembersProviderDelegate Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Enum/RealTimeProviderState" class="dashAnchor"></a>
-    <a title="RealTimeProviderState Enumeration Reference"></a>
+    <a name="//apple_ref/swift/Protocol/RoomMembersProviderDelegate" class="dashAnchor"></a>
+    <a title="RoomMembersProviderDelegate Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">PusherChatkit Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">PusherChatkit Reference</a>
         <img id="carat" src="../img/carat.png" />
-        RealTimeProviderState Enumeration Reference
+        RoomMembersProviderDelegate Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -132,15 +132,15 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>RealTimeProviderState</h1>
+            <h1>RoomMembersProviderDelegate</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">RealTimeProviderState</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">RoomMembersProviderDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                 </div>
               </div>
-            <p>An enumeration representing the state of a data provider which serves real time data retrieved from
-the Chatkit web service.</p>
+            <p>A delegate protocol that describes methods that will be called by the associated
+<code><a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a></code> when the maintainted collection of room members have changed.</p>
 
           </section>
           <section class="section task-group-section">
@@ -149,9 +149,9 @@ the Chatkit web service.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit21RealTimeProviderStateO9connectedyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/connected" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit21RealTimeProviderStateO9connectedyA2CmF">connected</a>
+                    <a name="/s:13PusherChatkit27RoomMembersProviderDelegateP04roomdE0_06didAddD12AtIndexRangeyAA0cdE0C_SnySiGtF"></a>
+                    <a name="//apple_ref/swift/Method/roomMembersProvider(_:didAddMembersAtIndexRange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit27RoomMembersProviderDelegateP04roomdE0_06didAddD12AtIndexRangeyAA0cdE0C_SnySiGtF">roomMembersProvider(_:didAddMembersAtIndexRange:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -159,16 +159,48 @@ the Chatkit web service.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The case representing an open connection to the Chatkit web service.</p>
+                        <p>Notifies the receiver that new members have been added to the maintened collection of room
+members.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">connected</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">roomMembersProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">roomMembersProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a></span><span class="p">,</span> <span class="n">didAddMembersAtIndexRange</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomMembersProvider</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a></code> that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>range</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The range of added objects in the maintened collection of room members.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -176,9 +208,9 @@ the Chatkit web service.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit21RealTimeProviderStateO8degradedyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/degraded" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit21RealTimeProviderStateO8degradedyA2CmF">degraded</a>
+                    <a name="/s:13PusherChatkit27RoomMembersProviderDelegateP04roomdE0_22didRemoveMemberAtIndex13previousValueyAA0cdE0C_SiAA4UserVtF"></a>
+                    <a name="//apple_ref/swift/Method/roomMembersProvider(_:didRemoveMemberAtIndex:previousValue:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit27RoomMembersProviderDelegateP04roomdE0_22didRemoveMemberAtIndex13previousValueyAA0cdE0C_SiAA4UserVtF">roomMembersProvider(_:didRemoveMemberAtIndex:previousValue:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -186,16 +218,60 @@ the Chatkit web service.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The case representing a problem with the connection to the Chatkit web service.</p>
+                        <p>Notifies the receiver that a room member from the maintened collection of room members have
+been removed.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">degraded</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">roomMembersProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">roomMembersProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a></span><span class="p">,</span> <span class="n">didRemoveMemberAtIndex</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">previousValue</span><span class="p">:</span> <span class="kt"><a href="../Structs/User.html">User</a></span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomMembersProvider</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a></code> that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of the removed object in the maintened collection of room members.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>previousValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The value of the room member prior to the removal.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>

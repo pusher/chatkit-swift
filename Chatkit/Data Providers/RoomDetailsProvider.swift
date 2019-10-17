@@ -2,8 +2,10 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-/// A provider which maintains a collection of messages for a given room which have been retrieved from
-/// the web service.
+/// A provider which exposes a collection of messages for a given room.
+///
+/// Initialy the N most recent messages are available. New messages are automatically added in real time.
+/// More older messages can be added on request.
 public class RoomDetailsProvider {
     
     // MARK: - Properties

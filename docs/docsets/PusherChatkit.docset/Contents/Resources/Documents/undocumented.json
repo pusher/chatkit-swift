@@ -1,12 +1,6 @@
 {
   "warnings": [
-    {
-      "file": "/Users/Grzesiek/Developer/Pusher/Chatkit/Chatkit/Model/Message.swift",
-      "line": 20,
-      "symbol": "Message.lastReadByUsers",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    }
+
   ],
   "source_directory": "/Users/Grzesiek/Developer/Pusher/Chatkit"
 }
