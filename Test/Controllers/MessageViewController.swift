@@ -7,7 +7,7 @@ class MessageViewController: UIViewController {
     
     var room: Room?
     var chatkit: Chatkit?
-    var roomDetailsProvider: RoomDetailsProvider?
+    var messagesProvider: MessagesProvider?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,13 +16,13 @@ class MessageViewController: UIViewController {
             return
         }
         
-        self.chatkit?.createRoomDetailsProvider(for: room) { roomDetailsProvider, error in
+        self.chatkit?.createMessagesProvider(for: room) { messagesProvider, error in
             if let error = error {
                 print("Error: \(error.localizedDescription)")
             }
-            else if let roomDetailsProvider = roomDetailsProvider {
-                self.roomDetailsProvider = roomDetailsProvider
-                self.roomDetailsProvider?.delegate = self
+            else if let messagesProvider = messagesProvider {
+                self.messagesProvider = messagesProvider
+                self.messagesProvider?.delegate = self
                 
                 self.tableView.reloadData()
             }
@@ -32,14 +32,14 @@ class MessageViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let roomDetailsProvider = self.roomDetailsProvider {
+        if let messagesProvider = self.messagesProvider {
             self.tableView.reloadData()
-            roomDetailsProvider.delegate = self
+            messagesProvider.delegate = self
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.roomDetailsProvider?.delegate = nil
+        self.messagesProvider?.delegate = nil
         
         super.viewWillAppear(animated)
     }
@@ -49,16 +49,24 @@ class MessageViewController: UIViewController {
         
         if segue.identifier == "displayMembers" {
             guard let membersViewController = segue.destination as? MembersViewController else {
-                    return
+                return
             }
             
             membersViewController.room = self.room
             membersViewController.chatkit = self.chatkit
         }
+        else if segue.identifier == "displayTypingUsers" {
+            guard let typingUsersViewController = segue.destination as? TypingUsersViewController else {
+                return
+            }
+            
+            typingUsersViewController.room = self.room
+            typingUsersViewController.chatkit = self.chatkit
+        }
     }
     
     @IBAction func loadMore(_ sender: UIBarButtonItem) {
-        self.roomDetailsProvider?.fetchOlderMessages(numberOfMessages: 5)
+        self.messagesProvider?.fetchOlderMessages(numberOfMessages: 5)
     }
     
     private func scrollToBottomIfNeeded() {
@@ -81,14 +89,14 @@ class MessageViewController: UIViewController {
 extension MessageViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.roomDetailsProvider?.numberOfMessages ?? 0
+        return self.messagesProvider?.numberOfMessages ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)
         
         if let messageCell = cell as? TestTableViewCell {
-            let message = self.roomDetailsProvider?.message(at: indexPath.row)
+            let message = self.messagesProvider?.message(at: indexPath.row)
             
             if case let MessagePart.text(_, content) = message!.parts.first! {
                 messageCell.testLabel.text = content
@@ -100,9 +108,9 @@ extension MessageViewController: UITableViewDataSource {
     
 }
 
-extension MessageViewController: RoomDetailsProviderDelegate {
+extension MessageViewController: MessagesProviderDelegate {
     
-    func roomDetailsProvider(_ roomDetailsProvider: RoomDetailsProvider, didReceiveMessagesAtIndexRange range: Range<Int>) {
+    func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveMessagesAtIndexRange range: Range<Int>) {
         if self.tableView.numberOfRows(inSection: 0) == 0 {
             self.tableView.reloadData()
         }
@@ -120,7 +128,7 @@ extension MessageViewController: RoomDetailsProviderDelegate {
         }
     }
     
-    func roomDetailsProvider(_ roomDetailsProvider: RoomDetailsProvider, didUpdateMessageAtIndex index: Int, previousValue: Message) {
+    func messagesProvider(_ messagesProvider: MessagesProvider, didUpdateMessageAtIndex index: Int, previousValue: Message) {
         self.tableView.beginUpdates()
         
         let indexPath = IndexPath(row: index, section: 0)
@@ -129,7 +137,7 @@ extension MessageViewController: RoomDetailsProviderDelegate {
         self.tableView.endUpdates()
     }
     
-    func roomDetailsProvider(_ roomDetailsProvider: RoomDetailsProvider, didRemoveMessageAtIndex index: Int, previousValue: Message) {
+    func messagesProvider(_ messagesProvider: MessagesProvider, didRemoveMessageAtIndex index: Int, previousValue: Message) {
         self.tableView.beginUpdates()
         
         let indexPath = IndexPath(row: index, section: 0)

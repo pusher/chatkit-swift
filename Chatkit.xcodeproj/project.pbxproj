@@ -59,6 +59,8 @@
 		228AD276232675D400AB280B /* NetworkingControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228AD275232675D400AB280B /* NetworkingControllerTests.swift */; };
 		228E1D69230D87660014B1A9 /* IdentifiableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D68230D87660014B1A9 /* IdentifiableTests.swift */; };
 		228E1D6D230D9FDC0014B1A9 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */; };
+		229018312358AE99008FAB07 /* TypingUsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229018302358AE99008FAB07 /* TypingUsersProvider.swift */; };
+		229018352358C2E5008FAB07 /* TypingUsersFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229018342358C2E5008FAB07 /* TypingUsersFactory.swift */; };
 		229093DA22F1DDB4003DDE2C /* PusherChatkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 229093D822F1DDB4003DDE2C /* PusherChatkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		229656FB232FCE920016DA7C /* RoomDetailsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656FA232FCE920016DA7C /* RoomDetailsProvider.swift */; };
 		229A6C8E230BE6F0002997CF /* MessageEntity+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229A6C8D230BE6F0002997CF /* MessageEntity+Identifiable.swift */; };
@@ -180,6 +182,8 @@
 		228AD275232675D400AB280B /* NetworkingControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingControllerTests.swift; sourceTree = "<group>"; };
 		228E1D68230D87660014B1A9 /* IdentifiableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableTests.swift; sourceTree = "<group>"; };
 		228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
+		229018302358AE99008FAB07 /* TypingUsersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingUsersProvider.swift; sourceTree = "<group>"; };
+		229018342358C2E5008FAB07 /* TypingUsersFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingUsersFactory.swift; sourceTree = "<group>"; };
 		229093D522F1DDB4003DDE2C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229093D822F1DDB4003DDE2C /* PusherChatkit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PusherChatkit.h; sourceTree = "<group>"; };
 		229093D922F1DDB4003DDE2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -562,6 +566,7 @@
 				22FC1126233E42CA0013A9D7 /* RoomEntityFactory.swift */,
 				22FC1128233E42F70013A9D7 /* RoomFactory.swift */,
 				228865D0233BCA6B0044BCD8 /* TestDataFactory.swift */,
+				229018342358C2E5008FAB07 /* TypingUsersFactory.swift */,
 				2207CE9E233CE4DE00D85E52 /* UserEntityFactory.swift */,
 				22FC112A233E50030013A9D7 /* UserFactory.swift */,
 			);
@@ -714,6 +719,7 @@
 				2212EC54235725B8002212A4 /* MessagesProvider.swift */,
 				229656FA232FCE920016DA7C /* RoomDetailsProvider.swift */,
 				2212EC5623572A3F002212A4 /* RoomMembersProvider.swift */,
+				229018302358AE99008FAB07 /* TypingUsersProvider.swift */,
 				22FC112C233E50FB0013A9D7 /* UsersProvider.swift */,
 			);
 			path = "Data Providers";
@@ -1088,9 +1094,11 @@
 				22D2A2EA23197E7F0095757C /* ConnectionStatus.swift in Sources */,
 				229A6C8E230BE6F0002997CF /* MessageEntity+Identifiable.swift in Sources */,
 				229A6C92230BE74D002997CF /* RoomEntity+Identifiable.swift in Sources */,
+				229018352358C2E5008FAB07 /* TypingUsersFactory.swift in Sources */,
 				222EA2AF23424A7D004EE90F /* AvailableRoomsProvider.swift in Sources */,
 				222576A12305488E00FAFAEC /* AttachmentPartEntity+CoreDataClass.swift in Sources */,
 				222576B423055E1900FAFAEC /* UserEntity+CoreDataProperties.swift in Sources */,
+				229018312358AE99008FAB07 /* TypingUsersProvider.swift in Sources */,
 				222576962305488E00FAFAEC /* CursorEntity+CoreDataProperties.swift in Sources */,
 				22D2A2D823196B9F0095757C /* PCBaseClient+Extensions.swift in Sources */,
 				22C499C723323F7700DA061F /* FetchedResultsController.swift in Sources */,

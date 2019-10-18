@@ -58,9 +58,7 @@ public class MessagesProvider {
         self.pagedState = .partiallyPopulated
         
         self.roomManagedObjectID = room.objectID
-        self.messageFactory = MessageEntityFactory(roomID: self.roomManagedObjectID,
-                                                   currentUserManagedObjectID: currentUser.objectID,
-                                                   persistenceController: persistenceController)
+        self.messageFactory = MessageEntityFactory(roomID: self.roomManagedObjectID, currentUserID: currentUser.objectID, persistenceController: persistenceController)
         
         let context = persistenceController.mainContext
         let predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.room), self.roomManagedObjectID)

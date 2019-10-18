@@ -5,13 +5,13 @@ import PusherPlatform
 class MessageEntityFactory {
     
     private let roomID: NSManagedObjectID
-    private let currentUserManagedObjectID: NSManagedObjectID
+    private let currentUserID: NSManagedObjectID
     private let persistenceController: PersistenceController
     private var timer: Timer?
     
-    init(roomID: NSManagedObjectID, currentUserManagedObjectID: NSManagedObjectID, persistenceController: PersistenceController) {
+    init(roomID: NSManagedObjectID, currentUserID: NSManagedObjectID, persistenceController: PersistenceController) {
         self.roomID = roomID
-        self.currentUserManagedObjectID = currentUserManagedObjectID
+        self.currentUserID = currentUserID
         self.persistenceController = persistenceController
         self.timer = nil
     }
@@ -25,7 +25,7 @@ class MessageEntityFactory {
                 }
                 
                 (0..<numberOfMessages).forEach {
-                    self.createMessage(in: context, identifier: "\($0)", userID: self.currentUserManagedObjectID, roomID: self.roomID)
+                    self.createMessage(in: context, identifier: "\($0)", userID: self.currentUserID, roomID: self.roomID)
                 }
                 
                 do {
@@ -50,7 +50,7 @@ class MessageEntityFactory {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             self.persistenceController.performBackgroundTask { context in
                 ((lastMessageIdentifier - numberOfMessages)..<lastMessageIdentifier).forEach {
-                    self.createMessage(in: context, identifier: "\($0)", userID: self.currentUserManagedObjectID, roomID: self.roomID)
+                    self.createMessage(in: context, identifier: "\($0)", userID: self.currentUserID, roomID: self.roomID)
                 }
                 
                 do {
@@ -112,7 +112,7 @@ class MessageEntityFactory {
                     return
             }
             
-            self.createMessage(in: context, identifier: "\(lastIdentifier + 1)", userID: self.currentUserManagedObjectID, roomID: self.roomID)
+            self.createMessage(in: context, identifier: "\(lastIdentifier + 1)", userID: self.currentUserID, roomID: self.roomID)
             
             do {
                 try context.save()

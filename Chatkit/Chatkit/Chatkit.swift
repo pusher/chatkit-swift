@@ -33,6 +33,7 @@ public class Chatkit {
     var roomDetailsProviderCache: [UUID : RoomDetailsProvider]
     var messagesProviderCache: [UUID : MessagesProvider]
     var roomMembersProviderCache: [UUID : RoomMembersProvider]
+    var typingUsersProviderCache: [UUID : TypingUsersProvider]
     
     /// The instance locator used to identify the Chatkit instance.
     public var instanceLocator: String {
@@ -61,6 +62,7 @@ public class Chatkit {
         self.roomDetailsProviderCache = [:]
         self.messagesProviderCache = [:]
         self.roomMembersProviderCache = [:]
+        self.typingUsersProviderCache = [:]
         
         self.logger = logger
         
@@ -253,6 +255,26 @@ public class Chatkit {
             }
             
             self.roomMembersProviderCache.removeValue(forKey: identifier)
+        }
+    }
+    
+    /// Creates an instance of `TypingUsersProvider`.
+    ///
+    /// - Parameters:
+    ///     - completionHandler: A completion handler called when an instance of
+    ///     `TypingUsersProvider` has been successfuly created or the instantiation failed due to
+    ///     an error.
+    public func createTypingUsersProvider(for room: Room, completionHandler: @escaping (TypingUsersProvider?, Error?) -> Void) {
+        let identifier = UUID()
+        self.typingUsersProviderCache[identifier] = TypingUsersProvider(room: room, currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController) { error in
+            if let error = error {
+                completionHandler(nil, error)
+            }
+            else if let typingUsersProvider = self.typingUsersProviderCache[identifier] {
+                completionHandler(typingUsersProvider, nil)
+            }
+            
+            self.typingUsersProviderCache.removeValue(forKey: identifier)
         }
     }
     

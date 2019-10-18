@@ -10,6 +10,7 @@
 		2212EC5923575A5A002212A4 /* MembersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC5823575A5A002212A4 /* MembersViewController.swift */; };
 		222EA2B223425823004EE90F /* TestTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EA2B123425823004EE90F /* TestTokenProvider.swift */; };
 		228865CF233BC5940044BCD8 /* RoomListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228865CE233BC5940044BCD8 /* RoomListViewController.swift */; };
+		229018332358B8FB008FAB07 /* TypingUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229018322358B8FB008FAB07 /* TypingUsersViewController.swift */; };
 		229656D6232FC8880016DA7C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656D5232FC8880016DA7C /* AppDelegate.swift */; };
 		229656D8232FC8880016DA7C /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656D7232FC8880016DA7C /* MessageViewController.swift */; };
 		229656DB232FC8880016DA7C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 229656D9232FC8880016DA7C /* Main.storyboard */; };
@@ -26,6 +27,7 @@
 		2212EC5823575A5A002212A4 /* MembersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersViewController.swift; sourceTree = "<group>"; };
 		222EA2B123425823004EE90F /* TestTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTokenProvider.swift; sourceTree = "<group>"; };
 		228865CE233BC5940044BCD8 /* RoomListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListViewController.swift; sourceTree = "<group>"; };
+		229018322358B8FB008FAB07 /* TypingUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingUsersViewController.swift; sourceTree = "<group>"; };
 		229656D2232FC8880016DA7C /* Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		229656D5232FC8880016DA7C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		229656D7232FC8880016DA7C /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 				229656D7232FC8880016DA7C /* MessageViewController.swift */,
 				228865CE233BC5940044BCD8 /* RoomListViewController.swift */,
 				22FC112E233E58600013A9D7 /* RoomPickerViewController.swift */,
+				229018322358B8FB008FAB07 /* TypingUsersViewController.swift */,
 				22FC1130233E5CD80013A9D7 /* UserPickerViewController.swift */,
 			);
 			path = Controllers;
@@ -232,6 +235,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2212EC5923575A5A002212A4 /* MembersViewController.swift in Sources */,
+				229018332358B8FB008FAB07 /* TypingUsersViewController.swift in Sources */,
 				229656D8232FC8880016DA7C /* MessageViewController.swift in Sources */,
 				229656D6232FC8880016DA7C /* AppDelegate.swift in Sources */,
 				22FC112F233E58600013A9D7 /* RoomPickerViewController.swift in Sources */,
