@@ -29,15 +29,11 @@ extension RoomEntity: Snapshotable {
     
     func snapshot() throws -> Room {
         let lastMessage = (try? self.lastMessage?.snapshot()) ?? nil
-        let members = snapshot(self.members)
-        let typingMembers = snapshot(self.typingMembers)
         let userData = UserDataSerializer.deserialize(data: self.userData)
         
         return Room(identifier: self.identifier,
                     name: self.name,
                     isPrivate: self.isPrivate,
-                    members: members,
-                    typingMembers: typingMembers,
                     unreadCount: UInt64(self.unreadCount),
                     lastMessage: lastMessage,
                     userData: userData,

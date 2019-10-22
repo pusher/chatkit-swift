@@ -15,12 +15,6 @@ public struct Room {
     /// A boolean value that determines whether or not the room is private.
     public let isPrivate: Bool
     
-    /// The array of users on the room.
-    public let members: [User]
-    
-    /// The array of users currently typing on the room.
-    public let typingMembers: [User]
-    
     /// The number of unread messages for the given user in this room.
     ///
     /// The value of this property is only defined if the user is a member of the room.
@@ -47,12 +41,10 @@ public struct Room {
     
     // MARK: - Initializers
     
-    init(identifier: String, name: String?, isPrivate: Bool, members: [User], typingMembers: [User], unreadCount: UInt64, lastMessage: Message?, userData: UserData?, createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
+    init(identifier: String, name: String?, isPrivate: Bool, unreadCount: UInt64, lastMessage: Message?, userData: UserData?, createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
         self.identifier = identifier
         self.name = name
         self.isPrivate = isPrivate
-        self.members = members
-        self.typingMembers = typingMembers
         self.unreadCount = unreadCount
         self.lastMessage = lastMessage
         self.userData = userData
@@ -95,8 +87,6 @@ extension Room: Equatable {
         return lhs.identifier == rhs.identifier
             && lhs.name == rhs.name
             && lhs.isPrivate == rhs.isPrivate
-            && lhs.members == rhs.members
-            && lhs.typingMembers == rhs.typingMembers
             && lhs.unreadCount == rhs.unreadCount
             && lhs.lastMessage == rhs.lastMessage
             && lhs.createdAt == rhs.createdAt
