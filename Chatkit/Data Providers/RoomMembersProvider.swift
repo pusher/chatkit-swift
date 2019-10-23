@@ -33,14 +33,10 @@ public class RoomMembersProvider {
     private let fetchedResultsController: FetchedResultsController<UserEntity>
     private let userFactory: UserEntityFactory
     
-    /// The array of all rooms joined by the user.
-    public var members: [User] {
-        return self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
-    }
-    
-    /// Returns the number of room members stored locally in the maintained collection of room members.
-    public var numberOfMembers: Int {
-        return self.fetchedResultsController.numberOfObjects
+    /// The set of all room members for the given room.
+    public var members: Set<User> {
+        let members = self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
+        return Set(members)
     }
     
     // MARK: - Initializers
@@ -68,20 +64,6 @@ public class RoomMembersProvider {
         self.fetchData(completionHandler: completionHandler)
     }
     
-    // MARK: - Methods
-    
-    /// Returns the room member at the given index in the maintained collection of room members.
-    ///
-    /// - Parameters:
-    ///     - index: The index of object that should be returned from the maintained collection of
-    ///     room members.
-    ///
-    /// - Returns: An instance of `User` from the maintained collection of room members or `nil`
-    /// when the object could not be found.
-    public func member(at index: Int) -> User? {
-        return (try? self.fetchedResultsController.object(at: index)?.snapshot()) ?? nil
-    }
-    
     // MARK: - Private methods
     
     private func fetchData(completionHandler: @escaping CompletionHandler) {
@@ -99,7 +81,15 @@ public class RoomMembersProvider {
 extension RoomMembersProvider: FetchedResultsControllerDelegate {
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>) where ResultType : NSManagedObject {
-        self.delegate?.roomMembersProvider(self, didAddMembersAtIndexRange: range)
+        for index in range {
+            guard index < self.fetchedResultsController.numberOfObjects,
+                let entity = self.fetchedResultsController.object(at: index),
+                let user = try? entity.snapshot() else {
+                    continue
+            }
+            
+            self.delegate?.roomMembersProvider(self, userDidJoin: user)
+        }
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
@@ -107,11 +97,11 @@ extension RoomMembersProvider: FetchedResultsControllerDelegate {
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
-        guard let object = object as? UserEntity, let member = try? object.snapshot() else {
+        guard let object = object as? UserEntity, let user = try? object.snapshot() else {
             return
         }
         
-        self.delegate?.roomMembersProvider(self, didRemoveMemberAtIndex: index, previousValue: member)
+        self.delegate?.roomMembersProvider(self, userDidLeave: user)
     }
     
 }
@@ -122,21 +112,19 @@ extension RoomMembersProvider: FetchedResultsControllerDelegate {
 /// `RoomMembersProvider` when the maintainted collection of room members have changed.
 public protocol RoomMembersProviderDelegate: class {
     
-    /// Notifies the receiver that new members have been added to the maintened collection of room
-    /// members.
+    /// Notifies the receiver that a new member have joined the room.
     ///
     /// - Parameters:
     ///     - roomMembersProvider: The `RoomMembersProvider` that called the method.
-    ///     - range: The range of added objects in the maintened collection of room members.
-    func roomMembersProvider(_ roomMembersProvider: RoomMembersProvider, didAddMembersAtIndexRange range: Range<Int>)
+    ///     - user: The user who joined the room.
+    func roomMembersProvider(_ roomMembersProvider: RoomMembersProvider, userDidJoin user: User)
     
-    /// Notifies the receiver that a room member from the maintened collection of room members have
-    /// been removed.
+    /// Notifies the receiver that a user from the maintened collection of room members have
+    /// left the room.
     ///
     /// - Parameters:
     ///     - roomMembersProvider: The `RoomMembersProvider` that called the method.
-    ///     - index: The index of the removed object in the maintened collection of room members.
-    ///     - previousValue: The value of the room member prior to the removal.
-    func roomMembersProvider(_ roomMembersProvider: RoomMembersProvider, didRemoveMemberAtIndex index: Int, previousValue: User)
+    ///     - user: The user who left the room.
+    func roomMembersProvider(_ roomMembersProvider: RoomMembersProvider, userDidLeave user: User)
     
 }
