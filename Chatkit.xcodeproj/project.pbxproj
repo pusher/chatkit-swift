@@ -62,7 +62,6 @@
 		229018312358AE99008FAB07 /* TypingUsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229018302358AE99008FAB07 /* TypingUsersProvider.swift */; };
 		229018352358C2E5008FAB07 /* TypingUsersFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229018342358C2E5008FAB07 /* TypingUsersFactory.swift */; };
 		229093DA22F1DDB4003DDE2C /* PusherChatkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 229093D822F1DDB4003DDE2C /* PusherChatkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		229656FB232FCE920016DA7C /* RoomDetailsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656FA232FCE920016DA7C /* RoomDetailsProvider.swift */; };
 		229A6C8E230BE6F0002997CF /* MessageEntity+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229A6C8D230BE6F0002997CF /* MessageEntity+Identifiable.swift */; };
 		229A6C90230BE744002997CF /* UserEntity+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229A6C8F230BE744002997CF /* UserEntity+Identifiable.swift */; };
 		229A6C92230BE74D002997CF /* RoomEntity+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229A6C91230BE74D002997CF /* RoomEntity+Identifiable.swift */; };
@@ -187,7 +186,6 @@
 		229093D522F1DDB4003DDE2C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229093D822F1DDB4003DDE2C /* PusherChatkit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PusherChatkit.h; sourceTree = "<group>"; };
 		229093D922F1DDB4003DDE2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		229656FA232FCE920016DA7C /* RoomDetailsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsProvider.swift; sourceTree = "<group>"; };
 		229A6C8D230BE6F0002997CF /* MessageEntity+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageEntity+Identifiable.swift"; sourceTree = "<group>"; };
 		229A6C8F230BE744002997CF /* UserEntity+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserEntity+Identifiable.swift"; sourceTree = "<group>"; };
 		229A6C91230BE74D002997CF /* RoomEntity+Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RoomEntity+Identifiable.swift"; sourceTree = "<group>"; };
@@ -717,7 +715,6 @@
 				222EA2AE23424A7D004EE90F /* AvailableRoomsProvider.swift */,
 				222EA2AC23424A11004EE90F /* JoinedRoomsProvider.swift */,
 				2212EC54235725B8002212A4 /* MessagesProvider.swift */,
-				229656FA232FCE920016DA7C /* RoomDetailsProvider.swift */,
 				2212EC5623572A3F002212A4 /* RoomMembersProvider.swift */,
 				229018302358AE99008FAB07 /* TypingUsersProvider.swift */,
 				22FC112C233E50FB0013A9D7 /* UsersProvider.swift */,
@@ -1115,7 +1112,6 @@
 				229A6C90230BE744002997CF /* UserEntity+Identifiable.swift in Sources */,
 				22FFA6AD2355F5A500156A7F /* MessageEntity+CoreDataClass.swift in Sources */,
 				222576A52305488E00FAFAEC /* PartEntity+CoreDataProperties.swift in Sources */,
-				229656FB232FCE920016DA7C /* RoomDetailsProvider.swift in Sources */,
 				22D537D72302D2CE00A92341 /* User.swift in Sources */,
 				22C5F3F32306B9F3009A7383 /* InlinePartEntity+Snapshotable.swift in Sources */,
 				22D537E22302F27200A92341 /* UserEntity+Snapshotable.swift in Sources */,
