@@ -18,14 +18,10 @@ public class JoinedRoomsProvider {
     private let fetchedResultsController: FetchedResultsController<RoomEntity>
     private let roomFactory: RoomEntityFactory
     
-    /// The array of all rooms joined by the user.
-    public var rooms: [Room] {
-        return self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
-    }
-    
-    /// Returns the number of rooms stored locally in the maintained collection of rooms.
-    public var numberOfRooms: Int {
-        return self.fetchedResultsController.numberOfObjects
+    /// The set of all rooms joined by the user.
+    public var rooms: Set<Room> {
+        let rooms = self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
+        return Set(rooms)
     }
     
     // MARK: - Initializers
@@ -56,20 +52,6 @@ public class JoinedRoomsProvider {
         self.fetchData(completionHandler: completionHandler)
     }
     
-    // MARK: - Methods
-    
-    /// Returns the room at the given index in the maintained collection of rooms.
-    /// 
-    /// - Parameters:
-    ///     - index: The index of object that should be returned from the maintained collection of
-    ///     rooms.
-    ///
-    /// - Returns: An instance of `Room` from the maintained collection of rooms or `nil` when
-    /// the object could not be found.
-    public func room(at index: Int) -> Room? {
-        return (try? self.fetchedResultsController.object(at: index)?.snapshot()) ?? nil
-    }
-    
     // MARK: - Private methods
     
     private func fetchData(completionHandler: @escaping CompletionHandler) {
@@ -88,7 +70,15 @@ public class JoinedRoomsProvider {
 
 extension JoinedRoomsProvider: FetchedResultsControllerDelegate {
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>) where ResultType : NSManagedObject {
-        self.delegate?.joinedRoomsProvider(self, didJoinRoomsAtIndexRange: range)
+        for index in range {
+            guard index < self.fetchedResultsController.numberOfObjects,
+                let entity = self.fetchedResultsController.object(at: index),
+                let room = try? entity.snapshot() else {
+                    continue
+            }
+            
+            self.delegate?.joinedRoomsProvider(self, didJoinRoom: room)
+        }
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
@@ -96,7 +86,9 @@ extension JoinedRoomsProvider: FetchedResultsControllerDelegate {
             return
         }
         
-        self.delegate?.joinedRoomsProvider(self, didUpdateRoomAtIndex: index, previousValue: room)
+        // TODO: Generate the old value based on the new value and the changeset.
+        
+        self.delegate?.joinedRoomsProvider(self, didUpdateRoom: room, previousValue: room)
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
@@ -104,7 +96,7 @@ extension JoinedRoomsProvider: FetchedResultsControllerDelegate {
             return
         }
         
-        self.delegate?.joinedRoomsProvider(self, didLeaveRoomAtIndex: index, previousValue: room)
+        self.delegate?.joinedRoomsProvider(self, didLeaveRoom: room)
     }
     
 }
@@ -119,23 +111,22 @@ public protocol JoinedRoomsProviderDelegate: class {
     ///
     /// - Parameters:
     ///     - joinedRoomsProvider: The `JoinedRoomsProvider` that called the method.
-    ///     - range: The range of added objects in the maintened collection of rooms.
-    func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didJoinRoomsAtIndexRange range: Range<Int>)
+    ///     - room: The room joined by the user.
+    func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didJoinRoom room: Room)
     
     /// Notifies the receiver that a room from the maintened collection of rooms have been updated.
     ///
     /// - Parameters:
     ///     - joinedRoomsProvider: The `JoinedRoomsProvider` that called the method.
-    ///     - index: The index of the updated object in the maintened collection of rooms.
+    ///     - room: The updated value of the room.
     ///     - previousValue: The value of the room prior to the update.
-    func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didUpdateRoomAtIndex index: Int, previousValue: Room)
+    func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didUpdateRoom room: Room, previousValue: Room)
     
     /// Notifies the receiver that a room from the maintened collection of rooms have been removed.
     ///
     /// - Parameters:
     ///     - joinedRoomsProvider: The `JoinedRoomsProvider` that called the method.
-    ///     - index: The index of the removed object in the maintened collection of rooms.
-    ///     - previousValue: The value of the room prior to the removal.
-    func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didLeaveRoomAtIndex index: Int, previousValue: Room)
+    ///     - room: The room left by the user.
+    func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didLeaveRoom room: Room)
     
 }
