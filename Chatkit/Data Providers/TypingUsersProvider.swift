@@ -31,14 +31,10 @@ public class TypingUsersProvider {
     private let fetchedResultsController: FetchedResultsController<UserEntity>
     private let typingUsersFactory: TypingUsersFactory
     
-    /// The array of all users currently typing on a given room.
-    public var typingUsers: [User] {
-        return self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
-    }
-    
-    /// Returns the number of users stored locally in the maintained collection of typing users.
-    public var numberOfTypingUsers: Int {
-        return self.fetchedResultsController.numberOfObjects
+    /// The set of all users currently typing on a given room.
+    public var typingUsers: Set<User> {
+        let users = self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
+        return Set(users)
     }
     
     // MARK: - Initializers
@@ -66,20 +62,6 @@ public class TypingUsersProvider {
         self.fetchData(completionHandler: completionHandler)
     }
     
-    // MARK: - Methods
-    
-    /// Returns the users at the given index in the maintained collection of typing users.
-    ///
-    /// - Parameters:
-    ///     - index: The index of object that should be returned from the maintained collection of
-    ///     typing users.
-    ///
-    /// - Returns: An instance of `User` from the maintained collection of typing users or `nil`
-    /// when the object could not be found.
-    public func typingUser(at index: Int) -> User? {
-        return (try? self.fetchedResultsController.object(at: index)?.snapshot()) ?? nil
-    }
-    
     // MARK: - Private methods
     
     private func fetchData(completionHandler: @escaping CompletionHandler) {
@@ -97,7 +79,15 @@ public class TypingUsersProvider {
 extension TypingUsersProvider: FetchedResultsControllerDelegate {
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>) where ResultType : NSManagedObject {
-        self.delegate?.typingUsersProvider(self, didAddTypingUsersAtIndexRange: range)
+        for index in range {
+            guard index < self.fetchedResultsController.numberOfObjects,
+                let entity = self.fetchedResultsController.object(at: index),
+                let user = try? entity.snapshot() else {
+                    continue
+            }
+            
+            self.delegate?.typingUsersProvider(self, userDidStartTyping: user)
+        }
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
@@ -105,11 +95,11 @@ extension TypingUsersProvider: FetchedResultsControllerDelegate {
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
-        guard let object = object as? UserEntity, let member = try? object.snapshot() else {
+        guard let object = object as? UserEntity, let user = try? object.snapshot() else {
             return
         }
         
-        self.delegate?.typingUsersProvider(self, didRemoveTypingUserAtIndex: index, previousValue: member)
+        self.delegate?.typingUsersProvider(self, userDidStopTyping: user)
     }
     
 }
@@ -120,21 +110,18 @@ extension TypingUsersProvider: FetchedResultsControllerDelegate {
 /// `TypingUsersProvider` when the maintainted collection of typing users have changed.
 public protocol TypingUsersProviderDelegate: class {
     
-    /// Notifies the receiver that new members have been added to the maintened collection of room
-    /// members.
+    /// Notifies the receiver that a user started typing in the room.
     ///
     /// - Parameters:
-    ///     - typingUsersProvider: The `TypingUsersProvider` that called the method.
-    ///     - range: The range of added objects in the maintened collection of typing users.
-    func typingUsersProvider(_ typingUsersProvider: TypingUsersProvider, didAddTypingUsersAtIndexRange range: Range<Int>)
+    ///     - roomMembersProvider: The `RoomMembersProvider` that called the method.
+    ///     - user: The user who started typing in the room.
+    func typingUsersProvider(_ typingUsersProvider: TypingUsersProvider, userDidStartTyping user: User)
     
-    /// Notifies the receiver that a room member from the maintened collection of room members have
-    /// been removed.
+    /// Notifies the receiver that a user stopped typing in the room.
     ///
     /// - Parameters:
     ///     - typingUsersProvider: The `TypingUsersProvider` that called the method.
-    ///     - index: The index of the removed object in the maintened collection of typing users.
-    ///     - previousValue: The value of the users prior to the removal.
-    func typingUsersProvider(_ typingUsersProvider: TypingUsersProvider, didRemoveTypingUserAtIndex index: Int, previousValue: User)
+    ///     - user: The user who stopped typing in the room.
+    func typingUsersProvider(_ typingUsersProvider: TypingUsersProvider, userDidStopTyping user: User)
     
 }
