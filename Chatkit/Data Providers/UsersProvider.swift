@@ -10,46 +10,31 @@ public class UsersProvider {
     /// The current state of the provider.
     public private(set) var state: PagedProviderState
     
-    /// The array of all users stored locally.
+    /// The set of all users stored locally.
     ///
     /// This array contains all users retrieved from the web service as a result of an implicit initial call made
     /// to the web service during the initialization of the class as well as all explicit calls triggered
     /// as a result of calling `fetchMoreUsers(numberOfUsers:completionHandler:)` method.
-    public private(set) var users: [User]
+    public private(set) var users: Set<User>
     
     /// The object that is notified when the content of the maintained collection of users changed.
     public weak var delegate: UsersProviderDelegate?
     
+    private var lastIdentifier: String
     private let userFactory: UserFactory
-    
-    /// Returns the number of users stored locally in the maintained collection of users.
-    public var numberOfUsers: Int {
-        return self.users.count
-    }
     
     // MARK: - Initializers
     
     init(completionHandler: @escaping CompletionHandler) {
         self.state = .partiallyPopulated
         self.users = []
+        self.lastIdentifier = "-1"
         self.userFactory = UserFactory()
         
         self.fetchData(completionHandler: completionHandler)
     }
     
     // MARK: - Methods
-    
-    /// Returns the user at the given index in the maintained collection of users.
-    /// 
-    /// - Parameters:
-    ///     - index: The index of object that should be returned from the maintained collection of
-    ///     users.
-    ///
-    /// - Returns: An instance of `User` from the maintained collection of users or `nil` when
-    /// the object could not be found.
-    public func user(at index: Int) -> User? {
-        return index >= 0 && index < self.users.count ? self.users[index] : nil
-    }
     
     /// Triggers an asynchronous call to the web service that extends the maintained collection of users
     /// by the given maximum number of entries.
@@ -71,16 +56,21 @@ public class UsersProvider {
         
         self.state = .fetching
         
-        let lastUserIdentifier = self.users.last?.identifier ?? "-1"
-        
-        self.userFactory.receiveUsers(numberOfUsers: Int(numberOfUsers), lastUserIdentifier: lastUserIdentifier, delay: 1.0) { users in
-            let range = Range<Int>(uncheckedBounds: (lower: self.users.count, upper: self.users.count + users.count))
+        self.userFactory.receiveUsers(numberOfUsers: Int(numberOfUsers), lastUserIdentifier: self.lastIdentifier, delay: 1.0) { users in
+            guard let lastIdentifier = users.last?.identifier else {
+                if let completionHandler = completionHandler {
+                    completionHandler(nil)
+                }
+                
+                return
+            }
             
-            self.users.append(contentsOf: users)
+            self.lastIdentifier = lastIdentifier
+            self.users.formUnion(users)
             
             self.state = .partiallyPopulated
             
-            self.delegate?.usersProvider(self, didAddUsersAtIndexRange: range)
+            self.delegate?.usersProvider(self, didReceiveUsers: Set(users))
             
             if let completionHandler = completionHandler {
                 completionHandler(nil)
@@ -93,8 +83,16 @@ public class UsersProvider {
     private func fetchData(completionHandler: @escaping CompletionHandler) {
         self.state = .fetching
         
-        self.userFactory.receiveUsers(numberOfUsers: 5, lastUserIdentifier: "-1", delay: 1.0) { users in
-            self.users.append(contentsOf: users)
+        self.userFactory.receiveUsers(numberOfUsers: 5, lastUserIdentifier: self.lastIdentifier, delay: 1.0) { users in
+            guard let lastIdentifier = users.last?.identifier else {
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
+                return
+            }
+            
+            self.lastIdentifier = lastIdentifier
+            self.users.formUnion(users)
             
             self.state = .partiallyPopulated
             
@@ -116,7 +114,7 @@ public protocol UsersProviderDelegate: class {
     ///
     /// - Parameters:
     ///     - usersProvider: The `UsersProvider` that called the method.
-    ///     - range: The range of added objects in the maintened collection of users.
-    func usersProvider(_ usersProvider: UsersProvider, didAddUsersAtIndexRange range: Range<Int>)
+    ///     - users: The set of users added to the maintened collection of users.
+    func usersProvider(_ usersProvider: UsersProvider, didReceiveUsers users: Set<User>)
     
 }

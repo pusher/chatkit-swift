@@ -11,47 +11,32 @@ public class AvailableRoomsProvider {
     /// The current state of the provider.
     public private(set) var state: PagedProviderState
     
-    /// The array of all rooms available to the user.
+    /// The set of all rooms available to the user.
     ///
     /// This array contains all rooms available to the user which have been retrieved from the web service
     /// as a result of an implicit initial call made to the web service during the initialization of the class
     /// as well as all explicit calls triggered as a result of calling
     /// `fetchMoreRooms(numberOfRooms:completionHandler:)` method.
-    public private(set) var rooms: [Room]
+    public private(set) var rooms: Set<Room>
     
     /// The object that is notified when the content of the maintained collection of rooms changed.
     public weak var delegate: AvailableRoomsProviderDelegate?
     
+    private var lastIdentifier: String
     private let roomFactory: RoomFactory
-    
-    /// Returns the number of rooms stored locally in the maintained collection of rooms.
-    public var numberOfRooms: Int {
-        return self.rooms.count
-    }
     
     // MARK: - Initializers
     
     init(completionHandler: @escaping CompletionHandler) {
         self.state = .partiallyPopulated
         self.rooms = []
+        self.lastIdentifier = "-1"
         self.roomFactory = RoomFactory()
         
         self.fetchData(completionHandler: completionHandler)
     }
     
     // MARK: - Methods
-    
-    /// Returns the room at the given index in the maintained collection of rooms.
-    /// 
-    /// - Parameters:
-    ///     - index: The index of object that should be returned from the maintained collection of
-    ///     rooms.
-    ///
-    /// - Returns: An instance of `Room` from the maintained collection of rooms or `nil` when
-    /// the object could not be found.
-    public func room(at index: Int) -> Room? {
-        return index >= 0 && index < self.rooms.count ? self.rooms[index] : nil
-    }
     
     /// Triggers an asynchronous call to the web service that extends the maintained collection of rooms
     /// by the given maximum number of entries.
@@ -73,16 +58,21 @@ public class AvailableRoomsProvider {
         
         self.state = .fetching
         
-        let lastRoomIdentifier = self.rooms.last?.identifier ?? "-1"
-        
-        self.roomFactory.receiveRooms(numberOfRooms: Int(numberOfRooms), lastRoomIdentifier: lastRoomIdentifier, delay: 1.0) { rooms in
-            let range = Range<Int>(uncheckedBounds: (lower: self.rooms.count, upper: self.rooms.count + rooms.count))
+        self.roomFactory.receiveRooms(numberOfRooms: Int(numberOfRooms), lastRoomIdentifier: self.lastIdentifier, delay: 1.0) { rooms in
+            guard let lastIdentifier = rooms.last?.identifier else {
+                if let completionHandler = completionHandler {
+                    completionHandler(nil)
+                }
+                
+                return
+            }
             
-            self.rooms.append(contentsOf: rooms)
+            self.lastIdentifier = lastIdentifier
+            self.rooms.formUnion(rooms)
             
             self.state = .partiallyPopulated
             
-            self.delegate?.availableRoomsProvider(self, didAddRoomsAtIndexRange: range)
+            self.delegate?.availableRoomsProvider(self, didReceiveRooms: Set(rooms))
             
             if let completionHandler = completionHandler {
                 completionHandler(nil)
@@ -95,8 +85,16 @@ public class AvailableRoomsProvider {
     private func fetchData(completionHandler: @escaping CompletionHandler) {
         self.state = .fetching
         
-        self.roomFactory.receiveRooms(numberOfRooms: 5, lastRoomIdentifier: "-1", delay: 1.0) { rooms in
-            self.rooms.append(contentsOf: rooms)
+        self.roomFactory.receiveRooms(numberOfRooms: 5, lastRoomIdentifier: self.lastIdentifier, delay: 1.0) { rooms in
+            guard let lastIdentifier = rooms.last?.identifier else {
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
+                return
+            }
+            
+            self.lastIdentifier = lastIdentifier
+            self.rooms.formUnion(rooms)
             
             self.state = .partiallyPopulated
             
@@ -119,7 +117,7 @@ public protocol AvailableRoomsProviderDelegate: class {
     /// - Parameters:
     ///     - availableRoomsProvider: The `AvailableRoomsProvider` that called
     ///     the method.
-    ///     - range: The range of added objects in the maintened collection of rooms.
-    func availableRoomsProvider(_ availableRoomsProvider: AvailableRoomsProvider, didAddRoomsAtIndexRange range: Range<Int>)
+    ///     - rooms: The set of rooms added to the maintened collection of rooms.
+    func availableRoomsProvider(_ availableRoomsProvider: AvailableRoomsProvider, didReceiveRooms rooms: Set<Room>)
     
 }
