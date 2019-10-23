@@ -72,7 +72,7 @@ public class AvailableRoomsProvider {
             
             self.state = .partiallyPopulated
             
-            self.delegate?.availableRoomsProvider(self, didAddRooms: Set(rooms))
+            self.delegate?.availableRoomsProvider(self, didReceiveRooms: Set(rooms))
             
             if let completionHandler = completionHandler {
                 completionHandler(nil)
@@ -118,6 +118,6 @@ public protocol AvailableRoomsProviderDelegate: class {
     ///     - availableRoomsProvider: The `AvailableRoomsProvider` that called
     ///     the method.
     ///     - rooms: The set of rooms added to the maintened collection of rooms.
-    func availableRoomsProvider(_ availableRoomsProvider: AvailableRoomsProvider, didAddRooms rooms: Set<Room>)
+    func availableRoomsProvider(_ availableRoomsProvider: AvailableRoomsProvider, didReceiveRooms rooms: Set<Room>)
     
 }
