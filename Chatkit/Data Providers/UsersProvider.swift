@@ -70,7 +70,7 @@ public class UsersProvider {
             
             self.state = .partiallyPopulated
             
-            self.delegate?.usersProvider(self, didAddUsers: Set(users))
+            self.delegate?.usersProvider(self, didReceiveUsers: Set(users))
             
             if let completionHandler = completionHandler {
                 completionHandler(nil)
@@ -115,6 +115,6 @@ public protocol UsersProviderDelegate: class {
     /// - Parameters:
     ///     - usersProvider: The `UsersProvider` that called the method.
     ///     - users: The set of users added to the maintened collection of users.
-    func usersProvider(_ usersProvider: UsersProvider, didAddUsers users: Set<User>)
+    func usersProvider(_ usersProvider: UsersProvider, didReceiveUsers users: Set<User>)
     
 }
