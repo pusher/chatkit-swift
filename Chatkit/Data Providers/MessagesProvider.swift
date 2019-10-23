@@ -13,11 +13,12 @@ public class MessagesProvider {
     /// The identifier of the room for which the provider manages a collection of messages.
     public let roomIdentifier: String
     
-    /// The current state of the provider related to the real time web service.
-    public private(set) var realTimeState: RealTimeProviderState
-    
-    /// The current state of the provider related to the non-real time web service.
-    public private(set) var pagedState: PagedProviderState
+    /// The current state of the provider.
+    ///
+    /// - Parameters:
+    ///     - realTime: The current state of the provider related to the real time web service.
+    ///     - paged: The current state of the provider related to the non-real time web service.
+    public private(set) var state: (realTime: RealTimeProviderState, paged: PagedProviderState)
     
     /// The object that is notified when the content of the maintained collection of messages changed.
     public weak var delegate: MessagesProviderDelegate? {
@@ -45,17 +46,12 @@ public class MessagesProvider {
         return self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
     }
     
-    /// Returns the number of messages stored locally in the maintained collection of messages.
-    public var numberOfMessages: Int {
-        return self.fetchedResultsController.numberOfObjects
-    }
-    
     // MARK: - Initializers
     
     init(room: Room, currentUser: User, persistenceController: PersistenceController, completionHandler: @escaping CompletionHandler) {
         self.roomIdentifier = room.identifier
-        self.realTimeState = .degraded
-        self.pagedState = .partiallyPopulated
+        self.state.realTime = .degraded
+        self.state.paged = .partiallyPopulated
         
         self.roomManagedObjectID = room.objectID
         self.messageFactory = MessageEntityFactory(roomID: self.roomManagedObjectID, currentUserID: currentUser.objectID, persistenceController: persistenceController)
@@ -78,18 +74,6 @@ public class MessagesProvider {
     
     // MARK: - Methods
     
-    /// Returns the messages at the given index in the maintained collection of messages.
-    ///
-    /// - Parameters:
-    ///     - index: The index of object that should be returned from the maintained collection of
-    ///     messages.
-    ///
-    /// - Returns: An instance of `Message` from the maintained collection of messages or `nil`
-    /// when the object could not be found.
-    public func message(at index: Int) -> Message? {
-        return (try? self.fetchedResultsController.object(at: index)?.snapshot()) ?? nil
-    }
-    
     /// Triggers an asynchronous call to the web service that retrieves a batch of historical
     /// currently not present in the maintained collection of messages.
     ///
@@ -99,7 +83,7 @@ public class MessagesProvider {
     ///     - completionHandler:An optional completion handler called when the call to the web
     ///     service finishes with either a successful result or an error.
     public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: CompletionHandler? = nil) {
-        guard self.pagedState == .partiallyPopulated, let lastMessageIdentifier = self.message(at: 0)?.identifier else {
+        guard self.state.paged == .partiallyPopulated, let lastMessageIdentifier = self.messages.first?.identifier else {
             if let completionHandler = completionHandler {
                 // TODO: Return error
                 completionHandler(nil)
@@ -108,10 +92,10 @@ public class MessagesProvider {
             return
         }
         
-        self.pagedState = .fetching
+        self.state.paged = .fetching
         
         self.messageFactory.receiveOldMessages(numberOfMessages: Int(numberOfMessages), lastMessageIdentifier: lastMessageIdentifier, delay: 1.0) {
-            self.pagedState = .partiallyPopulated
+            self.state.paged = .partiallyPopulated
             
             if let completionHandler = completionHandler {
                 completionHandler(nil)
@@ -122,10 +106,10 @@ public class MessagesProvider {
     // MARK: - Private methods
     
     private func fetchData(completionHandler: @escaping CompletionHandler) {
-        self.realTimeState = .connected
+        self.state.realTime = .connected
         
         self.messageFactory.receiveInitialMessages(numberOfMessages: 10, delay: 1.0) {
-            self.pagedState = .partiallyPopulated
+            self.state.paged = .partiallyPopulated
             
             DispatchQueue.main.async {
                 completionHandler(nil)
@@ -140,7 +124,21 @@ public class MessagesProvider {
 extension MessagesProvider: FetchedResultsControllerDelegate {
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>) where ResultType : NSManagedObject {
-        self.delegate?.messagesProvider(self, didReceiveMessagesAtIndexRange: range)
+        if range.lowerBound == 0 {
+            let messages = self.fetchedResultsController.objects[range].compactMap { try? $0.snapshot() }
+            self.delegate?.messagesProvider(self, didReceiveOlderMessages: messages)
+        }
+        else {
+            for index in range {
+                guard index < self.fetchedResultsController.numberOfObjects,
+                    let entity = self.fetchedResultsController.object(at: index),
+                    let message = try? entity.snapshot() else {
+                        continue
+                }
+                
+                self.delegate?.messagesProvider(self, didReceiveNewMessage: message)
+            }
+        }
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
@@ -148,7 +146,9 @@ extension MessagesProvider: FetchedResultsControllerDelegate {
             return
         }
         
-        self.delegate?.messagesProvider(self, didUpdateMessageAtIndex: index, previousValue: message)
+        // TODO: Generate the old value based on the new value and the changeset.
+        
+        self.delegate?.messagesProvider(self, didUpdateMessage: message, previousValue: message)
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
@@ -156,7 +156,7 @@ extension MessagesProvider: FetchedResultsControllerDelegate {
             return
         }
         
-        self.delegate?.messagesProvider(self, didRemoveMessageAtIndex: index, previousValue: message)
+        self.delegate?.messagesProvider(self, didRemoveMessage: message)
     }
     
 }
@@ -172,25 +172,32 @@ public protocol MessagesProviderDelegate: class {
     ///
     /// - Parameters:
     ///     - messagesProvider: The `MessagesProvider` that called the method.
-    ///     - range: The range of added objects in the maintened collection of messages.
-    func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveMessagesAtIndexRange range: Range<Int>)
+    ///     - messages: The array of older messages received from the web service.
+    func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveOlderMessages messages: [Message])
+    
+    /// Notifies the receiver that new messages have been added to the maintened collection of
+    /// messages.
+    ///
+    /// - Parameters:
+    ///     - messagesProvider: The `MessagesProvider` that called the method.
+    ///     - messages: The new message received from the web service.
+    func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveNewMessage message: Message)
     
     /// Notifies the receiver that a message from the maintened collection of messages have been
     /// updated.
     ///
     /// - Parameters:
     ///     - messagesProvider: The `MessagesProvider` that called the method.
-    ///     - index: The index of the updated object in the maintened collection of messages.
+    ///     - message: The updated value of the message.
     ///     - previousValue: The value of the message prior to the update.
-    func messagesProvider(_ messagesProvider: MessagesProvider, didUpdateMessageAtIndex index: Int, previousValue: Message)
+    func messagesProvider(_ messagesProvider: MessagesProvider, didUpdateMessage message: Message, previousValue: Message)
     
     /// Notifies the receiver that a message from the maintened collection of messages have been
     /// removed.
     ///
     /// - Parameters:
     ///     - messagesProvider: The `MessagesProvider` that called the method.
-    ///     - index: The index of the removed object in the maintened collection of messages.
-    ///     - previousValue: The value of the message prior to the removal.
-    func messagesProvider(_ messagesProvider: MessagesProvider, didRemoveMessageAtIndex index: Int, previousValue: Message)
+    ///     - message: The message removed from the maintened collection of messages.
+    func messagesProvider(_ messagesProvider: MessagesProvider, didRemoveMessage message: Message)
     
 }
