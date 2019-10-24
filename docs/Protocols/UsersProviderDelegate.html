@@ -43,10 +43,13 @@
                 <a href="../Classes/MessagesProvider.html">MessagesProvider</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a>
+                <a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a>
+                <a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TypingUsersViewModel.html">TypingUsersViewModel</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/UsersProvider.html">UsersProvider</a>
@@ -92,10 +95,13 @@
                 <a href="../Protocols/MessagesProviderDelegate.html">MessagesProviderDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/RoomDetailsProviderDelegate.html">RoomDetailsProviderDelegate</a>
+                <a href="../Protocols/RoomMembersProviderDelegate.html">RoomMembersProviderDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/RoomMembersProviderDelegate.html">RoomMembersProviderDelegate</a>
+                <a href="../Protocols/TypingUsersProviderDelegate.html">TypingUsersProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TypingUsersViewModelDelegate.html">TypingUsersViewModelDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/UsersProviderDelegate.html">UsersProviderDelegate</a>
@@ -149,9 +155,9 @@ when the maintainted collection of users have changed.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit21UsersProviderDelegateP05usersD0_06didAddC12AtIndexRangeyAA0cD0C_SnySiGtF"></a>
-                    <a name="//apple_ref/swift/Method/usersProvider(_:didAddUsersAtIndexRange:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit21UsersProviderDelegateP05usersD0_06didAddC12AtIndexRangeyAA0cD0C_SnySiGtF">usersProvider(_:didAddUsersAtIndexRange:)</a>
+                    <a name="/s:13PusherChatkit21UsersProviderDelegateP05usersD0_010didReceiveC0yAA0cD0C_ShyAA4UserVGtF"></a>
+                    <a name="//apple_ref/swift/Method/usersProvider(_:didReceiveUsers:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit21UsersProviderDelegateP05usersD0_010didReceiveC0yAA0cD0C_ShyAA4UserVGtF">usersProvider(_:didReceiveUsers:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -166,7 +172,7 @@ when the maintainted collection of users have changed.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">usersProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">usersProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/UsersProvider.html">UsersProvider</a></span><span class="p">,</span> <span class="n">didAddUsersAtIndexRange</span> <span class="nv">range</span><span class="p">:</span> <span class="kt">Range</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">usersProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">usersProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/UsersProvider.html">UsersProvider</a></span><span class="p">,</span> <span class="n">didReceiveUsers</span> <span class="nv">users</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt"><a href="../Structs/User.html">User</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -189,12 +195,12 @@ when the maintainted collection of users have changed.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>range</em>
+                                <em>users</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The range of added objects in the maintened collection of users.</p>
+                                  <p>The set of users added to the maintened collection of users.</p>
                                 </div>
                               </td>
                             </tr>
@@ -209,7 +215,7 @@ when the maintainted collection of users have changed.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-17)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-24)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>PresenceState Enumeration Reference</title>
+    <title>TypingUsersProvider Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Enum/PresenceState" class="dashAnchor"></a>
-    <a title="PresenceState Enumeration Reference"></a>
+    <a name="//apple_ref/swift/Class/TypingUsersProvider" class="dashAnchor"></a>
+    <a title="TypingUsersProvider Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">PusherChatkit Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">PusherChatkit Reference</a>
         <img id="carat" src="../img/carat.png" />
-        PresenceState Enumeration Reference
+        TypingUsersProvider Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -138,25 +138,34 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>PresenceState</h1>
+            <h1>TypingUsersProvider</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">PresenceState</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TypingUsersProvider</span></code></pre>
 
                 </div>
               </div>
-            <p>An enumeration representing presence state of a user.</p>
+            <p>A provider which exposes a collection of users currently typing on a given room.</p>
+
+<p>The collection is updated in real time when a user begins or ends typing on a room.</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Properties"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <a href="#/Properties">
+                  <h3 class="section-name">Properties</h3>
+                </a>
+              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit13PresenceStateO7unknownyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/unknown" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit13PresenceStateO7unknownyA2CmF">unknown</a>
+                    <a name="/s:13PusherChatkit19TypingUsersProviderC14roomIdentifierSSvp"></a>
+                    <a name="//apple_ref/swift/Property/roomIdentifier" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit19TypingUsersProviderC14roomIdentifierSSvp">roomIdentifier</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -164,14 +173,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The value representing unknown presence state.</p>
+                        <p>The identifier of the room for which the provider manages a collection of typing users.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">unknown</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">roomIdentifier</span><span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -181,9 +190,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit13PresenceStateO7offlineyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/offline" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit13PresenceStateO7offlineyA2CmF">offline</a>
+                    <a name="/s:13PusherChatkit19TypingUsersProviderC5stateAA08RealTimeE5StateOvp"></a>
+                    <a name="//apple_ref/swift/Property/state" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit19TypingUsersProviderC5stateAA08RealTimeE5StateOvp">state</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -191,14 +200,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The value representing offline presence state.</p>
+                        <p>The current state of the provider.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">offline</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Enums/RealTimeProviderState.html">RealTimeProviderState</a></span></code></pre>
 
                         </div>
                       </div>
@@ -208,9 +217,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit13PresenceStateO6onlineyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/online" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit13PresenceStateO6onlineyA2CmF">online</a>
+                    <a name="/s:13PusherChatkit19TypingUsersProviderC8delegateAA0cdE8Delegate_pSgvp"></a>
+                    <a name="//apple_ref/swift/Property/delegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit19TypingUsersProviderC8delegateAA0cdE8Delegate_pSgvp">delegate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -218,14 +227,41 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The value representing online presence state.</p>
+                        <p>The object that is notified when the content of the maintained collection of typing users changed.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">online</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/TypingUsersProviderDelegate.html">TypingUsersProviderDelegate</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit19TypingUsersProviderC06typingD0ShyAA4UserVGvp"></a>
+                    <a name="//apple_ref/swift/Property/typingUsers" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit19TypingUsersProviderC06typingD0ShyAA4UserVGvp">typingUsers</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The set of all users currently typing on a given room.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">typingUsers</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt"><a href="../Structs/User.html">User</a></span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>

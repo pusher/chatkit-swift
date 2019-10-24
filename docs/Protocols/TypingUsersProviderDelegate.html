@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>PresenceState Enumeration Reference</title>
+    <title>TypingUsersProviderDelegate Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Enum/PresenceState" class="dashAnchor"></a>
-    <a title="PresenceState Enumeration Reference"></a>
+    <a name="//apple_ref/swift/Protocol/TypingUsersProviderDelegate" class="dashAnchor"></a>
+    <a title="TypingUsersProviderDelegate Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">PusherChatkit Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">PusherChatkit Reference</a>
         <img id="carat" src="../img/carat.png" />
-        PresenceState Enumeration Reference
+        TypingUsersProviderDelegate Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -138,14 +138,15 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>PresenceState</h1>
+            <h1>TypingUsersProviderDelegate</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">PresenceState</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">TypingUsersProviderDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                 </div>
               </div>
-            <p>An enumeration representing presence state of a user.</p>
+            <p>A delegate protocol that describes methods that will be called by the associated
+<code><a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a></code> when the maintainted collection of typing users have changed.</p>
 
           </section>
           <section class="section task-group-section">
@@ -154,9 +155,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit13PresenceStateO7unknownyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/unknown" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit13PresenceStateO7unknownyA2CmF">unknown</a>
+                    <a name="/s:13PusherChatkit27TypingUsersProviderDelegateP06typingdE0_012userDidStartC0yAA0cdE0C_AA4UserVtF"></a>
+                    <a name="//apple_ref/swift/Method/typingUsersProvider(_:userDidStartTyping:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit27TypingUsersProviderDelegateP06typingdE0_012userDidStartC0yAA0cdE0C_AA4UserVtF">typingUsersProvider(_:userDidStartTyping:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -164,16 +165,47 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The value representing unknown presence state.</p>
+                        <p>Notifies the receiver that a user started typing in the room.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">unknown</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">typingUsersProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">typingUsersProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a></span><span class="p">,</span> <span class="n">userDidStartTyping</span> <span class="nv">user</span><span class="p">:</span> <span class="kt"><a href="../Structs/User.html">User</a></span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomMembersProvider</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a></code> that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>user</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The user who started typing in the room.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
@@ -181,9 +213,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit13PresenceStateO7offlineyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/offline" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit13PresenceStateO7offlineyA2CmF">offline</a>
+                    <a name="/s:13PusherChatkit27TypingUsersProviderDelegateP06typingdE0_011userDidStopC0yAA0cdE0C_AA4UserVtF"></a>
+                    <a name="//apple_ref/swift/Method/typingUsersProvider(_:userDidStopTyping:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit27TypingUsersProviderDelegateP06typingdE0_011userDidStopC0yAA0cdE0C_AA4UserVtF">typingUsersProvider(_:userDidStopTyping:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -191,43 +223,47 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The value representing offline presence state.</p>
+                        <p>Notifies the receiver that a user stopped typing in the room.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">offline</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">typingUsersProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">typingUsersProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a></span><span class="p">,</span> <span class="n">userDidStopTyping</span> <span class="nv">user</span><span class="p">:</span> <span class="kt"><a href="../Structs/User.html">User</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:13PusherChatkit13PresenceStateO6onlineyA2CmF"></a>
-                    <a name="//apple_ref/swift/Element/online" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit13PresenceStateO6onlineyA2CmF">online</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The value representing online presence state.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">online</span></code></pre>
-
-                        </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>typingUsersProvider</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a></code> that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>user</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The user who stopped typing in the room.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
