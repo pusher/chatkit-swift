@@ -8,11 +8,8 @@ public class TypingUsersViewModel {
     /// The text representations of typing users.
     public private(set) var value: String?
     
-    /// The typing users provider used as the source of data.
-    public let provider: TypingUsersProvider
-    
-    /// The placeholder used when a user doeas not have a value set for the name property.
-    public let userNamePlaceholder: String
+    private let provider: TypingUsersProvider
+    private let userNamePlaceholder: String
     
     /// The object that is notified when the content of the `value` property has changed.
     public weak var delegate: TypingUsersViewModelDelegate?
