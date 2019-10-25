@@ -43,10 +43,13 @@
                 <a href="../Classes/MessagesProvider.html">MessagesProvider</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a>
+                <a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a>
+                <a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TypingUsersViewModel.html">TypingUsersViewModel</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/UsersProvider.html">UsersProvider</a>
@@ -92,10 +95,13 @@
                 <a href="../Protocols/MessagesProviderDelegate.html">MessagesProviderDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/RoomDetailsProviderDelegate.html">RoomDetailsProviderDelegate</a>
+                <a href="../Protocols/RoomMembersProviderDelegate.html">RoomMembersProviderDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/RoomMembersProviderDelegate.html">RoomMembersProviderDelegate</a>
+                <a href="../Protocols/TypingUsersProviderDelegate.html">TypingUsersProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TypingUsersViewModelDelegate.html">TypingUsersViewModelDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/UsersProviderDelegate.html">UsersProviderDelegate</a>
@@ -636,54 +642,6 @@ an error.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit0B0C25createRoomDetailsProvider3for17completionHandleryAA0D0V_yAA0deF0CSg_s5Error_pSgtctF"></a>
-                    <a name="//apple_ref/swift/Method/createRoomDetailsProvider(for:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit0B0C25createRoomDetailsProvider3for17completionHandleryAA0D0V_yAA0deF0CSg_s5Error_pSgtctF">createRoomDetailsProvider(for:completionHandler:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Creates an instance of <code><a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a></code>.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">createRoomDetailsProvider</span><span class="p">(</span><span class="k">for</span> <span class="nv">room</span><span class="p">:</span> <span class="kt"><a href="../Structs/Room.html">Room</a></span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a></span><span class="p">?,</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A completion handler called when an instance of
-<code><a href="../Classes/RoomDetailsProvider.html">RoomDetailsProvider</a></code> has been successfuly created or the instantiation failed due to
-an error.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:13PusherChatkit0B0C22createMessagesProvider3for17completionHandleryAA4RoomV_yAA0dE0CSg_s5Error_pSgtctF"></a>
                     <a name="//apple_ref/swift/Method/createMessagesProvider(for:completionHandler:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:13PusherChatkit0B0C22createMessagesProvider3for17completionHandleryAA4RoomV_yAA0dE0CSg_s5Error_pSgtctF">createMessagesProvider(for:completionHandler:)</a>
@@ -777,12 +735,60 @@ an error.</p>
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit0B0C25createTypingUsersProvider3for17completionHandleryAA4RoomV_yAA0deF0CSg_s5Error_pSgtctF"></a>
+                    <a name="//apple_ref/swift/Method/createTypingUsersProvider(for:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit0B0C25createTypingUsersProvider3for17completionHandleryAA4RoomV_yAA0deF0CSg_s5Error_pSgtctF">createTypingUsersProvider(for:completionHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an instance of <code><a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a></code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">createTypingUsersProvider</span><span class="p">(</span><span class="k">for</span> <span class="nv">room</span><span class="p">:</span> <span class="kt"><a href="../Structs/Room.html">Room</a></span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a></span><span class="p">?,</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A completion handler called when an instance of
+<code><a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a></code> has been successfuly created or the instantiation failed due to
+an error.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-17)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-25)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

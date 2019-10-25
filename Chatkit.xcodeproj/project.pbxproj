@@ -106,6 +106,7 @@
 		22FC1129233E42F70013A9D7 /* RoomFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC1128233E42F70013A9D7 /* RoomFactory.swift */; };
 		22FC112B233E50030013A9D7 /* UserFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC112A233E50030013A9D7 /* UserFactory.swift */; };
 		22FC112D233E50FB0013A9D7 /* UsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC112C233E50FB0013A9D7 /* UsersProvider.swift */; };
+		22FD93C02361DD8A00AB841F /* TypingUsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD93BF2361DD8A00AB841F /* TypingUsersViewModel.swift */; };
 		22FFA6AD2355F5A500156A7F /* MessageEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FFA6AB2355F5A500156A7F /* MessageEntity+CoreDataClass.swift */; };
 		22FFA6AE2355F5A500156A7F /* MessageEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FFA6AC2355F5A500156A7F /* MessageEntity+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
@@ -231,6 +232,7 @@
 		22FC1128233E42F70013A9D7 /* RoomFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFactory.swift; sourceTree = "<group>"; };
 		22FC112A233E50030013A9D7 /* UserFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFactory.swift; sourceTree = "<group>"; };
 		22FC112C233E50FB0013A9D7 /* UsersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersProvider.swift; sourceTree = "<group>"; };
+		22FD93BF2361DD8A00AB841F /* TypingUsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingUsersViewModel.swift; sourceTree = "<group>"; };
 		22FFA6AB2355F5A500156A7F /* MessageEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MessageEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		22FFA6AC2355F5A500156A7F /* MessageEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MessageEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -534,6 +536,7 @@
 				22CEBB5322FC6F2B005CB021 /* Types */,
 				22C5F3F82306BD4D009A7383 /* User Data */,
 				22D2A2D3231963BC0095757C /* Utilities */,
+				22FD93BE2361DC3200AB841F /* View Models */,
 			);
 			path = Chatkit;
 			sourceTree = "<group>";
@@ -829,6 +832,14 @@
 			path = Types;
 			sourceTree = "<group>";
 		};
+		22FD93BE2361DC3200AB841F /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				22FD93BF2361DD8A00AB841F /* TypingUsersViewModel.swift */,
+			);
+			path = "View Models";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1097,6 +1108,7 @@
 				222576B423055E1900FAFAEC /* UserEntity+CoreDataProperties.swift in Sources */,
 				229018312358AE99008FAB07 /* TypingUsersProvider.swift in Sources */,
 				222576962305488E00FAFAEC /* CursorEntity+CoreDataProperties.swift in Sources */,
+				22FD93C02361DD8A00AB841F /* TypingUsersViewModel.swift in Sources */,
 				22D2A2D823196B9F0095757C /* PCBaseClient+Extensions.swift in Sources */,
 				22C499C723323F7700DA061F /* FetchedResultsController.swift in Sources */,
 				222EA2AD23424A11004EE90F /* JoinedRoomsProvider.swift in Sources */,

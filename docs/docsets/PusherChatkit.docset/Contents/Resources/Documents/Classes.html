@@ -43,10 +43,13 @@
                 <a href="Classes/MessagesProvider.html">MessagesProvider</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/RoomDetailsProvider.html">RoomDetailsProvider</a>
+                <a href="Classes/RoomMembersProvider.html">RoomMembersProvider</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/RoomMembersProvider.html">RoomMembersProvider</a>
+                <a href="Classes/TypingUsersProvider.html">TypingUsersProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/TypingUsersViewModel.html">TypingUsersViewModel</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/UsersProvider.html">UsersProvider</a>
@@ -92,10 +95,13 @@
                 <a href="Protocols/MessagesProviderDelegate.html">MessagesProviderDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/RoomDetailsProviderDelegate.html">RoomDetailsProviderDelegate</a>
+                <a href="Protocols/RoomMembersProviderDelegate.html">RoomMembersProviderDelegate</a>
               </li>
               <li class="nav-group-task">
-                <a href="Protocols/RoomMembersProviderDelegate.html">RoomMembersProviderDelegate</a>
+                <a href="Protocols/TypingUsersProviderDelegate.html">TypingUsersProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/TypingUsersViewModelDelegate.html">TypingUsersViewModelDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/UsersProviderDelegate.html">UsersProviderDelegate</a>
@@ -277,41 +283,6 @@ More older messages can be added on request.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit19RoomDetailsProviderC"></a>
-                    <a name="//apple_ref/swift/Class/RoomDetailsProvider" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit19RoomDetailsProviderC">RoomDetailsProvider</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>A provider which exposes a collection of messages for a given room.</p>
-
-<p>Initialy the N most recent messages are available. New messages are automatically added in real time.
-More older messages can be added on request.</p>
-
-                        <a href="Classes/RoomDetailsProvider.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomDetailsProvider</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:13PusherChatkit19RoomMembersProviderC"></a>
                     <a name="//apple_ref/swift/Class/RoomMembersProvider" class="dashAnchor"></a>
                     <a class="token" href="#/s:13PusherChatkit19RoomMembersProviderC">RoomMembersProvider</a>
@@ -333,6 +304,40 @@ More older messages can be added on request.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomMembersProvider</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit19TypingUsersProviderC"></a>
+                    <a name="//apple_ref/swift/Class/TypingUsersProvider" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit19TypingUsersProviderC">TypingUsersProvider</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A provider which exposes a collection of users currently typing on a given room.</p>
+
+<p>The collection is updated in real time when a user begins or ends typing on a room.</p>
+
+                        <a href="Classes/TypingUsersProvider.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TypingUsersProvider</span></code></pre>
 
                         </div>
                       </div>
@@ -373,10 +378,42 @@ More older messages can be added on request.</p>
                 </li>
               </ul>
             </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit20TypingUsersViewModelC"></a>
+                    <a name="//apple_ref/swift/Class/TypingUsersViewModel" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit20TypingUsersViewModelC">TypingUsersViewModel</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A view model which provides a text representations of typing users.</p>
+
+                        <a href="Classes/TypingUsersViewModel.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TypingUsersViewModel</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-17)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-10-25)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>AvailableRoomsProviderDelegate Protocol Reference</title>
+    <title>TypingUsersViewModelDelegate Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Protocol/AvailableRoomsProviderDelegate" class="dashAnchor"></a>
-    <a title="AvailableRoomsProviderDelegate Protocol Reference"></a>
+    <a name="//apple_ref/swift/Protocol/TypingUsersViewModelDelegate" class="dashAnchor"></a>
+    <a title="TypingUsersViewModelDelegate Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">PusherChatkit Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">PusherChatkit Reference</a>
         <img id="carat" src="../img/carat.png" />
-        AvailableRoomsProviderDelegate Protocol Reference
+        TypingUsersViewModelDelegate Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -138,15 +138,15 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>AvailableRoomsProviderDelegate</h1>
+            <h1>TypingUsersViewModelDelegate</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">AvailableRoomsProviderDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">TypingUsersViewModelDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                 </div>
               </div>
             <p>A delegate protocol that describes methods that will be called by the associated
-<code><a href="../Classes/AvailableRoomsProvider.html">AvailableRoomsProvider</a></code> when the maintainted collection of rooms have changed.</p>
+<code><a href="../Classes/TypingUsersViewModel.html">TypingUsersViewModel</a></code> when the content of the <code>value</code> property has changed.</p>
 
           </section>
           <section class="section task-group-section">
@@ -155,9 +155,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit30AvailableRoomsProviderDelegateP09availabledE0_010didReceiveD0yAA0cdE0C_ShyAA4RoomVGtF"></a>
-                    <a name="//apple_ref/swift/Method/availableRoomsProvider(_:didReceiveRooms:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit30AvailableRoomsProviderDelegateP09availabledE0_010didReceiveD0yAA0cdE0C_ShyAA4RoomVGtF">availableRoomsProvider(_:didReceiveRooms:)</a>
+                    <a name="/s:13PusherChatkit28TypingUsersViewModelDelegateP06typingdeF14DidUpdateValueyyAA0cdeF0CF"></a>
+                    <a name="//apple_ref/swift/Method/typingUsersViewModelDidUpdateValue(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit28TypingUsersViewModelDelegateP06typingdeF14DidUpdateValueyyAA0cdeF0CF">typingUsersViewModelDidUpdateValue(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -165,14 +165,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Notifies the receiver that new rooms have been added to the maintened collection of rooms.</p>
+                        <p>Notifies the receiver that the content of the <code>value</code> property has changed.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">availableRoomsProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">availableRoomsProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/AvailableRoomsProvider.html">AvailableRoomsProvider</a></span><span class="p">,</span> <span class="n">didReceiveRooms</span> <span class="nv">rooms</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Room.html">Room</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">typingUsersViewModelDidUpdateValue</span><span class="p">(</span><span class="n">_</span> <span class="nv">typingUsersViewModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/TypingUsersViewModel.html">TypingUsersViewModel</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -183,25 +183,12 @@
                             <tr>
                               <td>
                                 <code>
-                                <em>availableRoomsProvider</em>
+                                <em>typingUsersViewModel</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The <code><a href="../Classes/AvailableRoomsProvider.html">AvailableRoomsProvider</a></code> that called
-the method.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>rooms</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The set of rooms added to the maintened collection of rooms.</p>
+                                  <p>The <code><a href="../Classes/TypingUsersViewModel.html">TypingUsersViewModel</a></code> that called the method.</p>
                                 </div>
                               </td>
                             </tr>
