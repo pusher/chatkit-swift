@@ -1,14 +1,18 @@
 import UIKit
 import PusherChatkit
 
-class TypingUsersViewController: UITableViewController {
+class TypingUsersViewController: UIViewController {
+    
+    @IBOutlet weak var typingUsersLabel: UILabel!
     
     var room: Room?
     var chatkit: Chatkit?
-    var typingUsersProvider: TypingUsersProvider?
+    var viewModel: TypingUsersViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.reloadData()
         
         guard let room = self.room else {
             return
@@ -19,10 +23,10 @@ class TypingUsersViewController: UITableViewController {
                 print("Error: \(error.localizedDescription)")
             }
             else if let typingUsersProvider = typingUsersProvider {
-                self.typingUsersProvider = typingUsersProvider
-                self.typingUsersProvider?.delegate = self
+                self.viewModel = TypingUsersViewModel(provider: typingUsersProvider)
+                self.viewModel?.delegate = self
                 
-                self.tableView.reloadData()
+                self.reloadData()
             }
         }
     }
@@ -30,43 +34,25 @@ class TypingUsersViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let typingUsersProvider = self.typingUsersProvider {
-            self.tableView.reloadData()
-            typingUsersProvider.delegate = self
-        }
+        self.viewModel?.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.typingUsersProvider?.delegate = nil
+        self.viewModel?.delegate = nil
         
         super.viewWillAppear(animated)
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.typingUsersProvider?.numberOfTypingUsers ?? 0
+    private func reloadData() {
+        self.typingUsersLabel.text = self.viewModel?.value
     }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "userCell", for: indexPath)
-        
-        if let userCell = cell as? TestTableViewCell {
-            let user = self.typingUsersProvider?.typingUser(at: indexPath.row)
-            
-            userCell.testLabel.text = user?.name
-        }
-        
-        return cell
-    }
+    
 }
 
-extension TypingUsersViewController: TypingUsersProviderDelegate {
+extension TypingUsersViewController: TypingUsersViewModelDelegate {
     
-    func typingUsersProvider(_ typingUsersProvider: TypingUsersProvider, didAddTypingUsersAtIndexRange range: Range<Int>) {
-        self.tableView.reloadData()
-    }
-    
-    func typingUsersProvider(_ typingUsersProvider: TypingUsersProvider, didRemoveTypingUserAtIndex index: Int, previousValue: User) {
-        self.tableView.reloadData()
+    func typingUsersViewModelDidUpdateValue(_ typingUsersViewModel: TypingUsersViewModel) {
+        self.reloadData()
     }
     
 }
