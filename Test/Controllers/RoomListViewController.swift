@@ -46,17 +46,17 @@ class RoomListViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
-//        if segue.identifier == "displayMessages" {
-//            guard let cell = sender as? UITableViewCell,
-//                let indexPath = self.tableView.indexPath(for: cell),
-//                let room = self.roomProvider?.room(at: indexPath.row),
-//                let messageViewController = segue.destination as? MessageViewController else {
-//                    return
-//            }
-//
-//            messageViewController.room = room
-//            messageViewController.chatkit = self.chatkit
-//        }
+        if segue.identifier == "displayMessages" {
+            guard let cell = sender as? UITableViewCell,
+                let indexPath = self.tableView.indexPath(for: cell),
+                let room = self.viewModel?.rooms[indexPath.row],
+                let messageViewController = segue.destination as? MessageViewController else {
+                    return
+            }
+            
+            messageViewController.room = room
+            messageViewController.chatkit = self.chatkit
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -78,7 +78,7 @@ class RoomListViewController: UITableViewController {
 
 extension RoomListViewController: JoinedRoomsViewModelDelegate {
     
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didAddRoomAtIndex index: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didAddRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
         self.tableView.beginUpdates()
         
         let indexPath = IndexPath(row: index, section: 0)
@@ -87,27 +87,27 @@ extension RoomListViewController: JoinedRoomsViewModelDelegate {
         self.tableView.endUpdates()
     }
     
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateRoomAtIndex index: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
         self.tableView.beginUpdates()
         
         let indexPath = IndexPath(row: index, section: 0)
-        
-        switch changeReason {
-        case .dataUpdated:
-            self.tableView.reloadRows(at: [indexPath], with: .fade)
-            
-        case let .messageReceived(previousIndex):
-            let previousIndexPath = IndexPath(row: previousIndex, section: 0)
-            self.tableView.moveRow(at: previousIndexPath, to: indexPath)
-            
-        default:
-            break
-        }
+        self.tableView.reloadRows(at: [indexPath], with: .fade)
         
         self.tableView.endUpdates()
     }
     
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didRemoveRoomAtIndex index: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didMoveRoomFrom oldIndex: Int, to newIndex: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
+        self.tableView.beginUpdates()
+        
+        let oldIndexPath = IndexPath(row: oldIndex, section: 0)
+        let newIndexPath = IndexPath(row: newIndex, section: 0)
+        
+        self.tableView.moveRow(at: oldIndexPath, to: newIndexPath)
+        
+        self.tableView.endUpdates()
+    }
+    
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didRemoveRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
         self.tableView.beginUpdates()
         
         let indexPath = IndexPath(row: index, section: 0)

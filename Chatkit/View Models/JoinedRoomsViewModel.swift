@@ -59,6 +59,8 @@ public class JoinedRoomsViewModel {
     
 }
 
+// MARK: - JoinedRoomsProviderDelegate
+
 extension JoinedRoomsViewModel: JoinedRoomsProviderDelegate {
     
     public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didJoinRoom room: Room) {
@@ -71,7 +73,7 @@ extension JoinedRoomsViewModel: JoinedRoomsProviderDelegate {
             return
         }
         
-        self.delegate?.joinedRoomsViewModel(self, didAddRoomAtIndex: index, changeReason: .userJoined)
+        self.delegate?.joinedRoomsViewModel(self, didAddRoomAt: index, changeReason: .userJoined)
     }
     
     public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didUpdateRoom room: Room, previousValue: Room) {
@@ -88,13 +90,15 @@ extension JoinedRoomsViewModel: JoinedRoomsProviderDelegate {
             return
         }
         
-        if let currentLastMessage = room.lastMessage,
-            let previousLastMessage = previousValue.lastMessage,
-            currentLastMessage.createdAt == previousLastMessage.createdAt {
-            self.delegate?.joinedRoomsViewModel(self, didUpdateRoomAtIndex: currentIndex, changeReason: .messageReceived(previousIndex))
+        let currentMessage = room.lastMessage
+        let previousMessage = previousValue.lastMessage
+        let changeReason: JoinedRoomsViewModel.ChangeReason = currentMessage != nil && currentMessage?.identifier != previousMessage?.identifier ? .messageReceived : .dataUpdated
+        
+        if currentIndex != previousIndex {
+            self.delegate?.joinedRoomsViewModel(self, didMoveRoomFrom: previousIndex, to: currentIndex, changeReason: changeReason)
         }
         else {
-            self.delegate?.joinedRoomsViewModel(self, didUpdateRoomAtIndex: currentIndex, changeReason: .dataUpdated)
+            self.delegate?.joinedRoomsViewModel(self, didUpdateRoomAt: currentIndex, changeReason: changeReason)
         }
     }
     
@@ -105,7 +109,7 @@ extension JoinedRoomsViewModel: JoinedRoomsProviderDelegate {
         
         self.rooms.remove(at: index)
         
-        self.delegate?.joinedRoomsViewModel(self, didRemoveRoomAtIndex: index, changeReason: .userLeft)
+        self.delegate?.joinedRoomsViewModel(self, didRemoveRoomAt: index, changeReason: .userLeft)
     }
     
 }
@@ -122,7 +126,7 @@ public protocol JoinedRoomsViewModelDelegate: class {
     ///     - joinedRoomsViewModel: The `JoinedRoomsViewModel` that called the method.
     ///     - index: The index of the room added to the maintened collection of rooms.
     ///     - changeReason: The semantic reson that triggered the change.
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didAddRoomAtIndex index: Int, changeReason: JoinedRoomsViewModel.ChangeReason)
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didAddRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason)
     
     /// Notifies the receiver that a room from the maintened collection of rooms has been updated.
     ///
@@ -130,7 +134,16 @@ public protocol JoinedRoomsViewModelDelegate: class {
     ///     - joinedRoomsViewModel: The `JoinedRoomsViewModel` that called the method.
     ///     - index: The index of the room updated in the maintened collection of rooms.
     ///     - changeReason: The semantic reson that triggered the change.
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateRoomAtIndex index: Int, changeReason: JoinedRoomsViewModel.ChangeReason)
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason)
+    
+    /// Notifies the receiver that a room from the maintened collection of rooms has been moved.
+    ///
+    /// - Parameters:
+    ///     - joinedRoomsViewModel: The `JoinedRoomsViewModel` that called the method.
+    ///     - oldIndex: The old index of the room before the move.
+    ///     - newIndex: The new index of the room after the move.
+    ///     - changeReason: The semantic reson that triggered the change.
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didMoveRoomFrom oldIndex: Int, to newIndex: Int, changeReason: JoinedRoomsViewModel.ChangeReason)
     
     /// Notifies the receiver that a room from the maintened collection of rooms has been removed.
     ///
@@ -138,7 +151,7 @@ public protocol JoinedRoomsViewModelDelegate: class {
     ///     - joinedRoomsViewModel: The `JoinedRoomsViewModel` that called the method.
     ///     - index: The index of the room removed from the maintened collection of rooms.
     ///     - changeReason: The semantic reson that triggered the change.
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didRemoveRoomAtIndex index: Int, changeReason: JoinedRoomsViewModel.ChangeReason)
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didRemoveRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason)
     
 }
 
@@ -158,10 +171,7 @@ public extension JoinedRoomsViewModel {
         case userLeft
         
         /// A new message received by the room.
-        ///
-        /// - Parameters:
-        ///     - index: The previous index of the room before the message has been received.
-        case messageReceived(Int)
+        case messageReceived
         
         /// A new value of `name` or `userData` properties received by the room.
         case dataUpdated
