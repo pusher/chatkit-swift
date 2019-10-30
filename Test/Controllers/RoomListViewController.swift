@@ -4,7 +4,7 @@ import PusherChatkit
 class RoomListViewController: UITableViewController {
     
     var chatkit: Chatkit?
-    var roomProvider: JoinedRoomsProvider?
+    var viewModel: JoinedRoomsViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,8 +20,8 @@ class RoomListViewController: UITableViewController {
                 print("Error: \(error.localizedDescription)")
             }
             else if let joinedRoomsProvider = joinedRoomsProvider {
-                self.roomProvider = joinedRoomsProvider
-                self.roomProvider?.delegate = self
+                self.viewModel = JoinedRoomsViewModel(provider: joinedRoomsProvider)
+                self.viewModel?.delegate = self
                 
                 self.tableView.reloadData()
             }
@@ -31,14 +31,14 @@ class RoomListViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let roomProvider = self.roomProvider {
+        if let viewModel = self.viewModel {
             self.tableView.reloadData()
-            roomProvider.delegate = self
+            viewModel.delegate = self
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.roomProvider?.delegate = nil
+        self.viewModel?.delegate = nil
         
         super.viewWillAppear(animated)
     }
@@ -49,7 +49,7 @@ class RoomListViewController: UITableViewController {
         if segue.identifier == "displayMessages" {
             guard let cell = sender as? UITableViewCell,
                 let indexPath = self.tableView.indexPath(for: cell),
-                let room = self.roomProvider?.room(at: indexPath.row),
+                let room = self.viewModel?.rooms[indexPath.row],
                 let messageViewController = segue.destination as? MessageViewController else {
                     return
             }
@@ -57,60 +57,37 @@ class RoomListViewController: UITableViewController {
             messageViewController.room = room
             messageViewController.chatkit = self.chatkit
         }
-        else if segue.identifier == "displayRoomPicker" {
-            guard let navigationController = segue.destination as? UINavigationController,
-                let roomPickerViewController = navigationController.topViewController as? RoomPickerViewController else {
-                    return
-            }
-            
-            roomPickerViewController.chatkit = self.chatkit
-        }
-        else if segue.identifier == "displayUserPicker" {
-            guard let navigationController = segue.destination as? UINavigationController,
-                let userPickerViewController = navigationController.topViewController as? UserPickerViewController else {
-                    return
-            }
-            
-            userPickerViewController.chatkit = self.chatkit
-        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.roomProvider?.numberOfRooms ?? 0
+        return self.viewModel?.rooms.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "roomCell", for: indexPath)
         
-        if let roomCell = cell as? TestTableViewCell {
-            let room = self.roomProvider?.room(at: indexPath.row)
+        if let roomCell = cell as? TestTableViewCell, let viewModel = self.viewModel {
+            let room = viewModel.rooms[indexPath.row]
             
-            roomCell.testLabel.text = room?.name
+            roomCell.testLabel.text = room.name
         }
         
         return cell
     }
 }
 
-extension RoomListViewController: JoinedRoomsProviderDelegate {
+extension RoomListViewController: JoinedRoomsViewModelDelegate {
     
-    func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didJoinRoomsAtIndexRange range: Range<Int>) {
-        if self.tableView.numberOfRows(inSection: 0) == 0 {
-            self.tableView.reloadData()
-        }
-        else {
-            self.tableView.beginUpdates()
-            
-            range.forEach {
-                let indexPath = IndexPath(row: $0, section: 0)
-                self.tableView.insertRows(at: [indexPath], with: .fade)
-            }
-            
-            self.tableView.endUpdates()
-        }
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didAddRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
+        self.tableView.beginUpdates()
+        
+        let indexPath = IndexPath(row: index, section: 0)
+        self.tableView.insertRows(at: [indexPath], with: .fade)
+        
+        self.tableView.endUpdates()
     }
     
-    func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didUpdateRoomAtIndex index: Int, previousValue: Room) {
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
         self.tableView.beginUpdates()
         
         let indexPath = IndexPath(row: index, section: 0)
@@ -119,7 +96,18 @@ extension RoomListViewController: JoinedRoomsProviderDelegate {
         self.tableView.endUpdates()
     }
     
-    func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didLeaveRoomAtIndex index: Int, previousValue: Room) {
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didMoveRoomFrom oldIndex: Int, to newIndex: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
+        self.tableView.beginUpdates()
+        
+        let oldIndexPath = IndexPath(row: oldIndex, section: 0)
+        let newIndexPath = IndexPath(row: newIndex, section: 0)
+        
+        self.tableView.moveRow(at: oldIndexPath, to: newIndexPath)
+        
+        self.tableView.endUpdates()
+    }
+    
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didRemoveRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
         self.tableView.beginUpdates()
         
         let indexPath = IndexPath(row: index, section: 0)

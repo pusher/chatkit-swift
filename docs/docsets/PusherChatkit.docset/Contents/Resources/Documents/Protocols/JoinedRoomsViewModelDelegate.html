@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>MessagesProvider Class Reference</title>
+    <title>JoinedRoomsViewModelDelegate Protocol Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/MessagesProvider" class="dashAnchor"></a>
-    <a title="MessagesProvider Class Reference"></a>
+    <a name="//apple_ref/swift/Protocol/JoinedRoomsViewModelDelegate" class="dashAnchor"></a>
+    <a title="JoinedRoomsViewModelDelegate Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">PusherChatkit Docs</a> (100% documented)</p>
@@ -21,7 +21,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">PusherChatkit Reference</a>
         <img id="carat" src="../img/carat.png" />
-        MessagesProvider Class Reference
+        JoinedRoomsViewModelDelegate Protocol Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -147,35 +147,26 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>MessagesProvider</h1>
+            <h1>JoinedRoomsViewModelDelegate</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">MessagesProvider</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">JoinedRoomsViewModelDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
 
                 </div>
               </div>
-            <p>A provider which exposes a collection of messages for a given room.</p>
-
-<p>Initialy the N most recent messages are available. New messages are automatically added in real time.
-More older messages can be added on request.</p>
+            <p>A delegate protocol that describes methods that will be called by the associated
+<code><a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a></code> when the maintainted collection of rooms have changed.</p>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Properties"></a>
-                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
-                <a href="#/Properties">
-                  <h3 class="section-name">Properties</h3>
-                </a>
-              </div>
               <ul>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit16MessagesProviderC14roomIdentifierSSvp"></a>
-                    <a name="//apple_ref/swift/Property/roomIdentifier" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit16MessagesProviderC14roomIdentifierSSvp">roomIdentifier</a>
+                    <a name="/s:13PusherChatkit28JoinedRoomsViewModelDelegateP06joineddeF0_17didAddRoomAtIndex12changeReasonyAA0cdeF0C_SiAH06ChangeO0OtF"></a>
+                    <a name="//apple_ref/swift/Method/joinedRoomsViewModel(_:didAddRoomAtIndex:changeReason:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit28JoinedRoomsViewModelDelegateP06joineddeF0_17didAddRoomAtIndex12changeReasonyAA0cdeF0C_SiAH06ChangeO0OtF">joinedRoomsViewModel(_:didAddRoomAtIndex:changeReason:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -183,41 +174,14 @@ More older messages can be added on request.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The identifier of the room for which the provider manages a collection of messages.</p>
+                        <p>Notifies the receiver that a new room has been added to the maintened collection of rooms.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">roomIdentifier</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:13PusherChatkit16MessagesProviderC5stateAA08RealTimeD5StateO04realG0_AA05PageddH0O5pagedtvp"></a>
-                    <a name="//apple_ref/swift/Property/state" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit16MessagesProviderC5stateAA08RealTimeD5StateO04realG0_AA05PageddH0O5pagedtvp">state</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The current state of the provider.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">state</span><span class="p">:</span> <span class="p">(</span><span class="nv">realTime</span><span class="p">:</span> <span class="kt"><a href="../Enums/RealTimeProviderState.html">RealTimeProviderState</a></span><span class="p">,</span> <span class="nv">paged</span><span class="p">:</span> <span class="kt"><a href="../Enums/PagedProviderState.html">PagedProviderState</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">joinedRoomsViewModel</span><span class="p">(</span><span class="n">_</span> <span class="nv">joinedRoomsViewModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a></span><span class="p">,</span> <span class="n">didAddRoomAtIndex</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">changeReason</span><span class="p">:</span> <span class="kt"><a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a></span><span class="o">.</span><span class="kt">ChangeReason</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -228,24 +192,36 @@ More older messages can be added on request.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>realTime</em>
+                                <em>joinedRoomsViewModel</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The current state of the provider related to the real time web service.</p>
+                                  <p>The <code><a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a></code> that called the method.</p>
                                 </div>
                               </td>
                             </tr>
                             <tr>
                               <td>
                                 <code>
-                                <em>paged</em>
+                                <em>index</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The current state of the provider related to the non-real time web service.</p>
+                                  <p>The index of the room added to the maintened collection of rooms.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>changeReason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The semantic reson that triggered the change.</p>
                                 </div>
                               </td>
                             </tr>
@@ -258,9 +234,9 @@ More older messages can be added on request.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:13PusherChatkit16MessagesProviderC8delegateAA0cD8Delegate_pSgvp"></a>
-                    <a name="//apple_ref/swift/Property/delegate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit16MessagesProviderC8delegateAA0cD8Delegate_pSgvp">delegate</a>
+                    <a name="/s:13PusherChatkit28JoinedRoomsViewModelDelegateP06joineddeF0_20didUpdateRoomAtIndex12changeReasonyAA0cdeF0C_SiAH06ChangeO0OtF"></a>
+                    <a name="//apple_ref/swift/Method/joinedRoomsViewModel(_:didUpdateRoomAtIndex:changeReason:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit28JoinedRoomsViewModelDelegateP06joineddeF0_20didUpdateRoomAtIndex12changeReasonyAA0cdeF0C_SiAH06ChangeO0OtF">joinedRoomsViewModel(_:didUpdateRoomAtIndex:changeReason:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -268,85 +244,14 @@ More older messages can be added on request.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The object that is notified when the content of the maintained collection of messages changed.</p>
+                        <p>Notifies the receiver that a room from the maintened collection of rooms has been updated.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/MessagesProviderDelegate.html">MessagesProviderDelegate</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:13PusherChatkit16MessagesProviderC8messagesSayAA7MessageVGvp"></a>
-                    <a name="//apple_ref/swift/Property/messages" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit16MessagesProviderC8messagesSayAA7MessageVGvp">messages</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The array of messages for the given room.</p>
-
-<p>This array contains all messages for the given room and retrieved from the web service as a result
-of either an internal real time subscription to the web service or explicit calls triggered
-as a result of calling <code><a href="../Classes/MessagesProvider.html#/s:13PusherChatkit16MessagesProviderC010fetchOlderC008numberOfC017completionHandlerySu_ys5Error_pSgcSgtF">fetchOlderMessages(numberOfMessages:completionHandler:)</a></code>
-method.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">messages</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Methods"></a>
-                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
-                <a href="#/Methods">
-                  <h3 class="section-name">Methods</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:13PusherChatkit16MessagesProviderC010fetchOlderC008numberOfC017completionHandlerySu_ys5Error_pSgcSgtF"></a>
-                    <a name="//apple_ref/swift/Method/fetchOlderMessages(numberOfMessages:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit16MessagesProviderC010fetchOlderC008numberOfC017completionHandlerySu_ys5Error_pSgcSgtF">fetchOlderMessages(numberOfMessages:completionHandler:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Triggers an asynchronous call to the web service that retrieves a batch of historical
-currently not present in the maintained collection of messages.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">fetchOlderMessages</span><span class="p">(</span><span class="nv">numberOfMessages</span><span class="p">:</span> <span class="kt">UInt</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:13PusherChatkit17CompletionHandlera">CompletionHandler</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">joinedRoomsViewModel</span><span class="p">(</span><span class="n">_</span> <span class="nv">joinedRoomsViewModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a></span><span class="p">,</span> <span class="n">didUpdateRoomAtIndex</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">changeReason</span><span class="p">:</span> <span class="kt"><a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a></span><span class="o">.</span><span class="kt">ChangeReason</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -357,26 +262,106 @@ currently not present in the maintained collection of messages.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>numberOfMessages</em>
+                                <em>joinedRoomsViewModel</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The maximum number of messages that should be retrieved from
-the web service.</p>
+                                  <p>The <code><a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a></code> that called the method.</p>
                                 </div>
                               </td>
                             </tr>
                             <tr>
                               <td>
                                 <code>
-                                <em>completionHandler</em>
+                                <em>index</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>An optional completion handler called when the call to the web
-service finishes with either a successful result or an error.</p>
+                                  <p>The index of the room updated in the maintened collection of rooms.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>changeReason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The semantic reson that triggered the change.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit28JoinedRoomsViewModelDelegateP06joineddeF0_20didRemoveRoomAtIndex12changeReasonyAA0cdeF0C_SiAH06ChangeO0OtF"></a>
+                    <a name="//apple_ref/swift/Method/joinedRoomsViewModel(_:didRemoveRoomAtIndex:changeReason:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit28JoinedRoomsViewModelDelegateP06joineddeF0_20didRemoveRoomAtIndex12changeReasonyAA0cdeF0C_SiAH06ChangeO0OtF">joinedRoomsViewModel(_:didRemoveRoomAtIndex:changeReason:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Notifies the receiver that a room from the maintened collection of rooms has been removed.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">joinedRoomsViewModel</span><span class="p">(</span><span class="n">_</span> <span class="nv">joinedRoomsViewModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a></span><span class="p">,</span> <span class="n">didRemoveRoomAtIndex</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">changeReason</span><span class="p">:</span> <span class="kt"><a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a></span><span class="o">.</span><span class="kt">ChangeReason</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>joinedRoomsViewModel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a></code> that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of the room removed from the maintened collection of rooms.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>changeReason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The semantic reson that triggered the change.</p>
                                 </div>
                               </td>
                             </tr>
