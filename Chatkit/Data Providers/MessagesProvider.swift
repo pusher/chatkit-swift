@@ -84,7 +84,7 @@ public class MessagesProvider {
     
     // MARK: - Methods
     
-    /// Triggers an asynchronous call to the web service that retrieves a batch of historical
+    /// Triggers an asynchronous call to the web service that retrieves a batch of historical messages
     /// currently not present in the maintained collection of messages.
     ///
     /// - Parameters:

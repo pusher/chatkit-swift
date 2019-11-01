@@ -1,17 +1,32 @@
 import Foundation
 
+/// A view model which provides a collection of message rows representig different elements that might
+/// appear on a message feed
+///
+/// Plese see the documentation of `MessageRow` for the list of possible entries that are managed
+/// by the view model.
 public class MessagesViewModel {
     
     // MARK: - Properties
     
     private let provider: MessagesProvider
     
+    /// The array of entires representig different elements that might appear on a message feed.
+    ///
+    /// Plese see the documentation of `MessageRow` for the list of possible entries that might be held
+    /// by the array.
     public private(set) var rows: [MessageRow]
     
+    /// The current state of the provider used by the view model as the data source.
+    ///
+    /// - Parameters:
+    ///     - realTime: The current state of the provider related to the real time web service.
+    ///     - paged: The current state of the provider related to the non-real time web service.
     public var state: (realTime: RealTimeProviderState, paged: PagedProviderState) {
         return self.provider.state
     }
     
+    /// The object that is notified when the content of the maintained collection of message rows changed.
     public weak var delegate: MessagesViewModelDelegate? {
         didSet {
             if delegate == nil {
@@ -25,6 +40,10 @@ public class MessagesViewModel {
     
     // MARK: - Initializers
     
+    /// Designated initializer for the class.
+    ///
+    /// - Parameters:
+    ///     - provider: The messages provider used as the source of data.
     public init(provider: MessagesProvider) {
         self.rows = []
         
@@ -36,6 +55,14 @@ public class MessagesViewModel {
     
     // MARK: - Methods
     
+    /// Triggers an asynchronous call to the web service that retrieves a batch of historical messages
+    /// currently not present in the maintained collection of messages.
+    ///
+    /// - Parameters:
+    ///     - numberOfMessages: The maximum number of messages that should be retrieved from
+    ///     the web service.
+    ///     - completionHandler:An optional completion handler called when the call to the web
+    ///     service finishes with either a successful result or an error.
     public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: CompletionHandler? = nil) {
         guard self.provider.state.paged == .partiallyPopulated else {
             if let completionHandler = completionHandler {
@@ -366,12 +393,46 @@ extension MessagesViewModel: MessagesProviderDelegate {
 
 // MARK: - Delegate
 
+/// A delegate protocol that describes methods that will be called by the associated
+/// `MessagesViewModelDelegate` when the maintained collection of message rows has changed.
 public protocol MessagesViewModelDelegate: class {
     
+    /// Notifies the receiver that a new set of changes to the maintened collection of message rows
+    /// will be processed.
+    ///
+    /// - Parameters:
+    ///     - messagesViewModel: The `MessagesViewModel` that called the method.
     func messagesViewModelWillChangeContent(_ messagesViewModel: MessagesViewModel)
+    
+    /// Notifies the receiver that a new row has been added to the maintened collection of message rows.
+    ///
+    /// - Parameters:
+    ///     - messagesViewModel: The `MessagesViewModel` that called the method.
+    ///     - index: The index of the row added to the maintened collection of message rows.
+    ///     - changeReason: The semantic reson that triggered the change.
     func messagesViewModel(_ messagesViewModel: MessagesViewModel, didAddRowAt index: Int, changeReason: MessagesViewModel.ChangeReason)
+    
+    /// Notifies the receiver that a row from the maintened collection of message rows has been updated.
+    ///
+    /// - Parameters:
+    ///     - messagesViewModel: The `MessagesViewModel` that called the method.
+    ///     - index: The index of the row updated in the maintened collection of message rows.
+    ///     - changeReason: The semantic reson that triggered the change.
     func messagesViewModel(_ messagesViewModel: MessagesViewModel, didUpdateRowAt index: Int, changeReason: MessagesViewModel.ChangeReason)
+    
+    /// Notifies the receiver that a row from the maintened collection of message rows has been removed.
+    ///
+    /// - Parameters:
+    ///     - messagesViewModel: The `MessagesViewModel` that called the method.
+    ///     - index: The index of the row removed from the maintened collection of message rows.
+    ///     - changeReason: The semantic reson that triggered the change.
     func messagesViewModel(_ messagesViewModel: MessagesViewModel, didRemoveRowAt index: Int, changeReason: MessagesViewModel.ChangeReason)
+    
+    /// Notifies the receiver that a set of changes to the maintened collection of message rows
+    /// has finished processing.
+    ///
+    /// - Parameters:
+    ///     - messagesViewModel: The `MessagesViewModel` that called the method.
     func messagesViewModelDidChangeContent(_ messagesViewModel: MessagesViewModel)
     
 }
@@ -380,10 +441,31 @@ public protocol MessagesViewModelDelegate: class {
 
 public extension MessagesViewModel {
     
+    /// An enumeration representing an entry is the list of rows of the message feed provided
+    /// by the `MessagesViewModel` class.
     enum MessageRow: Equatable {
         
+        /// An entry representing a loading indicator.
+        ///
+        /// The loading indicator is present of the message feed when a new batch of messages is being
+        /// downloaded from the web service.
         case loadingIndicator
+        
+        /// An entry representing a date header.
+        ///
+        /// The date header is present of the message feed to indicatate a new batch of messages sent
+        /// on a different day.
+        ///
+        /// - Parameters:
+        ///     - date: The date of the header.
         case dateHeader(Date)
+        
+        /// An entry representing a message.
+        ///
+        /// - Parameters:
+        ///     - message: The message.
+        ///     - groupPosition: The position of the message in the group of messages sent
+        ///     by the same user.
         case message(Message, GroupPosition)
         
     }
@@ -394,11 +476,22 @@ public extension MessagesViewModel {
 
 public extension MessagesViewModel.MessageRow {
     
+    /// An enumeration representing a position of a `MessageRow` in the group of messages sent
+    /// by the same user.
     enum GroupPosition {
         
+        /// The only message send by the user.
+        ///
+        /// No grouping provided.
         case single
+        
+        /// The top message in the group of messages sent by the user.
         case top
+        
+        /// One of the middle messages in the group of messages sent by the user.
         case middle
+        
+        /// The bottom message in the group of messages sent by the user.
         case bottom
         
     }
@@ -410,11 +503,20 @@ public extension MessagesViewModel.MessageRow {
 public extension MessagesViewModel {
     
     // TODO: Define change reasons.
+    /// An enumeration representing semantic reasons that might trigger a change
+    /// in the `MessagesViewModel` class.
     enum ChangeReason {
         
+        /// A new message received by the room.
         case messageReceived
+        
+        /// A message removed in the room.
         case messageRemoved
+        
+        /// A message has updated its content.
         case dataUpdated
+        
+        /// A new fetch of historical messages has been triggered.
         case messageHistoryFetch
         
     }
