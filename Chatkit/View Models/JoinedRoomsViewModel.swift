@@ -15,6 +15,15 @@ public class JoinedRoomsViewModel {
     /// The array of all rooms joined by the user.
     public private(set) var rooms: [Room]
     
+    /// The current state of the provider used by the view model as the data source.
+    ///
+    /// - Parameters:
+    ///     - realTime: The current state of the provider related to the real time web service.
+    ///     - paged: The current state of the provider related to the non-real time web service.
+    public var state: RealTimeProviderState {
+        return self.provider.state
+    }
+    
     /// The object that is notified when the content of the maintained collection of rooms changed.
     public weak var delegate: JoinedRoomsViewModelDelegate?
     
