@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2212EC5923575A5A002212A4 /* MembersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC5823575A5A002212A4 /* MembersViewController.swift */; };
 		222EA2B223425823004EE90F /* TestTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EA2B123425823004EE90F /* TestTokenProvider.swift */; };
+		226A15E2236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226A15E1236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift */; };
 		228865CF233BC5940044BCD8 /* RoomListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228865CE233BC5940044BCD8 /* RoomListViewController.swift */; };
 		229018332358B8FB008FAB07 /* TypingUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229018322358B8FB008FAB07 /* TypingUsersViewController.swift */; };
 		229656D6232FC8880016DA7C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656D5232FC8880016DA7C /* AppDelegate.swift */; };
@@ -24,6 +25,7 @@
 /* Begin PBXFileReference section */
 		2212EC5823575A5A002212A4 /* MembersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersViewController.swift; sourceTree = "<group>"; };
 		222EA2B123425823004EE90F /* TestTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTokenProvider.swift; sourceTree = "<group>"; };
+		226A15E1236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicatorTableViewCell.swift; sourceTree = "<group>"; };
 		228865CE233BC5940044BCD8 /* RoomListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListViewController.swift; sourceTree = "<group>"; };
 		229018322358B8FB008FAB07 /* TypingUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingUsersViewController.swift; sourceTree = "<group>"; };
 		229656D2232FC8880016DA7C /* Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Test.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,6 +132,7 @@
 		229656FC232FD2AD0016DA7C /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				226A15E1236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift */,
 				229656FD232FD2C40016DA7C /* TestTableViewCell.swift */,
 			);
 			path = Cells;
@@ -232,6 +235,7 @@
 				229018332358B8FB008FAB07 /* TypingUsersViewController.swift in Sources */,
 				229656D8232FC8880016DA7C /* MessageViewController.swift in Sources */,
 				229656D6232FC8880016DA7C /* AppDelegate.swift in Sources */,
+				226A15E2236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift in Sources */,
 				229656FE232FD2C40016DA7C /* TestTableViewCell.swift in Sources */,
 				222EA2B223425823004EE90F /* TestTokenProvider.swift in Sources */,
 				228865CF233BC5940044BCD8 /* RoomListViewController.swift in Sources */,
@@ -311,7 +315,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -366,7 +370,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

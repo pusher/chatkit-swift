@@ -7,39 +7,45 @@ class MessageViewController: UIViewController {
     
     var room: Room?
     var chatkit: Chatkit?
-    var messagesProvider: MessagesProvider?
+    var viewModel: MessagesViewModel?
+    
+    var dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d MMMM yyyy"
+        return dateFormatter
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        guard let room = self.room else {
-//            return
-//        }
-//        
-//        self.chatkit?.createMessagesProvider(for: room) { messagesProvider, error in
-//            if let error = error {
-//                print("Error: \(error.localizedDescription)")
-//            }
-//            else if let messagesProvider = messagesProvider {
-//                self.messagesProvider = messagesProvider
-//                self.messagesProvider?.delegate = self
-//                
-//                self.tableView.reloadData()
-//            }
-//        }
+        guard let room = self.room else {
+            return
+        }
+        
+        self.chatkit?.createMessagesProvider(for: room) { messagesProvider, error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+            }
+            else if let messagesProvider = messagesProvider {
+                self.viewModel = MessagesViewModel(provider: messagesProvider)
+                self.viewModel?.delegate = self
+                
+                self.tableView.reloadData()
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-//        if let messagesProvider = self.messagesProvider {
-//            self.tableView.reloadData()
-//            messagesProvider.delegate = self
-//        }
+        if let viewModel = self.viewModel {
+            self.tableView.reloadData()
+            viewModel.delegate = self
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-//        self.messagesProvider?.delegate = nil
+        self.viewModel?.delegate = nil
         
         super.viewWillAppear(animated)
     }
@@ -66,7 +72,7 @@ class MessageViewController: UIViewController {
     }
     
     @IBAction func loadMore(_ sender: UIBarButtonItem) {
-        self.messagesProvider?.fetchOlderMessages(numberOfMessages: 5)
+        self.viewModel?.fetchOlderMessages(numberOfMessages: 5)
     }
     
     private func scrollToBottomIfNeeded() {
@@ -84,67 +90,94 @@ class MessageViewController: UIViewController {
         }
     }
     
+    private func configureLoadingIndicatorCell(_ cell: UITableViewCell) {
+        guard let cell = cell as? LoadingIndicatorTableViewCell else {
+            return
+        }
+        
+        cell.loadingIndicator.startAnimating()
+    }
+    
+    private func configureDateHeaderCell(_ cell: UITableViewCell, date: Date) {
+        guard let cell = cell as? TestTableViewCell else {
+            return
+        }
+        
+        cell.testLabel.text = self.dateFormatter.string(from: date)
+    }
+    
+    private func configureMessageCell(_ cell: UITableViewCell, message: Message, groupPosition: MessagesViewModel.MessageRow.GroupPosition) {
+        // TODO: Render other message parts in future.
+        guard let cell = cell as? TestTableViewCell,
+            let messagePart = message.parts.first else {
+                return
+        }
+        
+        if case let MessagePart.text(_, content) = messagePart {
+            cell.testLabel.text = content
+        }
+    }
+    
 }
 
 extension MessageViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return self.messagesProvider?.numberOfMessages ?? 0
-        return 0
+        return self.viewModel?.rows.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)
         
-//        if let messageCell = cell as? TestTableViewCell {
-//            let message = self.messagesProvider?.message(at: indexPath.row)
-//
-//            if case let MessagePart.text(_, content) = message!.parts.first! {
-//                messageCell.testLabel.text = content
-//            }
-//        }
+        guard let row = self.viewModel?.rows[indexPath.row] else {
+            return cell
+        }
         
-        return cell
+        switch row {
+        case .loadingIndicator:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "loadingIndicatorCell", for: indexPath)
+            self.configureLoadingIndicatorCell(cell)
+            return cell
+            
+        case let .dateHeader(date):
+            let cell = tableView.dequeueReusableCell(withIdentifier: "dateHeaderCell", for: indexPath)
+            self.configureDateHeaderCell(cell, date: date)
+            return cell
+        
+        case let .message(message, groupPosition):
+            let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)
+            self.configureMessageCell(cell, message: message, groupPosition: groupPosition)
+            return cell
+        }
     }
     
 }
 
-//extension MessageViewController: MessagesProviderDelegate {
-//
-//    func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveMessagesAtIndexRange range: Range<Int>) {
-//        if self.tableView.numberOfRows(inSection: 0) == 0 {
-//            self.tableView.reloadData()
-//        }
-//        else {
-//            self.tableView.beginUpdates()
-//
-//            range.forEach {
-//                let indexPath = IndexPath(row: $0, section: 0)
-//                self.tableView.insertRows(at: [indexPath], with: .fade)
-//            }
-//
-//            self.tableView.endUpdates()
-//
-//            self.scrollToBottomIfNeeded()
-//        }
-//    }
-//
-//    func messagesProvider(_ messagesProvider: MessagesProvider, didUpdateMessageAtIndex index: Int, previousValue: Message) {
-//        self.tableView.beginUpdates()
-//
-//        let indexPath = IndexPath(row: index, section: 0)
-//        self.tableView.reloadRows(at: [indexPath], with: .fade)
-//
-//        self.tableView.endUpdates()
-//    }
-//
-//    func messagesProvider(_ messagesProvider: MessagesProvider, didRemoveMessageAtIndex index: Int, previousValue: Message) {
-//        self.tableView.beginUpdates()
-//
-//        let indexPath = IndexPath(row: index, section: 0)
-//        self.tableView.deleteRows(at: [indexPath], with: .fade)
-//
-//        self.tableView.endUpdates()
-//    }
-//
-//}
+extension MessageViewController: MessagesViewModelDelegate {
+    
+    func messagesViewModelWillChangeContent(_ messagesViewModel: MessagesViewModel) {
+        self.tableView.beginUpdates()
+    }
+    
+    func messagesViewModel(_ messagesViewModel: MessagesViewModel, didAddRowAt index: Int, changeReason: MessagesViewModel.ChangeReason) {
+        let indexPath = IndexPath(row: index, section: 0)
+        self.tableView.insertRows(at: [indexPath], with: .fade)
+        
+//        self.scrollToBottomIfNeeded()
+    }
+    
+    func messagesViewModel(_ messagesViewModel: MessagesViewModel, didUpdateRowAt index: Int, changeReason: MessagesViewModel.ChangeReason) {
+        let indexPath = IndexPath(row: index, section: 0)
+        self.tableView.reloadRows(at: [indexPath], with: .fade)
+    }
+    
+    func messagesViewModel(_ messagesViewModel: MessagesViewModel, didRemoveRowAt index: Int, changeReason: MessagesViewModel.ChangeReason) {
+        let indexPath = IndexPath(row: index, section: 0)
+        self.tableView.deleteRows(at: [indexPath], with: .fade)
+    }
+    
+    func messagesViewModelDidChangeContent(_ messagesViewModel: MessagesViewModel) {
+        self.tableView.endUpdates()
+    }
+    
+}
