@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>MessagesViewModelDelegate Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/MessagesViewModelDelegate" class="dashAnchor"></a>
+    <a title="MessagesViewModelDelegate Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">PusherChatkit Docs</a> (100% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">PusherChatkit Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        MessagesViewModelDelegate Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/AvailableRoomsProvider.html">AvailableRoomsProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Chatkit.html">Chatkit</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/JoinedRoomsViewModel/ChangeReason.html">– ChangeReason</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MessagesProvider.html">MessagesProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MessagesViewModel.html">MessagesViewModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MessagesViewModel/MessageRow.html">– MessageRow</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MessagesViewModel/ChangeReason.html">– ChangeReason</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TypingUsersViewModel.html">TypingUsersViewModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/UsersProvider.html">UsersProvider</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/ConnectionStatus.html">ConnectionStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/MessagePart.html">MessagePart</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/NetworkingError.html">NetworkingError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/PagedProviderState.html">PagedProviderState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/PresenceState.html">PresenceState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/RealTimeProviderState.html">RealTimeProviderState</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/AvailableRoomsProviderDelegate.html">AvailableRoomsProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ChatkitDelegate.html">ChatkitDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/JoinedRoomsProviderDelegate.html">JoinedRoomsProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/JoinedRoomsViewModelDelegate.html">JoinedRoomsViewModelDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/MessagesProviderDelegate.html">MessagesProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/MessagesViewModelDelegate.html">MessagesViewModelDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/RoomMembersProviderDelegate.html">RoomMembersProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TypingUsersProviderDelegate.html">TypingUsersProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TypingUsersViewModelDelegate.html">TypingUsersViewModelDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/UsersProviderDelegate.html">UsersProviderDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/Message.html">Message</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Room.html">Room</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/User.html">User</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:13PusherChatkit17CompletionHandlera">CompletionHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:13PusherChatkit8UserDataa">UserData</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>MessagesViewModelDelegate</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">MessagesViewModelDelegate</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+
+                </div>
+              </div>
+            <p>A delegate protocol that describes methods that will be called by the associated
+<code>MessagesViewModelDelegate</code> when the maintained collection of message rows has changed.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit25MessagesViewModelDelegateP08messagesdE17WillChangeContentyyAA0cdE0CF"></a>
+                    <a name="//apple_ref/swift/Method/messagesViewModelWillChangeContent(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit25MessagesViewModelDelegateP08messagesdE17WillChangeContentyyAA0cdE0CF">messagesViewModelWillChangeContent(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Notifies the receiver that a new set of changes to the maintened collection of message rows
+will be processed.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">messagesViewModelWillChangeContent</span><span class="p">(</span><span class="n">_</span> <span class="nv">messagesViewModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>messagesViewModel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></code> that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit25MessagesViewModelDelegateP08messagesdE0_11didAddRowAt12changeReasonyAA0cdE0C_SiAH06ChangeM0OtF"></a>
+                    <a name="//apple_ref/swift/Method/messagesViewModel(_:didAddRowAt:changeReason:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit25MessagesViewModelDelegateP08messagesdE0_11didAddRowAt12changeReasonyAA0cdE0C_SiAH06ChangeM0OtF">messagesViewModel(_:didAddRowAt:changeReason:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Notifies the receiver that a new row has been added to the maintened collection of message rows.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">messagesViewModel</span><span class="p">(</span><span class="n">_</span> <span class="nv">messagesViewModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></span><span class="p">,</span> <span class="n">didAddRowAt</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">changeReason</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></span><span class="o">.</span><span class="kt">ChangeReason</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>messagesViewModel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></code> that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of the row added to the maintened collection of message rows.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>changeReason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The semantic reson that triggered the change.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit25MessagesViewModelDelegateP08messagesdE0_14didUpdateRowAt12changeReasonyAA0cdE0C_SiAH06ChangeM0OtF"></a>
+                    <a name="//apple_ref/swift/Method/messagesViewModel(_:didUpdateRowAt:changeReason:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit25MessagesViewModelDelegateP08messagesdE0_14didUpdateRowAt12changeReasonyAA0cdE0C_SiAH06ChangeM0OtF">messagesViewModel(_:didUpdateRowAt:changeReason:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Notifies the receiver that a row from the maintened collection of message rows has been updated.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">messagesViewModel</span><span class="p">(</span><span class="n">_</span> <span class="nv">messagesViewModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></span><span class="p">,</span> <span class="n">didUpdateRowAt</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">changeReason</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></span><span class="o">.</span><span class="kt">ChangeReason</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>messagesViewModel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></code> that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of the row updated in the maintened collection of message rows.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>changeReason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The semantic reson that triggered the change.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit25MessagesViewModelDelegateP08messagesdE0_14didRemoveRowAt12changeReasonyAA0cdE0C_SiAH06ChangeM0OtF"></a>
+                    <a name="//apple_ref/swift/Method/messagesViewModel(_:didRemoveRowAt:changeReason:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit25MessagesViewModelDelegateP08messagesdE0_14didRemoveRowAt12changeReasonyAA0cdE0C_SiAH06ChangeM0OtF">messagesViewModel(_:didRemoveRowAt:changeReason:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Notifies the receiver that a row from the maintened collection of message rows has been removed.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">messagesViewModel</span><span class="p">(</span><span class="n">_</span> <span class="nv">messagesViewModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></span><span class="p">,</span> <span class="n">didRemoveRowAt</span> <span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">changeReason</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></span><span class="o">.</span><span class="kt">ChangeReason</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>messagesViewModel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></code> that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>index</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The index of the row removed from the maintened collection of message rows.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>changeReason</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The semantic reson that triggered the change.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit25MessagesViewModelDelegateP08messagesdE16DidChangeContentyyAA0cdE0CF"></a>
+                    <a name="//apple_ref/swift/Method/messagesViewModelDidChangeContent(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit25MessagesViewModelDelegateP08messagesdE16DidChangeContentyyAA0cdE0CF">messagesViewModelDidChangeContent(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Notifies the receiver that a set of changes to the maintened collection of message rows
+has finished processing.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">messagesViewModelDidChangeContent</span><span class="p">(</span><span class="n">_</span> <span class="nv">messagesViewModel</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>messagesViewModel</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></code> that called the method.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-11-01)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

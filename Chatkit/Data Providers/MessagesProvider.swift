@@ -34,7 +34,7 @@ public class MessagesProvider {
     
     private let roomManagedObjectID: NSManagedObjectID
     private let fetchedResultsController: FetchedResultsController<MessageEntity>
-    private let messageFactory: MessageEntityFactory
+    let messageFactory: MessageEntityFactory
     
     /// The array of messages for the given room.
     ///
@@ -45,6 +45,9 @@ public class MessagesProvider {
     public var messages: [Message] {
         return self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
     }
+    
+    // A quick and dirty hack that is here to enable user testing. We should get rid of this in the final version.
+    private static var controllers = [String : FetchedResultsController<MessageEntity>]()
     
     // MARK: - Initializers
     
@@ -66,7 +69,14 @@ public class MessagesProvider {
             return NSNumber(value: lhs).compare(NSNumber(value: rhs))
         }
         
-        self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
+        if let fetchedResultsController = MessagesProvider.controllers[room.identifier] {
+            self.fetchedResultsController = fetchedResultsController
+        }
+        else {
+            self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
+            MessagesProvider.controllers[room.identifier] = self.fetchedResultsController
+        }
+        
         self.fetchedResultsController.delegate = self
         
         self.fetchData(completionHandler: completionHandler)
@@ -74,7 +84,7 @@ public class MessagesProvider {
     
     // MARK: - Methods
     
-    /// Triggers an asynchronous call to the web service that retrieves a batch of historical
+    /// Triggers an asynchronous call to the web service that retrieves a batch of historical messages
     /// currently not present in the maintained collection of messages.
     ///
     /// - Parameters:
@@ -83,7 +93,7 @@ public class MessagesProvider {
     ///     - completionHandler:An optional completion handler called when the call to the web
     ///     service finishes with either a successful result or an error.
     public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: CompletionHandler? = nil) {
-        guard self.state.paged == .partiallyPopulated, let lastMessageIdentifier = self.messages.first?.identifier else {
+        guard self.state.paged == .partiallyPopulated, let lastMessage = self.messages.first else {
             if let completionHandler = completionHandler {
                 // TODO: Return error
                 completionHandler(nil)
@@ -94,7 +104,7 @@ public class MessagesProvider {
         
         self.state.paged = .fetching
         
-        self.messageFactory.receiveOldMessages(numberOfMessages: Int(numberOfMessages), lastMessageIdentifier: lastMessageIdentifier, delay: 1.0) {
+        self.messageFactory.receiveOldMessages(numberOfMessages: Int(numberOfMessages), lastMessageIdentifier: lastMessage.identifier, lastMessageDate: lastMessage.createdAt, delay: 1.0) {
             self.state.paged = .partiallyPopulated
             
             if let completionHandler = completionHandler {
@@ -115,6 +125,13 @@ public class MessagesProvider {
                 completionHandler(nil)
             }
         }
+    }
+    
+    // MARK: - Memory management
+    
+    deinit {
+        self.messageFactory.stopReceivingNewMessages()
+        self.fetchedResultsController.delegate = nil
     }
     
 }

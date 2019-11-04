@@ -74,6 +74,13 @@ public class RoomMembersProvider {
         }
     }
     
+    // MARK: - Memory management
+    
+    deinit {
+        self.userFactory.stopAddingNewMembers()
+        self.userFactory.stopRemovingMembers()
+    }
+    
 }
 
 // MARK: - FetchedResultsControllerDelegate

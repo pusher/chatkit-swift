@@ -41,16 +41,20 @@ class MessageEntityFactory {
         }
     }
     
-    func receiveOldMessages(numberOfMessages: Int, lastMessageIdentifier: String, delay: TimeInterval, completionHandler: @escaping () -> Void) {
-        guard let lastMessageIdentifier = Int(lastMessageIdentifier) else {
-            completionHandler()
-            return
+    func receiveOldMessages(numberOfMessages: Int, lastMessageIdentifier: String, lastMessageDate: Date, delay: TimeInterval, completionHandler: @escaping () -> Void) {
+        var dateOffset = DateComponents()
+        dateOffset.day = -1
+        
+        guard let lastMessageIdentifier = Int(lastMessageIdentifier),
+            let messageDate = Calendar.current.date(byAdding: dateOffset, to: lastMessageDate) else {
+                completionHandler()
+                return
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
             self.persistenceController.performBackgroundTask { context in
                 ((lastMessageIdentifier - numberOfMessages)..<lastMessageIdentifier).forEach {
-                    self.createMessage(in: context, identifier: "\($0)", userID: self.currentUserID, roomID: self.roomID)
+                    self.createMessage(in: context, identifier: "\($0)", userID: self.currentUserID, roomID: self.roomID, date: messageDate)
                 }
                 
                 do {
@@ -79,9 +83,7 @@ class MessageEntityFactory {
         self.timer = nil
     }
     
-    @discardableResult private func createMessage(in context: NSManagedObjectContext, identifier: String, userID: NSManagedObjectID, roomID: NSManagedObjectID) -> MessageEntity {
-        let now = Date()
-        
+    @discardableResult private func createMessage(in context: NSManagedObjectContext, identifier: String, userID: NSManagedObjectID, roomID: NSManagedObjectID, date: Date = Date()) -> MessageEntity {
         let part = context.create(InlinePartEntity.self)
         part.content = "Test message: \(identifier)"
         part.type = "text/plain"
@@ -90,8 +92,8 @@ class MessageEntityFactory {
         message.identifier = identifier
         message.room = context.object(with: roomID) as! RoomEntity
         message.sender = context.object(with: userID) as! UserEntity
-        message.createdAt = now
-        message.updatedAt = now
+        message.createdAt = date
+        message.updatedAt = date
         message.addToParts(part)
         
         return message

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>MessagesViewModel Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/MessagesViewModel" class="dashAnchor"></a>
+    <a title="MessagesViewModel Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">PusherChatkit Docs</a> (100% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">PusherChatkit Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        MessagesViewModel Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/AvailableRoomsProvider.html">AvailableRoomsProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Chatkit.html">Chatkit</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/JoinedRoomsViewModel/ChangeReason.html">– ChangeReason</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MessagesProvider.html">MessagesProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MessagesViewModel.html">MessagesViewModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MessagesViewModel/MessageRow.html">– MessageRow</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MessagesViewModel/ChangeReason.html">– ChangeReason</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TypingUsersViewModel.html">TypingUsersViewModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/UsersProvider.html">UsersProvider</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/ConnectionStatus.html">ConnectionStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/MessagePart.html">MessagePart</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/NetworkingError.html">NetworkingError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/PagedProviderState.html">PagedProviderState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/PresenceState.html">PresenceState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/RealTimeProviderState.html">RealTimeProviderState</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/AvailableRoomsProviderDelegate.html">AvailableRoomsProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ChatkitDelegate.html">ChatkitDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/JoinedRoomsProviderDelegate.html">JoinedRoomsProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/JoinedRoomsViewModelDelegate.html">JoinedRoomsViewModelDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/MessagesProviderDelegate.html">MessagesProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/MessagesViewModelDelegate.html">MessagesViewModelDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/RoomMembersProviderDelegate.html">RoomMembersProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TypingUsersProviderDelegate.html">TypingUsersProviderDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/TypingUsersViewModelDelegate.html">TypingUsersViewModelDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/UsersProviderDelegate.html">UsersProviderDelegate</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/Message.html">Message</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Room.html">Room</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/User.html">User</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:13PusherChatkit17CompletionHandlera">CompletionHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:13PusherChatkit8UserDataa">UserData</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>MessagesViewModel</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">MessagesViewModel</span></code></pre>
+
+                </div>
+              </div>
+            <p>A view model which provides a collection of message rows representig different elements that might
+appear on a message feed</p>
+
+<p>Plese see the documentation of <code>MessageRow</code> for the list of possible entries that are managed
+by the view model.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Properties"></a>
+                <a name="//apple_ref/swift/Section/Properties" class="dashAnchor"></a>
+                <a href="#/Properties">
+                  <h3 class="section-name">Properties</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit17MessagesViewModelC4rowsSayAC10MessageRowOGvp"></a>
+                    <a name="//apple_ref/swift/Property/rows" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit17MessagesViewModelC4rowsSayAC10MessageRowOGvp">rows</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The array of entires representig different elements that might appear on a message feed.</p>
+
+<p>Plese see the documentation of <code><a href="../Classes/MessagesViewModel/MessageRow.html">MessageRow</a></code> for the list of possible entries that might be held
+by the array.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">rows</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/MessagesViewModel/MessageRow.html">MessageRow</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit17MessagesViewModelC5stateAA21RealTimeProviderStateO04realH0_AA05PagediJ0O5pagedtvp"></a>
+                    <a name="//apple_ref/swift/Property/state" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit17MessagesViewModelC5stateAA21RealTimeProviderStateO04realH0_AA05PagediJ0O5pagedtvp">state</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The current state of the provider used by the view model as the data source.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">state</span><span class="p">:</span> <span class="p">(</span><span class="nv">realTime</span><span class="p">:</span> <span class="kt"><a href="../Enums/RealTimeProviderState.html">RealTimeProviderState</a></span><span class="p">,</span> <span class="nv">paged</span><span class="p">:</span> <span class="kt"><a href="../Enums/PagedProviderState.html">PagedProviderState</a></span><span class="p">)</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>realTime</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The current state of the provider related to the real time web service.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>paged</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The current state of the provider related to the non-real time web service.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit17MessagesViewModelC8delegateAA0cdE8Delegate_pSgvp"></a>
+                    <a name="//apple_ref/swift/Property/delegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit17MessagesViewModelC8delegateAA0cdE8Delegate_pSgvp">delegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The object that is notified when the content of the maintained collection of message rows changed.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/MessagesViewModelDelegate.html">MessagesViewModelDelegate</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Initializers"></a>
+                <a name="//apple_ref/swift/Section/Initializers" class="dashAnchor"></a>
+                <a href="#/Initializers">
+                  <h3 class="section-name">Initializers</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit17MessagesViewModelC8providerAcA0C8ProviderC_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(provider:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit17MessagesViewModelC8providerAcA0C8ProviderC_tcfc">init(provider:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Designated initializer for the class.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">provider</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesProvider.html">MessagesProvider</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>provider</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The messages provider used as the source of data.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Methods"></a>
+                <a name="//apple_ref/swift/Section/Methods" class="dashAnchor"></a>
+                <a href="#/Methods">
+                  <h3 class="section-name">Methods</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit17MessagesViewModelC010fetchOlderC008numberOfC017completionHandlerySu_ys5Error_pSgcSgtF"></a>
+                    <a name="//apple_ref/swift/Method/fetchOlderMessages(numberOfMessages:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit17MessagesViewModelC010fetchOlderC008numberOfC017completionHandlerySu_ys5Error_pSgcSgtF">fetchOlderMessages(numberOfMessages:completionHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Triggers an asynchronous call to the web service that retrieves a batch of historical messages
+currently not present in the maintained collection of messages.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">fetchOlderMessages</span><span class="p">(</span><span class="nv">numberOfMessages</span><span class="p">:</span> <span class="kt">UInt</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt"><a href="../Typealiases.html#/s:13PusherChatkit17CompletionHandlera">CompletionHandler</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>numberOfMessages</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The maximum number of messages that should be retrieved from
+the web service.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An optional completion handler called when the call to the web
+service finishes with either a successful result or an error.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/JoinedRoomsProviderDelegate"></a>
+                <a name="//apple_ref/swift/Section/JoinedRoomsProviderDelegate" class="dashAnchor"></a>
+                <a href="#/JoinedRoomsProviderDelegate">
+                  <h3 class="section-name">JoinedRoomsProviderDelegate</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit24MessagesProviderDelegateP08messagesD0_015didReceiveOlderC0yAA0cD0C_SayAA7MessageVGtF"></a>
+                    <a name="//apple_ref/swift/Method/messagesProvider(_:didReceiveOlderMessages:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit24MessagesProviderDelegateP08messagesD0_015didReceiveOlderC0yAA0cD0C_SayAA7MessageVGtF">messagesProvider(_:didReceiveOlderMessages:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">messagesProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">messagesProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesProvider.html">MessagesProvider</a></span><span class="p">,</span> <span class="n">didReceiveOlderMessages</span> <span class="nv">messages</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="p">])</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit24MessagesProviderDelegateP08messagesD0_20didReceiveNewMessageyAA0cD0C_AA0J0VtF"></a>
+                    <a name="//apple_ref/swift/Method/messagesProvider(_:didReceiveNewMessage:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit24MessagesProviderDelegateP08messagesD0_20didReceiveNewMessageyAA0cD0C_AA0J0VtF">messagesProvider(_:didReceiveNewMessage:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">messagesProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">messagesProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesProvider.html">MessagesProvider</a></span><span class="p">,</span> <span class="n">didReceiveNewMessage</span> <span class="nv">message</span><span class="p">:</span> <span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit24MessagesProviderDelegateP08messagesD0_16didUpdateMessage13previousValueyAA0cD0C_AA0I0VAJtF"></a>
+                    <a name="//apple_ref/swift/Method/messagesProvider(_:didUpdateMessage:previousValue:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit24MessagesProviderDelegateP08messagesD0_16didUpdateMessage13previousValueyAA0cD0C_AA0I0VAJtF">messagesProvider(_:didUpdateMessage:previousValue:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">messagesProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">messagesProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesProvider.html">MessagesProvider</a></span><span class="p">,</span> <span class="n">didUpdateMessage</span> <span class="nv">message</span><span class="p">:</span> <span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="p">,</span> <span class="nv">previousValue</span><span class="p">:</span> <span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit24MessagesProviderDelegateP08messagesD0_16didRemoveMessageyAA0cD0C_AA0I0VtF"></a>
+                    <a name="//apple_ref/swift/Method/messagesProvider(_:didRemoveMessage:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit24MessagesProviderDelegateP08messagesD0_16didRemoveMessageyAA0cD0C_AA0I0VtF">messagesProvider(_:didRemoveMessage:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">messagesProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">messagesProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessagesProvider.html">MessagesProvider</a></span><span class="p">,</span> <span class="n">didRemoveMessage</span> <span class="nv">message</span><span class="p">:</span> <span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Row"></a>
+                <a name="//apple_ref/swift/Section/Row" class="dashAnchor"></a>
+                <a href="#/Row">
+                  <h3 class="section-name">Row</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit17MessagesViewModelC10MessageRowO"></a>
+                    <a name="//apple_ref/swift/Enum/MessageRow" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit17MessagesViewModelC10MessageRowO">MessageRow</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An enumeration representing an entry is the list of rows of the message feed provided
+by the <code><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></code> class.</p>
+
+                        <a href="../Classes/MessagesViewModel/MessageRow.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">MessageRow</span> <span class="p">:</span> <span class="kt">Equatable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Change%20Reason"></a>
+                <a name="//apple_ref/swift/Section/Change Reason" class="dashAnchor"></a>
+                <a href="#/Change%20Reason">
+                  <h3 class="section-name">Change Reason</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:13PusherChatkit17MessagesViewModelC12ChangeReasonO"></a>
+                    <a name="//apple_ref/swift/Enum/ChangeReason" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit17MessagesViewModelC12ChangeReasonO">ChangeReason</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An enumeration representing semantic reasons that might trigger a change
+in the <code><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></code> class.</p>
+
+                        <a href="../Classes/MessagesViewModel/ChangeReason.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">enum</span> <span class="kt">ChangeReason</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-11-01)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

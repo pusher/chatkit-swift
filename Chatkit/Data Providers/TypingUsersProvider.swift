@@ -72,6 +72,12 @@ public class TypingUsersProvider {
         }
     }
     
+    // MARK: - Memory management
+    
+    deinit {
+        self.typingUsersFactory.stopTyping()
+    }
+    
 }
 
 // MARK: - FetchedResultsControllerDelegate

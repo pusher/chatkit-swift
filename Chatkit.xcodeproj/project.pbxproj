@@ -35,6 +35,7 @@
 		224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805822F2DADC003CB8DC /* Chatkit.swift */; };
 		224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */; };
 		224E33C0230B07C2005168E3 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E33BF230B07C2005168E3 /* Identifiable.swift */; };
+		227177FE236894AA00B89376 /* MessagesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227177FD236894AA00B89376 /* MessagesViewModel.swift */; };
 		227498472321028700D10C76 /* DateFormatterExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227498462321028700D10C76 /* DateFormatterExtensionsTests.swift */; };
 		227498492321040100D10C76 /* BundleExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227498482321040100D10C76 /* BundleExtensionsTests.swift */; };
 		2274984C2321098B00D10C76 /* PCBaseClientExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2274984B2321098B00D10C76 /* PCBaseClientExtensionsTests.swift */; };
@@ -159,6 +160,7 @@
 		224B805822F2DADC003CB8DC /* Chatkit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chatkit.swift; sourceTree = "<group>"; };
 		224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatkitTests.swift; sourceTree = "<group>"; };
 		224E33BF230B07C2005168E3 /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
+		227177FD236894AA00B89376 /* MessagesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewModel.swift; sourceTree = "<group>"; };
 		227498462321028700D10C76 /* DateFormatterExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterExtensionsTests.swift; sourceTree = "<group>"; };
 		227498482321040100D10C76 /* BundleExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtensionsTests.swift; sourceTree = "<group>"; };
 		2274984B2321098B00D10C76 /* PCBaseClientExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCBaseClientExtensionsTests.swift; sourceTree = "<group>"; };
@@ -838,6 +840,7 @@
 			isa = PBXGroup;
 			children = (
 				22BECDFB2366F24D00FAB7DC /* JoinedRoomsViewModel.swift */,
+				227177FD236894AA00B89376 /* MessagesViewModel.swift */,
 				22FD93BF2361DD8A00AB841F /* TypingUsersViewModel.swift */,
 			);
 			path = "View Models";
@@ -1125,6 +1128,7 @@
 				22EDCB7B231D0FA300419C75 /* Event.swift in Sources */,
 				22C5F3FA2306BDE8009A7383 /* UserDataSerializer.swift in Sources */,
 				224E33C0230B07C2005168E3 /* Identifiable.swift in Sources */,
+				227177FE236894AA00B89376 /* MessagesViewModel.swift in Sources */,
 				229A6C90230BE744002997CF /* UserEntity+Identifiable.swift in Sources */,
 				22FFA6AD2355F5A500156A7F /* MessageEntity+CoreDataClass.swift in Sources */,
 				222576A52305488E00FAFAEC /* PartEntity+CoreDataProperties.swift in Sources */,
