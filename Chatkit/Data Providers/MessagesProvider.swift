@@ -41,7 +41,7 @@ public class MessagesProvider {
     
     // MARK: - Initializers
     
-    init(room: Room, persistenceController: PersistenceController, completionHandler: @escaping CompletionHandler) {
+    init(room: Room, persistenceController: PersistenceController) {
         self.roomIdentifier = room.identifier
         self.state.realTime = .connected
         self.state.paged = .partiallyPopulated
@@ -67,8 +67,6 @@ public class MessagesProvider {
         }
         
         self.fetchedResultsController.delegate = self
-        
-        completionHandler(nil)
     }
     
     // MARK: - Methods

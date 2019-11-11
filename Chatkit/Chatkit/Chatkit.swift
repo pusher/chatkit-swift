@@ -22,15 +22,15 @@ public class Chatkit {
     /// The object that is notified when the status of the connection to Chatkit web service changed.
     public weak var delegate: ChatkitDelegate?
     
-    let persistenceController: PersistenceController
-    let networkingController: NetworkingController
+    private let persistenceController: PersistenceController
+    private let networkingController: NetworkingController
     
-    var usersProviderCache: [UUID : UsersProvider]
-    var availableRoomsProviderCache: [UUID : AvailableRoomsProvider]
-    var joinedRoomsProviderCache: [UUID : JoinedRoomsProvider]
-    var messagesProviderCache: [UUID : MessagesProvider]
-    var roomMembersProviderCache: [UUID : RoomMembersProvider]
-    var typingUsersProviderCache: [UUID : TypingUsersProvider]
+    private let dataSimulator: DataSimulator
+    
+    private var usersProviderCache: [UUID : UsersProvider]
+    private var availableRoomsProviderCache: [UUID : AvailableRoomsProvider]
+    private var roomMembersProviderCache: [UUID : RoomMembersProvider]
+    private var typingUsersProviderCache: [UUID : TypingUsersProvider]
     
     /// The instance locator used to identify the Chatkit instance.
     public var instanceLocator: String {
@@ -55,8 +55,6 @@ public class Chatkit {
     public init(instanceLocator: String, tokenProvider: PPTokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
         self.usersProviderCache = [:]
         self.availableRoomsProviderCache = [:]
-        self.joinedRoomsProviderCache = [:]
-        self.messagesProviderCache = [:]
         self.roomMembersProviderCache = [:]
         self.typingUsersProviderCache = [:]
         
@@ -80,6 +78,8 @@ public class Chatkit {
         eventParser.register(parser: ChatEventParser(persistenceController: self.persistenceController, logger: self.logger), for: .chat, with: .version6)
         
         self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, eventParser: eventParser, logger: self.logger)
+        
+        self.dataSimulator = DataSimulator(persistenceController: self.persistenceController)
     }
     
     // MARK: - Methods
@@ -97,18 +97,18 @@ public class Chatkit {
         self.connectionStatus = .connecting
         self.delegate?.chatkit(self, didChangeConnectionStatus: self.connectionStatus)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.connectionStatus = .connected
-            // TODO: Set current user.
-            
-            self.delegate?.chatkit(self, didChangeConnectionStatus: self.connectionStatus)
-            
-            if let currentUser = self.currentUser {
+        // Just to be sure that this is being executed on the main thread. It simplifies data simulation.
+        DispatchQueue.main.async {
+            self.dataSimulator.start { currentUser in
+                self.currentUser = currentUser
+                self.connectionStatus = .connected
+                
+                self.delegate?.chatkit(self, didChangeConnectionStatus: self.connectionStatus)
                 self.delegate?.chatkit(self, didUpdateCurrentUser: currentUser)
-            }
-            
-            if let completionHandler = completionHandler {
-                completionHandler(nil)
+                
+                if let completionHandler = completionHandler {
+                    completionHandler(nil)
+                }
             }
         }
     }
@@ -169,24 +169,14 @@ public class Chatkit {
     ///     `JoinedRoomsProvider` has been successfuly created or the instantiation failed due to
     ///     an error.
     public func createJoinedRoomsProvider(completionHandler: @escaping (JoinedRoomsProvider?, Error?) -> Void) {
-        guard let currentUser = self.currentUser else {
-            // TODO: Return error.
-            completionHandler(nil, nil)
+        guard let currentUser = self.currentUser, self.connectionStatus == .connected else {
+            completionHandler(nil, NetworkingError.disconnected)
             return
         }
         
-        let identifier = UUID()
+        let provider = JoinedRoomsProvider(currentUser: currentUser, persistenceController: self.persistenceController)
         
-        self.joinedRoomsProviderCache[identifier] = JoinedRoomsProvider(currentUser: currentUser, persistenceController: self.persistenceController) { error in
-            if let error = error {
-                completionHandler(nil, error)
-            }
-            else if let joinedRoomsProvider = self.joinedRoomsProviderCache[identifier] {
-                completionHandler(joinedRoomsProvider, nil)
-            }
-            
-            self.joinedRoomsProviderCache.removeValue(forKey: identifier)
-        }
+        completionHandler(provider, nil)
     }
     
     /// Creates an instance of `MessagesProvider`.
@@ -196,18 +186,14 @@ public class Chatkit {
     ///     `MessagesProvider` has been successfuly created or the instantiation failed due to
     ///     an error.
     public func createMessagesProvider(for room: Room, completionHandler: @escaping (MessagesProvider?, Error?) -> Void) {
-        let identifier = UUID()
-        
-        self.messagesProviderCache[identifier] = MessagesProvider(room: room, persistenceController: self.persistenceController) { error in
-            if let error = error {
-                completionHandler(nil, error)
-            }
-            else if let messagesProvider = self.messagesProviderCache[identifier] {
-                completionHandler(messagesProvider, nil)
-            }
-            
-            self.messagesProviderCache.removeValue(forKey: identifier)
+        guard self.connectionStatus == .connected else {
+            completionHandler(nil, NetworkingError.disconnected)
+            return
         }
+        
+        let provider = MessagesProvider(room: room, persistenceController: self.persistenceController)
+        
+        completionHandler(provider, nil)
     }
     
     /// Creates an instance of `RoomMembersProvider`.

@@ -25,7 +25,7 @@ public class JoinedRoomsProvider {
     
     // MARK: - Initializers
     
-    init(currentUser: User, persistenceController: PersistenceController, completionHandler: @escaping CompletionHandler) {
+    init(currentUser: User, persistenceController: PersistenceController) {
         self.state = .connected
         
         let context = persistenceController.mainContext
@@ -46,8 +46,6 @@ public class JoinedRoomsProvider {
         
         self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
         self.fetchedResultsController.delegate = self
-        
-        completionHandler(nil)
     }
     
 }

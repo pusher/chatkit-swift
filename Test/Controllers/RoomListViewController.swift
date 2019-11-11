@@ -8,24 +8,7 @@ class RoomListViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        guard let chatkit = try? Chatkit(instanceLocator: "test:Instance:Locator", tokenProvider: TestTokenProvider()) else {
-            return
-        }
-        
-        self.chatkit = chatkit
-        
-        self.chatkit?.createJoinedRoomsProvider { joinedRoomsProvider, error in
-            if let error = error {
-                print("Error: \(error.localizedDescription)")
-            }
-            else if let joinedRoomsProvider = joinedRoomsProvider {
-                self.viewModel = JoinedRoomsViewModel(provider: joinedRoomsProvider)
-                self.viewModel?.delegate = self
-                
-                self.tableView.reloadData()
-            }
-        }
+        self.connect()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,6 +57,37 @@ class RoomListViewController: UITableViewController {
         
         return cell
     }
+    
+    private func connect() {
+        guard let chatkit = try? Chatkit(instanceLocator: "test:Instance:Locator", tokenProvider: TestTokenProvider()) else {
+            return
+        }
+        
+        self.chatkit = chatkit
+        
+        self.chatkit?.connect { error in
+            guard error == nil else {
+                return
+            }
+            
+            self.createJoinedRoomsProvider()
+        }
+    }
+    
+    private func createJoinedRoomsProvider() {
+        self.chatkit?.createJoinedRoomsProvider { joinedRoomsProvider, error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+            }
+            else if let joinedRoomsProvider = joinedRoomsProvider {
+                self.viewModel = JoinedRoomsViewModel(provider: joinedRoomsProvider)
+                self.viewModel?.delegate = self
+                
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
 }
 
 extension RoomListViewController: JoinedRoomsViewModelDelegate {
