@@ -16,22 +16,10 @@ public class RoomMembersProvider {
     public private(set) var state: RealTimeProviderState
     
     /// The object that is notified when the content of the maintained collection of room members changed.
-    public weak var delegate: RoomMembersProviderDelegate? {
-        didSet {
-            if delegate == nil {
-                self.userFactory.stopAddingNewMembers()
-                self.userFactory.stopRemovingMembers()
-            }
-            else {
-                self.userFactory.startAddingNewMembers()
-                self.userFactory.startRemovingMembers()
-            }
-        }
-    }
+    public weak var delegate: RoomMembersProviderDelegate?
     
     private let roomManagedObjectID: NSManagedObjectID
     private let fetchedResultsController: FetchedResultsController<UserEntity>
-    private let userFactory: UserEntityFactory
     
     /// The set of all room members for the given room.
     public var members: Set<User> {
@@ -41,12 +29,11 @@ public class RoomMembersProvider {
     
     // MARK: - Initializers
     
-    init(room: Room, currentUser: User, persistenceController: PersistenceController, completionHandler: @escaping CompletionHandler) {
+    init(room: Room, persistenceController: PersistenceController, completionHandler: @escaping CompletionHandler) {
         self.roomIdentifier = room.identifier
         self.state = .degraded
         
         self.roomManagedObjectID = room.objectID
-        self.userFactory = UserEntityFactory(roomID: self.roomManagedObjectID, persistenceController: persistenceController)
         
         let context = persistenceController.mainContext
         let predicate = NSPredicate(format: "ANY %K == %@", #keyPath(UserEntity.room), self.roomManagedObjectID)
@@ -72,13 +59,6 @@ public class RoomMembersProvider {
         DispatchQueue.main.async {
             completionHandler(nil)
         }
-    }
-    
-    // MARK: - Memory management
-    
-    deinit {
-        self.userFactory.stopAddingNewMembers()
-        self.userFactory.stopRemovingMembers()
     }
     
 }

@@ -10,7 +10,6 @@
 		2200BB8E231E601600BF9545 /* TestTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2EB2319B60E0095757C /* TestTokenProvider.swift */; };
 		2200BB93231E727000BF9545 /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2200BB92231E727000BF9545 /* DateFormatter+Extensions.swift */; };
 		2200BB97231EA5C200BF9545 /* TestLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2200BB96231EA5C200BF9545 /* TestLogger.swift */; };
-		2207CE9F233CE4DE00D85E52 /* UserEntityFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2207CE9E233CE4DE00D85E52 /* UserEntityFactory.swift */; };
 		2212EC55235725B8002212A4 /* MessagesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC54235725B8002212A4 /* MessagesProvider.swift */; };
 		2212EC5723572A3F002212A4 /* RoomMembersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC5623572A3F002212A4 /* RoomMembersProvider.swift */; };
 		222576962305488E00FAFAEC /* CursorEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222576862305488D00FAFAEC /* CursorEntity+CoreDataProperties.swift */; };
@@ -56,12 +55,10 @@
 		227E946D231FBDAB0025B691 /* chat-initial_state.json in Resources */ = {isa = PBXBuildFile; fileRef = 227E946C231FBDAB0025B691 /* chat-initial_state.json */; };
 		227E946F231FC5950025B691 /* XCTest+Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227E946E231FC5950025B691 /* XCTest+Networking.swift */; };
 		227E947223200DBD0025B691 /* ModularEventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227E947123200DBD0025B691 /* ModularEventParser.swift */; };
-		228865D1233BCA6B0044BCD8 /* TestDataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228865D0233BCA6B0044BCD8 /* TestDataFactory.swift */; };
 		228AD276232675D400AB280B /* NetworkingControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228AD275232675D400AB280B /* NetworkingControllerTests.swift */; };
 		228E1D69230D87660014B1A9 /* IdentifiableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D68230D87660014B1A9 /* IdentifiableTests.swift */; };
 		228E1D6D230D9FDC0014B1A9 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */; };
 		229018312358AE99008FAB07 /* TypingUsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229018302358AE99008FAB07 /* TypingUsersProvider.swift */; };
-		229018352358C2E5008FAB07 /* TypingUsersFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229018342358C2E5008FAB07 /* TypingUsersFactory.swift */; };
 		229093DA22F1DDB4003DDE2C /* PusherChatkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 229093D822F1DDB4003DDE2C /* PusherChatkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		229A6C8E230BE6F0002997CF /* MessageEntity+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229A6C8D230BE6F0002997CF /* MessageEntity+Identifiable.swift */; };
 		229A6C90230BE744002997CF /* UserEntity+Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229A6C8F230BE744002997CF /* UserEntity+Identifiable.swift */; };
@@ -97,14 +94,12 @@
 		22D537E22302F27200A92341 /* UserEntity+Snapshotable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537E12302F27200A92341 /* UserEntity+Snapshotable.swift */; };
 		22D537E62302F57600A92341 /* MessageEntity+Snapshotable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537E52302F57600A92341 /* MessageEntity+Snapshotable.swift */; };
 		22D777432322B6B0009773D0 /* ChatServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D777422322B6B0009773D0 /* ChatServiceTests.swift */; };
-		22DACBEC233138D900573D12 /* MessageEntityFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DACBEB233138D900573D12 /* MessageEntityFactory.swift */; };
 		22EDCB7B231D0FA300419C75 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB7A231D0FA300419C75 /* Event.swift */; };
 		22EDCB80231D2D6D00419C75 /* NetworkingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB7F231D2D6D00419C75 /* NetworkingController.swift */; };
 		22EDCB84231D6C6000419C75 /* EventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB83231D6C6000419C75 /* EventParser.swift */; };
 		22EDCB87231D762A00419C75 /* ChatEventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB86231D762A00419C75 /* ChatEventParser.swift */; };
 		22F1875A2356150E009DDD9C /* RoomEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F187582356150E009DDD9C /* RoomEntity+CoreDataClass.swift */; };
 		22F1875B2356150E009DDD9C /* RoomEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F187592356150E009DDD9C /* RoomEntity+CoreDataProperties.swift */; };
-		22FC1127233E42CA0013A9D7 /* RoomEntityFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC1126233E42CA0013A9D7 /* RoomEntityFactory.swift */; };
 		22FC1129233E42F70013A9D7 /* RoomFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC1128233E42F70013A9D7 /* RoomFactory.swift */; };
 		22FC112B233E50030013A9D7 /* UserFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC112A233E50030013A9D7 /* UserFactory.swift */; };
 		22FC112D233E50FB0013A9D7 /* UsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC112C233E50FB0013A9D7 /* UsersProvider.swift */; };
@@ -133,7 +128,6 @@
 /* Begin PBXFileReference section */
 		2200BB92231E727000BF9545 /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
 		2200BB96231EA5C200BF9545 /* TestLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestLogger.swift; sourceTree = "<group>"; };
-		2207CE9E233CE4DE00D85E52 /* UserEntityFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEntityFactory.swift; sourceTree = "<group>"; };
 		2212EC54235725B8002212A4 /* MessagesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesProvider.swift; sourceTree = "<group>"; };
 		2212EC5623572A3F002212A4 /* RoomMembersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMembersProvider.swift; sourceTree = "<group>"; };
 		222576862305488D00FAFAEC /* CursorEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CursorEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -181,12 +175,10 @@
 		227E946C231FBDAB0025B691 /* chat-initial_state.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "chat-initial_state.json"; sourceTree = "<group>"; };
 		227E946E231FC5950025B691 /* XCTest+Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+Networking.swift"; sourceTree = "<group>"; };
 		227E947123200DBD0025B691 /* ModularEventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModularEventParser.swift; sourceTree = "<group>"; };
-		228865D0233BCA6B0044BCD8 /* TestDataFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDataFactory.swift; sourceTree = "<group>"; };
 		228AD275232675D400AB280B /* NetworkingControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingControllerTests.swift; sourceTree = "<group>"; };
 		228E1D68230D87660014B1A9 /* IdentifiableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifiableTests.swift; sourceTree = "<group>"; };
 		228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
 		229018302358AE99008FAB07 /* TypingUsersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingUsersProvider.swift; sourceTree = "<group>"; };
-		229018342358C2E5008FAB07 /* TypingUsersFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingUsersFactory.swift; sourceTree = "<group>"; };
 		229093D522F1DDB4003DDE2C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229093D822F1DDB4003DDE2C /* PusherChatkit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PusherChatkit.h; sourceTree = "<group>"; };
 		229093D922F1DDB4003DDE2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -225,14 +217,12 @@
 		22D537E12302F27200A92341 /* UserEntity+Snapshotable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserEntity+Snapshotable.swift"; sourceTree = "<group>"; };
 		22D537E52302F57600A92341 /* MessageEntity+Snapshotable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageEntity+Snapshotable.swift"; sourceTree = "<group>"; };
 		22D777422322B6B0009773D0 /* ChatServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatServiceTests.swift; sourceTree = "<group>"; };
-		22DACBEB233138D900573D12 /* MessageEntityFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageEntityFactory.swift; sourceTree = "<group>"; };
 		22EDCB7A231D0FA300419C75 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		22EDCB7F231D2D6D00419C75 /* NetworkingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingController.swift; sourceTree = "<group>"; };
 		22EDCB83231D6C6000419C75 /* EventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventParser.swift; sourceTree = "<group>"; };
 		22EDCB86231D762A00419C75 /* ChatEventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatEventParser.swift; sourceTree = "<group>"; };
 		22F187582356150E009DDD9C /* RoomEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RoomEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		22F187592356150E009DDD9C /* RoomEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RoomEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		22FC1126233E42CA0013A9D7 /* RoomEntityFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomEntityFactory.swift; sourceTree = "<group>"; };
 		22FC1128233E42F70013A9D7 /* RoomFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFactory.swift; sourceTree = "<group>"; };
 		22FC112A233E50030013A9D7 /* UserFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFactory.swift; sourceTree = "<group>"; };
 		22FC112C233E50FB0013A9D7 /* UsersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersProvider.swift; sourceTree = "<group>"; };
@@ -567,12 +557,7 @@
 		229AEEEE23351DA300A5E159 /* Test Data */ = {
 			isa = PBXGroup;
 			children = (
-				22DACBEB233138D900573D12 /* MessageEntityFactory.swift */,
-				22FC1126233E42CA0013A9D7 /* RoomEntityFactory.swift */,
 				22FC1128233E42F70013A9D7 /* RoomFactory.swift */,
-				228865D0233BCA6B0044BCD8 /* TestDataFactory.swift */,
-				229018342358C2E5008FAB07 /* TypingUsersFactory.swift */,
-				2207CE9E233CE4DE00D85E52 /* UserEntityFactory.swift */,
 				22FC112A233E50030013A9D7 /* UserFactory.swift */,
 			);
 			path = "Test Data";
@@ -1074,16 +1059,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				228865D1233BCA6B0044BCD8 /* TestDataFactory.swift in Sources */,
 				22D537E62302F57600A92341 /* MessageEntity+Snapshotable.swift in Sources */,
 				222576A22305488E00FAFAEC /* PartEntity+CoreDataClass.swift in Sources */,
 				22D537D12302CA9600A92341 /* Model.swift in Sources */,
 				22C5F3F72306B9FE009A7383 /* AttachmentPartEntity+Snapshotable.swift in Sources */,
 				22D2A2D2231961060095757C /* PPSDKInfo+Extensions.swift in Sources */,
 				22D2A2EF2319BA520095757C /* State.swift in Sources */,
-				2207CE9F233CE4DE00D85E52 /* UserEntityFactory.swift in Sources */,
 				22D537DD2302E19C00A92341 /* RoomEntity+Snapshotable.swift in Sources */,
-				22DACBEC233138D900573D12 /* MessageEntityFactory.swift in Sources */,
 				22FFA6AE2355F5A500156A7F /* MessageEntity+CoreDataProperties.swift in Sources */,
 				2212EC5723572A3F002212A4 /* RoomMembersProvider.swift in Sources */,
 				22D537CD2302BDD700A92341 /* Store.swift in Sources */,
@@ -1105,11 +1087,9 @@
 				2200BB93231E727000BF9545 /* DateFormatter+Extensions.swift in Sources */,
 				22BECDFC2366F24D00FAB7DC /* JoinedRoomsViewModel.swift in Sources */,
 				22CEBB5522FC6F37005CB021 /* Types.swift in Sources */,
-				22FC1127233E42CA0013A9D7 /* RoomEntityFactory.swift in Sources */,
 				22D2A2EA23197E7F0095757C /* ConnectionStatus.swift in Sources */,
 				229A6C8E230BE6F0002997CF /* MessageEntity+Identifiable.swift in Sources */,
 				229A6C92230BE74D002997CF /* RoomEntity+Identifiable.swift in Sources */,
-				229018352358C2E5008FAB07 /* TypingUsersFactory.swift in Sources */,
 				222EA2AF23424A7D004EE90F /* AvailableRoomsProvider.swift in Sources */,
 				222576A12305488E00FAFAEC /* AttachmentPartEntity+CoreDataClass.swift in Sources */,
 				222576B423055E1900FAFAEC /* UserEntity+CoreDataProperties.swift in Sources */,

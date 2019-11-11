@@ -25,8 +25,6 @@ public class Chatkit {
     let persistenceController: PersistenceController
     let networkingController: NetworkingController
     
-    var hiddenCurrentUser: User!
-    
     var usersProviderCache: [UUID : UsersProvider]
     var availableRoomsProviderCache: [UUID : AvailableRoomsProvider]
     var joinedRoomsProviderCache: [UUID : JoinedRoomsProvider]
@@ -82,18 +80,6 @@ public class Chatkit {
         eventParser.register(parser: ChatEventParser(persistenceController: self.persistenceController, logger: self.logger), for: .chat, with: .version6)
         
         self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, eventParser: eventParser, logger: self.logger)
-        
-        var hiddenCurrentUser: User? = nil
-        
-        self.persistenceController.mainContext.performAndWait {
-            let userEntity = UserEntityFactory.createCurrentUser(in: self.persistenceController.mainContext)
-            
-            self.persistenceController.save()
-            
-            hiddenCurrentUser = try! userEntity.snapshot()
-        }
-        
-        self.hiddenCurrentUser = hiddenCurrentUser!
     }
     
     // MARK: - Methods
@@ -113,7 +99,7 @@ public class Chatkit {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.connectionStatus = .connected
-            self.currentUser = self.hiddenCurrentUser
+            // TODO: Set current user.
             
             self.delegate?.chatkit(self, didChangeConnectionStatus: self.connectionStatus)
             
@@ -183,8 +169,15 @@ public class Chatkit {
     ///     `JoinedRoomsProvider` has been successfuly created or the instantiation failed due to
     ///     an error.
     public func createJoinedRoomsProvider(completionHandler: @escaping (JoinedRoomsProvider?, Error?) -> Void) {
+        guard let currentUser = self.currentUser else {
+            // TODO: Return error.
+            completionHandler(nil, nil)
+            return
+        }
+        
         let identifier = UUID()
-        self.joinedRoomsProviderCache[identifier] = JoinedRoomsProvider(currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController) { error in
+        
+        self.joinedRoomsProviderCache[identifier] = JoinedRoomsProvider(currentUser: currentUser, persistenceController: self.persistenceController) { error in
             if let error = error {
                 completionHandler(nil, error)
             }
@@ -204,7 +197,8 @@ public class Chatkit {
     ///     an error.
     public func createMessagesProvider(for room: Room, completionHandler: @escaping (MessagesProvider?, Error?) -> Void) {
         let identifier = UUID()
-        self.messagesProviderCache[identifier] = MessagesProvider(room: room, currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController) { error in
+        
+        self.messagesProviderCache[identifier] = MessagesProvider(room: room, persistenceController: self.persistenceController) { error in
             if let error = error {
                 completionHandler(nil, error)
             }
@@ -224,7 +218,8 @@ public class Chatkit {
     ///     an error.
     public func createRoomMembersProvider(for room: Room, completionHandler: @escaping (RoomMembersProvider?, Error?) -> Void) {
         let identifier = UUID()
-        self.roomMembersProviderCache[identifier] = RoomMembersProvider(room: room, currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController) { error in
+        
+        self.roomMembersProviderCache[identifier] = RoomMembersProvider(room: room, persistenceController: self.persistenceController) { error in
             if let error = error {
                 completionHandler(nil, error)
             }
@@ -244,7 +239,8 @@ public class Chatkit {
     ///     an error.
     public func createTypingUsersProvider(for room: Room, completionHandler: @escaping (TypingUsersProvider?, Error?) -> Void) {
         let identifier = UUID()
-        self.typingUsersProviderCache[identifier] = TypingUsersProvider(room: room, currentUser: self.hiddenCurrentUser, persistenceController: self.persistenceController) { error in
+        
+        self.typingUsersProviderCache[identifier] = TypingUsersProvider(room: room, persistenceController: self.persistenceController) { error in
             if let error = error {
                 completionHandler(nil, error)
             }

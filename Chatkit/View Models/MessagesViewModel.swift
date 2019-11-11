@@ -27,16 +27,7 @@ public class MessagesViewModel {
     }
     
     /// The object that is notified when the content of the maintained collection of message rows changed.
-    public weak var delegate: MessagesViewModelDelegate? {
-        didSet {
-            if delegate == nil {
-                self.provider.messageFactory.stopReceivingNewMessages()
-            }
-            else {
-                self.provider.messageFactory.startReceivingNewMessages()
-            }
-        }
-    }
+    public weak var delegate: MessagesViewModelDelegate?
     
     // MARK: - Initializers
     

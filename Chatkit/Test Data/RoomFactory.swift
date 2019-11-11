@@ -22,7 +22,7 @@ class RoomFactory {
                     createdAt: now,
                     updatedAt: now,
                     deletedAt: nil,
-                    objectID: UserEntityFactory.currentUserID) // It does not really matter what kind of NSManagedObjectID instance we put here.
+                    objectID: nil!) // FIXME: Make this optional for data that is not supposed to be persisted.
             }
             
             completionHandler(rooms)
