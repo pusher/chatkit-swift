@@ -52,10 +52,10 @@ public class JoinedRoomsViewModel {
     private func sort() {
         self.rooms.sort { lhs, rhs -> Bool in
             if let lhsLastMessage = lhs.lastMessage, let rhsLastMessage = rhs.lastMessage {
-                return lhsLastMessage.createdAt < rhsLastMessage.createdAt
+                return lhsLastMessage.createdAt > rhsLastMessage.createdAt
             }
             else {
-                return lhs.createdAt < rhs.createdAt
+                return lhs.createdAt > rhs.createdAt
             }
         }
     }
