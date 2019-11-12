@@ -108,13 +108,16 @@ class MessageViewController: UIViewController {
     
     private func configureMessageCell(_ cell: UITableViewCell, message: Message, groupPosition: MessagesViewModel.MessageRow.GroupPosition) {
         // TODO: Render other message parts in future.
-        guard let cell = cell as? TestTableViewCell,
-            let messagePart = message.parts.first else {
+        guard let cell = cell as? MessageTableViewCell,
+            let messagePart = message.parts.first,
+            let currentUser = self.chatkit?.currentUser else {
                 return
         }
         
         if case let MessagePart.text(_, content) = messagePart {
-            cell.testLabel.text = content
+            cell.sender = message.sender.identifier == currentUser.identifier ? .currentUser : .otherUser
+            cell.groupPosition = groupPosition
+            cell.contentLabel.text = content
         }
     }
     
