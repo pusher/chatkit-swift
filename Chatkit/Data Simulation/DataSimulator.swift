@@ -12,35 +12,38 @@ class DataSimulator {
     private var timer: Timer?
     private var entries: [(date: Date, event: Event)]
     
-    var currentUser: UserEntity?
-    var firstUser: UserEntity?
-    var secondUser: UserEntity?
-    var thirdUser: UserEntity?
-    var fourthUser: UserEntity?
-    var fifthUser: UserEntity?
-    var sixthUser: UserEntity?
-    var seventhUser: UserEntity?
-    var eighthUser: UserEntity?
-    var ninthUser: UserEntity?
-    var tenthUser: UserEntity?
-    var eleventhUser: UserEntity?
+    private var nextMessageIdentifier: Int
     
-    var firstRoom: RoomEntity?
-    var secondRoom: RoomEntity?
-    var thirdRoom: RoomEntity?
-    var fourthRoom: RoomEntity?
-    var fifthRoom: RoomEntity?
-    var sixthRoom: RoomEntity?
-    var seventhRoom: RoomEntity?
-    var eighthRoom: RoomEntity?
-    var ninthRoom: RoomEntity?
-    var tenthRoom: RoomEntity?
-    var eleventhRoom: RoomEntity?
+    var currentUserID: NSManagedObjectID?
+    var firstUserID: NSManagedObjectID?
+    var secondUserID: NSManagedObjectID?
+    var thirdUserID: NSManagedObjectID?
+    var fourthUserID: NSManagedObjectID?
+    var fifthUserID: NSManagedObjectID?
+    var sixthUserID: NSManagedObjectID?
+    var seventhUserID: NSManagedObjectID?
+    var eighthUserID: NSManagedObjectID?
+    var ninthUserID: NSManagedObjectID?
+    var tenthUserID: NSManagedObjectID?
+    var eleventhUserID: NSManagedObjectID?
+    
+    var firstRoomID: NSManagedObjectID?
+    var secondRoomID: NSManagedObjectID?
+    var thirdRoomID: NSManagedObjectID?
+    var fourthRoomID: NSManagedObjectID?
+    var fifthRoomID: NSManagedObjectID?
+    var sixthRoomID: NSManagedObjectID?
+    var seventhRoomID: NSManagedObjectID?
+    var eighthRoomID: NSManagedObjectID?
+    var ninthRoomID: NSManagedObjectID?
+    var tenthRoomID: NSManagedObjectID?
+    var eleventhRoomID: NSManagedObjectID?
     
     // MARK: - Initializers
     
     init(persistenceController: PersistenceController) {
         self.persistenceController = persistenceController
+        self.nextMessageIdentifier = 0
         self.entries = []
     }
     
@@ -71,6 +74,14 @@ class DataSimulator {
         let index = self.entries.firstIndex { $0.date > date } ?? self.entries.endIndex
         
         self.entries.insert((date: date, event: event), at: index)
+    }
+    
+    func calculateMessageIdentifier() -> String {
+        let identifier = String(self.nextMessageIdentifier)
+        
+        self.nextMessageIdentifier += 1
+        
+        return identifier
     }
     
     // MARK: - Timers

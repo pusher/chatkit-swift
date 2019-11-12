@@ -6,94 +6,103 @@ extension DataSimulator {
     // MARK: - Internal methods
     
     func loadInitialState(completionHandler: @escaping (User) -> Void) {
-        let context = self.persistenceController.mainContext
+        let persistenceController = self.persistenceController
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            var snapshot: User? = nil
-            
-            context.performAndWait {
+            persistenceController.performBackgroundTask { context in
                 let currentUser = self.createUser(in: context, identifier: "olivia", name: "Olivia")
-                self.currentUser = currentUser
+                self.currentUserID = currentUser.objectID
                 
                 let firstUser = self.createUser(in: context, identifier: "oliver", name: "Oliver")
-                self.firstUser = firstUser
+                self.firstUserID = firstUser.objectID
                 
                 let secondUser = self.createUser(in: context, identifier: "harry", name: "Harry")
-                self.secondUser = secondUser
+                self.secondUserID = secondUser.objectID
                 
                 let thirdUser = self.createUser(in: context, identifier: "george", name: "George")
-                self.thirdUser = thirdUser
+                self.thirdUserID = thirdUser.objectID
                 
                 let fourthUser = self.createUser(in: context, identifier: "noah", name: "Noah")
-                self.fourthUser = fourthUser
+                self.fourthUserID = fourthUser.objectID
                 
                 let fifthUser = self.createUser(in: context, identifier: "jack", name: "Jack")
-                self.fifthUser = fifthUser
+                self.fifthUserID = fifthUser.objectID
                 
                 let sixthUser = self.createUser(in: context, identifier: "jacob", name: "Jacob")
-                self.sixthUser = sixthUser
+                self.sixthUserID = sixthUser.objectID
                 
                 let seventhUser = self.createUser(in: context, identifier: "bob", name: "Bob")
-                self.seventhUser = seventhUser
+                self.seventhUserID = seventhUser.objectID
                 
                 let eighthUser = self.createUser(in: context, identifier: "leo", name: "Leo")
-                self.eighthUser = eighthUser
+                self.eighthUserID = eighthUser.objectID
                 
                 let ninthUser = self.createUser(in: context, identifier: "oscar", name: "Oscar")
-                self.ninthUser = ninthUser
+                self.ninthUserID = ninthUser.objectID
                 
                 let tenthUser = self.createUser(in: context, identifier: "charlie", name: "Charlie")
-                self.tenthUser = tenthUser
+                self.tenthUserID = tenthUser.objectID
                 
                 let firstRoom = self.createRoom(in: context, identifier: "firstRoom", name: "Oliver's room", members: [currentUser, firstUser])
-                self.firstRoom = firstRoom
+                self.firstRoomID = firstRoom.objectID
                 
                 let secondRoom = self.createRoom(in: context, identifier: "secondRoom", name: "Harry's room", members: [currentUser, secondUser])
-                self.secondRoom = secondRoom
+                self.secondRoomID = secondRoom.objectID
                 
                 let thirdRoom = self.createRoom(in: context, identifier: "thirdRoom", name: "George's room", members: [currentUser, thirdUser])
-                self.thirdRoom = thirdRoom
+                self.thirdRoomID = thirdRoom.objectID
                 
                 let fourthRoom = self.createRoom(in: context, identifier: "fourthRoom", name: "Noah's room", members: [currentUser, fourthUser])
-                self.fourthRoom = fourthRoom
+                self.fourthRoomID = fourthRoom.objectID
                 
                 let fifthRoom = self.createRoom(in: context, identifier: "fifthRoom", name: "Jack's room", members: [currentUser, fifthUser])
-                self.fifthRoom = fifthRoom
+                self.fifthRoomID = fifthRoom.objectID
                 
                 let sixthRoom = self.createRoom(in: context, identifier: "sixthRoom", name: "Jacob's room", members: [currentUser, sixthUser])
-                self.sixthRoom = sixthRoom
+                self.sixthRoomID = sixthRoom.objectID
                 
                 let seventhRoom = self.createRoom(in: context, identifier: "seventhRoom", name: "Bob's room", members: [currentUser, seventhUser])
-                self.seventhRoom = seventhRoom
+                self.seventhRoomID = seventhRoom.objectID
                 
                 let eighthRoom = self.createRoom(in: context, identifier: "eighthRoom", name: "Leo's room", members: [currentUser, eighthUser])
-                self.eighthRoom = eighthRoom
+                self.eighthRoomID = eighthRoom.objectID
                 
                 let ninthRoom = self.createRoom(in: context, identifier: "ninthRoom", name: "Oscar's room", members: [currentUser, ninthUser])
-                self.ninthRoom = ninthRoom
+                self.ninthRoomID = ninthRoom.objectID
                 
                 let tenthRoom = self.createRoom(in: context, identifier: "tenthRoom", name: "Charlie's room", members: [currentUser, tenthUser])
-                self.tenthRoom = tenthRoom
+                self.tenthRoomID = tenthRoom.objectID
                 
-                self.createMessage(in: context, identifier: "1", content: "Hello", sender: tenthUser, room: tenthRoom)
-                self.createMessage(in: context, identifier: "2", content: "Hello", sender: currentUser, room: tenthRoom)
+                self.createMessage(in: context, content: "Hello", sender: firstUser, room: firstRoom)
+                self.createMessage(in: context, content: "Hello", sender: secondUser, room: secondRoom)
+                self.createMessage(in: context, content: "Hello", sender: thirdUser, room: thirdRoom)
+                self.createMessage(in: context, content: "Hello", sender: fourthUser, room: fourthRoom)
+                self.createMessage(in: context, content: "Hello", sender: fifthUser, room: fifthRoom)
+                self.createMessage(in: context, content: "Hello", sender: sixthUser, room: sixthRoom)
+                self.createMessage(in: context, content: "Hello", sender: seventhUser, room: seventhRoom)
+                self.createMessage(in: context, content: "Hello", sender: eighthUser, room: eighthRoom)
+                self.createMessage(in: context, content: "Hello", sender: ninthUser, room: ninthRoom)
+                self.createMessage(in: context, content: "Hello", sender: tenthUser, room: tenthRoom)
+                
+                try? context.save()
                 
                 self.persistenceController.save()
                 
-                snapshot = try? currentUser.snapshot()
+                guard let snapshot = try? currentUser.snapshot() else {
+                    fatalError("Failed to create current user.")
+                }
+                
+                DispatchQueue.main.async {
+                    completionHandler(snapshot)
+                }
             }
-            
-            guard let currentUser = snapshot else {
-                fatalError("Failed to create current user.")
-            }
-            
-            completionHandler(currentUser)
         }
     }
     
     func scheduleAllEvents() {
-        let newRoomEvent = self.createNewRoomEvent()
-        self.schedule(newRoomEvent, after: 5.0)
+        self.schedule(self.createHowCanIHelpMessageFromOlivia(), after: 4.0)
+        self.schedule(self.createIAmNotSureMessageFromGeorge(), after: 6.0)
+        self.schedule(self.createNewRoomForAmelia(), after: 10.0)
     }
     
     // MARK: - Private methods
@@ -128,7 +137,7 @@ extension DataSimulator {
         return room
     }
     
-    @discardableResult private func createMessage(in context: NSManagedObjectContext, identifier: String, content: String, sender: UserEntity, room: RoomEntity) -> MessageEntity {
+    @discardableResult private func createMessage(in context: NSManagedObjectContext, identifier: String? = nil, content: String, sender: UserEntity, room: RoomEntity) -> MessageEntity {
         let now = Date()
         
         let part = context.create(InlinePartEntity.self)
@@ -136,7 +145,7 @@ extension DataSimulator {
         part.type = "text/plain"
         
         let message = context.create(MessageEntity.self)
-        message.identifier = identifier
+        message.identifier = identifier ?? self.calculateMessageIdentifier()
         message.sender = sender
         message.createdAt = now
         message.updatedAt = now
@@ -147,21 +156,62 @@ extension DataSimulator {
         return message
     }
     
-    private func createNewRoomEvent() -> Event {
+    private func createNewRoomForAmelia() -> Event {
         return Event { persistenceController in
-            guard let currentUser = self.currentUser else {
-                return
+            persistenceController.performBackgroundTask { context in
+                guard let currentUserID = self.currentUserID,
+                    let currentUser = context.object(with: currentUserID) as? UserEntity else {
+                        fatalError("Failed to retrieve data.")
+                }
+                
+                let eleventhUser = self.createUser(in: context, identifier: "amelia", name: "Amelia")
+                self.eleventhUserID = eleventhUser.objectID
+                
+                let eleventhRoom = self.createRoom(in: context, identifier: "eleventhRoom", name: "Amelia's room", members: [currentUser, eleventhUser])
+                self.eleventhRoomID = eleventhRoom.objectID
+                
+                try? context.save()
+                
+                persistenceController.save()
             }
-            
-            let context = persistenceController.mainContext
-            
-            let eleventhUser = self.createUser(in: context, identifier: "amelia", name: "Amelia")
-            self.eleventhUser = eleventhUser
-            
-            let eleventhRoom = self.createRoom(in: context, identifier: "eleventhRoom", name: "Amelia's room", members: [currentUser, eleventhUser])
-            self.eleventhRoom = eleventhRoom
-            
-            persistenceController.save()
+        }
+    }
+    
+    private func createHowCanIHelpMessageFromOlivia() -> Event {
+        return Event { persistenceController in
+            persistenceController.performBackgroundTask { context in
+                guard let currentUserID = self.currentUserID,
+                let currentUser = context.object(with: currentUserID) as? UserEntity,
+                    let thirdRoomID = self.thirdRoomID,
+                    let thirdRoom = context.object(with: thirdRoomID) as? RoomEntity else {
+                        fatalError("Failed to retrieve data.")
+                }
+                
+                self.createMessage(in: context, content: "How can I help?", sender: currentUser, room: thirdRoom)
+                
+                try? context.save()
+                
+                persistenceController.save()
+            }
+        }
+    }
+    
+    private func createIAmNotSureMessageFromGeorge() -> Event {
+        return Event { persistenceController in
+            persistenceController.performBackgroundTask { context in
+                guard let thirdUserID = self.thirdUserID,
+                    let thirdUser = context.object(with: thirdUserID) as? UserEntity,
+                    let thirdRoomID = self.thirdRoomID,
+                    let thirdRoom = context.object(with: thirdRoomID) as? RoomEntity else {
+                        fatalError("Failed to retrieve data.")
+                }
+                
+                self.createMessage(in: context, content: "I am not sure :|", sender: thirdUser, room: thirdRoom)
+                
+                try? context.save()
+                
+                persistenceController.save()
+            }
         }
     }
     
