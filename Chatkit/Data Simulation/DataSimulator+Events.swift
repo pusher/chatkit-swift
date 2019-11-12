@@ -43,6 +43,9 @@ extension DataSimulator {
                 let tenthUser = self.createUser(in: context, identifier: "charlie", name: "Charlie")
                 self.tenthUserID = tenthUser.objectID
                 
+                let eleventhUser = self.createUser(in: context, identifier: "amelia", name: "Amelia")
+                self.eleventhUserID = eleventhUser.objectID
+                
                 let firstRoom = self.createRoom(in: context, identifier: "firstRoom", name: "Oliver's room", members: [currentUser, firstUser])
                 self.firstRoomID = firstRoom.objectID
                 
@@ -73,9 +76,13 @@ extension DataSimulator {
                 let tenthRoom = self.createRoom(in: context, identifier: "tenthRoom", name: "Charlie's room", members: [currentUser, tenthUser])
                 self.tenthRoomID = tenthRoom.objectID
                 
+                let eleventhRoom = self.createRoom(in: context, identifier: "eleventhRoom", name: "Amelia's room", members: [eleventhUser])
+                self.eleventhRoomID = eleventhRoom.objectID
+                
                 self.createMessage(in: context, content: "Hello", sender: firstUser, room: firstRoom)
                 self.createMessage(in: context, content: "Hello", sender: secondUser, room: secondRoom)
                 self.createMessage(in: context, content: "Hello", sender: thirdUser, room: thirdRoom)
+                self.createMessage(in: context, content: "It's me again", sender: thirdUser, room: thirdRoom)
                 self.createMessage(in: context, content: "Hello", sender: fourthUser, room: fourthRoom)
                 self.createMessage(in: context, content: "Hello", sender: fifthUser, room: fifthRoom)
                 self.createMessage(in: context, content: "Hello", sender: sixthUser, room: sixthRoom)
@@ -100,11 +107,28 @@ extension DataSimulator {
     }
     
     func scheduleAllEvents() {
+        // George - Olivia
         self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 3.0)
-        self.schedule(self.createMessageEvent(message: "How can I help?", from: self.currentUserID, in: self.thirdRoomID), after: 4.0)
-        self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 6.0)
-        self.schedule(self.createMessageEvent(message: "I am not sure :|", from: self.thirdUserID, in: self.thirdRoomID), after: 8.0)
+        self.schedule(self.createMessageEvent(message: "Hi", from: self.currentUserID, in: self.thirdRoomID), after: 4.0)
+        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 5.0)
+        self.schedule(self.createMessageEvent(message: "How can I help?", from: self.currentUserID, in: self.thirdRoomID), after: 6.0)
+        self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 9.0)
+        self.schedule(self.createMessageEvent(message: "I am not sure 😐", from: self.thirdUserID, in: self.thirdRoomID), after: 11.0)
+        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 13.0)
+        self.schedule(self.createMessageEvent(message: "Perhaps I could send you our offer?", from: self.currentUserID, in: self.thirdRoomID), after: 15.0)
+        self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 16.0)
+        self.schedule(self.createMessageEvent(message: "That sounds great!", from: self.thirdUserID, in: self.thirdRoomID), after: 17.0)
+        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 20.0)
+        self.schedule(self.createMessageEvent(message: "Done 👍", from: self.currentUserID, in: self.thirdRoomID), after: 21.0)
+        self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 22.0)
+        self.schedule(self.createMessageEvent(message: "Thank you! Bye bye", from: self.thirdUserID, in: self.thirdRoomID), after: 23.0)
+        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 24.0)
+        self.schedule(self.createMessageEvent(message: "Bye", from: self.currentUserID, in: self.thirdRoomID), after: 25.0)
+        
+        // Amelia - Olivia
         self.schedule(self.createNewRoomForAmelia(), after: 10.0)
+        self.schedule(self.createTypingIndicatorEvent(for: self.eleventhUserID, in: self.eleventhRoomID), after: 11.0)
+        self.schedule(self.createMessageEvent(message: "Hi", from: self.eleventhUserID, in: self.eleventhRoomID), after: 12.0)
     }
     
     // MARK: - Private methods
@@ -162,15 +186,13 @@ extension DataSimulator {
         return Event { persistenceController in
             persistenceController.performBackgroundTask { context in
                 guard let currentUserID = self.currentUserID,
-                    let currentUser = context.object(with: currentUserID) as? UserEntity else {
+                    let currentUser = context.object(with: currentUserID) as? UserEntity,
+                    let eleventhRoomID = self.eleventhRoomID,
+                    let eleventhRoom = context.object(with: eleventhRoomID) as? RoomEntity else {
                         fatalError("Failed to retrieve data.")
                 }
                 
-                let eleventhUser = self.createUser(in: context, identifier: "amelia", name: "Amelia")
-                self.eleventhUserID = eleventhUser.objectID
-                
-                let eleventhRoom = self.createRoom(in: context, identifier: "eleventhRoom", name: "Amelia's room", members: [currentUser, eleventhUser])
-                self.eleventhRoomID = eleventhRoom.objectID
+                eleventhRoom.addToMembers(currentUser)
                 
                 try? context.save()
                 

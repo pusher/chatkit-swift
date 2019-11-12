@@ -8,6 +8,8 @@ class MessageTableViewCell: UITableViewCell {
     
     @IBOutlet weak var leadingConstraint: NSLayoutConstraint?
     @IBOutlet weak var trailingConstraint: NSLayoutConstraint?
+    @IBOutlet weak var topConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
     var groupPosition: MessagesViewModel.MessageRow.GroupPosition = .single {
         didSet {
@@ -56,18 +58,29 @@ class MessageTableViewCell: UITableViewCell {
             self.trailingConstraint?.isActive = true
         }
         
+        let minimumSpacing: CGFloat = 1.0
+        let maximumSpacing: CGFloat = 4.0
+        
         switch self.groupPosition {
         case .single:
             self.bubbleView.corners = .allCorners
+            self.topConstraint.constant = maximumSpacing
+            self.bottomConstraint.constant = maximumSpacing
             
         case .top:
             self.bubbleView.corners = [.topLeft, .topRight]
+            self.topConstraint.constant = maximumSpacing
+            self.bottomConstraint.constant = minimumSpacing
         
         case .bottom:
             self.bubbleView.corners = [.bottomLeft, .bottomRight]
+            self.topConstraint.constant = minimumSpacing
+            self.bottomConstraint.constant = maximumSpacing
         
         case .middle:
             self.bubbleView.corners = nil
+            self.topConstraint.constant = minimumSpacing
+            self.bottomConstraint.constant = minimumSpacing
         }
     }
     

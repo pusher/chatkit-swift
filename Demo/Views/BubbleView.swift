@@ -8,7 +8,13 @@ class BubbleView: UIView {
         }
     }
     
-    var radius = CGSize(width: 10.0, height: 10.0) {
+    var maximumRadius: CGFloat = 12.0 {
+        didSet {
+            self.update()
+        }
+    }
+    
+    var minimumRadius: CGFloat = 4.0 {
         didSet {
             self.update()
         }
@@ -20,15 +26,24 @@ class BubbleView: UIView {
     }
     
     private func update() {
-        if let corners = corners {
-            let mask = CAShapeLayer()
-            mask.path = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: self.radius).cgPath
-            
-            self.layer.mask = mask
-        }
-        else {
+        guard let corners = self.corners else {
             self.layer.mask = nil
+            return
         }
+        
+        let topLeftRadius = corners.contains(.topLeft) || corners.contains(.allCorners) ? self.maximumRadius : self.minimumRadius
+        let topRightRadius = corners.contains(.topRight) || corners.contains(.allCorners) ? self.maximumRadius : self.minimumRadius
+        let bottomLeftRadius = corners.contains(.bottomLeft) || corners.contains(.allCorners) ? self.maximumRadius : self.minimumRadius
+        let bottomRightRadius = corners.contains(.bottomRight) || corners.contains(.allCorners) ? self.maximumRadius : self.minimumRadius
+        
+        let mask = CAShapeLayer()
+        mask.path = UIBezierPath(roundedRect: self.bounds,
+                                 topLeftRadius: topLeftRadius,
+                                 topRightRadius: topRightRadius,
+                                 bottomLeftRadius: bottomLeftRadius,
+                                 bottomRightRadius: bottomRightRadius)?.cgPath
+        
+        self.layer.mask = mask
     }
     
 }

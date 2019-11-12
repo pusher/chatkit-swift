@@ -20,6 +20,7 @@
 		229656EF232FC8BB0016DA7C /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229656EE232FC8BB0016DA7C /* PusherChatkit.framework */; };
 		229656F8232FCAE90016DA7C /* PusherPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229656F7232FCAE90016DA7C /* PusherPlatform.framework */; };
 		229656FE232FD2C40016DA7C /* TextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656FD232FD2C40016DA7C /* TextTableViewCell.swift */; };
+		22FDE9C8237B2127005F13CA /* UIBezierPath+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		229656EE232FC8BB0016DA7C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229656F7232FCAE90016DA7C /* PusherPlatform.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PusherPlatform.framework; path = Carthage/Build/iOS/PusherPlatform.framework; sourceTree = "<group>"; };
 		229656FD232FD2C40016DA7C /* TextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTableViewCell.swift; sourceTree = "<group>"; };
+		22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBezierPath+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +94,7 @@
 				229656F0232FC8C20016DA7C /* Application Delegate */,
 				229656FC232FD2AD0016DA7C /* Cells */,
 				229656F2232FC8CC0016DA7C /* Controllers */,
+				22FDE9C6237B210E005F13CA /* Extensions */,
 				229656F1232FC8C90016DA7C /* Supporting Files */,
 				222EA2B023425810004EE90F /* Token Provider */,
 				227843B5237AD0C600EB9B26 /* Views */,
@@ -144,6 +147,14 @@
 				229656FD232FD2C40016DA7C /* TextTableViewCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		22FDE9C6237B210E005F13CA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,6 +250,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22FDE9C8237B2127005F13CA /* UIBezierPath+Extensions.swift in Sources */,
 				227843B7237AD0D200EB9B26 /* BubbleView.swift in Sources */,
 				227843B4237AC6DF00EB9B26 /* MessageTableViewCell.swift in Sources */,
 				229656D8232FC8880016DA7C /* MessageViewController.swift in Sources */,

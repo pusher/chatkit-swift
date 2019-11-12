@@ -23,6 +23,8 @@ class MessageViewController: UIViewController {
             return
         }
         
+        self.title = room.name ?? "Messages"
+        
         self.chatkit?.createMessagesProvider(for: room) { messagesProvider, error in
             if let error = error {
                 print("Error: \(error.localizedDescription)")
