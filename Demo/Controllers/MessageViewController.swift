@@ -94,19 +94,19 @@ class MessageViewController: UIViewController {
     }
     
     private func configureTypingUsersCell(_ cell: UITableViewCell) {
-        guard let cell = cell as? TestTableViewCell else {
+        guard let cell = cell as? TextTableViewCell else {
             return
         }
         
-        cell.testLabel.text = self.typingUsersViewModel?.value
+        cell.contentLabel.text = self.typingUsersViewModel?.value
     }
     
     private func configureDateHeaderCell(_ cell: UITableViewCell, date: Date) {
-        guard let cell = cell as? TestTableViewCell else {
+        guard let cell = cell as? TextTableViewCell else {
             return
         }
         
-        cell.testLabel.text = self.dateFormatter.string(from: date)
+        cell.contentLabel.text = self.dateFormatter.string(from: date)
     }
     
     private func configureMessageCell(_ cell: UITableViewCell, message: Message, groupPosition: MessagesViewModel.MessageRow.GroupPosition) {

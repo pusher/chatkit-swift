@@ -19,7 +19,7 @@
 		229656E0232FC8890016DA7C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 229656DE232FC8890016DA7C /* LaunchScreen.storyboard */; };
 		229656EF232FC8BB0016DA7C /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229656EE232FC8BB0016DA7C /* PusherChatkit.framework */; };
 		229656F8232FCAE90016DA7C /* PusherPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229656F7232FCAE90016DA7C /* PusherPlatform.framework */; };
-		229656FE232FD2C40016DA7C /* TestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656FD232FD2C40016DA7C /* TestTableViewCell.swift */; };
+		229656FE232FD2C40016DA7C /* TextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656FD232FD2C40016DA7C /* TextTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,7 +28,7 @@
 		227843B3237AC6DF00EB9B26 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
 		227843B6237AD0D200EB9B26 /* BubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleView.swift; sourceTree = "<group>"; };
 		228865CE233BC5940044BCD8 /* RoomListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListViewController.swift; sourceTree = "<group>"; };
-		229656D2232FC8880016DA7C /* Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Test.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		229656D2232FC8880016DA7C /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		229656D5232FC8880016DA7C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		229656D7232FC8880016DA7C /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 		229656DA232FC8880016DA7C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -37,7 +37,7 @@
 		229656E1232FC8890016DA7C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		229656EE232FC8BB0016DA7C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		229656F7232FCAE90016DA7C /* PusherPlatform.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PusherPlatform.framework; path = Carthage/Build/iOS/PusherPlatform.framework; sourceTree = "<group>"; };
-		229656FD232FD2C40016DA7C /* TestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTableViewCell.swift; sourceTree = "<group>"; };
+		229656FD232FD2C40016DA7C /* TextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +72,7 @@
 		229656C9232FC8880016DA7C = {
 			isa = PBXGroup;
 			children = (
-				229656D4232FC8880016DA7C /* Test */,
+				229656D4232FC8880016DA7C /* Demo */,
 				229656D3232FC8880016DA7C /* Products */,
 				229656ED232FC8BB0016DA7C /* Frameworks */,
 			);
@@ -81,12 +81,12 @@
 		229656D3232FC8880016DA7C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				229656D2232FC8880016DA7C /* Test.app */,
+				229656D2232FC8880016DA7C /* Demo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		229656D4232FC8880016DA7C /* Test */ = {
+		229656D4232FC8880016DA7C /* Demo */ = {
 			isa = PBXGroup;
 			children = (
 				229656F0232FC8C20016DA7C /* Application Delegate */,
@@ -96,7 +96,7 @@
 				222EA2B023425810004EE90F /* Token Provider */,
 				227843B5237AD0C600EB9B26 /* Views */,
 			);
-			path = Test;
+			path = Demo;
 			sourceTree = "<group>";
 		};
 		229656ED232FC8BB0016DA7C /* Frameworks */ = {
@@ -141,7 +141,7 @@
 			children = (
 				226A15E1236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift */,
 				227843B3237AC6DF00EB9B26 /* MessageTableViewCell.swift */,
-				229656FD232FD2C40016DA7C /* TestTableViewCell.swift */,
+				229656FD232FD2C40016DA7C /* TextTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -149,9 +149,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		229656D1232FC8880016DA7C /* Test */ = {
+		229656D1232FC8880016DA7C /* Demo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 229656E4232FC8890016DA7C /* Build configuration list for PBXNativeTarget "Test" */;
+			buildConfigurationList = 229656E4232FC8890016DA7C /* Build configuration list for PBXNativeTarget "Demo" */;
 			buildPhases = (
 				229656CE232FC8880016DA7C /* Sources */,
 				229656CF232FC8880016DA7C /* Frameworks */,
@@ -162,9 +162,9 @@
 			);
 			dependencies = (
 			);
-			name = Test;
+			name = Demo;
 			productName = Test;
-			productReference = 229656D2232FC8880016DA7C /* Test.app */;
+			productReference = 229656D2232FC8880016DA7C /* Demo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -182,7 +182,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 229656CD232FC8880016DA7C /* Build configuration list for PBXProject "Test" */;
+			buildConfigurationList = 229656CD232FC8880016DA7C /* Build configuration list for PBXProject "Demo" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -195,7 +195,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				229656D1232FC8880016DA7C /* Test */,
+				229656D1232FC8880016DA7C /* Demo */,
 			);
 		};
 /* End PBXProject section */
@@ -244,7 +244,7 @@
 				229656D8232FC8880016DA7C /* MessageViewController.swift in Sources */,
 				229656D6232FC8880016DA7C /* AppDelegate.swift in Sources */,
 				226A15E2236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift in Sources */,
-				229656FE232FD2C40016DA7C /* TestTableViewCell.swift in Sources */,
+				229656FE232FD2C40016DA7C /* TextTableViewCell.swift in Sources */,
 				222EA2B223425823004EE90F /* TestTokenProvider.swift in Sources */,
 				228865CF233BC5940044BCD8 /* RoomListViewController.swift in Sources */,
 			);
@@ -398,12 +398,12 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = "Test/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "Demo/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pusher.Test;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pusher.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -420,12 +420,12 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = "Test/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "Demo/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pusher.Test;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pusher.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -435,7 +435,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		229656CD232FC8880016DA7C /* Build configuration list for PBXProject "Test" */ = {
+		229656CD232FC8880016DA7C /* Build configuration list for PBXProject "Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				229656E2232FC8890016DA7C /* Debug */,
@@ -444,7 +444,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		229656E4232FC8890016DA7C /* Build configuration list for PBXNativeTarget "Test" */ = {
+		229656E4232FC8890016DA7C /* Build configuration list for PBXNativeTarget "Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				229656E5232FC8890016DA7C /* Debug */,

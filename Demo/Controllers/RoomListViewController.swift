@@ -49,10 +49,10 @@ class RoomListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "roomCell", for: indexPath)
         
-        if let roomCell = cell as? TestTableViewCell, let viewModel = self.viewModel {
+        if let roomCell = cell as? TextTableViewCell, let viewModel = self.viewModel {
             let room = viewModel.rooms[indexPath.row]
             
-            roomCell.testLabel.text = room.name
+            roomCell.contentLabel.text = room.name
         }
         
         return cell
