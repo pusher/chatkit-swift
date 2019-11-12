@@ -100,8 +100,10 @@ extension DataSimulator {
     }
     
     func scheduleAllEvents() {
-        self.schedule(self.createHowCanIHelpMessageFromOlivia(), after: 4.0)
-        self.schedule(self.createIAmNotSureMessageFromGeorge(), after: 6.0)
+        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 3.0)
+        self.schedule(self.createMessageEvent(message: "How can I help?", from: self.currentUserID, in: self.thirdRoomID), after: 4.0)
+        self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 6.0)
+        self.schedule(self.createMessageEvent(message: "I am not sure :|", from: self.thirdUserID, in: self.thirdRoomID), after: 8.0)
         self.schedule(self.createNewRoomForAmelia(), after: 10.0)
     }
     
@@ -177,17 +179,17 @@ extension DataSimulator {
         }
     }
     
-    private func createHowCanIHelpMessageFromOlivia() -> Event {
+    private func createTypingIndicatorEvent(for userID: NSManagedObjectID?, in roomID: NSManagedObjectID?) -> Event {
         return Event { persistenceController in
             persistenceController.performBackgroundTask { context in
-                guard let currentUserID = self.currentUserID,
-                let currentUser = context.object(with: currentUserID) as? UserEntity,
-                    let thirdRoomID = self.thirdRoomID,
-                    let thirdRoom = context.object(with: thirdRoomID) as? RoomEntity else {
+                guard let userID = userID,
+                    let user = context.object(with: userID) as? UserEntity,
+                    let roomID = roomID,
+                    let room = context.object(with: roomID) as? RoomEntity else {
                         fatalError("Failed to retrieve data.")
                 }
                 
-                self.createMessage(in: context, content: "How can I help?", sender: currentUser, room: thirdRoom)
+                room.addToTypingMembers(user)
                 
                 try? context.save()
                 
@@ -196,17 +198,38 @@ extension DataSimulator {
         }
     }
     
-    private func createIAmNotSureMessageFromGeorge() -> Event {
+    private func removeTypingIndicatorEvent(for userID: NSManagedObjectID?, in roomID: NSManagedObjectID?) -> Event {
         return Event { persistenceController in
             persistenceController.performBackgroundTask { context in
-                guard let thirdUserID = self.thirdUserID,
-                    let thirdUser = context.object(with: thirdUserID) as? UserEntity,
-                    let thirdRoomID = self.thirdRoomID,
-                    let thirdRoom = context.object(with: thirdRoomID) as? RoomEntity else {
+                guard let userID = userID,
+                    let user = context.object(with: userID) as? UserEntity,
+                    let roomID = roomID,
+                    let room = context.object(with: roomID) as? RoomEntity else {
                         fatalError("Failed to retrieve data.")
                 }
                 
-                self.createMessage(in: context, content: "I am not sure :|", sender: thirdUser, room: thirdRoom)
+                room.removeFromTypingMembers(user)
+                
+                try? context.save()
+                
+                persistenceController.save()
+            }
+        }
+    }
+    
+    private func createMessageEvent(message: String, from userID: NSManagedObjectID?, in roomID: NSManagedObjectID?) -> Event {
+        return Event { persistenceController in
+            persistenceController.performBackgroundTask { context in
+                guard let userID = userID,
+                    let user = context.object(with: userID) as? UserEntity,
+                    let roomID = roomID,
+                    let room = context.object(with: roomID) as? RoomEntity else {
+                        fatalError("Failed to retrieve data.")
+                }
+                
+                self.createMessage(in: context, content: message, sender: user, room: room)
+                
+                room.removeFromTypingMembers(user)
                 
                 try? context.save()
                 

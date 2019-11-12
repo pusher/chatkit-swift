@@ -29,8 +29,6 @@ public class Chatkit {
     
     private var usersProviderCache: [UUID : UsersProvider]
     private var availableRoomsProviderCache: [UUID : AvailableRoomsProvider]
-    private var roomMembersProviderCache: [UUID : RoomMembersProvider]
-    private var typingUsersProviderCache: [UUID : TypingUsersProvider]
     
     /// The instance locator used to identify the Chatkit instance.
     public var instanceLocator: String {
@@ -55,8 +53,6 @@ public class Chatkit {
     public init(instanceLocator: String, tokenProvider: PPTokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
         self.usersProviderCache = [:]
         self.availableRoomsProviderCache = [:]
-        self.roomMembersProviderCache = [:]
-        self.typingUsersProviderCache = [:]
         
         self.logger = logger
         
@@ -203,18 +199,14 @@ public class Chatkit {
     ///     `RoomMembersProvider` has been successfuly created or the instantiation failed due to
     ///     an error.
     public func createRoomMembersProvider(for room: Room, completionHandler: @escaping (RoomMembersProvider?, Error?) -> Void) {
-        let identifier = UUID()
-        
-        self.roomMembersProviderCache[identifier] = RoomMembersProvider(room: room, persistenceController: self.persistenceController) { error in
-            if let error = error {
-                completionHandler(nil, error)
-            }
-            else if let roomMembersProvider = self.roomMembersProviderCache[identifier] {
-                completionHandler(roomMembersProvider, nil)
-            }
-            
-            self.roomMembersProviderCache.removeValue(forKey: identifier)
+        guard self.connectionStatus == .connected else {
+            completionHandler(nil, NetworkingError.disconnected)
+            return
         }
+        
+        let provider = RoomMembersProvider(room: room, persistenceController: self.persistenceController)
+        
+        completionHandler(provider, nil)
     }
     
     /// Creates an instance of `TypingUsersProvider`.
@@ -224,18 +216,14 @@ public class Chatkit {
     ///     `TypingUsersProvider` has been successfuly created or the instantiation failed due to
     ///     an error.
     public func createTypingUsersProvider(for room: Room, completionHandler: @escaping (TypingUsersProvider?, Error?) -> Void) {
-        let identifier = UUID()
-        
-        self.typingUsersProviderCache[identifier] = TypingUsersProvider(room: room, persistenceController: self.persistenceController) { error in
-            if let error = error {
-                completionHandler(nil, error)
-            }
-            else if let typingUsersProvider = self.typingUsersProviderCache[identifier] {
-                completionHandler(typingUsersProvider, nil)
-            }
-            
-            self.typingUsersProviderCache.removeValue(forKey: identifier)
+        guard self.connectionStatus == .connected else {
+            completionHandler(nil, NetworkingError.disconnected)
+            return
         }
+        
+        let provider = TypingUsersProvider(room: room, persistenceController: self.persistenceController)
+        
+        completionHandler(provider, nil)
     }
     
 }

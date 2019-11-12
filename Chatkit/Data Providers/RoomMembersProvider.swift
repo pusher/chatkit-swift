@@ -29,9 +29,9 @@ public class RoomMembersProvider {
     
     // MARK: - Initializers
     
-    init(room: Room, persistenceController: PersistenceController, completionHandler: @escaping CompletionHandler) {
+    init(room: Room, persistenceController: PersistenceController) {
         self.roomIdentifier = room.identifier
-        self.state = .degraded
+        self.state = .connected
         
         self.roomManagedObjectID = room.objectID
         
@@ -47,18 +47,6 @@ public class RoomMembersProvider {
         
         self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
         self.fetchedResultsController.delegate = self
-        
-        self.fetchData(completionHandler: completionHandler)
-    }
-    
-    // MARK: - Private methods
-    
-    private func fetchData(completionHandler: @escaping CompletionHandler) {
-        self.state = .connected
-        
-        DispatchQueue.main.async {
-            completionHandler(nil)
-        }
     }
     
 }
