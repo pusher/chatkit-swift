@@ -187,7 +187,7 @@ public class Chatkit {
             return
         }
         
-        let provider = MessagesProvider(room: room, persistenceController: self.persistenceController)
+        let provider = MessagesProvider(room: room, persistenceController: self.persistenceController, dataSimulator: self.dataSimulator)
         
         completionHandler(provider, nil)
     }

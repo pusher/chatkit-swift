@@ -39,12 +39,15 @@ class DataSimulator {
     var tenthRoomID: NSManagedObjectID?
     var eleventhRoomID: NSManagedObjectID?
     
+    var messageHistory: [NSManagedObjectID : [HistoricMessage]]
+    
     // MARK: - Initializers
     
     init(persistenceController: PersistenceController) {
         self.persistenceController = persistenceController
-        self.nextMessageIdentifier = 0
+        self.nextMessageIdentifier = 1000
         self.entries = []
+        self.messageHistory = [NSManagedObjectID : [HistoricMessage]]()
     }
     
     // MARK: - Internal methods
@@ -57,6 +60,7 @@ class DataSimulator {
         self.referenceDate = Date()
         
         self.loadInitialState { currentUser in
+            self.populateMessageHistory()
             self.scheduleAllEvents()
             
             self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.tick(_:)), userInfo: nil, repeats: true)

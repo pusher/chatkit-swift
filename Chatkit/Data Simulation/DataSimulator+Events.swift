@@ -81,8 +81,9 @@ extension DataSimulator {
                 
                 self.createMessage(in: context, content: "Hello", sender: firstUser, room: firstRoom)
                 self.createMessage(in: context, content: "Hello", sender: secondUser, room: secondRoom)
-                self.createMessage(in: context, content: "Hello", sender: thirdUser, room: thirdRoom)
-                self.createMessage(in: context, content: "It's me again", sender: thirdUser, room: thirdRoom)
+                self.createMessage(in: context, content: "Hi Olivia", sender: thirdUser, room: thirdRoom)
+                self.createMessage(in: context, content: "I am after my first daily routine", sender: thirdUser, room: thirdRoom)
+                self.createMessage(in: context, content: "Unfortunately, I feel completely exhausted now 😰", sender: thirdUser, room: thirdRoom)
                 self.createMessage(in: context, content: "Hello", sender: fourthUser, room: fourthRoom)
                 self.createMessage(in: context, content: "Hello", sender: fifthUser, room: fifthRoom)
                 self.createMessage(in: context, content: "Hello", sender: sixthUser, room: sixthRoom)
@@ -109,26 +110,72 @@ extension DataSimulator {
     func scheduleAllEvents() {
         // George - Olivia
         self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 3.0)
-        self.schedule(self.createMessageEvent(message: "Hi", from: self.currentUserID, in: self.thirdRoomID), after: 4.0)
+        self.schedule(self.createMessageEvent(message: "Hi George", from: self.currentUserID, in: self.thirdRoomID), after: 4.0)
+        
         self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 5.0)
-        self.schedule(self.createMessageEvent(message: "How can I help?", from: self.currentUserID, in: self.thirdRoomID), after: 6.0)
+        self.schedule(self.createMessageEvent(message: "Did you manage do complete the whole routine?", from: self.currentUserID, in: self.thirdRoomID), after: 6.0)
+        
         self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 9.0)
-        self.schedule(self.createMessageEvent(message: "I am not sure 😐", from: self.thirdUserID, in: self.thirdRoomID), after: 11.0)
+        self.schedule(self.createMessageEvent(message: "Yes, I did 😎", from: self.thirdUserID, in: self.thirdRoomID), after: 11.0)
+        
         self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 13.0)
-        self.schedule(self.createMessageEvent(message: "Perhaps I could send you our offer?", from: self.currentUserID, in: self.thirdRoomID), after: 15.0)
+        self.schedule(self.createMessageEvent(message: "Where there any elements of the routine that were especially hard for you?", from: self.currentUserID, in: self.thirdRoomID), after: 15.0)
+        
         self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 16.0)
-        self.schedule(self.createMessageEvent(message: "That sounds great!", from: self.thirdUserID, in: self.thirdRoomID), after: 17.0)
+        self.schedule(self.createMessageEvent(message: "I struggled with push-ups 😐", from: self.thirdUserID, in: self.thirdRoomID), after: 17.0)
+        
         self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 20.0)
-        self.schedule(self.createMessageEvent(message: "Done 👍", from: self.currentUserID, in: self.thirdRoomID), after: 21.0)
+        self.schedule(self.createMessageEvent(message: "Perhaps we could reduce the number of push-ups for you and see if that helps tomorrow?", from: self.currentUserID, in: self.thirdRoomID), after: 21.0)
+        
         self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 22.0)
-        self.schedule(self.createMessageEvent(message: "Thank you! Bye bye", from: self.thirdUserID, in: self.thirdRoomID), after: 23.0)
+        self.schedule(self.createMessageEvent(message: "That sound great! 👍", from: self.thirdUserID, in: self.thirdRoomID), after: 23.0)
+        
         self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 24.0)
-        self.schedule(self.createMessageEvent(message: "Bye", from: self.currentUserID, in: self.thirdRoomID), after: 25.0)
+        self.schedule(self.createMessageEvent(message: "I will amend your daily routine to include that change", from: self.currentUserID, in: self.thirdRoomID), after: 25.0)
+        
+        self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 26.0)
+        self.schedule(self.createMessageEvent(message: "Thank you! Bye bye", from: self.thirdUserID, in: self.thirdRoomID), after: 27.0)
+        
+        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 28.0)
+        self.schedule(self.createMessageEvent(message: "Bye", from: self.currentUserID, in: self.thirdRoomID), after: 29.0)
         
         // Amelia - Olivia
         self.schedule(self.createNewRoomForAmelia(), after: 10.0)
         self.schedule(self.createTypingIndicatorEvent(for: self.eleventhUserID, in: self.eleventhRoomID), after: 11.0)
         self.schedule(self.createMessageEvent(message: "Hi", from: self.eleventhUserID, in: self.eleventhRoomID), after: 12.0)
+    }
+    
+    @discardableResult func createMessage(in context: NSManagedObjectContext, identifier: String? = nil, content: String, sender: UserEntity, room: RoomEntity, date: Date = Date()) -> MessageEntity {
+        let part = context.create(InlinePartEntity.self)
+        part.content = content
+        part.type = "text/plain"
+        
+        let message = context.create(MessageEntity.self)
+        message.identifier = identifier ?? self.calculateMessageIdentifier()
+        message.sender = sender
+        message.createdAt = date
+        message.updatedAt = date
+        message.addToParts(part)
+        
+        var isHistoric = false
+        
+        // This is a simplification, but should be enough for the simulation.
+        if let firstMessage = room.messages?.firstObject as? MessageEntity,
+            let firstMessageIdentifier = Int(firstMessage.identifier),
+            let currentMessageIdentifier = Int(message.identifier),
+            currentMessageIdentifier < firstMessageIdentifier {
+            isHistoric = true
+        }
+        
+        if isHistoric {
+            room.insertIntoMessages(message, at: 0)
+        }
+        else {
+            room.addToMessages(message)
+            room.unreadCount += 1
+        }
+        
+        return message
     }
     
     // MARK: - Private methods
@@ -161,25 +208,6 @@ extension DataSimulator {
         }
         
         return room
-    }
-    
-    @discardableResult private func createMessage(in context: NSManagedObjectContext, identifier: String? = nil, content: String, sender: UserEntity, room: RoomEntity) -> MessageEntity {
-        let now = Date()
-        
-        let part = context.create(InlinePartEntity.self)
-        part.content = content
-        part.type = "text/plain"
-        
-        let message = context.create(MessageEntity.self)
-        message.identifier = identifier ?? self.calculateMessageIdentifier()
-        message.sender = sender
-        message.createdAt = now
-        message.updatedAt = now
-        message.addToParts(part)
-        
-        room.addToMessages(message)
-        
-        return message
     }
     
     private func createNewRoomForAmelia() -> Event {

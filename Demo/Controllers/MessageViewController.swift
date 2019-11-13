@@ -69,7 +69,23 @@ class MessageViewController: UIViewController {
     }
     
     @IBAction func loadMore(_ sender: UIBarButtonItem) {
-        self.messagesViewModel?.fetchOlderMessages(numberOfMessages: 5)
+        guard let messagesViewModel = self.messagesViewModel else {
+            return
+        }
+        
+        if messagesViewModel.state.paged == .partiallyPopulated {
+            self.messagesViewModel?.fetchOlderMessages(numberOfMessages: 5)
+        }
+        else if messagesViewModel.state.paged == .fullyPopulated {
+            let alertController = UIAlertController(title: "Info", message: "No more historic messages available on the server!", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+                self.dismiss(animated: true)
+            }
+            alertController.addAction(okAction)
+            
+            self.present(alertController, animated: true)
+        }
     }
     
     private func scrollToBottomIfNeeded() {

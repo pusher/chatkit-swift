@@ -78,7 +78,7 @@ class MessageTableViewCell: UITableViewCell {
             self.bottomConstraint.constant = maximumSpacing
         
         case .middle:
-            self.bubbleView.corners = nil
+            self.bubbleView.corners = []
             self.topConstraint.constant = minimumSpacing
             self.bottomConstraint.constant = minimumSpacing
         }

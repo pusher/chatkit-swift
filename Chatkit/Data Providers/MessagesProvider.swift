@@ -25,6 +25,7 @@ public class MessagesProvider {
     
     private let roomManagedObjectID: NSManagedObjectID
     private let fetchedResultsController: FetchedResultsController<MessageEntity>
+    private let dataSimulator: DataSimulator
     
     /// The array of messages for the given room.
     ///
@@ -41,12 +42,14 @@ public class MessagesProvider {
     
     // MARK: - Initializers
     
-    init(room: Room, persistenceController: PersistenceController) {
+    init(room: Room, persistenceController: PersistenceController, dataSimulator: DataSimulator) {
         self.roomIdentifier = room.identifier
-        self.state.realTime = .connected
-        self.state.paged = .partiallyPopulated
         
+        self.dataSimulator = dataSimulator
         self.roomManagedObjectID = room.objectID
+        
+        self.state.realTime = .connected
+        self.state.paged = dataSimulator.pagedState(for: room.objectID)
         
         let context = persistenceController.mainContext
         let predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.room), self.roomManagedObjectID)
@@ -80,8 +83,6 @@ public class MessagesProvider {
     ///     - completionHandler:An optional completion handler called when the call to the web
     ///     service finishes with either a successful result or an error.
     public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: CompletionHandler? = nil) {
-        // TODO: Implement using the new simulation mechanism.
-//        guard self.state.paged == .partiallyPopulated, let lastMessage = self.messages.first else {
         guard self.state.paged == .partiallyPopulated else {
             if let completionHandler = completionHandler {
                 // TODO: Return error
@@ -93,13 +94,13 @@ public class MessagesProvider {
         
         self.state.paged = .fetching
         
-//        self.messageFactory.receiveOldMessages(numberOfMessages: Int(numberOfMessages), lastMessageIdentifier: lastMessage.identifier, lastMessageDate: lastMessage.createdAt, delay: 1.0) {
-//            self.state.paged = .partiallyPopulated
+        self.dataSimulator.fetchOlderMessages(for: self.roomManagedObjectID) {
+            self.state.paged = self.dataSimulator.pagedState(for: self.roomManagedObjectID)
             
             if let completionHandler = completionHandler {
                 completionHandler(nil)
             }
-//        }
+        }
     }
     
     // MARK: - Memory management
