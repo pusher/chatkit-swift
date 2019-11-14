@@ -61,6 +61,11 @@ class MessageViewController: UIViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.markMessagesAsRead()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         self.messagesViewModel?.delegate = nil
         self.typingUsersViewModel?.delegate = nil
@@ -142,6 +147,31 @@ class MessageViewController: UIViewController {
         }
     }
     
+    private func markMessagesAsRead() {
+        let visibleIndexPaths = self.tableView.indexPathsForVisibleRows?.filter { $0.section == 0 }
+        
+        guard let index = visibleIndexPaths?.last,
+            let rows = self.messagesViewModel?.rows.prefix(through: index.row) else {
+                return
+        }
+        
+        let lastMessageRow = rows.last {
+            switch $0 {
+            case .message(_, _):
+                return true
+            
+            default:
+                return false
+            }
+        }
+        
+        guard case let .message(message, _) = lastMessageRow else {
+            return
+        }
+        
+        self.messagesViewModel?.markMessagesAsRead(lastReadMessage: message)
+    }
+    
 }
 
 extension MessageViewController: UITableViewDataSource {
@@ -191,6 +221,14 @@ extension MessageViewController: UITableViewDataSource {
     
 }
 
+extension MessageViewController: UITableViewDelegate {
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        self.markMessagesAsRead()
+    }
+    
+}
+
 extension MessageViewController: MessagesViewModelDelegate {
     
     func messagesViewModelWillChangeContent(_ messagesViewModel: MessagesViewModel) {
@@ -216,6 +254,7 @@ extension MessageViewController: MessagesViewModelDelegate {
     
     func messagesViewModelDidChangeContent(_ messagesViewModel: MessagesViewModel) {
         self.tableView.endUpdates()
+        self.markMessagesAsRead()
     }
     
 }

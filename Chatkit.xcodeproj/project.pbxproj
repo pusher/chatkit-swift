@@ -67,6 +67,7 @@
 		229EC00123796BD000610990 /* DataSimulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229EC00023796BD000610990 /* DataSimulator.swift */; };
 		229EC00423797B4A00610990 /* DataSimulator+Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229EC00323797B4A00610990 /* DataSimulator+Events.swift */; };
 		22BECDFC2366F24D00FAB7DC /* JoinedRoomsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BECDFB2366F24D00FAB7DC /* JoinedRoomsViewModel.swift */; };
+		22BFC034237DAE4000B55C5E /* DataSimulator+Cursors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFC033237DAE4000B55C5E /* DataSimulator+Cursors.swift */; };
 		22C499C723323F7700DA061F /* FetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C499C623323F7700DA061F /* FetchedResultsController.swift */; };
 		22C5F3ED2306B06E009A7383 /* SnapshotError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3EC2306B06E009A7383 /* SnapshotError.swift */; };
 		22C5F3EF2306B08C009A7383 /* MessagePart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3EE2306B08C009A7383 /* MessagePart.swift */; };
@@ -192,6 +193,7 @@
 		229EC00023796BD000610990 /* DataSimulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSimulator.swift; sourceTree = "<group>"; };
 		229EC00323797B4A00610990 /* DataSimulator+Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataSimulator+Events.swift"; sourceTree = "<group>"; };
 		22BECDFB2366F24D00FAB7DC /* JoinedRoomsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsViewModel.swift; sourceTree = "<group>"; };
+		22BFC033237DAE4000B55C5E /* DataSimulator+Cursors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataSimulator+Cursors.swift"; sourceTree = "<group>"; };
 		22C499C623323F7700DA061F /* FetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchedResultsController.swift; sourceTree = "<group>"; };
 		22C5F3EC2306B06E009A7383 /* SnapshotError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotError.swift; sourceTree = "<group>"; };
 		22C5F3EE2306B08C009A7383 /* MessagePart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePart.swift; sourceTree = "<group>"; };
@@ -563,10 +565,11 @@
 		229AEEEE23351DA300A5E159 /* Data Simulation */ = {
 			isa = PBXGroup;
 			children = (
+				229EC00223796BE000610990 /* Factories */,
 				229EC00023796BD000610990 /* DataSimulator.swift */,
+				22BFC033237DAE4000B55C5E /* DataSimulator+Cursors.swift */,
 				229EC00323797B4A00610990 /* DataSimulator+Events.swift */,
 				22174D12237C185800669740 /* DataSimulator+MessageHistory.swift */,
-				229EC00223796BE000610990 /* Factories */,
 			);
 			path = "Data Simulation";
 			sourceTree = "<group>";
@@ -1146,6 +1149,7 @@
 				22C5F3FF2306C7AB009A7383 /* PresenceState.swift in Sources */,
 				22D2A2DB23196FDE0095757C /* NetworkingError.swift in Sources */,
 				22EDCB87231D762A00419C75 /* ChatEventParser.swift in Sources */,
+				22BFC034237DAE4000B55C5E /* DataSimulator+Cursors.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

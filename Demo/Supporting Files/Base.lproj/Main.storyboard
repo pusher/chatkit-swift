@@ -16,29 +16,44 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="roomCell" id="PVw-zn-m00" customClass="TextTableViewCell" customModule="Demo" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="roomCell" id="PVw-zn-m00" customClass="RoomTableViewCell" customModule="Demo" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="43"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="PVw-zn-m00" id="pam-73-ZdD">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ybz-LI-W3M">
-                                            <rect key="frame" x="35" y="11" width="42" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ybz-LI-W3M">
+                                            <rect key="frame" x="55" y="11" width="45" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="8TS-2m-4Yn" customClass="IndicatorLabel" customModule="Demo" customModuleProvider="target">
+                                            <rect key="frame" x="25" y="11.5" width="20" height="20"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="20" id="n5o-6V-4mb"/>
+                                                <constraint firstAttribute="width" constant="20" id="noW-N6-fet"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="ybz-LI-W3M" secondAttribute="trailing" constant="5" id="8VN-wW-yFL"/>
                                         <constraint firstItem="ybz-LI-W3M" firstAttribute="top" secondItem="pam-73-ZdD" secondAttribute="topMargin" id="NG4-xf-ASz"/>
-                                        <constraint firstItem="ybz-LI-W3M" firstAttribute="leading" secondItem="pam-73-ZdD" secondAttribute="leadingMargin" constant="15" id="STb-hB-0OA"/>
+                                        <constraint firstItem="8TS-2m-4Yn" firstAttribute="leading" secondItem="pam-73-ZdD" secondAttribute="leadingMargin" constant="5" id="cIL-v3-GMk"/>
                                         <constraint firstItem="ybz-LI-W3M" firstAttribute="bottom" secondItem="pam-73-ZdD" secondAttribute="bottomMargin" id="cUe-b7-APc"/>
-                                        <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="ybz-LI-W3M" secondAttribute="trailing" id="eDE-cQ-E0G"/>
+                                        <constraint firstItem="8TS-2m-4Yn" firstAttribute="centerY" secondItem="pam-73-ZdD" secondAttribute="centerY" id="eK7-SX-4DM"/>
+                                        <constraint firstItem="ybz-LI-W3M" firstAttribute="leading" secondItem="pam-73-ZdD" secondAttribute="leadingMargin" priority="750" constant="5" id="isL-Kk-SPK"/>
+                                        <constraint firstItem="ybz-LI-W3M" firstAttribute="leading" secondItem="8TS-2m-4Yn" secondAttribute="trailing" constant="10" id="wk5-xX-gA9"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="contentLabel" destination="ybz-LI-W3M" id="fVi-cG-nfu"/>
+                                    <outlet property="indicatorLabel" destination="8TS-2m-4Yn" id="b6j-qt-oKe"/>
+                                    <outlet property="leadingConstraint" destination="wk5-xX-gA9" id="9M1-DL-6FA"/>
+                                    <outlet property="nameLabel" destination="ybz-LI-W3M" id="VaI-Xr-AG9"/>
                                     <segue destination="KDb-se-p0S" kind="show" identifier="displayMessages" id="9e0-MH-cdW"/>
                                 </connections>
                             </tableViewCell>
@@ -177,6 +192,7 @@
                                 </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="KDb-se-p0S" id="2j5-8A-wzI"/>
+                                    <outlet property="delegate" destination="KDb-se-p0S" id="mPu-fB-QTZ"/>
                                 </connections>
                             </tableView>
                         </subviews>

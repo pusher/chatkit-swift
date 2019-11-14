@@ -78,6 +78,14 @@ public class MessagesViewModel {
         self.provider.fetchOlderMessages(numberOfMessages: numberOfMessages, completionHandler: completionHandler)
     }
     
+    /// Marks the `lastReadMessage` and all messages preceding that message as read.
+    ///
+    /// - Parameters:
+    ///     - lastReadMessage: The last message read by the user.
+    public func markMessagesAsRead(lastReadMessage: Message) {
+        self.provider.markMessagesAsRead(lastReadMessage: lastReadMessage)
+    }
+    
     // MARK: - Private methods
     
     private func reload() {

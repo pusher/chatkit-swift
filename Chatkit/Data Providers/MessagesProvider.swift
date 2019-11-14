@@ -103,6 +103,14 @@ public class MessagesProvider {
         }
     }
     
+    /// Marks the `lastReadMessage` and all messages preceding that message as read.
+    ///
+    /// - Parameters:
+    ///     - lastReadMessage: The last message read by the user.
+    public func markMessagesAsRead(lastReadMessage: Message) {
+        self.dataSimulator.markMessagesAsRead(lastReadMessage: lastReadMessage)
+    }
+    
     // MARK: - Memory management
     
     deinit {

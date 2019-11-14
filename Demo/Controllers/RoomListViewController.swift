@@ -49,10 +49,11 @@ class RoomListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "roomCell", for: indexPath)
         
-        if let roomCell = cell as? TextTableViewCell, let viewModel = self.viewModel {
+        if let roomCell = cell as? RoomTableViewCell, let viewModel = self.viewModel {
             let room = viewModel.rooms[indexPath.row]
             
-            roomCell.contentLabel.text = room.name
+            roomCell.nameLabel.text = room.name
+            roomCell.numberOfUnreadMessages = room.unreadCount
         }
         
         return cell
@@ -105,19 +106,21 @@ extension RoomListViewController: JoinedRoomsViewModelDelegate {
         self.tableView.beginUpdates()
         
         let indexPath = IndexPath(row: index, section: 0)
-        self.tableView.reloadRows(at: [indexPath], with: .fade)
+        self.tableView.reloadRows(at: [indexPath], with: .none)
         
         self.tableView.endUpdates()
     }
     
     func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didMoveRoomFrom oldIndex: Int, to newIndex: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
-        self.tableView.beginUpdates()
-        
         let oldIndexPath = IndexPath(row: oldIndex, section: 0)
         let newIndexPath = IndexPath(row: newIndex, section: 0)
         
+        self.tableView.beginUpdates()
         self.tableView.moveRow(at: oldIndexPath, to: newIndexPath)
+        self.tableView.endUpdates()
         
+        self.tableView.beginUpdates()
+        self.tableView.reloadRows(at: [newIndexPath], with: .none)
         self.tableView.endUpdates()
     }
     
