@@ -16,20 +16,10 @@ public class TypingUsersProvider {
     public private(set) var state: RealTimeProviderState
     
     /// The object that is notified when the content of the maintained collection of typing users changed.
-    public weak var delegate: TypingUsersProviderDelegate? {
-        didSet {
-            if delegate == nil {
-                self.typingUsersFactory.stopTyping()
-            }
-            else {
-                self.typingUsersFactory.startTyping()
-            }
-        }
-    }
+    public weak var delegate: TypingUsersProviderDelegate?
     
     private let roomManagedObjectID: NSManagedObjectID
     private let fetchedResultsController: FetchedResultsController<UserEntity>
-    private let typingUsersFactory: TypingUsersFactory
     
     /// The set of all users currently typing on a given room.
     public var typingUsers: Set<User> {
@@ -39,12 +29,11 @@ public class TypingUsersProvider {
     
     // MARK: - Initializers
     
-    init(room: Room, currentUser: User, persistenceController: PersistenceController, completionHandler: @escaping CompletionHandler) {
+    init(room: Room, persistenceController: PersistenceController) {
         self.roomIdentifier = room.identifier
-        self.state = .degraded
+        self.state = .connected
         
         self.roomManagedObjectID = room.objectID
-        self.typingUsersFactory = TypingUsersFactory(roomID: self.roomManagedObjectID, persistenceController: persistenceController)
         
         let context = persistenceController.mainContext
         let predicate = NSPredicate(format: "ANY %K == %@", #keyPath(UserEntity.typingInRooms), self.roomManagedObjectID)
@@ -58,24 +47,6 @@ public class TypingUsersProvider {
         
         self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
         self.fetchedResultsController.delegate = self
-        
-        self.fetchData(completionHandler: completionHandler)
-    }
-    
-    // MARK: - Private methods
-    
-    private func fetchData(completionHandler: @escaping CompletionHandler) {
-        self.state = .connected
-        
-        DispatchQueue.main.async {
-            completionHandler(nil)
-        }
-    }
-    
-    // MARK: - Memory management
-    
-    deinit {
-        self.typingUsersFactory.stopTyping()
     }
     
 }

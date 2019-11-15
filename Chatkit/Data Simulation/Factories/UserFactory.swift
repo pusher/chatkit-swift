@@ -20,7 +20,7 @@ class UserFactory {
                     userData: nil,
                     createdAt: now,
                     updatedAt: now,
-                    objectID: UserEntityFactory.currentUserID)
+                    objectID: nil!) // FIXME: Make this optional for data that is not supposed to be persisted.
             }
             
             completionHandler(users)

@@ -27,16 +27,7 @@ public class MessagesViewModel {
     }
     
     /// The object that is notified when the content of the maintained collection of message rows changed.
-    public weak var delegate: MessagesViewModelDelegate? {
-        didSet {
-            if delegate == nil {
-                self.provider.messageFactory.stopReceivingNewMessages()
-            }
-            else {
-                self.provider.messageFactory.startReceivingNewMessages()
-            }
-        }
-    }
+    public weak var delegate: MessagesViewModelDelegate?
     
     // MARK: - Initializers
     
@@ -85,6 +76,14 @@ public class MessagesViewModel {
         }
         
         self.provider.fetchOlderMessages(numberOfMessages: numberOfMessages, completionHandler: completionHandler)
+    }
+    
+    /// Marks the `lastReadMessage` and all messages preceding that message as read.
+    ///
+    /// - Parameters:
+    ///     - lastReadMessage: The last message read by the user.
+    public func markMessagesAsRead(lastReadMessage: Message) {
+        self.provider.markMessagesAsRead(lastReadMessage: lastReadMessage)
     }
     
     // MARK: - Private methods

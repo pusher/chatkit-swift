@@ -16,7 +16,6 @@ public class JoinedRoomsProvider {
     public weak var delegate: JoinedRoomsProviderDelegate?
     
     private let fetchedResultsController: FetchedResultsController<RoomEntity>
-    private let roomFactory: RoomEntityFactory
     
     /// The set of all rooms joined by the user.
     public var rooms: Set<Room> {
@@ -26,9 +25,8 @@ public class JoinedRoomsProvider {
     
     // MARK: - Initializers
     
-    init(currentUser: User, persistenceController: PersistenceController, completionHandler: @escaping CompletionHandler) {
-        self.state = .degraded
-        self.roomFactory = RoomEntityFactory(currentUserManagedObjectID: currentUser.objectID, persistenceController: persistenceController)
+    init(currentUser: User, persistenceController: PersistenceController) {
+        self.state = .connected
         
         let context = persistenceController.mainContext
         
@@ -48,20 +46,6 @@ public class JoinedRoomsProvider {
         
         self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
         self.fetchedResultsController.delegate = self
-        
-        self.fetchData(completionHandler: completionHandler)
-    }
-    
-    // MARK: - Private methods
-    
-    private func fetchData(completionHandler: @escaping CompletionHandler) {
-        self.state = .connected
-        
-        self.roomFactory.receiveInitialListOfRooms(numberOfRooms: 10, delay: 1.0) {
-            DispatchQueue.main.async {
-                completionHandler(nil)
-            }
-        }
     }
     
 }

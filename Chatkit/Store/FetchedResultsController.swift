@@ -105,16 +105,12 @@ class FetchedResultsController<ResultType> : NSObject, NSFetchedResultsControlle
             
             self.insertedObjects.append(index)
         
-        case .update:
+        case .update, .move:
             guard let index = indexPath?.item else {
                 return
             }
             
             self.delegate?.fetchedResultsController(self, didUpdateObject: object, at: index)
-            
-        case .move:
-            // FIXME: Ignore for now.
-            break
             
         case .delete:
             guard let index = indexPath?.item else {

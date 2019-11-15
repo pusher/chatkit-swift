@@ -21,20 +21,11 @@ public class MessagesProvider {
     public private(set) var state: (realTime: RealTimeProviderState, paged: PagedProviderState)
     
     /// The object that is notified when the content of the maintained collection of messages changed.
-    public weak var delegate: MessagesProviderDelegate? {
-        didSet {
-            if delegate == nil {
-                self.messageFactory.stopReceivingNewMessages()
-            }
-            else {
-                self.messageFactory.startReceivingNewMessages()
-            }
-        }
-    }
+    public weak var delegate: MessagesProviderDelegate?
     
     private let roomManagedObjectID: NSManagedObjectID
     private let fetchedResultsController: FetchedResultsController<MessageEntity>
-    let messageFactory: MessageEntityFactory
+    private let dataSimulator: DataSimulator
     
     /// The array of messages for the given room.
     ///
@@ -51,13 +42,14 @@ public class MessagesProvider {
     
     // MARK: - Initializers
     
-    init(room: Room, currentUser: User, persistenceController: PersistenceController, completionHandler: @escaping CompletionHandler) {
+    init(room: Room, persistenceController: PersistenceController, dataSimulator: DataSimulator) {
         self.roomIdentifier = room.identifier
-        self.state.realTime = .degraded
-        self.state.paged = .partiallyPopulated
         
+        self.dataSimulator = dataSimulator
         self.roomManagedObjectID = room.objectID
-        self.messageFactory = MessageEntityFactory(roomID: self.roomManagedObjectID, currentUserID: currentUser.objectID, persistenceController: persistenceController)
+        
+        self.state.realTime = .connected
+        self.state.paged = dataSimulator.pagedState(for: room.objectID)
         
         let context = persistenceController.mainContext
         let predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.room), self.roomManagedObjectID)
@@ -78,8 +70,6 @@ public class MessagesProvider {
         }
         
         self.fetchedResultsController.delegate = self
-        
-        self.fetchData(completionHandler: completionHandler)
     }
     
     // MARK: - Methods
@@ -93,7 +83,7 @@ public class MessagesProvider {
     ///     - completionHandler:An optional completion handler called when the call to the web
     ///     service finishes with either a successful result or an error.
     public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: CompletionHandler? = nil) {
-        guard self.state.paged == .partiallyPopulated, let lastMessage = self.messages.first else {
+        guard self.state.paged == .partiallyPopulated else {
             if let completionHandler = completionHandler {
                 // TODO: Return error
                 completionHandler(nil)
@@ -104,8 +94,8 @@ public class MessagesProvider {
         
         self.state.paged = .fetching
         
-        self.messageFactory.receiveOldMessages(numberOfMessages: Int(numberOfMessages), lastMessageIdentifier: lastMessage.identifier, lastMessageDate: lastMessage.createdAt, delay: 1.0) {
-            self.state.paged = .partiallyPopulated
+        self.dataSimulator.fetchOlderMessages(for: self.roomManagedObjectID) {
+            self.state.paged = self.dataSimulator.pagedState(for: self.roomManagedObjectID)
             
             if let completionHandler = completionHandler {
                 completionHandler(nil)
@@ -113,24 +103,17 @@ public class MessagesProvider {
         }
     }
     
-    // MARK: - Private methods
-    
-    private func fetchData(completionHandler: @escaping CompletionHandler) {
-        self.state.realTime = .connected
-        
-        self.messageFactory.receiveInitialMessages(numberOfMessages: 10, delay: 1.0) {
-            self.state.paged = .partiallyPopulated
-            
-            DispatchQueue.main.async {
-                completionHandler(nil)
-            }
-        }
+    /// Marks the `lastReadMessage` and all messages preceding that message as read.
+    ///
+    /// - Parameters:
+    ///     - lastReadMessage: The last message read by the user.
+    public func markMessagesAsRead(lastReadMessage: Message) {
+        self.dataSimulator.markMessagesAsRead(lastReadMessage: lastReadMessage)
     }
     
     // MARK: - Memory management
     
     deinit {
-        self.messageFactory.stopReceivingNewMessages()
         self.fetchedResultsController.delegate = nil
     }
     
