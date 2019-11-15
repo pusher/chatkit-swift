@@ -10,6 +10,7 @@ Pod::Spec.new do |s|
 
   s.requires_arc = true
   s.source_files = 'Chatkit/**/*.swift'
+  s.resources = 'Chatkit/**/*.xcdatamodeld'
 
   s.dependency 'PusherPlatform', '~> 0.7.2'
   s.ios.dependency 'PushNotifications', '~> 2.1.2'
