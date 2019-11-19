@@ -109,28 +109,34 @@ extension DataSimulator {
     
     func scheduleAllEvents() {
         // George - Olivia
+        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 3.0)
         self.schedule(self.createMessageEvent(message: "Hi George", from: self.currentUserID, in: self.thirdRoomID), after: 4.0)
         
+        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 5.0)
         self.schedule(self.createMessageEvent(message: "Did you manage do complete the whole routine?", from: self.currentUserID, in: self.thirdRoomID), after: 6.0)
         
         self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 9.0)
         self.schedule(self.createMessageEvent(message: "Yes, I did 😎", from: self.thirdUserID, in: self.thirdRoomID), after: 11.0)
         
+        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 13.0)
         self.schedule(self.createMessageEvent(message: "Where there any elements of the routine that were especially hard for you?", from: self.currentUserID, in: self.thirdRoomID), after: 15.0)
         
         self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 16.0)
         self.schedule(self.createMessageEvent(message: "I struggled with push-ups 😐", from: self.thirdUserID, in: self.thirdRoomID), after: 17.0)
         
+        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 20.0)
         self.schedule(self.createMessageEvent(message: "Perhaps we could reduce the number of push-ups for you and see if that helps tomorrow?", from: self.currentUserID, in: self.thirdRoomID), after: 21.0)
         
         self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 22.0)
         self.schedule(self.createMessageEvent(message: "That sound great! 👍", from: self.thirdUserID, in: self.thirdRoomID), after: 23.0)
         
+        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 24.0)
         self.schedule(self.createMessageEvent(message: "I will amend your daily routine to include that change", from: self.currentUserID, in: self.thirdRoomID), after: 25.0)
         
         self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 26.0)
         self.schedule(self.createMessageEvent(message: "Thank you! Bye bye", from: self.thirdUserID, in: self.thirdRoomID), after: 27.0)
         
+        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 28.0)
         self.schedule(self.createMessageEvent(message: "Bye", from: self.currentUserID, in: self.thirdRoomID), after: 29.0)
         
         // Amelia - Olivia
