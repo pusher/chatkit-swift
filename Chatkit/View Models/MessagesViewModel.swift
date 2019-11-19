@@ -31,11 +31,7 @@ public class MessagesViewModel {
     
     // MARK: - Initializers
     
-    /// Designated initializer for the class.
-    ///
-    /// - Parameters:
-    ///     - provider: The messages provider used as the source of data.
-    public init(provider: MessagesProvider) {
+    init(provider: MessagesProvider) {
         self.rows = []
         
         self.provider = provider
