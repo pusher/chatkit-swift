@@ -218,6 +218,26 @@ public class Chatkit {
         completionHandler(provider, nil)
     }
     
+    /// Creates an instance of `JoinedRoomsViewModel`.
+    ///
+    /// - Parameters:
+    ///     - completionHandler: A completion handler called when an instance of
+    ///     `JoinedRoomsViewModel` has been successfuly created or the instantiation failed due to
+    ///     an error.
+    public func createJoinedRoomsViewModel(completionHandler: @escaping (JoinedRoomsViewModel?, Error?) -> Void) {
+        self.createJoinedRoomsProvider { provider, error in
+            guard error == nil,
+                let provider = provider else {
+                    completionHandler(nil, error)
+                    return
+            }
+            
+            let viewModel = JoinedRoomsViewModel(provider: provider)
+            
+            completionHandler(viewModel, nil)
+        }
+    }
+    
     /// Creates an instance of `MessagesViewModel`.
     ///
     /// - Parameters:
