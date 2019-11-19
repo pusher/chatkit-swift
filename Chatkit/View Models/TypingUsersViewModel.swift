@@ -39,7 +39,16 @@ public class TypingUsersViewModel {
             return
         }
         
-        let names = self.provider.typingUsers.map { $0.name ?? self.userNamePlaceholder }.sorted().prefix(3).joined(separator: ", ")
+        var sortedNames = self.provider.typingUsers.map { $0.name ?? self.userNamePlaceholder }.sorted()
+        
+        if sortedNames.count > 3 {
+            let numberOfTruncatedUsers = sortedNames.count - 3
+            
+            sortedNames = Array(sortedNames.prefix(3))
+            sortedNames.append("\(numberOfTruncatedUsers) more")
+        }
+        
+        let names = sortedNames.joined(separator: ", ")
         let verb = self.provider.typingUsers.count == 1 ? "is" : "are"
         
         // TODO: Provide localization for all languages supported by Pusher.
