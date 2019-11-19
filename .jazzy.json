@@ -1,0 +1,53 @@
+{
+  "xcodebuild_arguments": [ "-workspace", "Chatkit.xcworkspace", "-scheme", "Chatkit" ],
+  "documentation": "./docs-src/*",
+  "custom_categories": [
+    {
+      "name": "Overview",
+      "children": [
+        "Initialization",
+        "View Models and Providers"
+      ]
+    },
+    {
+      "name": "Entry point",
+      "children": [
+        "Chatkit",
+        "ChatkitDelegate"
+      ]
+    },
+    {
+      "name": "Realtime Data Providers",
+      "children": [
+        "JoinedRoomsProvider",
+        "JoinedRoomsProviderDelegate",
+        "RoomMembersProvider",
+        "RoomMembersProviderDelegate",
+        "TypingUsersProvider",
+        "TypingUsersProviderDelegate",
+        "MessagesProvider",
+        "MessagesProviderDelegate",
+        "RealTimeProviderState"
+      ]
+    },
+    {
+      "name": "Paged Data Providers",
+      "children": [
+        "AvailableRoomsProvider",
+        "AvailableRoomsProviderDelegate",
+        "UsersProvider",
+        "UsersProviderDelegate",
+        "PagedProviderState"
+      ]
+    },
+    {
+      "name": "View Models",
+      "children": [
+        "JoinedRoomsViewModel",
+        "JoinedRoomsViewModelDelegate",
+        "TypingUsersViewModel",
+        "TypingUsersViewModelDelegate"
+      ]
+    }
+  ]
+}
