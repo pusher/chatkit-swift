@@ -2,9 +2,9 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-/// A provider which exposes a collection of members for a given room.
+/// A provider which exposes the set of `User`s which are members of a given `Room`.
 ///
-/// The collection is updated in real time when a user joins or leaves a room.
+/// The collection is updated in real time when users join or leave the room.
 public class RoomMembersProvider {
     
     // MARK: - Properties

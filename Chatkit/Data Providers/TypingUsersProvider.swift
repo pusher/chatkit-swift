@@ -2,7 +2,7 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-/// A provider which exposes a collection of users currently typing on a given room.
+/// A provider which exposes the set of `User`s currently typing on a given `Room`.
 ///
 /// The collection is updated in real time when a user begins or ends typing on a room.
 public class TypingUsersProvider {

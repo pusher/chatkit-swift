@@ -4,8 +4,11 @@ import PusherPlatform
 
 /// A provider which exposes a collection of messages for a given room.
 ///
-/// Initialy the N most recent messages are available. New messages are automatically added in real time.
-/// More older messages can be added on request.
+/// Initially the most recent messages are available.
+///
+/// New messages are added in real time.
+///
+/// More older messages can be fetched and added to the collection by calling methods on this provider.
 public class MessagesProvider {
     
     // MARK: - Properties
@@ -20,19 +23,22 @@ public class MessagesProvider {
     ///     - paged: The current state of the provider related to the non-real time web service.
     public private(set) var state: (realTime: RealTimeProviderState, paged: PagedProviderState)
     
-    /// The object that is notified when the content of the maintained collection of messages changed.
+    /// The object that is notified when the list `messages` has changed.
     public weak var delegate: MessagesProviderDelegate?
     
     private let roomManagedObjectID: NSManagedObjectID
     private let fetchedResultsController: FetchedResultsController<MessageEntity>
     private let dataSimulator: DataSimulator
     
-    /// The array of messages for the given room.
+    /// The array of available messages for the given room.
     ///
-    /// This array contains all messages for the given room and retrieved from the web service as a result
-    /// of either an internal real time subscription to the web service or explicit calls triggered
-    /// as a result of calling `fetchOlderMessages(numberOfMessages:completionHandler:)`
-    /// method.
+    /// The array contains all messages for the room which have been received by the client device.
+    ///
+    /// Initially this will be some of the most recent messages.
+    ///
+    /// New messages are always added to this array.
+    ///
+    /// If more older messages are required, call `fetchOlderMessages(...)` to have them added to this array.
     public var messages: [Message] {
         return self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
     }
@@ -74,14 +80,19 @@ public class MessagesProvider {
     
     // MARK: - Methods
     
-    /// Triggers an asynchronous call to the web service that retrieves a batch of historical messages
-    /// currently not present in the maintained collection of messages.
+    /// Fetch more old messages from the Chatkit service and add them to the `messages` array.
+    ///
+    /// This call is asynchronous because messages may need to be retrieved from the network.
+    ///
+    /// On success, the completion handler receives `nil`, and the messages are added to the `messages` array.
+    ///
+    /// The `delegate` will be informed of the change to the `messages` array.
     ///
     /// - Parameters:
     ///     - numberOfMessages: The maximum number of messages that should be retrieved from
     ///     the web service.
-    ///     - completionHandler:An optional completion handler called when the call to the web
-    ///     service finishes with either a successful result or an error.
+    ///     - completionHandler:An optional completion handler invoked when the operation is complete.
+    ///     The completion handler receives an Error, or nil on success.
     public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: CompletionHandler? = nil) {
         guard self.state.paged == .partiallyPopulated else {
             if let completionHandler = completionHandler {
@@ -103,7 +114,9 @@ public class MessagesProvider {
         }
     }
     
-    /// Marks the `lastReadMessage` and all messages preceding that message as read.
+    /// Marks the `lastReadMessage` and all preceding messages as read.
+    ///
+    /// This will propagate to the currrent user's unread counts and other users which are watching the read state of the message via the Chatkit service.
     ///
     /// - Parameters:
     ///     - lastReadMessage: The last message read by the user.
@@ -163,28 +176,24 @@ extension MessagesProvider: FetchedResultsControllerDelegate {
 
 // MARK: - Delegate
 
-/// A delegate protocol that describes methods that will be called by the associated `MessagesProvider`
-/// when the maintainted collection of messages have changed.
+/// A delegate protocol for being notified when the `messages` array of a `MessagesProvider` has changed.
 public protocol MessagesProviderDelegate: class {
     
-    /// Notifies the receiver that new messages have been added to the maintened collection of
-    /// messages.
+    /// Called when old messages requested with `MessagesProvider.fetchOlderMessages(...)` have been added to the collection.
     ///
     /// - Parameters:
     ///     - messagesProvider: The `MessagesProvider` that called the method.
     ///     - messages: The array of older messages received from the web service.
     func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveOlderMessages messages: [Message])
     
-    /// Notifies the receiver that new messages have been added to the maintened collection of
-    /// messages.
+    /// Called when new messages have been added to the collection.
     ///
     /// - Parameters:
     ///     - messagesProvider: The `MessagesProvider` that called the method.
     ///     - messages: The new message received from the web service.
     func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveNewMessage message: Message)
     
-    /// Notifies the receiver that a message from the maintened collection of messages have been
-    /// updated.
+    /// Called when a message in the collection has been updated.
     ///
     /// - Parameters:
     ///     - messagesProvider: The `MessagesProvider` that called the method.
@@ -192,8 +201,7 @@ public protocol MessagesProviderDelegate: class {
     ///     - previousValue: The value of the message prior to the update.
     func messagesProvider(_ messagesProvider: MessagesProvider, didUpdateMessage message: Message, previousValue: Message)
     
-    /// Notifies the receiver that a message from the maintened collection of messages have been
-    /// removed.
+    /// Called when a message in the collection has been deleted.
     ///
     /// - Parameters:
     ///     - messagesProvider: The `MessagesProvider` that called the method.

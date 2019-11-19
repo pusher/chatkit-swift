@@ -4,7 +4,7 @@ import PusherPlatform
 
 /// A provider which exposes a collection of all rooms joined by the user.
 ///
-/// The collection is updated in real time when the user joins or leaves a room.
+/// The collection is updated in real time when the user joins or leaves rooms, or the properties of rooms are updated.
 public class JoinedRoomsProvider {
     
     // MARK: - Properties
@@ -12,7 +12,7 @@ public class JoinedRoomsProvider {
     /// The current state of the provider.
     public private(set) var state: RealTimeProviderState
     
-    /// The object that is notified when the content of the maintained collection of rooms changed.
+    /// The object that is notified when the set `rooms` has changed.
     public weak var delegate: JoinedRoomsProviderDelegate?
     
     private let fetchedResultsController: FetchedResultsController<RoomEntity>
@@ -87,30 +87,28 @@ extension JoinedRoomsProvider: FetchedResultsControllerDelegate {
 
 // MARK: - Delegate
 
-/// A delegate protocol that describes methods that will be called by the associated
-/// `JoinedRoomsProvider` when the maintainted collection of rooms have changed.
+/// A delegate protocol for being notified when the `rooms` property of a `JoinedRoomsProvider` has changed.
 public protocol JoinedRoomsProviderDelegate: class {
     
-    /// Notifies the receiver that new rooms have been added to the maintened collection of rooms.
+    /// Notifies the receiver that the current user has joined a room, and that it has been added to the set.
     ///
     /// - Parameters:
     ///     - joinedRoomsProvider: The `JoinedRoomsProvider` that called the method.
     ///     - room: The room joined by the user.
     func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didJoinRoom room: Room)
     
-    /// Notifies the receiver that a room from the maintened collection of rooms have been updated.
+    /// Notifies the receiver that a room the current user is a member of has been updated.
     ///
     /// - Parameters:
     ///     - joinedRoomsProvider: The `JoinedRoomsProvider` that called the method.
-    ///     - room: The updated value of the room.
-    ///     - previousValue: The value of the room prior to the update.
+    ///     - room: The new value of the room.
+    ///     - previousValue: The value of the room befrore it was updated.
     func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didUpdateRoom room: Room, previousValue: Room)
     
-    /// Notifies the receiver that a room from the maintened collection of rooms have been removed.
+    /// Notifies the receiver that the current user has left, or been removed from a room.
     ///
     /// - Parameters:
     ///     - joinedRoomsProvider: The `JoinedRoomsProvider` that called the method.
-    ///     - room: The room left by the user.
+    ///     - room: The room which the user is no longer a member of.
     func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didLeaveRoom room: Room)
-    
 }
