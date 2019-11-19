@@ -25,24 +25,24 @@ class MessageViewController: UIViewController {
         
         self.title = room.name ?? "Messages"
         
-        self.chatkit?.createMessagesProvider(for: room) { messagesProvider, error in
+        self.chatkit?.createMessagesViewModel(for: room) { viewModel, error in
             if let error = error {
                 print("Error: \(error.localizedDescription)")
             }
-            else if let messagesProvider = messagesProvider {
-                self.messagesViewModel = MessagesViewModel(provider: messagesProvider)
+            else if let viewModel = viewModel {
+                self.messagesViewModel = viewModel
                 self.messagesViewModel?.delegate = self
                 
                 self.tableView.reloadData()
             }
         }
         
-        self.chatkit?.createTypingUsersProvider(for: room) { typingUsersProvider, error in
+        self.chatkit?.createTypingUsersViewModel(for: room) { viewModel, error in
             if let error = error {
                 print("Error: \(error.localizedDescription)")
             }
-            else if let typingUsersProvider = typingUsersProvider {
-                self.typingUsersViewModel = TypingUsersViewModel(provider: typingUsersProvider)
+            else if let viewModel = viewModel {
+                self.typingUsersViewModel = viewModel
                 self.typingUsersViewModel?.delegate = self
                 
                 self.tableView.reloadData()

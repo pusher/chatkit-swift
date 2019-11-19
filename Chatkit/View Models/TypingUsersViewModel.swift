@@ -9,6 +9,7 @@ public class TypingUsersViewModel {
     public private(set) var value: String?
     
     private let provider: TypingUsersProvider
+    private let currentUserIdentifier: String
     private let userNamePlaceholder: String
     
     /// The object that is notified when the content of the `value` property has changed.
@@ -16,13 +17,8 @@ public class TypingUsersViewModel {
     
     // MARK: - Initializers
     
-    /// Designated initializer for the class.
-    ///
-    /// - Parameters:
-    ///     - provider: The typing users provider used as the source of data.
-    ///     - userNamePlaceholder: The placeholder used when a user doeas not have a value set
-    ///     for the name property.
-    public init(provider: TypingUsersProvider, userNamePlaceholder: String = "anonymous") {
+    init(provider: TypingUsersProvider, currentUserIdentifier: String, userNamePlaceholder: String) {
+        self.currentUserIdentifier = currentUserIdentifier
         self.userNamePlaceholder = userNamePlaceholder
         
         self.provider = provider
@@ -34,12 +30,21 @@ public class TypingUsersViewModel {
     // MARK: - Private methods
     
     private func reload() {
-        guard self.provider.typingUsers.count > 0 else {
+        var sortedNames = self.provider.typingUsers.filter{ $0.identifier != self.currentUserIdentifier }.map { $0.name ?? self.userNamePlaceholder }.sorted()
+        
+        guard sortedNames.count > 0 else {
             self.value = nil
             return
         }
         
-        let names = self.provider.typingUsers.map { $0.name ?? self.userNamePlaceholder }.sorted().joined(separator: ", ")
+        if sortedNames.count > 3 {
+            let numberOfTruncatedUsers = sortedNames.count - 3
+            
+            sortedNames = Array(sortedNames.prefix(3))
+            sortedNames.append("\(numberOfTruncatedUsers) more")
+        }
+        
+        let names = sortedNames.joined(separator: ", ")
         let verb = self.provider.typingUsers.count == 1 ? "is" : "are"
         
         // TODO: Provide localization for all languages supported by Pusher.

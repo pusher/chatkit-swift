@@ -29,11 +29,7 @@ public class JoinedRoomsViewModel {
     
     // MARK: - Initializers
     
-    /// Designated initializer for the class.
-    ///
-    /// - Parameters:
-    ///     - provider: The joined rooms provider used as the source of data.
-    public init(provider: JoinedRoomsProvider) {
+    init(provider: JoinedRoomsProvider) {
         self.rooms = []
         
         self.provider = provider

@@ -76,12 +76,12 @@ class RoomListViewController: UITableViewController {
     }
     
     private func createJoinedRoomsProvider() {
-        self.chatkit?.createJoinedRoomsProvider { joinedRoomsProvider, error in
+        self.chatkit?.createJoinedRoomsViewModel { viewModel, error in
             if let error = error {
                 print("Error: \(error.localizedDescription)")
             }
-            else if let joinedRoomsProvider = joinedRoomsProvider {
-                self.viewModel = JoinedRoomsViewModel(provider: joinedRoomsProvider)
+            else if let viewModel = viewModel {
+                self.viewModel = viewModel
                 self.viewModel?.delegate = self
                 
                 self.tableView.reloadData()
