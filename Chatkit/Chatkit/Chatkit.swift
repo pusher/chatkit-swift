@@ -23,22 +23,12 @@ public class Chatkit {
     public weak var delegate: ChatkitDelegate?
     
     private let persistenceController: PersistenceController
-    private let networkingController: NetworkingController
+//    private let networkingController: NetworkingController
     
     private let dataSimulator: DataSimulator
     
     private var usersProviderCache: [UUID : UsersProvider]
     private var availableRoomsProviderCache: [UUID : AvailableRoomsProvider]
-    
-    /// The instance locator used to identify the Chatkit instance.
-    public var instanceLocator: String {
-        return self.networkingController.instanceLocator
-    }
-    
-    /// The token provider used to authenticate as a user of Chatkit web service.
-    public var tokenProvider: PPTokenProvider {
-        return self.networkingController.tokenProvider
-    }
     
     // MARK: - Initializers
     
@@ -46,11 +36,10 @@ public class Chatkit {
     ///
     /// - Parameters:
     ///     - instanceLocator: The instance locator used to identify the Chatkit instance.
-    ///     - tokenProvider: The token provider used to authenticate as a user of Chatkit web service.
     ///     - logger: The logger used by the SDK.
     ///
     /// - Returns: An instance of `Chatkit` or throws an error when the initialization failed.
-    public init(instanceLocator: String, tokenProvider: PPTokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
+    public init(instanceLocator: String, logger: PPLogger = PPDefaultLogger()) throws {
         self.usersProviderCache = [:]
         self.availableRoomsProviderCache = [:]
         
@@ -73,7 +62,7 @@ public class Chatkit {
         let eventParser = ModularEventParser(logger: self.logger)
         eventParser.register(parser: ChatEventParser(persistenceController: self.persistenceController, logger: self.logger), for: .chat, with: .version6)
         
-        self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, eventParser: eventParser, logger: self.logger)
+//        self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, eventParser: eventParser, logger: self.logger)
         
         self.dataSimulator = DataSimulator(persistenceController: self.persistenceController)
     }
