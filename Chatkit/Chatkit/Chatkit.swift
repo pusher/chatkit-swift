@@ -205,12 +205,13 @@ public class Chatkit {
     ///     `TypingUsersProvider` has been successfuly created or the instantiation failed due to
     ///     an error.
     public func createTypingUsersProvider(for room: Room, completionHandler: @escaping (TypingUsersProvider?, Error?) -> Void) {
-        guard self.connectionStatus == .connected else {
-            completionHandler(nil, NetworkingError.disconnected)
-            return
+        guard self.connectionStatus == .connected,
+            let currentUser = self.currentUser else {
+                completionHandler(nil, NetworkingError.disconnected)
+                return
         }
         
-        let provider = TypingUsersProvider(room: room, persistenceController: self.persistenceController)
+        let provider = TypingUsersProvider(room: room, currentUser: currentUser, persistenceController: self.persistenceController)
         
         completionHandler(provider, nil)
     }

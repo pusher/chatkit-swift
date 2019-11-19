@@ -27,10 +27,13 @@ public class TypingUsersProvider {
         return Set(users)
     }
     
+    let currentUser: User
+    
     // MARK: - Initializers
     
-    init(room: Room, persistenceController: PersistenceController) {
+    init(room: Room, currentUser: User, persistenceController: PersistenceController) {
         self.roomIdentifier = room.identifier
+        self.currentUser = currentUser
         self.state = .connected
         
         self.roomManagedObjectID = room.objectID

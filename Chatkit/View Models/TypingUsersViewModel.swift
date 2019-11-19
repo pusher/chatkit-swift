@@ -34,12 +34,13 @@ public class TypingUsersViewModel {
     // MARK: - Private methods
     
     private func reload() {
-        guard self.provider.typingUsers.count > 0 else {
+        let currentUserIdentifier = self.provider.currentUser.identifier
+        var sortedNames = self.provider.typingUsers.filter{ $0.identifier != currentUserIdentifier }.map { $0.name ?? self.userNamePlaceholder }.sorted()
+        
+        guard sortedNames.count > 0 else {
             self.value = nil
             return
         }
-        
-        var sortedNames = self.provider.typingUsers.map { $0.name ?? self.userNamePlaceholder }.sorted()
         
         if sortedNames.count > 3 {
             let numberOfTruncatedUsers = sortedNames.count - 3
