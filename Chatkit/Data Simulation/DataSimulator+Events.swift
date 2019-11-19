@@ -46,37 +46,37 @@ extension DataSimulator {
                 let eleventhUser = self.createUser(in: context, identifier: "amelia", name: "Amelia")
                 self.eleventhUserID = eleventhUser.objectID
                 
-                let firstRoom = self.createRoom(in: context, identifier: "firstRoom", userName: "Oliver", members: [currentUser, firstUser])
+                let firstRoom = self.createRoom(in: context, identifier: "firstRoom", members: [currentUser, firstUser])
                 self.firstRoomID = firstRoom.objectID
                 
-                let secondRoom = self.createRoom(in: context, identifier: "secondRoom", userName: "Harry", members: [currentUser, secondUser])
+                let secondRoom = self.createRoom(in: context, identifier: "secondRoom", members: [currentUser, secondUser])
                 self.secondRoomID = secondRoom.objectID
                 
-                let thirdRoom = self.createRoom(in: context, identifier: "thirdRoom", userName: "George", isSubscribedToExerciseRoutinesPlan: true, members: [currentUser, thirdUser])
+                let thirdRoom = self.createRoom(in: context, identifier: "thirdRoom", isSubscribedToExerciseRoutinesPlan: true, members: [currentUser, thirdUser])
                 self.thirdRoomID = thirdRoom.objectID
                 
-                let fourthRoom = self.createRoom(in: context, identifier: "fourthRoom", userName: "Noah", members: [currentUser, fourthUser])
+                let fourthRoom = self.createRoom(in: context, identifier: "fourthRoom", members: [currentUser, fourthUser])
                 self.fourthRoomID = fourthRoom.objectID
                 
-                let fifthRoom = self.createRoom(in: context, identifier: "fifthRoom", userName: "Jack", members: [currentUser, fifthUser])
+                let fifthRoom = self.createRoom(in: context, identifier: "fifthRoom", members: [currentUser, fifthUser])
                 self.fifthRoomID = fifthRoom.objectID
                 
-                let sixthRoom = self.createRoom(in: context, identifier: "sixthRoom", userName: "Jacob", members: [currentUser, sixthUser])
+                let sixthRoom = self.createRoom(in: context, identifier: "sixthRoom", members: [currentUser, sixthUser])
                 self.sixthRoomID = sixthRoom.objectID
                 
-                let seventhRoom = self.createRoom(in: context, identifier: "seventhRoom", userName: "Bob", members: [currentUser, seventhUser])
+                let seventhRoom = self.createRoom(in: context, identifier: "seventhRoom", members: [currentUser, seventhUser])
                 self.seventhRoomID = seventhRoom.objectID
                 
-                let eighthRoom = self.createRoom(in: context, identifier: "eighthRoom", userName: "Leo", members: [currentUser, eighthUser])
+                let eighthRoom = self.createRoom(in: context, identifier: "eighthRoom", members: [currentUser, eighthUser])
                 self.eighthRoomID = eighthRoom.objectID
                 
-                let ninthRoom = self.createRoom(in: context, identifier: "ninthRoom", userName: "Oscar", members: [currentUser, ninthUser])
+                let ninthRoom = self.createRoom(in: context, identifier: "ninthRoom", members: [currentUser, ninthUser])
                 self.ninthRoomID = ninthRoom.objectID
                 
-                let tenthRoom = self.createRoom(in: context, identifier: "tenthRoom", userName: "Charlie", members: [currentUser, tenthUser])
+                let tenthRoom = self.createRoom(in: context, identifier: "tenthRoom", members: [currentUser, tenthUser])
                 self.tenthRoomID = tenthRoom.objectID
                 
-                let eleventhRoom = self.createRoom(in: context, identifier: "eleventhRoom", userName: "Amelia", members: [eleventhUser])
+                let eleventhRoom = self.createRoom(in: context, identifier: "eleventhRoom", members: [eleventhUser])
                 self.eleventhRoomID = eleventhRoom.objectID
                 
                 self.createMessage(in: context, content: "Hello", sender: firstUser, room: firstRoom)
@@ -192,7 +192,7 @@ extension DataSimulator {
         return user
     }
     
-    private func createRoom(in context: NSManagedObjectContext, identifier: String, userName: String, isSubscribedToExerciseRoutinesPlan: Bool = false, members: [UserEntity]) -> RoomEntity {
+    private func createRoom(in context: NSManagedObjectContext, identifier: String, isSubscribedToExerciseRoutinesPlan: Bool = false, members: [UserEntity]) -> RoomEntity {
         let now = Date()
         
         let room = context.create(RoomEntity.self)
@@ -207,7 +207,7 @@ extension DataSimulator {
             let userData = ["planID" : "exercise-basic",
                             "planName" : planName]
             
-            room.name = "\(userName) - \(planName) Plan"
+            room.name = "\(planName) Plan"
             room.userData = UserDataSerializer.serialize(userData: userData)
         }
         else {
@@ -215,7 +215,7 @@ extension DataSimulator {
             let userData = ["planID" : "routine-basic",
                             "planName" : planName]
             
-            room.name = "\(userName) - \(planName) Plan"
+            room.name = "\(planName) Plan"
             room.userData = UserDataSerializer.serialize(userData: userData)
         }
         
