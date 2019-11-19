@@ -34,7 +34,7 @@ public class TypingUsersViewModel {
     // MARK: - Private methods
     
     private func reload() {
-        let currentUserIdentifier = self.provider.currentUser.identifier
+        let currentUserIdentifier = self.provider.currentUserIdentifier
         var sortedNames = self.provider.typingUsers.filter{ $0.identifier != currentUserIdentifier }.map { $0.name ?? self.userNamePlaceholder }.sorted()
         
         guard sortedNames.count > 0 else {
