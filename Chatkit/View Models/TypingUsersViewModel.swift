@@ -9,6 +9,7 @@ public class TypingUsersViewModel {
     public private(set) var value: String?
     
     private let provider: TypingUsersProvider
+    private let currentUserIdentifier: String
     private let userNamePlaceholder: String
     
     /// The object that is notified when the content of the `value` property has changed.
@@ -16,13 +17,8 @@ public class TypingUsersViewModel {
     
     // MARK: - Initializers
     
-    /// Designated initializer for the class.
-    ///
-    /// - Parameters:
-    ///     - provider: The typing users provider used as the source of data.
-    ///     - userNamePlaceholder: The placeholder used when a user doeas not have a value set
-    ///     for the name property.
-    public init(provider: TypingUsersProvider, userNamePlaceholder: String = "anonymous") {
+    init(provider: TypingUsersProvider, currentUserIdentifier: String, userNamePlaceholder: String) {
+        self.currentUserIdentifier = currentUserIdentifier
         self.userNamePlaceholder = userNamePlaceholder
         
         self.provider = provider
@@ -34,8 +30,7 @@ public class TypingUsersViewModel {
     // MARK: - Private methods
     
     private func reload() {
-        let currentUserIdentifier = self.provider.currentUserIdentifier
-        var sortedNames = self.provider.typingUsers.filter{ $0.identifier != currentUserIdentifier }.map { $0.name ?? self.userNamePlaceholder }.sorted()
+        var sortedNames = self.provider.typingUsers.filter{ $0.identifier != self.currentUserIdentifier }.map { $0.name ?? self.userNamePlaceholder }.sorted()
         
         guard sortedNames.count > 0 else {
             self.value = nil

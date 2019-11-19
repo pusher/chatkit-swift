@@ -37,12 +37,12 @@ class MessageViewController: UIViewController {
             }
         }
         
-        self.chatkit?.createTypingUsersProvider(for: room) { typingUsersProvider, error in
+        self.chatkit?.createTypingUsersViewModel(for: room) { viewModel, error in
             if let error = error {
                 print("Error: \(error.localizedDescription)")
             }
-            else if let typingUsersProvider = typingUsersProvider {
-                self.typingUsersViewModel = TypingUsersViewModel(provider: typingUsersProvider)
+            else if let viewModel = viewModel {
+                self.typingUsersViewModel = viewModel
                 self.typingUsersViewModel?.delegate = self
                 
                 self.tableView.reloadData()

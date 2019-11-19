@@ -167,6 +167,7 @@ public class Chatkit {
     /// Creates an instance of `MessagesProvider`.
     ///
     /// - Parameters:
+    ///     - `room`: An instance of `Room` associated with the provider.
     ///     - completionHandler: A completion handler called when an instance of
     ///     `MessagesProvider` has been successfuly created or the instantiation failed due to
     ///     an error.
@@ -184,6 +185,7 @@ public class Chatkit {
     /// Creates an instance of `RoomMembersProvider`.
     ///
     /// - Parameters:
+    ///     - `room`: An instance of `Room` associated with the provider.
     ///     - completionHandler: A completion handler called when an instance of
     ///     `RoomMembersProvider` has been successfuly created or the instantiation failed due to
     ///     an error.
@@ -201,19 +203,47 @@ public class Chatkit {
     /// Creates an instance of `TypingUsersProvider`.
     ///
     /// - Parameters:
+    ///     - `room`: An instance of `Room` associated with the provider.
     ///     - completionHandler: A completion handler called when an instance of
     ///     `TypingUsersProvider` has been successfuly created or the instantiation failed due to
     ///     an error.
     public func createTypingUsersProvider(for room: Room, completionHandler: @escaping (TypingUsersProvider?, Error?) -> Void) {
-        guard self.connectionStatus == .connected,
-            let currentUser = self.currentUser else {
-                completionHandler(nil, NetworkingError.disconnected)
-                return
+        guard self.connectionStatus == .connected else {
+            completionHandler(nil, NetworkingError.disconnected)
+            return
         }
         
-        let provider = TypingUsersProvider(room: room, currentUser: currentUser, persistenceController: self.persistenceController)
+        let provider = TypingUsersProvider(room: room, persistenceController: self.persistenceController)
         
         completionHandler(provider, nil)
+    }
+    
+    /// Creates an instance of `TypingUsersViewModel`.
+    ///
+    /// - Parameters:
+    ///     - `room`: An instance of `Room` associated with the view model.
+    ///     - userNamePlaceholder: The placeholder used when a user doeas not have a value set
+    ///     for the name property.
+    ///     - completionHandler: A completion handler called when an instance of
+    ///     `TypingUsersViewModel` has been successfuly created or the instantiation failed due to
+    ///     an error.
+    public func createTypingUsersViewModel(for room: Room, userNamePlaceholder: String = "anonymous", completionHandler: @escaping (TypingUsersViewModel?, Error?) -> Void) {
+        guard let currentUser = self.currentUser else {
+            completionHandler(nil, NetworkingError.disconnected)
+            return
+        }
+        
+        self.createTypingUsersProvider(for: room) { provider, error in
+            guard error == nil,
+                let provider = provider else {
+                    completionHandler(nil, error)
+                    return
+            }
+            
+            let viewModel = TypingUsersViewModel(provider: provider, currentUserIdentifier: currentUser.identifier, userNamePlaceholder: userNamePlaceholder)
+            
+            completionHandler(viewModel, nil)
+        }
     }
     
 }
