@@ -197,8 +197,8 @@
 
                 </div>
               </div>
-            <p>A delegate protocol that describes methods that will be called by the associated
-<code><a href="../Classes/Chatkit.html">Chatkit</a></code> class when the status of the maintained connection to Chatkit web service have changed.</p>
+            <p>A delegate protocol for observing changes to the <code><a href="../Classes/Chatkit.html">Chatkit</a></code> handle, including the proerties of
+the currently logged in user, and the state of the connection to the Chatkit services.</p>
 
           </section>
           <section class="section task-group-section">
@@ -217,7 +217,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Notifies the receiver that the currently logged in user have changed.</p>
+                        <p>Called when the properties of the currently authenticated user of the SDK change.</p>
 
                       </div>
                       <div class="declaration">
@@ -252,8 +252,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>The new current user have established the connection to Chatkit web
-service.</p>
+                                  <p>The new <code><a href="../Structs/User.html">User</a></code> entity representing the currently logged in user.</p>
                                 </div>
                               </td>
                             </tr>
@@ -276,8 +275,7 @@ service.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Notifies the receiver that the status of the maintained connection to Chatkit web service have
-changed.</p>
+                        <p>Called when the state of the connection to the Chatkit service changes.</p>
 
                       </div>
                       <div class="declaration">
@@ -307,12 +305,12 @@ changed.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>currentUser</em>
+                                <em>connectionStatus</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The new status of the connection to the web service.</p>
+                                  <p>The new state of the connection to the Chatkit service.</p>
                                 </div>
                               </td>
                             </tr>

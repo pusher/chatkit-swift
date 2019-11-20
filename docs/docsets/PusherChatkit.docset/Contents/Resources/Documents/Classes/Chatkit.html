@@ -518,8 +518,7 @@ been successfuly established or failed due to an error.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A completion handler called when an instance of
-<code><a href="../Classes/UsersProvider.html">UsersProvider</a></code> has been successfuly created or the instantiation failed due to an error.</p>
+                                  <p>A completion handler which will be called when the <code><a href="../Classes/UsersProvider.html">UsersProvider</a></code> is ready, or an <code>Error</code> occurs creating it.</p>
                                 </div>
                               </td>
                             </tr>
@@ -565,9 +564,7 @@ been successfuly established or failed due to an error.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A completion handler called when an instance of
-<code><a href="../Classes/AvailableRoomsProvider.html">AvailableRoomsProvider</a></code> has been successfuly created or the instantiation failed
-due to an error.</p>
+                                  <p>A completion handler which will be called when the <code><a href="../Classes/AvailableRoomsProvider.html">AvailableRoomsProvider</a></code> is ready, or an <code>Error</code> occurs creating it.</p>
                                 </div>
                               </td>
                             </tr>
@@ -592,6 +589,8 @@ due to an error.</p>
                       <div class="abstract">
                         <p>Creates an instance of <code><a href="../Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a></code>.</p>
 
+<p>This will provide access to a real time set of <code><a href="../Structs/Room.html">Room</a></code>s that the current user is a member of.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -613,9 +612,7 @@ due to an error.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A completion handler called when an instance of
-<code><a href="../Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a></code> has been successfuly created or the instantiation failed due to
-an error.</p>
+                                  <p>A completion handler which will be called when the <code><a href="../Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a></code> is ready, or an <code>Error</code> occurs creating it.</p>
                                 </div>
                               </td>
                             </tr>
@@ -640,6 +637,8 @@ an error.</p>
                       <div class="abstract">
                         <p>Creates an instance of <code><a href="../Classes/MessagesProvider.html">MessagesProvider</a></code>.</p>
 
+<p>This will provide access to a real time list of the <code><a href="../Structs/Message.html">Message</a></code>s in a given <code><a href="../Structs/Room.html">Room</a></code>.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -661,9 +660,7 @@ an error.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A completion handler called when an instance of
-<code><a href="../Classes/MessagesProvider.html">MessagesProvider</a></code> has been successfuly created or the instantiation failed due to
-an error.</p>
+                                  <p>A completion handler which will be called when the <code><a href="../Classes/MessagesProvider.html">MessagesProvider</a></code> is ready, or an <code>Error</code> occurs creating it.</p>
                                 </div>
                               </td>
                             </tr>
@@ -688,6 +685,8 @@ an error.</p>
                       <div class="abstract">
                         <p>Creates an instance of <code><a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a></code>.</p>
 
+<p>This will give access to a real time set of the <code><a href="../Structs/User.html">User</a></code>s who are members of a given <code><a href="../Structs/Room.html">Room</a></code></p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -709,9 +708,7 @@ an error.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A completion handler called when an instance of
-<code><a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a></code> has been successfuly created or the instantiation failed due to
-an error.</p>
+                                  <p>A completion handler which will be called when the <code><a href="../Classes/RoomMembersProvider.html">RoomMembersProvider</a></code> is ready, or an <code>Error</code> occurs creating it.</p>
                                 </div>
                               </td>
                             </tr>
@@ -736,6 +733,8 @@ an error.</p>
                       <div class="abstract">
                         <p>Creates an instance of <code><a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a></code>.</p>
 
+<p>This will give access to a real time set of the <code><a href="../Structs/User.html">User</a></code>s who are typing in a given <code><a href="../Structs/Room.html">Room</a></code>.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -757,9 +756,7 @@ an error.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A completion handler called when an instance of
-<code><a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a></code> has been successfuly created or the instantiation failed due to
-an error.</p>
+                                  <p>A completion handler which will be called when the <code><a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a></code> is ready, or an <code>Error</code> occurs creating it.</p>
                                 </div>
                               </td>
                             </tr>
@@ -784,6 +781,8 @@ an error.</p>
                       <div class="abstract">
                         <p>Creates an instance of <code><a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a></code>.</p>
 
+<p>This will give access to a real time sorted list of the <code><a href="../Structs/Room.html">Room</a></code>s that the current user is a member of.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -805,9 +804,7 @@ an error.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A completion handler called when an instance of
-<code><a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a></code> has been successfuly created or the instantiation failed due to
-an error.</p>
+                                  <p>A completion handler which will be called when the <code><a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel</a></code> is ready, or an <code>Error</code> occurs creating it.</p>
                                 </div>
                               </td>
                             </tr>
@@ -832,6 +829,8 @@ an error.</p>
                       <div class="abstract">
                         <p>Creates an instance of <code><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></code>.</p>
 
+<p>This will give access to a real time list of elements which can be rendered to create a conversation view for a given <code><a href="../Structs/Room.html">Room</a></code>.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -853,9 +852,7 @@ an error.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A completion handler called when an instance of
-<code><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></code> has been successfuly created or the instantiation failed due to
-an error.</p>
+                                  <p>A completion handler which will be called when the <code><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></code> is ready, or an <code>Error</code> occurs creating it.</p>
                                 </div>
                               </td>
                             </tr>
@@ -880,6 +877,8 @@ an error.</p>
                       <div class="abstract">
                         <p>Creates an instance of <code><a href="../Classes/TypingUsersViewModel.html">TypingUsersViewModel</a></code>.</p>
 
+<p>This will give access to a real time <code>String</code> describing the users which are currently typing in a given <code><a href="../Structs/Room.html">Room</a></code>.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -901,8 +900,7 @@ an error.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The placeholder used when a user doeas not have a value set
-for the name property.</p>
+                                  <p>The placeholder used when a user does not have a value set for the <code><a href="../Structs/User.html#/s:13PusherChatkit4UserV4nameSSSgvp">User.name</a></code> property.</p>
                                 </div>
                               </td>
                             </tr>
@@ -914,9 +912,7 @@ for the name property.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A completion handler called when an instance of
-<code><a href="../Classes/TypingUsersViewModel.html">TypingUsersViewModel</a></code> has been successfuly created or the instantiation failed due to
-an error.</p>
+                                  <p>A completion handler which will be called when the <code><a href="../Classes/TypingUsersViewModel.html">TypingUsersViewModel</a></code> is ready, or an <code>Error</code> occurs creating it.</p>
                                 </div>
                               </td>
                             </tr>

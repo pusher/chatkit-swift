@@ -111,8 +111,7 @@ public class Chatkit {
     /// Creates an instance of `UsersProvider`.
     ///
     /// - Parameters:
-    ///     - completionHandler: A completion handler called when an instance of
-    ///     `UsersProvider` has been successfuly created or the instantiation failed due to an error.
+    ///     - completionHandler: A completion handler which will be called when the `UsersProvider` is ready, or an `Error` occurs creating it.
     public func createUsersProvider(completionHandler: @escaping (UsersProvider?, Error?) -> Void) {
         let identifier = UUID()
         self.usersProviderCache[identifier] = UsersProvider { error in
@@ -130,9 +129,7 @@ public class Chatkit {
     /// Creates an instance of `AvailableRoomsProvider`.
     ///
     /// - Parameters:
-    ///     - completionHandler: A completion handler called when an instance of
-    ///     `AvailableRoomsProvider` has been successfuly created or the instantiation failed
-    ///     due to an error.
+    ///     - completionHandler: A completion handler which will be called when the `AvailableRoomsProvider` is ready, or an `Error` occurs creating it.
     public func createAvailableRoomsProvider(completionHandler: @escaping (AvailableRoomsProvider?, Error?) -> Void) {
         let identifier = UUID()
         self.availableRoomsProviderCache[identifier] = AvailableRoomsProvider { error in
@@ -149,10 +146,10 @@ public class Chatkit {
     
     /// Creates an instance of `JoinedRoomsProvider`.
     ///
+    /// This will provide access to a real time set of `Room`s that the current user is a member of.
+    ///
     /// - Parameters:
-    ///     - completionHandler: A completion handler called when an instance of
-    ///     `JoinedRoomsProvider` has been successfuly created or the instantiation failed due to
-    ///     an error.
+    ///     - completionHandler: A completion handler which will be called when the `JoinedRoomsProvider` is ready, or an `Error` occurs creating it.
     public func createJoinedRoomsProvider(completionHandler: @escaping (JoinedRoomsProvider?, Error?) -> Void) {
         guard let currentUser = self.currentUser, self.connectionStatus == .connected else {
             completionHandler(nil, NetworkingError.disconnected)
@@ -166,11 +163,11 @@ public class Chatkit {
     
     /// Creates an instance of `MessagesProvider`.
     ///
+    /// This will provide access to a real time list of the `Message`s in a given `Room`.
+    ///
     /// - Parameters:
-    ///     - `room`: An instance of `Room` associated with the provider.
-    ///     - completionHandler: A completion handler called when an instance of
-    ///     `MessagesProvider` has been successfuly created or the instantiation failed due to
-    ///     an error.
+    ///     - `room`: The `Room` for which the provider will provide messages.
+    ///     - completionHandler: A completion handler which will be called when the `MessagesProvider` is ready, or an `Error` occurs creating it.
     public func createMessagesProvider(for room: Room, completionHandler: @escaping (MessagesProvider?, Error?) -> Void) {
         guard self.connectionStatus == .connected else {
             completionHandler(nil, NetworkingError.disconnected)
@@ -184,11 +181,11 @@ public class Chatkit {
     
     /// Creates an instance of `RoomMembersProvider`.
     ///
+    /// This will give access to a real time set of the `User`s who are members of a given `Room`
+    ///
     /// - Parameters:
-    ///     - `room`: An instance of `Room` associated with the provider.
-    ///     - completionHandler: A completion handler called when an instance of
-    ///     `RoomMembersProvider` has been successfuly created or the instantiation failed due to
-    ///     an error.
+    ///     - `room`: The `Room` for which the provider will provide member information.
+    ///     - completionHandler: A completion handler which will be called when the `RoomMembersProvider` is ready, or an `Error` occurs creating it.
     public func createRoomMembersProvider(for room: Room, completionHandler: @escaping (RoomMembersProvider?, Error?) -> Void) {
         guard self.connectionStatus == .connected else {
             completionHandler(nil, NetworkingError.disconnected)
@@ -202,11 +199,11 @@ public class Chatkit {
     
     /// Creates an instance of `TypingUsersProvider`.
     ///
+    /// This will give access to a real time set of the `User`s who are typing in a given `Room`.
+    ///
     /// - Parameters:
-    ///     - `room`: An instance of `Room` associated with the provider.
-    ///     - completionHandler: A completion handler called when an instance of
-    ///     `TypingUsersProvider` has been successfuly created or the instantiation failed due to
-    ///     an error.
+    ///     - `room`: The `Room` for which this provider will provide information on users who are typing.
+    ///     - completionHandler: A completion handler which will be called when the `TypingUsersProvider` is ready, or an `Error` occurs creating it.
     public func createTypingUsersProvider(for room: Room, completionHandler: @escaping (TypingUsersProvider?, Error?) -> Void) {
         guard self.connectionStatus == .connected else {
             completionHandler(nil, NetworkingError.disconnected)
@@ -220,10 +217,10 @@ public class Chatkit {
     
     /// Creates an instance of `JoinedRoomsViewModel`.
     ///
+    /// This will give access to a real time sorted list of the `Room`s that the current user is a member of.
+    ///
     /// - Parameters:
-    ///     - completionHandler: A completion handler called when an instance of
-    ///     `JoinedRoomsViewModel` has been successfuly created or the instantiation failed due to
-    ///     an error.
+    ///     - completionHandler: A completion handler which will be called when the `JoinedRoomsViewModel` is ready, or an `Error` occurs creating it.
     public func createJoinedRoomsViewModel(completionHandler: @escaping (JoinedRoomsViewModel?, Error?) -> Void) {
         self.createJoinedRoomsProvider { provider, error in
             guard error == nil,
@@ -240,11 +237,11 @@ public class Chatkit {
     
     /// Creates an instance of `MessagesViewModel`.
     ///
+    /// This will give access to a real time list of elements which can be rendered to create a conversation view for a given `Room`.
+    ///
     /// - Parameters:
-    ///     - `room`: An instance of `Room` associated with the view model.
-    ///     - completionHandler: A completion handler called when an instance of
-    ///     `MessagesViewModel` has been successfuly created or the instantiation failed due to
-    ///     an error.
+    ///     - `room`: The `Room` for which messages should be modelled.
+    ///     - completionHandler: A completion handler which will be called when the `MessagesViewModel` is ready, or an `Error` occurs creating it.
     public func createMessagesViewModel(for room: Room, completionHandler: @escaping (MessagesViewModel?, Error?) -> Void) {
         self.createMessagesProvider(for: room) { provider, error in
             guard error == nil,
@@ -261,13 +258,12 @@ public class Chatkit {
     
     /// Creates an instance of `TypingUsersViewModel`.
     ///
+    /// This will give access to a real time `String` describing the users which are currently typing in a given `Room`.
+    ///
     /// - Parameters:
-    ///     - `room`: An instance of `Room` associated with the view model.
-    ///     - userNamePlaceholder: The placeholder used when a user doeas not have a value set
-    ///     for the name property.
-    ///     - completionHandler: A completion handler called when an instance of
-    ///     `TypingUsersViewModel` has been successfuly created or the instantiation failed due to
-    ///     an error.
+    ///     - `room`: The `Room` for which typing users should be modelled.
+    ///     - userNamePlaceholder: The placeholder used when a user does not have a value set for the `User.name` property.
+    ///     - completionHandler: A completion handler which will be called when the `TypingUsersViewModel` is ready, or an `Error` occurs creating it.
     public func createTypingUsersViewModel(for room: Room, userNamePlaceholder: String = "anonymous", completionHandler: @escaping (TypingUsersViewModel?, Error?) -> Void) {
         guard let currentUser = self.currentUser else {
             completionHandler(nil, NetworkingError.disconnected)
@@ -291,24 +287,22 @@ public class Chatkit {
 
 // MARK: - Delegate
 
-/// A delegate protocol that describes methods that will be called by the associated
-/// `Chatkit` class when the status of the maintained connection to Chatkit web service have changed.
+/// A delegate protocol for observing changes to the `Chatkit` handle, including the proerties of
+/// the currently logged in user, and the state of the connection to the Chatkit services.
 public protocol ChatkitDelegate: class {
     
-    /// Notifies the receiver that the currently logged in user have changed.
+    /// Called when the properties of the currently authenticated user of the SDK change.
     ///
     /// - Parameters:
     ///     - chatkit: The `Chatkit` class that called the method.
-    ///     - currentUser: The new current user have established the connection to Chatkit web
-    ///     service.
+    ///     - currentUser: The new `User` entity representing the currently logged in user.
     func chatkit(_ chatkit: Chatkit, didUpdateCurrentUser currentUser: User)
     
-    /// Notifies the receiver that the status of the maintained connection to Chatkit web service have
-    /// changed.
+    /// Called when the state of the connection to the Chatkit service changes.
     ///
     /// - Parameters:
     ///     - chatkit: The `Chatkit` class that called the method.
-    ///     - currentUser: The new status of the connection to the web service.
+    ///     - connectionStatus: The new state of the connection to the Chatkit service.
     func chatkit(_ chatkit: Chatkit, didChangeConnectionStatus connectionStatus: ConnectionStatus)
     
 }
