@@ -199,8 +199,11 @@
               </div>
             <p>A provider which exposes a collection of messages for a given room.</p>
 
-<p>Initialy the N most recent messages are available. New messages are automatically added in real time.
-More older messages can be added on request.</p>
+<p>Initially the most recent messages are available.</p>
+
+<p>New messages are added in real time.</p>
+
+<p>More older messages can be fetched and added to the collection by calling methods on this provider.</p>
 
           </section>
           <section class="section task-group-section">
@@ -311,7 +314,7 @@ More older messages can be added on request.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The object that is notified when the content of the maintained collection of messages changed.</p>
+                        <p>The object that is notified when the list <code><a href="../Classes/MessagesProvider.html#/s:13PusherChatkit16MessagesProviderC8messagesSayAA7MessageVGvp">messages</a></code> has changed.</p>
 
                       </div>
                       <div class="declaration">
@@ -338,12 +341,15 @@ More older messages can be added on request.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The array of messages for the given room.</p>
+                        <p>The array of available messages for the given room.</p>
 
-<p>This array contains all messages for the given room and retrieved from the web service as a result
-of either an internal real time subscription to the web service or explicit calls triggered
-as a result of calling <code><a href="../Classes/MessagesProvider.html#/s:13PusherChatkit16MessagesProviderC010fetchOlderC008numberOfC017completionHandlerySu_ys5Error_pSgcSgtF">fetchOlderMessages(numberOfMessages:completionHandler:)</a></code>
-method.</p>
+<p>The array contains all messages for the room which have been received by the client device.</p>
+
+<p>Initially this will be some of the most recent messages.</p>
+
+<p>New messages are always added to this array.</p>
+
+<p>If more older messages are required, call <code><a href="../Classes/MessagesProvider.html#/s:13PusherChatkit16MessagesProviderC010fetchOlderC008numberOfC017completionHandlerySu_ys5Error_pSgcSgtF">fetchOlderMessages(...)</a></code> to have them added to this array.</p>
 
                       </div>
                       <div class="declaration">
@@ -381,8 +387,13 @@ method.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Triggers an asynchronous call to the web service that retrieves a batch of historical messages
-currently not present in the maintained collection of messages.</p>
+                        <p>Fetch more old messages from the Chatkit service and add them to the <code><a href="../Classes/MessagesProvider.html#/s:13PusherChatkit16MessagesProviderC8messagesSayAA7MessageVGvp">messages</a></code> array.</p>
+
+<p>This call is asynchronous because messages may need to be retrieved from the network.</p>
+
+<p>On success, the completion handler receives <code>nil</code>, and the messages are added to the <code><a href="../Classes/MessagesProvider.html#/s:13PusherChatkit16MessagesProviderC8messagesSayAA7MessageVGvp">messages</a></code> array.</p>
+
+<p>The <code><a href="../Classes/MessagesProvider.html#/s:13PusherChatkit16MessagesProviderC8delegateAA0cD8Delegate_pSgvp">delegate</a></code> will be informed of the change to the <code><a href="../Classes/MessagesProvider.html#/s:13PusherChatkit16MessagesProviderC8messagesSayAA7MessageVGvp">messages</a></code> array.</p>
 
                       </div>
                       <div class="declaration">
@@ -418,8 +429,8 @@ the web service.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>An optional completion handler called when the call to the web
-service finishes with either a successful result or an error.</p>
+                                  <p>An optional completion handler invoked when the operation is complete.
+The completion handler receives an Error, or nil on success.</p>
                                 </div>
                               </td>
                             </tr>
@@ -442,7 +453,9 @@ service finishes with either a successful result or an error.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Marks the <code>lastReadMessage</code> and all messages preceding that message as read.</p>
+                        <p>Marks the <code>lastReadMessage</code> and all preceding messages as read.</p>
+
+<p>This will propagate to the currrent user&rsquo;s unread counts and other users which are watching the read state of the message via the Chatkit service.</p>
 
                       </div>
                       <div class="declaration">
@@ -480,7 +493,7 @@ service finishes with either a successful result or an error.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-11-19)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-11-20)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

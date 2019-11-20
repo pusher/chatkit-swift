@@ -197,8 +197,7 @@
 
                 </div>
               </div>
-            <p>A delegate protocol that describes methods that will be called by the associated
-<code>MessagesViewModelDelegate</code> when the maintained collection of message rows has changed.</p>
+            <p>A delegate protocol for being notified when the <code>rows</code> of a <code><a href="../Classes/MessagesViewModel.html">MessagesViewModel</a></code> have changed.</p>
 
           </section>
           <section class="section task-group-section">
@@ -217,8 +216,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Notifies the receiver that a new set of changes to the maintened collection of message rows
-will be processed.</p>
+                        <p>Called before a batch of changes are made to the <code>rows</code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -264,7 +262,7 @@ will be processed.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Notifies the receiver that a new row has been added to the maintened collection of message rows.</p>
+                        <p>Called when a new row was added to the collection.</p>
 
                       </div>
                       <div class="declaration">
@@ -299,7 +297,7 @@ will be processed.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The index of the row added to the maintened collection of message rows.</p>
+                                  <p>The index of the row added to the <code>rows</code> collection.</p>
                                 </div>
                               </td>
                             </tr>
@@ -311,7 +309,7 @@ will be processed.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The semantic reson that triggered the change.</p>
+                                  <p>The reason for the addition.</p>
                                 </div>
                               </td>
                             </tr>
@@ -334,7 +332,7 @@ will be processed.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Notifies the receiver that a row from the maintened collection of message rows has been updated.</p>
+                        <p>Called when a row has been updated.</p>
 
                       </div>
                       <div class="declaration">
@@ -369,7 +367,7 @@ will be processed.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The index of the row updated in the maintened collection of message rows.</p>
+                                  <p>The index of the row updated in the <code>rows</code> collection.</p>
                                 </div>
                               </td>
                             </tr>
@@ -381,7 +379,7 @@ will be processed.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The semantic reson that triggered the change.</p>
+                                  <p>The reason for the update.</p>
                                 </div>
                               </td>
                             </tr>
@@ -404,7 +402,7 @@ will be processed.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Notifies the receiver that a row from the maintened collection of message rows has been removed.</p>
+                        <p>Called when a row has been removed.</p>
 
                       </div>
                       <div class="declaration">
@@ -439,7 +437,7 @@ will be processed.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The index of the row removed from the maintened collection of message rows.</p>
+                                  <p>The index of the row removed from the <code>rows</code> collection (the index it held before it was removed).</p>
                                 </div>
                               </td>
                             </tr>
@@ -451,7 +449,7 @@ will be processed.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The semantic reson that triggered the change.</p>
+                                  <p>The reason for the removal.</p>
                                 </div>
                               </td>
                             </tr>
@@ -474,8 +472,7 @@ will be processed.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Notifies the receiver that a set of changes to the maintened collection of message rows
-has finished processing.</p>
+                        <p>Called after a batch of changes are made to the <code>rows</code>.</p>
 
                       </div>
                       <div class="declaration">
@@ -513,7 +510,7 @@ has finished processing.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-11-19)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-11-20)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
