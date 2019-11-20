@@ -1,6 +1,7 @@
 {
   "xcodebuild_arguments": [ "-workspace", "Chatkit.xcworkspace", "-scheme", "Chatkit" ],
   "documentation": "./docs-src/*",
+  "readme": "./docs-src/Initialization.md",
   "custom_categories": [
     {
       "name": "Overview",

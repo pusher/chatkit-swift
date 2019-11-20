@@ -190,99 +190,47 @@
         <section>
           <section class="section">
             
-            <h1 id='pusherchatkit-chatkit-swift' class='heading'>PusherChatkit (chatkit-swift)</h1>
+            <h1 id='initialization' class='heading'>Initialization</h1>
 
-<p><a href="https://app.bitrise.io/app/b991488f69c6c503"><img src="https://app.bitrise.io/app/b991488f69c6c503/status.svg?token=k8uHB_7_HNRSCzlVcghexg&branch=master" alt="Build Status"></a>
-<a href="https://docs.pusher.com/chatkit/reference/swift"><img src="https://img.shields.io/badge/read_the-docs-92A8D1.svg" alt="Read the docs"></a>
-<a href="http://twitter.com/Pusher"><img src="https://img.shields.io/badge/twitter-@Pusher-blue.svg?style=flat" alt="Twitter"></a>
-<a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/carthage-compatible-4BC51D.svg?style=flat" alt="Carthage"></a>
-<a href="https://cocoapods.org/pods/PusherChatkit"><img src="https://img.shields.io/cocoapods/v/PusherChatkit.svg" alt="CocoaPods"></a>
-<a href="https://github.com/pusher/chatkit-swift/blob/master/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-lightgrey.svg" alt="GitHub license"></a></p>
+<p>In order to use the Chatkit SDK, it must be imported, initialized and
+connected.</p>
+<h2 id='importing' class='heading'>Importing</h2>
 
-<p>Find out more about Chatkit <a href="https://pusher.com/chatkit">here</a>.</p>
-<h2 id='building-and-running' class='heading'>Building and Running</h2>
-<h3 id='minimum-requirements' class='heading'>Minimum Requirements</h3>
-
-<ul>
-<li><p><a href="https://itunes.apple.com/us/app/xcode/id497799835">Xcode</a> - The easiest way to get Xcode is from the <a href="https://itunes.apple.com/us/app/xcode/id497799835?mt=12">App Store</a>, but you can also download it from <a href="https://developer.apple.com/">developer.apple.com</a> if you have an AppleID registered with an Apple Developer account.</p></li>
-<li><p>Swift version 4.1 and above</p></li>
-<li><p>iOS version 10.0</p></li>
-</ul>
-
-<p>Before building &amp; running in Xcode, install all of the required dependencies with <a href="https://github.com/pusher/chatkit-tutorial-ios#carthage">Carthage</a> or <a href="https://github.com/pusher/chatkit-tutorial-ios#cocoapods">CocoaPods</a>.</p>
-<h2 id='installation' class='heading'>Installation</h2>
-<h3 id='cocoapods' class='heading'>CocoaPods</h3>
-
-<p><a href="http://cocoapods.org">CocoaPods</a> is a dependency manager for Cocoa projects. You can install it with the following command:</p>
-<pre class="highlight shell"><code><span class="nv">$ </span>gem <span class="nb">install </span>cocoapods
+<p>The Chatkit SDK package is called <code>PusherChatkit</code></p>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">PusherChatkit</span>
 </code></pre>
+<h2 id='initializing' class='heading'>Initializing</h2>
 
-<p>To integrate Chatkit into your Xcode project using CocoaPods, specify it in your <code>Podfile</code>:</p>
-<pre class="highlight ruby"><code><span class="n">source</span> <span class="s1">'https://github.com/CocoaPods/Specs.git'</span>
-<span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'11.0'</span>
-<span class="n">use_frameworks!</span>
-
-<span class="c1"># Replace `&lt;Your Target Name&gt;` with your app's target name.</span>
-<span class="n">target</span> <span class="s1">'&lt;Your Target Name&gt;'</span> <span class="k">do</span>
-  <span class="n">pod</span> <span class="s1">'PusherChatkit'</span>
-<span class="k">end</span>
+<p>When initializing the SDK, you must provide your <code>instanceLocator</code>. This
+string identifies users as belonging to your instance of Chatkit.</p>
+<pre class="highlight swift"><code><span class="k">guard</span> <span class="k">let</span> <span class="nv">chatkit</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="kt">Chatkit</span><span class="p">(</span><span class="nv">instanceLocator</span><span class="p">:</span> <span class="s">"your_instance_locator"</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="c1">// Something went wrong</span>
+<span class="p">}</span>
 </code></pre>
+<h2 id='connecting' class='heading'>Connecting</h2>
 
-<p>Then, run the following command:</p>
-<pre class="highlight shell"><code><span class="nv">$ </span>pod <span class="nb">install</span>
+<p>No network connections are created when the SDK is initialized, so to start
+using the SDK, you must connect it.</p>
+
+<p>The <code>connect</code> method takes a completion handler which receives <code>nil</code> on
+success, otherwise an error describing what went wrong.</p>
+<pre class="highlight swift"><code><span class="n">chatkit</span><span class="o">.</span><span class="n">connect</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+  <span class="k">guard</span> <span class="n">error</span> <span class="o">==</span> <span class="kc">nil</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// Something went wrong while trying to connect</span>
+    <span class="k">return</span>
+  <span class="p">}</span>
+
+  <span class="c1">// the SDK is connected and ready for use.</span>
+<span class="p">}</span>
 </code></pre>
+<h1 id='next' class='heading'>Next</h1>
 
-<blockquote>
-<p>You might need to use the <code>--repo-update</code> flag to ensure the specs repository is aware of the latest version of PusherChatkit.</p>
-</blockquote>
-<h3 id='carthage' class='heading'>Carthage</h3>
+<p>Now that the SDK is ready for use, you will probably want to access chat data
+using either ViewModels or Providers which the SDK offers.</p>
 
-<p><a href="https://github.com/Carthage/Carthage">Carthage</a> is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.</p>
-
-<p>You can install Carthage with <a href="http://brew.sh/">Homebrew</a> using the following command:</p>
-<pre class="highlight shell"><code><span class="nv">$ </span>brew update
-<span class="nv">$ </span>brew <span class="nb">install </span>carthage
-</code></pre>
-
-<p>To integrate Chatkit into your Xcode project using Carthage, specify it in your <code>Cartfile</code>:</p>
-<pre class="highlight plaintext"><code>github "pusher/chatkit-swift"
-</code></pre>
-
-<p>Run <code>carthage update</code> to build the framework and drag the built <code>PusherChatkit.framework</code>, <code>PusherPlatform.framework</code> and <code>PushNotifications.framework</code> into your Xcode project.</p>
-<h2 id='deprecated-versions' class='heading'>Deprecated versions</h2>
-
-<p>Versions of the library below
- <a href="https://github.com/pusher/chatkit-swift/releases/tag/1.0.0">1.0.0</a> are
- deprecated and support for them will soon be dropped.</p>
-
-<p>It is highly recommended that you upgrade to the latest version if you&rsquo;re on
- an older version. To view a list of changes, please refer to the
- <a href="CHANGELOG.md">CHANGELOG</a>.</p>
-<h2 id='getting-started' class='heading'>Getting started</h2>
-
-<p>Head over to <a href="https://docs.pusher.com/chatkit/reference/swift">our documentation</a>.</p>
-<h2 id='running-tests' class='heading'>Running tests</h2>
-
-<p>Some of the tests require a valid Chatkit instance locator, key, and token provider URL.</p>
-
-<p>To set this up, run the following command:</p>
-<pre class="highlight shell"><code><span class="nb">cp </span>Tests/Config/TestConfigExample.swift Tests/Config/TestConfig.swift
-</code></pre>
-
-<p>Then edit <code>Tests/Config/TestConfig.swift</code> to include a valid Chatkit instance locator, key, and token provider URL.</p>
-<h2 id='communication' class='heading'>Communication</h2>
-
-<ul>
-<li>Found a bug? Please open an <a href="https://github.com/pusher/chatkit-swift/issues">issue</a>.</li>
-<li>Have a feature request. Please open an <a href="https://github.com/pusher/chatkit-swift/issues">issue</a>.</li>
-<li>If you want to contribute, please submit a <a href="https://github.com/pusher/chatkit-swift/pulls">pull request</a> (preferrably with some tests 🙂 ).</li>
-</ul>
-<h2 id='credits' class='heading'>Credits</h2>
-
-<p>PusherChatkit is owned and maintained by <a href="https://pusher.com">Pusher</a>.</p>
-<h2 id='license' class='heading'>License</h2>
-
-<p>PusherChatkit is released under the MIT license. See <a href="https://github.com/pusher/chatkit-swift/blob/master/LICENSE.md">LICENSE</a> for details.</p>
+<p>You can also explore the methods offered by the <code><a href="Classes/Chatkit.html">Chatkit</a></code> entry point object.
+Now that this object is initialized and connected, it is your handle to all
+further interaction with the SDK.</p>
 
           </section>
         </section>
