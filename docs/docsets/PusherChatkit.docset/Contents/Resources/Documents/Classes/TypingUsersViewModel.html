@@ -197,7 +197,20 @@
 
                 </div>
               </div>
-            <p>A view model which provides a text representations of typing users.</p>
+            <p>A view model which provides a textual representation of the <code><a href="../Structs/User.html">User</a></code>s currently typing in a <code><a href="../Structs/Room.html">Room</a></code>.</p>
+
+<p>This class is intended to allow easy binding to a text UI component.</p>
+
+<p>This class exposes a <code>String?</code>, and accepts a delegate which will be called whenever the value of the string has changed.</p>
+
+<p>The full set of users who are typing is:</p>
+
+<ul>
+<li>filtered to exclude the current user</li>
+<li>sorted by name</li>
+<li>limited to 3 entries with a <q><X> more</q> placeholder if more than 3 users are typing</li>
+<li>rendered using the <code><a href="../Structs/User.html#/s:13PusherChatkit4UserV4nameSSSgvp">User.name</a></code> property, or a configurable placeholder name if this field is not set.</li>
+</ul>
 
           </section>
           <section class="section task-group-section">
@@ -223,7 +236,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The text representations of typing users.</p>
+                        <p>The textual description of the set of currently typing users, or <code>nil</code> of no users are typing.</p>
 
                       </div>
                       <div class="declaration">
@@ -260,76 +273,6 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/TypingUsersViewModelDelegate.html">TypingUsersViewModelDelegate</a></span><span class="p">?</span></code></pre>
 
                         </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Initializers"></a>
-                <a name="//apple_ref/swift/Section/Initializers" class="dashAnchor"></a>
-                <a href="#/Initializers">
-                  <h3 class="section-name">Initializers</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:13PusherChatkit20TypingUsersViewModelC8provider19userNamePlaceholderAcA0cD8ProviderC_SStcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(provider:userNamePlaceholder:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit20TypingUsersViewModelC8provider19userNamePlaceholderAcA0cD8ProviderC_SStcfc">init(provider:userNamePlaceholder:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Designated initializer for the class.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">provider</span><span class="p">:</span> <span class="kt"><a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a></span><span class="p">,</span> <span class="nv">userNamePlaceholder</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"anonymous"</span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>provider</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The typing users provider used as the source of data.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>userNamePlaceholder</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The placeholder used when a user doeas not have a value set
-for the name property.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
                     </section>
                   </div>
@@ -402,7 +345,7 @@ for the name property.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-11-19)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-11-20)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

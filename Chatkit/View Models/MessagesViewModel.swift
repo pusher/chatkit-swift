@@ -1,10 +1,10 @@
 import Foundation
 
-/// A view model which provides a collection of message rows representig different elements that might
-/// appear on a message feed
+/// A view model which provides a list of objects which can be used to render a message list.
 ///
-/// Plese see the documentation of `MessageRow` for the list of possible entries that are managed
-/// by the view model.
+/// This class is intended to allow easy binding to a UICollectionView or UITableView.
+///
+/// Plese see `MessageRow` for a description of the types of row which can appear in this collection.
 public class MessagesViewModel {
     
     // MARK: - Properties
@@ -388,43 +388,40 @@ extension MessagesViewModel: MessagesProviderDelegate {
 
 // MARK: - Delegate
 
-/// A delegate protocol that describes methods that will be called by the associated
-/// `MessagesViewModelDelegate` when the maintained collection of message rows has changed.
+/// A delegate protocol for being notified when the `rows` of a `MessagesViewModel` have changed.
 public protocol MessagesViewModelDelegate: class {
     
-    /// Notifies the receiver that a new set of changes to the maintened collection of message rows
-    /// will be processed.
+    /// Called before a batch of changes are made to the `rows`.
     ///
     /// - Parameters:
     ///     - messagesViewModel: The `MessagesViewModel` that called the method.
     func messagesViewModelWillChangeContent(_ messagesViewModel: MessagesViewModel)
     
-    /// Notifies the receiver that a new row has been added to the maintened collection of message rows.
+    /// Called when a new row was added to the collection.
     ///
     /// - Parameters:
     ///     - messagesViewModel: The `MessagesViewModel` that called the method.
-    ///     - index: The index of the row added to the maintened collection of message rows.
-    ///     - changeReason: The semantic reson that triggered the change.
+    ///     - index: The index of the row added to the `rows` collection.
+    ///     - changeReason: The reason for the addition.
     func messagesViewModel(_ messagesViewModel: MessagesViewModel, didAddRowAt index: Int, changeReason: MessagesViewModel.ChangeReason)
     
-    /// Notifies the receiver that a row from the maintened collection of message rows has been updated.
+    /// Called when a row has been updated.
     ///
     /// - Parameters:
     ///     - messagesViewModel: The `MessagesViewModel` that called the method.
-    ///     - index: The index of the row updated in the maintened collection of message rows.
-    ///     - changeReason: The semantic reson that triggered the change.
+    ///     - index: The index of the row updated in the `rows` collection.
+    ///     - changeReason: The reason for the update.
     func messagesViewModel(_ messagesViewModel: MessagesViewModel, didUpdateRowAt index: Int, changeReason: MessagesViewModel.ChangeReason)
     
-    /// Notifies the receiver that a row from the maintened collection of message rows has been removed.
+    /// Called when a row has been removed.
     ///
     /// - Parameters:
     ///     - messagesViewModel: The `MessagesViewModel` that called the method.
-    ///     - index: The index of the row removed from the maintened collection of message rows.
-    ///     - changeReason: The semantic reson that triggered the change.
+    ///     - index: The index of the row removed from the `rows` collection (the index it held before it was removed).
+    ///     - changeReason: The reason for the removal.
     func messagesViewModel(_ messagesViewModel: MessagesViewModel, didRemoveRowAt index: Int, changeReason: MessagesViewModel.ChangeReason)
     
-    /// Notifies the receiver that a set of changes to the maintened collection of message rows
-    /// has finished processing.
+    /// Called after a batch of changes are made to the `rows`.
     ///
     /// - Parameters:
     ///     - messagesViewModel: The `MessagesViewModel` that called the method.

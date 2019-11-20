@@ -1,11 +1,21 @@
 import Foundation
 
-/// A view model which provides a text representations of typing users.
+/// A view model which provides a textual representation of the `User`s currently typing in a `Room`.
+///
+/// This class is intended to allow easy binding to a text UI component.
+///
+/// This class exposes a `String?`, and accepts a delegate which will be called whenever the value of the string has changed.
+///
+/// The full set of users who are typing is:
+/// - filtered to exclude the current user
+/// - sorted by name
+/// - limited to 3 entries with a "<X> more" placeholder if more than 3 users are typing
+/// - rendered using the `User.name` property, or a configurable placeholder name if this field is not set.
 public class TypingUsersViewModel {
     
     // MARK: - Properties
     
-    /// The text representations of typing users.
+    /// The textual description of the set of currently typing users, or `nil` of no users are typing.
     public private(set) var value: String?
     
     private let provider: TypingUsersProvider
@@ -71,11 +81,10 @@ extension TypingUsersViewModel: TypingUsersProviderDelegate {
 
 // MARK: - Delegate
 
-/// A delegate protocol that describes methods that will be called by the associated
-/// `TypingUsersViewModel` when the content of the `value` property has changed.
+/// A delegate protocol for being notified when the `value` of a `TypingUsersViewModel` has changed.
 public protocol TypingUsersViewModelDelegate: class {
     
-    /// Notifies the receiver that the content of the `value` property has changed.
+    /// Called when the content of the `value` property has changed.
     ///
     /// - Parameters:
     ///     - typingUsersViewModel: The `TypingUsersViewModel` that called the method.
