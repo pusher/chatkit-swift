@@ -44,7 +44,7 @@ chatkit.connect { error in
 # Next
 
 Now that the SDK is ready for use, you will probably want to access chat data
-using either ViewModels or Providers which the SDK offers.
+using the [View Models and Providers](view-models-and-providers.html) which the SDK offers.
 
 You can also explore the methods offered by the `Chatkit` entry point object.
 Now that this object is initialized and connected, it is your handle to all
