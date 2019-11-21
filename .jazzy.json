@@ -18,6 +18,28 @@
       ]
     },
     {
+      "name": "Data Model",
+      "children": [
+        "Room",
+        "Message",
+        "MessagePart",
+        "User",
+        "PresenceState",
+        "UserData"
+      ]
+    },
+    {
+      "name": "View Models",
+      "children": [
+        "JoinedRoomsViewModel",
+        "JoinedRoomsViewModelDelegate",
+        "MessagesViewModel",
+        "MessagesViewModelDelegate",
+        "TypingUsersViewModel",
+        "TypingUsersViewModelDelegate"
+      ]
+    },
+    {
       "name": "Realtime Data Providers",
       "children": [
         "JoinedRoomsProvider",
@@ -39,15 +61,6 @@
         "UsersProvider",
         "UsersProviderDelegate",
         "PagedProviderState"
-      ]
-    },
-    {
-      "name": "View Models",
-      "children": [
-        "JoinedRoomsViewModel",
-        "JoinedRoomsViewModelDelegate",
-        "TypingUsersViewModel",
-        "TypingUsersViewModelDelegate"
       ]
     }
   ]
