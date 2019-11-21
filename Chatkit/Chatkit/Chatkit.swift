@@ -2,8 +2,14 @@ import Foundation
 import CoreData
 import PusherPlatform
 
-/// This class represents an entry point to Chatkit SDK allowing to establish a connection to the web service
-/// and retrieve data from it.
+/// This class is the entry point to the SDK.
+///
+/// An instance of this class will maintain a real time connection to the
+/// Chatkit service, allow access to the retrieved data, and provide methods
+/// to manipulate that data in the context of the current user.
+///
+/// See [Initialization](initialization.html) for details on how to get it up
+/// and running.
 public class Chatkit {
     
     // MARK: - Properties
