@@ -18,7 +18,7 @@ class RoomFactory {
                     isPrivate: false,
                     unreadCount: 3,
                     lastMessage: nil,
-                    userData: nil,
+                    customData: nil,
                     createdAt: now,
                     updatedAt: now,
                     deletedAt: nil,

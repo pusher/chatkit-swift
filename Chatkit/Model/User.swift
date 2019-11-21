@@ -19,7 +19,7 @@ public struct User {
     public let presenceState: PresenceState
     
     /// The dictionary of arbitrary data which you may attach to the user.
-    public let userData: UserData?
+    public let customData: CustomData?
     
     /// The `Date` at which the user was created.
     public let createdAt: Date
@@ -31,12 +31,12 @@ public struct User {
     
     // MARK: - Initializers
     
-    init(identifier: String, name: String?, avatar: URL?, presenceState: PresenceState, userData: UserData?, createdAt: Date, updatedAt: Date, objectID: NSManagedObjectID) {
+    init(identifier: String, name: String?, avatar: URL?, presenceState: PresenceState, customData: CustomData?, createdAt: Date, updatedAt: Date, objectID: NSManagedObjectID) {
         self.identifier = identifier
         self.name = name
         self.avatar = avatar
         self.presenceState = presenceState
-        self.userData = userData
+        self.customData = customData
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.objectID = objectID

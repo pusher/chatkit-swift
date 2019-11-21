@@ -18,8 +18,8 @@ class RoomTests: XCTestCase {
     
     var now: Date!
     
-    var firstTestUserData: UserData!
-    var secondTestUserData: UserData!
+    var firstTestCustomData: CustomData!
+    var secondTestCustomData: CustomData!
     
     var firstTestManagedObjectID: NSManagedObjectID!
     var secondTestManagedObjectID: NSManagedObjectID!
@@ -62,7 +62,7 @@ class RoomTests: XCTestCase {
                                       name: "firstUser",
                                       avatar: nil,
                                       presenceState: .unknown,
-                                      userData: nil,
+                                      customData: nil,
                                       createdAt: Date.distantPast,
                                       updatedAt: self.now,
                                       objectID: userEntityObjectID)
@@ -71,7 +71,7 @@ class RoomTests: XCTestCase {
                                        name: "secondUser",
                                        avatar: nil,
                                        presenceState: .unknown,
-                                       userData: nil,
+                                       customData: nil,
                                        createdAt: Date.distantPast,
                                        updatedAt: self.now,
                                        objectID: userEntityObjectID)
@@ -80,7 +80,7 @@ class RoomTests: XCTestCase {
                                       name: "thirdUser",
                                       avatar: nil,
                                       presenceState: .unknown,
-                                      userData: nil,
+                                      customData: nil,
                                       createdAt: Date.distantPast,
                                       updatedAt: self.now,
                                       objectID: userEntityObjectID)
@@ -114,8 +114,8 @@ class RoomTests: XCTestCase {
                                         deletedAt: self.now,
                                         objectID: messageEntityObjectID)
         
-        self.firstTestUserData = ["firstKey" : "firstValue"]
-        self.secondTestUserData = ["secondKey" : "secondValue"]
+        self.firstTestCustomData = ["firstKey" : "firstValue"]
+        self.secondTestCustomData = ["secondKey" : "secondValue"]
     }
     
     // MARK: - Tests
@@ -128,7 +128,7 @@ class RoomTests: XCTestCase {
                         typingMembers: [self.secondTestUser],
                         unreadCount: 5,
                         lastMessage: self.firstTestMessage,
-                        userData: self.firstTestUserData,
+                        customData: self.firstTestCustomData,
                         createdAt: Date.distantPast,
                         updatedAt: self.now,
                         deletedAt: Date.distantFuture,
@@ -139,8 +139,8 @@ class RoomTests: XCTestCase {
         XCTAssertTrue(room.isPrivate)
         XCTAssertEqual(room.unreadCount, 5)
         XCTAssertEqual(room.lastMessage, self.firstTestMessage)
-        XCTAssertNotNil(room.userData)
-        XCTAssertEqual(room.userData as? [String : String], self.firstTestUserData as? [String : String])
+        XCTAssertNotNil(room.customData)
+        XCTAssertEqual(room.customData as? [String : String], self.firstTestCustomData as? [String : String])
         XCTAssertEqual(room.createdAt, Date.distantPast)
         XCTAssertEqual(room.updatedAt, self.now)
         XCTAssertEqual(room.deletedAt, Date.distantFuture)
@@ -173,7 +173,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: Date.distantPast,
                              deletedAt: Date.distantFuture,
@@ -186,7 +186,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser, self.thirdTestUser],
                               unreadCount: 25,
                               lastMessage: self.secondTestMessage,
-                              userData: self.secondTestUserData,
+                              customData: self.secondTestCustomData,
                               createdAt: self.now,
                               updatedAt: self.now,
                               deletedAt: self.now,
@@ -203,7 +203,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: self.now,
                              deletedAt: Date.distantFuture,
@@ -216,7 +216,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
-                              userData: self.firstTestUserData,
+                              customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
                               updatedAt: self.now,
                               deletedAt: Date.distantFuture,
@@ -233,7 +233,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: self.now,
                              deletedAt: Date.distantFuture,
@@ -246,7 +246,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
-                              userData: self.firstTestUserData,
+                              customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
                               updatedAt: self.now,
                               deletedAt: Date.distantFuture,
@@ -263,7 +263,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: self.now,
                              deletedAt: Date.distantFuture,
@@ -276,7 +276,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
-                              userData: self.firstTestUserData,
+                              customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
                               updatedAt: self.now,
                               deletedAt: Date.distantFuture,
@@ -293,7 +293,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: self.now,
                              deletedAt: Date.distantFuture,
@@ -306,7 +306,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
-                              userData: self.firstTestUserData,
+                              customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
                               updatedAt: self.now,
                               deletedAt: Date.distantFuture,
@@ -323,7 +323,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: self.now,
                              deletedAt: Date.distantFuture,
@@ -336,7 +336,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
-                              userData: self.firstTestUserData,
+                              customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
                               updatedAt: self.now,
                               deletedAt: Date.distantFuture,
@@ -353,7 +353,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: self.now,
                              deletedAt: Date.distantFuture,
@@ -366,7 +366,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
-                              userData: self.firstTestUserData,
+                              customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
                               updatedAt: self.now,
                               deletedAt: Date.distantFuture,
@@ -383,7 +383,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: self.now,
                              deletedAt: Date.distantFuture,
@@ -396,7 +396,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser, self.thirdTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
-                              userData: self.firstTestUserData,
+                              customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
                               updatedAt: self.now,
                               deletedAt: Date.distantFuture,
@@ -413,7 +413,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: self.now,
                              deletedAt: Date.distantFuture,
@@ -426,7 +426,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser],
                               unreadCount: 25,
                               lastMessage: self.firstTestMessage,
-                              userData: self.firstTestUserData,
+                              customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
                               updatedAt: self.now,
                               deletedAt: Date.distantFuture,
@@ -443,7 +443,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: self.now,
                              deletedAt: Date.distantFuture,
@@ -456,7 +456,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.secondTestMessage,
-                              userData: self.firstTestUserData,
+                              customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
                               updatedAt: self.now,
                               deletedAt: Date.distantFuture,
@@ -465,7 +465,7 @@ class RoomTests: XCTestCase {
         XCTAssertNotEqual(firstRoom, secondRoom)
     }
     
-    func testShouldCompareTwoRoomsAsEqualWhenUserDataValuesAreDifferent() {
+    func testShouldCompareTwoRoomsAsEqualWhenCustomDataValuesAreDifferent() {
         let firstRoom = Room(identifier: "testIdentifier",
                              name: "testName",
                              isPrivate: true,
@@ -473,7 +473,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: self.now,
                              deletedAt: Date.distantFuture,
@@ -486,7 +486,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
-                              userData: self.secondTestUserData,
+                              customData: self.secondTestCustomData,
                               createdAt: Date.distantPast,
                               updatedAt: self.now,
                               deletedAt: Date.distantFuture,
@@ -503,7 +503,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: self.now,
                              deletedAt: Date.distantFuture,
@@ -516,7 +516,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
-                              userData: self.firstTestUserData,
+                              customData: self.firstTestCustomData,
                               createdAt: self.now,
                               updatedAt: self.now,
                               deletedAt: Date.distantFuture,
@@ -533,7 +533,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: self.now,
                              deletedAt: Date.distantFuture,
@@ -546,7 +546,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
-                              userData: self.firstTestUserData,
+                              customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
                               updatedAt: Date.distantPast,
                               deletedAt: Date.distantFuture,
@@ -563,7 +563,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: self.now,
                              deletedAt: Date.distantFuture,
@@ -576,7 +576,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
-                              userData: self.firstTestUserData,
+                              customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
                               updatedAt: self.now,
                               deletedAt: self.now,
@@ -593,7 +593,7 @@ class RoomTests: XCTestCase {
                              typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
-                             userData: self.firstTestUserData,
+                             customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
                              updatedAt: self.now,
                              deletedAt: Date.distantFuture,
@@ -606,7 +606,7 @@ class RoomTests: XCTestCase {
                               typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
-                              userData: self.firstTestUserData,
+                              customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
                               updatedAt: self.now,
                               deletedAt: Date.distantFuture,

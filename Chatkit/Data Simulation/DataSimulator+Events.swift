@@ -204,19 +204,19 @@ extension DataSimulator {
         
         if isSubscribedToExerciseRoutinesPlan {
             let planName = "Exercise Routine"
-            let userData = ["planID" : "exercise-basic",
+            let customData = ["planID" : "exercise-basic",
                             "planName" : planName]
             
             room.name = "\(planName) Plan"
-            room.userData = UserDataSerializer.serialize(userData: userData)
+            room.customData = CustomDataSerializer.serialize(customData: customData)
         }
         else {
             let planName = "Nutrition"
-            let userData = ["planID" : "routine-basic",
+            let customData = ["planID" : "routine-basic",
                             "planName" : planName]
             
             room.name = "\(planName) Plan"
-            room.userData = UserDataSerializer.serialize(userData: userData)
+            room.customData = CustomDataSerializer.serialize(customData: customData)
         }
         
         for member in members {

@@ -1,7 +1,7 @@
 import XCTest
 @testable import PusherChatkit
 
-class UserDataSerializerTests: XCTestCase {
+class CustomDataSerializerTests: XCTestCase {
     
     // MARK: - Tests
     
@@ -11,18 +11,18 @@ class UserDataSerializerTests: XCTestCase {
                         "third" : "ghi",
                         "fourth" : "jkl"]
         
-        let data = UserDataSerializer.serialize(userData: metadata)
+        let data = CustomDataSerializer.serialize(customData: metadata)
         
         XCTAssertNotNil(data)
     }
     
     func testShouldNotSerializeMetadataWithIncorrectValues() {
-        let metadata: UserData = ["first" : "abc",
+        let metadata: CustomData = ["first" : "abc",
                                   "second" : "def",
                                   "third" : Date.distantPast,
                                   "fourth" : "jkl"]
         
-        let data = UserDataSerializer.serialize(userData: metadata)
+        let data = CustomDataSerializer.serialize(customData: metadata)
         
         XCTAssertNil(data)
     }
@@ -38,7 +38,7 @@ class UserDataSerializerTests: XCTestCase {
             return
         }
         
-        let deserializedMetadata = UserDataSerializer.deserialize(data: data)
+        let deserializedMetadata = CustomDataSerializer.deserialize(data: data)
         
         XCTAssertEqual(deserializedMetadata as? [String : String], sourceMetadata)
     }
@@ -51,7 +51,7 @@ class UserDataSerializerTests: XCTestCase {
             return
         }
         
-        let deserializedMetadata = UserDataSerializer.deserialize(data: data)
+        let deserializedMetadata = CustomDataSerializer.deserialize(data: data)
         
         XCTAssertNil(deserializedMetadata)
     }
@@ -59,13 +59,13 @@ class UserDataSerializerTests: XCTestCase {
     func testShouldNotDeserializeMetadataFromDataThatIsNotInJSONFormat() {
         let data = Data(capacity: 1234)
         
-        let deserializedMetadata = UserDataSerializer.deserialize(data: data)
+        let deserializedMetadata = CustomDataSerializer.deserialize(data: data)
         
         XCTAssertNil(deserializedMetadata)
     }
     
     func testShouldReturnNilWhenTryingToDeserializeNil() {
-        let deserializedMetadata = UserDataSerializer.deserialize(data: nil)
+        let deserializedMetadata = CustomDataSerializer.deserialize(data: nil)
         
         XCTAssertNil(deserializedMetadata)
     }
@@ -76,8 +76,8 @@ class UserDataSerializerTests: XCTestCase {
                               "third" : "ghi",
                               "fourth" : "jkl"]
         
-        let data = UserDataSerializer.serialize(userData: sourceMetadata)
-        let deserializedMetadata = UserDataSerializer.deserialize(data: data) as? [String : String]
+        let data = CustomDataSerializer.serialize(customData: sourceMetadata)
+        let deserializedMetadata = CustomDataSerializer.deserialize(data: data) as? [String : String]
         
         XCTAssertEqual(deserializedMetadata, sourceMetadata)
     }

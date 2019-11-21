@@ -177,7 +177,7 @@ public extension JoinedRoomsViewModel {
         /// A new message received by the room.
         case messageReceived
         
-        /// A new value of `name` or `userData` properties received by the room.
+        /// A new value of `name` or `customData` properties received by the room.
         case dataUpdated
         
     }

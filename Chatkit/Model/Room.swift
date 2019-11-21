@@ -26,7 +26,7 @@ public struct Room {
     public let lastMessage: Message?
     
     /// The dictionary of arbitrary data which you may attach to the room.
-    public let userData: UserData?
+    public let customData: CustomData?
     
     /// The `Date` at which the room was created.
     public let createdAt: Date
@@ -41,13 +41,13 @@ public struct Room {
     
     // MARK: - Initializers
     
-    init(identifier: String, name: String?, isPrivate: Bool, unreadCount: UInt64, lastMessage: Message?, userData: UserData?, createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
+    init(identifier: String, name: String?, isPrivate: Bool, unreadCount: UInt64, lastMessage: Message?, customData: CustomData?, createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
         self.identifier = identifier
         self.name = name
         self.isPrivate = isPrivate
         self.unreadCount = unreadCount
         self.lastMessage = lastMessage
-        self.userData = userData
+        self.customData = customData
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt

@@ -9,7 +9,7 @@ class ChatEventParserTests: XCTestCase {
     
     var persistenceController: PersistenceController!
     
-    var userDataPayload: [String : String]!
+    var customDataPayload: [String : String]!
     var event: Event!
     
     // MARK: - Tests lifecycle
@@ -32,7 +32,7 @@ class ChatEventParserTests: XCTestCase {
         
         self.persistenceController = persistenceController
         
-        self.userDataPayload = ["testKey" : "testValue"]
+        self.customDataPayload = ["testKey" : "testValue"]
         
         guard let event = Event(with: ["event_name" : "initial_state",
                                        "data" : ["current_user" : ["id" : "alice",
@@ -51,7 +51,7 @@ class ChatEventParserTests: XCTestCase {
                                                              "updated_at" : "2019-08-30T21:37:07Z"],
                                                             ["created_at" : "2019-09-06T09:29:15Z",
                                                              "created_by_id" : "bob",
-                                                             "custom_data" : self.userDataPayload,
+                                                             "custom_data" : self.customDataPayload,
                                                              "deleted_at" : "2019-09-06T09:29:35Z",
                                                              "id" : "831b637a-bdd2-47cc-aa57-99912a16df42",
                                                              "member_user_ids" : nil,
@@ -170,7 +170,7 @@ class ChatEventParserTests: XCTestCase {
             XCTAssertEqual(firstRoom.messages?.count, 0)
             XCTAssertEqual(firstRoom.cursors?.count, 0)
             XCTAssertEqual(firstRoom.typingMembers?.count, 0)
-            XCTAssertNil(firstRoom.userData)
+            XCTAssertNil(firstRoom.customData)
             
             guard let secondRoom = mainContext.fetch(RoomEntity.self, filteredBy: "%K == %@", #keyPath(RoomEntity.identifier), "831b637a-bdd2-47cc-aa57-99912a16df42") else {
                 XCTFail("Failed to fetch room.")
@@ -188,8 +188,8 @@ class ChatEventParserTests: XCTestCase {
             XCTAssertEqual(secondRoom.messages?.count, 0)
             XCTAssertEqual(secondRoom.cursors?.count, 0)
             XCTAssertEqual(secondRoom.typingMembers?.count, 0)
-            XCTAssertNotNil(secondRoom.userData)
-            XCTAssertEqual(UserDataSerializer.deserialize(data: secondRoom.userData) as? [String : String], self.userDataPayload)
+            XCTAssertNotNil(secondRoom.customData)
+            XCTAssertEqual(CustomDataSerializer.deserialize(data: secondRoom.customData) as? [String : String], self.customDataPayload)
         }
     }
     
@@ -204,7 +204,7 @@ class ChatEventParserTests: XCTestCase {
             room.unreadCount = 8
             room.createdAt = Date.distantPast
             room.updatedAt = Date.distantPast
-            room.userData = UserDataSerializer.serialize(userData: self.userDataPayload)
+            room.customData = CustomDataSerializer.serialize(customData: self.customDataPayload)
         }
         
         self.persistenceController.save()
@@ -245,8 +245,8 @@ class ChatEventParserTests: XCTestCase {
             XCTAssertEqual(oldRoom.messages?.count, 0)
             XCTAssertEqual(oldRoom.cursors?.count, 0)
             XCTAssertEqual(oldRoom.typingMembers?.count, 0)
-            XCTAssertNotNil(oldRoom.userData)
-            XCTAssertEqual(UserDataSerializer.deserialize(data: oldRoom.userData) as? [String : String], self.userDataPayload)
+            XCTAssertNotNil(oldRoom.customData)
+            XCTAssertEqual(CustomDataSerializer.deserialize(data: oldRoom.customData) as? [String : String], self.customDataPayload)
         }
     }
     
@@ -261,7 +261,7 @@ class ChatEventParserTests: XCTestCase {
             room.unreadCount = 8
             room.createdAt = Date.distantPast
             room.updatedAt = Date.distantPast
-            room.userData = UserDataSerializer.serialize(userData: self.userDataPayload)
+            room.customData = CustomDataSerializer.serialize(customData: self.customDataPayload)
         }
         
         self.persistenceController.save()
@@ -301,7 +301,7 @@ class ChatEventParserTests: XCTestCase {
             XCTAssertEqual(oldRoom.messages?.count, 0)
             XCTAssertEqual(oldRoom.cursors?.count, 0)
             XCTAssertEqual(oldRoom.typingMembers?.count, 0)
-            XCTAssertNil(oldRoom.userData)
+            XCTAssertNil(oldRoom.customData)
         }
     }
     
@@ -323,7 +323,7 @@ class ChatEventParserTests: XCTestCase {
                                                              "updated_at" : "2019-08-30T21:37:07Z"],
                                                             ["created_at" : "2019-09-06T09:29:15Z",
                                                              "created_by_id" : "bob",
-                                                             "custom_data" : self.userDataPayload,
+                                                             "custom_data" : self.customDataPayload,
                                                              "deleted_at" : "2019-09-06T09:29:35Z",
                                                              "id" : 1234,
                                                              "member_user_ids" : nil,
@@ -376,7 +376,7 @@ class ChatEventParserTests: XCTestCase {
                                                              "updated_at" : "2019-08-30T21:37:07Z"],
                                                             ["created_at" : "2019-09-06T09:29:15Z",
                                                              "created_by_id" : "bob",
-                                                             "custom_data" : self.userDataPayload,
+                                                             "custom_data" : self.customDataPayload,
                                                              "deleted_at" : "2019-09-06T09:29:35Z",
                                                              "member_user_ids" : nil,
                                                              "name" : "Test room",
@@ -428,7 +428,7 @@ class ChatEventParserTests: XCTestCase {
                                                              "updated_at" : "2019-08-30T21:37:07Z"],
                                                             ["created_at" : "2019-09-06T09:29:15Z",
                                                              "created_by_id" : "bob",
-                                                             "custom_data" : self.userDataPayload,
+                                                             "custom_data" : self.customDataPayload,
                                                              "deleted_at" : "2019-09-06T09:29:35Z",
                                                              "id" : "831b637a-bdd2-47cc-aa57-99912a16df42",
                                                              "member_user_ids" : nil,
@@ -481,7 +481,7 @@ class ChatEventParserTests: XCTestCase {
                                                              "updated_at" : "2019-08-30T21:37:07Z"],
                                                             ["created_at" : "2019-09-06T09:29:15Z",
                                                              "created_by_id" : "bob",
-                                                             "custom_data" : self.userDataPayload,
+                                                             "custom_data" : self.customDataPayload,
                                                              "deleted_at" : "2019-09-06T09:29:35Z",
                                                              "id" : "831b637a-bdd2-47cc-aa57-99912a16df42",
                                                              "member_user_ids" : nil,
@@ -533,7 +533,7 @@ class ChatEventParserTests: XCTestCase {
                                                              "updated_at" : "2019-08-30T21:37:07Z"],
                                                             ["created_at" : "2019-09-06T09:29:15Z",
                                                              "created_by_id" : "bob",
-                                                             "custom_data" : self.userDataPayload,
+                                                             "custom_data" : self.customDataPayload,
                                                              "deleted_at" : "2019-09-06T09:29:35Z",
                                                              "id" : "831b637a-bdd2-47cc-aa57-99912a16df42",
                                                              "member_user_ids" : nil,
@@ -585,7 +585,7 @@ class ChatEventParserTests: XCTestCase {
                                                              "updated_at" : "2019-08-30T21:37:07Z"],
                                                             ["created_at" : "2019-09-06T09:29:15Z",
                                                              "created_by_id" : "bob",
-                                                             "custom_data" : self.userDataPayload,
+                                                             "custom_data" : self.customDataPayload,
                                                              "deleted_at" : "2019-09-06T09:29:35Z",
                                                              "id" : "831b637a-bdd2-47cc-aa57-99912a16df42",
                                                              "member_user_ids" : nil,
@@ -638,7 +638,7 @@ class ChatEventParserTests: XCTestCase {
                                                              "updated_at" : "2019-08-30T21:37:07Z"],
                                                             ["created_at" : "2019-09-06T09:29:15Z",
                                                              "created_by_id" : "bob",
-                                                             "custom_data" : self.userDataPayload,
+                                                             "custom_data" : self.customDataPayload,
                                                              "deleted_at" : "2019-09-06T09:29:35Z",
                                                              "id" : "831b637a-bdd2-47cc-aa57-99912a16df42",
                                                              "member_user_ids" : nil,
@@ -690,7 +690,7 @@ class ChatEventParserTests: XCTestCase {
                                                              "updated_at" : "2019-08-30T21:37:07Z"],
                                                             ["created_at" : "randomString",
                                                              "created_by_id" : "bob",
-                                                             "custom_data" : self.userDataPayload,
+                                                             "custom_data" : self.customDataPayload,
                                                              "deleted_at" : "2019-09-06T09:29:35Z",
                                                              "id" : "831b637a-bdd2-47cc-aa57-99912a16df42",
                                                              "member_user_ids" : nil,
@@ -742,7 +742,7 @@ class ChatEventParserTests: XCTestCase {
                                                              "unread_count" : 1,
                                                              "updated_at" : "2019-08-30T21:37:07Z"],
                                                             ["created_by_id" : "bob",
-                                                             "custom_data" : self.userDataPayload,
+                                                             "custom_data" : self.customDataPayload,
                                                              "deleted_at" : "2019-09-06T09:29:35Z",
                                                              "id" : "831b637a-bdd2-47cc-aa57-99912a16df42",
                                                              "member_user_ids" : nil,
@@ -795,7 +795,7 @@ class ChatEventParserTests: XCTestCase {
                                                              "updated_at" : "2019-08-30T21:37:07Z"],
                                                             ["created_at" : "2019-09-06T09:29:15Z",
                                                              "created_by_id" : "bob",
-                                                             "custom_data" : self.userDataPayload,
+                                                             "custom_data" : self.customDataPayload,
                                                              "deleted_at" : "2019-09-06T09:29:35Z",
                                                              "id" : "831b637a-bdd2-47cc-aa57-99912a16df42",
                                                              "member_user_ids" : nil,
@@ -848,7 +848,7 @@ class ChatEventParserTests: XCTestCase {
                                                              "updated_at" : "2019-08-30T21:37:07Z"],
                                                             ["created_at" : "2019-09-06T09:29:15Z",
                                                              "created_by_id" : "bob",
-                                                             "custom_data" : self.userDataPayload,
+                                                             "custom_data" : self.customDataPayload,
                                                              "deleted_at" : "2019-09-06T09:29:35Z",
                                                              "id" : "831b637a-bdd2-47cc-aa57-99912a16df42",
                                                              "member_user_ids" : nil,
@@ -900,7 +900,7 @@ class ChatEventParserTests: XCTestCase {
                                                              "updated_at" : "2019-08-30T21:37:07Z"],
                                                             ["created_at" : "2019-09-06T09:29:15Z",
                                                              "created_by_id" : "bob",
-                                                             "custom_data" : self.userDataPayload,
+                                                             "custom_data" : self.customDataPayload,
                                                              "deleted_at" : "randomString",
                                                              "id" : "831b637a-bdd2-47cc-aa57-99912a16df42",
                                                              "member_user_ids" : nil,
@@ -950,12 +950,12 @@ class ChatEventParserTests: XCTestCase {
             XCTAssertEqual(room.messages?.count, 0)
             XCTAssertEqual(room.cursors?.count, 0)
             XCTAssertEqual(room.typingMembers?.count, 0)
-            XCTAssertNotNil(room.userData)
-            XCTAssertEqual(UserDataSerializer.deserialize(data: room.userData) as? [String : String], self.userDataPayload)
+            XCTAssertNotNil(room.customData)
+            XCTAssertEqual(CustomDataSerializer.deserialize(data: room.customData) as? [String : String], self.customDataPayload)
         }
     }
     
-    func testShouldSkipInvalidUserData() {
+    func testShouldSkipInvalidCustomData() {
         guard let event = Event(with: ["event_name" : "initial_state",
                                        "data" : ["current_user" : ["id" : "alice",
                                                                    "name" : "alice",
@@ -1023,7 +1023,7 @@ class ChatEventParserTests: XCTestCase {
             XCTAssertEqual(room.messages?.count, 0)
             XCTAssertEqual(room.cursors?.count, 0)
             XCTAssertEqual(room.typingMembers?.count, 0)
-            XCTAssertNil(room.userData)
+            XCTAssertNil(room.customData)
         }
     }
     

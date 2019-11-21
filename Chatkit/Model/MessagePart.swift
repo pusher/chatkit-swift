@@ -10,7 +10,7 @@ public enum MessagePart {
     case link(MIMEType, URL)
     
     /// A message part where content has been uploaded to Chatkit managed attachment storage.
-    case attachment(MIMEType, Identifier, DownloadURL, RefreshURL, Size, Expiration, Name?, UserData?)
+    case attachment(MIMEType, Identifier, DownloadURL, RefreshURL, Size, Expiration, Name?, CustomData?)
     
 }
 

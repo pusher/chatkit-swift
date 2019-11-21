@@ -17,7 +17,7 @@ class UserFactory {
                     name: "User \($0)",
                     avatar: nil,
                     presenceState: .unknown,
-                    userData: nil,
+                    customData: nil,
                     createdAt: now,
                     updatedAt: now,
                     objectID: nil!) // FIXME: Make this optional for data that is not supposed to be persisted.

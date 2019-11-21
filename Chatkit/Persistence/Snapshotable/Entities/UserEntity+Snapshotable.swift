@@ -21,13 +21,13 @@ extension UserEntity: Snapshotable {
         }
         
         let presenceState = PresenceState(state: self.presenceState)
-        let userData = UserDataSerializer.deserialize(data: self.userData)
+        let customData = CustomDataSerializer.deserialize(data: self.customData)
         
         return User(identifier: self.identifier,
                     name: self.name,
                     avatar: avatar,
                     presenceState: presenceState,
-                    userData: userData,
+                    customData: customData,
                     createdAt: self.createdAt,
                     updatedAt: self.updatedAt,
                     objectID: self.objectID)

@@ -10,7 +10,7 @@ extension AttachmentPartEntity {
     @NSManaged var downloadURL: String
     @NSManaged var expiration: Date
     @NSManaged var identifier: String
-    @NSManaged var userData: Data?
+    @NSManaged var customData: Data?
     @NSManaged var name: String?
     @NSManaged var refreshURL: String
     @NSManaged var size: Int64
