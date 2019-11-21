@@ -26,9 +26,9 @@ class MessagePartTests: XCTestCase {
     // MARK: - Tests
     
     func testShouldCreateTextMessagePartWithCorrectValues() {
-        let messagePart = MessagePart.text("text/plain", "testContent")
+        let messagePart = MessagePart.inline("text/plain", "testContent")
         
-        if case let MessagePart.text(mimeType, content) = messagePart {
+        if case let MessagePart.inline(mimeType, content) = messagePart {
             XCTAssertEqual(mimeType, "text/plain")
             XCTAssertEqual(content, "testContent")
         }
@@ -69,22 +69,22 @@ class MessagePartTests: XCTestCase {
     }
     
     func testShouldHaveTheSameHashForTheSameTextMessageParts() {
-        let firstMessagePart = MessagePart.text("text/plain", "testContent")
-        let secondMessagePart = MessagePart.text("text/plain", "testContent")
+        let firstMessagePart = MessagePart.inline("text/plain", "testContent")
+        let secondMessagePart = MessagePart.inline("text/plain", "testContent")
         
         XCTAssertEqual(firstMessagePart.hashValue, secondMessagePart.hashValue)
     }
     
     func testShouldNotHaveTheSameHashForTextMessagePartsWithDifferentMIMETypeValues() {
-        let firstMessagePart = MessagePart.text("text/plain", "testContent")
-        let secondMessagePart = MessagePart.text("text/json", "testContent")
+        let firstMessagePart = MessagePart.inline("text/plain", "testContent")
+        let secondMessagePart = MessagePart.inline("text/json", "testContent")
         
         XCTAssertNotEqual(firstMessagePart.hashValue, secondMessagePart.hashValue)
     }
     
     func testShouldNotHaveTheSameHashForTextMessagePartsWithDifferentContentValues() {
-        let firstMessagePart = MessagePart.text("text/plain", "testContent")
-        let secondMessagePart = MessagePart.text("text/plain", "anotherContent")
+        let firstMessagePart = MessagePart.inline("text/plain", "testContent")
+        let secondMessagePart = MessagePart.inline("text/plain", "anotherContent")
         
         XCTAssertNotEqual(firstMessagePart.hashValue, secondMessagePart.hashValue)
     }
@@ -174,22 +174,22 @@ class MessagePartTests: XCTestCase {
     }
     
     func testShouldCompareTwoTextMessagePartsAsEqualWhenValuesOfAllPropertiesAreTheSame() {
-        let firstMessagePart = MessagePart.text("text/plain", "testContent")
-        let secondMessagePart = MessagePart.text("text/plain", "testContent")
+        let firstMessagePart = MessagePart.inline("text/plain", "testContent")
+        let secondMessagePart = MessagePart.inline("text/plain", "testContent")
         
         XCTAssertEqual(firstMessagePart, secondMessagePart)
     }
     
     func testShouldNotCompareTwoTextMessagePartsAsEqualWhenMIMETypeValuesAreDifferent() {
-        let firstMessagePart = MessagePart.text("text/plain", "testContent")
-        let secondMessagePart = MessagePart.text("text/json", "testContent")
+        let firstMessagePart = MessagePart.inline("text/plain", "testContent")
+        let secondMessagePart = MessagePart.inline("text/json", "testContent")
         
         XCTAssertNotEqual(firstMessagePart, secondMessagePart)
     }
     
     func testShouldNotCompareTwoTextMessagePartsAsEqualWhenContentValuesAreDifferent() {
-        let firstMessagePart = MessagePart.text("text/plain", "testContent")
-        let secondMessagePart = MessagePart.text("text/plain", "anotherContent")
+        let firstMessagePart = MessagePart.inline("text/plain", "testContent")
+        let secondMessagePart = MessagePart.inline("text/plain", "anotherContent")
         
         XCTAssertNotEqual(firstMessagePart, secondMessagePart)
     }

@@ -3,13 +3,13 @@ import Foundation
 /// An enumeration representing a message part retrieved from the Chatkit web service.
 public enum MessagePart {
     
-    /// A message part representing a text content.
-    case text(MIMEType, String)
+    /// A message part with inline content.
+    case inline(MIMEType, String)
     
-    /// A message part representing a URL destination.
+    /// A message part where content has been uploaded to a URL which is not managed by Chatkit.
     case link(MIMEType, URL)
     
-    /// A message part representing an attachment.
+    /// A message part where content has been uploaded to Chatkit managed attachment storage.
     case attachment(MIMEType, Identifier, DownloadURL, RefreshURL, Size, Expiration, Name?, UserData?)
     
 }
@@ -51,7 +51,7 @@ extension MessagePart: Hashable {
     ///     - hasher: The hasher to use when combining the components of this instance.
     public func hash(into hasher: inout Hasher) {
         switch self {
-        case let .text(mimeType, content):
+        case let .inline(mimeType, content):
             hasher.combine(mimeType)
             hasher.combine(content)
             
@@ -87,8 +87,8 @@ extension MessagePart: Equatable {
     ///     - rhs: Another value to compare.
     public static func == (lhs: MessagePart, rhs: MessagePart) -> Bool {
         switch (lhs, rhs) {
-        case (let .text(lhsMIMEType, lhsContent),
-              let .text(rhsMIMEType, rhsContent)):
+        case (let .inline(lhsMIMEType, lhsContent),
+              let .inline(rhsMIMEType, rhsContent)):
             return lhsMIMEType == rhsMIMEType
                 && lhsContent == rhsContent
             

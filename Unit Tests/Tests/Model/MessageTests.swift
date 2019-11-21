@@ -84,7 +84,7 @@ class MessageTests: XCTestCase {
         
         let testURL = URL(fileURLWithPath: "/dev/null")
         
-        self.testTextPart = .text("text/plain", "test")
+        self.testTextPart = .inline("text/plain", "test")
         self.testLinkPart = .link("image/png", testURL)
     }
     

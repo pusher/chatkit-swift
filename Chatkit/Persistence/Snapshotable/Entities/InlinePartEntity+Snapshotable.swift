@@ -15,7 +15,7 @@ extension InlinePartEntity: Snapshotable {
     // MARK: - Internal methods
     
     func snapshot() throws -> MessagePart {
-        return MessagePart.text(self.type, self.content)
+        return MessagePart.inline(self.type, self.content)
     }
     
 }

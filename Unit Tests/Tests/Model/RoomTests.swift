@@ -88,7 +88,7 @@ class RoomTests: XCTestCase {
         
         let testURL = URL(fileURLWithPath: "/dev/null")
         
-        let textPart = MessagePart.text("text/plain", "test")
+        let textPart = MessagePart.inline("text/plain", "test")
         let linkPart = MessagePart.link("image/png", testURL)
         
         let messageEntity = mainContext.create(MessageEntity.self)

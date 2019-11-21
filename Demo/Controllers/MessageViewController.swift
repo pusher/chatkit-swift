@@ -140,7 +140,7 @@ class MessageViewController: UIViewController {
                 return
         }
         
-        if case let MessagePart.text(_, content) = messagePart {
+        if case let MessagePart.inline(_, content) = messagePart {
             cell.sender = message.sender.identifier == currentUser.identifier ? .currentUser : .otherUser
             cell.groupPosition = groupPosition
             cell.contentLabel.text = content
