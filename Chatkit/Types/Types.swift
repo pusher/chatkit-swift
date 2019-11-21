@@ -1,12 +1,12 @@
 import Foundation
 
-/// A dictionary of objects provided by the user and retrieved from the Chatkit web service.
+/// A dictionary of objects which can be used to store arbitrary metadata on a variety of Chatkit entities.
 ///
-/// All objects stored in the dictionary must conform to a valid JSON data type. In addition to that keys used
-/// by the dictionary must be represented by `String` objects.
+/// All objects stored in the dictionary must conform to a valid JSON data type. In addition, all keys used
+/// by the dictionary must be `String`s.
 public typealias CustomData = [String : Any]
 
-/// A closure that is being executed by the SDK when an asynchronous operation has been completed.
+/// A closure to be executed by the SDK when an asynchronous operation completes.
 ///
 /// - Parameters:
 ///     - error: An optional error object which describes the issue that occurred during the execution
