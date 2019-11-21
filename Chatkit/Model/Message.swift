@@ -2,8 +2,10 @@ import Foundation
 import CoreData
 
 /// A structure representing a message retrieved from the Chatkit web service.
+///
+/// The content of a message is made up of 1 or more `MessagePart`s. Each part can be of three types, and should be unpacked
+/// using a `switch` on the type.
 public struct Message {
-    
     /// The unique identifier for the message assigned by the Chatkit web service.
     public let identifier: String
     
