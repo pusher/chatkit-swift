@@ -58,12 +58,16 @@ public class MessagesViewModel {
             
             return
         }
-        
-        self.addLoadingIndicator()
-        
+
+        self.batchViewUpdate {
+            self.addLoadingIndicator()
+        }
+
         self.provider.fetchOlderMessages(numberOfMessages: numberOfMessages) { error in
             if error != nil {
-                self.removeLoadingIndicator()
+                self.batchViewUpdate {
+                    self.removeLoadingIndicator()
+                }
             }
             
             if let completionHandler = completionHandler {
@@ -210,17 +214,13 @@ public class MessagesViewModel {
             return
         }
         
-        self.delegate?.messagesViewModelWillChangeContent(self)
-        
         let index = self.rows.startIndex
         self.rows.insert(.loadingIndicator, at: index)
-        
+
         self.delegate?.messagesViewModel(self, didAddRowAt: index, changeReason: .messageHistoryFetch)
-        
-        self.delegate?.messagesViewModelDidChangeContent(self)
     }
     
-    private func removeLoadingIndicator(shouldNotifyBatchChange: Bool = true) {
+    private func removeLoadingIndicator() {
         guard let index = self.rows.firstIndex(where: { row -> Bool in
             if case MessageRow.loadingIndicator = row {
                 return true
@@ -231,18 +231,10 @@ public class MessagesViewModel {
         }) else {
             return
         }
-        
-        if shouldNotifyBatchChange {
-            self.delegate?.messagesViewModelWillChangeContent(self)
-        }
-        
+
         self.rows.remove(at: index)
         
         self.delegate?.messagesViewModel(self, didRemoveRowAt: index, changeReason: .messageHistoryFetch)
-        
-        if shouldNotifyBatchChange {
-            self.delegate?.messagesViewModelDidChangeContent(self)
-        }
     }
     
     private func removeDateHeaderIfNeeded(at index: Int, changeReason: MessagesViewModel.ChangeReason) {
@@ -251,7 +243,7 @@ public class MessagesViewModel {
         
         let succeedingIndex = index + 1
         let succeedingMessage = self.message(at: succeedingIndex)
-        
+
         guard let row = self.row(at: index),
             case MessageRow.dateHeader(_) = row,
             let precedingHeaderDate = self.headerDate(for: precedingMessage),
@@ -259,12 +251,11 @@ public class MessagesViewModel {
             precedingHeaderDate == succeedingHeaderDate else {
                 return
         }
-        
+
         self.rows.remove(at: index)
         
         self.delegate?.messagesViewModel(self, didRemoveRowAt: index, changeReason: changeReason)
     }
-    
 }
 
 // MARK: - JoinedRoomsProviderDelegate
@@ -277,53 +268,55 @@ extension MessagesViewModel: MessagesProviderDelegate {
         guard rows.count > 0 else {
             return
         }
-        
-        self.delegate?.messagesViewModelWillChangeContent(self)
-        
-        self.removeLoadingIndicator(shouldNotifyBatchChange: false)
-        
-        self.rows.insert(contentsOf: rows, at: self.rows.startIndex)
-        
+
         let succeedingIndex = rows.endIndex
+
+        self.batchViewUpdate {
+            self.removeLoadingIndicator()
         
-        for index in self.rows.startIndex..<succeedingIndex {
-            self.delegate?.messagesViewModel(self, didAddRowAt: index, changeReason: .messageReceived)
-        }
-        
-        self.removeDateHeaderIfNeeded(at: succeedingIndex, changeReason: .messageReceived)
-        self.updateGroupPositionIfNeeded(forMessageAt: succeedingIndex, changeReason: .messageReceived)
-        
-        self.delegate?.messagesViewModelDidChangeContent(self)
-    }
-    
-    public func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveNewMessage message: Message) {
-        self.delegate?.messagesViewModelWillChangeContent(self)
-        
-        let precedingIndex = self.rows.endIndex - 1
-        var precedingMessage = self.message(at: precedingIndex)
-        let precedingHeaderDate = self.headerDate(for: precedingMessage)
-        
-        if let headerDate = self.headerDate(for: message), let dateHeader = self.dateHeader(for: headerDate, precedingDate: precedingHeaderDate) {
-            rows.append(dateHeader)
-            precedingMessage = nil
-            
-            if let index = self.index(of: dateHeader) {
+            self.rows.insert(contentsOf: rows, at: self.rows.startIndex)
+
+            for index in self.rows.startIndex..<succeedingIndex {
                 self.delegate?.messagesViewModel(self, didAddRowAt: index, changeReason: .messageReceived)
             }
         }
-        
-        let groupPosition = self.groupPosition(for: message, precededBy: precedingMessage, succeededBy: nil)
-        let messageRow = MessageRow.message(message, groupPosition)
-        
-        self.rows.append(messageRow)
-        
-        if let index = self.index(of: message) {
-            self.delegate?.messagesViewModel(self, didAddRowAt: index, changeReason: .messageReceived)
+
+        self.batchViewUpdate {
+            self.removeDateHeaderIfNeeded(at: succeedingIndex, changeReason: .messageReceived)
         }
-        
-        self.updateGroupPositionIfNeeded(forMessageAt: precedingIndex, changeReason: .messageReceived)
-        
-        self.delegate?.messagesViewModelDidChangeContent(self)
+
+        self.batchViewUpdate {
+            self.updateGroupPositionIfNeeded(forMessageAt: succeedingIndex-1, changeReason: .messageReceived)
+            self.updateGroupPositionIfNeeded(forMessageAt: succeedingIndex, changeReason: .messageReceived)
+        }
+    }
+    
+    public func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveNewMessage message: Message) {
+        self.batchViewUpdate {
+            let precedingIndex = self.rows.endIndex - 1
+            var precedingMessage = self.message(at: precedingIndex)
+            let precedingHeaderDate = self.headerDate(for: precedingMessage)
+
+            if let headerDate = self.headerDate(for: message), let dateHeader = self.dateHeader(for: headerDate, precedingDate: precedingHeaderDate) {
+                rows.append(dateHeader)
+                precedingMessage = nil
+
+                if let index = self.index(of: dateHeader) {
+                    self.delegate?.messagesViewModel(self, didAddRowAt: index, changeReason: .messageReceived)
+                }
+            }
+
+            let groupPosition = self.groupPosition(for: message, precededBy: precedingMessage, succeededBy: nil)
+            let messageRow = MessageRow.message(message, groupPosition)
+
+            self.rows.append(messageRow)
+
+            if let index = self.index(of: message) {
+                self.delegate?.messagesViewModel(self, didAddRowAt: index, changeReason: .messageReceived)
+            }
+
+            self.updateGroupPositionIfNeeded(forMessageAt: precedingIndex, changeReason: .messageReceived)
+        }
     }
     
     public func messagesProvider(_ messagesProvider: MessagesProvider, didUpdateMessage message: Message, previousValue: Message) {
@@ -331,36 +324,39 @@ extension MessagesViewModel: MessagesProviderDelegate {
             return
         }
         
-        self.delegate?.messagesViewModelWillChangeContent(self)
-        
-        let groupPosition = self.groupPosition(for: message, at: index)
-        self.rows[index] = .message(message, groupPosition)
-        
-        self.delegate?.messagesViewModel(self, didUpdateRowAt: index, changeReason: .dataUpdated)
-        
-        self.delegate?.messagesViewModelDidChangeContent(self)
+        self.batchViewUpdate {
+            let groupPosition = self.groupPosition(for: message, at: index)
+            self.rows[index] = .message(message, groupPosition)
+
+            self.delegate?.messagesViewModel(self, didUpdateRowAt: index, changeReason: .dataUpdated)
+        }
     }
     
     public func messagesProvider(_ messagesProvider: MessagesProvider, didRemoveMessage message: Message) {
         guard let index = self.index(of: message) else {
             return
         }
-        
-        self.delegate?.messagesViewModelWillChangeContent(self)
-        
-        self.rows.remove(at: index)
-        self.delegate?.messagesViewModel(self, didRemoveRowAt: index, changeReason: .messageRemoved)
-        
         let precedingIndex = index - 1
-        self.removeDateHeaderIfNeeded(at: precedingIndex, changeReason: .messageRemoved)
-        self.updateGroupPositionIfNeeded(forMessageAt: precedingIndex, changeReason: .messageRemoved)
-        
-        let succeedingIndex = index
-        self.updateGroupPositionIfNeeded(forMessageAt: succeedingIndex, changeReason: .messageRemoved)
-        
+
+        self.batchViewUpdate {
+            self.rows.remove(at: index)
+            self.delegate?.messagesViewModel(self, didRemoveRowAt: index, changeReason: .messageRemoved)
+
+            self.removeDateHeaderIfNeeded(at: precedingIndex, changeReason: .messageRemoved)
+        }
+
+        self.batchViewUpdate {
+            self.updateGroupPositionIfNeeded(forMessageAt: precedingIndex, changeReason: .messageRemoved)
+            self.updateGroupPositionIfNeeded(forMessageAt: index, changeReason: .messageRemoved)
+        }
+    }
+
+    private func batchViewUpdate(_ runUpdates: () -> ()) {
+        self.delegate?.messagesViewModelWillChangeContent(self)
+        runUpdates()
         self.delegate?.messagesViewModelDidChangeContent(self)
     }
-    
+
     private func headerDate(for message: Message?) -> Date? {
         guard let message = message else {
             return nil
