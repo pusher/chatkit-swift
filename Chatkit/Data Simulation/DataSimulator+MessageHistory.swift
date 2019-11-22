@@ -42,8 +42,29 @@ extension DataSimulator {
                     return
             }
             let fourthRoom = context.object(with: fourthRoomID)
+            let seconds = Countdown(start: 1000, step: 5)
             self.messageHistory[fourthRoom.objectID] = [
-                HistoricMessage(identifier: ids.new(), content: "Test", senderID: fourthUserID, days: 3, seconds: 955)
+                HistoricMessage(identifier: ids.new(), content: "Morbi in finibus metus, eu auctor massa.", senderID: currentUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Nunc finibus commodo nibh, eget rhoncus nulla viverra ut.", senderID: fourthUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Ut sed arcu in libero lobortis cursus.", senderID: currentUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Pellentesque id nibh sit amet nisi congue hendrerit in et sapien.", senderID: currentUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Pellentesque aliquam enim ut ornare viverra.", senderID: fourthUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Cras tempor, ex eget mattis gravida, est sem accumsan purus, vel imperdiet mauris ligula a ex.", senderID: fourthUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Pellentesque pretium efficitur blandit.", senderID: fourthUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Sed sit amet vestibulum lectus.", senderID: currentUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Sed justo libero, placerat a suscipit non, sagittis vel metus.", senderID: fourthUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Proin a elit facilisis, consequat felis ut, dignissim tellus.", senderID: currentUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Donec tempus volutpat turpis vel ultricies.", senderID: fourthUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Nullam vel est condimentum, sodales libero at, ullamcorper urna.", senderID: fourthUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Proin sed iaculis tellus.", senderID: currentUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Nunc quis imperdiet lectus, eget ultricies felis.", senderID: fourthUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Vivamus eu tempus orci.", senderID: currentUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Aenean tempor et tortor ac efficitur.", senderID: currentUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Morbi facilisis faucibus turpis vel ultrices.", senderID: fourthUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Ut quis accumsan neque.", senderID: currentUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Donec est nulla, imperdiet at mauris accumsan, vulputate feugiat quam.", senderID: fourthUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Pellentesque aliquam enim ac nulla scelerisque egestas.", senderID: currentUserID, days: 3, seconds: seconds.next()),
+                HistoricMessage(identifier: ids.new(), content: "Sed aliquam mollis lorem, eu molestie sem gravida eget.", senderID: fourthUserID, days: 3, seconds: seconds.next())
             ]
         }
     }
@@ -131,6 +152,21 @@ extension DataSimulator {
         public func new() -> String {
             self.nextId += 1
             return String(self.nextId)
+        }
+    }
+
+    class Countdown {
+        private var nextValue: Int
+        private let step: Int
+
+        init(start: Int, step: Int) {
+            self.nextValue = start
+            self.step = step
+        }
+
+        public func next() -> Double {
+            self.nextValue -= self.selp
+            return Double(self.nextValue)
         }
     }
 }
