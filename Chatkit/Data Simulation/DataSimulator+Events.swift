@@ -81,9 +81,18 @@ extension DataSimulator {
                 
                 self.createMessage(in: context, content: "Hello", sender: firstUser, room: firstRoom)
                 self.createMessage(in: context, content: "Hello", sender: secondUser, room: secondRoom)
-                self.createMessage(in: context, content: "Hi Olivia", sender: thirdUser, room: thirdRoom)
-                self.createMessage(in: context, content: "I finished my first daily routine", sender: thirdUser, room: thirdRoom)
-                self.createMessage(in: context, content: "Unfortunately, I feel completely exhausted now 😰", sender: thirdUser, room: thirdRoom)
+
+                self.createMessage(in: context, content: "Hi George!", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 35))
+                self.createMessage(in: context, content: "That is great to hear", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 30))
+                self.createMessage(in: context, content: "Which plan would you like to pick?", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 25))
+                self.createMessage(in: context, content: "The basic one 💪", sender: thirdUser, room: thirdRoom, date: oldTs(days: 1, seconds: 20))
+                self.createMessage(in: context, content: "I will send a subscription link to your email address", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 15))
+                self.createMessage(in: context, content: "Thank you! Bye bye", sender: thirdUser, room: thirdRoom, date: oldTs(days: 1, seconds: 10))
+                self.createMessage(in: context, content: "Bye", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 5))
+                self.createMessage(in: context, content: "Hi Olivia", sender: thirdUser, room: thirdRoom, date: oldTs(seconds: 40))
+                self.createMessage(in: context, content: "I finished my first daily routine", sender: thirdUser, room: thirdRoom, date: oldTs(seconds: 20))
+                self.createMessage(in: context, content: "Unfortunately, I feel completely exhausted now 😰", sender: thirdUser, room: thirdRoom, date: oldTs(seconds: 10))
+
                 self.createMessage(in: context, content: "Hello", sender: fourthUser, room: fourthRoom)
                 self.createMessage(in: context, content: "Hello", sender: fifthUser, room: fifthRoom)
                 self.createMessage(in: context, content: "Hello", sender: sixthUser, room: sixthRoom)
@@ -303,5 +312,9 @@ extension DataSimulator {
             }
         }
     }
-    
+
+}
+
+private func oldTs(days: Double = 0, seconds: Double = 0) -> Date {
+    return Date(timeIntervalSinceNow: -(days * 24 * 60 * 60 + seconds))
 }

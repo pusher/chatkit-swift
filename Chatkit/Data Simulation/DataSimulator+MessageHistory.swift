@@ -33,13 +33,6 @@ extension DataSimulator {
                 HistoricMessage(identifier: "990", content: "Hello", senderID: thirdUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 50.0),
                 HistoricMessage(identifier: "991", content: "It's me again", senderID: thirdUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 45.0),
                 HistoricMessage(identifier: "992", content: "I am interested in subscribing to one of your exercise plans 💰", senderID: thirdUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 40.0),
-                HistoricMessage(identifier: "993", content: "Hi George!", senderID: currentUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 35.0),
-                HistoricMessage(identifier: "994", content: "That is great to hear", senderID: currentUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 30.0),
-                HistoricMessage(identifier: "995", content: "Which plan would you like to pick?", senderID: currentUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 25.0),
-                HistoricMessage(identifier: "996", content: "The basic one 💪", senderID: thirdUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 20.0),
-                HistoricMessage(identifier: "997", content: "I will send a subscription link to your email address", senderID: currentUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 15.0),
-                HistoricMessage(identifier: "998", content: "Thank you! Bye bye", senderID: thirdUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 10.0),
-                HistoricMessage(identifier: "999", content: "Bye", senderID: currentUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0)
             ]
         }
     }
