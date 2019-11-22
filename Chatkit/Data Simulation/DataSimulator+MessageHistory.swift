@@ -11,6 +11,8 @@ extension DataSimulator {
             let thirdUserID = self.thirdUserID else {
                 return
         }
+
+        let ids = IdGenerator()
         
         let context = self.persistenceController.mainContext
         
@@ -19,20 +21,29 @@ extension DataSimulator {
             
             // George - Olivia
             self.messageHistory[thirdRoom.objectID] = [
-                HistoricMessage(identifier: "980", content: "Hi!", senderID: thirdUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 50.0),
-                HistoricMessage(identifier: "981", content: "Hi George!", senderID: currentUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 45.0),
-                HistoricMessage(identifier: "982", content: "How can I help you?", senderID: currentUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 40.0),
-                HistoricMessage(identifier: "983", content: "I am interested in your offer 🏋️‍♂️", senderID: thirdUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 35.0),
-                HistoricMessage(identifier: "984", content: "Should I send you our brochure?", senderID: currentUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 30.0),
-                HistoricMessage(identifier: "985", content: "Yes, please", senderID: thirdUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 25.0),
-                HistoricMessage(identifier: "986", content: "Done 👍", senderID: currentUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 20.0),
-                HistoricMessage(identifier: "987", content: "Thank you!", senderID: thirdUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 15.0),
-                HistoricMessage(identifier: "988", content: "Bye bye", senderID: thirdUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 10.0),
-                HistoricMessage(identifier: "989", content: "Bye", senderID: currentUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0),
+                HistoricMessage(identifier: ids.new(), content: "Hi!", senderID: thirdUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 50.0),
+                HistoricMessage(identifier: ids.new(), content: "Hi George!", senderID: currentUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 45.0),
+                HistoricMessage(identifier: ids.new(), content: "How can I help you?", senderID: currentUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 40.0),
+                HistoricMessage(identifier: ids.new(), content: "I am interested in your offer 🏋️‍♂️", senderID: thirdUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 35.0),
+                HistoricMessage(identifier: ids.new(), content: "Should I send you our brochure?", senderID: currentUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 30.0),
+                HistoricMessage(identifier: ids.new(), content: "Yes, please", senderID: thirdUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 25.0),
+                HistoricMessage(identifier: ids.new(), content: "Done 👍", senderID: currentUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 20.0),
+                HistoricMessage(identifier: ids.new(), content: "Thank you!", senderID: thirdUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 15.0),
+                HistoricMessage(identifier: ids.new(), content: "Bye bye", senderID: thirdUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0 + 10.0),
+                HistoricMessage(identifier: ids.new(), content: "Bye", senderID: currentUserID, timeInterval: 2.0 * 24.0 * 60.0 * 60.0),
                 
-                HistoricMessage(identifier: "990", content: "Hello", senderID: thirdUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 50.0),
-                HistoricMessage(identifier: "991", content: "It's me again", senderID: thirdUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 45.0),
-                HistoricMessage(identifier: "992", content: "I am interested in subscribing to one of your exercise plans 💰", senderID: thirdUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 40.0),
+                HistoricMessage(identifier: ids.new(), content: "Hello", senderID: thirdUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 50.0),
+                HistoricMessage(identifier: ids.new(), content: "It's me again", senderID: thirdUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 45.0),
+                HistoricMessage(identifier: ids.new(), content: "I am interested in subscribing to one of your exercise plans 💰", senderID: thirdUserID, timeInterval: 1.0 * 24.0 * 60.0 * 60.0 + 40.0),
+            ]
+
+            guard let fourthRoomID = self.fourthRoomID,
+                let fourthUserID = self.fourthUserID else {
+                    return
+            }
+            let fourthRoom = context.object(with: fourthRoomID)
+            self.messageHistory[fourthRoom.objectID] = [
+                HistoricMessage(identifier: ids.new(), content: "Test", senderID: fourthUserID, days: 3, seconds: 955)
             ]
         }
     }
@@ -101,7 +112,25 @@ extension DataSimulator {
             self.senderID = senderID
             self.date = Date(timeIntervalSinceNow: -timeInterval)
         }
-        
+
+        init(identifier: String, content: String, senderID: NSManagedObjectID, days: Double, seconds: Double) {
+            self.identifier = identifier
+            self.content = content
+            self.senderID = senderID
+            self.date = Date(timeIntervalSinceNow: -(days * 24 * 60 * 60 + seconds))
+        }
+
     }
     
+}
+
+extension DataSimulator {
+    class IdGenerator {
+        private var nextId: Int = 100
+
+        public func new() -> String {
+            self.nextId += 1
+            return String(self.nextId)
+        }
+    }
 }
