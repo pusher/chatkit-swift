@@ -81,10 +81,42 @@ extension DataSimulator {
                 
                 self.createMessage(in: context, content: "Hello", sender: firstUser, room: firstRoom)
                 self.createMessage(in: context, content: "Hello", sender: secondUser, room: secondRoom)
-                self.createMessage(in: context, content: "Hi Olivia", sender: thirdUser, room: thirdRoom)
-                self.createMessage(in: context, content: "I finished my first daily routine", sender: thirdUser, room: thirdRoom)
-                self.createMessage(in: context, content: "Unfortunately, I feel completely exhausted now 😰", sender: thirdUser, room: thirdRoom)
-                self.createMessage(in: context, content: "Hello", sender: fourthUser, room: fourthRoom)
+
+                self.createMessage(in: context, content: "Hi George!", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 35))
+                self.createMessage(in: context, content: "That is great to hear", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 30))
+                self.createMessage(in: context, content: "Which plan would you like to pick?", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 25))
+                self.createMessage(in: context, content: "The basic one 💪", sender: thirdUser, room: thirdRoom, date: oldTs(days: 1, seconds: 20))
+                self.createMessage(in: context, content: "I will send a subscription link to your email address", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 15))
+                self.createMessage(in: context, content: "Thank you! Bye bye", sender: thirdUser, room: thirdRoom, date: oldTs(days: 1, seconds: 10))
+                self.createMessage(in: context, content: "Bye", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 5))
+                self.createMessage(in: context, content: "Hi Olivia", sender: thirdUser, room: thirdRoom, date: oldTs(seconds: 40))
+                self.createMessage(in: context, content: "I finished my first daily routine", sender: thirdUser, room: thirdRoom, date: oldTs(seconds: 20))
+                self.createMessage(in: context, content: "Unfortunately, I feel completely exhausted now 😰", sender: thirdUser, room: thirdRoom, date: oldTs(seconds: 10))
+
+                self.createMessage(in: context, content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 320))
+                self.createMessage(in: context, content: "Duis tempus ante non nisi feugiat commodo.", sender: currentUser, room: fourthRoom, date: oldTs(days: 2, seconds: 310))
+                self.createMessage(in: context, content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 280))
+                self.createMessage(in: context, content: "Praesent mattis ligula id ligula porta efficitur.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 270))
+                self.createMessage(in: context, content: "Fusce non felis ut quam egestas accumsan.", sender: currentUser, room: fourthRoom, date: oldTs(days: 2, seconds: 260))
+                self.createMessage(in: context, content: "Nam ornare volutpat sem non auctor.", sender: currentUser, room: fourthRoom, date: oldTs(days: 2, seconds: 230))
+                self.createMessage(in: context, content: "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus ac elementum enim.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 210))
+                self.createMessage(in: context, content: "Proin finibus leo vel turpis consectetur lobortis.", sender: currentUser, room: fourthRoom, date: oldTs(days: 2, seconds: 120))
+                self.createMessage(in: context, content: "Nullam quis consectetur leo.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 110))
+                self.createMessage(in: context, content: "Nulla eleifend semper massa vitae pharetra.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 100))
+                self.createMessage(in: context, content: "Nulla pulvinar, lectus a ultrices molestie, eros velit porta justo, vel tincidunt velit odio ac eros.", sender: currentUser, room: fourthRoom, date: oldTs(days: 2, seconds: 90))
+                self.createMessage(in: context, content: "Nunc ac faucibus neque.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 80))
+                self.createMessage(in: context, content: "Nam tempus eleifend nibh, ut aliquet risus consectetur eu.", sender: currentUser, room: fourthRoom, date: oldTs(days: 2, seconds: 60))
+                self.createMessage(in: context, content: "Duis mauris elit, blandit ac nisl vel, dignissim venenatis nulla.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 30))
+                self.createMessage(in: context, content: "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 20))
+                self.createMessage(in: context, content: "Mauris tincidunt fermentum sapien eu pellentesque.", sender: currentUser, room: fourthRoom, date: oldTs(days: 1, seconds: 820))
+                self.createMessage(in: context, content: "Nunc quis rutrum felis, ut interdum ligula.", sender: currentUser, room: fourthRoom, date: oldTs(days: 1, seconds: 720))
+                self.createMessage(in: context, content: "Nulla faucibus varius erat vel facilisis.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 1, seconds: 620))
+                self.createMessage(in: context, content: "Aenean tempus leo in eleifend posuere.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 1, seconds: 520))
+                self.createMessage(in: context, content: "Aliquam ornare magna diam, a consequat neque sodales sit amet.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 1, seconds: 420))
+                self.createMessage(in: context, content: "Aliquam a orci in elit dictum semper in ut dui.", sender: currentUser, room: fourthRoom, date: oldTs(days: 0, seconds: 90))
+                self.createMessage(in: context, content: "Vestibulum feugiat consequat lacinia.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 0, seconds: 50))
+                self.createMessage(in: context, content: "Maecenas dapibus sapien nisl, sed interdum nibh suscipit eu.", sender: currentUser, room: fourthRoom, date: oldTs(days: 0, seconds: 20))
+
                 self.createMessage(in: context, content: "Hello", sender: fifthUser, room: fifthRoom)
                 self.createMessage(in: context, content: "Hello", sender: sixthUser, room: sixthRoom)
                 self.createMessage(in: context, content: "Hello", sender: seventhUser, room: seventhRoom)
@@ -303,5 +335,9 @@ extension DataSimulator {
             }
         }
     }
-    
+
+}
+
+private func oldTs(days: Double = 0, seconds: Double = 0) -> Date {
+    return Date(timeIntervalSinceNow: -(days * 24 * 60 * 60 + seconds))
 }
