@@ -9,7 +9,12 @@ class MessageViewController: UIViewController {
     var chatkit: Chatkit?
     var messagesViewModel: MessagesViewModel?
     var typingUsersViewModel: TypingUsersViewModel?
-    
+
+    // Was the last row in the table visible when we last started an update to
+    // the table. Because if it was, we should scroll to the new last row when
+    // the update completes
+    var lastRowVisibleBeforeUpdate: Bool = false
+
     var dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "d MMMM yyyy"
@@ -92,22 +97,24 @@ class MessageViewController: UIViewController {
             self.present(alertController, animated: true)
         }
     }
-    
-    private func scrollToBottomIfNeeded() {
+
+    private func beforeContentChange() {
         guard let lastVisibleRow = self.tableView.indexPathsForVisibleRows?.last?.row else {
             return
         }
-        
-        let numberOfRows = self.tableView.numberOfRows(inSection: 0)
-        let lastRow = numberOfRows - 2
-        let addedRow = numberOfRows - 1
-        
-        if lastVisibleRow == lastRow || lastVisibleRow == addedRow {
-            let indexPath = IndexPath(row: addedRow, section: 0)
-            self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+
+        let rowCount = self.tableView.numberOfRows(inSection: 0)
+        self.lastRowVisibleBeforeUpdate = lastVisibleRow == rowCount-1
+    }
+
+    private func afterContentChange() {
+        let rowCount = self.tableView.numberOfRows(inSection: 0)
+        let indexPath = IndexPath(row: rowCount-1, section: 0)
+        if (self.lastRowVisibleBeforeUpdate) {
+            self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
         }
     }
-    
+
     private func configureLoadingIndicatorCell(_ cell: UITableViewCell) {
         guard let cell = cell as? LoadingIndicatorTableViewCell else {
             return
@@ -232,14 +239,13 @@ extension MessageViewController: UITableViewDelegate {
 extension MessageViewController: MessagesViewModelDelegate {
     
     func messagesViewModelWillChangeContent(_ messagesViewModel: MessagesViewModel) {
+        self.beforeContentChange()
         self.tableView.beginUpdates()
     }
     
     func messagesViewModel(_ messagesViewModel: MessagesViewModel, didAddRowAt index: Int, changeReason: MessagesViewModel.ChangeReason) {
         let indexPath = IndexPath(row: index, section: 0)
         self.tableView.insertRows(at: [indexPath], with: .fade)
-        
-//        self.scrollToBottomIfNeeded()
     }
     
     func messagesViewModel(_ messagesViewModel: MessagesViewModel, didUpdateRowAt index: Int, changeReason: MessagesViewModel.ChangeReason) {
@@ -254,6 +260,7 @@ extension MessageViewController: MessagesViewModelDelegate {
     
     func messagesViewModelDidChangeContent(_ messagesViewModel: MessagesViewModel) {
         self.tableView.endUpdates()
+        self.afterContentChange()
         self.markMessagesAsRead()
     }
     
