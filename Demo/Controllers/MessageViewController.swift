@@ -108,9 +108,13 @@ class MessageViewController: UIViewController {
     }
 
     private func afterContentChange() {
-        let rowCount = self.tableView.numberOfRows(inSection: 0)
-        let indexPath = IndexPath(row: rowCount-1, section: 0)
         if (self.lastRowVisibleBeforeUpdate) {
+            let messageRowCount = self.tableView.numberOfRows(inSection: 0)
+            let typingRowCount = self.tableView.numberOfRows(inSection: 1)
+            let indexPath = typingRowCount > 0
+                ? IndexPath(row: typingRowCount-1, section: 1)
+                : IndexPath(row: messageRowCount-1, section: 0)
+
             self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
         }
     }
@@ -269,11 +273,13 @@ extension MessageViewController: MessagesViewModelDelegate {
 extension MessageViewController: TypingUsersViewModelDelegate {
     
     func typingUsersViewModelDidUpdateValue(_ typingUsersViewModel: TypingUsersViewModel) {
+        self.beforeContentChange()
         self.tableView.beginUpdates()
         
         self.tableView.reloadSections(IndexSet(arrayLiteral: 1), with: .fade)
         
         self.tableView.endUpdates()
+        self.afterContentChange()
     }
     
 }
