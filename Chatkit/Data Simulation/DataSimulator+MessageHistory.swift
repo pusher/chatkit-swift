@@ -165,7 +165,7 @@ extension DataSimulator {
         }
 
         public func next() -> Double {
-            self.nextValue -= self.selp
+            self.nextValue -= self.step
             return Double(self.nextValue)
         }
     }
