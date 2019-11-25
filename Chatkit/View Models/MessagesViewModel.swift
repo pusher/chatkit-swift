@@ -133,10 +133,7 @@ public class MessagesViewModel {
     }
     
     private func groupPosition(for message: Message, precededBy precedingMessage: Message?, succeededBy succeedingMessage: Message?) -> MessageRow.GroupPosition {
-        let hasPrecedingElement = message.sender.identifier == precedingMessage?.sender.identifier
-        let hasSucceedingElement = message.sender.identifier == succeedingMessage?.sender.identifier
-        
-        switch (hasPrecedingElement, hasSucceedingElement) {
+        switch (self.shouldGroup(precedingMessage, message), self.shouldGroup(message, succeedingMessage)) {
         case (true, true):
             return .middle
             
@@ -149,6 +146,17 @@ public class MessagesViewModel {
         case (false, false):
             return .single
         }
+    }
+
+    private func shouldGroup(_ first: Message?, _ second: Message?) -> Bool {
+        guard let first = first, let second = second else {
+            return false
+        }
+
+        let sameSender = first.sender.identifier == second.sender.identifier
+        let timesClose = first.createdAt.addingTimeInterval(60).compare(second.createdAt) == .orderedDescending
+
+        return sameSender && timesClose
     }
     
     private func groupPosition(for message: Message, at index: Int) -> MessageRow.GroupPosition {
