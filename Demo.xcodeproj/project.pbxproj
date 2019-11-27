@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		222EA2B223425823004EE90F /* TestTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EA2B123425823004EE90F /* TestTokenProvider.swift */; };
+		223D2C1C238EA5ED007B0BC6 /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229656EE232FC8BB0016DA7C /* PusherChatkit.framework */; };
+		223D2C1D238EA5ED007B0BC6 /* PusherChatkit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 229656EE232FC8BB0016DA7C /* PusherChatkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		226A15E2236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226A15E1236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift */; };
 		227843B4237AC6DF00EB9B26 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227843B3237AC6DF00EB9B26 /* MessageTableViewCell.swift */; };
 		227843B7237AD0D200EB9B26 /* BubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227843B6237AD0D200EB9B26 /* BubbleView.swift */; };
@@ -17,13 +19,26 @@
 		229656DB232FC8880016DA7C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 229656D9232FC8880016DA7C /* Main.storyboard */; };
 		229656DD232FC8890016DA7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 229656DC232FC8890016DA7C /* Assets.xcassets */; };
 		229656E0232FC8890016DA7C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 229656DE232FC8890016DA7C /* LaunchScreen.storyboard */; };
-		229656EF232FC8BB0016DA7C /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229656EE232FC8BB0016DA7C /* PusherChatkit.framework */; };
 		229656F8232FCAE90016DA7C /* PusherPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229656F7232FCAE90016DA7C /* PusherPlatform.framework */; };
 		229656FE232FD2C40016DA7C /* TextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656FD232FD2C40016DA7C /* TextTableViewCell.swift */; };
 		22BFC030237D7AEC00B55C5E /* IndicatorLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFC02F237D7AEC00B55C5E /* IndicatorLabel.swift */; };
 		22BFC032237D852900B55C5E /* RoomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFC031237D852900B55C5E /* RoomTableViewCell.swift */; };
 		22FDE9C8237B2127005F13CA /* UIBezierPath+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		223D2C1E238EA5ED007B0BC6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				223D2C1D238EA5ED007B0BC6 /* PusherChatkit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		222EA2B123425823004EE90F /* TestTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTokenProvider.swift; sourceTree = "<group>"; };
@@ -51,8 +66,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				223D2C1C238EA5ED007B0BC6 /* PusherChatkit.framework in Frameworks */,
 				229656F8232FCAE90016DA7C /* PusherPlatform.framework in Frameworks */,
-				229656EF232FC8BB0016DA7C /* PusherChatkit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,7 +188,8 @@
 				229656CE232FC8880016DA7C /* Sources */,
 				229656CF232FC8880016DA7C /* Frameworks */,
 				229656D0232FC8880016DA7C /* Resources */,
-				229656F9232FCB5A0016DA7C /* ShellScript */,
+				223D2C1E238EA5ED007B0BC6 /* Embed Frameworks */,
+				229656F9232FCB5A0016DA7C /* Copy Carthage Frameworks */,
 			);
 			buildRules = (
 			);
@@ -231,7 +247,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		229656F9232FCB5A0016DA7C /* ShellScript */ = {
+		229656F9232FCB5A0016DA7C /* Copy Carthage Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -239,15 +255,16 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				PusherPlatform,
+				"$(SRCROOT)/Carthage/Build/iOS/PusherPlatform.framework",
 			);
+			name = "Copy Carthage Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "case \"$PLATFORM_NAME\" in\nmacosx) plat=Mac;;\niphone*) plat=iOS;;\nwatch*) plat=watchOS;;\ntv*) plat=tvOS;;\nappletv*) plat=tvOS;;\n*) echo \"error: Unknown PLATFORM_NAME: $PLATFORM_NAME\"; exit 1;;\nesac\n\nif [[ $plat != \"tvOS\" ]] && [[ $plat != \"watchOS\" ]]\nthen\nexport SCRIPT_INPUT_FILE_$SCRIPT_INPUT_FILE_COUNT=\"PushNotifications\"\nexport SCRIPT_INPUT_FILE_COUNT=$(($SCRIPT_INPUT_FILE_COUNT+1))\nfi\n\nfor (( n = 0; n < SCRIPT_INPUT_FILE_COUNT; n++ )); do\nVAR=SCRIPT_INPUT_FILE_$n\nframework=$(basename \"${!VAR}\")\nexport SCRIPT_INPUT_FILE_$n=\"$SRCROOT\"/Carthage/Build/$plat/\"$framework\".framework\ndone\n\n/usr/local/bin/carthage copy-frameworks || exit\n\nfor (( n = 0; n < SCRIPT_INPUT_FILE_COUNT; n++ )); do\nVAR=SCRIPT_INPUT_FILE_$n\nsource=${!VAR}.dSYM\ndest=${BUILT_PRODUCTS_DIR}/$(basename \"$source\")\nditto \"$source\" \"$dest\" || exit\ndone\n";
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
