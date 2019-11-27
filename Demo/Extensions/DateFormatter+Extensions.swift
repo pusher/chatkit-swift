@@ -13,7 +13,7 @@ internal extension DateFormatter {
     
     static let time: DateFormatter = {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
+        dateFormatter.dateFormat = "HH:mm:ss"
         
         return dateFormatter
     }()
