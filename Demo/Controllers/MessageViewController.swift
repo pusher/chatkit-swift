@@ -14,12 +14,6 @@ class MessageViewController: UIViewController {
     // the table. Because if it was, we should scroll to the new last row when
     // the update completes
     var lastRowVisibleBeforeUpdate: Bool = false
-
-    var dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "d MMMM yyyy"
-        return dateFormatter
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -140,7 +134,7 @@ class MessageViewController: UIViewController {
             return
         }
         
-        cell.contentLabel.text = self.dateFormatter.string(from: date)
+        cell.contentLabel.text = DateFormatter.header.string(from: date)
     }
     
     private func configureMessageCell(_ cell: UITableViewCell, message: Message, groupPosition: MessagesViewModel.MessageRow.GroupPosition) {
@@ -155,6 +149,13 @@ class MessageViewController: UIViewController {
             cell.sender = message.sender.identifier == currentUser.identifier ? .currentUser : .otherUser
             cell.groupPosition = groupPosition
             cell.contentLabel.text = content
+            
+            if groupPosition == .bottom || groupPosition == .single {
+                cell.timeLabel.text = DateFormatter.time.string(from: message.createdAt)
+            }
+            else {
+                cell.timeLabel.text = nil
+            }
         }
     }
     

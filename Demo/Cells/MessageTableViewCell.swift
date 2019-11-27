@@ -4,6 +4,7 @@ import PusherChatkit
 class MessageTableViewCell: UITableViewCell {
     
     @IBOutlet weak var contentLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var bubbleView: BubbleView!
     
     @IBOutlet weak var leadingConstraint: NSLayoutConstraint?
@@ -40,6 +41,7 @@ class MessageTableViewCell: UITableViewCell {
         case .currentUser:
             self.bubbleView.backgroundColor = UIColor(red: 71.0 / 255.0, green: 149.0 / 255.0, blue: 242.0 / 255.0, alpha: 1.0)
             self.contentLabel.textColor = UIColor.white
+            self.timeLabel.textColor = UIColor(white: 1.0, alpha: 0.5)
             
             self.leadingConstraint = self.contentLabel.leadingAnchor.constraint(greaterThanOrEqualTo: self.contentView.leadingAnchor, constant: 50.0)
             self.trailingConstraint = self.contentView.trailingAnchor.constraint(equalTo: self.contentLabel.trailingAnchor, constant: 25.0)
@@ -50,6 +52,7 @@ class MessageTableViewCell: UITableViewCell {
         case .otherUser:
             self.bubbleView.backgroundColor = UIColor(red: 229.0 / 255.0, green: 229.0 / 255.0, blue: 234.0 / 255.0, alpha: 1.0)
             self.contentLabel.textColor = UIColor.black
+            self.timeLabel.textColor = UIColor.lightGray
             
             self.leadingConstraint = self.contentLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 25.0)
             self.trailingConstraint = self.contentView.trailingAnchor.constraint(greaterThanOrEqualTo: self.contentLabel.trailingAnchor, constant: 50.0)
