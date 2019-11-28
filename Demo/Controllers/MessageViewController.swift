@@ -21,8 +21,11 @@ class MessageViewController: UIViewController {
         guard let room = self.room else {
             return
         }
-        
-        self.title = room.name ?? "Messages"
+
+        let otherUser = self.chatkit?.members(for: room).filter { $0.identifier != self.chatkit?.currentUser?.identifier }.first
+        let otherUserName = otherUser?.name ?? "Unknown user"
+        let roomName = room.name ?? "Unknown Plan"
+        self.title = otherUserName + " - " + roomName
         
         self.chatkit?.createMessagesViewModel(for: room) { viewModel, error in
             if let error = error {

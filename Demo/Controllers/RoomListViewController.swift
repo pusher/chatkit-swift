@@ -51,8 +51,12 @@ class RoomListViewController: UITableViewController {
         
         if let roomCell = cell as? RoomTableViewCell, let viewModel = self.viewModel {
             let room = viewModel.rooms[indexPath.row]
+            let roomName = room.name ?? "Unknown plan"
+
+            let otherUser = self.chatkit?.members(for: room).filter { $0.identifier != self.chatkit?.currentUser?.identifier }.first
+            let otherUserName = otherUser?.name ?? "Unknown user"
             
-            roomCell.nameLabel.text = room.name
+            roomCell.nameLabel.text = otherUserName + " - " + roomName
             roomCell.numberOfUnreadMessages = room.unreadCount
         }
         
