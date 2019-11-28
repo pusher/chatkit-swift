@@ -17,17 +17,20 @@ class MessageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        guard let chatkit = self.chatkit else {
+            fatalError("MessageViewController view did load, but Chatkit is not available")
+        }
         guard let room = self.room else {
-            return
+            fatalError("MessageViewController view did load, but no room has been specified")
         }
 
-        let otherUser = self.chatkit?.members(for: room).filter { $0.identifier != self.chatkit?.currentUser?.identifier }.first
+        let otherUser = chatkit.members(for: room).filter { $0.identifier != chatkit.currentUser?.identifier }.first
         let otherUserName = otherUser?.name ?? "Unknown user"
         let roomName = room.name ?? "Unknown Plan"
         self.title = otherUserName + " - " + roomName
         
-        self.chatkit?.createMessagesViewModel(for: room) { viewModel, error in
+        chatkit.createMessagesViewModel(for: room) { viewModel, error in
             if let error = error {
                 print("Error: \(error.localizedDescription)")
             }
@@ -39,7 +42,7 @@ class MessageViewController: UIViewController {
             }
         }
         
-        self.chatkit?.createTypingUsersViewModel(for: room) { viewModel, error in
+        chatkit.createTypingUsersViewModel(for: room) { viewModel, error in
             if let error = error {
                 print("Error: \(error.localizedDescription)")
             }
