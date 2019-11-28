@@ -289,6 +289,31 @@ public class Chatkit {
         }
     }
     
+    /// Retrieves a static snapshot of the `User`s who are currently members of the `Room`.
+    ///
+    /// - Parameters:
+    ///     - `room`: The `Room` for which members should be retrieved.
+    public func members(for room: Room) -> [User] {
+        let roomManagedObjectID = room.objectID
+        var members: [User] = []
+
+        let context = persistenceController.mainContext
+        context.performAndWait {
+            let predicate = NSPredicate(format: "ANY %K == %@", #keyPath(UserEntity.room), roomManagedObjectID)
+            let sortDescriptor = NSSortDescriptor(key: #keyPath(UserEntity.identifier), ascending: true) { (lhs, rhs) -> ComparisonResult in
+                guard let lhsString = lhs as? String, let lhs = Int(lhsString), let rhsString = rhs as? String, let rhs = Int(rhsString) else {
+                    return .orderedSame
+                }
+
+                return NSNumber(value: lhs).compare(NSNumber(value: rhs))
+            }
+
+            let memberEntities = context.fetchAll(UserEntity.self, withRelationships: nil, sortedBy: [sortDescriptor], filteredBy: predicate)
+            members = memberEntities.compactMap { try? $0.snapshot() }
+        }
+
+        return members
+    }
 }
 
 // MARK: - Delegate
