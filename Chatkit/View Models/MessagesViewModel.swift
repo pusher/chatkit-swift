@@ -74,8 +74,6 @@ public class MessagesViewModel {
                 completionHandler(error)
             }
         }
-        
-        self.provider.fetchOlderMessages(numberOfMessages: numberOfMessages, completionHandler: completionHandler)
     }
     
     /// Marks the `lastReadMessage` and all messages preceding that message as read.
