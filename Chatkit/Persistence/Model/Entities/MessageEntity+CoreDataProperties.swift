@@ -14,6 +14,7 @@ extension MessageEntity {
     @NSManaged var cursors: NSOrderedSet?
     @NSManaged var parts: NSOrderedSet
     @NSManaged var room: RoomEntity
+    @NSManaged var lastInRoom: RoomEntity?
     @NSManaged var sender: UserEntity
     
 }

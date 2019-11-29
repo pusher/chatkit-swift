@@ -207,6 +207,9 @@ extension DataSimulator {
             room.unreadCount += 1
         }
         
+        room.lastMessage = room.messages?.lastObject as? MessageEntity
+        room.hasNoMessages = false
+        
         return message
     }
     

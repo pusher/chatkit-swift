@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15400" systemVersion="18G1012" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15508" systemVersion="18G1012" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AttachmentPartEntity" representedClassName="AttachmentPartEntity" parentEntity="PartEntity" syncable="YES">
         <attribute name="customData" optional="YES" attributeType="Binary"/>
         <attribute name="downloadURL" attributeType="String"/>
@@ -24,6 +24,7 @@
         <attribute name="identifier" attributeType="String"/>
         <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="cursors" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="CursorEntity" inverseName="readMessages" inverseEntity="CursorEntity"/>
+        <relationship name="lastInRoom" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="lastMessage" inverseEntity="RoomEntity"/>
         <relationship name="parts" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="PartEntity" inverseName="message" inverseEntity="PartEntity"/>
         <relationship name="room" maxCount="1" deletionRule="Nullify" destinationEntity="RoomEntity" inverseName="messages" inverseEntity="RoomEntity"/>
         <relationship name="sender" maxCount="1" deletionRule="Nullify" destinationEntity="UserEntity" inverseName="messages" inverseEntity="UserEntity"/>
@@ -36,12 +37,14 @@
         <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="customData" optional="YES" attributeType="Binary"/>
         <attribute name="deletedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="hasNoMessages" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
         <attribute name="identifier" attributeType="String"/>
         <attribute name="isPrivate" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="unreadCount" optional="YES" attributeType="Integer 64" minValueString="0" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="updatedAt" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="cursors" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CursorEntity" inverseName="room" inverseEntity="CursorEntity"/>
+        <relationship name="lastMessage" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="MessageEntity" inverseName="lastInRoom" inverseEntity="MessageEntity"/>
         <relationship name="members" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="UserEntity" inverseName="room" inverseEntity="UserEntity"/>
         <relationship name="messages" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="MessageEntity" inverseName="room" inverseEntity="MessageEntity"/>
         <relationship name="typingMembers" optional="YES" transient="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="UserEntity" inverseName="typingInRooms" inverseEntity="UserEntity"/>
@@ -66,9 +69,9 @@
         <element name="AttachmentPartEntity" positionX="-76.32421875" positionY="560.5078125" width="128" height="148"/>
         <element name="CursorEntity" positionX="19.9296875" positionY="214.15625" width="128" height="105"/>
         <element name="InlinePartEntity" positionX="-437.19921875" positionY="550.703125" width="128" height="60"/>
-        <element name="MessageEntity" positionX="-258.15234375" positionY="206.734375" width="128" height="163"/>
+        <element name="MessageEntity" positionX="-258.15234375" positionY="206.734375" width="128" height="178"/>
         <element name="PartEntity" positionX="-258.35546875" positionY="418.3828125" width="128" height="30"/>
-        <element name="RoomEntity" positionX="-257.5234375" positionY="-96.3046875" width="128" height="223"/>
+        <element name="RoomEntity" positionX="-257.5234375" positionY="-96.3046875" width="128" height="253"/>
         <element name="URLPartEntity" positionX="-257.734375" positionY="553.296875" width="128" height="60"/>
         <element name="UserEntity" positionX="16.46484375" positionY="-98.0546875" width="128" height="208"/>
     </elements>

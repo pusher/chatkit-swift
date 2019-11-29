@@ -68,7 +68,11 @@ extension TypingUsersProvider: FetchedResultsControllerDelegate {
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
-        // This method intentionally does not provide any implementation.
+        // This method does not provide any implementation.
+    }
+    
+    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didMoveObject object: ResultType, from oldIndex: Int, to newIndex: Int) where ResultType : NSManagedObject {
+        // This method does not provide any implementation.
     }
     
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {

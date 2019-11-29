@@ -15,6 +15,8 @@ extension RoomEntity {
     @NSManaged var name: String
     @NSManaged var unreadCount: Int64
     @NSManaged var updatedAt: Date
+    @NSManaged var hasNoMessages: Bool
+    @NSManaged var lastMessage: MessageEntity?
     @NSManaged var cursors: Set<CursorEntity>?
     @NSManaged var members: NSOrderedSet?
     @NSManaged var messages: NSOrderedSet?

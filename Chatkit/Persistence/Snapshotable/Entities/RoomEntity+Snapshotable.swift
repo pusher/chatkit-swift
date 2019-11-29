@@ -19,12 +19,6 @@ extension RoomEntity: Snapshotable {
                 "\(#keyPath(RoomEntity.lastMessage.cursors)).\(#keyPath(CursorEntity.readMessages))"]   // Perhaps in future this could be replaced with #keyPath(RoomEntity.lastMessage.cursors.readMessages)
     }
     
-    // MARK: - Accessors
-    
-    @objc var lastMessage: MessageEntity? {
-        return self.messages?.lastObject as? MessageEntity
-    }
-    
     // MARK: - Internal methods
     
     func snapshot() throws -> Room {

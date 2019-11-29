@@ -97,43 +97,36 @@ class RoomListViewController: UITableViewController {
 
 extension RoomListViewController: JoinedRoomsViewModelDelegate {
     
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didAddRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
+    func joinedRoomsViewModelWillChangeContent(_ joinedRoomsViewModel: JoinedRoomsViewModel) {
         self.tableView.beginUpdates()
-        
+    }
+    
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didAddRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
         let indexPath = IndexPath(row: index, section: 0)
         self.tableView.insertRows(at: [indexPath], with: .fade)
-        
-        self.tableView.endUpdates()
     }
     
     func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
-        self.tableView.beginUpdates()
-        
         let indexPath = IndexPath(row: index, section: 0)
         self.tableView.reloadRows(at: [indexPath], with: .none)
-        
-        self.tableView.endUpdates()
     }
     
     func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didMoveRoomFrom oldIndex: Int, to newIndex: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
         let oldIndexPath = IndexPath(row: oldIndex, section: 0)
         let newIndexPath = IndexPath(row: newIndex, section: 0)
         
-        self.tableView.beginUpdates()
         self.tableView.moveRow(at: oldIndexPath, to: newIndexPath)
         self.tableView.endUpdates()
-        
         self.tableView.beginUpdates()
         self.tableView.reloadRows(at: [newIndexPath], with: .none)
-        self.tableView.endUpdates()
     }
     
     func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didRemoveRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason) {
-        self.tableView.beginUpdates()
-        
         let indexPath = IndexPath(row: index, section: 0)
         self.tableView.deleteRows(at: [indexPath], with: .fade)
-        
+    }
+    
+    func joinedRoomsViewModelDidChangeContent(_ joinedRoomsViewModel: JoinedRoomsViewModel) {
         self.tableView.endUpdates()
     }
     

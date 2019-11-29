@@ -105,12 +105,19 @@ class FetchedResultsController<ResultType> : NSObject, NSFetchedResultsControlle
             
             self.insertedObjects.append(index)
         
-        case .update, .move:
+        case .update:
             guard let index = indexPath?.item else {
                 return
             }
             
             self.delegate?.fetchedResultsController(self, didUpdateObject: object, at: index)
+            
+        case .move:
+            guard let oldIndex = indexPath?.item, let newIndex = newIndexPath?.item else {
+                return
+            }
+            
+            self.delegate?.fetchedResultsController(self, didMoveObject: object, from: oldIndex, to: newIndex)
             
         case .delete:
             guard let index = indexPath?.item else {
@@ -133,6 +140,7 @@ protocol FetchedResultsControllerDelegate: class {
     
     func fetchedResultsController<ResultType: NSManagedObject>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>)
     func fetchedResultsController<ResultType: NSManagedObject>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject object: ResultType, at index: Int)
+    func fetchedResultsController<ResultType: NSManagedObject>(_ fetchedResultsController: FetchedResultsController<ResultType>, didMoveObject object: ResultType, from oldIndex: Int, to newIndex: Int)
     func fetchedResultsController<ResultType: NSManagedObject>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject object: ResultType, at index: Int)
     
 }

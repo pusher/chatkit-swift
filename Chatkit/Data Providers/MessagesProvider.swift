@@ -164,6 +164,16 @@ extension MessagesProvider: FetchedResultsControllerDelegate {
         self.delegate?.messagesProvider(self, didUpdateMessage: message, previousValue: message)
     }
     
+    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didMoveObject object: ResultType, from oldIndex: Int, to newIndex: Int) where ResultType : NSManagedObject {
+        guard let object = object as? MessageEntity, let message = try? object.snapshot() else {
+            return
+        }
+        
+        // TODO: Generate the old value based on the new value and the changeset.
+        
+        self.delegate?.messagesProvider(self, didUpdateMessage: message, previousValue: message)
+    }
+    
     func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
         guard let object = object as? MessageEntity, let message = try? object.snapshot() else {
             return

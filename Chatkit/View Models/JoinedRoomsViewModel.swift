@@ -19,7 +19,7 @@ public class JoinedRoomsViewModel {
     /// - Parameters:
     ///     - realTime: The current state of the provider related to the real time web service.
     ///     - paged: The current state of the provider related to the non-real time web service.
-    public var state: RealTimeProviderState {
+    public var state: (realTime: RealTimeProviderState, paged: PagedProviderState) {
         return self.provider.state
     }
     
@@ -29,31 +29,35 @@ public class JoinedRoomsViewModel {
     // MARK: - Initializers
     
     init(provider: JoinedRoomsProvider) {
-        self.rooms = []
+        self.rooms = provider.rooms
         
         self.provider = provider
         self.provider.delegate = self
+    }
+    
+    // MARK: - Methods
+    
+    /// Triggers an asynchronous call to the web service that retrieves a batch of historical messages
+    /// currently not present in the maintained collection of messages.
+    ///
+    /// - Parameters:
+    ///     - numberOfMessages: The maximum number of messages that should be retrieved from
+    ///     the web service.
+    ///     - completionHandler:An optional completion handler called when the call to the web
+    ///     service finishes with either a successful result or an error.
+    public func fetchMoreRooms(completionHandler: CompletionHandler? = nil) {
+        guard self.provider.state.paged == .partiallyPopulated else {
+            if let completionHandler = completionHandler {
+                completionHandler(nil)
+            }
+            
+            return
+        }
         
-        self.reload()
+        self.provider.fetchMoreRooms(completionHandler: completionHandler)
     }
     
     // MARK: - Private methods
-    
-    private func reload() {
-        self.rooms = Array(self.provider.rooms)
-        self.sort()
-    }
-    
-    private func sort() {
-        self.rooms.sort { lhs, rhs -> Bool in
-            if let lhsLastMessage = lhs.lastMessage, let rhsLastMessage = rhs.lastMessage {
-                return lhsLastMessage.createdAt > rhsLastMessage.createdAt
-            }
-            else {
-                return lhs.createdAt > rhs.createdAt
-            }
-        }
-    }
     
     private func index(of room: Room) -> Int? {
         return self.rooms.firstIndex { storedRoom -> Bool in
@@ -67,53 +71,65 @@ public class JoinedRoomsViewModel {
 
 extension JoinedRoomsViewModel: JoinedRoomsProviderDelegate {
     
-    public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didJoinRoom room: Room) {
-        // TODO: Optimize if necessary
+    public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didReceiveNewActiveRoom room: Room, at index: Int) {
+        self.delegate?.joinedRoomsViewModelWillChangeContent(self)
         
-        self.rooms.append(room)
-        self.sort()
-        
-        guard let index = self.index(of: room) else {
-            return
-        }
+        self.rooms.insert(room, at: index)
         
         self.delegate?.joinedRoomsViewModel(self, didAddRoomAt: index, changeReason: .userJoined)
+        
+        self.delegate?.joinedRoomsViewModelDidChangeContent(self)
+    }
+    
+    public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didReceiveMoreRooms rooms: [Room]) {
+        // TODO: Implement when required.
     }
     
     public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didUpdateRoom room: Room, previousValue: Room) {
-        // TODO: Optimize if necessary
-        
-        guard let previousIndex = self.index(of: previousValue) else {
+        guard let index = self.index(of: previousValue) else {
             return
         }
         
-        self.rooms[previousIndex] = room
-        self.sort()
-        
-        guard let currentIndex = self.index(of: room) else {
-            return
-        }
+        self.delegate?.joinedRoomsViewModelWillChangeContent(self)
         
         let currentMessage = room.lastMessage
         let previousMessage = previousValue.lastMessage
         let changeReason: JoinedRoomsViewModel.ChangeReason = currentMessage != nil && currentMessage?.identifier != previousMessage?.identifier ? .messageReceived : .dataUpdated
         
-        if currentIndex != previousIndex {
-            self.delegate?.joinedRoomsViewModel(self, didMoveRoomFrom: previousIndex, to: currentIndex, changeReason: changeReason)
-        }
-        else {
-            self.delegate?.joinedRoomsViewModel(self, didUpdateRoomAt: currentIndex, changeReason: changeReason)
-        }
+        self.rooms[index] = room
+        
+        self.delegate?.joinedRoomsViewModel(self, didUpdateRoomAt: index, changeReason: changeReason)
+        
+        self.delegate?.joinedRoomsViewModelDidChangeContent(self)
     }
     
-    public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didLeaveRoom room: Room) {
+    public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didMoveRoom room: Room, from oldIndex: Int, to newIndex: Int, previousValue: Room) {
+        self.delegate?.joinedRoomsViewModelWillChangeContent(self)
+        
+        let currentMessage = room.lastMessage
+        let previousMessage = previousValue.lastMessage
+        let changeReason: JoinedRoomsViewModel.ChangeReason = currentMessage != nil && currentMessage?.identifier != previousMessage?.identifier ? .messageReceived : .dataUpdated
+        
+        self.rooms.remove(at: oldIndex)
+        self.rooms.insert(room, at: newIndex)
+        
+        self.delegate?.joinedRoomsViewModel(self, didMoveRoomFrom: oldIndex, to: newIndex, changeReason: changeReason)
+        
+        self.delegate?.joinedRoomsViewModelDidChangeContent(self)
+    }
+    
+    public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didRemoveRoom room: Room) {
         guard let index = self.index(of: room) else {
             return
         }
         
+        self.delegate?.joinedRoomsViewModelWillChangeContent(self)
+        
         self.rooms.remove(at: index)
         
         self.delegate?.joinedRoomsViewModel(self, didRemoveRoomAt: index, changeReason: .userLeft)
+        
+        self.delegate?.joinedRoomsViewModelDidChangeContent(self)
     }
     
 }
@@ -123,6 +139,12 @@ extension JoinedRoomsViewModel: JoinedRoomsProviderDelegate {
 /// A delegate protocol that describes methods that will be called by the associated
 /// `JoinedRoomsViewModel` when the maintainted collection of rooms have changed.
 public protocol JoinedRoomsViewModelDelegate: class {
+    
+    /// Called before a batch of changes are made to the collection of rooms.
+    ///
+    /// - Parameters:
+    ///     - joinedRoomsViewModel: The `JoinedRoomsViewModel` that called the method.
+    func joinedRoomsViewModelWillChangeContent(_ joinedRoomsViewModel: JoinedRoomsViewModel)
     
     /// Notifies the receiver that a new room has been added to the maintened collection of rooms.
     ///
@@ -156,6 +178,12 @@ public protocol JoinedRoomsViewModelDelegate: class {
     ///     - index: The index of the room removed from the maintened collection of rooms.
     ///     - changeReason: The semantic reson that triggered the change.
     func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didRemoveRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason)
+    
+    /// Called after a batch of changes are made to the collection of rooms.
+    ///
+    /// - Parameters:
+    ///     - joinedRoomsViewModel: The `JoinedRoomsViewModel` that called the method.
+    func joinedRoomsViewModelDidChangeContent(_ joinedRoomsViewModel: JoinedRoomsViewModel)
     
 }
 
