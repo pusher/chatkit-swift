@@ -12,122 +12,60 @@ extension DataSimulator {
             persistenceController.performBackgroundTask { context in
                 let currentUser = self.createUser(in: context, identifier: "olivia", name: "Olivia")
                 self.currentUserID = currentUser.objectID
-                
-                let firstUser = self.createUser(in: context, identifier: "oliver", name: "Oliver")
-                self.firstUserID = firstUser.objectID
-                
-                let secondUser = self.createUser(in: context, identifier: "harry", name: "Harry")
-                self.secondUserID = secondUser.objectID
-                
-                let thirdUser = self.createUser(in: context, identifier: "george", name: "George")
-                self.thirdUserID = thirdUser.objectID
-                
-                let fourthUser = self.createUser(in: context, identifier: "noah", name: "Noah")
-                self.fourthUserID = fourthUser.objectID
-                
-                let fifthUser = self.createUser(in: context, identifier: "jack", name: "Jack")
-                self.fifthUserID = fifthUser.objectID
-                
-                let sixthUser = self.createUser(in: context, identifier: "jacob", name: "Jacob")
-                self.sixthUserID = sixthUser.objectID
-                
-                let seventhUser = self.createUser(in: context, identifier: "bob", name: "Bob")
-                self.seventhUserID = seventhUser.objectID
-                
-                let eighthUser = self.createUser(in: context, identifier: "leo", name: "Leo")
-                self.eighthUserID = eighthUser.objectID
-                
-                let ninthUser = self.createUser(in: context, identifier: "oscar", name: "Oscar")
-                self.ninthUserID = ninthUser.objectID
-                
-                let tenthUser = self.createUser(in: context, identifier: "charlie", name: "Charlie")
-                self.tenthUserID = tenthUser.objectID
-                
-                let eleventhUser = self.createUser(in: context, identifier: "amelia", name: "Amelia")
-                self.eleventhUserID = eleventhUser.objectID
-                
-                let firstRoom = self.createRoom(in: context, identifier: "firstRoom", members: [currentUser, firstUser])
-                self.firstRoomID = firstRoom.objectID
-                
-                let secondRoom = self.createRoom(in: context, identifier: "secondRoom", members: [currentUser, secondUser])
-                self.secondRoomID = secondRoom.objectID
-                
-                let thirdRoom = self.createRoom(in: context, identifier: "thirdRoom", isSubscribedToExerciseRoutinesPlan: true, members: [currentUser, thirdUser])
-                self.thirdRoomID = thirdRoom.objectID
-                
-                let fourthRoom = self.createRoom(in: context, identifier: "fourthRoom", members: [currentUser, fourthUser])
-                self.fourthRoomID = fourthRoom.objectID
-                
-                let fifthRoom = self.createRoom(in: context, identifier: "fifthRoom", members: [currentUser, fifthUser])
-                self.fifthRoomID = fifthRoom.objectID
-                
-                let sixthRoom = self.createRoom(in: context, identifier: "sixthRoom", members: [currentUser, sixthUser])
-                self.sixthRoomID = sixthRoom.objectID
-                
-                let seventhRoom = self.createRoom(in: context, identifier: "seventhRoom", members: [currentUser, seventhUser])
-                self.seventhRoomID = seventhRoom.objectID
-                
-                let eighthRoom = self.createRoom(in: context, identifier: "eighthRoom", members: [currentUser, eighthUser])
-                self.eighthRoomID = eighthRoom.objectID
-                
-                let ninthRoom = self.createRoom(in: context, identifier: "ninthRoom", members: [currentUser, ninthUser])
-                self.ninthRoomID = ninthRoom.objectID
-                
-                let tenthRoom = self.createRoom(in: context, identifier: "tenthRoom", members: [currentUser, tenthUser])
-                self.tenthRoomID = tenthRoom.objectID
-                
-                let eleventhRoom = self.createRoom(in: context, identifier: "eleventhRoom", members: [eleventhUser])
-                self.eleventhRoomID = eleventhRoom.objectID
-                
-                self.createMessage(in: context, content: "Hello", sender: firstUser, room: firstRoom)
-                self.createMessage(in: context, content: "Hello", sender: secondUser, room: secondRoom)
 
-                self.createMessage(in: context, content: "Hi George!", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 35))
-                self.createMessage(in: context, content: "That is great to hear", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 30))
-                self.createMessage(in: context, content: "Which plan would you like to pick?", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 25))
-                self.createMessage(in: context, content: "The basic one 💪", sender: thirdUser, room: thirdRoom, date: oldTs(days: 1, seconds: 20))
-                self.createMessage(in: context, content: "I will send a subscription link to your email address", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 15))
-                self.createMessage(in: context, content: "Thank you! Bye bye", sender: thirdUser, room: thirdRoom, date: oldTs(days: 1, seconds: 10))
-                self.createMessage(in: context, content: "Bye", sender: currentUser, room: thirdRoom, date: oldTs(days: 1, seconds: 5))
-                self.createMessage(in: context, content: "Hi Olivia", sender: thirdUser, room: thirdRoom, date: oldTs(seconds: 40))
-                self.createMessage(in: context, content: "I finished my first daily routine", sender: thirdUser, room: thirdRoom, date: oldTs(seconds: 20))
-                self.createMessage(in: context, content: "Unfortunately, I feel completely exhausted now 😰", sender: thirdUser, room: thirdRoom, date: oldTs(seconds: 10))
+                self.data.forEach { roomDef in
+                    let otherUser = self.createUser(in: context, identifier: roomDef.otherUser.identifier, name: roomDef.otherUser.name)
+                    let room = self.createRoom(in: context, identifier: roomDef.otherUser.identifier, planName: roomDef.planName, members: [currentUser, otherUser])
+                    var historicMessages = [ServersideMessage]()
 
-                self.createMessage(in: context, content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 320))
-                self.createMessage(in: context, content: "Duis tempus ante non nisi feugiat commodo.", sender: currentUser, room: fourthRoom, date: oldTs(days: 2, seconds: 310))
-                self.createMessage(in: context, content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 280))
-                self.createMessage(in: context, content: "Praesent mattis ligula id ligula porta efficitur.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 270))
-                self.createMessage(in: context, content: "Fusce non felis ut quam egestas accumsan.", sender: currentUser, room: fourthRoom, date: oldTs(days: 2, seconds: 260))
-                self.createMessage(in: context, content: "Nam ornare volutpat sem non auctor.", sender: currentUser, room: fourthRoom, date: oldTs(days: 2, seconds: 230))
-                self.createMessage(in: context, content: "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus ac elementum enim.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 210))
-                self.createMessage(in: context, content: "Proin finibus leo vel turpis consectetur lobortis.", sender: currentUser, room: fourthRoom, date: oldTs(days: 2, seconds: 120))
-                self.createMessage(in: context, content: "Nullam quis consectetur leo.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 110))
-                self.createMessage(in: context, content: "Nulla eleifend semper massa vitae pharetra.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 100))
-                self.createMessage(in: context, content: "Nulla pulvinar, lectus a ultrices molestie, eros velit porta justo, vel tincidunt velit odio ac eros.", sender: currentUser, room: fourthRoom, date: oldTs(days: 2, seconds: 90))
-                self.createMessage(in: context, content: "Nunc ac faucibus neque.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 80))
-                self.createMessage(in: context, content: "Nam tempus eleifend nibh, ut aliquet risus consectetur eu.", sender: currentUser, room: fourthRoom, date: oldTs(days: 2, seconds: 60))
-                self.createMessage(in: context, content: "Duis mauris elit, blandit ac nisl vel, dignissim venenatis nulla.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 30))
-                self.createMessage(in: context, content: "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;", sender: fourthUser, room: fourthRoom, date: oldTs(days: 2, seconds: 20))
-                self.createMessage(in: context, content: "Mauris tincidunt fermentum sapien eu pellentesque.", sender: currentUser, room: fourthRoom, date: oldTs(days: 1, seconds: 820))
-                self.createMessage(in: context, content: "Nunc quis rutrum felis, ut interdum ligula.", sender: currentUser, room: fourthRoom, date: oldTs(days: 1, seconds: 720))
-                self.createMessage(in: context, content: "Nulla faucibus varius erat vel facilisis.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 1, seconds: 620))
-                self.createMessage(in: context, content: "Aenean tempus leo in eleifend posuere.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 1, seconds: 520))
-                self.createMessage(in: context, content: "Aliquam ornare magna diam, a consequat neque sodales sit amet.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 1, seconds: 420))
-                self.createMessage(in: context, content: "Aliquam a orci in elit dictum semper in ut dui.", sender: currentUser, room: fourthRoom, date: oldTs(days: 0, seconds: 90))
-                self.createMessage(in: context, content: "Vestibulum feugiat consequat lacinia.", sender: fourthUser, room: fourthRoom, date: oldTs(days: 0, seconds: 50))
-                self.createMessage(in: context, content: "Maecenas dapibus sapien nisl, sed interdum nibh suscipit eu.", sender: currentUser, room: fourthRoom, date: oldTs(days: 0, seconds: 20))
+                    roomDef.messages.forEach { messageDef in
+                        switch messageDef {
+                        case .initial(let days, let seconds, let sentByCurrentUser, let content):
+                            self.createMessage(
+                                in: context,
+                                content: content,
+                                sender: sentByCurrentUser ? currentUser : otherUser,
+                                room: room,
+                                date: Date(timeIntervalSinceNow: -(days * 24 * 60 * 60 + seconds))
+                            )
+                        case .scheduled(let after, let sentByCurrentUser, let content):
+                            self.schedule(
+                                self.createTypingIndicatorEvent(
+                                    for: sentByCurrentUser ? currentUser.objectID : otherUser.objectID,
+                                    in: room.objectID
+                                ),
+                                after: after-1.5
+                            )
+                            self.schedule(
+                                self.createMessageEvent(
+                                    message: content,
+                                    from: sentByCurrentUser ? currentUser.objectID : otherUser.objectID,
+                                    in: room.objectID
+                                ),
+                                after: after
+                            )
+                        case .serverside(let days, let seconds, let sentByCurrentUser, let content):
+                            historicMessages.append(
+                                ServersideMessage(
+                                    identifier: self.calculateMessageIdentifier(isHistoric: true),
+                                    content: content,
+                                    senderID: sentByCurrentUser ? currentUser.objectID : otherUser.objectID,
+                                    days: days,
+                                    seconds: seconds
+                                )
+                            )
+                        }
+                    }
 
-                self.createMessage(in: context, content: "Hello", sender: fifthUser, room: fifthRoom)
-                self.createMessage(in: context, content: "Hello", sender: sixthUser, room: sixthRoom)
-                self.createMessage(in: context, content: "Hello", sender: seventhUser, room: seventhRoom)
-                self.createMessage(in: context, content: "Hello", sender: eighthUser, room: eighthRoom)
-                self.createMessage(in: context, content: "Hello", sender: ninthUser, room: ninthRoom)
-                self.createMessage(in: context, content: "Hello", sender: tenthUser, room: tenthRoom)
-                
-                try? context.save()
-                
-                self.persistenceController.save()
-                
+                    try! context.save()
+                    self.persistenceController.save()
+
+                    // Now the entities are saved, we can look up the new ID of the Room to store the historic messages against
+                    let context = persistenceController.mainContext
+                    let persistedRoom = context.object(with: room.objectID)
+                    self.serversideMessages[persistedRoom.objectID] = historicMessages
+                }
+
                 guard let snapshot = try? currentUser.snapshot() else {
                     fatalError("Failed to create current user.")
                 }
@@ -138,67 +76,19 @@ extension DataSimulator {
             }
         }
     }
-    
-    func scheduleAllEvents() {
-        // George - Olivia
-        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 3.0)
-        self.schedule(self.createMessageEvent(message: "Hi George", from: self.currentUserID, in: self.thirdRoomID), after: 4.0)
-        
-        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 5.0)
-        self.schedule(self.createMessageEvent(message: "Did you manage do complete the whole routine?", from: self.currentUserID, in: self.thirdRoomID), after: 6.0)
-        
-        self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 9.0)
-        self.schedule(self.createMessageEvent(message: "Yes, I did 😎", from: self.thirdUserID, in: self.thirdRoomID), after: 11.0)
-        
-        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 13.0)
-        self.schedule(self.createMessageEvent(message: "Where there any elements of the routine that were especially hard for you?", from: self.currentUserID, in: self.thirdRoomID), after: 15.0)
-        
-        self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 16.0)
-        self.schedule(self.createMessageEvent(message: "I struggled with push-ups 😐", from: self.thirdUserID, in: self.thirdRoomID), after: 17.0)
-        
-        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 20.0)
-        self.schedule(self.createMessageEvent(message: "Perhaps we could reduce the number of push-ups for you and see if that helps tomorrow?", from: self.currentUserID, in: self.thirdRoomID), after: 21.0)
-        
-        self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 22.0)
-        self.schedule(self.createMessageEvent(message: "That sound great! 👍", from: self.thirdUserID, in: self.thirdRoomID), after: 23.0)
-        
-        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 24.0)
-        self.schedule(self.createMessageEvent(message: "I will amend your daily routine to include that change", from: self.currentUserID, in: self.thirdRoomID), after: 25.0)
-        
-        self.schedule(self.createTypingIndicatorEvent(for: self.thirdUserID, in: self.thirdRoomID), after: 26.0)
-        self.schedule(self.createMessageEvent(message: "Thank you! Bye bye", from: self.thirdUserID, in: self.thirdRoomID), after: 27.0)
-        
-        self.schedule(self.createTypingIndicatorEvent(for: self.currentUserID, in: self.thirdRoomID), after: 28.0)
-        self.schedule(self.createMessageEvent(message: "Bye", from: self.currentUserID, in: self.thirdRoomID), after: 29.0)
-        
-        // Amelia - Olivia
-        self.schedule(self.createNewRoomForAmelia(), after: 10.0)
-        self.schedule(self.createTypingIndicatorEvent(for: self.eleventhUserID, in: self.eleventhRoomID), after: 11.0)
-        self.schedule(self.createMessageEvent(message: "Hi", from: self.eleventhUserID, in: self.eleventhRoomID), after: 12.0)
-    }
-    
-    @discardableResult func createMessage(in context: NSManagedObjectContext, identifier: String? = nil, content: String, sender: UserEntity, room: RoomEntity, date: Date = Date()) -> MessageEntity {
+
+    @discardableResult func createMessage(in context: NSManagedObjectContext, identifier: String? = nil, isHistoric: Bool = false, content: String, sender: UserEntity, room: RoomEntity, date: Date = Date()) -> MessageEntity {
         let part = context.create(InlinePartEntity.self)
         part.content = content
         part.type = "text/plain"
-        
+
         let message = context.create(MessageEntity.self)
-        message.identifier = identifier ?? self.calculateMessageIdentifier()
+        message.identifier = identifier ?? self.calculateMessageIdentifier(isHistoric: isHistoric)
         message.sender = sender
         message.createdAt = date
         message.updatedAt = date
         message.addToParts(part)
-        
-        var isHistoric = false
-        
-        // This is a simplification, but should be enough for the simulation.
-        if let firstMessage = room.messages?.firstObject as? MessageEntity,
-            let firstMessageIdentifier = Int(firstMessage.identifier),
-            let currentMessageIdentifier = Int(message.identifier),
-            currentMessageIdentifier < firstMessageIdentifier {
-            isHistoric = true
-        }
-        
+
         if isHistoric {
             room.insertIntoMessages(message, at: 0)
         }
@@ -227,7 +117,7 @@ extension DataSimulator {
         return user
     }
     
-    private func createRoom(in context: NSManagedObjectContext, identifier: String, isSubscribedToExerciseRoutinesPlan: Bool = false, members: [UserEntity]) -> RoomEntity {
+    private func createRoom(in context: NSManagedObjectContext, identifier: String, planName: String, members: [UserEntity]) -> RoomEntity {
         let now = Date()
         
         let room = context.create(RoomEntity.self)
@@ -236,24 +126,11 @@ extension DataSimulator {
         room.isPrivate = false
         room.createdAt = now
         room.updatedAt = now
-        
-        if isSubscribedToExerciseRoutinesPlan {
-            let planName = "Exercise Routine"
-            let customData = ["planID" : "exercise-basic",
-                            "planName" : planName]
-            
-            room.name = "\(planName) Plan"
-            room.customData = CustomDataSerializer.serialize(customData: customData)
-        }
-        else {
-            let planName = "Nutrition"
-            let customData = ["planID" : "routine-basic",
-                            "planName" : planName]
-            
-            room.name = "\(planName) Plan"
-            room.customData = CustomDataSerializer.serialize(customData: customData)
-        }
-        
+
+        let customData = ["planName" : planName]
+        room.name = "\(planName) Plan"
+        room.customData = CustomDataSerializer.serialize(customData: customData)
+
         for member in members {
             room.addToMembers(member)
         }
@@ -261,24 +138,24 @@ extension DataSimulator {
         return room
     }
     
-    private func createNewRoomForAmelia() -> Event {
-        return Event { persistenceController in
-            persistenceController.performBackgroundTask { context in
-                guard let currentUserID = self.currentUserID,
-                    let currentUser = context.object(with: currentUserID) as? UserEntity,
-                    let eleventhRoomID = self.eleventhRoomID,
-                    let eleventhRoom = context.object(with: eleventhRoomID) as? RoomEntity else {
-                        fatalError("Failed to retrieve data.")
-                }
-                
-                eleventhRoom.addToMembers(currentUser)
-                
-                try? context.save()
-                
-                persistenceController.save()
-            }
-        }
-    }
+//    private func createNewRoomForAmelia() -> Event {
+//        return Event { persistenceController in
+//            persistenceController.performBackgroundTask { context in
+//                guard let currentUserID = self.currentUserID,
+//                    let currentUser = context.object(with: currentUserID) as? UserEntity,
+//                    let eleventhRoomID = self.eleventhRoomID,
+//                    let eleventhRoom = context.object(with: eleventhRoomID) as? RoomEntity else {
+//                        fatalError("Failed to retrieve data.")
+//                }
+//
+//                eleventhRoom.addToMembers(currentUser)
+//
+//                try? context.save()
+//
+//                persistenceController.save()
+//            }
+//        }
+//    }
     
     private func createTypingIndicatorEvent(for userID: NSManagedObjectID?, in roomID: NSManagedObjectID?) -> Event {
         return Event { persistenceController in
@@ -339,8 +216,4 @@ extension DataSimulator {
         }
     }
 
-}
-
-private func oldTs(days: Double = 0, seconds: Double = 0) -> Date {
-    return Date(timeIntervalSinceNow: -(days * 24 * 60 * 60 + seconds))
 }
