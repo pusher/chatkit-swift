@@ -318,7 +318,7 @@ public class Chatkit {
 
 // MARK: - Delegate
 
-/// A delegate protocol for observing changes to the `Chatkit` handle, including the proerties of
+/// A delegate protocol for observing changes to the `Chatkit` handle, including the properties of
 /// the currently logged in user, and the state of the connection to the Chatkit services.
 public protocol ChatkitDelegate: class {
     
