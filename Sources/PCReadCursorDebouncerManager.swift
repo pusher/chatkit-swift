@@ -50,9 +50,11 @@ class PCReadCursorDebouncer {
     }
 
     func set(position: Int, completionHandler: @escaping PCErrorCompletionHandler) {
-        if sendReadCursorPayload != nil {
-            sendReadCursorPayload!.position = max(position, sendReadCursorPayload!.position)
-            sendReadCursorPayload!.completionHandlers = sendReadCursorPayload!.completionHandlers + [completionHandler]
+        if let previousCursor = sendReadCursorPayload {
+            sendReadCursorPayload = (
+                position: max(position, previousCursor.position),
+                completionHandlers: previousCursor.completionHandlers + [completionHandler]
+            )
         } else {
             sendReadCursorPayload = (
                 position: position,
