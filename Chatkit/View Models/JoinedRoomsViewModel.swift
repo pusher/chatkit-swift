@@ -7,6 +7,21 @@ import Foundation
 /// This class is intended to be bound to a UICollectionView or UITableView.
 ///
 /// The rooms are sorted in descending order of the time of their last message, or their creation time if they contain no messages.
+///
+/// ## Understanding the `state` of the ViewModel
+///
+/// The ViewModel provides both live updates to current data, and paged access to older data.
+///
+/// The `JoinedRoomsViewModel.state` tuple allows you to understand the current state of both:
+///
+/// - the `realTime` component (an instance of `RealTimeProviderState`) describes the state of the live update connection, either
+///   - `.connected`: updates are flowing live, or
+///   - `.degraded`: updates may be delayed due to network problems.
+/// - the `paged` component (an instance of `PagedProviderState`) describes whether the fill set of data has been fetched or not, either
+///   - `.fullyPopulated`: all data has been retrieved,
+///   - `.partiallyPopulated`: more data can be fetched from the Chatkit service, or
+///   - `.fetching`: more data is currently being requested from the Chatkit service.
+///
 public class JoinedRoomsViewModel {
     
     // MARK: - Properties
