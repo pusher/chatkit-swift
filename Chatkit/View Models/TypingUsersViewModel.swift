@@ -17,13 +17,18 @@ public class TypingUsersViewModel {
     
     // MARK: - Properties
     
-    /// The textual description of the set of currently typing users, or `nil` of no users are typing.
-    public private(set) var value: String?
-    
     private let provider: TypingUsersProvider
     private let currentUserIdentifier: String
     private let userNamePlaceholder: String
     
+    /// The textual description of the set of currently typing users, or `nil` of no users are typing.
+    public private(set) var value: String?
+    
+    /// The current state of the provider used by the view model as the data source.
+    public var state: RealTimeProviderState {
+        return self.provider.state
+    }
+
     /// The object that is notified when the content of the `value` property has changed.
     public weak var delegate: TypingUsersViewModelDelegate?
     
