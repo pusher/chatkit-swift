@@ -22,8 +22,7 @@ let chatkit = try! Chatkit(instanceLocator: "your_instance_locator")
 
 ## Connecting
 
-No network connections are created when the SDK is initialized, so to start
-using the SDK, you must connect it.
+To access the Chatkit service, the SDK must be connected to Chatkit.
 
 The `connect` method takes a completion handler which receives `nil` on
 success, otherwise an error describing what went wrong.
