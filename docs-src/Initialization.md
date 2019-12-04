@@ -17,9 +17,7 @@ When initializing the SDK, you must provide your `instanceLocator`. This
 string identifies users as belonging to your instance of Chatkit.
 
 ```swift
-guard let chatkit = try? Chatkit(instanceLocator: "your_instance_locator") else {
-  // Something went wrong
-}
+let chatkit = try! Chatkit(instanceLocator: "your_instance_locator")
 ```
 
 ## Connecting
