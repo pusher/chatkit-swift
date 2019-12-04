@@ -85,7 +85,7 @@ data should be presented, they are provided as conveniences and their use is
 entirely optional.
 
 For example, a shortcoming of the `TypingUsersViewModel` presented above is
-that it exposes an english description of the typing users. Another example is
+that it exposes an English description of the typing users. Another example is
 that it uses the full `User.name` field of the user in the description, but you
 may want to split this field to extract only the first name, for example, or
 use a nickname field which you maintain in the custom metadata on the `User`.
