@@ -16,10 +16,11 @@ import Foundation
 /// - limited to 3 entries with a "<X> more" placeholder if more than 3 users are typing
 /// - rendered using the `User.name` property, or a configurable placeholder name if this field is not set.
 ///
-/// ## Receiving live updates to the `value`
+/// ## Receiving live updates
 ///
 /// In order to be notified when the contents of the `value` changes, implement the `TypingUsersViewModelDelegate` protocol and assign the `TypingUsersViewModel.delegate` property.
 ///
+/// Note that when the view model is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.
 public class TypingUsersViewModel {
     
     // MARK: - Properties

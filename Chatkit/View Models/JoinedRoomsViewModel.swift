@@ -13,9 +13,11 @@ import Foundation
 ///
 /// Each item in the `rooms` array can be used to populate a cell in a `UITableView` or `UICollectionView`.
 ///
-/// ## Receiving live updates to the `rooms`
+/// ## Receiving live updates
 ///
 /// In order to be notified when the contents of the `rooms` changes, implement the `JoinedRoomsModelDelegate` protocol and assign the `JoinedRoomsModel.delegate` property.
+///
+/// Note that when the view model is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.
 ///
 /// ## Understanding the `state` of the ViewModel
 ///

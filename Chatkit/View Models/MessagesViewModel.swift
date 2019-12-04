@@ -25,9 +25,11 @@ import Foundation
 ///
 /// This grouping can be used to alter the rendering of different messages, for example, to show the timestamp or sender details only on the first or last message in each group.
 ///
-/// ## Receiving live updates to the `rows`
+/// ## Receiving live updates
 ///
 /// In order to be notified when the contents of the `rows` changes, implement the `MessagesViewModelDelegate` protocol and assign the `MessagesViewModel.delegate` property.
+///
+/// Note that when the view model is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.
 ///
 /// ## Understanding the `state` of the ViewModel
 ///
