@@ -6,6 +6,8 @@ import Foundation
 ///
 /// This class is intended to be bound to a text UI component.
 ///
+/// ## What is provided
+///
 /// This class exposes a `String?`, and accepts a delegate which will be called whenever the value has changed.
 ///
 /// The full set of users who are typing is:
@@ -13,6 +15,11 @@ import Foundation
 /// - sorted by name
 /// - limited to 3 entries with a "<X> more" placeholder if more than 3 users are typing
 /// - rendered using the `User.name` property, or a configurable placeholder name if this field is not set.
+///
+/// ## Receiving live updates to the `value`
+///
+/// In order to be notified when the contents of the `value` changes, implement the `TypingUsersViewModelDelegate` protocol and assign the `TypingUsersViewModel.delegate` property.
+///
 public class TypingUsersViewModel {
     
     // MARK: - Properties
