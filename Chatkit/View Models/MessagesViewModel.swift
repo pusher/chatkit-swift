@@ -117,14 +117,19 @@ public class MessagesViewModel {
     
     // MARK: - Methods
     
-    /// Triggers an asynchronous call to the web service that retrieves a batch of historical messages
-    /// currently not present in the maintained collection of messages.
+    /// Fetch more old messages from the Chatkit service and add them to the `messages` array.
+    ///
+    /// This call is asynchronous because messages may need to be retrieved from the network.
+    ///
+    /// On success, the completion handler receives `nil`, and the messages are added to the `rows`.
+    ///
+    /// The `delegate` will be informed of the change to the `rows`.
     ///
     /// - Parameters:
     ///     - numberOfMessages: The maximum number of messages that should be retrieved from
     ///     the web service.
-    ///     - completionHandler:An optional completion handler called when the call to the web
-    ///     service finishes with either a successful result or an error.
+    ///     - completionHandler: An optional completion handler invoked when the operation is complete.
+    ///     The completion handler receives an Error, or nil on success.
     public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: CompletionHandler? = nil) {
         guard self.provider.state.paged == .partiallyPopulated else {
             if let completionHandler = completionHandler {

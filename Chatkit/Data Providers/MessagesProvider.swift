@@ -93,7 +93,7 @@ public class MessagesProvider {
     /// - Parameters:
     ///     - numberOfMessages: The maximum number of messages that should be retrieved from
     ///     the web service.
-    ///     - completionHandler:An optional completion handler invoked when the operation is complete.
+    ///     - completionHandler: An optional completion handler invoked when the operation is complete.
     ///     The completion handler receives an Error, or nil on success.
     public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: CompletionHandler? = nil) {
         guard self.state.paged == .partiallyPopulated else {
