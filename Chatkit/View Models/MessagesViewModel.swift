@@ -4,7 +4,7 @@ import Foundation
 ///
 /// Construct an instance of this class using `Chatkit.createMessagesViewModel(...)`
 ///
-/// This class is intended to be bound to a UICollectionView or UITableView.
+/// This class is intended to be bound to a `UICollectionView` or `UITableView`.
 ///
 /// The `MessagesViewModel.rows` are intended to represent rows in a UI view, and there are three different types of row, represented by members of the `MessagesViewModel.MessageRow` enum:
 ///
@@ -20,6 +20,42 @@ import Foundation
 /// - `.bottom`: the last (newest) message in a group
 ///
 /// This grouping can be used to alter the rendering of different messages, for example, to show the timestamp or sender details only on the first or last message in each group.
+///
+/// ## Example usage to support a `UITableView` data source
+///
+/// ```
+/// extension SampleMessageViewController: UITableViewDataSource {
+///
+///     func numberOfSections(in tableView: UITableView) -> Int {
+///         return 1
+///     }
+///
+///     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+///         return self.messagesViewModel.rows.count
+///     }
+///
+///     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+///         let row = self.messagesViewModel.rows[indexPath.row]
+///
+///         switch row {
+///         case let .message(message, groupPosition):
+///             let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageCell
+///             // Assign the properties of the cell from the message and groupPosition
+///             return cell
+///
+///         case let .dateHeader(date):
+///             let cell = tableView.dequeueReusableCell(withIdentifier: "dateHeaderCell", for: indexPath) as! DateHeaderCell
+///             // Assign the properties of the cell from the date
+///             return cell
+///
+///         case .loadingIndicator:
+///             let cell = tableView.dequeueReusableCell(withIdentifier: "loadingIndicatorCell", for: indexPath) as! LoadingIndicatorCell
+///             // Start the animation in the cell
+///             return cell
+///         }
+///     }
+/// }
+/// ```
 public class MessagesViewModel {
     
     // MARK: - Properties
