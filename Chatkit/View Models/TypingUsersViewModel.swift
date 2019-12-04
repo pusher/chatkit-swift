@@ -21,6 +21,13 @@ import Foundation
 /// In order to be notified when the contents of the `value` changes, implement the `TypingUsersViewModelDelegate` protocol and assign the `TypingUsersViewModel.delegate` property.
 ///
 /// Note that when the view model is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.
+///
+/// ## Understanding the `state` of the ViewModel
+///
+/// The `state` property describes the state of the live update connection, either
+///   - `.connected`: updates are flowing live, or
+///   - `.degraded`: updates may be delayed due to network problems.
+///
 public class TypingUsersViewModel {
     
     // MARK: - Properties
