@@ -67,6 +67,7 @@ public class TypingUsersViewModel {
 
 // MARK: - TypingUsersProviderDelegate
 
+/// :nodoc:
 extension TypingUsersViewModel: TypingUsersProviderDelegate {
     
     public func typingUsersProvider(_ typingUsersProvider: TypingUsersProvider, userDidStartTyping user: User) {

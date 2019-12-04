@@ -270,6 +270,7 @@ public class MessagesViewModel {
 
 // MARK: - JoinedRoomsProviderDelegate
 
+/// :nodoc:
 extension MessagesViewModel: MessagesProviderDelegate {
     
     public func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveOlderMessages messages: [Message]) {

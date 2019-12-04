@@ -67,6 +67,7 @@ public class JoinedRoomsViewModel {
 
 // MARK: - JoinedRoomsProviderDelegate
 
+/// :nodoc:
 extension JoinedRoomsViewModel: JoinedRoomsProviderDelegate {
     
     public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didJoinRoom room: Room) {
