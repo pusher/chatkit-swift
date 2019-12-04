@@ -6,11 +6,15 @@ import Foundation
 ///
 /// This class is intended to be bound to a `UICollectionView` or `UITableView`.
 ///
+/// ## Types of row
+///
 /// The `MessagesViewModel.rows` are intended to represent rows in a UI view, and there are three different types of row, represented by members of the `MessagesViewModel.MessageRow` enum:
 ///
 /// - `.message`: a row containing a message
 /// - `.dateHeader`: a row inserted between messages sent on different days, to be rendered as a divider between days in the feed.
 /// - `.loadingIndicator`: a row inserted in to the feed when more messages have been requested from the Chatkit service, but have not yet arrived. See `MessagesViewModel.fetchOlderMessages(...)`.
+///
+/// ### Message grouping
 ///
 /// Additionally, messages from the same sender which are sent in a short space of time are "grouped", and each `.message` is assigned a `MessagesViewModel.MessageRow.GroupPosition` describing whether it is:
 ///
@@ -20,6 +24,10 @@ import Foundation
 /// - `.bottom`: the last (newest) message in a group
 ///
 /// This grouping can be used to alter the rendering of different messages, for example, to show the timestamp or sender details only on the first or last message in each group.
+///
+/// ## Receiving live updates to the `rows`
+///
+/// In order to be notified when the contents of the `rows` changes, implement the `MessagesViewModelDelegate` protocol and assign the `MessagesViewModel.delegate` property.
 ///
 /// ## Example usage to support a `UITableView` data source
 ///
