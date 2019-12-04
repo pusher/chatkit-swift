@@ -6,7 +6,16 @@ import Foundation
 ///
 /// This class is intended to be bound to a UICollectionView or UITableView.
 ///
-/// The rooms are sorted in descending order of the time of their last message, or their creation time if they contain no messages.
+/// ## What is provided
+///
+/// The ViewModel exposes an array, `rooms: [Room]` which presents the rooms that the current user is a member
+/// of in descending order of the time of their last message, or their creation time if they contain no messages.
+///
+/// Each item in the `rooms` array can be used to populate a cell in a `UITableView` or `UICollectionView`.
+///
+/// ## Receiving live updates to the `rooms`
+///
+/// In order to be notified when the contents of the `rooms` changes, implement the `JoinedRoomsModelDelegate` protocol and assign the `JoinedRoomsModel.delegate` property.
 ///
 /// ## Understanding the `state` of the ViewModel
 ///
