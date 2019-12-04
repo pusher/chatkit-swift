@@ -31,10 +31,12 @@ success, otherwise an error describing what went wrong.
 chatkit.connect { error in
   guard error == nil else {
     // Something went wrong while trying to connect
+    print("Could not connect to Chatkit: \(error)")
     return
   }
 
   // the SDK is connected and ready for use.
+  print("Connected to Chatkit")
 }
 ```
 
