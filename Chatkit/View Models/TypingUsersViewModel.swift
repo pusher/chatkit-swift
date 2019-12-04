@@ -2,9 +2,11 @@ import Foundation
 
 /// A view model which provides a textual representation of the `User`s currently typing in a `Room`.
 ///
-/// This class is intended to allow easy binding to a text UI component.
+/// Construct an instance of this class using `Chatkit.createTypingUsersViewModel(...)`
 ///
-/// This class exposes a `String?`, and accepts a delegate which will be called whenever the value of the string has changed.
+/// This class is intended to be bound to a text UI component.
+///
+/// This class exposes a `String?`, and accepts a delegate which will be called whenever the value has changed.
 ///
 /// The full set of users who are typing is:
 /// - filtered to exclude the current user

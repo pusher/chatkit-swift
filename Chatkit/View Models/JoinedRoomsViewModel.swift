@@ -2,7 +2,9 @@ import Foundation
 
 /// A view model which provides a collection of all `Room`s joined by the user.
 ///
-/// This class is intended to allow easy binding to a UICollectionView or UITableView.
+/// Construct an instance of this class using `Chatkit.createJoinedRoomsViewModel(...)`
+///
+/// This class is intended to be bound to a UICollectionView or UITableView.
 ///
 /// The rooms are sorted in descending order of the time of their last message, or their creation time if they contain no messages.
 public class JoinedRoomsViewModel {

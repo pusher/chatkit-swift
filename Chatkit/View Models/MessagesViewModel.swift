@@ -2,7 +2,9 @@ import Foundation
 
 /// A view model which provides a list of objects which can be used to render a message list.
 ///
-/// This class is intended to allow easy binding to a UICollectionView or UITableView.
+/// Construct an instance of this class using `Chatkit.createMessagesViewModel(...)`
+///
+/// This class is intended to be bound to a UICollectionView or UITableView.
 ///
 /// Plese see `MessageRow` for a description of the types of row which can appear in this collection.
 public class MessagesViewModel {

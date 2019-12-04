@@ -4,6 +4,8 @@ import PusherPlatform
 
 /// A provider which exposes a collection of messages for a given room.
 ///
+/// Construct an instance of this class using `Chatkit.createMessagesProvider(...)`
+///
 /// Initially the most recent messages are available.
 ///
 /// New messages are added in real time.

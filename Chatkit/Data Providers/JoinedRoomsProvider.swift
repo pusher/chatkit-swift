@@ -4,6 +4,8 @@ import PusherPlatform
 
 /// A provider which exposes a collection of all rooms joined by the user.
 ///
+/// Construct an instance of this class using `Chatkit.createJoinedRoomsProvider(...)`
+///
 /// The collection is updated in real time when the user joins or leaves rooms, or the properties of rooms are updated.
 public class JoinedRoomsProvider {
     

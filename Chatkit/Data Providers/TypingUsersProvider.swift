@@ -4,6 +4,8 @@ import PusherPlatform
 
 /// A provider which exposes the set of `User`s currently typing on a given `Room`.
 ///
+/// Construct an instance of this class using `Chatkit.createTypingUsersProvider(...)`
+///
 /// The collection is updated in real time when a user begins or ends typing on a room.
 public class TypingUsersProvider {
     

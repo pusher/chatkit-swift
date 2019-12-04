@@ -4,6 +4,8 @@ import PusherPlatform
 
 /// A provider which exposes the set of `User`s which are members of a given `Room`.
 ///
+/// Construct an instance of this class using `Chatkit.createRoomMembersProvider(...)`
+///
 /// The collection is updated in real time when users join or leave the room.
 public class RoomMembersProvider {
     
