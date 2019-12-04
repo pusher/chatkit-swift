@@ -24,7 +24,9 @@ public struct Message {
     /// The `Date` at which the message was created.
     public let createdAt: Date
     
-    /// The `Date` at which the message was last updated.
+    /// The `Date` at which the message was last updated, either by editing, or because it was "soft" deleted (scrubbed of content, but not removed from the feed)
+    ///
+    /// This will apply *only* to changes to the `sender` and `parts` properties.
     public let updatedAt: Date
     
     /// The `Date` at which the message was deleted.
