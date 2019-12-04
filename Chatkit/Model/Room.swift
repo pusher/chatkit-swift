@@ -6,7 +6,7 @@ public struct Room {
     
     // MARK: - Properties
     
-    /// The unique identifier for the room assigned by the Chatkit web service.
+    /// The unique identifier for the room.
     public let identifier: String
     
     /// The human readable name of the room. This is not required to be unique.

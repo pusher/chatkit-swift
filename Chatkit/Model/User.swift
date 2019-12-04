@@ -6,7 +6,7 @@ public struct User {
     
     // MARK: - Properties
     
-    /// The unique identifier for the user assigned by the Chatkit web service.
+    /// The unique identifier for the user.
     public let identifier: String
     
     /// The human readable name of the user. This is not required to be unique.
