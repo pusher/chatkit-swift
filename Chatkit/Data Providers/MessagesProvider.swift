@@ -6,11 +6,36 @@ import PusherPlatform
 ///
 /// Construct an instance of this class using `Chatkit.createMessagesProvider(...)`
 ///
-/// Initially the most recent messages are available.
+/// ## What is provided
 ///
-/// New messages are added in real time.
+/// The provider exposes an array, `messages: [Message]` which contains a subset of the messages for a given `Room`.
 ///
-/// More older messages can be fetched and added to the collection by calling methods on this provider.
+/// Initially, the `messages` array contains the most recent messages from the room.
+///
+/// New messages arriving in the room are added in real time.
+///
+/// Older messages can be requested using `MessagesProvider.fetchOlderMessages(...)`.
+///
+/// ## Receiving live updates
+///
+/// In order to be notified when the contents of the `messages` changes, implement the `MessagesProviderDelegate` protocol and assign the `MessagesProvider.delegate` property.
+///
+/// Note that when the provider is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.
+///
+/// ## Understanding the `state` of the Provider
+///
+/// The provider provides both live updates to current data, and paged access to older data.
+///
+/// The `MessagesProvider.state` tuple allows you to understand the current state of both:
+///
+/// - the `realTime` component (an instance of `RealTimeProviderState`) describes the state of the live update connection, either
+///   - `.connected`: updates are flowing live, or
+///   - `.degraded`: updates may be delayed due to network problems.
+/// - the `paged` component (an instance of `PagedProviderState`) describes whether the fill set of data has been fetched or not, either
+///   - `.fullyPopulated`: all data has been retrieved,
+///   - `.partiallyPopulated`: more data can be fetched from the Chatkit service, or
+///   - `.fetching`: more data is currently being requested from the Chatkit service.
+///
 public class MessagesProvider {
     
     // MARK: - Properties
