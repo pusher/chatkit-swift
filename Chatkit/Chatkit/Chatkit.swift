@@ -73,7 +73,7 @@ public class Chatkit {
         self.dataSimulator = DataSimulator(persistenceController: self.persistenceController)
     }
     
-    // MARK: - Methods
+    // MARK: - Connecting
     
     /// Establishes a connection to the Chatkit web service.
     ///
@@ -114,6 +114,8 @@ public class Chatkit {
         self.delegate?.chatkit(self, didChangeConnectionStatus: self.connectionStatus)
     }
     
+    // MARK: - Constructing paged data providers
+
     /// Creates an instance of `UsersProvider`.
     ///
     /// - Parameters:
@@ -150,6 +152,8 @@ public class Chatkit {
         }
     }
     
+    // MARK: - Constructing real time data providers
+
     /// Creates an instance of `JoinedRoomsProvider`.
     ///
     /// This will provide access to a real time set of `Room`s that the current user is a member of.
@@ -221,6 +225,8 @@ public class Chatkit {
         completionHandler(provider, nil)
     }
     
+    // MARK: - Constructing real time view models
+
     /// Creates an instance of `JoinedRoomsViewModel`.
     ///
     /// This will give access to a real time sorted list of the `Room`s that the current user is a member of.
@@ -289,6 +295,8 @@ public class Chatkit {
         }
     }
     
+    // MARK: - Retrieving static snapshots of chat data
+
     /// Retrieves a static snapshot of the `User`s who are currently members of the `Room`.
     ///
     /// - Parameters:
