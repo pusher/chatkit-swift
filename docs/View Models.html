@@ -201,9 +201,28 @@
                       <div class="abstract">
                         <p>A view model which provides a collection of all <code><a href="Structs/Room.html">Room</a></code>s joined by the user.</p>
 
-<p>This class is intended to allow easy binding to a UICollectionView or UITableView.</p>
+<p>Construct an instance of this class using <code><a href="Classes/Chatkit.html#/s:13PusherChatkit0B0C26createJoinedRoomsViewModel17completionHandleryyAA0defG0CSg_s5Error_pSgtc_tF">Chatkit.createJoinedRoomsViewModel(...)</a></code></p>
 
-<p>The rooms are sorted in descending order of the time of their last message, or their creation time if they contain no messages.</p>
+<p>This class is intended to be bound to a UICollectionView or UITableView.</p>
+<h2 id='what-is-provided' class='heading'>What is provided</h2>
+
+<p>The ViewModel exposes an array, <code>rooms: [Room]</code> which presents the rooms that the current user is a member
+of in descending order of the time of their last message, or their creation time if they contain no messages.</p>
+
+<p>Each item in the <code>rooms</code> array can be used to populate a cell in a <code>UITableView</code> or <code>UICollectionView</code>.</p>
+<h2 id='receiving-live-updates' class='heading'>Receiving live updates</h2>
+
+<p>In order to be notified when the contents of the <code>rooms</code> changes, implement the <code><a href="Protocols/JoinedRoomsViewModelDelegate.html">JoinedRoomsViewModelDelegate</a></code> protocol and assign the <code><a href="Classes/JoinedRoomsViewModel.html#/s:13PusherChatkit20JoinedRoomsViewModelC8delegateAA0cdeF8Delegate_pSgvp">JoinedRoomsViewModel.delegate</a></code> property.</p>
+
+<p>Note that when the view model is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.</p>
+<h2 id='understanding-the-code-state-code-of-the-viewmodel' class='heading'>Understanding the <code>state</code> of the ViewModel</h2>
+
+<p>The <code>state</code> property describes the state of the live update connection, either</p>
+
+<ul>
+<li><code>.connected</code>: updates are flowing live, or</li>
+<li><code>.degraded</code>: updates may be delayed due to network problems.</li>
+</ul>
 
                         <a href="Classes/JoinedRoomsViewModel.html" class="slightly-smaller">See more</a>
                       </div>
@@ -275,11 +294,91 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A view model which provides a list of objects which can be used to render a message list.</p>
+                        <p>A view model which provides a list of objects which can be used to render a message feed which includes messages and separators or headers between days.</p>
 
-<p>This class is intended to allow easy binding to a UICollectionView or UITableView.</p>
+<p>Construct an instance of this class using <code><a href="Classes/Chatkit.html#/s:13PusherChatkit0B0C23createMessagesViewModel3for17completionHandleryAA4RoomV_yAA0deF0CSg_s5Error_pSgtctF">Chatkit.createMessagesViewModel(...)</a></code></p>
 
-<p>Plese see <code>MessageRow</code> for a description of the types of row which can appear in this collection.</p>
+<p>This class is intended to be bound to a <code>UICollectionView</code> or <code>UITableView</code>.</p>
+<h2 id='types-of-row' class='heading'>Types of row</h2>
+
+<p>The <code><a href="Classes/MessagesViewModel.html#/s:13PusherChatkit17MessagesViewModelC4rowsSayAC10MessageRowOGvp">MessagesViewModel.rows</a></code> are intended to represent rows in a UI view, and there are three different types of row, represented by members of the <code><a href="Classes/MessagesViewModel/MessageRow.html">MessagesViewModel.MessageRow</a></code> enum:</p>
+
+<ul>
+<li><code>.message</code>: a row containing a message</li>
+<li><code>.dateHeader</code>: a row inserted between messages sent on different days, to be rendered as a divider between days in the feed.</li>
+<li><code>.loadingIndicator</code>: a row inserted in to the feed when more messages have been requested from the Chatkit service, but have not yet arrived. See <code><a href="Classes/MessagesViewModel.html#/s:13PusherChatkit17MessagesViewModelC010fetchOlderC008numberOfC017completionHandlerySu_ys5Error_pSgcSgtF">MessagesViewModel.fetchOlderMessages(...)</a></code>.</li>
+</ul>
+<h3 id='message-grouping' class='heading'>Message grouping</h3>
+
+<p>Additionally, messages from the same sender which are sent in a short space of time are <q>grouped</q>, and each <code>.message</code> is assigned a <code><a href="Classes/MessagesViewModel/MessageRow/GroupPosition.html">MessagesViewModel.MessageRow.GroupPosition</a></code> describing whether it is:</p>
+
+<ul>
+<li><code>.single</code>: the only message in its group</li>
+<li><code>.top</code>: the first (oldest) message in a group</li>
+<li><code>.middle</code>: a message on the <q>inside</q> of a group</li>
+<li><code>.bottom</code>: the last (newest) message in a group</li>
+</ul>
+
+<p>This grouping can be used to alter the rendering of different messages, for example, to show the timestamp or sender details only on the first or last message in each group.</p>
+<h2 id='receiving-live-updates' class='heading'>Receiving live updates</h2>
+
+<p>In order to be notified when the contents of the <code>rows</code> changes, implement the <code><a href="Protocols/MessagesViewModelDelegate.html">MessagesViewModelDelegate</a></code> protocol and assign the <code><a href="Classes/MessagesViewModel.html#/s:13PusherChatkit17MessagesViewModelC8delegateAA0cdE8Delegate_pSgvp">MessagesViewModel.delegate</a></code> property.</p>
+
+<p>Note that when the view model is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.</p>
+<h2 id='understanding-the-code-state-code-of-the-viewmodel' class='heading'>Understanding the <code>state</code> of the ViewModel</h2>
+
+<p>The ViewModel provides both live updates to current data, and paged access to older data.</p>
+
+<p>The <code><a href="Classes/MessagesViewModel.html#/s:13PusherChatkit17MessagesViewModelC5stateAA21RealTimeProviderStateO04realH0_AA05PagediJ0O5pagedtvp">MessagesViewModel.state</a></code> tuple allows you to understand the current state of both:</p>
+
+<ul>
+<li>the <code>realTime</code> component (an instance of <code><a href="Enums/RealTimeProviderState.html">RealTimeProviderState</a></code>) describes the state of the live update connection, either
+
+<ul>
+<li><code>.connected</code>: updates are flowing live, or</li>
+<li><code>.degraded</code>: updates may be delayed due to network problems.</li>
+</ul></li>
+<li>the <code>paged</code> component (an instance of <code><a href="Enums/PagedProviderState.html">PagedProviderState</a></code>) describes whether the fill set of data has been fetched or not, either
+
+<ul>
+<li><code>.fullyPopulated</code>: all data has been retrieved,</li>
+<li><code>.partiallyPopulated</code>: more data can be fetched from the Chatkit service, or</li>
+<li><code>.fetching</code>: more data is currently being requested from the Chatkit service.</li>
+</ul></li>
+</ul>
+<h2 id='example-usage-to-support-a-code-uitableview-code-data-source' class='heading'>Example usage to support a <code>UITableView</code> data source</h2>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">SampleMessageViewController</span><span class="p">:</span> <span class="kt">UITableViewDataSource</span> <span class="p">{</span>
+
+    <span class="kd">func</span> <span class="nf">numberOfSections</span><span class="p">(</span><span class="k">in</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">numberOfRowsInSection</span> <span class="nv">section</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">self</span><span class="o">.</span><span class="n">messagesViewModel</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">count</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="n">_</span> <span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">cellForRowAt</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">IndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UITableViewCell</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">row</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">messagesViewModel</span><span class="o">.</span><span class="n">rows</span><span class="p">[</span><span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">]</span>
+
+        <span class="k">switch</span> <span class="n">row</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="kd">let</span> <span class="o">.</span><span class="nf">message</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">groupPosition</span><span class="p">):</span>
+            <span class="k">let</span> <span class="nv">cell</span> <span class="o">=</span> <span class="n">tableView</span><span class="o">.</span><span class="nf">dequeueReusableCell</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"messageCell"</span><span class="p">,</span> <span class="nv">for</span><span class="p">:</span> <span class="n">indexPath</span><span class="p">)</span> <span class="k">as!</span> <span class="kt">MessageCell</span>
+            <span class="c1">// Assign the properties of the cell from the message and groupPosition</span>
+            <span class="k">return</span> <span class="n">cell</span>
+
+        <span class="k">case</span> <span class="kd">let</span> <span class="o">.</span><span class="nf">dateHeader</span><span class="p">(</span><span class="n">date</span><span class="p">):</span>
+            <span class="k">let</span> <span class="nv">cell</span> <span class="o">=</span> <span class="n">tableView</span><span class="o">.</span><span class="nf">dequeueReusableCell</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"dateHeaderCell"</span><span class="p">,</span> <span class="nv">for</span><span class="p">:</span> <span class="n">indexPath</span><span class="p">)</span> <span class="k">as!</span> <span class="kt">DateHeaderCell</span>
+            <span class="c1">// Assign the properties of the cell from the date</span>
+            <span class="k">return</span> <span class="n">cell</span>
+
+        <span class="k">case</span> <span class="o">.</span><span class="nv">loadingIndicator</span><span class="p">:</span>
+            <span class="k">let</span> <span class="nv">cell</span> <span class="o">=</span> <span class="n">tableView</span><span class="o">.</span><span class="nf">dequeueReusableCell</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"loadingIndicatorCell"</span><span class="p">,</span> <span class="nv">for</span><span class="p">:</span> <span class="n">indexPath</span><span class="p">)</span> <span class="k">as!</span> <span class="kt">LoadingIndicatorCell</span>
+            <span class="c1">// Start the animation in the cell</span>
+            <span class="k">return</span> <span class="n">cell</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
 
                         <a href="Classes/MessagesViewModel.html" class="slightly-smaller">See more</a>
                       </div>
@@ -352,9 +451,12 @@
                       <div class="abstract">
                         <p>A view model which provides a textual representation of the <code><a href="Structs/User.html">User</a></code>s currently typing in a <code><a href="Structs/Room.html">Room</a></code>.</p>
 
-<p>This class is intended to allow easy binding to a text UI component.</p>
+<p>Construct an instance of this class using <code><a href="Classes/Chatkit.html#/s:13PusherChatkit0B0C26createTypingUsersViewModel3for19userNamePlaceholder17completionHandleryAA4RoomV_SSyAA0defG0CSg_s5Error_pSgtctF">Chatkit.createTypingUsersViewModel(...)</a></code></p>
 
-<p>This class exposes a <code>String?</code>, and accepts a delegate which will be called whenever the value of the string has changed.</p>
+<p>This class is intended to be bound to a text UI component.</p>
+<h2 id='what-is-provided' class='heading'>What is provided</h2>
+
+<p>This class exposes a <code>String?</code>, and accepts a delegate which will be called whenever the value has changed.</p>
 
 <p>The full set of users who are typing is:</p>
 
@@ -363,6 +465,19 @@
 <li>sorted by name</li>
 <li>limited to 3 entries with a <q><X> more</q> placeholder if more than 3 users are typing</li>
 <li>rendered using the <code><a href="Structs/User.html#/s:13PusherChatkit4UserV4nameSSSgvp">User.name</a></code> property, or a configurable placeholder name if this field is not set.</li>
+</ul>
+<h2 id='receiving-live-updates' class='heading'>Receiving live updates</h2>
+
+<p>In order to be notified when the contents of the <code>value</code> changes, implement the <code><a href="Protocols/TypingUsersViewModelDelegate.html">TypingUsersViewModelDelegate</a></code> protocol and assign the <code><a href="Classes/TypingUsersViewModel.html#/s:13PusherChatkit20TypingUsersViewModelC8delegateAA0cdeF8Delegate_pSgvp">TypingUsersViewModel.delegate</a></code> property.</p>
+
+<p>Note that when the view model is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.</p>
+<h2 id='understanding-the-code-state-code-of-the-viewmodel' class='heading'>Understanding the <code>state</code> of the ViewModel</h2>
+
+<p>The <code>state</code> property describes the state of the live update connection, either</p>
+
+<ul>
+<li><code>.connected</code>: updates are flowing live, or</li>
+<li><code>.degraded</code>: updates may be delayed due to network problems.</li>
 </ul>
 
                         <a href="Classes/TypingUsersViewModel.html" class="slightly-smaller">See more</a>
@@ -422,7 +537,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-11-28)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-12-05)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
