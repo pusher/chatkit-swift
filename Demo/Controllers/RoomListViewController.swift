@@ -64,7 +64,10 @@ class RoomListViewController: UITableViewController {
     }
     
     private func connect() {
-        guard let chatkit = try? Chatkit(instanceLocator: "test:Instance:Locator") else {
+        guard let chatkit = try? Chatkit(
+            instanceLocator: "test:Instance:Locator",
+            tokenProvider: ChatkitTokenProviders.chatkitTestTokenProvider(instanceLocator: "test:Instance:Locator", userId: "olivia")
+        ) else {
             return
         }
         
