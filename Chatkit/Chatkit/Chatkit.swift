@@ -42,10 +42,13 @@ public class Chatkit {
     ///
     /// - Parameters:
     ///     - instanceLocator: The instance locator used to identify the Chatkit instance.
+    ///     This is found in the Chatkit dashboard.
+    ///     - tokenProvider: An object which will be used to fetch authentication token for the
+    ///     user. See `ChatkitTokenProviders`
     ///     - logger: The logger used by the SDK.
     ///
     /// - Returns: An instance of `Chatkit` or throws an error when the initialization failed.
-    public init(instanceLocator: String, logger: PPLogger = PPDefaultLogger()) throws {
+    public init(instanceLocator: String, tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
         self.usersProviderCache = [:]
         self.availableRoomsProviderCache = [:]
         
