@@ -4,7 +4,26 @@ import PusherPlatform
 
 /// A provider which exposes the set of `User`s which are members of a given `Room`.
 ///
-/// The collection is updated in real time when users join or leave the room.
+/// This class provides a real time collection, if you just want a snapshot of the members of a room *now*, see `Chatkit.members(...)`.
+///
+/// Construct an instance of this class using `Chatkit.createRoomMembersProvider(...)`
+///
+/// ## What is provided
+///
+/// The provider exposes a set, `members: Set<User>` which represents the members of a room.
+///
+/// ## Receiving live updates
+///
+/// In order to be notified when the contents of the `members` changes, implement the `RoomMembersProviderDelegate` protocol and assign the `RoomMembersProvider.delegate` property.
+///
+/// Note that when the provider is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.
+///
+/// ## Understanding the `state` of the provider
+///
+/// The `state` property describes the state of the live update connection, either
+///   - `.connected`: updates are flowing live, or
+///   - `.degraded`: updates may be delayed due to network problems.
+///
 public class RoomMembersProvider {
     
     // MARK: - Properties

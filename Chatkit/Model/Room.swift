@@ -6,7 +6,7 @@ public struct Room {
     
     // MARK: - Properties
     
-    /// The unique identifier for the room assigned by the Chatkit web service.
+    /// The unique identifier for the room.
     public let identifier: String
     
     /// The human readable name of the room. This is not required to be unique.
@@ -31,7 +31,9 @@ public struct Room {
     /// The `Date` at which the room was created.
     public let createdAt: Date
     
-    /// The `Date` at which the room was last updated.
+    /// The `Date` at which the room entity was last updated by an explicit call to `updateRoom` on the Chatkit service.
+    ///
+    /// This will *only* apply to changes to the `name`, `isPrivate` and `customData` properties.
     public let updatedAt: Date
     
     /// The `Date` at which the room was deleted.

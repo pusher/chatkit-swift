@@ -189,9 +189,12 @@
               </div>
             <p>A view model which provides a textual representation of the <code><a href="../Structs/User.html">User</a></code>s currently typing in a <code><a href="../Structs/Room.html">Room</a></code>.</p>
 
-<p>This class is intended to allow easy binding to a text UI component.</p>
+<p>Construct an instance of this class using <code><a href="../Classes/Chatkit.html#/s:13PusherChatkit0B0C26createTypingUsersViewModel3for19userNamePlaceholder17completionHandleryAA4RoomV_SSyAA0defG0CSg_s5Error_pSgtctF">Chatkit.createTypingUsersViewModel(...)</a></code></p>
 
-<p>This class exposes a <code>String?</code>, and accepts a delegate which will be called whenever the value of the string has changed.</p>
+<p>This class is intended to be bound to a text UI component.</p>
+<h2 id='what-is-provided' class='heading'>What is provided</h2>
+
+<p>This class exposes a <code>String?</code>, and accepts a delegate which will be called whenever the value has changed.</p>
 
 <p>The full set of users who are typing is:</p>
 
@@ -200,6 +203,19 @@
 <li>sorted by name</li>
 <li>limited to 3 entries with a <q><X> more</q> placeholder if more than 3 users are typing</li>
 <li>rendered using the <code><a href="../Structs/User.html#/s:13PusherChatkit4UserV4nameSSSgvp">User.name</a></code> property, or a configurable placeholder name if this field is not set.</li>
+</ul>
+<h2 id='receiving-live-updates' class='heading'>Receiving live updates</h2>
+
+<p>In order to be notified when the contents of the <code>value</code> changes, implement the <code><a href="../Protocols/TypingUsersViewModelDelegate.html">TypingUsersViewModelDelegate</a></code> protocol and assign the <code><a href="../Classes/TypingUsersViewModel.html#/s:13PusherChatkit20TypingUsersViewModelC8delegateAA0cdeF8Delegate_pSgvp">TypingUsersViewModel.delegate</a></code> property.</p>
+
+<p>Note that when the view model is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.</p>
+<h2 id='understanding-the-code-state-code-of-the-viewmodel' class='heading'>Understanding the <code>state</code> of the ViewModel</h2>
+
+<p>The <code>state</code> property describes the state of the live update connection, either</p>
+
+<ul>
+<li><code>.connected</code>: updates are flowing live, or</li>
+<li><code>.degraded</code>: updates may be delayed due to network problems.</li>
 </ul>
 
           </section>
@@ -243,6 +259,33 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:13PusherChatkit20TypingUsersViewModelC5stateAA21RealTimeProviderStateOvp"></a>
+                    <a name="//apple_ref/swift/Property/state" class="dashAnchor"></a>
+                    <a class="token" href="#/s:13PusherChatkit20TypingUsersViewModelC5stateAA21RealTimeProviderStateOvp">state</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The current state of the provider used by the view model as the data source.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Enums/RealTimeProviderState.html">RealTimeProviderState</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:13PusherChatkit20TypingUsersViewModelC8delegateAA0cdeF8Delegate_pSgvp"></a>
                     <a name="//apple_ref/swift/Property/delegate" class="dashAnchor"></a>
                     <a class="token" href="#/s:13PusherChatkit20TypingUsersViewModelC8delegateAA0cdeF8Delegate_pSgvp">delegate</a>
@@ -269,73 +312,10 @@
                 </li>
               </ul>
             </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/TypingUsersProviderDelegate"></a>
-                <a name="//apple_ref/swift/Section/TypingUsersProviderDelegate" class="dashAnchor"></a>
-                <a href="#/TypingUsersProviderDelegate">
-                  <h3 class="section-name">TypingUsersProviderDelegate</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:13PusherChatkit27TypingUsersProviderDelegateP06typingdE0_012userDidStartC0yAA0cdE0C_AA4UserVtF"></a>
-                    <a name="//apple_ref/swift/Method/typingUsersProvider(_:userDidStartTyping:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit27TypingUsersProviderDelegateP06typingdE0_012userDidStartC0yAA0cdE0C_AA4UserVtF">typingUsersProvider(_:userDidStartTyping:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">typingUsersProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">typingUsersProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a></span><span class="p">,</span> <span class="n">userDidStartTyping</span> <span class="nv">user</span><span class="p">:</span> <span class="kt"><a href="../Structs/User.html">User</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:13PusherChatkit27TypingUsersProviderDelegateP06typingdE0_011userDidStopC0yAA0cdE0C_AA4UserVtF"></a>
-                    <a name="//apple_ref/swift/Method/typingUsersProvider(_:userDidStopTyping:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit27TypingUsersProviderDelegateP06typingdE0_011userDidStopC0yAA0cdE0C_AA4UserVtF">typingUsersProvider(_:userDidStopTyping:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">typingUsersProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">typingUsersProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/TypingUsersProvider.html">TypingUsersProvider</a></span><span class="p">,</span> <span class="n">userDidStopTyping</span> <span class="nv">user</span><span class="p">:</span> <span class="kt"><a href="../Structs/User.html">User</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-11-28)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-12-05)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

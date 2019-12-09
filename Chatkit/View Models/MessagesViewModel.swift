@@ -1,10 +1,85 @@
 import Foundation
 
-/// A view model which provides a list of objects which can be used to render a message list.
+/// A view model which provides a list of objects which can be used to render a message feed which includes messages and separators or headers between days.
 ///
-/// This class is intended to allow easy binding to a UICollectionView or UITableView.
+/// Construct an instance of this class using `Chatkit.createMessagesViewModel(...)`
 ///
-/// Plese see `MessageRow` for a description of the types of row which can appear in this collection.
+/// This class is intended to be bound to a `UICollectionView` or `UITableView`.
+///
+/// ## Types of row
+///
+/// The `MessagesViewModel.rows` are intended to represent rows in a UI view, and there are three different types of row, represented by members of the `MessagesViewModel.MessageRow` enum:
+///
+/// - `.message`: a row containing a message
+/// - `.dateHeader`: a row inserted between messages sent on different days, to be rendered as a divider between days in the feed.
+/// - `.loadingIndicator`: a row inserted in to the feed when more messages have been requested from the Chatkit service, but have not yet arrived. See `MessagesViewModel.fetchOlderMessages(...)`.
+///
+/// ### Message grouping
+///
+/// Additionally, messages from the same sender which are sent in a short space of time are "grouped", and each `.message` is assigned a `MessagesViewModel.MessageRow.GroupPosition` describing whether it is:
+///
+/// - `.single`: the only message in its group
+/// - `.top`: the first (oldest) message in a group
+/// - `.middle`: a message on the "inside" of a group
+/// - `.bottom`: the last (newest) message in a group
+///
+/// This grouping can be used to alter the rendering of different messages, for example, to show the timestamp or sender details only on the first or last message in each group.
+///
+/// ## Receiving live updates
+///
+/// In order to be notified when the contents of the `rows` changes, implement the `MessagesViewModelDelegate` protocol and assign the `MessagesViewModel.delegate` property.
+///
+/// Note that when the view model is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.
+///
+/// ## Understanding the `state` of the ViewModel
+///
+/// The ViewModel provides both live updates to current data, and paged access to older data.
+///
+/// The `MessagesViewModel.state` tuple allows you to understand the current state of both:
+///
+/// - the `realTime` component (an instance of `RealTimeProviderState`) describes the state of the live update connection, either
+///   - `.connected`: updates are flowing live, or
+///   - `.degraded`: updates may be delayed due to network problems.
+/// - the `paged` component (an instance of `PagedProviderState`) describes whether the fill set of data has been fetched or not, either
+///   - `.fullyPopulated`: all data has been retrieved,
+///   - `.partiallyPopulated`: more data can be fetched from the Chatkit service, or
+///   - `.fetching`: more data is currently being requested from the Chatkit service.
+///
+/// ## Example usage to support a `UITableView` data source
+///
+/// ```
+/// extension SampleMessageViewController: UITableViewDataSource {
+///
+///     func numberOfSections(in tableView: UITableView) -> Int {
+///         return 1
+///     }
+///
+///     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+///         return self.messagesViewModel.rows.count
+///     }
+///
+///     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+///         let row = self.messagesViewModel.rows[indexPath.row]
+///
+///         switch row {
+///         case let .message(message, groupPosition):
+///             let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath) as! MessageCell
+///             // Assign the properties of the cell from the message and groupPosition
+///             return cell
+///
+///         case let .dateHeader(date):
+///             let cell = tableView.dequeueReusableCell(withIdentifier: "dateHeaderCell", for: indexPath) as! DateHeaderCell
+///             // Assign the properties of the cell from the date
+///             return cell
+///
+///         case .loadingIndicator:
+///             let cell = tableView.dequeueReusableCell(withIdentifier: "loadingIndicatorCell", for: indexPath) as! LoadingIndicatorCell
+///             // Start the animation in the cell
+///             return cell
+///         }
+///     }
+/// }
+/// ```
 public class MessagesViewModel {
     
     // MARK: - Properties
@@ -42,14 +117,19 @@ public class MessagesViewModel {
     
     // MARK: - Methods
     
-    /// Triggers an asynchronous call to the web service that retrieves a batch of historical messages
-    /// currently not present in the maintained collection of messages.
+    /// Fetch more old messages from the Chatkit service and add them to the `messages` array.
+    ///
+    /// This call is asynchronous because messages may need to be retrieved from the network.
+    ///
+    /// On success, the completion handler receives `nil`, and the messages are added to the `rows`.
+    ///
+    /// The `delegate` will be informed of the change to the `rows`.
     ///
     /// - Parameters:
     ///     - numberOfMessages: The maximum number of messages that should be retrieved from
     ///     the web service.
-    ///     - completionHandler:An optional completion handler called when the call to the web
-    ///     service finishes with either a successful result or an error.
+    ///     - completionHandler: An optional completion handler invoked when the operation is complete.
+    ///     The completion handler receives an Error, or nil on success.
     public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: CompletionHandler? = nil) {
         guard self.provider.state.paged == .partiallyPopulated else {
             if let completionHandler = completionHandler {
@@ -268,6 +348,7 @@ public class MessagesViewModel {
 
 // MARK: - JoinedRoomsProviderDelegate
 
+/// :nodoc:
 extension MessagesViewModel: MessagesProviderDelegate {
     
     public func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveOlderMessages messages: [Message]) {

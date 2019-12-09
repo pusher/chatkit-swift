@@ -2,26 +2,48 @@ import Foundation
 
 /// A view model which provides a textual representation of the `User`s currently typing in a `Room`.
 ///
-/// This class is intended to allow easy binding to a text UI component.
+/// Construct an instance of this class using `Chatkit.createTypingUsersViewModel(...)`
 ///
-/// This class exposes a `String?`, and accepts a delegate which will be called whenever the value of the string has changed.
+/// This class is intended to be bound to a text UI component.
+///
+/// ## What is provided
+///
+/// This class exposes a `String?`, and accepts a delegate which will be called whenever the value has changed.
 ///
 /// The full set of users who are typing is:
 /// - filtered to exclude the current user
 /// - sorted by name
 /// - limited to 3 entries with a "<X> more" placeholder if more than 3 users are typing
 /// - rendered using the `User.name` property, or a configurable placeholder name if this field is not set.
+///
+/// ## Receiving live updates
+///
+/// In order to be notified when the contents of the `value` changes, implement the `TypingUsersViewModelDelegate` protocol and assign the `TypingUsersViewModel.delegate` property.
+///
+/// Note that when the view model is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.
+///
+/// ## Understanding the `state` of the ViewModel
+///
+/// The `state` property describes the state of the live update connection, either
+///   - `.connected`: updates are flowing live, or
+///   - `.degraded`: updates may be delayed due to network problems.
+///
 public class TypingUsersViewModel {
     
     // MARK: - Properties
-    
-    /// The textual description of the set of currently typing users, or `nil` of no users are typing.
-    public private(set) var value: String?
     
     private let provider: TypingUsersProvider
     private let currentUserIdentifier: String
     private let userNamePlaceholder: String
     
+    /// The textual description of the set of currently typing users, or `nil` of no users are typing.
+    public private(set) var value: String?
+    
+    /// The current state of the provider used by the view model as the data source.
+    public var state: RealTimeProviderState {
+        return self.provider.state
+    }
+
     /// The object that is notified when the content of the `value` property has changed.
     public weak var delegate: TypingUsersViewModelDelegate?
     
@@ -40,7 +62,7 @@ public class TypingUsersViewModel {
     // MARK: - Private methods
     
     private func reload() {
-        var sortedNames = self.provider.typingUsers.filter{ $0.identifier != self.currentUserIdentifier }.map { $0.name ?? self.userNamePlaceholder }.sorted()
+        var sortedNames = self.provider.typingUsers.filter { $0.identifier != self.currentUserIdentifier }.map { $0.name ?? self.userNamePlaceholder }.sorted()
         
         guard sortedNames.count > 0 else {
             self.value = nil
@@ -65,6 +87,7 @@ public class TypingUsersViewModel {
 
 // MARK: - TypingUsersProviderDelegate
 
+/// :nodoc:
 extension TypingUsersViewModel: TypingUsersProviderDelegate {
     
     public func typingUsersProvider(_ typingUsersProvider: TypingUsersProvider, userDidStartTyping user: User) {

@@ -6,13 +6,13 @@ import CoreData
 /// The content of a message is made up of 1 or more `MessagePart`s. Each part can be of three types, and should be unpacked
 /// using a `switch` on the type.
 public struct Message {
-    /// The unique identifier for the message assigned by the Chatkit web service.
+    /// The unique identifier for the message assigned by the Chatkit service.
     public let identifier: String
     
     /// The user who sent the message.
     public let sender: User
     
-    /// The array of `MessagePart` that represents the contents of the message.
+    /// The array of `MessagePart`s that represent the contents of the message.
     public let parts: [MessagePart]
     
     /// The array of users who read the message.
@@ -24,7 +24,9 @@ public struct Message {
     /// The `Date` at which the message was created.
     public let createdAt: Date
     
-    /// The `Date` at which the message was last updated.
+    /// The `Date` at which the message was last updated, either by editing, or because it was "soft" deleted (scrubbed of content, but not removed from the feed)
+    ///
+    /// This will apply *only* to changes to the `sender` and `parts` properties.
     public let updatedAt: Date
     
     /// The `Date` at which the message was deleted.

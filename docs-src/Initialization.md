@@ -17,15 +17,12 @@ When initializing the SDK, you must provide your `instanceLocator`. This
 string identifies users as belonging to your instance of Chatkit.
 
 ```swift
-guard let chatkit = try? Chatkit(instanceLocator: "your_instance_locator") else {
-  // Something went wrong
-}
+let chatkit = try! Chatkit(instanceLocator: "your_instance_locator")
 ```
 
 ## Connecting
 
-No network connections are created when the SDK is initialized, so to start
-using the SDK, you must connect it.
+To access the Chatkit service, the SDK must be connected to Chatkit.
 
 The `connect` method takes a completion handler which receives `nil` on
 success, otherwise an error describing what went wrong.
@@ -34,10 +31,12 @@ success, otherwise an error describing what went wrong.
 chatkit.connect { error in
   guard error == nil else {
     // Something went wrong while trying to connect
+    print("Could not connect to Chatkit: \(error)")
     return
   }
 
   // the SDK is connected and ready for use.
+  print("Connected to Chatkit")
 }
 ```
 

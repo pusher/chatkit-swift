@@ -2,9 +2,29 @@ import Foundation
 
 /// A view model which provides a collection of all `Room`s joined by the user.
 ///
-/// This class is intended to allow easy binding to a UICollectionView or UITableView.
+/// Construct an instance of this class using `Chatkit.createJoinedRoomsViewModel(...)`
 ///
-/// The rooms are sorted in descending order of the time of their last message, or their creation time if they contain no messages.
+/// This class is intended to be bound to a UICollectionView or UITableView.
+///
+/// ## What is provided
+///
+/// The ViewModel exposes an array, `rooms: [Room]` which presents the rooms that the current user is a member
+/// of in descending order of the time of their last message, or their creation time if they contain no messages.
+///
+/// Each item in the `rooms` array can be used to populate a cell in a `UITableView` or `UICollectionView`.
+///
+/// ## Receiving live updates
+///
+/// In order to be notified when the contents of the `rooms` changes, implement the `JoinedRoomsViewModelDelegate` protocol and assign the `JoinedRoomsViewModel.delegate` property.
+///
+/// Note that when the view model is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.
+///
+/// ## Understanding the `state` of the ViewModel
+///
+/// The `state` property describes the state of the live update connection, either
+///   - `.connected`: updates are flowing live, or
+///   - `.degraded`: updates may be delayed due to network problems.
+///
 public class JoinedRoomsViewModel {
     
     // MARK: - Properties
@@ -15,10 +35,6 @@ public class JoinedRoomsViewModel {
     public private(set) var rooms: [Room]
     
     /// The current state of the provider used by the view model as the data source.
-    ///
-    /// - Parameters:
-    ///     - realTime: The current state of the provider related to the real time web service.
-    ///     - paged: The current state of the provider related to the non-real time web service.
     public var state: RealTimeProviderState {
         return self.provider.state
     }
@@ -65,6 +81,7 @@ public class JoinedRoomsViewModel {
 
 // MARK: - JoinedRoomsProviderDelegate
 
+/// :nodoc:
 extension JoinedRoomsViewModel: JoinedRoomsProviderDelegate {
     
     public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didJoinRoom room: Room) {

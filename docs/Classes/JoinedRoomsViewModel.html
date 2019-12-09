@@ -189,9 +189,28 @@
               </div>
             <p>A view model which provides a collection of all <code><a href="../Structs/Room.html">Room</a></code>s joined by the user.</p>
 
-<p>This class is intended to allow easy binding to a UICollectionView or UITableView.</p>
+<p>Construct an instance of this class using <code><a href="../Classes/Chatkit.html#/s:13PusherChatkit0B0C26createJoinedRoomsViewModel17completionHandleryyAA0defG0CSg_s5Error_pSgtc_tF">Chatkit.createJoinedRoomsViewModel(...)</a></code></p>
 
-<p>The rooms are sorted in descending order of the time of their last message, or their creation time if they contain no messages.</p>
+<p>This class is intended to be bound to a UICollectionView or UITableView.</p>
+<h2 id='what-is-provided' class='heading'>What is provided</h2>
+
+<p>The ViewModel exposes an array, <code>rooms: [Room]</code> which presents the rooms that the current user is a member
+of in descending order of the time of their last message, or their creation time if they contain no messages.</p>
+
+<p>Each item in the <code>rooms</code> array can be used to populate a cell in a <code>UITableView</code> or <code>UICollectionView</code>.</p>
+<h2 id='receiving-live-updates' class='heading'>Receiving live updates</h2>
+
+<p>In order to be notified when the contents of the <code>rooms</code> changes, implement the <code><a href="../Protocols/JoinedRoomsViewModelDelegate.html">JoinedRoomsViewModelDelegate</a></code> protocol and assign the <code><a href="../Classes/JoinedRoomsViewModel.html#/s:13PusherChatkit20JoinedRoomsViewModelC8delegateAA0cdeF8Delegate_pSgvp">JoinedRoomsViewModel.delegate</a></code> property.</p>
+
+<p>Note that when the view model is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.</p>
+<h2 id='understanding-the-code-state-code-of-the-viewmodel' class='heading'>Understanding the <code>state</code> of the ViewModel</h2>
+
+<p>The <code>state</code> property describes the state of the live update connection, either</p>
+
+<ul>
+<li><code>.connected</code>: updates are flowing live, or</li>
+<li><code>.degraded</code>: updates may be delayed due to network problems.</li>
+</ul>
 
           </section>
           <section class="section task-group-section">
@@ -255,37 +274,6 @@
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>realTime</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The current state of the provider related to the real time web service.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>paged</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The current state of the provider related to the non-real time web service.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
                     </section>
                   </div>
                 </li>
@@ -310,95 +298,6 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt"><a href="../Protocols/JoinedRoomsViewModelDelegate.html">JoinedRoomsViewModelDelegate</a></span><span class="p">?</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/JoinedRoomsProviderDelegate"></a>
-                <a name="//apple_ref/swift/Section/JoinedRoomsProviderDelegate" class="dashAnchor"></a>
-                <a href="#/JoinedRoomsProviderDelegate">
-                  <h3 class="section-name">JoinedRoomsProviderDelegate</h3>
-                </a>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:13PusherChatkit27JoinedRoomsProviderDelegateP06joineddE0_11didJoinRoomyAA0cdE0C_AA0J0VtF"></a>
-                    <a name="//apple_ref/swift/Method/joinedRoomsProvider(_:didJoinRoom:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit27JoinedRoomsProviderDelegateP06joineddE0_11didJoinRoomyAA0cdE0C_AA0J0VtF">joinedRoomsProvider(_:didJoinRoom:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">joinedRoomsProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">joinedRoomsProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a></span><span class="p">,</span> <span class="n">didJoinRoom</span> <span class="nv">room</span><span class="p">:</span> <span class="kt"><a href="../Structs/Room.html">Room</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:13PusherChatkit27JoinedRoomsProviderDelegateP06joineddE0_13didUpdateRoom13previousValueyAA0cdE0C_AA0J0VAJtF"></a>
-                    <a name="//apple_ref/swift/Method/joinedRoomsProvider(_:didUpdateRoom:previousValue:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit27JoinedRoomsProviderDelegateP06joineddE0_13didUpdateRoom13previousValueyAA0cdE0C_AA0J0VAJtF">joinedRoomsProvider(_:didUpdateRoom:previousValue:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">joinedRoomsProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">joinedRoomsProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a></span><span class="p">,</span> <span class="n">didUpdateRoom</span> <span class="nv">room</span><span class="p">:</span> <span class="kt"><a href="../Structs/Room.html">Room</a></span><span class="p">,</span> <span class="nv">previousValue</span><span class="p">:</span> <span class="kt"><a href="../Structs/Room.html">Room</a></span><span class="p">)</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:13PusherChatkit27JoinedRoomsProviderDelegateP06joineddE0_12didLeaveRoomyAA0cdE0C_AA0J0VtF"></a>
-                    <a name="//apple_ref/swift/Method/joinedRoomsProvider(_:didLeaveRoom:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:13PusherChatkit27JoinedRoomsProviderDelegateP06joineddE0_12didLeaveRoomyAA0cdE0C_AA0J0VtF">joinedRoomsProvider(_:didLeaveRoom:)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">joinedRoomsProvider</span><span class="p">(</span><span class="n">_</span> <span class="nv">joinedRoomsProvider</span><span class="p">:</span> <span class="kt"><a href="../Classes/JoinedRoomsProvider.html">JoinedRoomsProvider</a></span><span class="p">,</span> <span class="n">didLeaveRoom</span> <span class="nv">room</span><span class="p">:</span> <span class="kt"><a href="../Structs/Room.html">Room</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -450,7 +349,7 @@ in the <code><a href="../Classes/JoinedRoomsViewModel.html">JoinedRoomsViewModel
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-11-28)</p>
+          <p>&copy; 2019 <a class="link" href="https://github.com/pusher/chatkit-swift" target="_blank" rel="external">Pusher Limited</a>. All rights reserved. (Last updated: 2019-12-05)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

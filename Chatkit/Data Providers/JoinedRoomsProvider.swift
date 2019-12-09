@@ -4,7 +4,24 @@ import PusherPlatform
 
 /// A provider which exposes a collection of all rooms joined by the user.
 ///
-/// The collection is updated in real time when the user joins or leaves rooms, or the properties of rooms are updated.
+/// Construct an instance of this class using `Chatkit.createJoinedRoomsProvider(...)`
+///
+/// ## What is provided
+///
+/// The provider exposes a set, `rooms: Set<Room>` which presents the rooms that the current user is a member of.
+///
+/// ## Receiving live updates
+///
+/// In order to be notified when the contents of the `rooms` changes, implement the `JoinedRoomsProviderDelegate` protocol and assign the `JoinedRoomsProvider.delegate` property.
+///
+/// Note that when the provider is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.
+///
+/// ## Understanding the `state` of the provider
+///
+/// The `state` property describes the state of the live update connection, either
+///   - `.connected`: updates are flowing live, or
+///   - `.degraded`: updates may be delayed due to network problems.
+///
 public class JoinedRoomsProvider {
     
     // MARK: - Properties

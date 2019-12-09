@@ -6,7 +6,7 @@ public struct User {
     
     // MARK: - Properties
     
-    /// The unique identifier for the user assigned by the Chatkit web service.
+    /// The unique identifier for the user.
     public let identifier: String
     
     /// The human readable name of the user. This is not required to be unique.
@@ -24,7 +24,9 @@ public struct User {
     /// The `Date` at which the user was created.
     public let createdAt: Date
     
-    /// The `Date` at which the user was last updated.
+    /// The `Date` at which the user entity was last updated by an explicit call to `updateUser` on the Chatkit service.
+    ///
+    /// This will *only* apply to changes to the `name`, `avatar` and `customData` properties.
     public let updatedAt: Date
     
     let objectID: NSManagedObjectID
