@@ -176,7 +176,7 @@ public class Chatkit {
     /// This will provide access to a real time list of the `Message`s in a given `Room`.
     ///
     /// - Parameters:
-    ///     - `room`: The `Room` for which the provider will provide messages.
+    ///     - room: The `Room` for which the provider will provide messages.
     ///     - completionHandler: A completion handler which will be called when the `MessagesProvider` is ready, or an `Error` occurs creating it.
     public func createMessagesProvider(for room: Room, completionHandler: @escaping (MessagesProvider?, Error?) -> Void) {
         guard self.connectionStatus == .connected else {
@@ -194,7 +194,7 @@ public class Chatkit {
     /// This will give access to a real time set of the `User`s who are members of a given `Room`
     ///
     /// - Parameters:
-    ///     - `room`: The `Room` for which the provider will provide member information.
+    ///     - room: The `Room` for which the provider will provide member information.
     ///     - completionHandler: A completion handler which will be called when the `RoomMembersProvider` is ready, or an `Error` occurs creating it.
     public func createRoomMembersProvider(for room: Room, completionHandler: @escaping (RoomMembersProvider?, Error?) -> Void) {
         guard self.connectionStatus == .connected else {
@@ -212,7 +212,7 @@ public class Chatkit {
     /// This will give access to a real time set of the `User`s who are typing in a given `Room`.
     ///
     /// - Parameters:
-    ///     - `room`: The `Room` for which this provider will provide information on users who are typing.
+    ///     - room: The `Room` for which this provider will provide information on users who are typing.
     ///     - completionHandler: A completion handler which will be called when the `TypingUsersProvider` is ready, or an `Error` occurs creating it.
     public func createTypingUsersProvider(for room: Room, completionHandler: @escaping (TypingUsersProvider?, Error?) -> Void) {
         guard self.connectionStatus == .connected else {
@@ -252,7 +252,7 @@ public class Chatkit {
     /// This will give access to a real time list of elements which can be rendered to create a conversation view for a given `Room`.
     ///
     /// - Parameters:
-    ///     - `room`: The `Room` for which messages should be modelled.
+    ///     - room: The `Room` for which messages should be modelled.
     ///     - completionHandler: A completion handler which will be called when the `MessagesViewModel` is ready, or an `Error` occurs creating it.
     public func createMessagesViewModel(for room: Room, completionHandler: @escaping (MessagesViewModel?, Error?) -> Void) {
         self.createMessagesProvider(for: room) { provider, error in
@@ -273,7 +273,7 @@ public class Chatkit {
     /// This will give access to a real time `String` describing the users which are currently typing in a given `Room`.
     ///
     /// - Parameters:
-    ///     - `room`: The `Room` for which typing users should be modelled.
+    ///     - room: The `Room` for which typing users should be modelled.
     ///     - userNamePlaceholder: The placeholder used when a user does not have a value set for the `User.name` property.
     ///     - completionHandler: A completion handler which will be called when the `TypingUsersViewModel` is ready, or an `Error` occurs creating it.
     public func createTypingUsersViewModel(for room: Room, userNamePlaceholder: String = "anonymous", completionHandler: @escaping (TypingUsersViewModel?, Error?) -> Void) {
@@ -300,8 +300,8 @@ public class Chatkit {
     /// Retrieves a static snapshot of the `User`s who are currently members of the `Room`.
     ///
     /// - Parameters:
-    ///     - `room`: The `Room` for which members should be retrieved.
-    ///     - `includeCurrentUser`: Whether the return value should include an entry for the current user.
+    ///     - room: The `Room` for which members should be retrieved.
+    ///     - includeCurrentUser: Whether the return value should include an entry for the current user.
     public func members(for room: Room, includeCurrentUser: Bool = false) -> [User] {
         let roomManagedObjectID = room.objectID
         var members: [User] = []
