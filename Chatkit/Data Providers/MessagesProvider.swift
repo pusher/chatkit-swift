@@ -136,7 +136,9 @@ public class MessagesProvider {
             self.state.paged = self.dataSimulator.pagedState(for: self.roomManagedObjectID)
             
             if let completionHandler = completionHandler {
-                completionHandler(nil)
+                DispatchQueue.main.sync {
+                    completionHandler(nil)
+                }
             }
         }
     }
