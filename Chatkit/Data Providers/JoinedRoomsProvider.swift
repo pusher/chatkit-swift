@@ -69,6 +69,7 @@ public class JoinedRoomsProvider {
 
 // MARK: - ChangeControllerDelegate
 
+/// :nodoc:
 extension JoinedRoomsProvider: ChangeControllerDelegate {
     
     public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didInsertObjects objects: [ResultType], at indexes: IndexSet) where ResultType : NSManagedObject {

@@ -70,6 +70,7 @@ public class TypingUsersProvider {
 
 // MARK: - ChangeControllerDelegate
 
+/// :nodoc:
 extension TypingUsersProvider: ChangeControllerDelegate {
     
     public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didInsertObjects objects: [ResultType], at indexes: IndexSet) where ResultType : NSManagedObject {

@@ -72,6 +72,7 @@ public class RoomMembersProvider {
 
 // MARK: - ChangeControllerDelegate
 
+/// :nodoc:
 extension RoomMembersProvider: ChangeControllerDelegate {
     
     public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didInsertObjects objects: [ResultType], at indexes: IndexSet) where ResultType : NSManagedObject {
