@@ -69,7 +69,6 @@
 		229EC00423797B4A00610990 /* DataSimulator+Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229EC00323797B4A00610990 /* DataSimulator+Events.swift */; };
 		22BECDFC2366F24D00FAB7DC /* JoinedRoomsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BECDFB2366F24D00FAB7DC /* JoinedRoomsViewModel.swift */; };
 		22BFC034237DAE4000B55C5E /* DataSimulator+Cursors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFC033237DAE4000B55C5E /* DataSimulator+Cursors.swift */; };
-		22C499C723323F7700DA061F /* FetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C499C623323F7700DA061F /* FetchedResultsController.swift */; };
 		22C5F3ED2306B06E009A7383 /* SnapshotError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3EC2306B06E009A7383 /* SnapshotError.swift */; };
 		22C5F3EF2306B08C009A7383 /* MessagePart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3EE2306B08C009A7383 /* MessagePart.swift */; };
 		22C5F3F32306B9F3009A7383 /* InlinePartEntity+Snapshotable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3F22306B9F3009A7383 /* InlinePartEntity+Snapshotable.swift */; };
@@ -196,7 +195,6 @@
 		229EC00323797B4A00610990 /* DataSimulator+Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataSimulator+Events.swift"; sourceTree = "<group>"; };
 		22BECDFB2366F24D00FAB7DC /* JoinedRoomsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsViewModel.swift; sourceTree = "<group>"; };
 		22BFC033237DAE4000B55C5E /* DataSimulator+Cursors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataSimulator+Cursors.swift"; sourceTree = "<group>"; };
-		22C499C623323F7700DA061F /* FetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchedResultsController.swift; sourceTree = "<group>"; };
 		22C5F3EC2306B06E009A7383 /* SnapshotError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotError.swift; sourceTree = "<group>"; };
 		22C5F3EE2306B08C009A7383 /* MessagePart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePart.swift; sourceTree = "<group>"; };
 		22C5F3F22306B9F3009A7383 /* InlinePartEntity+Snapshotable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InlinePartEntity+Snapshotable.swift"; sourceTree = "<group>"; };
@@ -742,7 +740,6 @@
 			children = (
 				229A6C8B230BE664002997CF /* Identifiable */,
 				22D537CC2302BDD700A92341 /* Store.swift */,
-				22C499C623323F7700DA061F /* FetchedResultsController.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -1122,7 +1119,6 @@
 				22FD93C02361DD8A00AB841F /* TypingUsersViewModel.swift in Sources */,
 				229EC00423797B4A00610990 /* DataSimulator+Events.swift in Sources */,
 				22D2A2D823196B9F0095757C /* PCBaseClient+Extensions.swift in Sources */,
-				22C499C723323F7700DA061F /* FetchedResultsController.swift in Sources */,
 				222EA2AD23424A11004EE90F /* JoinedRoomsProvider.swift in Sources */,
 				22FC112B233E50030013A9D7 /* UserFactory.swift in Sources */,
 				22C5F3F52306B9F9009A7383 /* URLPartEntity+Snapshotable.swift in Sources */,
