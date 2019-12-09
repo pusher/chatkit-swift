@@ -301,6 +301,7 @@ public class Chatkit {
     ///
     /// - Parameters:
     ///     - `room`: The `Room` for which members should be retrieved.
+    ///     - `includeCurrentUser`: Whether the return value should include an entry for the current user.
     public func members(for room: Room, includeCurrentUser: Bool = false) -> [User] {
         let roomManagedObjectID = room.objectID
         var members: [User] = []
