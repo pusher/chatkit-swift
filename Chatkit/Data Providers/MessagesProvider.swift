@@ -120,7 +120,7 @@ public class MessagesProvider {
     ///     the web service.
     ///     - completionHandler: An optional completion handler invoked when the operation is complete.
     ///     The completion handler receives an Error, or nil on success.
-    public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: CompletionHandler? = nil) {
+    public func fetchOlderMessages(numberOfMessages: UInt = 10, completionHandler: CompletionHandler? = nil) {
         guard self.state.paged == .partiallyPopulated else {
             if let completionHandler = completionHandler {
                 // TODO: Return error
@@ -136,7 +136,9 @@ public class MessagesProvider {
             self.state.paged = self.dataSimulator.pagedState(for: self.roomManagedObjectID)
             
             if let completionHandler = completionHandler {
-                completionHandler(nil)
+                DispatchQueue.main.sync {
+                    completionHandler(nil)
+                }
             }
         }
     }

@@ -130,7 +130,7 @@ public class MessagesViewModel {
     ///     the web service.
     ///     - completionHandler: An optional completion handler invoked when the operation is complete.
     ///     The completion handler receives an Error, or nil on success.
-    public func fetchOlderMessages(numberOfMessages: UInt, completionHandler: CompletionHandler? = nil) {
+    public func fetchOlderMessages(numberOfMessages: UInt = 10, completionHandler: CompletionHandler? = nil) {
         guard self.provider.state.paged == .partiallyPopulated else {
             if let completionHandler = completionHandler {
                 completionHandler(nil)
@@ -164,6 +164,30 @@ public class MessagesViewModel {
     ///     - lastReadMessage: The last message read by the user.
     public func markMessagesAsRead(lastReadMessage: Message) {
         self.provider.markMessagesAsRead(lastReadMessage: lastReadMessage)
+    }
+    
+    /// Marks the message at `index` and all messages preceding that message as read.
+    ///
+    /// - Parameters:
+    ///     - lastReadIndex: The index in `rows` of the last message read by the user.
+    public func markMessagesAsRead(lastReadIndex: Int) {
+        let lastMessageRowBeforeIndex = rows.prefix(upTo: lastReadIndex).reversed().first(where: { row in
+            switch row {
+            case .message: return true
+            default: return false
+            }
+        })
+        
+        guard case let .message(lastReadMessage, _) = lastMessageRowBeforeIndex else {
+            return
+        }
+        
+        self.provider.markMessagesAsRead(lastReadMessage: lastReadMessage)
+    }
+    
+    /// Marks all messages as read.
+    public func markAllMessagesAsRead() {
+        markMessagesAsRead(lastReadIndex: self.rows.count-1)
     }
     
     // MARK: - Private methods
