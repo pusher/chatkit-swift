@@ -673,6 +673,18 @@ been successfuly established or failed due to an error.</p>
                             <tr>
                               <td>
                                 <code>
+                                <em>room</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Structs/Room.html">Room</a></code> for which the provider will provide messages.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
                                 <em>completionHandler</em>
                                 </code>
                               </td>
@@ -721,6 +733,18 @@ been successfuly established or failed due to an error.</p>
                             <tr>
                               <td>
                                 <code>
+                                <em>room</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Structs/Room.html">Room</a></code> for which the provider will provide member information.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
                                 <em>completionHandler</em>
                                 </code>
                               </td>
@@ -766,6 +790,18 @@ been successfuly established or failed due to an error.</p>
                         <h4>Parameters</h4>
                         <table class="graybox">
                           <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>room</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Structs/Room.html">Room</a></code> for which this provider will provide information on users who are typing.</p>
+                                </div>
+                              </td>
+                            </tr>
                             <tr>
                               <td>
                                 <code>
@@ -876,6 +912,18 @@ been successfuly established or failed due to an error.</p>
                             <tr>
                               <td>
                                 <code>
+                                <em>room</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Structs/Room.html">Room</a></code> for which messages should be modelled.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
                                 <em>completionHandler</em>
                                 </code>
                               </td>
@@ -921,6 +969,18 @@ been successfuly established or failed due to an error.</p>
                         <h4>Parameters</h4>
                         <table class="graybox">
                           <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>room</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Structs/Room.html">Room</a></code> for which typing users should be modelled.</p>
+                                </div>
+                              </td>
+                            </tr>
                             <tr>
                               <td>
                                 <code>
@@ -985,6 +1045,37 @@ been successfuly established or failed due to an error.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">members</span><span class="p">(</span><span class="k">for</span> <span class="nv">room</span><span class="p">:</span> <span class="kt"><a href="../Structs/Room.html">Room</a></span><span class="p">,</span> <span class="nv">includeCurrentUser</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/User.html">User</a></span><span class="p">]</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>room</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The <code><a href="../Structs/Room.html">Room</a></code> for which members should be retrieved.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>includeCurrentUser</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Whether the return value should include an entry for the current user.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </section>
                   </div>
