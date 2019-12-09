@@ -54,7 +54,7 @@ public class MessagesProvider {
     public weak var delegate: MessagesProviderDelegate?
     
     private let roomManagedObjectID: NSManagedObjectID
-    private let fetchedResultsController: FetchedResultsController<MessageEntity>
+    private let changeController: ChangeController<MessageEntity>
     private let dataSimulator: DataSimulator
     
     /// The array of available messages for the given room.
@@ -67,11 +67,8 @@ public class MessagesProvider {
     ///
     /// If more older messages are required, call `fetchOlderMessages(...)` to have them added to this array.
     public var messages: [Message] {
-        return self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
+        return self.changeController.objects.compactMap { try? $0.snapshot() }
     }
-    
-    // A quick and dirty hack that is here to enable user testing. We should get rid of this in the final version.
-    private static var controllers = [String : FetchedResultsController<MessageEntity>]()
     
     // MARK: - Initializers
     
@@ -94,15 +91,8 @@ public class MessagesProvider {
             return NSNumber(value: lhs).compare(NSNumber(value: rhs))
         }
         
-        if let fetchedResultsController = MessagesProvider.controllers[room.identifier] {
-            self.fetchedResultsController = fetchedResultsController
-        }
-        else {
-            self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
-            MessagesProvider.controllers[room.identifier] = self.fetchedResultsController
-        }
-        
-        self.fetchedResultsController.delegate = self
+        self.changeController = ChangeController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
+        self.changeController.delegate = self
     }
     
     // MARK: - Methods
@@ -153,28 +143,30 @@ public class MessagesProvider {
         self.dataSimulator.markMessagesAsRead(lastReadMessage: lastReadMessage)
     }
     
-    // MARK: - Memory management
-    
-    deinit {
-        self.fetchedResultsController.delegate = nil
-    }
-    
 }
 
-// MARK: - FetchedResultsControllerDelegate
+// MARK: - ChangeControllerDelegate
 
-extension MessagesProvider: FetchedResultsControllerDelegate {
+extension MessagesProvider: ChangeControllerDelegate {
     
-    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>) where ResultType : NSManagedObject {
-        if range.lowerBound == 0 {
-            let messages = self.fetchedResultsController.objects[range].compactMap { try? $0.snapshot() }
+    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didInsertObjects objects: [ResultType], at indexes: IndexSet) where ResultType : NSManagedObject {
+        if indexes.contains(0) && indexes.isContiguous {
+            guard let objects = objects as? [MessageEntity] else {
+                return
+            }
+            
+            let messages = objects.compactMap { try? $0.snapshot() }
+            
+            guard messages.count > 0 else {
+                return
+            }
+            
             self.delegate?.messagesProvider(self, didReceiveOlderMessages: messages)
         }
         else {
-            for index in range {
-                guard index < self.fetchedResultsController.numberOfObjects,
-                    let entity = self.fetchedResultsController.object(at: index),
-                    let message = try? entity.snapshot() else {
+            for object in objects {
+                guard let object = object as? MessageEntity,
+                    let message = try? object.snapshot() else {
                         continue
                 }
                 
@@ -183,7 +175,7 @@ extension MessagesProvider: FetchedResultsControllerDelegate {
         }
     }
     
-    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
+    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
         guard let object = object as? MessageEntity, let message = try? object.snapshot() else {
             return
         }
@@ -193,7 +185,11 @@ extension MessagesProvider: FetchedResultsControllerDelegate {
         self.delegate?.messagesProvider(self, didUpdateMessage: message, previousValue: message)
     }
     
-    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
+    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didMoveObject object: ResultType, from oldIndex: Int, to newIndex: Int) where ResultType : NSManagedObject {
+        // This method intentionally does not provide any implementation.
+    }
+    
+    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
         guard let object = object as? MessageEntity, let message = try? object.snapshot() else {
             return
         }
