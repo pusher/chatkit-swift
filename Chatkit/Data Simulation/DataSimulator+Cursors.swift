@@ -25,9 +25,7 @@ extension DataSimulator {
                 room.unreadCount = Int64(numberOfUnreadMessages)
             }
             
-            try? context.save()
-            
-            self.persistenceController.save()
+            self.persistenceController.save(includingBackgroundTaskContext: context)
         }
     }
     

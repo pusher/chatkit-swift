@@ -36,11 +36,11 @@ public class TypingUsersProvider {
     public weak var delegate: TypingUsersProviderDelegate?
     
     private let roomManagedObjectID: NSManagedObjectID
-    private let fetchedResultsController: FetchedResultsController<UserEntity>
+    private let changeController: ChangeController<UserEntity>
     
     /// The set of all users currently typing on a given room.
     public var typingUsers: Set<User> {
-        let users = self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
+        let users = self.changeController.objects.compactMap { try? $0.snapshot() }
         return Set(users)
     }
     
@@ -62,21 +62,21 @@ public class TypingUsersProvider {
             return NSNumber(value: lhs).compare(NSNumber(value: rhs))
         }
         
-        self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
-        self.fetchedResultsController.delegate = self
+        self.changeController = ChangeController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
+        self.changeController.delegate = self
     }
     
 }
 
-// MARK: - FetchedResultsControllerDelegate
+// MARK: - ChangeControllerDelegate
 
-extension TypingUsersProvider: FetchedResultsControllerDelegate {
+/// :nodoc:
+extension TypingUsersProvider: ChangeControllerDelegate {
     
-    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>) where ResultType : NSManagedObject {
-        for index in range {
-            guard index < self.fetchedResultsController.numberOfObjects,
-                let entity = self.fetchedResultsController.object(at: index),
-                let user = try? entity.snapshot() else {
+    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didInsertObjects objects: [ResultType], at indexes: IndexSet) where ResultType : NSManagedObject {
+        for object in objects {
+            guard let object = object as? UserEntity,
+                let user = try? object.snapshot() else {
                     continue
             }
             
@@ -84,11 +84,15 @@ extension TypingUsersProvider: FetchedResultsControllerDelegate {
         }
     }
     
-    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
+    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
         // This method intentionally does not provide any implementation.
     }
     
-    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
+    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didMoveObject object: ResultType, from oldIndex: Int, to newIndex: Int) where ResultType : NSManagedObject {
+        // This method intentionally does not provide any implementation.
+    }
+    
+    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
         guard let object = object as? UserEntity, let user = try? object.snapshot() else {
             return
         }

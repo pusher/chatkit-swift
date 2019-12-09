@@ -32,11 +32,11 @@ public class JoinedRoomsProvider {
     /// The object that is notified when the set `rooms` has changed.
     public weak var delegate: JoinedRoomsProviderDelegate?
     
-    private let fetchedResultsController: FetchedResultsController<RoomEntity>
+    private let changeController: ChangeController<RoomEntity>
     
     /// The set of all rooms joined by the user.
     public var rooms: Set<Room> {
-        let rooms = self.fetchedResultsController.objects.compactMap { try? $0.snapshot() }
+        let rooms = self.changeController.objects.compactMap { try? $0.snapshot() }
         return Set(rooms)
     }
     
@@ -61,20 +61,21 @@ public class JoinedRoomsProvider {
             return NSNumber(value: lhs).compare(NSNumber(value: rhs))
         }
         
-        self.fetchedResultsController = FetchedResultsController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
-        self.fetchedResultsController.delegate = self
+        self.changeController = ChangeController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
+        self.changeController.delegate = self
     }
     
 }
 
-// MARK: - FetchedResultsControllerDelegate
+// MARK: - ChangeControllerDelegate
 
-extension JoinedRoomsProvider: FetchedResultsControllerDelegate {
-    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didInsertObjectsWithRange range: Range<Int>) where ResultType : NSManagedObject {
-        for index in range {
-            guard index < self.fetchedResultsController.numberOfObjects,
-                let entity = self.fetchedResultsController.object(at: index),
-                let room = try? entity.snapshot() else {
+/// :nodoc:
+extension JoinedRoomsProvider: ChangeControllerDelegate {
+    
+    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didInsertObjects objects: [ResultType], at indexes: IndexSet) where ResultType : NSManagedObject {
+        for object in objects {
+            guard let object = object as? RoomEntity,
+                let room = try? object.snapshot() else {
                     continue
             }
             
@@ -82,7 +83,7 @@ extension JoinedRoomsProvider: FetchedResultsControllerDelegate {
         }
     }
     
-    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
+    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
         guard let object = object as? RoomEntity, let room = try? object.snapshot() else {
             return
         }
@@ -92,7 +93,11 @@ extension JoinedRoomsProvider: FetchedResultsControllerDelegate {
         self.delegate?.joinedRoomsProvider(self, didUpdateRoom: room, previousValue: room)
     }
     
-    func fetchedResultsController<ResultType>(_ fetchedResultsController: FetchedResultsController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
+    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didMoveObject object: ResultType, from oldIndex: Int, to newIndex: Int) where ResultType : NSManagedObject {
+        // This method intentionally does not provide any implementation.
+    }
+    
+    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
         guard let object = object as? RoomEntity, let room = try? object.snapshot() else {
             return
         }
