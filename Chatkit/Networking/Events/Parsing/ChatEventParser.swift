@@ -29,8 +29,6 @@ struct ChatEventParser: EventParser {
         case .initialState:
             parseInitialState(payload: event.payload, completionHandler: completionHandler)
         }
-        
-        self.persistenceController.save()
     }
     
     // MARK: - Private methods
@@ -47,13 +45,13 @@ struct ChatEventParser: EventParser {
                 }
             }
             
-            do {
-                try backgroundContext.save()
-            } catch {
-                self.logger?.log("Failed to save '\(Event.Name.initialState)' event with error: \(error.localizedDescription)", logLevel: .warning)
+            self.persistenceController.save(includingBackgroundTaskContext: backgroundContext) { error in
+                if let error = error {
+                    self.logger?.log("Failed to save '\(Event.Name.initialState)' event with error: \(error.localizedDescription)", logLevel: .warning)
+                }
+                
+                completionHandler(nil)
             }
-            
-            completionHandler(nil)
         }
     }
     

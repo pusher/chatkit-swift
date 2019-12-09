@@ -56,9 +56,8 @@ extension DataSimulator {
                             )
                         }
                     }
-
-                    try! context.save()
-                    self.persistenceController.save()
+                    
+                    self.persistenceController.save(includingBackgroundTaskContext: context)
 
                     // Now the entities are saved, we can look up the new ID of the Room to store the historic messages against
                     let context = persistenceController.mainContext
@@ -135,25 +134,6 @@ extension DataSimulator {
         return room
     }
     
-//    private func createNewRoomForAmelia() -> Event {
-//        return Event { persistenceController in
-//            persistenceController.performBackgroundTask { context in
-//                guard let currentUserID = self.currentUserID,
-//                    let currentUser = context.object(with: currentUserID) as? UserEntity,
-//                    let eleventhRoomID = self.eleventhRoomID,
-//                    let eleventhRoom = context.object(with: eleventhRoomID) as? RoomEntity else {
-//                        fatalError("Failed to retrieve data.")
-//                }
-//
-//                eleventhRoom.addToMembers(currentUser)
-//
-//                try? context.save()
-//
-//                persistenceController.save()
-//            }
-//        }
-//    }
-    
     private func createTypingIndicatorEvent(for userID: NSManagedObjectID?, in roomID: NSManagedObjectID?) -> Event {
         return Event { persistenceController in
             persistenceController.performBackgroundTask { context in
@@ -166,9 +146,7 @@ extension DataSimulator {
                 
                 room.addToTypingMembers(user)
                 
-                try? context.save()
-                
-                persistenceController.save()
+                persistenceController.save(includingBackgroundTaskContext: context)
             }
         }
     }
@@ -185,9 +163,7 @@ extension DataSimulator {
                 
                 room.removeFromTypingMembers(user)
                 
-                try? context.save()
-                
-                persistenceController.save()
+                persistenceController.save(includingBackgroundTaskContext: context)
             }
         }
     }
@@ -206,9 +182,7 @@ extension DataSimulator {
                 
                 room.removeFromTypingMembers(user)
                 
-                try? context.save()
-                
-                persistenceController.save()
+                persistenceController.save(includingBackgroundTaskContext: context)
             }
         }
     }

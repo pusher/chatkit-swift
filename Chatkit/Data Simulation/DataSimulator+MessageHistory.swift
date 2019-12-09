@@ -42,9 +42,7 @@ extension DataSimulator {
                 self.createMessage(in: context, identifier: message.identifier, isHistoric: true, content: message.content, sender: sender, room: room, date: message.date)
             }
             
-            try? context.save()
-            
-            self.persistenceController.save()
+            self.persistenceController.save(includingBackgroundTaskContext: context)
             
             completionHandler()
         }
