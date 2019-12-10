@@ -20,22 +20,28 @@ public typealias TokenProviderResult = PPTokenProviderResult
 
 /// A factory for `TokenProvider`s.
 ///
-/// The methods on this object create token provider instances which can interface with an HTTP endpoint in your backend, or the Chatkit Test Token Provider (for use during development)
+/// The methods on this object create token provider instances which can interface with an HTTP 
+/// endpoint in your backend, or the Chatkit Test Token Provider (for use during development)
 public struct ChatkitTokenProviders {
-    /// Creates a `TokenProvider` which fetches tokens from the Chatkit Test Token Provider. It should be used for development purposes only.
+    /// Creates a `TokenProvider` which fetches tokens from the Chatkit Test Token Provider. It
+    /// should be used for development purposes only.
     ///
-    /// The Chatkit Test Token Provider is a token provider endpoint hosted by Pusher which returns tokens for the requested `userId` without authenticating the user. It is intended for development convenience and *must not be enabled in instances which host production data*.
+    /// The Chatkit Test Token Provider is a token provider endpoint hosted by Pusher which returns
+    /// tokens for the requested `userId` without authenticating the user. It is intended for
+    /// development convenience and *must not be enabled in instances which host production data*.
     ///
     /// The test token provider must be enabled for your instance in the Chatkit dashboard.
     ///
     /// - Parameters:
-    ///     - instanceLocator: The locator string for your instance, which you also provide when initialising the `Chatkit` object.
-    ///     - userId: The user identifier to fetch a token for. The provider will sign a valid token for any user identifier requested, without applying any kind of authentication.
+    ///     - instanceLocator: The locator string for your instance, which you also provide when
+    ///     initialising the `Chatkit` object.
+    ///     - userId: The user identifier to fetch a token for. The provider will sign a valid
+    ///     token for any user identifier requested, without applying any kind of authentication.
     /// - Returns:a `TokenProvider` which fetches tokens from the Chatkit Test Token Provider.
-    public static func chatkitTestTokenProvider(instanceLocator: String, userId: String) -> TokenProvider {
+    public static func createChatkitTestTokenProvider(instanceLocator: String, userId: String) -> TokenProvider {
         return CachingTokenProvider(
             delegateProvider: RetryingTokenProvider(
-                delegateProvider: testTokenHTTPCallProvider(
+                delegateProvider: createTestTokenHTTPCallProvider(
                     instanceLocator: instanceLocator, userId: userId
                 ),
                 retryAttempts: 3,
@@ -44,16 +50,22 @@ public struct ChatkitTokenProviders {
         )
     }
 
-    /// Create a `TokenProvider` which fetches tokens from an HTTP endpoint in your backend, with caching and retry implemented. This is the recommended implementation for production use.
+    /// Create a `TokenProvider` which fetches tokens from an HTTP endpoint in your backend, with
+    /// caching and retry implemented. This is the recommended implementation for production use.
     ///
     /// - Parameters:
     ///     - method: The HTTP method to use in the call, e.g. `GET`, `POST`
     ///     - host: The host name to be called, e.g. `example.com`
     ///     - path: The path component of the URL to be called, e.g. `/tokens`
-    ///     - headers: An optional map of headers to include in the request. Here you can supply the session or other credientials which your endpoint might require to authenticate the request.
-    ///     - queryParams: An optional map of query parameters to include in the request URL. Here you can supply the session or other credientials which your endpoint might require to authenticate the request.
-    /// - Returns: a `TokenProvider` which fetches tokens from the specified HTTP endpoint, and is wrapped in default caching and retry logic.
-    public static func httpTokenProvider(method: String, host: String, path: String, headers: [String: String]?, queryParams: [String: String]?) -> TokenProvider {
+    ///     - headers: An optional map of headers to include in the request. Here you can supply
+    ///     the session or other credientials which your endpoint might require to authenticate the
+    ///     request.
+    ///     - queryParams: An optional map of query parameters to include in the request URL. Here
+    ///     you can supply the session or other credientials which your endpoint might require to
+    ///     authenticate the request.
+    /// - Returns: a `TokenProvider` which fetches tokens from the specified HTTP endpoint, and is
+    /// wrapped in default caching and retry logic.
+    public static func createHTTPSTokenProvider(method: String, host: String, path: String, headers: [String: String]?, queryParams: [String: String]?) -> TokenProvider {
         return CachingTokenProvider(
             delegateProvider: RetryingTokenProvider(
                 delegateProvider: HTTPCallTokenProvider(
@@ -69,7 +81,7 @@ public struct ChatkitTokenProviders {
         )
     }
 
-    internal static func testTokenHTTPCallProvider(instanceLocator: String, userId: String) -> TokenProvider {
+    internal static func createTestTokenHTTPCallProvider(instanceLocator: String, userId: String) -> TokenProvider {
         // TODO: Implement:
         // extract host and instanceId from instanceLocator
         let host = "us1.pusherplatform.io"
