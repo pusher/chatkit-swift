@@ -41,8 +41,10 @@ public class Chatkit {
     /// Creates and returns an instance of `Chatkit` entry point.
     ///
     /// - Parameters:
-    ///     - instanceLocator: The instance locator used to identify the Chatkit instance. This is found in the Chatkit dashboard.
-    ///     - tokenProvider: A class which will be used to fetch authentication token for the user. See `ChatkitTokenProviders`
+    ///     - instanceLocator: The instance locator used to identify the Chatkit instance.
+    ///     This is found in the Chatkit dashboard.
+    ///     - tokenProvider: An object which will be used to fetch authentication token for the
+    ///     user. See `ChatkitTokenProviders`
     ///     - logger: The logger used by the SDK.
     ///
     /// - Returns: An instance of `Chatkit` or throws an error when the initialization failed.
