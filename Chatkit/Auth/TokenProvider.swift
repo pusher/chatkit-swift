@@ -1,10 +1,3 @@
-//
-//  TokenProvider.swift
-//  Chatkit
-//
-//  Created by Mike Pye on 06/12/2019.
-//  Copyright © 2019 Pusher Ltd. All rights reserved.
-//
 // STUB FILE. This file demonstrates the desired interface, but contains to implementation
 // TODO: Move many of these types to PusherPlatform
 
@@ -18,132 +11,129 @@ extension String: Error { }
 public typealias TokenProvider = PPTokenProvider
 public typealias TokenProviderResult = PPTokenProviderResult
 
-/// A factory for `TokenProvider`s.
+/// ChatkitTestTokenProvider retrieves tokens from the Chatkit service's Test Token Provider, which
+/// is for development user only, and must be enabled for your instance in the Chatkit Dashboard.
 ///
-/// The methods on this object create token provider instances which can interface with an HTTP 
-/// endpoint in your backend, or the Chatkit Test Token Provider (for use during development)
-public struct ChatkitTokenProviders {
-    /// Creates a `TokenProvider` which fetches tokens from the Chatkit Test Token Provider. It
-    /// should be used for development purposes only.
-    ///
-    /// The Chatkit Test Token Provider is a token provider endpoint hosted by Pusher which returns
-    /// tokens for the requested `userId` without authenticating the user. It is intended for
-    /// development convenience and *must not be enabled in instances which host production data*.
-    ///
-    /// The test token provider must be enabled for your instance in the Chatkit dashboard.
-    ///
+/// The test token provider will always sign a token for the requested userID, without applying any
+/// form of authentication.
+public class ChatkitTestTokenProvider: TokenProvider {
+    
+    private let delegate: HTTPSTokenProvider
+    
     /// - Parameters:
-    ///     - instanceLocator: The locator string for your instance, which you also provide when
-    ///     initialising the `Chatkit` object.
-    ///     - userId: The user identifier to fetch a token for. The provider will sign a valid
-    ///     token for any user identifier requested, without applying any kind of authentication.
-    /// - Returns:a `TokenProvider` which fetches tokens from the Chatkit Test Token Provider.
-    public static func createChatkitTestTokenProvider(instanceLocator: String, userId: String) -> TokenProvider {
-        return CachingTokenProvider(
-            delegateProvider: RetryingTokenProvider(
-                delegateProvider: createTestTokenHTTPCallProvider(
-                    instanceLocator: instanceLocator, userId: userId
-                ),
-                retryAttempts: 3,
-                retryDelayMs: 1000
-            )
-        )
-    }
-
-    /// Create a `TokenProvider` which fetches tokens from an HTTP endpoint in your backend, with
-    /// caching and retry implemented. This is the recommended implementation for production use.
-    ///
-    /// - Parameters:
-    ///     - method: The HTTP method to use in the call, e.g. `GET`, `POST`
-    ///     - host: The host name to be called, e.g. `example.com`
-    ///     - path: The path component of the URL to be called, e.g. `/tokens`
-    ///     - headers: An optional map of headers to include in the request. Here you can supply
-    ///     the session or other credientials which your endpoint might require to authenticate the
-    ///     request.
-    ///     - queryParams: An optional map of query parameters to include in the request URL. Here
-    ///     you can supply the session or other credientials which your endpoint might require to
-    ///     authenticate the request.
-    /// - Returns: a `TokenProvider` which fetches tokens from the specified HTTP endpoint, and is
-    /// wrapped in default caching and retry logic.
-    public static func createHTTPSTokenProvider(method: String, host: String, path: String, headers: [String: String]?, queryParams: [String: String]?) -> TokenProvider {
-        return CachingTokenProvider(
-            delegateProvider: RetryingTokenProvider(
-                delegateProvider: HTTPCallTokenProvider(
-                    method: method,
-                    host: host,
-                    path: path,
-                    headers: headers,
-                    queryParams: queryParams
-                ),
-                retryAttempts: 3,
-                retryDelayMs: 1000
-            )
-        )
-    }
-
-    internal static func createTestTokenHTTPCallProvider(instanceLocator: String, userId: String) -> TokenProvider {
+    ///     - instanceLocator: The locator for your instance, the same value from the Dashboard
+    ///     which you use to construct the Chatkit object.
+    ///     - userID: The userID to fetch tokens for. A token will always be signed for this userID
+    ///     without any authentication being applied.
+    init(instanceLocator: String, userID: String) {
         // TODO: Implement:
         // extract host and instanceId from instanceLocator
         let host = "us1.pusherplatform.io"
         let instanceId = "UNIMPLEMENTED"
         let path = "/services/chatkit_token_provider/v1/\(instanceId)/token"
-
-        return HTTPCallTokenProvider(
-            method: "POST",
-            host: host,
-            path: path,
-            headers: nil,
-            queryParams: [ "user_id": userId ]
-        )
+        
+        self.delegate = HTTPSTokenProvider(method: "POST",
+                                           host: host,
+                                           path: path,
+                                           headers: nil,
+                                           queryParams: [ "user_id": userID ])
     }
-}
-
-/// CachingTokenProvider delegates the fetching of tokens to an underlying `delegateProvider`, retrying on failure
-public class CachingTokenProvider: TokenProvider {
-    private let delegate: TokenProvider
-    private var token: String?
-
-    public init(delegateProvider: TokenProvider) {
-        self.delegate = delegateProvider
-    }
-
-    public func fetchToken(completionHandler: @escaping (TokenProviderResult) -> Void) {
-        // TODO: Implement:
-        // if token is nil or expired, delegate
-        // if call to delegate is in progress, attach to its completion handler
-        // return token
-
+    
+    public func fetchToken(completionHandler: @escaping (PPTokenProviderResult) -> Void) {
         self.delegate.fetchToken(completionHandler: completionHandler)
     }
+    
 }
 
-/// RetryingTokenProvider delegates the fetching of tokens to an underlying `delegateProvider`, maintains a reference to the last fetched token and ensures
-/// that the delegate is only called when necessary:
-public class RetryingTokenProvider: TokenProvider {
-    public init(delegateProvider: TokenProvider, retryAttempts: UInt, retryDelayMs: UInt) {}
+public typealias AsyncCredentialsCall = (CredentialsCompletionHandler) -> ()
 
-    public func fetchToken(completionHandler: @escaping (TokenProviderResult) -> Void) {
-        // TODO: Implement:
-        // fetch token from delegate, with retries on failure
-    }
+public typealias CredentialsCompletionHandler = (CredentialResult) -> ()
+
+public enum CredentialResult {
+    
+    case success([String: String])
+    case error(Error)
+    
 }
 
-/// HTTPCallTokenProvider makes calls to a specified HTTP endpoint and expects to receive a token from it.
+/// HTTPCallTokenProvider makes calls to a specified HTTP endpoint and expects to receive a token
+/// from it.
 ///
-/// This class will make an HTTP request for every call to `fetchToken`, and in almost all cases it should be wrapped with caching and retry logic. See `httpTokenProvider(...)` for a factory method which returns a wrapped instance of this class.
+/// This is the implementation we recommend for production use, to request tokens from your backend
+/// system.
 ///
-/// - Parameters:
-///     - method: The HTTP method to use in the call, e.g. `GET`, `POST`
-///     - host: The host name to be called, e.g. `example.com`
-///     - path: The path component of the URL to be called, e.g. `/tokens`
-///     - headers: An optional map of headers to include in the request. Here you can supply the session or other credientials which your endpoint might require to authenticate the request.
-///     - queryParams: An optional map of query parameters to include in the request URL. Here you can supply the session or other credientials which your endpoint might require to authenticate the request.
-public class HTTPCallTokenProvider: TokenProvider {
-    public init(method: String, host: String, path: String, headers: [String: String]?, queryParams: [String: String]?) {
-        // TODO
+/// If this class does not fit your needs, you can implement the `TokenProvider` protocol yourself.
+public class HTTPSTokenProvider: TokenProvider {
+    
+    private let method: String
+    private let host: String
+    private let path: String
+    private let getHeaders: AsyncCredentialsCall?
+    private let getQueryParams: AsyncCredentialsCall?
+    
+    /// Create an HTTPSTokenProvider which presents either headers or query parameters as part of
+    /// the request. These should be used to identify your application user session to your backend
+    /// so that it can issue a token for the user.
+    ///
+    /// - Parameters:
+    ///     - method: The HTTP method to use in the call, e.g. `POST`
+    ///     - host: The host name to be called, e.g. `example.com`
+    ///     - path: The path component of the URL to be called, e.g. `/tokens`
+    ///     - headers: An optional map of headers to include in the request. Here you can supply
+    ///     the session or other credientials which your endpoint might require to authenticate
+    ///     the request.
+    ///     - queryParams: An optional map of query parameters to include in the request URL.
+    ///     Here you can supply the session or other credientials which your endpoint might
+    ///     require to authenticate the request.
+    public convenience init(method: String,
+                            host: String,
+                            path: String,
+                            headers: [String: String]?,
+                            queryParams: ([String: String]?)) {
+        self.init(method: method,
+                  host: host,
+                  path: path,
+                  getHeaders: HTTPSTokenProvider.wrapCredentialsValue(headers),
+                  getQueryParams: HTTPSTokenProvider.wrapCredentialsValue(queryParams))
     }
-
+    
+    /// Create an HTTPSTokenProvider which presents either headers or query parameters as part of
+    /// the request. These should be used to identify your application user session to your backend
+    /// so that it can issue a token for the user.
+    ///
+    /// - Parameters:
+    ///     - method: The HTTP method to use in the call, e.g. `POST`
+    ///     - host: The host name to be called, e.g. `example.com`
+    ///     - path: The path component of the URL to be called, e.g. `/tokens`
+    ///     - headers: An optional async function which will be invoked when a request is about
+    ///     to be made, so that you can supply headers describing the current application user
+    ///     session.
+    ///     - queryParams: An optional async function which will be invoked when a request is about
+    ///     to be made, so that you can supply query parameters describing the current application
+    ///     user session.
+    public init(method: String,
+                host: String,
+                path: String,
+                getHeaders: AsyncCredentialsCall?,
+                getQueryParams: AsyncCredentialsCall?) {
+        self.method = method
+        self.host = host
+        self.path = path
+        self.getHeaders = getHeaders
+        self.getQueryParams = getQueryParams
+    }
+    
     public func fetchToken(completionHandler: @escaping (TokenProviderResult) -> Void) {
         completionHandler(TokenProviderResult.error(error: "Unimplemented"))
     }
+    
+    private static func wrapCredentialsValue(_ literal: [String: String]?) -> AsyncCredentialsCall? {
+        guard let literal = literal else {
+            return nil
+        }
+        return { completionHandler in
+            return completionHandler(CredentialResult.success(literal))
+        }
+    }
+    
 }
