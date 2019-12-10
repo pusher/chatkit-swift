@@ -83,8 +83,8 @@ public class DefaultTokenProvider: TokenProvider {
     ///     the session or other credientials which your endpoint might require to authenticate
     ///     the request.
     ///     - queryParams: An optional map of query parameters to include in the request URL.
-    ///     Here you can supply the session or other credientials which your endpoint might
-    ///     require to authenticate the request.
+    ///     Here you can supply any query parameters which your endpoint might require to process
+    ///     the request.
     public convenience init(method: String,
                             host: String,
                             path: String,
@@ -109,8 +109,8 @@ public class DefaultTokenProvider: TokenProvider {
     ///     to be made, so that you can supply headers describing the current application user
     ///     session.
     ///     - queryParams: An optional async function which will be invoked when a request is about
-    ///     to be made, so that you can supply query parameters describing the current application
-    ///     user session.
+    ///     to be made, so that you can supply query parameters which your backend might require
+    ///     to process the request.
     public init(method: String,
                 host: String,
                 path: String,
