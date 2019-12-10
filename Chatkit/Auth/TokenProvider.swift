@@ -45,11 +45,11 @@ public class ChatkitTestTokenProvider: TokenProvider {
     
 }
 
-public typealias AsyncCredentialsCall = (CredentialsCompletionHandler) -> ()
+public typealias AsyncKeyValueCall = (CredentialsCompletionHandler) -> ()
 
-public typealias CredentialsCompletionHandler = (CredentialResult) -> ()
+public typealias CredentialsCompletionHandler = (KeyValueResult) -> ()
 
-public enum CredentialResult {
+public enum KeyValueResult {
     
     case success([String: String])
     case error(Error)
@@ -68,8 +68,8 @@ public class HTTPSTokenProvider: TokenProvider {
     private let method: String
     private let host: String
     private let path: String
-    private let getHeaders: AsyncCredentialsCall?
-    private let getQueryParams: AsyncCredentialsCall?
+    private let getHeaders: AsyncKeyValueCall?
+    private let getQueryParams: AsyncKeyValueCall?
     
     /// Create an HTTPSTokenProvider which presents either headers or query parameters as part of
     /// the request. These should be used to identify your application user session to your backend
@@ -114,8 +114,8 @@ public class HTTPSTokenProvider: TokenProvider {
     public init(method: String,
                 host: String,
                 path: String,
-                getHeaders: AsyncCredentialsCall? = nil,
-                getQueryParams: AsyncCredentialsCall? = nil) {
+                getHeaders: AsyncKeyValueCall? = nil,
+                getQueryParams: AsyncKeyValueCall? = nil) {
         self.method = method
         self.host = host
         self.path = path
@@ -127,12 +127,12 @@ public class HTTPSTokenProvider: TokenProvider {
         completionHandler(TokenProviderResult.error(error: "Unimplemented"))
     }
     
-    private static func wrapCredentialsValue(_ literal: [String: String]?) -> AsyncCredentialsCall? {
+    private static func wrapCredentialsValue(_ literal: [String: String]?) -> AsyncKeyValueCall? {
         guard let literal = literal else {
             return nil
         }
         return { completionHandler in
-            return completionHandler(CredentialResult.success(literal))
+            return completionHandler(KeyValueResult.success(literal))
         }
     }
     
