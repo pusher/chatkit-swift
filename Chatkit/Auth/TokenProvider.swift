@@ -11,14 +11,14 @@ extension String: Error { }
 public typealias TokenProvider = PPTokenProvider
 public typealias TokenProviderResult = PPTokenProviderResult
 
-/// ChatkitTestTokenProvider retrieves tokens from the Chatkit service's Test Token Provider, which
+/// TestTokenProvider retrieves tokens from the Chatkit service's Test Token Provider, which
 /// is for development user only, and must be enabled for your instance in the Chatkit Dashboard.
 ///
 /// The test token provider will always sign a token for the requested userID, without applying any
 /// form of authentication.
-public class ChatkitTestTokenProvider: TokenProvider {
+public class TestTokenProvider: TokenProvider {
     
-    private let delegate: HTTPSTokenProvider
+    private let delegate: DefaultTokenProvider
     
     /// - Parameters:
     ///     - instanceLocator: The locator for your instance, the same value from the Dashboard
@@ -32,7 +32,7 @@ public class ChatkitTestTokenProvider: TokenProvider {
         let instanceId = "UNIMPLEMENTED"
         let path = "/services/chatkit_token_provider/v1/\(instanceId)/token"
         
-        self.delegate = HTTPSTokenProvider(method: "POST",
+        self.delegate = DefaultTokenProvider(method: "POST",
                                            host: host,
                                            path: path,
                                            headers: nil,
@@ -56,14 +56,14 @@ public enum KeyValueResult {
     
 }
 
-/// HTTPCallTokenProvider makes calls to a specified HTTP endpoint and expects to receive a token
+/// HTTPCallTokenProvider makes calls to a specified HTTPS endpoint and expects to receive a token
 /// from it.
 ///
 /// This is the implementation we recommend for production use, to request tokens from your backend
 /// system.
 ///
 /// If this class does not fit your needs, you can implement the `TokenProvider` protocol yourself.
-public class HTTPSTokenProvider: TokenProvider {
+public class DefaultTokenProvider: TokenProvider {
     
     private let method: String
     private let host: String
@@ -71,7 +71,7 @@ public class HTTPSTokenProvider: TokenProvider {
     private let getHeaders: AsyncKeyValueCall?
     private let getQueryParams: AsyncKeyValueCall?
     
-    /// Create an HTTPSTokenProvider which presents either headers or query parameters as part of
+    /// Create an DefaultTokenProvider which presents either headers or query parameters as part of
     /// the request. These should be used to identify your application user session to your backend
     /// so that it can issue a token for the user.
     ///
@@ -93,11 +93,11 @@ public class HTTPSTokenProvider: TokenProvider {
         self.init(method: method,
                   host: host,
                   path: path,
-                  getHeaders: HTTPSTokenProvider.wrapCredentialsValue(headers),
-                  getQueryParams: HTTPSTokenProvider.wrapCredentialsValue(queryParams))
+                  getHeaders: DefaultTokenProvider.wrapCredentialsValue(headers),
+                  getQueryParams: DefaultTokenProvider.wrapCredentialsValue(queryParams))
     }
     
-    /// Create an HTTPSTokenProvider which presents either headers or query parameters as part of
+    /// Create an DefaultTokenProvider which presents either headers or query parameters as part of
     /// the request. These should be used to identify your application user session to your backend
     /// so that it can issue a token for the user.
     ///
