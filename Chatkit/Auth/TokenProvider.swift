@@ -88,8 +88,8 @@ public class HTTPSTokenProvider: TokenProvider {
     public convenience init(method: String,
                             host: String,
                             path: String,
-                            headers: [String: String]?,
-                            queryParams: ([String: String]?)) {
+                            headers: [String: String]? = nil,
+                            queryParams: [String: String]? = nil) {
         self.init(method: method,
                   host: host,
                   path: path,
@@ -114,8 +114,8 @@ public class HTTPSTokenProvider: TokenProvider {
     public init(method: String,
                 host: String,
                 path: String,
-                getHeaders: AsyncCredentialsCall?,
-                getQueryParams: AsyncCredentialsCall?) {
+                getHeaders: AsyncCredentialsCall? = nil,
+                getQueryParams: AsyncCredentialsCall? = nil) {
         self.method = method
         self.host = host
         self.path = path
