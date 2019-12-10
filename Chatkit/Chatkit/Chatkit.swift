@@ -115,7 +115,7 @@ public class Chatkit {
     }
     
     // MARK: - Constructing paged data providers
-
+    
     /// Creates an instance of `UsersProvider`.
     ///
     /// - Parameters:
@@ -153,7 +153,7 @@ public class Chatkit {
     }
     
     // MARK: - Constructing real time data providers
-
+    
     /// Creates an instance of `JoinedRoomsProvider`.
     ///
     /// This will provide access to a real time set of `Room`s that the current user is a member of.
@@ -226,7 +226,7 @@ public class Chatkit {
     }
     
     // MARK: - Constructing real time view models
-
+    
     /// Creates an instance of `JoinedRoomsViewModel`.
     ///
     /// This will give access to a real time sorted list of the `Room`s that the current user is a member of.
@@ -296,7 +296,7 @@ public class Chatkit {
     }
     
     // MARK: - Retrieving static snapshots of chat data
-
+    
     /// Retrieves a static snapshot of the `User`s who are currently members of the `Room`.
     ///
     /// - Parameters:
@@ -305,7 +305,7 @@ public class Chatkit {
     public func members(for room: Room, includeCurrentUser: Bool = false) -> [User] {
         let roomManagedObjectID = room.objectID
         var members: [User] = []
-
+        
         let context = persistenceController.mainContext
         context.performAndWait {
             let predicate = NSPredicate(format: "ANY %K == %@", #keyPath(UserEntity.room), roomManagedObjectID)
@@ -313,17 +313,15 @@ public class Chatkit {
                 guard let lhsString = lhs as? String, let lhs = Int(lhsString), let rhsString = rhs as? String, let rhs = Int(rhsString) else {
                     return .orderedSame
                 }
-
+                
                 return NSNumber(value: lhs).compare(NSNumber(value: rhs))
             }
-
+            
             let memberEntities = context.fetchAll(UserEntity.self, withRelationships: nil, sortedBy: [sortDescriptor], filteredBy: predicate)
             members = memberEntities.compactMap { try? $0.snapshot() }
         }
-
-        return includeCurrentUser
-            ? members
-            : members.filter { $0.identifier != self.currentUser?.identifier }
+        
+        return includeCurrentUser ? members : members.filter { $0.identifier != self.currentUser?.identifier }
     }
 }
 

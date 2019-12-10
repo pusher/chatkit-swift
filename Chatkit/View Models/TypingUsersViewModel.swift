@@ -43,7 +43,7 @@ public class TypingUsersViewModel {
     public var state: RealTimeProviderState {
         return self.provider.state
     }
-
+    
     /// The object that is notified when the content of the `value` property has changed.
     public weak var delegate: TypingUsersViewModelDelegate?
     

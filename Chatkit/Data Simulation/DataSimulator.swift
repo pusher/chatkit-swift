@@ -17,10 +17,10 @@ class DataSimulator {
     var currentUserID: NSManagedObjectID?
     
     var serversideMessages: [NSManagedObjectID : [ServersideMessage]]
-
+    
     let data = [
         DummyRoom(planName: "Nutrition", otherUser: DummyUser(identifier: "oliver", name: "Oliver"), messages: [
-            .initial(seconds: 1000, sentByCurrentUser: false, content: "Hello"),
+            .initial(seconds: 1000, sentByCurrentUser: false, content: "Hello")
         ]),
         DummyRoom(planName: "Exercise", otherUser: DummyUser(identifier: "george", name: "George"), messages: [
             .serverside(days: 2, seconds: 50, sentByCurrentUser: false, content: "Hi!"),
@@ -80,7 +80,7 @@ class DataSimulator {
             .initial(days: 1, seconds: 420, sentByCurrentUser: false, content: "Aliquam ornare magna diam, a consequat neque sodales sit amet."),
             .initial(days: 0, seconds: 90, sentByCurrentUser: true, content: "Aliquam a orci in elit dictum semper in ut dui."),
             .initial(days: 0, seconds: 50, sentByCurrentUser: false, content: "Vestibulum feugiat consequat lacinia."),
-            .initial(days: 0, seconds: 20, sentByCurrentUser: true, content: "Maecenas dapibus sapien nisl, sed interdum nibh suscipit eu."),
+            .initial(days: 0, seconds: 20, sentByCurrentUser: true, content: "Maecenas dapibus sapien nisl, sed interdum nibh suscipit eu.")
         ]),
         DummyRoom(planName: "Film Quote", otherUser: DummyUser(identifier: "alan", name: "Alan"), messages: [
             .serverside(seconds: 320, sentByCurrentUser: true, content: "What are you doing here?"),
@@ -199,11 +199,9 @@ class DataSimulator {
             .serverside(seconds: 03, sentByCurrentUser: false, content: "13"),
             .serverside(seconds: 02, sentByCurrentUser: false, content: "14"),
             .serverside(seconds: 01, sentByCurrentUser: false, content: "15"),
-            .initial(seconds: 00, sentByCurrentUser: false, content: "16"),
-        ])
-    ]
-
-
+            .initial(seconds: 00, sentByCurrentUser: false, content: "16")
+        ])]
+    
     // MARK: - Initializers
     
     init(persistenceController: PersistenceController) {
@@ -242,12 +240,10 @@ class DataSimulator {
     
     func calculateMessageIdentifier(isHistoric: Bool) -> String {
         let identifier = self.nextMessageIdentifier
-
+        
         self.nextMessageIdentifier += 1
         
-        return String(
-            isHistoric ? identifier : identifier + 1000
-        )
+        return String(isHistoric ? identifier : identifier + 1000)
     }
     
     // MARK: - Timers
