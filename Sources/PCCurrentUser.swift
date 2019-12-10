@@ -1285,27 +1285,24 @@ public typealias PCRoomsCompletionHandler = ([PCRoom]?, Error?) -> Void
 #if os(iOS) || os(macOS)
 import PushNotifications
 
-private let pushNotifications: PushNotifications = PushNotifications.shared
-
 extension PCCurrentUser {
     /**
      Start PushNotifications service.
      */
     public func enablePushNotifications() {
-        pushNotifications.start(instanceId: self.v6Instance.id)
-        self.setUser(self.id)
-        ChatManager.registerForRemoteNotifications()
-    }
+        let beamsClient = PushNotifications.init(instanceId: self.v6Instance.id)
+        beamsClient.start()
 
-    private func setUser(_ userId: String) {
         let chatkitBeamsTokenProvider = ChatkitBeamsTokenProvider(instance: self.chatkitBeamsTokenProviderInstance)
-        pushNotifications.setUserId(userId, tokenProvider: chatkitBeamsTokenProvider) { error in
+        beamsClient.setUserId(self.id, tokenProvider: chatkitBeamsTokenProvider) { error in
              guard error == nil else {
                 return self.v6Instance.logger.log("Error occured while setting the user: \(error!)", logLevel: .error)
             }
 
             self.v6Instance.logger.log("Push Notifications service enabled 🎉", logLevel: .debug)
         }
+
+        ChatManager.registerForRemoteNotifications()
     }
 }
 #endif

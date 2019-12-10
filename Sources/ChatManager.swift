@@ -401,8 +401,6 @@ func pathFriendlyVersion(of component: String) -> String {
 
 #if os(iOS) || os(macOS)
 // MARK: Beams
-private let pushNotifications: PushNotifications = PushNotifications.shared
-
 extension ChatManager {
     /**
      Register device token with PushNotifications service.
@@ -410,7 +408,7 @@ extension ChatManager {
      - Parameter deviceToken: A token that identifies the device to APNs.
      */
     public static func registerDeviceToken(_ deviceToken: Data) {
-        pushNotifications.registerDeviceToken(deviceToken)
+        PushNotifications.shared.registerDeviceToken(deviceToken)
     }
     /**
      Register to receive remote notifications via Apple Push Notification service.
@@ -420,7 +418,7 @@ extension ChatManager {
      - SeeAlso:  `registerForRemoteNotifications(options:)`
      */
     public static func registerForRemoteNotifications() {
-        pushNotifications.registerForRemoteNotifications()
+        PushNotifications.shared.registerForRemoteNotifications()
     }
     #if os(iOS)
     /**
@@ -429,7 +427,7 @@ extension ChatManager {
      - Parameter options: The authorization options your app is requesting. You may combine the available constants to request authorization for multiple items. Request only the authorization options that you plan to use. For a list of possible values, see [UNAuthorizationOptions](https://developer.apple.com/documentation/usernotifications/unauthorizationoptions).
      */
     public static func registerForRemoteNotifications(options: UNAuthorizationOptions) {
-        pushNotifications.registerForRemoteNotifications(options: options)
+        PushNotifications.shared.registerForRemoteNotifications(options: options)
     }
     #elseif os(macOS)
     /**
@@ -438,14 +436,14 @@ extension ChatManager {
      - Parameter options: A bit mask specifying the types of notifications the app accepts. See [NSApplication.RemoteNotificationType](https://developer.apple.com/documentation/appkit/nsapplication.remotenotificationtype) for valid bit-mask values.
      */
     public static func registerForRemoteNotifications(options: NSApplication.RemoteNotificationType) {
-        pushNotifications.registerForRemoteNotifications(options: options)
+        PushNotifications.shared.registerForRemoteNotifications(options: options)
     }
     #endif
     /**
      Disable push notifications service.
      */
     public static func disablePushNotifications() {
-        pushNotifications.clearAllState {
+        PushNotifications.shared.clearAllState {
             let logger = PCDefaultLogger()
             logger.log("Push Notifications Disabled 🚫", logLevel: .debug)
         }
