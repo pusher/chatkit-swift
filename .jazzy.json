@@ -15,7 +15,8 @@
       "children": [
         "Chatkit",
         "ChatkitDelegate",
-        "ChatkitTokenProviders"
+        "DefaultTokenProvider",
+        "TestTokenProvider"
       ]
     },
     {
@@ -62,14 +63,6 @@
         "UsersProvider",
         "UsersProviderDelegate",
         "PagedProviderState"
-      ]
-    },
-    {
-      "name": "Advanced Authentication",
-      "children": [
-        "HTTPCallTokenProvider",
-        "RetryingTokenProvider",
-        "CachingTokenProvider"
       ]
     }
   ]
