@@ -2,9 +2,9 @@ import Foundation
 import CoreData
 
 extension DataSimulator {
-
+    
     // MARK: - Internal methods
-
+    
     func pagedState(for roomID: NSManagedObjectID) -> PagedProviderState {
         guard let messageHistory = self.serversideMessages[roomID] else {
             return .fullyPopulated
@@ -67,18 +67,18 @@ extension DataSimulator {
             self.date = Date(timeIntervalSinceNow: -(days * 24 * 60 * 60 + seconds))
         }
     }
-
+    
     struct DummyRoom {
         let planName: String
         let otherUser: DummyUser
         let messages: [DummyMessage]
     }
-
+    
     struct DummyUser {
         let identifier: String
         let name: String
     }
-
+    
     enum DummyMessage {
         case serverside(days: Double = 0.0, seconds: Double, sentByCurrentUser: Bool, content: String)
         case initial(days: Double = 0.0, seconds: Double, sentByCurrentUser: Bool, content: String)
