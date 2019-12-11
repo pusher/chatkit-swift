@@ -110,6 +110,7 @@
 		22FD93C02361DD8A00AB841F /* TypingUsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD93BF2361DD8A00AB841F /* TypingUsersViewModel.swift */; };
 		22FFA6AD2355F5A500156A7F /* MessageEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FFA6AB2355F5A500156A7F /* MessageEntity+CoreDataClass.swift */; };
 		22FFA6AE2355F5A500156A7F /* MessageEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FFA6AC2355F5A500156A7F /* MessageEntity+CoreDataProperties.swift */; };
+		ED2919D9239A73320095B344 /* TokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2919D8239A73320095B344 /* TokenProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -237,6 +238,7 @@
 		22FD93BF2361DD8A00AB841F /* TypingUsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingUsersViewModel.swift; sourceTree = "<group>"; };
 		22FFA6AB2355F5A500156A7F /* MessageEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MessageEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		22FFA6AC2355F5A500156A7F /* MessageEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MessageEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		ED2919D8239A73320095B344 /* TokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -527,6 +529,7 @@
 		229093D722F1DDB4003DDE2C /* Chatkit */ = {
 			isa = PBXGroup;
 			children = (
+				ED2919D7239A73150095B344 /* Auth */,
 				224B805722F2DAD3003CB8DC /* Chatkit */,
 				22D537C82302BCD600A92341 /* Data Providers */,
 				229AEEEE23351DA300A5E159 /* Data Simulation */,
@@ -851,6 +854,14 @@
 			path = "View Models";
 			sourceTree = "<group>";
 		};
+		ED2919D7239A73150095B344 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				ED2919D8239A73320095B344 /* TokenProvider.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1137,6 +1148,7 @@
 				22D537D72302D2CE00A92341 /* User.swift in Sources */,
 				22C5F3F32306B9F3009A7383 /* InlinePartEntity+Snapshotable.swift in Sources */,
 				22D537E22302F27200A92341 /* UserEntity+Snapshotable.swift in Sources */,
+				ED2919D9239A73320095B344 /* TokenProvider.swift in Sources */,
 				222576B223055E1900FAFAEC /* UserEntity+CoreDataClass.swift in Sources */,
 				2225769E2305488E00FAFAEC /* InlinePartEntity+CoreDataProperties.swift in Sources */,
 				22F1875A2356150E009DDD9C /* RoomEntity+CoreDataClass.swift in Sources */,

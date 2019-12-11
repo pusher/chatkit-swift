@@ -14,7 +14,9 @@
       "name": "Entry point",
       "children": [
         "Chatkit",
-        "ChatkitDelegate"
+        "ChatkitDelegate",
+        "DefaultTokenProvider",
+        "TestTokenProvider"
       ]
     },
     {
