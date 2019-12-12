@@ -1,4 +1,5 @@
 import XCTest
+import CoreData
 import PusherPlatform
 @testable import PusherChatkit
 
