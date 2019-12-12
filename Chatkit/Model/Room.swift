@@ -1,6 +1,7 @@
 import Foundation
 import CoreData
 
+
 /// A structure representing a room retrieved from the Chatkit web service.
 public struct Room {
     
@@ -85,7 +86,7 @@ extension Room: Equatable {
     ///     - lhs: A value to compare.
     ///     - rhs: Another value to compare.
     public static func == (lhs: Room, rhs: Room) -> Bool {
-        // User data is intentionally excluded from this comparison.
+        // customData is intentionally excluded from this comparison.
         return lhs.identifier == rhs.identifier
             && lhs.name == rhs.name
             && lhs.isPrivate == rhs.isPrivate
