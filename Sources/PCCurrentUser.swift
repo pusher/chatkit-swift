@@ -1290,7 +1290,7 @@ extension PCCurrentUser {
      Start PushNotifications service.
      */
     public func enablePushNotifications() {
-        let beamsClient = PushNotifications.init(instanceId: self.v6Instance.id)
+        let beamsClient = PushNotifications(instanceId: self.v6Instance.id)
         beamsClient.start()
 
         let chatkitBeamsTokenProvider = ChatkitBeamsTokenProvider(instance: self.chatkitBeamsTokenProviderInstance)
