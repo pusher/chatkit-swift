@@ -124,8 +124,6 @@ class RoomTests: XCTestCase {
         let room = Room(identifier: "testIdentifier",
                         name: "testName",
                         isPrivate: true,
-                        members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                        typingMembers: [self.secondTestUser],
                         unreadCount: 5,
                         lastMessage: self.firstTestMessage,
                         customData: self.firstTestCustomData,
@@ -145,32 +143,12 @@ class RoomTests: XCTestCase {
         XCTAssertEqual(room.updatedAt, self.now)
         XCTAssertEqual(room.deletedAt, Date.distantFuture)
         XCTAssertEqual(room.objectID, self.firstTestManagedObjectID)
-        
-        guard let members = room.members else {
-            XCTFail("Value of members property should not be nil.")
-            return
-        }
-        
-        XCTAssertEqual(members.count, 3)
-        XCTAssertTrue(members.contains(self.firstTestUser))
-        XCTAssertTrue(members.contains(self.secondTestUser))
-        XCTAssertTrue(members.contains(self.thirdTestUser))
-        
-        guard let typingMembers = room.typingMembers else {
-            XCTFail("Value of typingMembers property should not be nil.")
-            return
-        }
-        
-        XCTAssertEqual(typingMembers.count, 1)
-        XCTAssertTrue(typingMembers.contains(self.secondTestUser))
     }
     
     func testRoomShouldHaveTheSameHashForTheSameIdentifiers() {
         let firstRoom = Room(identifier: "testIdentifier",
                              name: "testName",
                              isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
                              customData: self.firstTestCustomData,
@@ -182,8 +160,6 @@ class RoomTests: XCTestCase {
         let secondRoom = Room(identifier: "testIdentifier",
                               name: "anotherName",
                               isPrivate: false,
-                              members: [self.secondTestUser, self.thirdTestUser],
-                              typingMembers: [self.secondTestUser, self.thirdTestUser],
                               unreadCount: 25,
                               lastMessage: self.secondTestMessage,
                               customData: self.secondTestCustomData,
@@ -199,8 +175,6 @@ class RoomTests: XCTestCase {
         let firstRoom = Room(identifier: "testIdentifier",
                              name: "testName",
                              isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
                              customData: self.firstTestCustomData,
@@ -212,8 +186,6 @@ class RoomTests: XCTestCase {
         let secondRoom = Room(identifier: "anotherIdentifier",
                               name: "testName",
                               isPrivate: true,
-                              members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                              typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
                               customData: self.firstTestCustomData,
@@ -229,8 +201,6 @@ class RoomTests: XCTestCase {
         let firstRoom = Room(identifier: "testIdentifier",
                              name: "testName",
                              isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
                              customData: self.firstTestCustomData,
@@ -242,8 +212,6 @@ class RoomTests: XCTestCase {
         let secondRoom = Room(identifier: "testIdentifier",
                               name: "testName",
                               isPrivate: true,
-                              members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                              typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
                               customData: self.firstTestCustomData,
@@ -259,8 +227,6 @@ class RoomTests: XCTestCase {
         let firstRoom = Room(identifier: "testIdentifier",
                              name: "testName",
                              isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
                              customData: self.firstTestCustomData,
@@ -272,8 +238,6 @@ class RoomTests: XCTestCase {
         let secondRoom = Room(identifier: "anotherIdentifier",
                               name: "testName",
                               isPrivate: true,
-                              members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                              typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
                               customData: self.firstTestCustomData,
@@ -289,8 +253,6 @@ class RoomTests: XCTestCase {
         let firstRoom = Room(identifier: "testIdentifier",
                              name: "testName",
                              isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
                              customData: self.firstTestCustomData,
@@ -302,8 +264,6 @@ class RoomTests: XCTestCase {
         let secondRoom = Room(identifier: "testIdentifier",
                               name: "anotherName",
                               isPrivate: true,
-                              members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                              typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
                               customData: self.firstTestCustomData,
@@ -319,8 +279,6 @@ class RoomTests: XCTestCase {
         let firstRoom = Room(identifier: "testIdentifier",
                              name: "testName",
                              isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
                              customData: self.firstTestCustomData,
@@ -332,68 +290,6 @@ class RoomTests: XCTestCase {
         let secondRoom = Room(identifier: "testIdentifier",
                               name: "testName",
                               isPrivate: false,
-                              members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                              typingMembers: [self.secondTestUser],
-                              unreadCount: 5,
-                              lastMessage: self.firstTestMessage,
-                              customData: self.firstTestCustomData,
-                              createdAt: Date.distantPast,
-                              updatedAt: self.now,
-                              deletedAt: Date.distantFuture,
-                              objectID: self.firstTestManagedObjectID)
-        
-        XCTAssertNotEqual(firstRoom, secondRoom)
-    }
-    
-    func testShouldNotCompareTwoRoomsAsEqualWhenMembersValuesAreDifferent() {
-        let firstRoom = Room(identifier: "testIdentifier",
-                             name: "testName",
-                             isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
-                             unreadCount: 5,
-                             lastMessage: self.firstTestMessage,
-                             customData: self.firstTestCustomData,
-                             createdAt: Date.distantPast,
-                             updatedAt: self.now,
-                             deletedAt: Date.distantFuture,
-                             objectID: self.firstTestManagedObjectID)
-        
-        let secondRoom = Room(identifier: "testIdentifier",
-                              name: "testName",
-                              isPrivate: true,
-                              members: [self.firstTestUser, self.secondTestUser],
-                              typingMembers: [self.secondTestUser],
-                              unreadCount: 5,
-                              lastMessage: self.firstTestMessage,
-                              customData: self.firstTestCustomData,
-                              createdAt: Date.distantPast,
-                              updatedAt: self.now,
-                              deletedAt: Date.distantFuture,
-                              objectID: self.firstTestManagedObjectID)
-        
-        XCTAssertNotEqual(firstRoom, secondRoom)
-    }
-    
-    func testShouldNotCompareTwoRoomsAsEqualWhenTypingMembersValuesAreDifferent() {
-        let firstRoom = Room(identifier: "testIdentifier",
-                             name: "testName",
-                             isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
-                             unreadCount: 5,
-                             lastMessage: self.firstTestMessage,
-                             customData: self.firstTestCustomData,
-                             createdAt: Date.distantPast,
-                             updatedAt: self.now,
-                             deletedAt: Date.distantFuture,
-                             objectID: self.firstTestManagedObjectID)
-        
-        let secondRoom = Room(identifier: "testIdentifier",
-                              name: "testName",
-                              isPrivate: true,
-                              members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                              typingMembers: [self.secondTestUser, self.thirdTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
                               customData: self.firstTestCustomData,
@@ -409,8 +305,6 @@ class RoomTests: XCTestCase {
         let firstRoom = Room(identifier: "testIdentifier",
                              name: "testName",
                              isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
                              customData: self.firstTestCustomData,
@@ -422,8 +316,6 @@ class RoomTests: XCTestCase {
         let secondRoom = Room(identifier: "testIdentifier",
                               name: "testName",
                               isPrivate: true,
-                              members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                              typingMembers: [self.secondTestUser],
                               unreadCount: 25,
                               lastMessage: self.firstTestMessage,
                               customData: self.firstTestCustomData,
@@ -439,8 +331,6 @@ class RoomTests: XCTestCase {
         let firstRoom = Room(identifier: "testIdentifier",
                              name: "testName",
                              isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
                              customData: self.firstTestCustomData,
@@ -452,8 +342,6 @@ class RoomTests: XCTestCase {
         let secondRoom = Room(identifier: "testIdentifier",
                               name: "testName",
                               isPrivate: true,
-                              members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                              typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.secondTestMessage,
                               customData: self.firstTestCustomData,
@@ -469,8 +357,6 @@ class RoomTests: XCTestCase {
         let firstRoom = Room(identifier: "testIdentifier",
                              name: "testName",
                              isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
                              customData: self.firstTestCustomData,
@@ -482,8 +368,6 @@ class RoomTests: XCTestCase {
         let secondRoom = Room(identifier: "testIdentifier",
                               name: "testName",
                               isPrivate: true,
-                              members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                              typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
                               customData: self.secondTestCustomData,
@@ -499,8 +383,6 @@ class RoomTests: XCTestCase {
         let firstRoom = Room(identifier: "testIdentifier",
                              name: "testName",
                              isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
                              customData: self.firstTestCustomData,
@@ -512,8 +394,6 @@ class RoomTests: XCTestCase {
         let secondRoom = Room(identifier: "testIdentifier",
                               name: "testName",
                               isPrivate: true,
-                              members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                              typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
                               customData: self.firstTestCustomData,
@@ -529,8 +409,6 @@ class RoomTests: XCTestCase {
         let firstRoom = Room(identifier: "testIdentifier",
                              name: "testName",
                              isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
                              customData: self.firstTestCustomData,
@@ -542,8 +420,6 @@ class RoomTests: XCTestCase {
         let secondRoom = Room(identifier: "testIdentifier",
                               name: "testName",
                               isPrivate: true,
-                              members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                              typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
                               customData: self.firstTestCustomData,
@@ -559,8 +435,6 @@ class RoomTests: XCTestCase {
         let firstRoom = Room(identifier: "testIdentifier",
                              name: "testName",
                              isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
                              customData: self.firstTestCustomData,
@@ -572,8 +446,6 @@ class RoomTests: XCTestCase {
         let secondRoom = Room(identifier: "testIdentifier",
                               name: "testName",
                               isPrivate: true,
-                              members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                              typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
                               customData: self.firstTestCustomData,
@@ -589,8 +461,6 @@ class RoomTests: XCTestCase {
         let firstRoom = Room(identifier: "testIdentifier",
                              name: "testName",
                              isPrivate: true,
-                             members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                             typingMembers: [self.secondTestUser],
                              unreadCount: 5,
                              lastMessage: self.firstTestMessage,
                              customData: self.firstTestCustomData,
@@ -602,8 +472,6 @@ class RoomTests: XCTestCase {
         let secondRoom = Room(identifier: "testIdentifier",
                               name: "testName",
                               isPrivate: true,
-                              members: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                              typingMembers: [self.secondTestUser],
                               unreadCount: 5,
                               lastMessage: self.firstTestMessage,
                               customData: self.firstTestCustomData,

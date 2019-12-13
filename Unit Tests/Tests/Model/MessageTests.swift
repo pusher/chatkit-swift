@@ -1,4 +1,5 @@
 import XCTest
+import CoreData
 import PusherPlatform
 @testable import PusherChatkit
 
@@ -109,24 +110,14 @@ class MessageTests: XCTestCase {
         XCTAssertEqual(message.objectID, self.firstTestManagedObjectID)
         XCTAssertEqual(message.parts.count, 1)
         XCTAssertTrue(message.parts.contains(self.testTextPart))
+                
+        XCTAssertEqual(message.readByUsers.count, 3)
+        XCTAssertTrue(message.readByUsers.contains(self.firstTestUser))
+        XCTAssertTrue(message.readByUsers.contains(self.secondTestUser))
+        XCTAssertTrue(message.readByUsers.contains(self.thirdTestUser))
         
-        guard let readByUsers = message.readByUsers else {
-            XCTFail("Value of readByUsers property should not be nil.")
-            return
-        }
-        
-        XCTAssertEqual(readByUsers.count, 3)
-        XCTAssertTrue(readByUsers.contains(self.firstTestUser))
-        XCTAssertTrue(readByUsers.contains(self.secondTestUser))
-        XCTAssertTrue(readByUsers.contains(self.thirdTestUser))
-        
-        guard let lastReadByUsers = message.lastReadByUsers else {
-            XCTFail("Value of lastReadByUsers property should not be nil.")
-            return
-        }
-        
-        XCTAssertEqual(lastReadByUsers.count, 1)
-        XCTAssertTrue(lastReadByUsers.contains(self.secondTestUser))
+        XCTAssertEqual(message.lastReadByUsers.count, 1)
+        XCTAssertTrue(message.lastReadByUsers.contains(self.secondTestUser))
     }
     
     func testMessageShouldHaveTheSameHashForTheSameIdentifiers() {
