@@ -436,7 +436,7 @@ extension ChatManager {
      - Parameter options: A bit mask specifying the types of notifications the app accepts. See [NSApplication.RemoteNotificationType](https://developer.apple.com/documentation/appkit/nsapplication.remotenotificationtype) for valid bit-mask values.
      */
     public static func registerForRemoteNotifications(options: NSApplication.RemoteNotificationType) {
-        PPushNotificationsStatic.registerForRemoteNotifications(options: options)
+        PushNotificationsStatic.registerForRemoteNotifications(options: options)
     }
     #endif
     /**
