@@ -5,26 +5,33 @@ class DateFormatterExtensionsTests: XCTestCase {
     
     // MARK: - Tests
     
-    func testShouldHaveDefaultDateFormatter() {
-        XCTAssertNotNil(DateFormatter.default)
-    }
-    
-    func testShouldHaveCorrectDateFormat() {
-        let dateFormatter = DateFormatter.default
+    func test_date_formatMissingMilliseconds_noProblem() {
+        let dateAsString = "2017-11-29T16:59:55Z"
         
-        XCTAssertEqual(dateFormatter.dateFormat, "yyyy-MM-dd'T'HH:mm:ssZ")
-    }
-    
-    func testShouldHaveCorrectLocale() {
-        let dateFormatter = DateFormatter.default
+        let date = DateFormatter.date(fromISO8601String: dateAsString)
         
-        XCTAssertEqual(dateFormatter.locale, Locale(identifier: "en_US_POSIX"))
+        XCTAssertNotNil(date) { date in
+            print(date)
+        }
     }
     
-    func testShouldHaveCorrectTimeZone() {
-        let dateFormatter = DateFormatter.default
+    func test_date_formatImpreciseMilliseconds_noProblem() {
+        let dateAsString = "2017-03-23T11:36:42.399Z"
         
-        XCTAssertEqual(dateFormatter.timeZone, TimeZone(abbreviation: "UTC"))
+        let date = DateFormatter.date(fromISO8601String: dateAsString)
+        
+        XCTAssertNotNil(date) { date in
+            print(date)
+        }
     }
     
+    func test_date_formatPreciseMilliseconds_noProblem() {
+        let dateAsString = "2017-03-23T11:36:42.123456789012345678901234567890Z"
+        
+        let date = DateFormatter.date(fromISO8601String: dateAsString)
+        
+        XCTAssertNotNil(date) { date in
+            print(date)
+        }
+    }
 }

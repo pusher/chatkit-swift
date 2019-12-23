@@ -61,9 +61,9 @@ struct ChatEventParser: EventParser {
             let isPrivate = payload[Event.Key.private] as? Bool,
             let unreadCount = payload[Event.Key.unreadCount] as? UInt32,
             let createdAtString = payload[Event.Key.createdAt] as? String,
-            let createdAt = DateFormatter.default.date(from: createdAtString),
+            let createdAt = Date(fromISO8601String: createdAtString),
             let updatedAtString = payload[Event.Key.updatedAt] as? String,
-            let updatedAt = DateFormatter.default.date(from: updatedAtString) else {
+            let updatedAt = Date(fromISO8601String: updatedAtString) else {
                 return nil
         }
         
@@ -83,7 +83,7 @@ struct ChatEventParser: EventParser {
         }
         
         if let deletedAtString = payload[Event.Key.deletedAt] as? String {
-            room.deletedAt = DateFormatter.default.date(from: deletedAtString)
+            room.deletedAt = Date(fromISO8601String: deletedAtString)
         }
         else {
             room.deletedAt = nil
