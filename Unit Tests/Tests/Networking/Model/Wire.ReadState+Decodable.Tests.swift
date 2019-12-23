@@ -36,7 +36,7 @@ class WireReadStateDecodableTests: XCTestCase {
         }
     }
     
-    func test_init_roomIdentiferMissing_throws() {
+    func test_init_roomIdentifierMissing_throws() {
         
         let jsonData = """
         {
@@ -50,7 +50,7 @@ class WireReadStateDecodableTests: XCTestCase {
                                           "\"room_id\""])
     }
     
-    func test_init_roomIdentiferNull_throws() {
+    func test_init_roomIdentifierNull_throws() {
         
         let jsonData = """
         {
@@ -66,7 +66,7 @@ class WireReadStateDecodableTests: XCTestCase {
                                           "Expected String value but found null instead."])
     }
     
-    func test_init_roomIdentiferInvalidType_throws() {
+    func test_init_roomIdentifierInvalidType_throws() {
         
         let jsonData = """
         {

@@ -18,7 +18,7 @@ class WireMemebershipDecodableTests: XCTestCase {
         }
     }
     
-    func test_init_roomIdentiferMissing_throws() {
+    func test_init_roomIdentifierMissing_throws() {
         
         let jsonData = """
         {
@@ -31,7 +31,7 @@ class WireMemebershipDecodableTests: XCTestCase {
                                           "\"room_id\""])
     }
     
-    func test_init_roomIdentiferNull_throws() {
+    func test_init_roomIdentifierNull_throws() {
         
         let jsonData = """
         {
@@ -46,7 +46,7 @@ class WireMemebershipDecodableTests: XCTestCase {
                                           "Expected String value but found null instead."])
     }
     
-    func test_init_roomIdentiferInvalidType_throws() {
+    func test_init_roomIdentifierInvalidType_throws() {
         
         let jsonData = """
         {
@@ -61,7 +61,7 @@ class WireMemebershipDecodableTests: XCTestCase {
                                           "Expected to decode String but found a number instead."])
     }
     
-    func test_init_userIdentifersMissing_throws() {
+    func test_init_userIdentifiersMissing_throws() {
         
         let jsonData = """
         {
@@ -74,7 +74,7 @@ class WireMemebershipDecodableTests: XCTestCase {
                                           "\"user_ids\""])
     }
     
-    func test_init_userIdentifersNull_throws() {
+    func test_init_userIdentifiersNull_throws() {
         
         let jsonData = """
         {
@@ -89,7 +89,7 @@ class WireMemebershipDecodableTests: XCTestCase {
                                           "Cannot get unkeyed decoding container -- found null value instead."])
     }
     
-    func test_init_userIdentifersInvalidType_throws() {
+    func test_init_userIdentifiersInvalidType_throws() {
         
         let jsonData = """
         {

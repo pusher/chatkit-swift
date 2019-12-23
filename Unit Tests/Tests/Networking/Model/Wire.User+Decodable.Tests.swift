@@ -30,7 +30,7 @@ class WireUserDecodableTests: XCTestCase {
         }
     }
     
-    func test_init_identiferMissing_throws() {
+    func test_init_identifierMissing_throws() {
         
         let jsonData = """
         {
@@ -50,7 +50,7 @@ class WireUserDecodableTests: XCTestCase {
                                           "\"id\""])
     }
     
-    func test_init_identiferNull_throws() {
+    func test_init_identifierNull_throws() {
         
         let jsonData = """
         {
@@ -72,7 +72,7 @@ class WireUserDecodableTests: XCTestCase {
                                           "Expected String value but found null instead."])
     }
     
-    func test_init_identiferInvalidType_throws() {
+    func test_init_identifierInvalidType_throws() {
         
         let jsonData = """
         {
