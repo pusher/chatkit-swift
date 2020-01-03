@@ -158,6 +158,7 @@
 /* Begin PBXFileReference section */
 		2200BB92231E727000BF9545 /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
 		2200BB96231EA5C200BF9545 /* TestLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestLogger.swift; sourceTree = "<group>"; };
+		220904D023BF8BB900FC57B8 /* Carthage.xcfilelist */ = {isa = PBXFileReference; lastKnownFileType = text.xcfilelist; path = Carthage.xcfilelist; sourceTree = "<group>"; };
 		2212EC54235725B8002212A4 /* MessagesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesProvider.swift; sourceTree = "<group>"; };
 		2212EC5623572A3F002212A4 /* RoomMembersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMembersProvider.swift; sourceTree = "<group>"; };
 		22174D12237C185800669740 /* DataSimulator+MessageHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataSimulator+MessageHistory.swift"; sourceTree = "<group>"; };
@@ -186,6 +187,7 @@
 		224B805822F2DADC003CB8DC /* Chatkit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chatkit.swift; sourceTree = "<group>"; };
 		224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatkitTests.swift; sourceTree = "<group>"; };
 		224E33BF230B07C2005168E3 /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
+		225D11F523BF8BD700B73B1C /* Carthage.xcfilelist */ = {isa = PBXFileReference; lastKnownFileType = text.xcfilelist; path = Carthage.xcfilelist; sourceTree = "<group>"; };
 		227177FD236894AA00B89376 /* MessagesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewModel.swift; sourceTree = "<group>"; };
 		227498462321028700D10C76 /* DateFormatterExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterExtensionsTests.swift; sourceTree = "<group>"; };
 		227498482321040100D10C76 /* BundleExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExtensionsTests.swift; sourceTree = "<group>"; };
@@ -326,6 +328,22 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		220904CE23BF8B7D00FC57B8 /* File Lists */ = {
+			isa = PBXGroup;
+			children = (
+				220904D023BF8BB900FC57B8 /* Carthage.xcfilelist */,
+			);
+			path = "File Lists";
+			sourceTree = "<group>";
+		};
+		220904CF23BF8B8500FC57B8 /* File Lists */ = {
+			isa = PBXGroup;
+			children = (
+				225D11F523BF8BD700B73B1C /* Carthage.xcfilelist */,
+			);
+			path = "File Lists";
+			sourceTree = "<group>";
+		};
 		2244FC2D22F2FBC600FE8D50 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -372,6 +390,7 @@
 		224B805322F1E15C003CB8DC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				220904CE23BF8B7D00FC57B8 /* File Lists */,
 				227E946B231FBD420025B691 /* Stubs */,
 				224B803C22F1E009003CB8DC /* Info.plist */,
 			);
@@ -381,6 +400,7 @@
 		224B805422F1E163003CB8DC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				220904CF23BF8B8500FC57B8 /* File Lists */,
 				224B804B22F1E028003CB8DC /* Info.plist */,
 			);
 			path = "Supporting Files";
@@ -1107,10 +1127,9 @@
 			files = (
 			);
 			inputFileListPaths = (
+				"$(SRCROOT)/Unit Tests/Supporting Files/File Lists/Carthage.xcfilelist",
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/PusherPlatform.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Mockingjay.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputFileListPaths = (
@@ -1127,9 +1146,9 @@
 			files = (
 			);
 			inputFileListPaths = (
+				"$(SRCROOT)/Integration Tests/Supporting Files/File Lists/Carthage.xcfilelist",
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/PusherPlatform.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputFileListPaths = (
@@ -1341,6 +1360,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CARTHAGE_PLATFORM = iOS;
+				"CARTHAGE_PLATFORM[sdk=macosx*]" = Mac;
+				"CARTHAGE_PLATFORM[sdk=appletvos*]" = tvOS;
+				"CARTHAGE_PLATFORM[sdk=appletvsimulator*]" = tvOS;
+				"CARTHAGE_PLATFORM[sdk=watchos*]" = watchOS;
+				"CARTHAGE_PLATFORM[sdk=watchsimulator*]" = watchOS;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1448,6 +1473,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CARTHAGE_PLATFORM = iOS;
+				"CARTHAGE_PLATFORM[sdk=macosx*]" = Mac;
+				"CARTHAGE_PLATFORM[sdk=appletvos*]" = tvOS;
+				"CARTHAGE_PLATFORM[sdk=appletvsimulator*]" = tvOS;
+				"CARTHAGE_PLATFORM[sdk=watchos*]" = watchOS;
+				"CARTHAGE_PLATFORM[sdk=watchsimulator*]" = watchOS;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
