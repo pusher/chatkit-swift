@@ -1,2 +1,2 @@
 github "pusher/pusher-platform-swift" ~> 0.7.3
-github "pusher/push-notifications-swift" ~> 2.1.2
+github "pusher/push-notifications-swift" ~> 3.0.1
