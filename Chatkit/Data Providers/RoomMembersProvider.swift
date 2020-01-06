@@ -1,6 +1,4 @@
 import Foundation
-import CoreData
-import PusherPlatform
 
 /// A provider which exposes the set of `User`s which are members of a given `Room`.
 ///
@@ -37,69 +35,16 @@ public class RoomMembersProvider {
     /// The object that is notified when the content of the maintained collection of room members changed.
     public weak var delegate: RoomMembersProviderDelegate?
     
-    private let roomManagedObjectID: NSManagedObjectID
-    private let changeController: ChangeController<UserEntity>
-    
     /// The set of all room members for the given room.
     public var members: Set<User> {
-        let members = self.changeController.objects.compactMap { try? $0.snapshot() }
-        return Set(members)
+        return []
     }
     
     // MARK: - Initializers
     
-    init(room: Room, persistenceController: PersistenceController) {
+    init(room: Room) {
         self.roomIdentifier = room.identifier
         self.state = .connected
-        
-        self.roomManagedObjectID = room.objectID
-        
-        let context = persistenceController.mainContext
-        let predicate = NSPredicate(format: "ANY %K == %@", #keyPath(UserEntity.room), self.roomManagedObjectID)
-        let sortDescriptor = NSSortDescriptor(key: #keyPath(UserEntity.identifier), ascending: true) { (lhs, rhs) -> ComparisonResult in
-            guard let lhsString = lhs as? String, let lhs = Int(lhsString), let rhsString = rhs as? String, let rhs = Int(rhsString) else {
-                return .orderedSame
-            }
-            
-            return NSNumber(value: lhs).compare(NSNumber(value: rhs))
-        }
-        
-        self.changeController = ChangeController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
-        self.changeController.delegate = self
-    }
-    
-}
-
-// MARK: - ChangeControllerDelegate
-
-/// :nodoc:
-extension RoomMembersProvider: ChangeControllerDelegate {
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didInsertObjects objects: [ResultType], at indexes: IndexSet) where ResultType : NSManagedObject {
-        for object in objects {
-            guard let object = object as? UserEntity,
-                let user = try? object.snapshot() else {
-                    continue
-            }
-            
-            self.delegate?.roomMembersProvider(self, userDidJoin: user)
-        }
-    }
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
-        // This method intentionally does not provide any implementation.
-    }
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didMoveObject object: ResultType, from oldIndex: Int, to newIndex: Int) where ResultType : NSManagedObject {
-        // This method intentionally does not provide any implementation.
-    }
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
-        guard let object = object as? UserEntity, let user = try? object.snapshot() else {
-            return
-        }
-        
-        self.delegate?.roomMembersProvider(self, userDidLeave: user)
     }
     
 }

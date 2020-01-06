@@ -1,6 +1,4 @@
 import Foundation
-import CoreData
-import PusherPlatform
 
 /// A provider which exposes a collection of messages for a given room.
 ///
@@ -53,10 +51,6 @@ public class MessagesProvider {
     /// The object that is notified when the list `messages` has changed.
     public weak var delegate: MessagesProviderDelegate?
     
-    private let roomManagedObjectID: NSManagedObjectID
-    private let changeController: ChangeController<MessageEntity>
-    private let dataSimulator: DataSimulator
-    
     /// The array of available messages for the given room.
     ///
     /// The array contains all messages for the room which have been received by the client device.
@@ -67,32 +61,16 @@ public class MessagesProvider {
     ///
     /// If more older messages are required, call `fetchOlderMessages(...)` to have them added to this array.
     public var messages: [Message] {
-        return self.changeController.objects.compactMap { try? $0.snapshot() }
+        return []
     }
     
     // MARK: - Initializers
     
-    init(room: Room, persistenceController: PersistenceController, dataSimulator: DataSimulator) {
+    init(room: Room) {
         self.roomIdentifier = room.identifier
         
-        self.dataSimulator = dataSimulator
-        self.roomManagedObjectID = room.objectID
-        
         self.state.realTime = .connected
-        self.state.paged = dataSimulator.pagedState(for: room.objectID)
-        
-        let context = persistenceController.mainContext
-        let predicate = NSPredicate(format: "%K == %@", #keyPath(MessageEntity.room), self.roomManagedObjectID)
-        let sortDescriptor = NSSortDescriptor(key: #keyPath(MessageEntity.identifier), ascending: true) { (lhs, rhs) -> ComparisonResult in
-            guard let lhsString = lhs as? String, let lhs = Int(lhsString), let rhsString = rhs as? String, let rhs = Int(rhsString) else {
-                return .orderedSame
-            }
-            
-            return NSNumber(value: lhs).compare(NSNumber(value: rhs))
-        }
-        
-        self.changeController = ChangeController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
-        self.changeController.delegate = self
+        self.state.paged = .fullyPopulated
     }
     
     // MARK: - Methods
@@ -120,16 +98,9 @@ public class MessagesProvider {
             return
         }
         
-        self.state.paged = .fetching
-        
-        self.dataSimulator.fetchOlderMessages(for: self.roomManagedObjectID) {
-            self.state.paged = self.dataSimulator.pagedState(for: self.roomManagedObjectID)
-            
-            if let completionHandler = completionHandler {
-                DispatchQueue.main.sync {
-                    completionHandler(nil)
-                }
-            }
+        // TODO: Implement
+        if let completionHandler = completionHandler {
+            completionHandler(nil)
         }
     }
     
@@ -140,62 +111,7 @@ public class MessagesProvider {
     /// - Parameters:
     ///     - lastReadMessage: The last message read by the user.
     public func markMessagesAsRead(lastReadMessage: Message) {
-        self.dataSimulator.markMessagesAsRead(lastReadMessage: lastReadMessage)
-    }
-    
-}
-
-// MARK: - ChangeControllerDelegate
-
-/// :nodoc:
-extension MessagesProvider: ChangeControllerDelegate {
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didInsertObjects objects: [ResultType], at indexes: IndexSet) where ResultType : NSManagedObject {
-        if indexes.contains(0) && indexes.isContiguous {
-            guard let objects = objects as? [MessageEntity] else {
-                return
-            }
-            
-            let messages = objects.compactMap { try? $0.snapshot() }
-            
-            guard messages.count > 0 else {
-                return
-            }
-            
-            self.delegate?.messagesProvider(self, didReceiveOlderMessages: messages)
-        }
-        else {
-            for object in objects {
-                guard let object = object as? MessageEntity,
-                    let message = try? object.snapshot() else {
-                        continue
-                }
-                
-                self.delegate?.messagesProvider(self, didReceiveNewMessage: message)
-            }
-        }
-    }
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
-        guard let object = object as? MessageEntity, let message = try? object.snapshot() else {
-            return
-        }
-        
-        // TODO: Generate the old value based on the new value and the changeset.
-        
-        self.delegate?.messagesProvider(self, didUpdateMessage: message, previousValue: message)
-    }
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didMoveObject object: ResultType, from oldIndex: Int, to newIndex: Int) where ResultType : NSManagedObject {
-        // This method intentionally does not provide any implementation.
-    }
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
-        guard let object = object as? MessageEntity, let message = try? object.snapshot() else {
-            return
-        }
-        
-        self.delegate?.messagesProvider(self, didRemoveMessage: message)
+        // TODO: Implement
     }
     
 }

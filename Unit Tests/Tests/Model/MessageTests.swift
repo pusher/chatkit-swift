@@ -1,13 +1,9 @@
 import XCTest
-import CoreData
-import PusherPlatform
 @testable import PusherChatkit
 
 class MessageTests: XCTestCase {
     
     // MARK: - Properties
-    
-    var persistenceController: PersistenceController!
     
     var testTextPart: MessagePart!
     var testLinkPart: MessagePart!
@@ -18,70 +14,36 @@ class MessageTests: XCTestCase {
     
     var now: Date!
     
-    var firstTestManagedObjectID: NSManagedObjectID!
-    var secondTestManagedObjectID: NSManagedObjectID!
-    
     // MARK: - Tests lifecycle
     
     override func setUp() {
         super.setUp()
         
-        guard let url = Bundle.current.url(forResource: "Model", withExtension: "momd"), let model = NSManagedObjectModel(contentsOf: url) else {
-            assertionFailure("Unable to locate test model.")
-            return
-        }
-        
-        let storeDescription = NSPersistentStoreDescription(inMemoryPersistentStoreDescription: ())
-        storeDescription.shouldAddStoreAsynchronously = false
-        
-        guard let persistenceController = try? PersistenceController(model: model, storeDescriptions: [storeDescription]) else {
-            assertionFailure("Failed to instantiate persistence controller.")
-            return
-        }
-        
-        self.persistenceController = persistenceController
-        
         self.now = Date()
         
-        let mainContext = self.persistenceController.mainContext
+        self.firstTestUser = User(identifier: "firstUserIdentifier",
+                                  name: "firstUser",
+                                  avatar: nil,
+                                  presenceState: .unknown,
+                                  customData: nil,
+                                  createdAt: Date.distantPast,
+                                  updatedAt: self.now)
         
-        mainContext.performAndWait {
-            let firstMessageEntity = mainContext.create(MessageEntity.self)
-            self.firstTestManagedObjectID = firstMessageEntity.objectID
-            
-            let secondMessageEntity = mainContext.create(MessageEntity.self)
-            self.secondTestManagedObjectID = secondMessageEntity.objectID
-            
-            let userEntity = mainContext.create(UserEntity.self)
-            let userEntityObjectID = userEntity.objectID
-            
-            self.firstTestUser = User(identifier: "firstUserIdentifier",
-                                      name: "firstUser",
-                                      avatar: nil,
-                                      presenceState: .unknown,
-                                      customData: nil,
-                                      createdAt: Date.distantPast,
-                                      updatedAt: self.now,
-                                      objectID: userEntityObjectID)
-            
-            self.secondTestUser = User(identifier: "secondUserIdentifier",
-                                       name: "secondUser",
-                                       avatar: nil,
-                                       presenceState: .unknown,
-                                       customData: nil,
-                                       createdAt: Date.distantPast,
-                                       updatedAt: self.now,
-                                       objectID: userEntityObjectID)
-            
-            self.thirdTestUser = User(identifier: "thirdUserIdentifier",
-                                      name: "thirdUser",
-                                      avatar: nil,
-                                      presenceState: .unknown,
-                                      customData: nil,
-                                      createdAt: Date.distantPast,
-                                      updatedAt: self.now,
-                                      objectID: userEntityObjectID)
-        }
+        self.secondTestUser = User(identifier: "secondUserIdentifier",
+                                   name: "secondUser",
+                                   avatar: nil,
+                                   presenceState: .unknown,
+                                   customData: nil,
+                                   createdAt: Date.distantPast,
+                                   updatedAt: self.now)
+        
+        self.thirdTestUser = User(identifier: "thirdUserIdentifier",
+                                  name: "thirdUser",
+                                  avatar: nil,
+                                  presenceState: .unknown,
+                                  customData: nil,
+                                  createdAt: Date.distantPast,
+                                  updatedAt: self.now)
         
         let testURL = URL(fileURLWithPath: "/dev/null")
         
@@ -99,15 +61,13 @@ class MessageTests: XCTestCase {
                               lastReadByUsers: [self.secondTestUser],
                               createdAt: Date.distantPast,
                               updatedAt: self.now,
-                              deletedAt: Date.distantFuture,
-                              objectID: self.firstTestManagedObjectID)
+                              deletedAt: Date.distantFuture)
         
         XCTAssertEqual(message.identifier, "testIdentifier")
         XCTAssertEqual(message.sender, self.firstTestUser)
         XCTAssertEqual(message.createdAt, Date.distantPast)
         XCTAssertEqual(message.updatedAt, self.now)
         XCTAssertEqual(message.deletedAt, Date.distantFuture)
-        XCTAssertEqual(message.objectID, self.firstTestManagedObjectID)
         XCTAssertEqual(message.parts.count, 1)
         XCTAssertTrue(message.parts.contains(self.testTextPart))
                 
@@ -128,8 +88,7 @@ class MessageTests: XCTestCase {
                                    lastReadByUsers: [self.secondTestUser],
                                    createdAt: Date.distantPast,
                                    updatedAt: Date.distantPast,
-                                   deletedAt: Date.distantFuture,
-                                   objectID: self.firstTestManagedObjectID)
+                                   deletedAt: Date.distantFuture)
         
         let secondMessage = Message(identifier: "testIdentifier",
                                    sender: self.secondTestUser,
@@ -138,8 +97,7 @@ class MessageTests: XCTestCase {
                                    lastReadByUsers: [self.secondTestUser],
                                    createdAt: self.now,
                                    updatedAt: self.now,
-                                   deletedAt: self.now,
-                                   objectID: self.secondTestManagedObjectID)
+                                   deletedAt: self.now)
         
         XCTAssertEqual(firstMessage.hashValue, secondMessage.hashValue)
     }
@@ -152,8 +110,7 @@ class MessageTests: XCTestCase {
                                    lastReadByUsers: [self.secondTestUser],
                                    createdAt: Date.distantPast,
                                    updatedAt: self.now,
-                                   deletedAt: Date.distantFuture,
-                                   objectID: self.firstTestManagedObjectID)
+                                   deletedAt: Date.distantFuture)
         
         let secondMessage = Message(identifier: "anotherIdentifier",
                                     sender: self.firstTestUser,
@@ -162,8 +119,7 @@ class MessageTests: XCTestCase {
                                     lastReadByUsers: [self.secondTestUser],
                                     createdAt: Date.distantPast,
                                     updatedAt: self.now,
-                                    deletedAt: Date.distantFuture,
-                                    objectID: self.firstTestManagedObjectID)
+                                    deletedAt: Date.distantFuture)
         
         XCTAssertNotEqual(firstMessage.hashValue, secondMessage.hashValue)
     }
@@ -176,8 +132,7 @@ class MessageTests: XCTestCase {
                                    lastReadByUsers: [self.secondTestUser],
                                    createdAt: Date.distantPast,
                                    updatedAt: self.now,
-                                   deletedAt: Date.distantFuture,
-                                   objectID: self.firstTestManagedObjectID)
+                                   deletedAt: Date.distantFuture)
         
         let secondMessage = Message(identifier: "testIdentifier",
                                     sender: self.firstTestUser,
@@ -186,8 +141,7 @@ class MessageTests: XCTestCase {
                                     lastReadByUsers: [self.secondTestUser],
                                     createdAt: Date.distantPast,
                                     updatedAt: self.now,
-                                    deletedAt: Date.distantFuture,
-                                    objectID: self.firstTestManagedObjectID)
+                                    deletedAt: Date.distantFuture)
         
         XCTAssertEqual(firstMessage, secondMessage)
     }
@@ -200,8 +154,7 @@ class MessageTests: XCTestCase {
                                    lastReadByUsers: [self.secondTestUser],
                                    createdAt: Date.distantPast,
                                    updatedAt: self.now,
-                                   deletedAt: Date.distantFuture,
-                                   objectID: self.firstTestManagedObjectID)
+                                   deletedAt: Date.distantFuture)
         
         let secondMessage = Message(identifier: "anotherIdentifier",
                                     sender: self.firstTestUser,
@@ -210,8 +163,7 @@ class MessageTests: XCTestCase {
                                     lastReadByUsers: [self.secondTestUser],
                                     createdAt: Date.distantPast,
                                     updatedAt: self.now,
-                                    deletedAt: Date.distantFuture,
-                                    objectID: self.firstTestManagedObjectID)
+                                    deletedAt: Date.distantFuture)
         
         XCTAssertNotEqual(firstMessage, secondMessage)
     }
@@ -224,8 +176,7 @@ class MessageTests: XCTestCase {
                                    lastReadByUsers: [self.secondTestUser],
                                    createdAt: Date.distantPast,
                                    updatedAt: self.now,
-                                   deletedAt: Date.distantFuture,
-                                   objectID: self.firstTestManagedObjectID)
+                                   deletedAt: Date.distantFuture)
         
         let secondMessage = Message(identifier: "testIdentifier",
                                     sender: self.secondTestUser,
@@ -234,8 +185,7 @@ class MessageTests: XCTestCase {
                                     lastReadByUsers: [self.secondTestUser],
                                     createdAt: Date.distantPast,
                                     updatedAt: self.now,
-                                    deletedAt: Date.distantFuture,
-                                    objectID: self.firstTestManagedObjectID)
+                                    deletedAt: Date.distantFuture)
         
         XCTAssertNotEqual(firstMessage, secondMessage)
     }
@@ -248,8 +198,7 @@ class MessageTests: XCTestCase {
                                    lastReadByUsers: [self.secondTestUser],
                                    createdAt: Date.distantPast,
                                    updatedAt: self.now,
-                                   deletedAt: Date.distantFuture,
-                                   objectID: self.firstTestManagedObjectID)
+                                   deletedAt: Date.distantFuture)
         
         let secondMessage = Message(identifier: "testIdentifier",
                                     sender: self.firstTestUser,
@@ -258,8 +207,7 @@ class MessageTests: XCTestCase {
                                     lastReadByUsers: [self.secondTestUser],
                                     createdAt: Date.distantPast,
                                     updatedAt: self.now,
-                                    deletedAt: Date.distantFuture,
-                                    objectID: self.firstTestManagedObjectID)
+                                    deletedAt: Date.distantFuture)
         
         XCTAssertNotEqual(firstMessage, secondMessage)
     }
@@ -272,8 +220,7 @@ class MessageTests: XCTestCase {
                                    lastReadByUsers: [self.secondTestUser],
                                    createdAt: Date.distantPast,
                                    updatedAt: self.now,
-                                   deletedAt: Date.distantFuture,
-                                   objectID: self.firstTestManagedObjectID)
+                                   deletedAt: Date.distantFuture)
         
         let secondMessage = Message(identifier: "testIdentifier",
                                     sender: self.firstTestUser,
@@ -282,8 +229,7 @@ class MessageTests: XCTestCase {
                                     lastReadByUsers: [self.secondTestUser],
                                     createdAt: Date.distantPast,
                                     updatedAt: self.now,
-                                    deletedAt: Date.distantFuture,
-                                    objectID: self.firstTestManagedObjectID)
+                                    deletedAt: Date.distantFuture)
         
         XCTAssertNotEqual(firstMessage, secondMessage)
     }
@@ -296,8 +242,7 @@ class MessageTests: XCTestCase {
                                    lastReadByUsers: [self.secondTestUser],
                                    createdAt: Date.distantPast,
                                    updatedAt: self.now,
-                                   deletedAt: Date.distantFuture,
-                                   objectID: self.firstTestManagedObjectID)
+                                   deletedAt: Date.distantFuture)
         
         let secondMessage = Message(identifier: "testIdentifier",
                                     sender: self.firstTestUser,
@@ -306,8 +251,7 @@ class MessageTests: XCTestCase {
                                     lastReadByUsers: [self.firstTestUser],
                                     createdAt: Date.distantPast,
                                     updatedAt: self.now,
-                                    deletedAt: Date.distantFuture,
-                                    objectID: self.firstTestManagedObjectID)
+                                    deletedAt: Date.distantFuture)
         
         XCTAssertNotEqual(firstMessage, secondMessage)
     }
@@ -320,8 +264,7 @@ class MessageTests: XCTestCase {
                                    lastReadByUsers: [self.secondTestUser],
                                    createdAt: Date.distantPast,
                                    updatedAt: self.now,
-                                   deletedAt: Date.distantFuture,
-                                   objectID: self.firstTestManagedObjectID)
+                                   deletedAt: Date.distantFuture)
         
         let secondMessage = Message(identifier: "testIdentifier",
                                     sender: self.firstTestUser,
@@ -330,8 +273,7 @@ class MessageTests: XCTestCase {
                                     lastReadByUsers: [self.secondTestUser],
                                     createdAt: self.now,
                                     updatedAt: self.now,
-                                    deletedAt: Date.distantFuture,
-                                    objectID: self.firstTestManagedObjectID)
+                                    deletedAt: Date.distantFuture)
         
         XCTAssertNotEqual(firstMessage, secondMessage)
     }
@@ -344,8 +286,7 @@ class MessageTests: XCTestCase {
                                    lastReadByUsers: [self.secondTestUser],
                                    createdAt: Date.distantPast,
                                    updatedAt: self.now,
-                                   deletedAt: Date.distantFuture,
-                                   objectID: self.firstTestManagedObjectID)
+                                   deletedAt: Date.distantFuture)
         
         let secondMessage = Message(identifier: "testIdentifier",
                                     sender: self.firstTestUser,
@@ -354,8 +295,7 @@ class MessageTests: XCTestCase {
                                     lastReadByUsers: [self.secondTestUser],
                                     createdAt: Date.distantPast,
                                     updatedAt: Date.distantFuture,
-                                    deletedAt: Date.distantFuture,
-                                    objectID: self.firstTestManagedObjectID)
+                                    deletedAt: Date.distantFuture)
         
         XCTAssertNotEqual(firstMessage, secondMessage)
     }
@@ -368,8 +308,7 @@ class MessageTests: XCTestCase {
                                    lastReadByUsers: [self.secondTestUser],
                                    createdAt: Date.distantPast,
                                    updatedAt: self.now,
-                                   deletedAt: Date.distantFuture,
-                                   objectID: self.firstTestManagedObjectID)
+                                   deletedAt: Date.distantFuture)
         
         let secondMessage = Message(identifier: "testIdentifier",
                                     sender: self.firstTestUser,
@@ -378,32 +317,7 @@ class MessageTests: XCTestCase {
                                     lastReadByUsers: [self.secondTestUser],
                                     createdAt: Date.distantPast,
                                     updatedAt: self.now,
-                                    deletedAt: self.now,
-                                    objectID: self.firstTestManagedObjectID)
-        
-        XCTAssertNotEqual(firstMessage, secondMessage)
-    }
-    
-    func testShouldNotCompareTwoMessagesAsEqualWhenObjectIDValuesAreDifferent() {
-        let firstMessage = Message(identifier: "testIdentifier",
-                                   sender: self.firstTestUser,
-                                   parts: [self.testTextPart],
-                                   readByUsers: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                                   lastReadByUsers: [self.secondTestUser],
-                                   createdAt: Date.distantPast,
-                                   updatedAt: self.now,
-                                   deletedAt: Date.distantFuture,
-                                   objectID: self.firstTestManagedObjectID)
-        
-        let secondMessage = Message(identifier: "testIdentifier",
-                                    sender: self.firstTestUser,
-                                    parts: [self.testTextPart],
-                                    readByUsers: [self.firstTestUser, self.secondTestUser, self.thirdTestUser],
-                                    lastReadByUsers: [self.secondTestUser],
-                                    createdAt: Date.distantPast,
-                                    updatedAt: self.now,
-                                    deletedAt: Date.distantFuture,
-                                    objectID: self.secondTestManagedObjectID)
+                                    deletedAt: self.now)
         
         XCTAssertNotEqual(firstMessage, secondMessage)
     }

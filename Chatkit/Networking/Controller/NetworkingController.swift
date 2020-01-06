@@ -7,7 +7,6 @@ class NetworkingController {
     
     let instanceLocator: String
     let tokenProvider: PPTokenProvider
-    let eventParser: EventParser
     let logger: PPLogger
     
     let chatService: ChatService
@@ -22,17 +21,15 @@ class NetworkingController {
     
     // MARK: - Initializers
     
-    init(instanceLocator: String, tokenProvider: PPTokenProvider, eventParser: EventParser, logger: PPLogger) throws {
+    init(instanceLocator: String, tokenProvider: PPTokenProvider, logger: PPLogger) throws {
         self.instanceLocator = instanceLocator
         self.tokenProvider = tokenProvider
-        self.eventParser = eventParser
         self.logger = logger
         
         let host = try PPBaseClient.host(for: self.instanceLocator)
         self.client = PPBaseClient(host: host, sdkInfo: PPSDKInfo.current)
         
         self.chatService = ChatService(instanceLocator: self.instanceLocator, client: self.client, tokenProvider: self.tokenProvider, logger: logger)
-        self.chatService.delegate = self
     }
     
     // MARK: - Internal methods
@@ -43,20 +40,6 @@ class NetworkingController {
     
     func disconnect() {
         self.chatService.unsubscribe()
-    }
-    
-}
-
-// MARK: - Service delegate
-
-extension NetworkingController: ServiceDelegate {
-    
-    func service(_ service: Service, didReceiveEvent event: Event) {
-        self.eventParser.parse(event: event, from: service.name, version: service.version) { error in
-            if let error = error {
-                self.logger.log("Failed to parse event with error: \(error.localizedDescription)", logLevel: .warning)
-            }
-        }
     }
     
 }

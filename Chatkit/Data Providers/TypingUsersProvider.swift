@@ -1,6 +1,4 @@
 import Foundation
-import CoreData
-import PusherPlatform
 
 /// A provider which exposes the set of `User`s currently typing on a given `Room`.
 ///
@@ -35,69 +33,16 @@ public class TypingUsersProvider {
     /// The object that is notified when the content of the maintained collection of typing users changed.
     public weak var delegate: TypingUsersProviderDelegate?
     
-    private let roomManagedObjectID: NSManagedObjectID
-    private let changeController: ChangeController<UserEntity>
-    
     /// The set of all users currently typing on a given room.
     public var typingUsers: Set<User> {
-        let users = self.changeController.objects.compactMap { try? $0.snapshot() }
-        return Set(users)
+        return []
     }
     
     // MARK: - Initializers
     
-    init(room: Room, persistenceController: PersistenceController) {
+    init(room: Room) {
         self.roomIdentifier = room.identifier
         self.state = .connected
-        
-        self.roomManagedObjectID = room.objectID
-        
-        let context = persistenceController.mainContext
-        let predicate = NSPredicate(format: "ANY %K == %@", #keyPath(UserEntity.typingInRooms), self.roomManagedObjectID)
-        let sortDescriptor = NSSortDescriptor(key: #keyPath(UserEntity.identifier), ascending: true) { (lhs, rhs) -> ComparisonResult in
-            guard let lhsString = lhs as? String, let lhs = Int(lhsString), let rhsString = rhs as? String, let rhs = Int(rhsString) else {
-                return .orderedSame
-            }
-            
-            return NSNumber(value: lhs).compare(NSNumber(value: rhs))
-        }
-        
-        self.changeController = ChangeController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
-        self.changeController.delegate = self
-    }
-    
-}
-
-// MARK: - ChangeControllerDelegate
-
-/// :nodoc:
-extension TypingUsersProvider: ChangeControllerDelegate {
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didInsertObjects objects: [ResultType], at indexes: IndexSet) where ResultType : NSManagedObject {
-        for object in objects {
-            guard let object = object as? UserEntity,
-                let user = try? object.snapshot() else {
-                    continue
-            }
-            
-            self.delegate?.typingUsersProvider(self, userDidStartTyping: user)
-        }
-    }
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
-        // This method intentionally does not provide any implementation.
-    }
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didMoveObject object: ResultType, from oldIndex: Int, to newIndex: Int) where ResultType : NSManagedObject {
-        // This method intentionally does not provide any implementation.
-    }
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
-        guard let object = object as? UserEntity, let user = try? object.snapshot() else {
-            return
-        }
-        
-        self.delegate?.typingUsersProvider(self, userDidStopTyping: user)
     }
     
 }

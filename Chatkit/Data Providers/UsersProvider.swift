@@ -1,6 +1,4 @@
 import Foundation
-import CoreData
-import PusherPlatform
 
 /// A provider which maintains a collection of users retrieved from the web service.
 public class UsersProvider {
@@ -20,16 +18,11 @@ public class UsersProvider {
     /// The object that is notified when the content of the maintained collection of users changed.
     public weak var delegate: UsersProviderDelegate?
     
-    private var lastIdentifier: String
-    private let userFactory: UserFactory
-    
     // MARK: - Initializers
     
     init(completionHandler: @escaping CompletionHandler) {
         self.state = .partiallyPopulated
         self.users = []
-        self.lastIdentifier = "-1"
-        self.userFactory = UserFactory()
         
         self.fetchData(completionHandler: completionHandler)
     }
@@ -54,52 +47,17 @@ public class UsersProvider {
             return
         }
         
-        self.state = .fetching
-        
-        self.userFactory.receiveUsers(numberOfUsers: Int(numberOfUsers), lastUserIdentifier: self.lastIdentifier, delay: 1.0) { users in
-            guard let lastIdentifier = users.last?.identifier else {
-                if let completionHandler = completionHandler {
-                    completionHandler(nil)
-                }
-                
-                return
-            }
-            
-            self.lastIdentifier = lastIdentifier
-            self.users.formUnion(users)
-            
-            self.state = .partiallyPopulated
-            
-            self.delegate?.usersProvider(self, didReceiveUsers: Set(users))
-            
-            if let completionHandler = completionHandler {
-                completionHandler(nil)
-            }
+        // TODO: Implement
+        if let completionHandler = completionHandler {
+            completionHandler(nil)
         }
     }
     
     // MARK: - Private methods
     
     private func fetchData(completionHandler: @escaping CompletionHandler) {
-        self.state = .fetching
-        
-        self.userFactory.receiveUsers(numberOfUsers: 5, lastUserIdentifier: self.lastIdentifier, delay: 1.0) { users in
-            guard let lastIdentifier = users.last?.identifier else {
-                DispatchQueue.main.async {
-                    completionHandler(nil)
-                }
-                return
-            }
-            
-            self.lastIdentifier = lastIdentifier
-            self.users.formUnion(users)
-            
-            self.state = .partiallyPopulated
-            
-            DispatchQueue.main.async {
-                completionHandler(nil)
-            }
-        }
+        // TODO: Implement
+        completionHandler(nil)
     }
     
 }

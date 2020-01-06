@@ -1,5 +1,4 @@
 import Foundation
-import CoreData
 
 /// A structure representing a message retrieved from the Chatkit web service.
 ///
@@ -32,11 +31,9 @@ public struct Message {
     /// The `Date` at which the message was deleted.
     public let deletedAt: Date?
     
-    let objectID: NSManagedObjectID
-    
     // MARK: - Initializers
     
-    init(identifier: String, sender: User, parts: [MessagePart], readByUsers: [User], lastReadByUsers: [User], createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
+    init(identifier: String, sender: User, parts: [MessagePart], readByUsers: [User], lastReadByUsers: [User], createdAt: Date, updatedAt: Date, deletedAt: Date?) {
         self.identifier = identifier
         self.sender = sender
         self.parts = parts
@@ -45,7 +42,6 @@ public struct Message {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
-        self.objectID = objectID
     }
     
 }
@@ -86,7 +82,6 @@ extension Message: Equatable {
             && lhs.createdAt == rhs.createdAt
             && lhs.updatedAt == rhs.updatedAt
             && lhs.deletedAt == rhs.deletedAt
-            && lhs.objectID == rhs.objectID
     }
     
 }
@@ -94,9 +89,4 @@ extension Message: Equatable {
 // MARK: - Model
 
 extension Message: Model {
-}
-
-// MARK: - Identifiable
-
-extension Message: Identifiable {
 }
