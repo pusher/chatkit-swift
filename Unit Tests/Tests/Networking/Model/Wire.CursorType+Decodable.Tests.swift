@@ -5,6 +5,7 @@ class WireCursorTypeDecodableTests: XCTestCase {
     
     func test_init_validValue_noProblem() {
         
+        // FIXME: Not a valid JSON object.
         let jsonData = """
         0
         """.toJsonData(validate: false)
@@ -16,6 +17,7 @@ class WireCursorTypeDecodableTests: XCTestCase {
     
     func test_init_invalidValue_throws() {
         
+        // FIXME: Not a valid JSON object.
         let jsonData = """
         1
         """.toJsonData(validate: false)
@@ -27,6 +29,7 @@ class WireCursorTypeDecodableTests: XCTestCase {
     
     func test_init_invalidType_throws() {
         
+        // FIXME: Not a valid JSON object.
         let jsonData = """
         "not an int"
         """.toJsonData(validate: false)
