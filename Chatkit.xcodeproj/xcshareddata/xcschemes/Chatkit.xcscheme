@@ -72,16 +72,6 @@
                </Test>
             </SkippedTests>
          </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "224B804622F1E028003CB8DC"
-               BuildableName = "Integration Tests.xctest"
-               BlueprintName = "Integration Tests"
-               ReferencedContainer = "container:Chatkit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
