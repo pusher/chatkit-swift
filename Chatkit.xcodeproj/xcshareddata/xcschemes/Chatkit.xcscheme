@@ -67,9 +67,6 @@
                <Test
                   Identifier = "NetworkingControllerTests/testShouldReturnErrorAfterUnsuccessfulConnection()">
                </Test>
-               <Test
-                  Identifier = "WireCursorTypeDecodableTests">
-               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
