@@ -10,8 +10,6 @@ class ChatService: Service {
     
     let logger: PPLogger
     
-    weak var delegate: ServiceDelegate?
-    
     private let instance: Instance
     private let requestOptions: PPRequestOptions
     private var resumableSubscription: PPResumableSubscription
@@ -35,7 +33,7 @@ class ChatService: Service {
     
     required init(instanceLocator: String, client: PPBaseClient, tokenProvider: PPTokenProvider, logger: PPLogger) {
         self.name = .chat
-        self.version = .version6
+        self.version = .version7
         self.logger = logger
         self.instance = Instance(locator: instanceLocator,
                                  serviceName: self.name.rawValue,
@@ -61,12 +59,8 @@ class ChatService: Service {
             if let completionHandler = completionHandler {
                 completionHandler(nil)
             }
-        }, onEvent: { [weak self] _, _, jsonObject in
-            guard let self = self, let event = Event(with: jsonObject) else {
-                return
-            }
-            
-            self.delegate?.service(self, didReceiveEvent: event)
+        }, onEvent: { _, _, _ in
+            // TODO: Implement
         }, onError: { [weak self] error in
             guard let self = self else {
                 return

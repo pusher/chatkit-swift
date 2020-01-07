@@ -1,6 +1,4 @@
 import Foundation
-import CoreData
-
 
 /// A structure representing a room retrieved from the Chatkit web service.
 public struct Room {
@@ -40,11 +38,9 @@ public struct Room {
     /// The `Date` at which the room was deleted.
     public let deletedAt: Date?
     
-    let objectID: NSManagedObjectID
-    
     // MARK: - Initializers
     
-    init(identifier: String, name: String?, isPrivate: Bool, unreadCount: UInt64, lastMessage: Message?, customData: CustomData?, createdAt: Date, updatedAt: Date, deletedAt: Date?, objectID: NSManagedObjectID) {
+    init(identifier: String, name: String?, isPrivate: Bool, unreadCount: UInt64, lastMessage: Message?, customData: CustomData?, createdAt: Date, updatedAt: Date, deletedAt: Date?) {
         self.identifier = identifier
         self.name = name
         self.isPrivate = isPrivate
@@ -54,7 +50,6 @@ public struct Room {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.deletedAt = deletedAt
-        self.objectID = objectID
     }
     
 }
@@ -95,7 +90,6 @@ extension Room: Equatable {
             && lhs.createdAt == rhs.createdAt
             && lhs.updatedAt == rhs.updatedAt
             && lhs.deletedAt == rhs.deletedAt
-            && lhs.objectID == rhs.objectID
     }
     
 }
@@ -103,9 +97,4 @@ extension Room: Equatable {
 // MARK: - Model
 
 extension Room: Model {
-}
-
-// MARK: - Identifiable
-
-extension Room: Identifiable {
 }

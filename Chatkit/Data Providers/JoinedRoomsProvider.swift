@@ -1,6 +1,4 @@
 import Foundation
-import CoreData
-import PusherPlatform
 
 /// A provider which exposes a collection of all rooms joined by the user.
 ///
@@ -32,77 +30,15 @@ public class JoinedRoomsProvider {
     /// The object that is notified when the set `rooms` has changed.
     public weak var delegate: JoinedRoomsProviderDelegate?
     
-    private let changeController: ChangeController<RoomEntity>
-    
     /// The set of all rooms joined by the user.
     public var rooms: Set<Room> {
-        let rooms = self.changeController.objects.compactMap { try? $0.snapshot() }
-        return Set(rooms)
+        return []
     }
     
     // MARK: - Initializers
     
-    init(currentUser: User, persistenceController: PersistenceController) {
+    init(currentUser: User) {
         self.state = .connected
-        
-        let context = persistenceController.mainContext
-        
-        var currentUserID = currentUser.objectID
-        context.performAndWait {
-            currentUserID = context.object(with: currentUserID).objectID
-        }
-        
-        let predicate = NSPredicate(format: "ANY %K == %@", #keyPath(RoomEntity.members), currentUserID)
-        let sortDescriptor = NSSortDescriptor(key: #keyPath(RoomEntity.identifier), ascending: true) { (lhs, rhs) -> ComparisonResult in
-            guard let lhsString = lhs as? String, let lhs = Int(lhsString), let rhsString = rhs as? String, let rhs = Int(rhsString) else {
-                return .orderedSame
-            }
-            
-            return NSNumber(value: lhs).compare(NSNumber(value: rhs))
-        }
-        
-        self.changeController = ChangeController(sortDescriptors: [sortDescriptor], predicate: predicate, context: context)
-        self.changeController.delegate = self
-    }
-    
-}
-
-// MARK: - ChangeControllerDelegate
-
-/// :nodoc:
-extension JoinedRoomsProvider: ChangeControllerDelegate {
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didInsertObjects objects: [ResultType], at indexes: IndexSet) where ResultType : NSManagedObject {
-        for object in objects {
-            guard let object = object as? RoomEntity,
-                let room = try? object.snapshot() else {
-                    continue
-            }
-            
-            self.delegate?.joinedRoomsProvider(self, didJoinRoom: room)
-        }
-    }
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didUpdateObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
-        guard let object = object as? RoomEntity, let room = try? object.snapshot() else {
-            return
-        }
-        
-        // TODO: Generate the old value based on the new value and the changeset.
-        
-        self.delegate?.joinedRoomsProvider(self, didUpdateRoom: room, previousValue: room)
-    }
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didMoveObject object: ResultType, from oldIndex: Int, to newIndex: Int) where ResultType : NSManagedObject {
-        // This method intentionally does not provide any implementation.
-    }
-    
-    public func changeController<ResultType>(_ changeController: ChangeController<ResultType>, didDeleteObject object: ResultType, at index: Int) where ResultType : NSManagedObject {
-        guard let object = object as? RoomEntity, let room = try? object.snapshot() else {
-            return
-        }
-        
-        self.delegate?.joinedRoomsProvider(self, didLeaveRoom: room)
     }
     
 }

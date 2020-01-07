@@ -1,6 +1,4 @@
 import Foundation
-import CoreData
-import PusherPlatform
 
 /// A provider which maintains a collection of all rooms available to the user which have been retrieved from
 /// the web service.
@@ -22,16 +20,11 @@ public class AvailableRoomsProvider {
     /// The object that is notified when the content of the maintained collection of rooms changed.
     public weak var delegate: AvailableRoomsProviderDelegate?
     
-    private var lastIdentifier: String
-    private let roomFactory: RoomFactory
-    
     // MARK: - Initializers
     
     init(completionHandler: @escaping CompletionHandler) {
         self.state = .partiallyPopulated
         self.rooms = []
-        self.lastIdentifier = "-1"
-        self.roomFactory = RoomFactory()
         
         self.fetchData(completionHandler: completionHandler)
     }
@@ -56,52 +49,17 @@ public class AvailableRoomsProvider {
             return
         }
         
-        self.state = .fetching
-        
-        self.roomFactory.receiveRooms(numberOfRooms: Int(numberOfRooms), lastRoomIdentifier: self.lastIdentifier, delay: 1.0) { rooms in
-            guard let lastIdentifier = rooms.last?.identifier else {
-                if let completionHandler = completionHandler {
-                    completionHandler(nil)
-                }
-                
-                return
-            }
-            
-            self.lastIdentifier = lastIdentifier
-            self.rooms.formUnion(rooms)
-            
-            self.state = .partiallyPopulated
-            
-            self.delegate?.availableRoomsProvider(self, didReceiveRooms: Set(rooms))
-            
-            if let completionHandler = completionHandler {
-                completionHandler(nil)
-            }
+        // TODO: Implement
+        if let completionHandler = completionHandler {
+            completionHandler(nil)
         }
     }
     
     // MARK: - Private methods
     
     private func fetchData(completionHandler: @escaping CompletionHandler) {
-        self.state = .fetching
-        
-        self.roomFactory.receiveRooms(numberOfRooms: 5, lastRoomIdentifier: self.lastIdentifier, delay: 1.0) { rooms in
-            guard let lastIdentifier = rooms.last?.identifier else {
-                DispatchQueue.main.async {
-                    completionHandler(nil)
-                }
-                return
-            }
-            
-            self.lastIdentifier = lastIdentifier
-            self.rooms.formUnion(rooms)
-            
-            self.state = .partiallyPopulated
-            
-            DispatchQueue.main.async {
-                completionHandler(nil)
-            }
-        }
+        // TODO: Implement
+        completionHandler(nil)
     }
     
 }

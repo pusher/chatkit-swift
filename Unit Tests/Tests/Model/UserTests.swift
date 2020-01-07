@@ -1,13 +1,9 @@
 import XCTest
-import CoreData
-import PusherPlatform
 @testable import PusherChatkit
 
 class UserTests: XCTestCase {
     
     // MARK: - Properties
-    
-    var persistenceController: PersistenceController!
     
     var firstTestURL: URL!
     var secondTestURL: URL!
@@ -15,38 +11,10 @@ class UserTests: XCTestCase {
     var firstTestCustomData: CustomData!
     var secondTestCustomData: CustomData!
     
-    var firstTestManagedObjectID: NSManagedObjectID!
-    var secondTestManagedObjectID: NSManagedObjectID!
-    
     // MARK: - Tests lifecycle
     
     override func setUp() {
         super.setUp()
-        
-        guard let url = Bundle.current.url(forResource: "Model", withExtension: "momd"), let model = NSManagedObjectModel(contentsOf: url) else {
-            assertionFailure("Unable to locate test model.")
-            return
-        }
-        
-        let storeDescription = NSPersistentStoreDescription(inMemoryPersistentStoreDescription: ())
-        storeDescription.shouldAddStoreAsynchronously = false
-        
-        guard let persistenceController = try? PersistenceController(model: model, storeDescriptions: [storeDescription]) else {
-            assertionFailure("Failed to instantiate persistence controller.")
-            return
-        }
-        
-        self.persistenceController = persistenceController
-        
-        let mainContext = self.persistenceController.mainContext
-        
-        mainContext.performAndWait {
-            let firstUserEntity = mainContext.create(UserEntity.self)
-            self.firstTestManagedObjectID = firstUserEntity.objectID
-            
-            let secondUserEntity = mainContext.create(UserEntity.self)
-            self.secondTestManagedObjectID = secondUserEntity.objectID
-        }
         
         self.firstTestURL = URL(fileURLWithPath: "/dev/null")
         self.secondTestURL = URL(fileURLWithPath: "/dev/zero")
@@ -64,8 +32,7 @@ class UserTests: XCTestCase {
                         presenceState: .offline,
                         customData: self.firstTestCustomData,
                         createdAt: Date.distantPast,
-                        updatedAt: Date.distantFuture,
-                        objectID: self.firstTestManagedObjectID)
+                        updatedAt: Date.distantFuture)
         
         XCTAssertEqual(user.identifier, "testIdentifier")
         XCTAssertEqual(user.name, "testName")
@@ -75,7 +42,6 @@ class UserTests: XCTestCase {
         XCTAssertEqual(user.customData as? [String : String], self.firstTestCustomData as? [String : String])
         XCTAssertEqual(user.createdAt, Date.distantPast)
         XCTAssertEqual(user.updatedAt, Date.distantFuture)
-        XCTAssertEqual(user.objectID, self.firstTestManagedObjectID)
     }
     
     func testUserShouldHaveTheSameHashForTheSameIdentifiers() {
@@ -85,8 +51,7 @@ class UserTests: XCTestCase {
                              presenceState: .offline,
                              customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
-                             updatedAt: Date.distantFuture,
-                             objectID: self.firstTestManagedObjectID)
+                             updatedAt: Date.distantFuture)
         
         let secondUser = User(identifier: "testIdentifier",
                               name: "anotherName",
@@ -94,8 +59,7 @@ class UserTests: XCTestCase {
                               presenceState: .online,
                               customData: self.secondTestCustomData,
                               createdAt: Date.distantFuture,
-                              updatedAt: Date.distantPast,
-                              objectID: self.secondTestManagedObjectID)
+                              updatedAt: Date.distantPast)
         
         XCTAssertEqual(firstUser.hashValue, secondUser.hashValue)
     }
@@ -107,8 +71,7 @@ class UserTests: XCTestCase {
                              presenceState: .offline,
                              customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
-                             updatedAt: Date.distantFuture,
-                             objectID: self.firstTestManagedObjectID)
+                             updatedAt: Date.distantFuture)
         
         let secondUser = User(identifier: "anotherIdentifier",
                               name: "testName",
@@ -116,8 +79,7 @@ class UserTests: XCTestCase {
                               presenceState: .offline,
                               customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
-                              updatedAt: Date.distantFuture,
-                              objectID: self.firstTestManagedObjectID)
+                              updatedAt: Date.distantFuture)
         
         XCTAssertNotEqual(firstUser.hashValue, secondUser.hashValue)
     }
@@ -129,8 +91,7 @@ class UserTests: XCTestCase {
                              presenceState: .offline,
                              customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
-                             updatedAt: Date.distantFuture,
-                             objectID: self.firstTestManagedObjectID)
+                             updatedAt: Date.distantFuture)
         
         let secondUser = User(identifier: "testIdentifier",
                               name: "testName",
@@ -138,8 +99,7 @@ class UserTests: XCTestCase {
                               presenceState: .offline,
                               customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
-                              updatedAt: Date.distantFuture,
-                              objectID: self.firstTestManagedObjectID)
+                              updatedAt: Date.distantFuture)
         
         XCTAssertEqual(firstUser, secondUser)
     }
@@ -151,8 +111,7 @@ class UserTests: XCTestCase {
                              presenceState: .offline,
                              customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
-                             updatedAt: Date.distantFuture,
-                             objectID: self.firstTestManagedObjectID)
+                             updatedAt: Date.distantFuture)
         
         let secondUser = User(identifier: "anotherIdentifier",
                               name: "testName",
@@ -160,8 +119,7 @@ class UserTests: XCTestCase {
                               presenceState: .offline,
                               customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
-                              updatedAt: Date.distantFuture,
-                              objectID: self.firstTestManagedObjectID)
+                              updatedAt: Date.distantFuture)
         
         XCTAssertNotEqual(firstUser, secondUser)
     }
@@ -173,8 +131,7 @@ class UserTests: XCTestCase {
                              presenceState: .offline,
                              customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
-                             updatedAt: Date.distantFuture,
-                             objectID: self.firstTestManagedObjectID)
+                             updatedAt: Date.distantFuture)
         
         let secondUser = User(identifier: "testIdentifier",
                               name: "anotherName",
@@ -182,8 +139,7 @@ class UserTests: XCTestCase {
                               presenceState: .offline,
                               customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
-                              updatedAt: Date.distantFuture,
-                              objectID: self.firstTestManagedObjectID)
+                              updatedAt: Date.distantFuture)
         
         XCTAssertNotEqual(firstUser, secondUser)
     }
@@ -195,8 +151,7 @@ class UserTests: XCTestCase {
                              presenceState: .offline,
                              customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
-                             updatedAt: Date.distantFuture,
-                             objectID: self.firstTestManagedObjectID)
+                             updatedAt: Date.distantFuture)
         
         let secondUser = User(identifier: "testIdentifier",
                               name: "testName",
@@ -204,8 +159,7 @@ class UserTests: XCTestCase {
                               presenceState: .offline,
                               customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
-                              updatedAt: Date.distantFuture,
-                              objectID: self.firstTestManagedObjectID)
+                              updatedAt: Date.distantFuture)
         
         XCTAssertNotEqual(firstUser, secondUser)
     }
@@ -217,8 +171,7 @@ class UserTests: XCTestCase {
                              presenceState: .offline,
                              customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
-                             updatedAt: Date.distantFuture,
-                             objectID: self.firstTestManagedObjectID)
+                             updatedAt: Date.distantFuture)
         
         let secondUser = User(identifier: "testIdentifier",
                               name: "testName",
@@ -226,8 +179,7 @@ class UserTests: XCTestCase {
                               presenceState: .online,
                               customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
-                              updatedAt: Date.distantFuture,
-                              objectID: self.firstTestManagedObjectID)
+                              updatedAt: Date.distantFuture)
         
         XCTAssertNotEqual(firstUser, secondUser)
     }
@@ -239,8 +191,7 @@ class UserTests: XCTestCase {
                              presenceState: .offline,
                              customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
-                             updatedAt: Date.distantFuture,
-                             objectID: self.firstTestManagedObjectID)
+                             updatedAt: Date.distantFuture)
         
         let secondUser = User(identifier: "testIdentifier",
                               name: "testName",
@@ -248,8 +199,7 @@ class UserTests: XCTestCase {
                               presenceState: .offline,
                               customData: self.secondTestCustomData,
                               createdAt: Date.distantPast,
-                              updatedAt: Date.distantFuture,
-                              objectID: self.firstTestManagedObjectID)
+                              updatedAt: Date.distantFuture)
         
         XCTAssertEqual(firstUser, secondUser)
     }
@@ -261,8 +211,7 @@ class UserTests: XCTestCase {
                              presenceState: .offline,
                              customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
-                             updatedAt: Date.distantFuture,
-                             objectID: self.firstTestManagedObjectID)
+                             updatedAt: Date.distantFuture)
         
         let secondUser = User(identifier: "testIdentifier",
                               name: "testName",
@@ -270,8 +219,7 @@ class UserTests: XCTestCase {
                               presenceState: .offline,
                               customData: self.firstTestCustomData,
                               createdAt: Date.distantFuture,
-                              updatedAt: Date.distantFuture,
-                              objectID: self.firstTestManagedObjectID)
+                              updatedAt: Date.distantFuture)
         
         XCTAssertNotEqual(firstUser, secondUser)
     }
@@ -283,8 +231,7 @@ class UserTests: XCTestCase {
                              presenceState: .offline,
                              customData: self.firstTestCustomData,
                              createdAt: Date.distantPast,
-                             updatedAt: Date.distantFuture,
-                             objectID: self.firstTestManagedObjectID)
+                             updatedAt: Date.distantFuture)
         
         let secondUser = User(identifier: "testIdentifier",
                               name: "testName",
@@ -292,30 +239,7 @@ class UserTests: XCTestCase {
                               presenceState: .offline,
                               customData: self.firstTestCustomData,
                               createdAt: Date.distantPast,
-                              updatedAt: Date.distantPast,
-                              objectID: self.firstTestManagedObjectID)
-        
-        XCTAssertNotEqual(firstUser, secondUser)
-    }
-    
-    func testShouldNotCompareTwoUsersAsEqualWhenObjectIDValuesAreDifferent() {
-        let firstUser = User(identifier: "testIdentifier",
-                             name: "testName",
-                             avatar: self.firstTestURL,
-                             presenceState: .offline,
-                             customData: self.firstTestCustomData,
-                             createdAt: Date.distantPast,
-                             updatedAt: Date.distantFuture,
-                             objectID: self.firstTestManagedObjectID)
-        
-        let secondUser = User(identifier: "testIdentifier",
-                              name: "testName",
-                              avatar: self.firstTestURL,
-                              presenceState: .offline,
-                              customData: self.firstTestCustomData,
-                              createdAt: Date.distantPast,
-                              updatedAt: Date.distantFuture,
-                              objectID: self.secondTestManagedObjectID)
+                              updatedAt: Date.distantPast)
         
         XCTAssertNotEqual(firstUser, secondUser)
     }

@@ -34,23 +34,7 @@ class ChatServiceTests: XCTestCase {
         let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
         
         XCTAssertEqual(service.name, ServiceName.chat)
-        XCTAssertEqual(service.version, ServiceVersion.version6)
         XCTAssertTrue(service.logger is TestLogger)
-    }
-    
-    func testShouldNotHaveDelegateAfterInstantiation() {
-        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
-        
-        XCTAssertNil(service.delegate)
-    }
-    
-    func testShouldSetDelegate() {
-        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
-        
-        let delegate = TestServiceDelegate()
-        service.delegate = delegate
-        
-        XCTAssertNotNil(service.delegate)
     }
     
     func testShouldHaveConnectionStatusSetToDisconnectedAfterInstantiation() {
@@ -60,7 +44,7 @@ class ChatServiceTests: XCTestCase {
     }
     
     func testShouldReturnNoErrorAfterSuccessfulConnection() {
-        stubSubscription(of: .chat, version: .version6, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
+        stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
         
         let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
         
@@ -78,7 +62,7 @@ class ChatServiceTests: XCTestCase {
     func testShouldReturnErrorAfterUnsuccessfulConnection() {
         // FIXME: This test is disabled in both test schemes due to an issue with handling HTTP status codes in PusherPlatform SDK.
         
-        stubSubscription(of: .chat, version: .version6, instanceLocator: Networking.testInstanceLocator, path: .users, with: 404)
+        stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: 404)
         
         let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
         
@@ -94,7 +78,7 @@ class ChatServiceTests: XCTestCase {
     }
     
     func testShouldHaveConnectionStatusSetToConnectedAfterSuccessfulConnection() {
-        stubSubscription(of: .chat, version: .version6, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
+        stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
         
         let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
         
@@ -110,7 +94,7 @@ class ChatServiceTests: XCTestCase {
     }
     
     func testShouldHaveConnectionStatusSetToDisconnectedAfterSuccessfullyDisconnecting() {
-        stubSubscription(of: .chat, version: .version6, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
+        stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
         
         let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
         
@@ -130,7 +114,7 @@ class ChatServiceTests: XCTestCase {
     func testShouldBeHaveConnectionStatusSetToDisconnectedAfterUnsuccessfulConnection() {
         // FIXME: This test is disabled in both test schemes due to an issue with handling HTTP status codes in PusherPlatform SDK.
         
-        stubSubscription(of: .chat, version: .version6, instanceLocator: Networking.testInstanceLocator, path: .users, with: 404)
+        stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: 404)
         
         let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
         
@@ -141,30 +125,6 @@ class ChatServiceTests: XCTestCase {
             XCTAssertNotNil(error)
             
             expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 1.0)
-    }
-    
-    func testShouldReceiveInitialStateEventAfterSuccessfulConnection() {
-        stubSubscription(of: .chat, version: .version6, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
-        
-        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
-        
-        let eventExpectation = self.expectation(description: "Event")
-        
-        let delegate = TestServiceDelegate { event in
-            XCTAssertNotNil(event)
-            XCTAssertEqual(event.name, Event.Name.initialState)
-            
-            eventExpectation.fulfill()
-        }
-        service.delegate = delegate
-        
-        let connectionExpectation = self.expectation(description: "Connection")
-        
-        service.subscribe() { error in
-            connectionExpectation.fulfill()
         }
         
         waitForExpectations(timeout: 1.0)

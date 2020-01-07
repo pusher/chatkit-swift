@@ -1,5 +1,4 @@
 import Foundation
-import CoreData
 
 /// A structure representing a user retrieved from the Chatkit web service.
 public struct User {
@@ -29,11 +28,9 @@ public struct User {
     /// This will *only* apply to changes to the `name`, `avatar` and `customData` properties.
     public let updatedAt: Date
     
-    let objectID: NSManagedObjectID
-    
     // MARK: - Initializers
     
-    init(identifier: String, name: String?, avatar: URL?, presenceState: PresenceState, customData: CustomData?, createdAt: Date, updatedAt: Date, objectID: NSManagedObjectID) {
+    init(identifier: String, name: String?, avatar: URL?, presenceState: PresenceState, customData: CustomData?, createdAt: Date, updatedAt: Date) {
         self.identifier = identifier
         self.name = name
         self.avatar = avatar
@@ -41,7 +38,6 @@ public struct User {
         self.customData = customData
         self.createdAt = createdAt
         self.updatedAt = updatedAt
-        self.objectID = objectID
     }
     
 }
@@ -80,7 +76,6 @@ extension User: Equatable {
             && lhs.presenceState == rhs.presenceState
             && lhs.createdAt == rhs.createdAt
             && lhs.updatedAt == rhs.updatedAt
-            && lhs.objectID == rhs.objectID
     }
     
 }
@@ -88,9 +83,4 @@ extension User: Equatable {
 // MARK: - Model
 
 extension User: Model {
-}
-
-// MARK: - Identifiable
-
-extension User: Identifiable {
 }
