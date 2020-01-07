@@ -1,60 +1,4 @@
-// STUB FILE. This file demonstrates the desired interface, but contains to implementation
-// TODO: Move many of these types to PusherPlatform
-
 import Foundation
-import PusherPlatform
-
-// TODO: Temporary
-extension String: Error { }
-
-// Re-export so that PusherPlatform import is not required in client code
-public typealias TokenProvider = PPTokenProvider
-public typealias TokenProviderResult = PPTokenProviderResult
-
-/// TestTokenProvider retrieves tokens from the Chatkit service's Test Token Provider, which
-/// is for development user only, and must be enabled for your instance in the Chatkit Dashboard.
-///
-/// The test token provider will always sign a token for the requested userID, without applying any
-/// form of authentication.
-public class TestTokenProvider: TokenProvider {
-    
-    private let delegate: DefaultTokenProvider
-    
-    /// - Parameters:
-    ///     - instanceLocator: The locator for your instance, the same value from the Dashboard
-    ///     which you use to construct the Chatkit object.
-    ///     - userID: The userID to fetch tokens for. A token will always be signed for this userID
-    ///     without any authentication being applied.
-    init(instanceLocator: String, userID: String) {
-        // TODO: Implement:
-        // extract host and instanceId from instanceLocator
-        let host = "us1.pusherplatform.io"
-        let instanceId = "UNIMPLEMENTED"
-        let path = "/services/chatkit_token_provider/v1/\(instanceId)/token"
-        
-        self.delegate = DefaultTokenProvider(method: "POST",
-                                           host: host,
-                                           path: path,
-                                           headers: nil,
-                                           queryParams: [ "user_id": userID ])
-    }
-    
-    public func fetchToken(completionHandler: @escaping (PPTokenProviderResult) -> Void) {
-        self.delegate.fetchToken(completionHandler: completionHandler)
-    }
-    
-}
-
-public typealias AsyncKeyValueCall = (CredentialsCompletionHandler) -> ()
-
-public typealias CredentialsCompletionHandler = (KeyValueResult) -> ()
-
-public enum KeyValueResult {
-    
-    case success([String: String])
-    case error(Error)
-    
-}
 
 /// HTTPCallTokenProvider makes calls to a specified HTTPS endpoint and expects to receive a token
 /// from it.
@@ -85,11 +29,7 @@ public class DefaultTokenProvider: TokenProvider {
     ///     - queryParams: An optional map of query parameters to include in the request URL.
     ///     Here you can supply any query parameters which your endpoint might require to process
     ///     the request.
-    public convenience init(method: String,
-                            host: String,
-                            path: String,
-                            headers: [String: String]? = nil,
-                            queryParams: [String: String]? = nil) {
+    public convenience init(method: String, host: String, path: String, headers: [String: String]? = nil, queryParams: [String: String]? = nil) {
         self.init(method: method,
                   host: host,
                   path: path,
@@ -111,11 +51,7 @@ public class DefaultTokenProvider: TokenProvider {
     ///     - queryParams: An optional async function which will be invoked when a request is about
     ///     to be made, so that you can supply query parameters which your backend might require
     ///     to process the request.
-    public init(method: String,
-                host: String,
-                path: String,
-                getHeaders: AsyncKeyValueCall? = nil,
-                getQueryParams: AsyncKeyValueCall? = nil) {
+    public init(method: String, host: String, path: String, getHeaders: AsyncKeyValueCall? = nil, getQueryParams: AsyncKeyValueCall? = nil) {
         self.method = method
         self.host = host
         self.path = path
@@ -131,6 +67,7 @@ public class DefaultTokenProvider: TokenProvider {
         guard let literal = literal else {
             return nil
         }
+        
         return { completionHandler in
             return completionHandler(KeyValueResult.success(literal))
         }
