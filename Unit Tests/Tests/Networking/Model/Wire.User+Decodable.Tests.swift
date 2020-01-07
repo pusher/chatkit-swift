@@ -221,6 +221,28 @@ class WireUserDecodableTests: XCTestCase {
                                           "Expected to decode String but found a number instead."])
     }
     
+    func test_init_avatarUrlInvalidFormat_throws() {
+        
+        let jsonData = """
+        {
+            "id": "cool-room-1",
+            "name": "mycoolroom",
+            "avatar_url": "not a url",
+            "custom_data": {
+                "cool": true
+            },
+            "created_at": "2017-03-23T11:36:42Z",
+            "updated_at": "2017-04-23T11:36:42Z",
+            "deleted_at": "2017-05-23T11:36:42Z",
+        }
+        """.toJsonData()
+        
+        XCTAssertThrowsError(try Wire.User(from: jsonData.jsonDecoder()),
+                             containing: ["dataCorrupted",
+                                          "\"avatar_url\"",
+                                          "Invalid URL string."])
+    }
+    
     func test_init_customDataMissing_noProblem() {
         
         let jsonData = """
