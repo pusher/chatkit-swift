@@ -56,6 +56,28 @@
 		22EDCB80231D2D6D00419C75 /* NetworkingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22EDCB7F231D2D6D00419C75 /* NetworkingController.swift */; };
 		22FC112D233E50FB0013A9D7 /* UsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC112C233E50FB0013A9D7 /* UsersProvider.swift */; };
 		22FD93C02361DD8A00AB841F /* TypingUsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FD93BF2361DD8A00AB841F /* TypingUsersViewModel.swift */; };
+		7301BC4D23B0E51300F162C7 /* Wire.Event.AddedToRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC4C23B0E51300F162C7 /* Wire.Event.AddedToRoom.swift */; };
+		7301BC4F23B0E5ED00F162C7 /* Wire.Event.RemovedFromRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC4E23B0E5ED00F162C7 /* Wire.Event.RemovedFromRoom.swift */; };
+		7301BC5123B0E64B00F162C7 /* Wire.Event.RoomUpdated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC5023B0E64B00F162C7 /* Wire.Event.RoomUpdated.swift */; };
+		7301BC5723B0E71500F162C7 /* Wire.Event.RoomDeleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC5623B0E71500F162C7 /* Wire.Event.RoomDeleted.swift */; };
+		7301BC5923B0E74800F162C7 /* Wire.Event.UserJoinedRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC5823B0E74800F162C7 /* Wire.Event.UserJoinedRoom.swift */; };
+		7301BC5C23B0E79F00F162C7 /* Wire.Event.ReadStateUpdated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC5A23B0E79F00F162C7 /* Wire.Event.ReadStateUpdated.swift */; };
+		7301BC5D23B0E79F00F162C7 /* Wire.Event.UserLeftRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC5B23B0E79F00F162C7 /* Wire.Event.UserLeftRoom.swift */; };
+		7301BC6323B0E8DE00F162C7 /* Wire.Event.UserJoinedRoom+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC6223B0E8DE00F162C7 /* Wire.Event.UserJoinedRoom+Decodable.Tests.swift */; };
+		7301BC6523B0E9C700F162C7 /* Wire.Event.UserLeftRoom+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC6423B0E9C700F162C7 /* Wire.Event.UserLeftRoom+Decodable.Tests.swift */; };
+		7301BC6C23B0FCCE00F162C7 /* Wire.Event.RoomDeleted+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC6623B0FCCE00F162C7 /* Wire.Event.RoomDeleted+Decodable.Tests.swift */; };
+		7301BC6D23B0FCCE00F162C7 /* Wire.Event.ReadStateUpdated+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC6723B0FCCE00F162C7 /* Wire.Event.ReadStateUpdated+Decodable.Tests.swift */; };
+		7301BC6E23B0FCCE00F162C7 /* Wire.Event.InitialState+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC6823B0FCCE00F162C7 /* Wire.Event.InitialState+Decodable.Tests.swift */; };
+		7301BC6F23B0FCCE00F162C7 /* Wire.Event.RemovedFromRoom+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC6923B0FCCE00F162C7 /* Wire.Event.RemovedFromRoom+Decodable.Tests.swift */; };
+		7301BC7023B0FCCE00F162C7 /* Wire.Event.RoomUpdated+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC6A23B0FCCE00F162C7 /* Wire.Event.RoomUpdated+Decodable.Tests.swift */; };
+		7301BC7123B0FCCE00F162C7 /* Wire.Event.AddedToRoom+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC6B23B0FCCE00F162C7 /* Wire.Event.AddedToRoom+Decodable.Tests.swift */; };
+		7301BC7323B1143D00F162C7 /* Wire.Event.IsTyping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC7223B1143D00F162C7 /* Wire.Event.IsTyping.swift */; };
+		7301BC7523B1149D00F162C7 /* Wire.Event.IsTyping+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC7423B1149D00F162C7 /* Wire.Event.IsTyping+Decodable.Tests.swift */; };
+		7301BC7723B1151600F162C7 /* Wire.Event.PresenceState+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC7623B1151600F162C7 /* Wire.Event.PresenceState+Decodable.Tests.swift */; };
+		7301BC7B23B11F6F00F162C7 /* Wire.Message+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC7A23B11F6F00F162C7 /* Wire.Message+Decodable.Tests.swift */; };
+		7301BC7D23B1261300F162C7 /* Wire.MessagePart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC7C23B1261300F162C7 /* Wire.MessagePart.swift */; };
+		7301BC7F23B1294500F162C7 /* Wire.MessagePart+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC7E23B1294500F162C7 /* Wire.MessagePart+Decodable.Tests.swift */; };
+		7326360723ACDF56009E44E2 /* Wire.Event.Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7326360623ACDF55009E44E2 /* Wire.Event.Subscription.swift */; };
 		734C16FD23A3D51600330245 /* JSONDecoder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734C16FC23A3D51600330245 /* JSONDecoder+Extensions.swift */; };
 		734C170323A3E17F00330245 /* JSONEncoder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734C170223A3E17F00330245 /* JSONEncoder+Extensions.swift */; };
 		734D6A3823AA91FB00105479 /* Wire.User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734D6A3723AA91FB00105479 /* Wire.User.swift */; };
@@ -66,6 +88,7 @@
 		734D6A4223AAA77F00105479 /* Wire.CursorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734D6A4123AAA77F00105479 /* Wire.CursorType.swift */; };
 		734D6A4423AAA7D300105479 /* Wire.CursorType+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734D6A4323AAA7D300105479 /* Wire.CursorType+Decodable.Tests.swift */; };
 		734D6A4623AB78A400105479 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734D6A4523AB78A400105479 /* Array+Extensions.swift */; };
+		736C7AE723B0B6D400018707 /* Wire.Event.InitialState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736C7AE623B0B6D400018707 /* Wire.Event.InitialState.swift */; };
 		7396B2D823A78E08009F08FD /* XCTest+Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7396B2D723A78E08009F08FD /* XCTest+Assertions.swift */; };
 		7396B2E223A7F7F6009F08FD /* JSONEncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7396B2E123A7F7F6009F08FD /* JSONEncoderTests.swift */; };
 		7396B2E423A7F8CA009F08FD /* Collections+EncodableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7396B2E323A7F8CA009F08FD /* Collections+EncodableTests.swift */; };
@@ -73,6 +96,10 @@
 		7396B2EA23A91370009F08FD /* JSONDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7396B2E923A91370009F08FD /* JSONDecoderTests.swift */; };
 		739860BF23AA83EF0098191E /* Wire.Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739860BE23AA83EF0098191E /* Wire.Room.swift */; };
 		739860C123AA86C20098191E /* Wire.Room+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739860C023AA86C20098191E /* Wire.Room+Decodable.Tests.swift */; };
+		73A5168E23B0B78400CF8B77 /* Wire.Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A5168D23B0B78400CF8B77 /* Wire.Event.swift */; };
+		73A5169023B0BB0500CF8B77 /* Wire.Event.EventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A5168F23B0BB0500CF8B77 /* Wire.Event.EventType.swift */; };
+		73A5169223B0BBE000CF8B77 /* Wire.Event.PresenceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A5169123B0BBE000CF8B77 /* Wire.Event.PresenceState.swift */; };
+		73ABC07E23B0B5D100ECD162 /* Wire.Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73ABC07D23B0B5D100ECD162 /* Wire.Message.swift */; };
 		73B00EAE23A2822F0062C718 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B00EAD23A2822F0062C718 /* String+Extensions.swift */; };
 		73CF01BC23AB823F006FB43E /* Wire.ReadState+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CF01BB23AB823F006FB43E /* Wire.ReadState+Decodable.Tests.swift */; };
 		73CF01BE23AB8AF9006FB43E /* Wire.Membership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CF01BD23AB8AF9006FB43E /* Wire.Membership.swift */; };
@@ -81,6 +108,7 @@
 		73CF01C623AB9DAC006FB43E /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B00EAF23A28B6A0062C718 /* Date+Extensions.swift */; };
 		73CF01C823ABC38A006FB43E /* CodableJSONCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CF01C723ABC38A006FB43E /* CodableJSONCollections.swift */; };
 		73CF01CC23ACC8E6006FB43E /* Wire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CF01CB23ACC8E6006FB43E /* Wire.swift */; };
+		73E7312823AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E7312723AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift */; };
 		ED2919D9239A73320095B344 /* TokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2919D8239A73320095B344 /* TokenProvider.swift */; };
 /* End PBXBuildFile section */
 
@@ -148,6 +176,28 @@
 		22EDCB7F231D2D6D00419C75 /* NetworkingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingController.swift; sourceTree = "<group>"; };
 		22FC112C233E50FB0013A9D7 /* UsersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersProvider.swift; sourceTree = "<group>"; };
 		22FD93BF2361DD8A00AB841F /* TypingUsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingUsersViewModel.swift; sourceTree = "<group>"; };
+		7301BC4C23B0E51300F162C7 /* Wire.Event.AddedToRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.AddedToRoom.swift; sourceTree = "<group>"; };
+		7301BC4E23B0E5ED00F162C7 /* Wire.Event.RemovedFromRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.RemovedFromRoom.swift; sourceTree = "<group>"; };
+		7301BC5023B0E64B00F162C7 /* Wire.Event.RoomUpdated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.RoomUpdated.swift; sourceTree = "<group>"; };
+		7301BC5623B0E71500F162C7 /* Wire.Event.RoomDeleted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.RoomDeleted.swift; sourceTree = "<group>"; };
+		7301BC5823B0E74800F162C7 /* Wire.Event.UserJoinedRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.UserJoinedRoom.swift; sourceTree = "<group>"; };
+		7301BC5A23B0E79F00F162C7 /* Wire.Event.ReadStateUpdated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wire.Event.ReadStateUpdated.swift; sourceTree = "<group>"; };
+		7301BC5B23B0E79F00F162C7 /* Wire.Event.UserLeftRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wire.Event.UserLeftRoom.swift; sourceTree = "<group>"; };
+		7301BC6223B0E8DE00F162C7 /* Wire.Event.UserJoinedRoom+Decodable.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Wire.Event.UserJoinedRoom+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		7301BC6423B0E9C700F162C7 /* Wire.Event.UserLeftRoom+Decodable.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wire.Event.UserLeftRoom+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		7301BC6623B0FCCE00F162C7 /* Wire.Event.RoomDeleted+Decodable.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wire.Event.RoomDeleted+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		7301BC6723B0FCCE00F162C7 /* Wire.Event.ReadStateUpdated+Decodable.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wire.Event.ReadStateUpdated+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		7301BC6823B0FCCE00F162C7 /* Wire.Event.InitialState+Decodable.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wire.Event.InitialState+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		7301BC6923B0FCCE00F162C7 /* Wire.Event.RemovedFromRoom+Decodable.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wire.Event.RemovedFromRoom+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		7301BC6A23B0FCCE00F162C7 /* Wire.Event.RoomUpdated+Decodable.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wire.Event.RoomUpdated+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		7301BC6B23B0FCCE00F162C7 /* Wire.Event.AddedToRoom+Decodable.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wire.Event.AddedToRoom+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		7301BC7223B1143D00F162C7 /* Wire.Event.IsTyping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.IsTyping.swift; sourceTree = "<group>"; };
+		7301BC7423B1149D00F162C7 /* Wire.Event.IsTyping+Decodable.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wire.Event.IsTyping+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		7301BC7623B1151600F162C7 /* Wire.Event.PresenceState+Decodable.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wire.Event.PresenceState+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		7301BC7A23B11F6F00F162C7 /* Wire.Message+Decodable.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wire.Message+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		7301BC7C23B1261300F162C7 /* Wire.MessagePart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.MessagePart.swift; sourceTree = "<group>"; };
+		7301BC7E23B1294500F162C7 /* Wire.MessagePart+Decodable.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Wire.MessagePart+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		7326360623ACDF55009E44E2 /* Wire.Event.Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.Subscription.swift; sourceTree = "<group>"; };
 		734C16FC23A3D51600330245 /* JSONDecoder+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONDecoder+Extensions.swift"; sourceTree = "<group>"; };
 		734C170223A3E17F00330245 /* JSONEncoder+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "JSONEncoder+Extensions.swift"; sourceTree = "<group>"; };
 		734D6A3723AA91FB00105479 /* Wire.User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.User.swift; sourceTree = "<group>"; };
@@ -158,6 +208,7 @@
 		734D6A4123AAA77F00105479 /* Wire.CursorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.CursorType.swift; sourceTree = "<group>"; };
 		734D6A4323AAA7D300105479 /* Wire.CursorType+Decodable.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Wire.CursorType+Decodable.Tests.swift"; sourceTree = "<group>"; };
 		734D6A4523AB78A400105479 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
+		736C7AE623B0B6D400018707 /* Wire.Event.InitialState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.InitialState.swift; sourceTree = "<group>"; };
 		7396B2D723A78E08009F08FD /* XCTest+Assertions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+Assertions.swift"; sourceTree = "<group>"; };
 		7396B2E123A7F7F6009F08FD /* JSONEncoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONEncoderTests.swift; sourceTree = "<group>"; };
 		7396B2E323A7F8CA009F08FD /* Collections+EncodableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collections+EncodableTests.swift"; sourceTree = "<group>"; };
@@ -165,6 +216,10 @@
 		7396B2E923A91370009F08FD /* JSONDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoderTests.swift; sourceTree = "<group>"; };
 		739860BE23AA83EF0098191E /* Wire.Room.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Room.swift; sourceTree = "<group>"; };
 		739860C023AA86C20098191E /* Wire.Room+Decodable.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wire.Room+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		73A5168D23B0B78400CF8B77 /* Wire.Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.swift; sourceTree = "<group>"; };
+		73A5168F23B0BB0500CF8B77 /* Wire.Event.EventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.EventType.swift; sourceTree = "<group>"; };
+		73A5169123B0BBE000CF8B77 /* Wire.Event.PresenceState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.PresenceState.swift; sourceTree = "<group>"; };
+		73ABC07D23B0B5D100ECD162 /* Wire.Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Message.swift; sourceTree = "<group>"; };
 		73B00EAD23A2822F0062C718 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		73B00EAF23A28B6A0062C718 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		73CF01BB23AB823F006FB43E /* Wire.ReadState+Decodable.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Wire.ReadState+Decodable.Tests.swift"; sourceTree = "<group>"; };
@@ -173,6 +228,7 @@
 		73CF01C423AB93FB006FB43E /* Data+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extensions.swift"; sourceTree = "<group>"; };
 		73CF01C723ABC38A006FB43E /* CodableJSONCollections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableJSONCollections.swift; sourceTree = "<group>"; };
 		73CF01CB23ACC8E6006FB43E /* Wire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wire.swift; sourceTree = "<group>"; };
+		73E7312723AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Wire.Event.Subscription+Decodable.Tests.swift"; sourceTree = "<group>"; };
 		ED2919D8239A73320095B344 /* TokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -546,6 +602,92 @@
 			path = "View Models";
 			sourceTree = "<group>";
 		};
+		7301BC5223B0E65200F162C7 /* RoomSubscription */ = {
+			isa = PBXGroup;
+			children = (
+				7301BC7223B1143D00F162C7 /* Wire.Event.IsTyping.swift */,
+			);
+			path = RoomSubscription;
+			sourceTree = "<group>";
+		};
+		7301BC5323B0E65C00F162C7 /* UserSubscription */ = {
+			isa = PBXGroup;
+			children = (
+				7301BC4C23B0E51300F162C7 /* Wire.Event.AddedToRoom.swift */,
+				736C7AE623B0B6D400018707 /* Wire.Event.InitialState.swift */,
+				7301BC5A23B0E79F00F162C7 /* Wire.Event.ReadStateUpdated.swift */,
+				7301BC4E23B0E5ED00F162C7 /* Wire.Event.RemovedFromRoom.swift */,
+				7301BC5623B0E71500F162C7 /* Wire.Event.RoomDeleted.swift */,
+				7301BC5023B0E64B00F162C7 /* Wire.Event.RoomUpdated.swift */,
+				7301BC5823B0E74800F162C7 /* Wire.Event.UserJoinedRoom.swift */,
+				7301BC5B23B0E79F00F162C7 /* Wire.Event.UserLeftRoom.swift */,
+			);
+			path = UserSubscription;
+			sourceTree = "<group>";
+		};
+		7301BC5423B0E66400F162C7 /* PresenceSubscription */ = {
+			isa = PBXGroup;
+			children = (
+				73A5169123B0BBE000CF8B77 /* Wire.Event.PresenceState.swift */,
+			);
+			path = PresenceSubscription;
+			sourceTree = "<group>";
+		};
+		7301BC5523B0E67B00F162C7 /* Subscription */ = {
+			isa = PBXGroup;
+			children = (
+				73A5168D23B0B78400CF8B77 /* Wire.Event.swift */,
+				73A5168F23B0BB0500CF8B77 /* Wire.Event.EventType.swift */,
+				7326360623ACDF55009E44E2 /* Wire.Event.Subscription.swift */,
+				7301BC5423B0E66400F162C7 /* PresenceSubscription */,
+				7301BC5223B0E65200F162C7 /* RoomSubscription */,
+				7301BC5323B0E65C00F162C7 /* UserSubscription */,
+			);
+			path = Subscription;
+			sourceTree = "<group>";
+		};
+		7301BC5E23B0E85500F162C7 /* Subscription */ = {
+			isa = PBXGroup;
+			children = (
+				73E7312723AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift */,
+				7301BC6123B0E86D00F162C7 /* PresenceSubscription */,
+				7301BC6023B0E86700F162C7 /* RoomSubscription */,
+				7301BC5F23B0E85F00F162C7 /* UserSubscription */,
+			);
+			path = Subscription;
+			sourceTree = "<group>";
+		};
+		7301BC5F23B0E85F00F162C7 /* UserSubscription */ = {
+			isa = PBXGroup;
+			children = (
+				7301BC6B23B0FCCE00F162C7 /* Wire.Event.AddedToRoom+Decodable.Tests.swift */,
+				7301BC6823B0FCCE00F162C7 /* Wire.Event.InitialState+Decodable.Tests.swift */,
+				7301BC6723B0FCCE00F162C7 /* Wire.Event.ReadStateUpdated+Decodable.Tests.swift */,
+				7301BC6923B0FCCE00F162C7 /* Wire.Event.RemovedFromRoom+Decodable.Tests.swift */,
+				7301BC6623B0FCCE00F162C7 /* Wire.Event.RoomDeleted+Decodable.Tests.swift */,
+				7301BC6A23B0FCCE00F162C7 /* Wire.Event.RoomUpdated+Decodable.Tests.swift */,
+				7301BC6223B0E8DE00F162C7 /* Wire.Event.UserJoinedRoom+Decodable.Tests.swift */,
+				7301BC6423B0E9C700F162C7 /* Wire.Event.UserLeftRoom+Decodable.Tests.swift */,
+			);
+			path = UserSubscription;
+			sourceTree = "<group>";
+		};
+		7301BC6023B0E86700F162C7 /* RoomSubscription */ = {
+			isa = PBXGroup;
+			children = (
+				7301BC7423B1149D00F162C7 /* Wire.Event.IsTyping+Decodable.Tests.swift */,
+			);
+			path = RoomSubscription;
+			sourceTree = "<group>";
+		};
+		7301BC6123B0E86D00F162C7 /* PresenceSubscription */ = {
+			isa = PBXGroup;
+			children = (
+				7301BC7623B1151600F162C7 /* Wire.Event.PresenceState+Decodable.Tests.swift */,
+			);
+			path = PresenceSubscription;
+			sourceTree = "<group>";
+		};
 		7396B2DF23A7F76F009F08FD /* CodableJSONCollections */ = {
 			isa = PBXGroup;
 			children = (
@@ -560,10 +702,13 @@
 		73CF01C123AB8EF3006FB43E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7301BC5523B0E67B00F162C7 /* Subscription */,
 				73CF01CB23ACC8E6006FB43E /* Wire.swift */,
 				734D6A3D23AAA2C900105479 /* Wire.Cursor.swift */,
 				734D6A4123AAA77F00105479 /* Wire.CursorType.swift */,
 				73CF01BD23AB8AF9006FB43E /* Wire.Membership.swift */,
+				73ABC07D23B0B5D100ECD162 /* Wire.Message.swift */,
+				7301BC7C23B1261300F162C7 /* Wire.MessagePart.swift */,
 				734D6A3B23AAA1FA00105479 /* Wire.ReadState.swift */,
 				739860BE23AA83EF0098191E /* Wire.Room.swift */,
 				734D6A3723AA91FB00105479 /* Wire.User.swift */,
@@ -574,8 +719,11 @@
 		73CF01C223AB8FE5006FB43E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7301BC5E23B0E85500F162C7 /* Subscription */,
 				734D6A3F23AAA3CE00105479 /* Wire.Cursor+Decodable.Tests.swift */,
 				734D6A4323AAA7D300105479 /* Wire.CursorType+Decodable.Tests.swift */,
+				7301BC7A23B11F6F00F162C7 /* Wire.Message+Decodable.Tests.swift */,
+				7301BC7E23B1294500F162C7 /* Wire.MessagePart+Decodable.Tests.swift */,
 				73CF01BF23AB8B84006FB43E /* Wire.Membership+Decodable.Tests.swift */,
 				73CF01BB23AB823F006FB43E /* Wire.ReadState+Decodable.Tests.swift */,
 				739860C023AA86C20098191E /* Wire.Room+Decodable.Tests.swift */,
@@ -728,6 +876,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7396B2E423A7F8CA009F08FD /* Collections+EncodableTests.swift in Sources */,
+				7301BC7F23B1294500F162C7 /* Wire.MessagePart+Decodable.Tests.swift in Sources */,
+				7301BC7723B1151600F162C7 /* Wire.Event.PresenceState+Decodable.Tests.swift in Sources */,
 				734D6A3A23AA95DC00105479 /* Wire.User+Decodable.Tests.swift in Sources */,
 				7396B2EA23A91370009F08FD /* JSONDecoderTests.swift in Sources */,
 				227B83FC230E9D7C00921E0D /* MessagePartTests.swift in Sources */,
@@ -735,17 +885,27 @@
 				7396B2D823A78E08009F08FD /* XCTest+Assertions.swift in Sources */,
 				73CF01BC23AB823F006FB43E /* Wire.ReadState+Decodable.Tests.swift in Sources */,
 				2244FC2F22F2FBD900FE8D50 /* TestTokenProvider.swift in Sources */,
+				73E7312823AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift in Sources */,
 				227498492321040100D10C76 /* BundleExtensionsTests.swift in Sources */,
 				227B8405230ECA7400921E0D /* RoomTests.swift in Sources */,
+				7301BC7B23B11F6F00F162C7 /* Wire.Message+Decodable.Tests.swift in Sources */,
 				228E1D6D230D9FDC0014B1A9 /* MessageTests.swift in Sources */,
+				7301BC7023B0FCCE00F162C7 /* Wire.Event.RoomUpdated+Decodable.Tests.swift in Sources */,
+				7301BC6D23B0FCCE00F162C7 /* Wire.Event.ReadStateUpdated+Decodable.Tests.swift in Sources */,
+				7301BC7123B0FCCE00F162C7 /* Wire.Event.AddedToRoom+Decodable.Tests.swift in Sources */,
 				73CF01C023AB8B84006FB43E /* Wire.Membership+Decodable.Tests.swift in Sources */,
 				227E946F231FC5950025B691 /* XCTest+Networking.swift in Sources */,
+				7301BC6323B0E8DE00F162C7 /* Wire.Event.UserJoinedRoom+Decodable.Tests.swift in Sources */,
+				7301BC6F23B0FCCE00F162C7 /* Wire.Event.RemovedFromRoom+Decodable.Tests.swift in Sources */,
 				227B8403230EAC7900921E0D /* UserTests.swift in Sources */,
 				224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */,
 				7396B2E623A7FE56009F08FD /* Collections+DecodableTests.swift in Sources */,
+				7301BC6523B0E9C700F162C7 /* Wire.Event.UserLeftRoom+Decodable.Tests.swift in Sources */,
 				73B00EAE23A2822F0062C718 /* String+Extensions.swift in Sources */,
 				734D6A4423AAA7D300105479 /* Wire.CursorType+Decodable.Tests.swift in Sources */,
 				734D6A4023AAA3CE00105479 /* Wire.Cursor+Decodable.Tests.swift in Sources */,
+				7301BC6E23B0FCCE00F162C7 /* Wire.Event.InitialState+Decodable.Tests.swift in Sources */,
+				7301BC7523B1149D00F162C7 /* Wire.Event.IsTyping+Decodable.Tests.swift in Sources */,
 				734D6A4623AB78A400105479 /* Array+Extensions.swift in Sources */,
 				22749855232146EA00D10C76 /* ServiceNameTests.swift in Sources */,
 				227B83FE230EAA4800921E0D /* PresenceStateTests.swift in Sources */,
@@ -754,6 +914,7 @@
 				2274984E23210D6500D10C76 /* PPSDKInfoExtensionsTests.swift in Sources */,
 				227498472321028700D10C76 /* DateFormatterExtensionsTests.swift in Sources */,
 				22749857232147AD00D10C76 /* ServiceVersionTests.swift in Sources */,
+				7301BC6C23B0FCCE00F162C7 /* Wire.Event.RoomDeleted+Decodable.Tests.swift in Sources */,
 				22D777432322B6B0009773D0 /* ChatServiceTests.swift in Sources */,
 				739860C123AA86C20098191E /* Wire.Room+Decodable.Tests.swift in Sources */,
 				2274984C2321098B00D10C76 /* PCBaseClientExtensionsTests.swift in Sources */,
@@ -765,6 +926,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22D537D12302CA9600A92341 /* Model.swift in Sources */,
+				7301BC4D23B0E51300F162C7 /* Wire.Event.AddedToRoom.swift in Sources */,
 				22D2A2D2231961060095757C /* PPSDKInfo+Extensions.swift in Sources */,
 				22D2A2EF2319BA520095757C /* State.swift in Sources */,
 				2212EC5723572A3F002212A4 /* RoomMembersProvider.swift in Sources */,
@@ -775,8 +937,10 @@
 				22D2A2E523197AD50095757C /* Service.swift in Sources */,
 				22D2A2E723197B620095757C /* ChatService.swift in Sources */,
 				22D2A2E1231978010095757C /* ServiceName.swift in Sources */,
+				736C7AE723B0B6D400018707 /* Wire.Event.InitialState.swift in Sources */,
 				22EDCB80231D2D6D00419C75 /* NetworkingController.swift in Sources */,
 				22D537D52302D25B00A92341 /* Room.swift in Sources */,
+				7301BC5C23B0E79F00F162C7 /* Wire.Event.ReadStateUpdated.swift in Sources */,
 				2200BB93231E727000BF9545 /* DateFormatter+Extensions.swift in Sources */,
 				22BECDFC2366F24D00FAB7DC /* JoinedRoomsViewModel.swift in Sources */,
 				22CEBB5522FC6F37005CB021 /* Types.swift in Sources */,
@@ -785,24 +949,36 @@
 				734D6A3E23AAA2C900105479 /* Wire.Cursor.swift in Sources */,
 				222EA2AF23424A7D004EE90F /* AvailableRoomsProvider.swift in Sources */,
 				734C16FD23A3D51600330245 /* JSONDecoder+Extensions.swift in Sources */,
+				73A5168E23B0B78400CF8B77 /* Wire.Event.swift in Sources */,
 				229018312358AE99008FAB07 /* TypingUsersProvider.swift in Sources */,
+				7301BC7D23B1261300F162C7 /* Wire.MessagePart.swift in Sources */,
 				22FD93C02361DD8A00AB841F /* TypingUsersViewModel.swift in Sources */,
 				73CF01CC23ACC8E6006FB43E /* Wire.swift in Sources */,
 				734D6A4223AAA77F00105479 /* Wire.CursorType.swift in Sources */,
 				22D2A2D823196B9F0095757C /* PCBaseClient+Extensions.swift in Sources */,
 				222EA2AD23424A11004EE90F /* JoinedRoomsProvider.swift in Sources */,
+				7301BC7323B1143D00F162C7 /* Wire.Event.IsTyping.swift in Sources */,
+				73A5169223B0BBE000CF8B77 /* Wire.Event.PresenceState.swift in Sources */,
+				7301BC4F23B0E5ED00F162C7 /* Wire.Event.RemovedFromRoom.swift in Sources */,
 				739860BF23AA83EF0098191E /* Wire.Room.swift in Sources */,
 				22D2A2E32319780F0095757C /* ServiceVersion.swift in Sources */,
+				73ABC07E23B0B5D100ECD162 /* Wire.Message.swift in Sources */,
 				22D2A2D5231963C70095757C /* Bundle+Extensions.swift in Sources */,
 				224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */,
 				734D6A3823AA91FB00105479 /* Wire.User.swift in Sources */,
 				73CF01BE23AB8AF9006FB43E /* Wire.Membership.swift in Sources */,
 				227177FE236894AA00B89376 /* MessagesViewModel.swift in Sources */,
 				22D537D72302D2CE00A92341 /* User.swift in Sources */,
+				7301BC5123B0E64B00F162C7 /* Wire.Event.RoomUpdated.swift in Sources */,
 				73CF01C523AB93FB006FB43E /* Data+Extensions.swift in Sources */,
+				73A5169023B0BB0500CF8B77 /* Wire.Event.EventType.swift in Sources */,
+				7301BC5923B0E74800F162C7 /* Wire.Event.UserJoinedRoom.swift in Sources */,
 				ED2919D9239A73320095B344 /* TokenProvider.swift in Sources */,
+				7326360723ACDF56009E44E2 /* Wire.Event.Subscription.swift in Sources */,
 				22D537D92302D2EB00A92341 /* Message.swift in Sources */,
+				7301BC5723B0E71500F162C7 /* Wire.Event.RoomDeleted.swift in Sources */,
 				22C5F3EF2306B08C009A7383 /* MessagePart.swift in Sources */,
+				7301BC5D23B0E79F00F162C7 /* Wire.Event.UserLeftRoom.swift in Sources */,
 				2212EC55235725B8002212A4 /* MessagesProvider.swift in Sources */,
 				22C5F3FF2306C7AB009A7383 /* PresenceState.swift in Sources */,
 				22D2A2DB23196FDE0095757C /* NetworkingError.swift in Sources */,
