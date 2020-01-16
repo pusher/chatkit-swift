@@ -3,7 +3,7 @@ import Foundation
 
 extension Wire {
     
-    internal struct Message: Decodable {
+    internal struct Message {
         
         let identifier: Int64
         let userIdentifier: String
@@ -11,19 +11,21 @@ extension Wire {
         let parts: [MessagePart]
         let createdAt: Date
         let updatedAt: Date
-        
-        private enum CodingKeys: String, CodingKey {
-            case identifier = "id"
-            case userIdentifier = "user_id"
-            case roomIdentifier = "room_id"
-            case parts
-            case createdAt = "created_at"
-            case updatedAt = "updated_at"
-            
-            var description: String {
-                return "\"\(self.rawValue)\""
-            }
-        }
     }
     
+}
+extension Wire.Message: Decodable {
+    
+    private enum CodingKeys: String, CodingKey {
+        case identifier = "id"
+        case userIdentifier = "user_id"
+        case roomIdentifier = "room_id"
+        case parts
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+        
+        var description: String {
+            return "\"\(self.rawValue)\""
+        }
+    }
 }
