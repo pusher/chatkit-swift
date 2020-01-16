@@ -10,7 +10,7 @@ class ChatService: Service {
     
     let logger: PPLogger
     
-    private let instance: Instance
+    private let instance: PusherPlatform.Instance
     private let requestOptions: PPRequestOptions
     private var resumableSubscription: PPResumableSubscription
     
@@ -35,12 +35,12 @@ class ChatService: Service {
         self.name = .chat
         self.version = .version7
         self.logger = logger
-        self.instance = Instance(locator: instanceLocator,
-                                 serviceName: self.name.rawValue,
-                                 serviceVersion: self.version.rawValue,
-                                 client: client,
-                                 tokenProvider: tokenProvider,
-                                 logger: self.logger)
+        self.instance = PusherPlatform.Instance(locator: instanceLocator,
+                                                serviceName: self.name.rawValue,
+                                                serviceVersion: self.version.rawValue,
+                                                client: client,
+                                                tokenProvider: tokenProvider,
+                                                logger: self.logger)
         self.requestOptions = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: "/users")
         self.resumableSubscription = PPResumableSubscription(instance: self.instance, requestOptions: self.requestOptions)
     }
