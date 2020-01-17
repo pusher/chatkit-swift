@@ -48,8 +48,8 @@ class StubInstance: StubBase, Instance {
             switch options.destination {
             case let .relative(relativePath):
                 return url.hasSuffix(relativePath)
-            case let .absolute(absoluteUrl):
-                return url == absoluteUrl
+            case let .absolute(absoluteURL):
+                return url == absoluteURL
             }
         }
     }

@@ -6,7 +6,7 @@ extension Wire {
     internal struct User {
         let identifier: String
         let name: String
-        let avatarUrl: URL?
+        let avatarURL: URL?
         let customData: [String: Any]?
         let createdAt: Date
         let updatedAt: Date
@@ -23,7 +23,7 @@ extension Wire.User: Equatable {
         
         return lhs.identifier == rhs.identifier
             && lhs.name == rhs.name
-            && lhs.avatarUrl == rhs.avatarUrl
+            && lhs.avatarURL == rhs.avatarURL
         // TODO FIXME
 //            && lhs.customData == rhs.customData
             && lhs.createdAt == rhs.createdAt
@@ -37,7 +37,7 @@ extension Wire.User: Decodable {
     private enum CodingKeys: String, CodingKey {
         case identifier = "id"
         case name
-        case avatarUrl = "avatar_url"
+        case avatarURL = "avatar_url"
         case customData = "custom_data"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
@@ -54,7 +54,7 @@ extension Wire.User: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.identifier = try container.decode(String.self, forKey: .identifier)
         self.name = try container.decode(String.self, forKey: .name)
-        self.avatarUrl = try container.decodeIfPresent(URL.self, forKey: .avatarUrl)
+        self.avatarURL = try container.decodeIfPresent(URL.self, forKey: .avatarURL)
         self.customData = try container.decodeIfPresent([String: Any].self, forKey: .customData)
         self.createdAt = try container.decode(type(of: self.createdAt), forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)

@@ -26,7 +26,7 @@ class ConcreteStoreTests: XCTestCase {
                     currentUser: Wire.User(
                         identifier: "viv",
                         name: "Vivan",
-                        avatarUrl: nil,
+                        avatarURL: nil,
                         customData: nil,
                         createdAt: Date.distantPast,
                         updatedAt: Date.distantFuture,

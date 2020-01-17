@@ -52,7 +52,7 @@ class ConcreteSubscriptionResponderTests: XCTestCase {
             Wire.Event.EventType.initialState(
                 event: Wire.Event.InitialState(currentUser: Wire.User(identifier: "viv",
                                                                       name: "Vivan",
-                                                                      avatarUrl: nil,
+                                                                      avatarURL: nil,
                                                                       customData: nil,
                                                                       createdAt: Date.distantPast,
                                                                       updatedAt: Date.distantFuture,
