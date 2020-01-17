@@ -1,0 +1,7 @@
+
+
+
+enum ServiceType {
+    case user
+}
+

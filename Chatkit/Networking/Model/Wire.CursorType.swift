@@ -8,4 +8,6 @@ extension Wire {
 
 }
 
+extension Wire.CursorType: Equatable {}
+
 extension Wire.CursorType: Decodable {}

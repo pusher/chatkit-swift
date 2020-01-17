@@ -17,6 +17,27 @@ extension Wire {
 
 }
 
+// A custom Eqautable implementation is required because `customData: [String: Any]?` cannot be auto synthensized
+extension Wire.Room: Equatable {
+    
+    static func == (lhs: Wire.Room, rhs: Wire.Room) -> Bool {
+        
+        return lhs.identifier == rhs.identifier
+            && lhs.name == rhs.name
+            && lhs.createdById == rhs.createdById
+            && lhs.isPrivate == rhs.isPrivate
+            && lhs.pushNotificationTitleOverride == rhs.pushNotificationTitleOverride
+        // TODO FIXME
+//            && lhs.customData == rhs.customData
+            && lhs.lastMessageAt == rhs.lastMessageAt
+            && lhs.createdAt == rhs.createdAt
+            && lhs.createdAt == rhs.createdAt
+            && lhs.updatedAt == rhs.updatedAt
+            && lhs.deletedAt == rhs.deletedAt
+    }
+    
+}
+
 extension Wire.Room: Decodable {
 
     private enum CodingKeys: String, CodingKey {
@@ -52,4 +73,3 @@ extension Wire.Room: Decodable {
         self.deletedAt = try container.decodeIfPresent(Date.self, forKey: .deletedAt)
     }
 }
-

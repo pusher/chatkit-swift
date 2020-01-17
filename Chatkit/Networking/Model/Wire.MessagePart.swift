@@ -16,6 +16,10 @@ extension Wire {
 
 }
 
+extension Wire.MessageType: Equatable {}
+
+extension Wire.MessagePart: Equatable {}
+
 extension Wire.MessagePart: Decodable {
 
     private struct Attachment: Decodable {
@@ -66,4 +70,3 @@ extension Wire.MessagePart: Decodable {
         }
     }
 }
-

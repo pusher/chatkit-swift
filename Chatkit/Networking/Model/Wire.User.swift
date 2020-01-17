@@ -15,6 +15,23 @@ extension Wire {
     
 }
 
+
+// A custom Eqautable implementation is required because `customData: [String: Any]?` cannot be auto synthensized
+extension Wire.User: Equatable {
+    
+    static func == (lhs: Wire.User, rhs: Wire.User) -> Bool {
+        
+        return lhs.identifier == rhs.identifier
+            && lhs.name == rhs.name
+            && lhs.avatarUrl == rhs.avatarUrl
+        // TODO FIXME
+//            && lhs.customData == rhs.customData
+            && lhs.createdAt == rhs.createdAt
+            && lhs.updatedAt == rhs.updatedAt
+            && lhs.deletedAt == rhs.deletedAt
+    }
+}
+
 extension Wire.User: Decodable {
     
     private enum CodingKeys: String, CodingKey {

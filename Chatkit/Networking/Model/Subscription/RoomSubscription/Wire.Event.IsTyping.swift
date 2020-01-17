@@ -9,6 +9,8 @@ extension Wire.Event {
     
 }
 
+extension Wire.Event.IsTyping: Equatable {}
+
 extension Wire.Event.IsTyping: Decodable {
     
     private enum CodingKeys: String, CodingKey {

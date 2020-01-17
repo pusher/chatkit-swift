@@ -10,6 +10,8 @@ extension Wire {
 
 }
 
+extension Wire.ReadState: Equatable {}
+
 extension Wire.ReadState: Decodable {
 
     private enum CodingKeys: String, CodingKey {
@@ -22,4 +24,3 @@ extension Wire.ReadState: Decodable {
         }
     }
 }
-

@@ -1,0 +1,6 @@
+
+
+// For namespacing
+struct Hydrator {
+}
+

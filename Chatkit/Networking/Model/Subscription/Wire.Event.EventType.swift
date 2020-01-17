@@ -26,3 +26,5 @@ extension Wire.Event {
     }
     
 }
+
+extension Wire.Event.EventType: Equatable {}

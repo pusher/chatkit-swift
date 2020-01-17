@@ -29,6 +29,8 @@ public class Chatkit {
     
     private let networkingController: NetworkingController
     
+    private let dependencies: Dependencies
+    
     // MARK: - Initializers
     
     /// Creates and returns an instance of `Chatkit` entry point.
@@ -41,11 +43,18 @@ public class Chatkit {
     ///     - logger: The logger used by the SDK.
     ///
     /// - Returns: An instance of `Chatkit` or throws an error when the initialization failed.
-    public init(instanceLocator: String, tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
+    public convenience init(instanceLocator: String, tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
+        let dependencies = ConcreteDependencies(instanceLocator: instanceLocator)
+        try self.init(instanceLocator: instanceLocator, tokenProvider: tokenProvider, logger: logger, dependencies: dependencies)
+    }
+    
+    internal init(instanceLocator: String, tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger(), dependencies: Dependencies) throws {
         self.logger = logger
         self.connectionStatus = .disconnected
         
         self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, logger: self.logger)
+        
+        self.dependencies = ConcreteDependencies(instanceLocator: instanceLocator)
     }
     
     // MARK: - Connecting
@@ -56,11 +65,20 @@ public class Chatkit {
     ///     - completionHandler: An optional completion handler called when a connection has
     ///     been successfuly established or failed due to an error.
     public func connect(completionHandler: CompletionHandler? = nil) {
-        // TODO: Implement
-        self.connectionStatus = .connected
-        if let completionHandler = completionHandler {
-            completionHandler(nil)
+        
+        // TODO: Implement properly
+        
+        dependencies.subscriptionManager.subscribe(.session) { result in
+            switch result {
+            case .success:
+                self.connectionStatus = .connected
+                completionHandler?(nil)
+            case let .failure(error):
+                self.connectionStatus = .disconnected
+                completionHandler?(error)
+            }
         }
+        
     }
     
     /// Terminates the previously established connection to the Chatkit web service.
@@ -99,7 +117,15 @@ public class Chatkit {
     ///     - completionHandler: A completion handler which will be called when the `JoinedRoomsProvider` is ready, or an `Error` occurs creating it.
     public func createJoinedRoomsProvider(completionHandler: @escaping (JoinedRoomsProvider?, Error?) -> Void) {
         // TODO: Implement
-        completionHandler(nil, nil)
+        let currentUser = User(identifier: "identifier",
+                               name: "name",
+                               avatar: nil,
+                               presenceState: .online,
+                               customData: nil,
+                               createdAt: Date(),
+                               updatedAt: Date())
+        let provider = JoinedRoomsProvider(currentUser: currentUser)
+        completionHandler(provider, nil)
     }
     
     /// Creates an instance of `MessagesProvider`.

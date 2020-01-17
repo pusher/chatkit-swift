@@ -28,7 +28,11 @@ extension Wire.Event {
 
 }
 
+extension Wire.Event.Subscription.Name: Equatable {}
+
 extension Wire.Event.Subscription.Name: Decodable {}
+    
+extension Wire.Event.Subscription: Equatable {}
 
 extension Wire.Event.Subscription: Decodable {
     
@@ -101,4 +105,3 @@ extension Wire.Event.Subscription: Decodable {
         }
     }
 }
-
