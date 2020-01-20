@@ -204,6 +204,17 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                     "created_at": "2017-03-13T14:10:04Z",
                     "updated_at": "2017-04-13T14:10:04Z"
                 },
+                "rooms": [
+                    {
+                        "id": "ac43dfef",
+                        "name": "Chatkit chat",
+                        "created_by_id": "alice",
+                        "private": false,
+                        "last_message_at": "2020-01-03T18:15:15Z",
+                        "created_at": "2017-03-23T11:36:42Z",
+                        "updated_at": "2017-07-28T22:19:32Z",
+                    }
+                ],
                 "memberships": [
                     {
                         "room_id": "ac43dfef",
@@ -227,17 +238,6 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                         },
                     }
                 ],
-                "rooms": [
-                    {
-                        "id": "ac43dfef",
-                        "name": "Chatkit chat",
-                        "created_by_id": "alice",
-                        "private": false,
-                        "last_message_at": "2020-01-03T18:15:15Z",
-                        "created_at": "2017-03-23T11:36:42Z",
-                        "updated_at": "2017-07-28T22:19:32Z",
-                    }
-                ]
             },
         }
         """.toJsonData()

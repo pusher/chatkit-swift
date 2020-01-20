@@ -22,7 +22,17 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
-                }
+                },
+            ],
+            "memberships": [
+                {
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
+                },
+                {
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
             "read_states": [
                 {
@@ -35,16 +45,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                         "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
                     },
-                }
-            ],
-            "memberships": [
-                {
-                    "room_id": "ac43dfef",
-                    "user_ids": ["alice", "carol"],
-                },
-                {
-                    "room_id": "538a8fc",
-                    "user_ids": ["bob", "carol"],
                 },
             ],
         }
@@ -72,7 +72,17 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
-                }
+                },
+            ],
+            "memberships": [
+                {
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
+                },
+                {
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
             "read_states": [
                 {
@@ -85,16 +95,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                         "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
                     },
-                }
-            ],
-            "memberships": [
-                {
-                    "room_id": "ac43dfef",
-                    "user_ids": ["alice", "carol"],
-                },
-                {
-                    "room_id": "538a8fc",
-                    "user_ids": ["bob", "carol"],
                 },
             ],
         }
@@ -119,7 +119,17 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
-                }
+                },
+            ],
+            "memberships": [
+                {
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
+                },
+                {
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
             "read_states": [
                 {
@@ -132,16 +142,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                         "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
                     },
-                }
-            ],
-            "memberships": [
-                {
-                    "room_id": "ac43dfef",
-                    "user_ids": ["alice", "carol"],
-                },
-                {
-                    "room_id": "538a8fc",
-                    "user_ids": ["bob", "carol"],
                 },
             ],
         }
@@ -167,7 +167,17 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
-                }
+                },
+            ],
+            "memberships": [
+                {
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
+                },
+                {
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
             "read_states": [
                 {
@@ -180,16 +190,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                         "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
                     },
-                }
-            ],
-            "memberships": [
-                {
-                    "room_id": "ac43dfef",
-                    "user_ids": ["alice", "carol"],
-                },
-                {
-                    "room_id": "538a8fc",
-                    "user_ids": ["bob", "carol"],
                 },
             ],
         }
@@ -220,7 +220,17 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
-                }
+                },
+            ],
+            "memberships": [
+                {
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
+                },
+                {
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
             "read_states": [
                 {
@@ -233,16 +243,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                         "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
                     },
-                }
-            ],
-            "memberships": [
-                {
-                    "room_id": "ac43dfef",
-                    "user_ids": ["alice", "carol"],
-                },
-                {
-                    "room_id": "538a8fc",
-                    "user_ids": ["bob", "carol"],
                 },
             ],
         }
@@ -263,6 +263,16 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
+            "memberships": [
+                {
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
+                },
+                {
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
+            ],
             "read_states": [
                 {
                     "room_id": "ac43dfef",
@@ -274,16 +284,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                         "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
                     },
-                }
-            ],
-            "memberships": [
-                {
-                    "room_id": "ac43dfef",
-                    "user_ids": ["alice", "carol"],
-                },
-                {
-                    "room_id": "538a8fc",
-                    "user_ids": ["bob", "carol"],
                 },
             ],
         }
@@ -305,6 +305,16 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": null,
+            "memberships": [
+                {
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
+                },
+                {
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
+            ],
             "read_states": [
                 {
                     "room_id": "ac43dfef",
@@ -316,16 +326,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                         "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
                     },
-                }
-            ],
-            "memberships": [
-                {
-                    "room_id": "ac43dfef",
-                    "user_ids": ["alice", "carol"],
-                },
-                {
-                    "room_id": "538a8fc",
-                    "user_ids": ["bob", "carol"],
                 },
             ],
         }
@@ -348,6 +348,16 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": "not an array",
+            "memberships": [
+                {
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
+                },
+                {
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
+            ],
             "read_states": [
                 {
                     "room_id": "ac43dfef",
@@ -359,16 +369,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                         "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
                     },
-                }
-            ],
-            "memberships": [
-                {
-                    "room_id": "ac43dfef",
-                    "user_ids": ["alice", "carol"],
-                },
-                {
-                    "room_id": "538a8fc",
-                    "user_ids": ["bob", "carol"],
                 },
             ],
         }
@@ -399,7 +399,17 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
-                }
+                },
+            ],
+            "memberships": [
+                {
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
+                },
+                {
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
             "read_states": [
                 {
@@ -412,16 +422,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                         "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
                     },
-                }
-            ],
-            "memberships": [
-                {
-                    "room_id": "ac43dfef",
-                    "user_ids": ["alice", "carol"],
-                },
-                {
-                    "room_id": "538a8fc",
-                    "user_ids": ["bob", "carol"],
                 },
             ],
         }
@@ -451,7 +451,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
-                }
+                },
             ],
             "read_states": [
                 {
@@ -464,7 +464,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                         "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
                     },
-                }
+                },
             ],
         }
         """.toJsonData()
@@ -493,8 +493,9 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
-                }
+                },
             ],
+            "memberships": null,
             "read_states": [
                 {
                     "room_id": "ac43dfef",
@@ -506,9 +507,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                         "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
                     },
-                }
+                },
             ],
-            "memberships": null,
         }
         """.toJsonData()
         
@@ -537,8 +537,9 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
-                }
+                },
             ],
+            "memberships": "not an array",
             "read_states": [
                 {
                     "room_id": "ac43dfef",
@@ -550,9 +551,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                         "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
                     },
-                }
+                },
             ],
-            "memberships": "not an array",
         }
         """.toJsonData()
         
@@ -582,7 +582,16 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
-                }
+                },
+            ],
+            "memberships": [
+                {
+                    "user_ids": ["alice", "carol"],
+                },
+                {
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
             "read_states": [
                 {
@@ -595,15 +604,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                         "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
                     },
-                }
-            ],
-            "memberships": [
-                {
-                    "user_ids": ["alice", "carol"],
-                },
-                {
-                    "room_id": "538a8fc",
-                    "user_ids": ["bob", "carol"],
                 },
             ],
         }
@@ -633,7 +633,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
-                }
+                },
             ],
             "memberships": [
                 {
@@ -672,9 +672,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
-                }
+                },
             ],
-            "read_states": null,
             "memberships": [
                 {
                     "room_id": "ac43dfef",
@@ -685,6 +684,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "user_ids": ["bob", "carol"],
                 },
             ],
+            "read_states": null,
         }
         """.toJsonData()
         
@@ -713,9 +713,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
-                }
+                },
             ],
-            "read_states": "not an array",
             "memberships": [
                 {
                     "room_id": "ac43dfef",
@@ -726,6 +725,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "user_ids": ["bob", "carol"],
                 },
             ],
+            "read_states": "not an array",
         }
         """.toJsonData()
         
@@ -755,7 +755,17 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
-                }
+                },
+            ],
+            "memberships": [
+                {
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
+                },
+                {
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
             "read_states": [
                 {
@@ -767,16 +777,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
                     }
-                }
-            ],
-            "memberships": [
-                {
-                    "room_id": "ac43dfef",
-                    "user_ids": ["alice", "carol"],
-                },
-                {
-                    "room_id": "538a8fc",
-                    "user_ids": ["bob", "carol"],
                 },
             ],
         }

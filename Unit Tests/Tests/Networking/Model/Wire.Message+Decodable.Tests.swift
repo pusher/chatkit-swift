@@ -14,7 +14,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -41,7 +41,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -64,7 +64,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -88,7 +88,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -111,7 +111,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -134,7 +134,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -158,7 +158,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -181,7 +181,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -204,7 +204,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -228,7 +228,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -307,7 +307,7 @@ class WireMessageDecodableTests: XCTestCase {
             "parts": [
                 {
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -330,7 +330,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "updated_at": "2017-04-23T11:36:42Z",
         }
@@ -424,7 +424,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
         }
@@ -446,7 +446,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": null,
@@ -470,7 +470,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": 123,
@@ -494,7 +494,7 @@ class WireMessageDecodableTests: XCTestCase {
                 {
                     "type": "text/plain",
                     "content": "Hola!"
-                }
+                },
             ],
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "not a date",
