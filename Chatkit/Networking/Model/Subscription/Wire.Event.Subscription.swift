@@ -86,7 +86,7 @@ extension Wire.Event.Subscription: Decodable {
         // Room Subscription
             
         case .newMessage:
-            let event = try container.decode(Wire.Message.self, forKey: .data)
+            let event = try container.decode(Wire.Event.NewMessage.self, forKey: .data)
             self.data = .newMessage(event: event)
             
         case .isTyping:

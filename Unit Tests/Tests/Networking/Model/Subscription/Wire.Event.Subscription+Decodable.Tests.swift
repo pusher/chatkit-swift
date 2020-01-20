@@ -655,7 +655,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             }
             
             // Loosely verify the event `data` (parsing of these entities is comprehensively tested elsewhere)
-            XCTAssertEqual(newMessage.identifier, 3)
+            XCTAssertEqual(newMessage.message.identifier, 3)
         }
     }
     
