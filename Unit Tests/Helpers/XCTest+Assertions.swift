@@ -50,8 +50,8 @@ public func XCTAssertNoThrow<T>(_ expression: @autoclosure () throws -> T, _ mes
     
     XCTAssertNoThrow(try executeAndAssignResult(expression, to: &result), message, file: file, line: line)
     
-    if let r = result {
-        validateResult(r)
+    if let result = result {
+        validateResult(result)
     }
 }
 
@@ -62,8 +62,8 @@ public func XCTAssertNotNil<T>(_ expression: @autoclosure () throws -> T?, _ mes
     XCTAssertNoThrow(try executeAndAssignResult(expression, to: &result), message, file: file, line: line)
     XCTAssertNotNil(result, message, file: file, line: line)
     
-    if let r = result {
-        validateResult(r)
+    if let result = result {
+        validateResult(result)
     }
 }
 
