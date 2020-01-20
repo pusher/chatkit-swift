@@ -17,7 +17,7 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
                 "updated_at": "2017-07-28T22:19:32Z",
             },
             "membership": {
-                "room_id": "Chatkit chat",
+                "room_id": "ac43dfef",
                 "user_ids": ["alice", "carol"],
             },
             "read_state": {
@@ -45,7 +45,7 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
         let jsonData = """
         {
             "membership": {
-                "room_id": "Chat",
+                "room_id": "ac43dfef",
                 "user_ids": ["alice", "carol"],
             },
             "read_state": {
@@ -73,7 +73,7 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
         {
             "room": null,
             "membership": {
-                "room_id": "cool-room-2",
+                "room_id": "ac43dfef2",
                 "user_ids": ["alice", "carol"],
             },
             "read_state": {
@@ -102,7 +102,7 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
         {
             "room": "not a room",
             "membership": {
-                "room_id": "cool-room-2",
+                "room_id": "ac43dfef",
                 "user_ids": ["alice", "carol"],
             },
             "read_state": {
@@ -139,7 +139,7 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
                 "updated_at": "2017-04-23T11:36:42Z",
             },
             "membership": {
-                "room_id": "cool-room-2",
+                "room_id": "ac43dfef",
                 "user_ids": ["alice", "carol"],
             },
             "read_state": {
@@ -311,7 +311,7 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
                 "updated_at": "2017-04-23T11:36:42Z",
             },
             "membership": {
-                "room_id": "cool-room-2",
+                "room_id": "ac43dfef",
                 "user_ids": ["alice", "carol"],
             },
         }
@@ -336,7 +336,7 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
                 "updated_at": "2017-04-23T11:36:42Z",
             },
             "membership": {
-                "room_id": "cool-room-2",
+                "room_id": "ac43dfef",
                 "user_ids": ["alice", "carol"],
             },
             "read_state": null
@@ -363,7 +363,7 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
                 "updated_at": "2017-04-23T11:36:42Z",
             },
             "membership": {
-                "room_id": "cool-room-2",
+                "room_id": "ac43dfef",
                 "user_ids": ["alice", "carol"],
             },
             "read_state": "not a read_state"
@@ -391,7 +391,7 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
                 "updated_at": "2017-04-23T11:36:42Z",
             },
             "membership": {
-                "room_id": "cool-room-2",
+                "room_id": "ac43dfef",
                 "user_ids": ["alice", "carol"],
             },
             "read_state": {
