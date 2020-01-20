@@ -15,26 +15,21 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
                 }
             ],
             "read_states": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
+                        "room_id": "ac43dfef",
                         "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
@@ -44,7 +39,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_ids": ["jean", "ham"]
                 },
                 {
@@ -70,26 +65,21 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         {
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
                 }
             ],
             "read_states": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
+                        "room_id": "ac43dfef",
                         "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
@@ -99,7 +89,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_ids": ["jean", "ham"]
                 },
                 {
@@ -122,26 +112,21 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "current_user": null,
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
                 }
             ],
             "read_states": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
+                        "room_id": "ac43dfef",
                         "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
@@ -151,7 +136,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_ids": ["jean", "ham"]
                 },
                 {
@@ -175,26 +160,21 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "current_user": "not a user",
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
                 }
             ],
             "read_states": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
+                        "room_id": "ac43dfef",
                         "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
@@ -204,7 +184,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_ids": ["jean", "ham"]
                 },
                 {
@@ -233,26 +213,21 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
                 }
             ],
             "read_states": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
+                        "room_id": "ac43dfef",
                         "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
@@ -262,7 +237,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_ids": ["jean", "ham"]
                 },
                 {
@@ -290,10 +265,10 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             },
             "read_states": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
+                        "room_id": "ac43dfef",
                         "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
@@ -303,7 +278,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_ids": ["jean", "ham"]
                 },
                 {
@@ -332,10 +307,10 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "rooms": null,
             "read_states": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
+                        "room_id": "ac43dfef",
                         "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
@@ -345,7 +320,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_ids": ["jean", "ham"]
                 },
                 {
@@ -375,10 +350,10 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "rooms": "not an array",
             "read_states": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
+                        "room_id": "ac43dfef",
                         "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
@@ -388,7 +363,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_ids": ["jean", "ham"]
                 },
                 {
@@ -418,25 +393,20 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             },
             "rooms": [
                 {
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
                 }
             ],
             "read_states": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
+                        "room_id": "ac43dfef",
                         "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
@@ -446,7 +416,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_ids": ["jean", "ham"]
                 },
                 {
@@ -474,26 +444,21 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
                 }
             ],
             "read_states": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
+                        "room_id": "ac43dfef",
                         "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
@@ -521,26 +486,21 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
                 }
             ],
             "read_states": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
+                        "room_id": "ac43dfef",
                         "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
@@ -570,26 +530,21 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
                 }
             ],
             "read_states": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
+                        "room_id": "ac43dfef",
                         "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
@@ -620,26 +575,21 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
                 }
             ],
             "read_states": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
+                        "room_id": "ac43dfef",
                         "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
@@ -676,23 +626,18 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
                 }
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_ids": ["jean", "ham"]
                 },
                 {
@@ -720,24 +665,19 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
                 }
             ],
             "read_states": null,
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_ids": ["jean", "ham"]
                 },
                 {
@@ -766,24 +706,19 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
                 }
             ],
             "read_states": "not an array",
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_ids": ["jean", "ham"]
                 },
                 {
@@ -813,25 +748,20 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
                 }
             ],
             "read_states": [
                 {
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
+                        "room_id": "ac43dfef",
                         "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
@@ -841,7 +771,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_ids": ["jean", "ham"]
                 },
                 {

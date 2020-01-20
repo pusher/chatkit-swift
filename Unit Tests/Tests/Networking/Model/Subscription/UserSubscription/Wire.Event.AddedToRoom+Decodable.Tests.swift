@@ -8,25 +8,20 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room": {
-                "id": "cool-room-2",
-                "created_by_id": "ham",
-                "name": "mycoolroom",
-                "push_notification_title_override": null,
+                "id": "ac43dfef",
+                "name": "Chatkit chat",
+                "created_by_id": "alice",
                 "private": false,
-                "custom_data": {
-                    "something": "interesting"
-                },
-                "last_message_at": "2017-04-14T14:00:42Z",
+                "last_message_at": "2020-01-03T18:15:15Z",
                 "created_at": "2017-03-23T11:36:42Z",
-                "updated_at": "2017-03-23T11:36:42Z",
-                "deleted_at": null
+                "updated_at": "2017-07-28T22:19:32Z",
             },
             "membership": {
-                "room_id": "cool-room-2",
+                "room_id": "Chatkit chat",
                 "user_ids": ["jean", "ham"]
             },
             "read_state": {
-                "room_id": "cool-room-2",
+                "room_id": "Chatkit chat",
                 "unread_count": 15,
                 "cursor": {
                     "room_id": "cool-room-2",
@@ -50,7 +45,7 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
         let jsonData = """
         {
             "membership": {
-                "room_id": "cool-room-2",
+                "room_id": "Chat",
                 "user_ids": ["jean", "ham"]
             },
             "read_state": {

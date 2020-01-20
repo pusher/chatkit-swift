@@ -9,7 +9,7 @@ class WireMessageDecodableTests: XCTestCase {
         {
             "id": 2,
             "user_id": "alice",
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": [
                 {
                     "type": "text/plain",
@@ -23,7 +23,7 @@ class WireMessageDecodableTests: XCTestCase {
         
         XCTAssertNoThrow(try Wire.Message(from: jsonData.jsonDecoder())) { message in
             XCTAssertEqual(message.identifier, 2)
-            XCTAssertEqual(message.roomIdentifier, "cool-room-1")
+            XCTAssertEqual(message.roomIdentifier, "ac43dfef")
             XCTAssertEqual(message.userIdentifier, "alice")
             XCTAssertEqual(message.parts.count, 1)
             XCTAssertEqual(message.createdAt, Date(fromISO8601String: "2017-03-23T11:36:42Z"))
@@ -36,7 +36,7 @@ class WireMessageDecodableTests: XCTestCase {
         let jsonData = """
         {
             "user_id": "alice",
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": [
                 {
                     "type": "text/plain",
@@ -59,7 +59,7 @@ class WireMessageDecodableTests: XCTestCase {
         {
             "id": null,
             "user_id": "alice",
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": [
                 {
                     "type": "text/plain",
@@ -83,7 +83,7 @@ class WireMessageDecodableTests: XCTestCase {
         {
             "id": "not an int",
             "user_id": "alice",
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": [
                 {
                     "type": "text/plain",
@@ -176,7 +176,7 @@ class WireMessageDecodableTests: XCTestCase {
         let jsonData = """
         {
             "id": 2,
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": [
                 {
                     "type": "text/plain",
@@ -199,7 +199,7 @@ class WireMessageDecodableTests: XCTestCase {
         {
             "id": 2,
             "user_id": null,
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": [
                 {
                     "type": "text/plain",
@@ -223,7 +223,7 @@ class WireMessageDecodableTests: XCTestCase {
         {
             "id": 2,
             "user_id": 123,
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": [
                 {
                     "type": "text/plain",
@@ -247,7 +247,7 @@ class WireMessageDecodableTests: XCTestCase {
         {
             "id": 2,
             "user_id": "alice",
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
         }
@@ -264,7 +264,7 @@ class WireMessageDecodableTests: XCTestCase {
         {
             "id": 2,
             "user_id": "alice",
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": null,
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -283,7 +283,7 @@ class WireMessageDecodableTests: XCTestCase {
         {
             "id": 2,
             "user_id": "alice",
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": "not an array",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -303,7 +303,7 @@ class WireMessageDecodableTests: XCTestCase {
         {
             "id": 2,
             "user_id": "alice",
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": [
                 {
                     "content": "Hola!"
@@ -325,7 +325,7 @@ class WireMessageDecodableTests: XCTestCase {
         {
             "id": 2,
             "user_id": "alice",
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": [
                 {
                     "type": "text/plain",
@@ -347,7 +347,7 @@ class WireMessageDecodableTests: XCTestCase {
           {
               "id": 2,
               "user_id": "alice",
-              "room_id": "cool-room-1",
+              "room_id": "ac43dfef",
               "parts": [
                   {
                       "type": "text/plain",
@@ -371,7 +371,7 @@ class WireMessageDecodableTests: XCTestCase {
           {
               "id": 2,
               "user_id": "alice",
-              "room_id": "cool-room-1",
+              "room_id": "ac43dfef",
               "parts": [
                   {
                       "type": "text/plain",
@@ -395,7 +395,7 @@ class WireMessageDecodableTests: XCTestCase {
           {
               "id": 2,
               "user_id": "alice",
-              "room_id": "cool-room-1",
+              "room_id": "ac43dfef",
               "parts": [
                   {
                       "type": "text/plain",
@@ -419,7 +419,7 @@ class WireMessageDecodableTests: XCTestCase {
         {
             "id": 2,
             "user_id": "alice",
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": [
                 {
                     "type": "text/plain",
@@ -441,7 +441,7 @@ class WireMessageDecodableTests: XCTestCase {
         {
             "id": 2,
             "user_id": "alice",
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": [
                 {
                     "type": "text/plain",
@@ -465,7 +465,7 @@ class WireMessageDecodableTests: XCTestCase {
         {
             "id": 2,
             "user_id": "alice",
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": [
                 {
                     "type": "text/plain",
@@ -489,7 +489,7 @@ class WireMessageDecodableTests: XCTestCase {
         {
             "id": 2,
             "user_id": "alice",
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "parts": [
                 {
                     "type": "text/plain",

@@ -8,10 +8,10 @@ class WireEventReadStateUpdatedDecodableTests: XCTestCase {
         let jsonData = """
         {
             "read_state": {
-                "room_id": "cool-room-1",
+                "room_id": "ac43dfef",
                 "unread_count": 90,
                 "cursor": {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_id": "alice",
                     "cursor_type": 0,
                     "position": 154,
@@ -75,7 +75,7 @@ class WireEventReadStateUpdatedDecodableTests: XCTestCase {
             "read_state": {
                 "unread_count": 90,
                 "cursor": {
-                    "room_id": "cool-room-1",
+                    "room_id": "ac43dfef",
                     "user_id": "alice",
                     "cursor_type": 0,
                     "position": 154,

@@ -5,7 +5,7 @@ class WireReadStateDecodableTests: XCTestCase {
         
     let validCursorJsonString = """
     {
-      "room_id": "cool-room-1",
+      "room_id": "ac43dfef",
       "user_id": "alice",
       "cursor_type": 0,
       "position": 123654,
@@ -19,14 +19,14 @@ class WireReadStateDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "unread_count": 7,
             "cursor": \(validCursorJsonString)
         }
         """.toJsonData()
         
         XCTAssertNoThrow(try Wire.ReadState(from: jsonData.jsonDecoder())) { readState in
-            XCTAssertEqual(readState.roomIdentifier, "cool-room-1")
+            XCTAssertEqual(readState.roomIdentifier, "ac43dfef")
             XCTAssertEqual(readState.unreadCount, 7)
             XCTAssertEqual(readState.cursor.roomIdentifier, validCursor.roomIdentifier)
             XCTAssertEqual(readState.cursor.userIdentifier, validCursor.userIdentifier)
@@ -86,7 +86,7 @@ class WireReadStateDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "cursor": \(validCursorJsonString)
         }
         """.toJsonData()
@@ -100,7 +100,7 @@ class WireReadStateDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "unread_count": null,
             "cursor": \(validCursorJsonString)
         }
@@ -116,7 +116,7 @@ class WireReadStateDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "unread_count": "not an int",
             "cursor": \(validCursorJsonString)
         }
@@ -132,7 +132,7 @@ class WireReadStateDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "unread_count": 7,
         }
         """.toJsonData()
@@ -146,7 +146,7 @@ class WireReadStateDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "unread_count": 7,
             "cursor": null,
         }
@@ -162,7 +162,7 @@ class WireReadStateDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "room_id": "cool-room-1",
+            "room_id": "ac43dfef",
             "unread_count": 7,
             "cursor": "not a cursor"
         }
