@@ -12,7 +12,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -44,7 +44,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -68,7 +68,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -93,7 +93,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -117,7 +117,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -141,7 +141,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -166,7 +166,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -190,7 +190,7 @@ class WireRoomDecodableTests: XCTestCase {
             "name": "Chatkit chat",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -214,7 +214,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": null,
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -239,7 +239,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": 123,
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -263,7 +263,7 @@ class WireRoomDecodableTests: XCTestCase {
             "name": "Chatkit chat",
             "created_by_id": "alice",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -287,7 +287,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": null,
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -311,7 +311,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": 123,
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -430,7 +430,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
@@ -453,7 +453,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": null,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -477,7 +477,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": 123,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -502,7 +502,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "created_at": "2017-03-23T11:36:42Z",
@@ -525,7 +525,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": null,
@@ -549,7 +549,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": 123,
@@ -574,7 +574,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "not a date",
@@ -599,7 +599,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -622,7 +622,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -647,7 +647,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -672,7 +672,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -697,7 +697,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -720,7 +720,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -745,7 +745,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -770,7 +770,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -795,7 +795,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -818,7 +818,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -842,7 +842,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -867,7 +867,7 @@ class WireRoomDecodableTests: XCTestCase {
             "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
-              "highlight_color": "blue"
+                "highlight_color": "blue"
             },
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
