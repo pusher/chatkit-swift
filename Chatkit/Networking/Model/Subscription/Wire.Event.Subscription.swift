@@ -20,6 +20,7 @@ extension Wire.Event {
             case readStateUpdated = "read_state_updated"
             // Room Subscription
             case newMessage = "new_message"
+            case messageDeleted = "message_deleted"
             case isTyping = "is_typing"
             // Presence Subscription
             case presenceState = "presence_state"
@@ -88,6 +89,10 @@ extension Wire.Event.Subscription: Decodable {
         case .newMessage:
             let event = try container.decode(Wire.Event.NewMessage.self, forKey: .data)
             self.data = .newMessage(event: event)
+
+        case .messageDeleted:
+            let event = try container.decode(Wire.Event.MessageDeleted.self, forKey: .data)
+            self.data = .messageDeleted(event: event)
             
         case .isTyping:
             let event = try container.decode(Wire.Event.IsTyping.self, forKey: .data)

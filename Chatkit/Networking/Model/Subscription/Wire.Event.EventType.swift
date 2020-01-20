@@ -15,6 +15,7 @@ extension Wire.Event {
         
         // Room Subscription
         case newMessage(event: Wire.Event.NewMessage)
+        case messageDeleted(event: Wire.Event.MessageDeleted)
         case isTyping(event: Wire.Event.IsTyping)
         
         // Presence Subscription

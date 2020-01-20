@@ -676,6 +676,48 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                                           "\"id\""])
     }
     
+    func test_init_messageDeletedAllFieldsValid_noProblem() {
+        
+        let jsonData = """
+        {
+            "event_name": "message_deleted",
+            "timestamp": "2017-03-23T11:36:42Z",
+            "data": {
+                "message_id": "53457983"
+            }
+        }
+        """.toJsonData()
+        
+        XCTAssertNoThrow(try Wire.Event.Subscription(from: jsonData.jsonDecoder())) { subscription in
+            XCTAssertEqual(subscription.eventName, .messageDeleted)
+            XCTAssertEqual(subscription.timestamp, Date(fromISO8601String: "2017-03-23T11:36:42Z"))
+            
+            guard case let Wire.Event.EventType.messageDeleted(messageDeleted) = subscription.data else {
+                XCTFail("Expected `data` value of .isTyping but got a different value instead: \(subscription.data)")
+                return
+            }
+            
+            XCTAssertEqual(messageDeleted.messageIdentifier, "53457983")
+        }
+    }
+    
+    func test_init_messageDeletedInvalidFormat_throws() {
+        
+        let jsonData = """
+        {
+            "event_name": "message_deleted",
+            "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
+        }
+        """.toJsonData()
+        
+        XCTAssertThrowsError(try Wire.Event.Subscription(from: jsonData.jsonDecoder()),
+                             containing: ["keyNotFound",
+                                          "\"data\"",
+                                          "No value associated with key",
+                                          "\"message_id\""])
+    }
+    
     func test_init_isTypingAllFieldsValid_noProblem() {
         
         let jsonData = """
