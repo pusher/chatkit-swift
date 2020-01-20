@@ -8,59 +8,51 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
-                }
-            ],
-            "read_states": [
-                {
-                    "room_id": "cool-room-1",
-                    "unread_count": 7,
-                    "cursor": {
-                        "room_id": "cool-room-1",
-                        "user_id": "viv",
-                        "cursor_type": 0,
-                        "position": 123654,
-                        "updated_at": "2017-04-13T14:10:04Z"
-                    }
-                }
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
-                    "user_ids": ["jean", "ham"]
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
+            ],
+            "read_states": [
+                {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
+                    "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
+                        "cursor_type": 0,
+                        "position": 43398,
+                        "updated_at": "2017-04-13T14:10:04Z",
+                    },
+                },
             ],
         }
         """.toJsonData()
         
         XCTAssertNoThrow(try Wire.Event.InitialState(from: jsonData.jsonDecoder())) { event in
             // Loosely verify all the child entities (parsing of these entities is comprehensively tested elsewhere)
-            XCTAssertEqual(event.currentUser.identifier, "viv")
+            XCTAssertEqual(event.currentUser.identifier, "alice")
             XCTAssertEqual(event.rooms.count, 1)
             XCTAssertEqual(event.readStates.count, 1)
             XCTAssertEqual(event.memberships.count, 2)
@@ -73,42 +65,37 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         {
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
-                }
-            ],
-            "read_states": [
-                {
-                    "room_id": "cool-room-1",
-                    "unread_count": 7,
-                    "cursor": {
-                        "room_id": "cool-room-1",
-                        "user_id": "viv",
-                        "cursor_type": 0,
-                        "position": 123654,
-                        "updated_at": "2017-04-13T14:10:04Z"
-                    }
-                }
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
-                    "user_ids": ["jean", "ham"]
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
+            ],
+            "read_states": [
+                {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
+                    "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
+                        "cursor_type": 0,
+                        "position": 43398,
+                        "updated_at": "2017-04-13T14:10:04Z",
+                    },
+                },
             ],
         }
         """.toJsonData()
@@ -125,42 +112,37 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "current_user": null,
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
-                }
-            ],
-            "read_states": [
-                {
-                    "room_id": "cool-room-1",
-                    "unread_count": 7,
-                    "cursor": {
-                        "room_id": "cool-room-1",
-                        "user_id": "viv",
-                        "cursor_type": 0,
-                        "position": 123654,
-                        "updated_at": "2017-04-13T14:10:04Z"
-                    }
-                }
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
-                    "user_ids": ["jean", "ham"]
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
+            ],
+            "read_states": [
+                {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
+                    "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
+                        "cursor_type": 0,
+                        "position": 43398,
+                        "updated_at": "2017-04-13T14:10:04Z",
+                    },
+                },
             ],
         }
         """.toJsonData()
@@ -178,42 +160,37 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "current_user": "not a user",
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
-                }
-            ],
-            "read_states": [
-                {
-                    "room_id": "cool-room-1",
-                    "unread_count": 7,
-                    "cursor": {
-                        "room_id": "cool-room-1",
-                        "user_id": "viv",
-                        "cursor_type": 0,
-                        "position": 123654,
-                        "updated_at": "2017-04-13T14:10:04Z"
-                    }
-                }
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
-                    "user_ids": ["jean", "ham"]
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
+            ],
+            "read_states": [
+                {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
+                    "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
+                        "cursor_type": 0,
+                        "position": 43398,
+                        "updated_at": "2017-04-13T14:10:04Z",
+                    },
+                },
             ],
         }
         """.toJsonData()
@@ -230,51 +207,43 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
-                }
-            ],
-            "read_states": [
-                {
-                    "room_id": "cool-room-1",
-                    "unread_count": 7,
-                    "cursor": {
-                        "room_id": "cool-room-1",
-                        "user_id": "viv",
-                        "cursor_type": 0,
-                        "position": 123654,
-                        "updated_at": "2017-04-13T14:10:04Z"
-                    }
-                }
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
-                    "user_ids": ["jean", "ham"]
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
+            ],
+            "read_states": [
+                {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
+                    "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
+                        "cursor_type": 0,
+                        "position": 43398,
+                        "updated_at": "2017-04-13T14:10:04Z",
+                    },
+                },
             ],
         }
         """.toJsonData()
@@ -289,36 +258,33 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
-            "read_states": [
-                {
-                    "room_id": "cool-room-1",
-                    "unread_count": 7,
-                    "cursor": {
-                        "room_id": "cool-room-1",
-                        "user_id": "viv",
-                        "cursor_type": 0,
-                        "position": 123654,
-                        "updated_at": "2017-04-13T14:10:04Z"
-                    }
-                }
-            ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
-                    "user_ids": ["jean", "ham"]
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
+            ],
+            "read_states": [
+                {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
+                    "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
+                        "cursor_type": 0,
+                        "position": 43398,
+                        "updated_at": "2017-04-13T14:10:04Z",
+                    },
+                },
             ],
         }
         """.toJsonData()
@@ -333,37 +299,34 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": null,
-            "read_states": [
-                {
-                    "room_id": "cool-room-1",
-                    "unread_count": 7,
-                    "cursor": {
-                        "room_id": "cool-room-1",
-                        "user_id": "viv",
-                        "cursor_type": 0,
-                        "position": 123654,
-                        "updated_at": "2017-04-13T14:10:04Z"
-                    }
-                }
-            ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
-                    "user_ids": ["jean", "ham"]
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
+            ],
+            "read_states": [
+                {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
+                    "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
+                        "cursor_type": 0,
+                        "position": 43398,
+                        "updated_at": "2017-04-13T14:10:04Z",
+                    },
+                },
             ],
         }
         """.toJsonData()
@@ -379,37 +342,34 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": "not an array",
-            "read_states": [
-                {
-                    "room_id": "cool-room-1",
-                    "unread_count": 7,
-                    "cursor": {
-                        "room_id": "cool-room-1",
-                        "user_id": "viv",
-                        "cursor_type": 0,
-                        "position": 123654,
-                        "updated_at": "2017-04-13T14:10:04Z"
-                    }
-                }
-            ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
-                    "user_ids": ["jean", "ham"]
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
+            ],
+            "read_states": [
+                {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
+                    "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
+                        "cursor_type": 0,
+                        "position": 43398,
+                        "updated_at": "2017-04-13T14:10:04Z",
+                    },
+                },
             ],
         }
         """.toJsonData()
@@ -426,51 +386,43 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": [
                 {
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
-                }
-            ],
-            "read_states": [
-                {
-                    "room_id": "cool-room-1",
-                    "unread_count": 7,
-                    "cursor": {
-                        "room_id": "cool-room-1",
-                        "user_id": "viv",
-                        "cursor_type": 0,
-                        "position": 123654,
-                        "updated_at": "2017-04-13T14:10:04Z"
-                    }
-                }
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
-                    "user_ids": ["jean", "ham"]
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
+            ],
+            "read_states": [
+                {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
+                    "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
+                        "cursor_type": 0,
+                        "position": 43398,
+                        "updated_at": "2017-04-13T14:10:04Z",
+                    },
+                },
             ],
         }
         """.toJsonData()
@@ -485,42 +437,34 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
-                }
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
             ],
             "read_states": [
                 {
-                    "room_id": "cool-room-1",
-                    "unread_count": 7,
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
                     "cursor": {
-                        "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
                         "cursor_type": 0,
-                        "position": 123654,
-                        "updated_at": "2017-04-13T14:10:04Z"
-                    }
-                }
+                        "position": 43398,
+                        "updated_at": "2017-04-13T14:10:04Z",
+                    },
+                },
             ],
         }
         """.toJsonData()
@@ -535,44 +479,36 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
-                }
-            ],
-            "read_states": [
-                {
-                    "room_id": "cool-room-1",
-                    "unread_count": 7,
-                    "cursor": {
-                        "room_id": "cool-room-1",
-                        "user_id": "viv",
-                        "cursor_type": 0,
-                        "position": 123654,
-                        "updated_at": "2017-04-13T14:10:04Z"
-                    }
-                }
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
             ],
             "memberships": null,
+            "read_states": [
+                {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
+                    "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
+                        "cursor_type": 0,
+                        "position": 43398,
+                        "updated_at": "2017-04-13T14:10:04Z",
+                    },
+                },
+            ],
         }
         """.toJsonData()
         
@@ -587,44 +523,36 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
-                }
-            ],
-            "read_states": [
-                {
-                    "room_id": "cool-room-1",
-                    "unread_count": 7,
-                    "cursor": {
-                        "room_id": "cool-room-1",
-                        "user_id": "viv",
-                        "cursor_type": 0,
-                        "position": 123654,
-                        "updated_at": "2017-04-13T14:10:04Z"
-                    }
-                }
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
             ],
             "memberships": "not an array",
+            "read_states": [
+                {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
+                    "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
+                        "cursor_type": 0,
+                        "position": 43398,
+                        "updated_at": "2017-04-13T14:10:04Z",
+                    },
+                },
+            ],
         }
         """.toJsonData()
         
@@ -640,51 +568,43 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
-                }
-            ],
-            "read_states": [
-                {
-                    "room_id": "cool-room-1",
-                    "unread_count": 7,
-                    "cursor": {
-                        "room_id": "cool-room-1",
-                        "user_id": "viv",
-                        "cursor_type": 0,
-                        "position": 123654,
-                        "updated_at": "2017-04-13T14:10:04Z"
-                    }
-                }
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
             ],
             "memberships": [
                 {
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
+            ],
+            "read_states": [
+                {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
+                    "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
+                        "cursor_type": 0,
+                        "position": 43398,
+                        "updated_at": "2017-04-13T14:10:04Z",
+                    },
+                },
             ],
         }
         """.toJsonData()
@@ -699,39 +619,31 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
-                }
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
             ],
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
-                    "user_ids": ["jean", "ham"]
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()
@@ -746,41 +658,33 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
-                }
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
             ],
-            "read_states": null,
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
-                    "user_ids": ["jean", "ham"]
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
+            "read_states": null,
         }
         """.toJsonData()
         
@@ -795,41 +699,33 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
-                }
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
             ],
-            "read_states": "not an array",
             "memberships": [
                 {
-                    "room_id": "cool-room-1",
-                    "user_ids": ["jean", "ham"]
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
+            "read_states": "not an array",
         }
         """.toJsonData()
         
@@ -845,51 +741,43 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
             "rooms": [
                 {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "mycoolroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "created_at": "2017-04-13T14:10:38Z",
-                    "updated_at": "2017-04-13T14:10:38Z",
-                    "deleted_at": null
-                }
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
+            ],
+            "memberships": [
+                {
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
+                },
+                {
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
             "read_states": [
                 {
                     "unread_count": 7,
                     "cursor": {
-                        "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
                     }
-                }
-            ],
-            "memberships": [
-                {
-                    "room_id": "cool-room-1",
-                    "user_ids": ["jean", "ham"]
                 },
-                {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
             ],
         }
         """.toJsonData()

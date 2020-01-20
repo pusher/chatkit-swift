@@ -7,10 +7,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": {
-                "room_id": "cool-room-1"
-            },
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": {
+                "room_id": "ac43dfef"
+            },
         }
         """.toJsonData()
         
@@ -24,10 +24,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": null,
-            "data": {
-                "room_id": "cool-room-1"
-            },
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": {
+                "room_id": "ac43dfef"
+            },
         }
         """.toJsonData()
         
@@ -42,10 +42,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": 123,
-            "data": {
-                "room_id": "cool-room-1"
-            },
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": {
+                "room_id": "ac43dfef"
+            },
         }
         """.toJsonData()
         
@@ -60,10 +60,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "unknown",
-            "data": {
-                "room_id": "cool-room-1"
-            },
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": {
+                "room_id": "ac43dfef"
+            },
         }
         """.toJsonData()
         
@@ -79,7 +79,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         {
             "event_name": "room_deleted",
             "data": {
-                "room_id": "cool-room-1"
+                "room_id": "ac43dfef"
             },
         }
         """.toJsonData()
@@ -94,10 +94,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "room_deleted",
-            "data": {
-                "room_id": "cool-room-1"
-            },
             "timestamp": null,
+            "data": {
+                "room_id": "ac43dfef"
+            },
         }
         """.toJsonData()
         
@@ -112,10 +112,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "room_deleted",
-            "data": {
-                "room_id": "cool-room-1"
-            },
             "timestamp": 123,
+            "data": {
+                "room_id": "ac43dfef"
+            },
         }
         """.toJsonData()
         
@@ -130,10 +130,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "room_deleted",
-            "data": {
-                "room_id": "cool-room-1"
-            },
             "timestamp": "not a valid date",
+            "data": {
+                "room_id": "ac43dfef1"
+            },
         }
         """.toJsonData()
         
@@ -162,8 +162,8 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "room_deleted",
-            "data": null,
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": null,
         }
         """.toJsonData()
         
@@ -178,8 +178,8 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "room_deleted",
-            "data": "not a dictionary",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": "not a dictionary",
         }
         """.toJsonData()
         
@@ -195,58 +195,50 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
+            "event_name": "initial_state",
+            "timestamp": "2017-04-14T14:00:42Z",
             "data": {
                 "current_user": {
+                    "id": "alice",
+                    "name": "Alice A",
                     "created_at": "2017-03-13T14:10:04Z",
-                    "custom_data": {
-                        "email": "vivan@pusher.com"
-                    },
-                    "id": "viv",
-                    "name": "Vivan",
                     "updated_at": "2017-04-13T14:10:04Z"
                 },
+                "rooms": [
+                    {
+                        "id": "ac43dfef",
+                        "name": "Chatkit chat",
+                        "created_by_id": "alice",
+                        "private": false,
+                        "last_message_at": "2020-01-03T18:15:15Z",
+                        "created_at": "2017-03-23T11:36:42Z",
+                        "updated_at": "2017-07-28T22:19:32Z",
+                    }
+                ],
                 "memberships": [
                     {
-                        "room_id": "cool-room-1",
-                        "user_ids": ["jean", "ham"]
+                        "room_id": "ac43dfef",
+                        "user_ids": ["alice", "carol"],
                     },
                     {
-                        "room_id": "party-room",
-                        "user_ids": ["ham"]
-                    }
+                        "room_id": "538a8fc",
+                        "user_ids": ["bob", "carol"],
+                    },
                 ],
                 "read_states": [
                     {
+                        "room_id": "ac43dfef",
+                        "unread_count": 3,
                         "cursor": {
+                            "room_id": "ac43dfef",
+                            "user_id": "alice",
                             "cursor_type": 0,
-                            "position": 123654,
-                            "room_id": "cool-room-1",
+                            "position": 43398,
                             "updated_at": "2017-04-13T14:10:04Z",
-                            "user_id": "viv"
                         },
-                        "room_id": "cool-room-1",
-                        "unread_count": 7
                     }
                 ],
-                "rooms": [
-                    {
-                        "created_at": "2017-04-13T14:10:38Z",
-                        "created_by_id": "jean",
-                        "custom_data": {
-                            "something": "interesting"
-                        },
-                        "deleted_at": null,
-                        "id": "cool-room-1",
-                        "last_message_at": "2017-04-14T14:00:42Z",
-                        "name": "mycoolroom",
-                        "private": false,
-                        "push_notification_title_override": null,
-                        "updated_at": "2017-04-13T14:10:38Z"
-                    }
-                ]
             },
-            "event_name": "initial_state",
-            "timestamp": "2017-04-14T14:00:42Z"
         }
         """.toJsonData()
         
@@ -260,14 +252,14 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             }
             
             // Loosely verify the event `data` (parsing of these entities is comprehensively tested elsewhere)
-            XCTAssertEqual(initialState.currentUser.identifier, "viv")
+            XCTAssertEqual(initialState.currentUser.identifier, "alice")
             XCTAssertEqual(initialState.rooms.count, 1)
-            XCTAssertEqual(initialState.rooms[0].identifier, "cool-room-1")
+            XCTAssertEqual(initialState.rooms[0].identifier, "ac43dfef")
             XCTAssertEqual(initialState.readStates.count, 1)
-            XCTAssertEqual(initialState.readStates[0].unreadCount, 7)
+            XCTAssertEqual(initialState.readStates[0].unreadCount, 3)
             XCTAssertEqual(initialState.memberships.count, 2)
-            XCTAssertEqual(initialState.memberships[0].userIdentifiers, ["jean", "ham"])
-            XCTAssertEqual(initialState.memberships[1].userIdentifiers, ["ham"])
+            XCTAssertEqual(initialState.memberships[0].userIdentifiers, ["alice", "carol"])
+            XCTAssertEqual(initialState.memberships[1].userIdentifiers, ["bob", "carol"])
         }
     }
     
@@ -275,9 +267,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "initial_state",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -291,42 +283,34 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
+            "event_name": "added_to_room",
+            "timestamp": "2017-04-14T14:00:42Z",
             "data": {
+                "room": {
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
+                    "private": false,
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
                 "membership": {
-                    "room_id": "cool-room-2",
-                    "user_ids": [
-                        "jean",
-                        "ham"
-                    ]
+                    "room_id": "ac43dfef",
+                    "user_ids": ["alice", "carol"],
                 },
                 "read_state": {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
                     "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
                         "cursor_type": 0,
-                        "position": 123654,
-                        "room_id": "cool-room-2",
+                        "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
-                        "user_id": "viv"
                     },
-                    "room_id": "cool-room-2",
-                    "unread_count": 15
                 },
-                "room": {
-                    "created_at": "2017-03-23T11:36:42Z",
-                    "created_by_id": "ham",
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "deleted_at": null,
-                    "id": "cool-room-2",
-                    "last_message_at": "2017-04-14T14:00:42Z",
-                    "name": "mycoolroom",
-                    "private": false,
-                    "push_notification_title_override": null,
-                    "updated_at": "2017-03-23T11:36:42Z"
-                }
             },
-            "event_name": "added_to_room",
-            "timestamp": "2017-04-14T14:00:42Z"
         }
         """.toJsonData()
         
@@ -340,7 +324,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             }
             
             // Loosely verify the event `data` (parsing of these entities is comprehensively tested elsewhere)
-            XCTAssertEqual(addedToRoom.membership.roomIdentifier, "cool-room-2")
+            XCTAssertEqual(addedToRoom.membership.roomIdentifier, "ac43dfef")
         }
     }
     
@@ -348,9 +332,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "added_to_room",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -365,11 +349,11 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": {
-                "room_id": "cool-room-2"
-            },
             "event_name": "removed_from_room",
-            "timestamp": "2017-03-23T17:36:42Z"
+            "timestamp": "2017-03-23T17:36:42Z",
+            "data": {
+                "room_id": "ac43dfef"
+            },
         }
         """.toJsonData()
         
@@ -383,7 +367,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             }
             
             // Loosely verify the event `data` (parsing of these entities is comprehensively tested elsewhere)
-            XCTAssertEqual(removedFromRoom.roomIdentifier, "cool-room-2")
+            XCTAssertEqual(removedFromRoom.roomIdentifier, "ac43dfef")
         }
     }
     
@@ -391,9 +375,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "removed_from_room",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -409,23 +393,18 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "room_updated",
+            "timestamp": "2017-04-14T14:00:42Z",
             "data": {
                 "room": {
-                    "id": "cool-room-1",
-                    "created_by_id": "jean",
-                    "name": "myamazingroom",
-                    "push_notification_title_override": null,
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
                     "private": false,
-                    "custom_data": {
-                        "something": "interesting"
-                    },
-                    "last_message_at": "2017-04-14T14:00:42Z",
+                    "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
-                    "updated_at": "2017-03-23T11:36:42Z",
-                    "deleted_at": null
+                    "updated_at": "2017-07-28T22:19:32Z",
                 },
             },
-            "timestamp": "2017-04-14T14:00:42Z"
         }
         """.toJsonData()
         
@@ -439,7 +418,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             }
             
             // Loosely verify the event `data` (parsing of these entities is comprehensively tested elsewhere)
-            XCTAssertEqual(roomUpdated.room.identifier, "cool-room-1")
+            XCTAssertEqual(roomUpdated.room.identifier, "ac43dfef")
         }
     }
     
@@ -447,9 +426,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "room_updated",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -465,10 +444,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "room_deleted",
+            "timestamp": "2017-03-23T11:36:42Z",
             "data": {
-                "room_id": "cool-room-1"
+                "room_id": "ac43dfef"
             },
-            "timestamp": "2017-03-23T11:36:42Z"
         }
         """.toJsonData()
         
@@ -482,7 +461,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             }
             
             // Loosely verify the event `data` (parsing of these entities is comprehensively tested elsewhere)
-            XCTAssertEqual(roomDeleted.roomIdentifier, "cool-room-1")
+            XCTAssertEqual(roomDeleted.roomIdentifier, "ac43dfef")
         }
     }
     
@@ -490,9 +469,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "room_deleted",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -508,11 +487,11 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "user_joined_room",
+            "timestamp": "2017-03-23T11:36:42Z",
             "data": {
-                "room_id": "cool-room-1",
-                "user_id": "xavier"
+                "room_id": "ac43dfef",
+                "user_id": "alice"
             },
-            "timestamp": "2017-03-23T11:36:42Z"
         }
         """.toJsonData()
         
@@ -526,7 +505,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             }
             
             // Loosely verify the event `data` (parsing of these entities is comprehensively tested elsewhere)
-            XCTAssertEqual(userJoinedRoom.roomIdentifier, "cool-room-1")
+            XCTAssertEqual(userJoinedRoom.roomIdentifier, "ac43dfef")
         }
     }
     
@@ -534,9 +513,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "user_joined_room",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -552,11 +531,11 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "user_left_room",
+            "timestamp": "2017-03-23T11:36:42Z",
             "data": {
-                "room_id": "cool-room-1",
-                "user_id": "xavier"
+                "room_id": "ac43dfef",
+                "user_id": "alice"
             },
-            "timestamp": "2017-03-23T11:36:42Z"
         }
         """.toJsonData()
         
@@ -570,7 +549,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             }
             
             // Loosely verify the event `data` (parsing of these entities is comprehensively tested elsewhere)
-            XCTAssertEqual(userLeftRoom.roomIdentifier, "cool-room-1")
+            XCTAssertEqual(userLeftRoom.roomIdentifier, "ac43dfef")
         }
     }
     
@@ -578,9 +557,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "user_left_room",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -596,20 +575,20 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "read_state_updated",
+            "timestamp": "2017-03-23T11:36:42Z",
             "data": {
                 "read_state": {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
                     "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
                         "cursor_type": 0,
-                        "position": 154,
-                        "room_id": "cool-room-1",
+                        "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
-                        "user_id": "viv"
                     },
-                    "room_id": "cool-room-1",
-                    "unread_count": 90,
                 },
             },
-            "timestamp": "2017-03-23T11:36:42Z",
         }
         """.toJsonData()
         
@@ -623,7 +602,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             }
             
             // Loosely verify the event `data` (parsing of these entities is comprehensively tested elsewhere)
-            XCTAssertEqual(readStateUpdated.readState.roomIdentifier, "cool-room-1")
+            XCTAssertEqual(readStateUpdated.readState.roomIdentifier, "ac43dfef")
         }
     }
     
@@ -631,9 +610,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "read_state_updated",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -655,8 +634,8 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             "timestamp": "2017-03-23T11:36:42Z",
             "data": {
                 "id": 3,
-                "user_id": "viv",
-                "room_id": "cool-room-1",
+                "user_id": "alice",
+                "room_id": "ac43dfef",
                 "created_at":"2017-03-23T11:36:42Z",
                 "updated_at":"2017-04-23T11:36:42Z",
                 "parts": [
@@ -687,9 +666,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "new_message",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -729,9 +708,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "is_typing",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -749,10 +728,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "presence_state",
+            "timestamp": "2017-03-23T11:36:42Z",
             "data": {
                 "state": "online"
             },
-            "timestamp": "2017-03-23T11:36:42Z"
         }
         """.toJsonData()
         
@@ -774,8 +753,8 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "data": { },
-            "event_name": "presence_state",
             "timestamp": "2017-04-14T14:00:42Z",
+            "event_name": "presence_state",
         }
         """.toJsonData()
         

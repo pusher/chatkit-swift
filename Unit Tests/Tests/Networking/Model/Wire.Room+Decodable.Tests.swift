@@ -7,15 +7,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -23,13 +23,13 @@ class WireRoomDecodableTests: XCTestCase {
         """.toJsonData()
         
         XCTAssertNoThrow(try Wire.Room(from: jsonData.jsonDecoder())) { user in
-            XCTAssertEqual(user.identifier, "cool-room-1")
-            XCTAssertEqual(user.name, "mycoolroom")
-            XCTAssertEqual(user.createdById, "jean")
-            XCTAssertEqual(user.pushNotificationTitleOverride, "Cool Room")
+            XCTAssertEqual(user.identifier, "ac43dfef")
+            XCTAssertEqual(user.name, "Chatkit chat")
+            XCTAssertEqual(user.createdById, "alice")
+            XCTAssertEqual(user.pushNotificationTitleOverride, "Chatkit")
+            XCTAssertEqual(user.customData as? [String: String], ["highlight_color": "blue"])
             XCTAssertEqual(user.isPrivate, false)
-            XCTAssertEqual(user.customData as? [String: Bool], ["cool": true])
-            XCTAssertEqual(user.lastMessageAt, Date(fromISO8601String: "2017-02-23T11:36:42Z"))
+            XCTAssertEqual(user.lastMessageAt, Date(fromISO8601String: "2020-01-08T14:55:10Z"))
             XCTAssertEqual(user.createdAt, Date(fromISO8601String: "2017-03-23T11:36:42Z"))
             XCTAssertEqual(user.updatedAt, Date(fromISO8601String: "2017-04-23T11:36:42Z"))
             XCTAssertEqual(user.deletedAt, Date(fromISO8601String: "2017-05-23T11:36:42Z"))
@@ -40,14 +40,14 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -64,14 +64,14 @@ class WireRoomDecodableTests: XCTestCase {
         let jsonData = """
         {
             "id": null,
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -89,14 +89,14 @@ class WireRoomDecodableTests: XCTestCase {
         let jsonData = """
         {
             "id": 123,
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -113,14 +113,14 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "id": "ac43dfef",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -136,15 +136,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
+            "id": "ac43dfef",
             "name": null,
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -161,15 +161,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
+            "id": "ac43dfef",
             "name": 123,
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -186,14 +186,14 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -209,15 +209,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
             "created_by_id": null,
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -234,15 +234,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
             "created_by_id": 123,
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -255,16 +255,88 @@ class WireRoomDecodableTests: XCTestCase {
                                           "Expected to decode String but found a number instead."])
     }
     
+    func test_init_pushNotificationTitleOverrideMissing_noProblem() {
+        
+        let jsonData = """
+        {
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "custom_data": {
+                "highlight_color": "blue"
+            },
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
+            "created_at": "2017-03-23T11:36:42Z",
+            "updated_at": "2017-04-23T11:36:42Z",
+            "deleted_at": "2017-05-23T11:36:42Z",
+        }
+        """.toJsonData()
+        
+        XCTAssertNoThrow(try Wire.Room(from: jsonData.jsonDecoder())) { user in
+            XCTAssertEqual(user.pushNotificationTitleOverride, nil)
+        }
+    }
+    
+    func test_init_pushNotificationTitleOverrideNull_noProblem() {
+        
+        let jsonData = """
+        {
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": null,
+            "custom_data": {
+                "highlight_color": "blue"
+            },
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
+            "created_at": "2017-03-23T11:36:42Z",
+            "updated_at": "2017-04-23T11:36:42Z",
+            "deleted_at": "2017-05-23T11:36:42Z",
+        }
+        """.toJsonData()
+        
+        XCTAssertNoThrow(try Wire.Room(from: jsonData.jsonDecoder())) { user in
+            XCTAssertEqual(user.pushNotificationTitleOverride, nil)
+        }
+    }
+    
+    func test_init_pushNotificationTitleOverrideInvalidType_throws() {
+        
+        let jsonData = """
+        {
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": 123,
+            "custom_data": {
+                "highlight_color": "blue"
+            },
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
+            "created_at": "2017-03-23T11:36:42Z",
+            "updated_at": "2017-04-23T11:36:42Z",
+            "deleted_at": "2017-05-23T11:36:42Z",
+        }
+        """.toJsonData()
+        
+        XCTAssertThrowsError(try Wire.Room(from: jsonData.jsonDecoder()),
+                             containing: ["typeMismatch",
+                                          "\"push_notification_title_override\"",
+                                          "Expected to decode String but found a number instead."])
+    }
+    
     func test_init_customDataMissing_noProblem() {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "private": false,
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -280,13 +352,13 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": null,
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -303,13 +375,13 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": 123,
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -329,15 +401,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "missing value"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -346,93 +418,21 @@ class WireRoomDecodableTests: XCTestCase {
         
         XCTAssertThrowsError(try Wire.Room(from: jsonData.jsonDecoder()),
                              containing: ["The given data was not valid JSON.",
-                                          "No value for key in object around character 206."])
-    }
-    
-    func test_init_pushNotificationTitleOverrideMissing_noProblem() {
-        
-        let jsonData = """
-        {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "private": false,
-            "custom_data": {
-                "cool": true
-            },
-            "last_message_at": "2017-02-23T11:36:42Z",
-            "created_at": "2017-03-23T11:36:42Z",
-            "updated_at": "2017-04-23T11:36:42Z",
-            "deleted_at": "2017-05-23T11:36:42Z",
-        }
-        """.toJsonData()
-        
-        XCTAssertNoThrow(try Wire.Room(from: jsonData.jsonDecoder())) { user in
-            XCTAssertEqual(user.pushNotificationTitleOverride, nil)
-        }
-    }
-    
-    func test_init_pushNotificationTitleOverrideNull_noProblem() {
-        
-        let jsonData = """
-        {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": null,
-            "private": false,
-            "custom_data": {
-                "cool": true
-            },
-            "last_message_at": "2017-02-23T11:36:42Z",
-            "created_at": "2017-03-23T11:36:42Z",
-            "updated_at": "2017-04-23T11:36:42Z",
-            "deleted_at": "2017-05-23T11:36:42Z",
-        }
-        """.toJsonData()
-        
-        XCTAssertNoThrow(try Wire.Room(from: jsonData.jsonDecoder())) { user in
-            XCTAssertEqual(user.pushNotificationTitleOverride, nil)
-        }
-    }
-    
-    func test_init_pushNotificationTitleOverrideInvalidType_throws() {
-        
-        let jsonData = """
-        {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": 123,
-            "private": false,
-            "custom_data": {
-                "cool": true
-            },
-            "last_message_at": "2017-02-23T11:36:42Z",
-            "created_at": "2017-03-23T11:36:42Z",
-            "updated_at": "2017-04-23T11:36:42Z",
-            "deleted_at": "2017-05-23T11:36:42Z",
-        }
-        """.toJsonData()
-        
-        XCTAssertThrowsError(try Wire.Room(from: jsonData.jsonDecoder()),
-                             containing: ["typeMismatch",
-                                          "\"push_notification_title_override\"",
-                                          "Expected to decode String but found a number instead."])
+                                          "No value for key in object around character 182."])
     }
     
     func test_init_isPrivateMissing_throws() {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -448,19 +448,18 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": null,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": null,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
-            "deleted_at": "2017-05-23T11:36:42Z",
-        }
+            "deleted_at": "2017-05-23T11:36:42Z",        }
         """.toJsonData()
         
         XCTAssertThrowsError(try Wire.Room(from: jsonData.jsonDecoder()),
@@ -473,15 +472,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": 123,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": 123,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -498,13 +497,14 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
+            "private": false,
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -520,14 +520,14 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
+            "private": false,
             "last_message_at": null,
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -544,14 +544,14 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
+            "private": false,
             "last_message_at": 123,
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -569,14 +569,14 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
+            "private": false,
             "last_message_at": "not a date",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -594,15 +594,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
         }
@@ -617,15 +617,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": null,
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -642,15 +642,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": 123,
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -667,15 +667,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "not a date",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -692,15 +692,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
         }
@@ -715,15 +715,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": null,
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -740,15 +740,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": 123,
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -765,15 +765,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "not a date",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -790,15 +790,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
         }
@@ -813,15 +813,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": null,
@@ -837,15 +837,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": 123,
@@ -862,15 +862,15 @@ class WireRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "created_by_id": "jean",
-            "push_notification_title_override": "Cool Room",
-            "private": false,
+            "id": "ac43dfef",
+            "name": "Chatkit chat",
+            "created_by_id": "alice",
+            "push_notification_title_override": "Chatkit",
             "custom_data": {
-                "cool": true
+                "highlight_color": "blue"
             },
-            "last_message_at": "2017-02-23T11:36:42Z",
+            "private": false,
+            "last_message_at": "2020-01-08T14:55:10Z",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "not a date",
