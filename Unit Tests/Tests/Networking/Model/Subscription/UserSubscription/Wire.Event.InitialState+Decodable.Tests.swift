@@ -41,9 +41,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             ],
@@ -91,9 +90,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             ],
@@ -138,9 +136,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             ],
@@ -186,9 +183,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             ],
@@ -239,9 +235,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             ],
@@ -280,9 +275,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             ],
@@ -322,9 +316,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             ],
@@ -365,9 +358,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             ],
@@ -418,9 +410,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             ],
@@ -460,9 +451,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             ],
@@ -503,9 +493,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             ],
@@ -547,9 +536,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             ],
@@ -600,9 +588,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             ],
@@ -769,14 +756,13 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             ],
             "read_states": [
                 {
-                    "unread_count": 7,
+                    "unread_count": 3,
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
-                        "position": 123654,
-                        "updated_at": "2017-04-13T14:10:04Z"
-                    }
+                        "type": 0,
+                        "position": 43398,
+                    },
                 },
             ],
         }

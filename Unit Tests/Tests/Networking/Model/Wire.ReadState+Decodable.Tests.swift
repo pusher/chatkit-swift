@@ -12,9 +12,8 @@ class WireReadStateDecodableTests: XCTestCase {
             "cursor": {
                 "room_id": "ac43dfef",
                 "user_id": "alice",
-                "cursor_type": 0,
+                "type": 0,
                 "position": 43398,
-                "updated_at": "2017-04-13T14:10:04Z",
             },
         }
         """.toJsonData()
@@ -26,7 +25,6 @@ class WireReadStateDecodableTests: XCTestCase {
             XCTAssertEqual(readState.cursor.userIdentifier, "alice")
             XCTAssertEqual(readState.cursor.cursorType, .read)
             XCTAssertEqual(readState.cursor.position, 43398)
-            XCTAssertEqual(readState.cursor.updatedAt, Date(fromISO8601String: "2017-04-13T14:10:04Z"))
         }
     }
     
@@ -38,9 +36,8 @@ class WireReadStateDecodableTests: XCTestCase {
             "cursor": {
                 "room_id": "ac43dfef",
                 "user_id": "alice",
-                "cursor_type": 0,
+                "type": 0,
                 "position": 43398,
-                "updated_at": "2017-04-13T14:10:04Z",
             },
         }
         """.toJsonData()
@@ -59,9 +56,8 @@ class WireReadStateDecodableTests: XCTestCase {
             "cursor": {
                 "room_id": "ac43dfef",
                 "user_id": "alice",
-                "cursor_type": 0,
+                "type": 0,
                 "position": 43398,
-                "updated_at": "2017-04-13T14:10:04Z",
             },
         }
         """.toJsonData()
@@ -81,9 +77,8 @@ class WireReadStateDecodableTests: XCTestCase {
             "cursor": {
                 "room_id": "ac43dfef",
                 "user_id": "alice",
-                "cursor_type": 0,
+                "type": 0,
                 "position": 43398,
-                "updated_at": "2017-04-13T14:10:04Z",
             },
         }
         """.toJsonData()
@@ -102,9 +97,8 @@ class WireReadStateDecodableTests: XCTestCase {
             "cursor": {
                 "room_id": "ac43dfef",
                 "user_id": "alice",
-                "cursor_type": 0,
+                "type": 0,
                 "position": 43398,
-                "updated_at": "2017-04-13T14:10:04Z",
             },
         }
         """.toJsonData()
@@ -123,9 +117,8 @@ class WireReadStateDecodableTests: XCTestCase {
             "cursor": {
                 "room_id": "ac43dfef",
                 "user_id": "alice",
-                "cursor_type": 0,
+                "type": 0,
                 "position": 43398,
-                "updated_at": "2017-04-13T14:10:04Z",
             },
         }
         """.toJsonData()
@@ -145,9 +138,8 @@ class WireReadStateDecodableTests: XCTestCase {
             "cursor": {
                 "room_id": "ac43dfef",
                 "user_id": "alice",
-                "cursor_type": 0,
+                "type": 0,
                 "position": 43398,
-                "updated_at": "2017-04-13T14:10:04Z",
             },
         }
         """.toJsonData()

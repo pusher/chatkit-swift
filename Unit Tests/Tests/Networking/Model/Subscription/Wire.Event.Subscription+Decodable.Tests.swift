@@ -232,9 +232,8 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                         "cursor": {
                             "room_id": "ac43dfef",
                             "user_id": "alice",
-                            "cursor_type": 0,
+                            "type": 0,
                             "position": 43398,
-                            "updated_at": "2017-04-13T14:10:04Z",
                         },
                     }
                 ],
@@ -305,9 +304,8 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             },
@@ -583,9 +581,8 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                     "cursor": {
                         "room_id": "ac43dfef",
                         "user_id": "alice",
-                        "cursor_type": 0,
+                        "type": 0,
                         "position": 43398,
-                        "updated_at": "2017-04-13T14:10:04Z",
                     },
                 },
             },

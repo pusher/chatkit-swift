@@ -9,7 +9,7 @@ class WireCursorDecodableTests: XCTestCase {
         {
             "room_id": "ac43dfef",
             "user_id": "alice",
-            "cursor_type": 0,
+            "type": 0,
             "position": 43398,
             "updated_at": "2017-04-13T14:10:04Z",
         }
@@ -20,7 +20,6 @@ class WireCursorDecodableTests: XCTestCase {
             XCTAssertEqual(cursor.userIdentifier, "alice")
             XCTAssertEqual(cursor.cursorType, .read)
             XCTAssertEqual(cursor.position, 43398)
-            XCTAssertEqual(cursor.updatedAt, Date(fromISO8601String: "2017-04-13T14:10:04Z"))
         }
     }
     
@@ -29,7 +28,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "user_id": "alice",
-            "cursor_type": 0,
+            "type": 0,
             "position": 43398,
             "updated_at": "2017-04-13T14:10:04Z",
         }
@@ -46,7 +45,7 @@ class WireCursorDecodableTests: XCTestCase {
         {
             "room_id": null,
             "user_id": "alice",
-            "cursor_type": 0,
+            "type": 0,
             "position": 43398,
             "updated_at": "2017-04-13T14:10:04Z",
         }
@@ -64,7 +63,7 @@ class WireCursorDecodableTests: XCTestCase {
         {
             "room_id": 123,
             "user_id": "alice",
-            "cursor_type": 0,
+            "type": 0,
             "position": 43398,
             "updated_at": "2017-04-13T14:10:04Z",
         }
@@ -81,7 +80,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "ac43dfef",
-            "cursor_type": 0,
+            "type": 0,
             "position": 43398,
             "updated_at": "2017-04-13T14:10:04Z",
         }
@@ -98,7 +97,7 @@ class WireCursorDecodableTests: XCTestCase {
         {
             "room_id": "ac43dfef",
             "user_id": null,
-            "cursor_type": 0,
+            "type": 0,
             "position": 43398,
             "updated_at": "2017-04-13T14:10:04Z",
         }
@@ -116,7 +115,7 @@ class WireCursorDecodableTests: XCTestCase {
         {
             "room_id": "ac43dfef",
             "user_id": 123,
-            "cursor_type": 0,
+            "type": 0,
             "position": 43398,
             "updated_at": "2017-04-13T14:10:04Z",
         }
@@ -141,7 +140,7 @@ class WireCursorDecodableTests: XCTestCase {
         
         XCTAssertThrowsError(try Wire.Cursor(from: jsonData.jsonDecoder()),
                              containing: ["keyNotFound",
-                                          "\"cursor_type\""])
+                                          "\"type\""])
     }
     
     func test_init_cursorTypeNull_throws() {
@@ -150,7 +149,7 @@ class WireCursorDecodableTests: XCTestCase {
         {
             "room_id": "ac43dfef",
             "user_id": "alice",
-            "cursor_type": null,
+            "type": null,
             "position": 43398,
             "updated_at": "2017-04-13T14:10:04Z",
         }
@@ -158,7 +157,7 @@ class WireCursorDecodableTests: XCTestCase {
         
         XCTAssertThrowsError(try Wire.Cursor(from: jsonData.jsonDecoder()),
                              containing: ["valueNotFound",
-                                          "\"cursor_type\"",
+                                          "\"type\"",
                                           "Expected Int but found null value instead."])
     }
     
@@ -168,7 +167,7 @@ class WireCursorDecodableTests: XCTestCase {
         {
             "room_id": "ac43dfef",
             "user_id": "alice",
-            "cursor_type": "not an int",
+            "type": "not an int",
             "position": 43398,
             "updated_at": "2017-04-13T14:10:04Z",
         }
@@ -176,7 +175,7 @@ class WireCursorDecodableTests: XCTestCase {
         
         XCTAssertThrowsError(try Wire.Cursor(from: jsonData.jsonDecoder()),
                              containing: ["typeMismatch",
-                                          "\"cursor_type\"",
+                                          "\"type\"",
                                           "Expected to decode Int but found a string/data instead."])
     }
     
@@ -186,7 +185,7 @@ class WireCursorDecodableTests: XCTestCase {
         {
             "room_id": "ac43dfef",
             "user_id": "alice",
-            "cursor_type": 0,
+            "type": 0,
             "updated_at": "2017-04-13T14:10:04Z",
         }
         """.toJsonData()
@@ -202,7 +201,7 @@ class WireCursorDecodableTests: XCTestCase {
         {
             "room_id": "ac43dfef",
             "user_id": "alice",
-            "cursor_type": 0,
+            "type": 0,
             "position": null,
             "updated_at": "2017-04-13T14:10:04Z",
         }
@@ -220,7 +219,7 @@ class WireCursorDecodableTests: XCTestCase {
         {
             "room_id": "ac43dfef",
             "user_id": "alice",
-            "cursor_type": 0,
+            "type": 0,
             "position": "not an int",
             "updated_at": "2017-04-13T14:10:04Z",
         }
@@ -232,73 +231,4 @@ class WireCursorDecodableTests: XCTestCase {
                                           "Expected to decode Int64 but found a string/data instead."])
     }
     
-    func test_init_updatedAtMissing_throws() {
-        
-        let jsonData = """
-        {
-            "room_id": "ac43dfef",
-            "user_id": "alice",
-            "cursor_type": 0,
-            "position": 43398,
-        }
-        """.toJsonData()
-        
-        XCTAssertThrowsError(try Wire.Cursor(from: jsonData.jsonDecoder()),
-                             containing: ["keyNotFound",
-                                          "\"updated_at\""])
-    }
-    
-    func test_init_updatedAtNull_throws() {
-        
-        let jsonData = """
-        {
-            "room_id": "ac43dfef",
-            "user_id": "alice",
-            "cursor_type": 0,
-            "position": 43398,
-            "updated_at": null,
-        }
-        """.toJsonData()
-        
-        XCTAssertThrowsError(try Wire.Cursor(from: jsonData.jsonDecoder()),
-                             containing: ["valueNotFound",
-                                          "\"updated_at\"",
-                                          "Expected Date value but found null instead."])
-    }
-    
-    func test_init_updatedAtInvalidType_throws() {
-        
-        let jsonData = """
-        {
-            "room_id": "ac43dfef",
-            "user_id": "alice",
-            "cursor_type": 0,
-            "position": 43398,
-            "updated_at": 123,
-        }
-        """.toJsonData()
-        
-        XCTAssertThrowsError(try Wire.Cursor(from: jsonData.jsonDecoder()),
-                             containing: ["typeMismatch",
-                                          "\"updated_at\"",
-                                          "Expected to decode String but found a number instead."])
-    }
-    
-    func test_init_updatedAtInvalidFormat_throws() {
-        
-        let jsonData = """
-        {
-            "room_id": "ac43dfef",
-            "user_id": "alice",
-            "cursor_type": 0,
-            "position": 43398,
-            "updated_at": "not a date",
-        }
-        """.toJsonData()
-        
-        XCTAssertThrowsError(try Wire.Cursor(from: jsonData.jsonDecoder()),
-                             containing: ["dataCorrupted",
-                                          "\"updated_at\"",
-                                          "Expected date string to be ISO8601-formatted."])
-    }
 }
