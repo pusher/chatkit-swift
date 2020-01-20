@@ -418,7 +418,7 @@ class WireRoomDecodableTests: XCTestCase {
         
         XCTAssertThrowsError(try Wire.Room(from: jsonData.jsonDecoder()),
                              containing: ["The given data was not valid JSON.",
-                                          "No value for key in object around character 206."])
+                                          "No value for key in object around character 182."])
     }
     
     func test_init_isPrivateMissing_throws() {

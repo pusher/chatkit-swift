@@ -40,12 +40,12 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "memberships": [
                 {
                     "room_id": "ac43dfef",
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()
@@ -90,12 +90,12 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "memberships": [
                 {
                     "room_id": "ac43dfef",
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()
@@ -137,12 +137,12 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "memberships": [
                 {
                     "room_id": "ac43dfef",
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()
@@ -185,12 +185,12 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "memberships": [
                 {
                     "room_id": "ac43dfef",
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()
@@ -238,12 +238,12 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "memberships": [
                 {
                     "room_id": "ac43dfef",
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()
@@ -279,12 +279,12 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "memberships": [
                 {
                     "room_id": "ac43dfef",
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()
@@ -321,12 +321,12 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "memberships": [
                 {
                     "room_id": "ac43dfef",
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()
@@ -364,12 +364,12 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "memberships": [
                 {
                     "room_id": "ac43dfef",
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()
@@ -417,12 +417,12 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "memberships": [
                 {
                     "room_id": "ac43dfef",
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()
@@ -599,12 +599,12 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             ],
             "memberships": [
                 {
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()
@@ -638,12 +638,12 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "memberships": [
                 {
                     "room_id": "ac43dfef",
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()
@@ -678,12 +678,12 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "memberships": [
                 {
                     "room_id": "ac43dfef",
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()
@@ -719,12 +719,12 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "memberships": [
                 {
                     "room_id": "ac43dfef",
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()
@@ -772,12 +772,12 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "memberships": [
                 {
                     "room_id": "ac43dfef",
-                    "user_ids": ["jean", "ham"]
+                    "user_ids": ["alice", "carol"],
                 },
                 {
-                    "room_id": "party-room",
-                    "user_ids": ["ham"]
-                }
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
             ],
         }
         """.toJsonData()

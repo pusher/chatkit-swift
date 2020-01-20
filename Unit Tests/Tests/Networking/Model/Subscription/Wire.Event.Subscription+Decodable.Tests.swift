@@ -205,12 +205,12 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                 "memberships": [
                     {
                         "room_id": "ac43dfef",
-                        "user_ids": ["jean", "ham"]
+                        "user_ids": ["alice", "carol"],
                     },
-                    {
-                        "room_id": "party-room",
-                        "user_ids": ["ham"]
-                    }
+                {
+                    "room_id": "538a8fc",
+                    "user_ids": ["bob", "carol"],
+                },
                 ],
                 "read_states": [
                     {
@@ -258,7 +258,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             XCTAssertEqual(initialState.readStates.count, 1)
             XCTAssertEqual(initialState.readStates[0].unreadCount, 7)
             XCTAssertEqual(initialState.memberships.count, 2)
-            XCTAssertEqual(initialState.memberships[0].userIdentifiers, ["jean", "ham"])
+            XCTAssertEqual(initialState.memberships[0].userIdentifiers, ["alice", "carol"])
             XCTAssertEqual(initialState.memberships[1].userIdentifiers, ["ham"])
         }
     }
