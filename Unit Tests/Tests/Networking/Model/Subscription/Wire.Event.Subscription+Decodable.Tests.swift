@@ -209,22 +209,22 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                         "room_id": "ac43dfef",
                         "user_ids": ["alice", "carol"],
                     },
-                {
-                    "room_id": "538a8fc",
-                    "user_ids": ["bob", "carol"],
-                },
+                    {
+                        "room_id": "538a8fc",
+                        "user_ids": ["bob", "carol"],
+                    },
                 ],
                 "read_states": [
                     {
-                        "cursor": {
-                            "cursor_type": 0,
-                            "position": 123654,
-                            "room_id": "ac43dfef",
-                            "updated_at": "2017-04-13T14:10:04Z",
-                            "user_id": "alice"
-                        },
                         "room_id": "ac43dfef",
-                        "unread_count": 7
+                        "unread_count": 3,
+                        "cursor": {
+                            "room_id": "ac43dfef",
+                            "user_id": "alice",
+                            "cursor_type": 0,
+                            "position": 43398,
+                            "updated_at": "2017-04-13T14:10:04Z",
+                        },
                     }
                 ],
                 "rooms": [
@@ -256,7 +256,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             XCTAssertEqual(initialState.rooms.count, 1)
             XCTAssertEqual(initialState.rooms[0].identifier, "ac43dfef")
             XCTAssertEqual(initialState.readStates.count, 1)
-            XCTAssertEqual(initialState.readStates[0].unreadCount, 7)
+            XCTAssertEqual(initialState.readStates[0].unreadCount, 3)
             XCTAssertEqual(initialState.memberships.count, 2)
             XCTAssertEqual(initialState.memberships[0].userIdentifiers, ["alice", "carol"])
             XCTAssertEqual(initialState.memberships[1].userIdentifiers, ["bob", "carol"])
@@ -297,21 +297,18 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                 },
                 "membership": {
                     "room_id": "ac43dfef",
-                    "user_ids": [
-                        "jean",
-                        "ham"
-                    ]
+                    "user_ids": ["alice", "carol"],
                 },
                 "read_state": {
+                    "room_id": "ac43dfef",
+                    "unread_count": 3,
                     "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
                         "cursor_type": 0,
-                        "position": 123654,
-                        "room_id": "cool-room-2",
+                        "position": 43398,
                         "updated_at": "2017-04-13T14:10:04Z",
-                        "user_id": "alice"
                     },
-                    "room_id": "cool-room-2",
-                    "unread_count": 15
                 },
             },
         }
@@ -493,7 +490,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             "timestamp": "2017-03-23T11:36:42Z",
             "data": {
                 "room_id": "ac43dfef",
-                "user_id": "xavier"
+                "user_id": "alice"
             },
         }
         """.toJsonData()
@@ -537,7 +534,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             "timestamp": "2017-03-23T11:36:42Z",
             "data": {
                 "room_id": "ac43dfef",
-                "user_id": "xavier"
+                "user_id": "alice"
             },
         }
         """.toJsonData()
@@ -581,15 +578,15 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             "timestamp": "2017-03-23T11:36:42Z",
             "data": {
                 "read_state": {
-                    "cursor": {
-                        "cursor_type": 0,
-                        "position": 154,
-                        "room_id": "ac43dfef",
-                        "updated_at": "2017-04-13T14:10:04Z",
-                        "user_id": "alice"
-                    },
                     "room_id": "ac43dfef",
-                    "unread_count": 90,
+                    "unread_count": 3,
+                    "cursor": {
+                        "room_id": "ac43dfef",
+                        "user_id": "alice",
+                        "cursor_type": 0,
+                        "position": 43398,
+                        "updated_at": "2017-04-13T14:10:04Z",
+                    },
                 },
             },
         }
@@ -613,9 +610,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
-            "timestamp": "2017-04-14T14:00:42Z",
             "event_name": "read_state_updated",
+            "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         

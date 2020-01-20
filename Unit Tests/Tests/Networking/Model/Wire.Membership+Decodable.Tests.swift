@@ -7,14 +7,14 @@ class WireMemebershipDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "room_id": "cool-room-2",
-            "user_ids": ["alice", "flo"],
+            "room_id": "ac43dfef",
+            "user_ids": ["alice", "carol"],
         }
         """.toJsonData()
         
         XCTAssertNoThrow(try Wire.Membership(from: jsonData.jsonDecoder())) { membership in
-            XCTAssertEqual(membership.roomIdentifier, "cool-room-2")
-            XCTAssertEqual(membership.userIdentifiers, ["alice", "flo"])
+            XCTAssertEqual(membership.roomIdentifier, "ac43dfef")
+            XCTAssertEqual(membership.userIdentifiers, ["alice", "carol"])
         }
     }
     
@@ -22,7 +22,7 @@ class WireMemebershipDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "user_ids": ["alice", "flo"],
+            "user_ids": ["alice", "carol"],
         }
         """.toJsonData()
         
@@ -36,7 +36,7 @@ class WireMemebershipDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": null,
-            "user_ids": ["alice", "flo"],
+            "user_ids": ["alice", "carol"],
         }
         """.toJsonData()
         
@@ -51,7 +51,7 @@ class WireMemebershipDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": 123,
-            "user_ids": ["alice", "flo"],
+            "user_ids": ["alice", "carol"],
         }
         """.toJsonData()
         
@@ -65,7 +65,7 @@ class WireMemebershipDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "room_id": "cool-room-2",
+            "room_id": "ac43dfef",
         }
         """.toJsonData()
         
@@ -78,7 +78,7 @@ class WireMemebershipDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "room_id": "cool-room-2",
+            "room_id": "ac43dfef",
             "user_ids": null,
         }
         """.toJsonData()
@@ -93,7 +93,7 @@ class WireMemebershipDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "room_id": "cool-room-2",
+            "room_id": "ac43dfef",
             "user_ids": "not an array",
         }
         """.toJsonData()

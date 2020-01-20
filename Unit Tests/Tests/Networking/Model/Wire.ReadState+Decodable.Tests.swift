@@ -2,37 +2,31 @@ import XCTest
 @testable import PusherChatkit
 
 class WireReadStateDecodableTests: XCTestCase {
-        
-    let validCursorJsonString = """
-    {
-      "room_id": "ac43dfef",
-      "user_id": "alice",
-      "cursor_type": 0,
-      "position": 123654,
-      "updated_at": "2017-04-13T14:10:04Z"
-    }
-    """
-    
-    lazy var validCursor = try! JSONDecoder.default.decode(Wire.Cursor.self, from: validCursorJsonString.toJsonData())
     
     func test_init_allFieldsValid_entityFullyPopulated() {
         
         let jsonData = """
         {
             "room_id": "ac43dfef",
-            "unread_count": 7,
-            "cursor": \(validCursorJsonString)
+            "unread_count": 3,
+            "cursor": {
+                "room_id": "ac43dfef",
+                "user_id": "alice",
+                "cursor_type": 0,
+                "position": 43398,
+                "updated_at": "2017-04-13T14:10:04Z",
+            },
         }
         """.toJsonData()
         
         XCTAssertNoThrow(try Wire.ReadState(from: jsonData.jsonDecoder())) { readState in
             XCTAssertEqual(readState.roomIdentifier, "ac43dfef")
-            XCTAssertEqual(readState.unreadCount, 7)
-            XCTAssertEqual(readState.cursor.roomIdentifier, validCursor.roomIdentifier)
-            XCTAssertEqual(readState.cursor.userIdentifier, validCursor.userIdentifier)
-            XCTAssertEqual(readState.cursor.cursorType, validCursor.cursorType)
-            XCTAssertEqual(readState.cursor.position, validCursor.position)
-            XCTAssertEqual(readState.cursor.updatedAt, validCursor.updatedAt)
+            XCTAssertEqual(readState.unreadCount, 3)
+            XCTAssertEqual(readState.cursor.roomIdentifier, "ac43dfef")
+            XCTAssertEqual(readState.cursor.userIdentifier, "alice")
+            XCTAssertEqual(readState.cursor.cursorType, .read)
+            XCTAssertEqual(readState.cursor.position, 43398)
+            XCTAssertEqual(readState.cursor.updatedAt, Date(fromISO8601String: "2017-04-13T14:10:04Z"))
         }
     }
     
@@ -40,8 +34,14 @@ class WireReadStateDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "unread_count": 7,
-            "cursor": \(validCursorJsonString)
+            "unread_count": 3,
+            "cursor": {
+                "room_id": "ac43dfef",
+                "user_id": "alice",
+                "cursor_type": 0,
+                "position": 43398,
+                "updated_at": "2017-04-13T14:10:04Z",
+            },
         }
         """.toJsonData()
         
@@ -55,8 +55,14 @@ class WireReadStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": null,
-            "unread_count": 7,
-            "cursor": \(validCursorJsonString)
+            "unread_count": 3,
+            "cursor": {
+                "room_id": "ac43dfef",
+                "user_id": "alice",
+                "cursor_type": 0,
+                "position": 43398,
+                "updated_at": "2017-04-13T14:10:04Z",
+            },
         }
         """.toJsonData()
         
@@ -71,8 +77,14 @@ class WireReadStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": 123,
-            "unread_count": 7,
-            "cursor": \(validCursorJsonString)
+            "unread_count": 3,
+            "cursor": {
+                "room_id": "ac43dfef",
+                "user_id": "alice",
+                "cursor_type": 0,
+                "position": 43398,
+                "updated_at": "2017-04-13T14:10:04Z",
+            },
         }
         """.toJsonData()
         
@@ -87,7 +99,13 @@ class WireReadStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "ac43dfef",
-            "cursor": \(validCursorJsonString)
+            "cursor": {
+                "room_id": "ac43dfef",
+                "user_id": "alice",
+                "cursor_type": 0,
+                "position": 43398,
+                "updated_at": "2017-04-13T14:10:04Z",
+            },
         }
         """.toJsonData()
         
@@ -102,7 +120,13 @@ class WireReadStateDecodableTests: XCTestCase {
         {
             "room_id": "ac43dfef",
             "unread_count": null,
-            "cursor": \(validCursorJsonString)
+            "cursor": {
+                "room_id": "ac43dfef",
+                "user_id": "alice",
+                "cursor_type": 0,
+                "position": 43398,
+                "updated_at": "2017-04-13T14:10:04Z",
+            },
         }
         """.toJsonData()
         
@@ -118,7 +142,13 @@ class WireReadStateDecodableTests: XCTestCase {
         {
             "room_id": "ac43dfef",
             "unread_count": "not an int",
-            "cursor": \(validCursorJsonString)
+            "cursor": {
+                "room_id": "ac43dfef",
+                "user_id": "alice",
+                "cursor_type": 0,
+                "position": 43398,
+                "updated_at": "2017-04-13T14:10:04Z",
+            },
         }
         """.toJsonData()
         
@@ -133,7 +163,7 @@ class WireReadStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "ac43dfef",
-            "unread_count": 7,
+            "unread_count": 3,
         }
         """.toJsonData()
         
@@ -147,7 +177,7 @@ class WireReadStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "ac43dfef",
-            "unread_count": 7,
+            "unread_count": 3,
             "cursor": null,
         }
         """.toJsonData()
@@ -163,7 +193,7 @@ class WireReadStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "ac43dfef",
-            "unread_count": 7,
+            "unread_count": 3,
             "cursor": "not a cursor"
         }
         """.toJsonData()

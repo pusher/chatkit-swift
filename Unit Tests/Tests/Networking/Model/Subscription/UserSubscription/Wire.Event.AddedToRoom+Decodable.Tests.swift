@@ -22,14 +22,14 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
             },
             "read_state": {
                 "room_id": "ac43dfef",
-                "unread_count": 15,
+                "unread_count": 3,
                 "cursor": {
                     "room_id": "ac43dfef",
                     "user_id": "alice",
                     "cursor_type": 0,
-                    "position": 123654,
+                    "position": 43398,
                     "updated_at": "2017-04-13T14:10:04Z",
-                }
+                },
             }
         }
         """.toJsonData()
@@ -50,14 +50,14 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
             },
             "read_state": {
                 "room_id": "ac43dfef",
-                "unread_count": 15,
+                "unread_count": 3,
                 "cursor": {
                     "room_id": "ac43dfef",
                     "user_id": "alice",
                     "cursor_type": 0,
-                    "position": 123654,
+                    "position": 43398,
                     "updated_at": "2017-04-13T14:10:04Z",
-                }
+                },
             }
         }
         """.toJsonData()
@@ -78,14 +78,14 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
             },
             "read_state": {
                 "room_id": "ac43dfef",
-                "unread_count": 15,
+                "unread_count": 3,
                 "cursor": {
                     "room_id": "ac43dfef",
                     "user_id": "alice",
                     "cursor_type": 0,
-                    "position": 123654,
+                    "position": 43398,
                     "updated_at": "2017-04-13T14:10:04Z",
-                }
+                },
             }
         }
         """.toJsonData()
@@ -107,14 +107,14 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
             },
             "read_state": {
                 "room_id": "ac43dfef",
-                "unread_count": 15,
+                "unread_count": 3,
                 "cursor": {
                     "room_id": "ac43dfef",
                     "user_id": "alice",
                     "cursor_type": 0,
-                    "position": 123654,
+                    "position": 43398,
                     "updated_at": "2017-04-13T14:10:04Z",
-                }
+                },
             }
         }
         """.toJsonData()
@@ -144,14 +144,14 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
             },
             "read_state": {
                 "room_id": "ac43dfef",
-                "unread_count": 15,
+                "unread_count": 3,
                 "cursor": {
                     "room_id": "ac43dfef",
                     "user_id": "alice",
                     "cursor_type": 0,
-                    "position": 123654,
+                    "position": 43398,
                     "updated_at": "2017-04-13T14:10:04Z",
-                }
+                },
             }
         }
         """.toJsonData()
@@ -176,14 +176,14 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
             },
             "read_state": {
                 "room_id": "ac43dfef",
-                "unread_count": 15,
+                "unread_count": 3,
                 "cursor": {
                     "room_id": "ac43dfef",
                     "user_id": "alice",
                     "cursor_type": 0,
-                    "position": 123654,
+                    "position": 43398,
                     "updated_at": "2017-04-13T14:10:04Z",
-                }
+                },
             }
         }
         """.toJsonData()
@@ -209,14 +209,14 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
             "membership": null,
             "read_state": {
                 "room_id": "ac43dfef",
-                "unread_count": 15,
+                "unread_count": 3,
                 "cursor": {
                     "room_id": "ac43dfef",
                     "user_id": "alice",
                     "cursor_type": 0,
-                    "position": 123654,
+                    "position": 43398,
                     "updated_at": "2017-04-13T14:10:04Z",
-                }
+                },
             }
         }
         """.toJsonData()
@@ -243,14 +243,14 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
             "membership": "not a membership",
             "read_state": {
                 "room_id": "ac43dfef",
-                "unread_count": 15,
+                "unread_count": 3,
                 "cursor": {
                     "room_id": "ac43dfef",
                     "user_id": "alice",
                     "cursor_type": 0,
-                    "position": 123654,
+                    "position": 43398,
                     "updated_at": "2017-04-13T14:10:04Z",
-                }
+                },
             }
         }
         """.toJsonData()
@@ -280,14 +280,14 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
             },
             "read_state": {
                 "room_id": "ac43dfef",
-                "unread_count": 15,
+                "unread_count": 3,
                 "cursor": {
                     "room_id": "ac43dfef",
                     "user_id": "alice",
                     "cursor_type": 0,
-                    "position": 123654,
+                    "position": 43398,
                     "updated_at": "2017-04-13T14:10:04Z",
-                }
+                },
             }
         }
         """.toJsonData()
@@ -395,14 +395,14 @@ class WireEventAddedToRoomDecodableTests: XCTestCase {
                 "user_ids": ["alice", "carol"],
             },
             "read_state": {
-                "unread_count": 15,
+                "unread_count": 3,
                 "cursor": {
-                    "room_id": "cool-room-2",
+                    "room_id": "ac43dfef",
                     "user_id": "alice",
                     "cursor_type": 0,
-                    "position": 123654,
-                    "updated_at": "2017-04-13T14:10:04Z"
-                }
+                    "position": 43398,
+                    "updated_at": "2017-04-13T14:10:04Z",
+                },
             }
         }
         """.toJsonData()

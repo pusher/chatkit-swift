@@ -9,14 +9,14 @@ class WireEventReadStateUpdatedDecodableTests: XCTestCase {
         {
             "read_state": {
                 "room_id": "ac43dfef",
-                "unread_count": 90,
+                "unread_count": 3,
                 "cursor": {
                     "room_id": "ac43dfef",
                     "user_id": "alice",
                     "cursor_type": 0,
-                    "position": 154,
-                    "updated_at": "2017-04-13T14:10:04Z"
-                }
+                    "position": 43398,
+                    "updated_at": "2017-04-13T14:10:04Z",
+                },
             }
         }
         """.toJsonData()
@@ -73,14 +73,14 @@ class WireEventReadStateUpdatedDecodableTests: XCTestCase {
         let jsonData = """
         {
             "read_state": {
-                "unread_count": 90,
+                "unread_count": 3,
                 "cursor": {
                     "room_id": "ac43dfef",
                     "user_id": "alice",
                     "cursor_type": 0,
-                    "position": 154,
-                    "updated_at": "2017-04-13T14:10:04Z"
-                }
+                    "position": 43398,
+                    "updated_at": "2017-04-13T14:10:04Z",
+                },
             }
         }
         """.toJsonData()
