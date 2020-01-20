@@ -6,7 +6,7 @@ class WireReadStateDecodableTests: XCTestCase {
     let validCursorJsonString = """
     {
       "room_id": "cool-room-1",
-      "user_id": "viv",
+      "user_id": "alice",
       "cursor_type": 0,
       "position": 123654,
       "updated_at": "2017-04-13T14:10:04Z"

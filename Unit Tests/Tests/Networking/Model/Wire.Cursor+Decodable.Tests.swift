@@ -8,7 +8,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "cool-room-2",
-            "user_id": "viv",
+            "user_id": "alice",
             "cursor_type": 0,
             "position": 123654,
             "updated_at": "2017-04-13T14:10:04Z",
@@ -17,7 +17,7 @@ class WireCursorDecodableTests: XCTestCase {
         
         XCTAssertNoThrow(try Wire.Cursor(from: jsonData.jsonDecoder())) { cursor in
             XCTAssertEqual(cursor.roomIdentifier, "cool-room-2")
-            XCTAssertEqual(cursor.userIdentifier, "viv")
+            XCTAssertEqual(cursor.userIdentifier, "alice")
             XCTAssertEqual(cursor.cursorType, .read)
             XCTAssertEqual(cursor.position, 123654)
             XCTAssertEqual(cursor.updatedAt, Date(fromISO8601String: "2017-04-13T14:10:04Z"))
@@ -28,7 +28,7 @@ class WireCursorDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "user_id": "viv",
+            "user_id": "alice",
             "cursor_type": 0,
             "position": 123654,
             "updated_at": "2017-04-13T14:10:04Z",
@@ -45,7 +45,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": null,
-            "user_id": "viv",
+            "user_id": "alice",
             "cursor_type": 0,
             "position": 123654,
             "updated_at": "2017-04-13T14:10:04Z",
@@ -63,7 +63,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": 123,
-            "user_id": "viv",
+            "user_id": "alice",
             "cursor_type": 0,
             "position": 123654,
             "updated_at": "2017-04-13T14:10:04Z",
@@ -133,7 +133,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "cool-room-2",
-            "user_id": "viv",
+            "user_id": "alice",
             "position": 123654,
             "updated_at": "2017-04-13T14:10:04Z",
         }
@@ -149,7 +149,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "cool-room-2",
-            "user_id": "viv",
+            "user_id": "alice",
             "cursor_type": null,
             "position": 123654,
             "updated_at": "2017-04-13T14:10:04Z",
@@ -167,7 +167,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "cool-room-2",
-            "user_id": "viv",
+            "user_id": "alice",
             "cursor_type": "not an int",
             "position": 123654,
             "updated_at": "2017-04-13T14:10:04Z",
@@ -185,7 +185,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "cool-room-2",
-            "user_id": "viv",
+            "user_id": "alice",
             "cursor_type": 0,
             "updated_at": "2017-04-13T14:10:04Z",
         }
@@ -201,7 +201,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "cool-room-2",
-            "user_id": "viv",
+            "user_id": "alice",
             "cursor_type": 0,
             "position": null,
             "updated_at": "2017-04-13T14:10:04Z",
@@ -219,7 +219,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "cool-room-2",
-            "user_id": "viv",
+            "user_id": "alice",
             "cursor_type": 0,
             "position": "not an int",
             "updated_at": "2017-04-13T14:10:04Z",
@@ -237,7 +237,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "cool-room-2",
-            "user_id": "viv",
+            "user_id": "alice",
             "cursor_type": 0,
             "position": 123654,
         }
@@ -253,7 +253,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "cool-room-2",
-            "user_id": "viv",
+            "user_id": "alice",
             "cursor_type": 0,
             "position": 123654,
             "updated_at": null,
@@ -271,7 +271,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "cool-room-2",
-            "user_id": "viv",
+            "user_id": "alice",
             "cursor_type": 0,
             "position": 123654,
             "updated_at": 123,
@@ -289,7 +289,7 @@ class WireCursorDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "cool-room-2",
-            "user_id": "viv",
+            "user_id": "alice",
             "cursor_type": 0,
             "position": 123654,
             "updated_at": "not a date",

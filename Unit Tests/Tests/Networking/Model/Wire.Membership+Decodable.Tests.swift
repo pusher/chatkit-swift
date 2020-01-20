@@ -8,13 +8,13 @@ class WireMemebershipDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "cool-room-2",
-            "user_ids": ["viv", "flo"],
+            "user_ids": ["alice", "flo"],
         }
         """.toJsonData()
         
         XCTAssertNoThrow(try Wire.Membership(from: jsonData.jsonDecoder())) { membership in
             XCTAssertEqual(membership.roomIdentifier, "cool-room-2")
-            XCTAssertEqual(membership.userIdentifiers, ["viv", "flo"])
+            XCTAssertEqual(membership.userIdentifiers, ["alice", "flo"])
         }
     }
     
@@ -22,7 +22,7 @@ class WireMemebershipDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "user_ids": ["viv", "flo"],
+            "user_ids": ["alice", "flo"],
         }
         """.toJsonData()
         
@@ -36,7 +36,7 @@ class WireMemebershipDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": null,
-            "user_ids": ["viv", "flo"],
+            "user_ids": ["alice", "flo"],
         }
         """.toJsonData()
         
@@ -51,7 +51,7 @@ class WireMemebershipDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": 123,
-            "user_ids": ["viv", "flo"],
+            "user_ids": ["alice", "flo"],
         }
         """.toJsonData()
         

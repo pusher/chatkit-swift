@@ -8,11 +8,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
@@ -38,7 +35,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "unread_count": 7,
                     "cursor": {
                         "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
@@ -60,7 +57,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         
         XCTAssertNoThrow(try Wire.Event.InitialState(from: jsonData.jsonDecoder())) { event in
             // Loosely verify all the child entities (parsing of these entities is comprehensively tested elsewhere)
-            XCTAssertEqual(event.currentUser.identifier, "viv")
+            XCTAssertEqual(event.currentUser.identifier, "alice")
             XCTAssertEqual(event.rooms.count, 1)
             XCTAssertEqual(event.readStates.count, 1)
             XCTAssertEqual(event.memberships.count, 2)
@@ -93,7 +90,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "unread_count": 7,
                     "cursor": {
                         "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
@@ -145,7 +142,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "unread_count": 7,
                     "cursor": {
                         "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
@@ -198,7 +195,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "unread_count": 7,
                     "cursor": {
                         "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
@@ -230,10 +227,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
@@ -259,7 +253,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "unread_count": 7,
                     "cursor": {
                         "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
@@ -289,11 +283,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
@@ -303,7 +294,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "unread_count": 7,
                     "cursor": {
                         "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
@@ -333,11 +324,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
@@ -348,7 +336,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "unread_count": 7,
                     "cursor": {
                         "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
@@ -379,11 +367,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
@@ -394,7 +379,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "unread_count": 7,
                     "cursor": {
                         "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
@@ -426,11 +411,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
@@ -455,7 +437,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "unread_count": 7,
                     "cursor": {
                         "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
@@ -485,11 +467,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
@@ -515,7 +494,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "unread_count": 7,
                     "cursor": {
                         "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
@@ -535,11 +514,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
@@ -565,7 +541,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "unread_count": 7,
                     "cursor": {
                         "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
@@ -587,11 +563,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
@@ -617,7 +590,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "unread_count": 7,
                     "cursor": {
                         "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
@@ -640,11 +613,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
@@ -670,7 +640,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "unread_count": 7,
                     "cursor": {
                         "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"
@@ -699,11 +669,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
@@ -746,11 +713,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
@@ -795,11 +759,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
@@ -845,11 +806,8 @@ class WireEventInitialStateDecodableTests: XCTestCase {
         let jsonData = """
         {
             "current_user": {
-                "id": "viv",
-                "name": "Vivan",
-                "custom_data": {
-                    "email": "vivan@pusher.com"
-                },
+                "id": "alice",
+                "name": "Alice A",
                 "created_at": "2017-04-13T14:10:04Z",
                 "updated_at": "2017-04-13T14:10:04Z"
             },
@@ -874,7 +832,7 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                     "unread_count": 7,
                     "cursor": {
                         "room_id": "cool-room-1",
-                        "user_id": "viv",
+                        "user_id": "alice",
                         "cursor_type": 0,
                         "position": 123654,
                         "updated_at": "2017-04-13T14:10:04Z"

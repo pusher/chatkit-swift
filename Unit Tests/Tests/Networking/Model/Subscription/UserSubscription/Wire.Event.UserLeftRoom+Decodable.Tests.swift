@@ -8,13 +8,13 @@ class WireEventUserLeftRoomDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": "cool-room-2",
-            "user_id": "viv",
+            "user_id": "alice",
         }
         """.toJsonData()
         
         XCTAssertNoThrow(try Wire.Event.UserLeftRoom(from: jsonData.jsonDecoder())) { event in
             XCTAssertEqual(event.roomIdentifier, "cool-room-2")
-            XCTAssertEqual(event.userIdentifier, "viv")
+            XCTAssertEqual(event.userIdentifier, "alice")
         }
     }
     
@@ -22,7 +22,7 @@ class WireEventUserLeftRoomDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "user_ids": "viv",
+            "user_ids": "alice",
         }
         """.toJsonData()
         
@@ -36,7 +36,7 @@ class WireEventUserLeftRoomDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": null,
-            "user_id": "viv",
+            "user_id": "alice",
         }
         """.toJsonData()
         
@@ -51,7 +51,7 @@ class WireEventUserLeftRoomDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": 123,
-            "user_id": "viv",
+            "user_id": "alice",
         }
         """.toJsonData()
         

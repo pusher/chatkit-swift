@@ -12,7 +12,7 @@ class WireEventReadStateUpdatedDecodableTests: XCTestCase {
                 "unread_count": 90,
                 "cursor": {
                     "room_id": "cool-room-1",
-                    "user_id": "viv",
+                    "user_id": "alice",
                     "cursor_type": 0,
                     "position": 154,
                     "updated_at": "2017-04-13T14:10:04Z"
@@ -76,7 +76,7 @@ class WireEventReadStateUpdatedDecodableTests: XCTestCase {
                 "unread_count": 90,
                 "cursor": {
                     "room_id": "cool-room-1",
-                    "user_id": "viv",
+                    "user_id": "alice",
                     "cursor_type": 0,
                     "position": 154,
                     "updated_at": "2017-04-13T14:10:04Z"

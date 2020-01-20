@@ -197,12 +197,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         {
             "data": {
                 "current_user": {
+                    "id": "alice",
+                    "name": "Alice A",
                     "created_at": "2017-03-13T14:10:04Z",
-                    "custom_data": {
-                        "email": "vivan@pusher.com"
-                    },
-                    "id": "viv",
-                    "name": "Vivan",
                     "updated_at": "2017-04-13T14:10:04Z"
                 },
                 "memberships": [
@@ -222,7 +219,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                             "position": 123654,
                             "room_id": "cool-room-1",
                             "updated_at": "2017-04-13T14:10:04Z",
-                            "user_id": "viv"
+                            "user_id": "alice"
                         },
                         "room_id": "cool-room-1",
                         "unread_count": 7
@@ -260,7 +257,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             }
             
             // Loosely verify the event `data` (parsing of these entities is comprehensively tested elsewhere)
-            XCTAssertEqual(initialState.currentUser.identifier, "viv")
+            XCTAssertEqual(initialState.currentUser.identifier, "alice")
             XCTAssertEqual(initialState.rooms.count, 1)
             XCTAssertEqual(initialState.rooms[0].identifier, "cool-room-1")
             XCTAssertEqual(initialState.readStates.count, 1)
@@ -305,7 +302,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                         "position": 123654,
                         "room_id": "cool-room-2",
                         "updated_at": "2017-04-13T14:10:04Z",
-                        "user_id": "viv"
+                        "user_id": "alice"
                     },
                     "room_id": "cool-room-2",
                     "unread_count": 15
@@ -603,7 +600,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                         "position": 154,
                         "room_id": "cool-room-1",
                         "updated_at": "2017-04-13T14:10:04Z",
-                        "user_id": "viv"
+                        "user_id": "alice"
                     },
                     "room_id": "cool-room-1",
                     "unread_count": 90,
@@ -655,7 +652,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             "timestamp": "2017-03-23T11:36:42Z",
             "data": {
                 "id": 3,
-                "user_id": "viv",
+                "user_id": "alice",
                 "room_id": "cool-room-1",
                 "created_at":"2017-03-23T11:36:42Z",
                 "updated_at":"2017-04-23T11:36:42Z",
