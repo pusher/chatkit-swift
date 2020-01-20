@@ -16,42 +16,53 @@ protocol Dependencies:
 
 class DependencyFactory {
     
-    // Big problem, dependencies are not cached.
+    // MARK: - Types
     
-    private var factoryClosures = [String: Any]()
-    private var cachedInstances = [String: Any]()
+    typealias Factory<T> = (Dependencies) -> T
+ 
+    private enum DependencyState<T> {
+        case registered(Factory<T>)
+        case initialised(T)
+    }
+ 
+    private var dependencyStates = [String: Any]()
+    
+    // MARK: - Public
 
+    func register<T>(_ type: T.Type, factory: @escaping Factory<T>) {
+        dependencyStates[key(type)] = DependencyState<T>.registered(factory)
+    }
+
+    func unregister<T>(_ type: T.Type) {
+        dependencyStates[key(type)] = nil
+    }
+
+    func resolve<T>(_ type: T.Type, dependencies: Dependencies) -> T {
+        let key = self.key(type)
+        
+        guard let dependencyState = dependencyStates[key] as? DependencyState<T> else {
+            fatalError("Attempt to access unregistered `\(type)` dependency")
+        }
+        
+        switch dependencyState {
+
+        case let .registered(factoryClosure):
+            let dependency = factoryClosure(dependencies)
+            dependencyStates[key] = DependencyState<T>.initialised(dependency)
+            return dependency
+            
+        case let .initialised(dependency):
+            return dependency
+            
+        }
+    }
+    
+    // MARK: - Private
+    
     private func key<T>(_ type: T.Type) -> String {
         return String(reflecting: type)
     }
-
-    public func register<T>(_ type: T.Type, factory: @escaping (Dependencies) -> T?) {
-        factoryClosures[key(type)] = factory
-    }
-
-    public func unregister<T>(_ type: T.Type) {
-        let key = self.key(type)
-        factoryClosures[key] = nil
-        cachedInstances[key] = nil
-    }
-
-    public func resolve<T>(_ type: T.Type, dependencies: Dependencies) -> T? {
-        let key = self.key(type)
-        
-        if let cachedInstance = cachedInstances[key] as? T {
-            return cachedInstance
-        }
-        
-        guard let factoryClosure = factoryClosures[key] as? (Dependencies) -> T? else {
-            return nil
-        }
-        
-        let instance = factoryClosure(dependencies)
-        cachedInstances[key] = instance
-        return instance
-    }
 }
-
 
 class ConcreteDependencies: Dependencies {
     
@@ -71,7 +82,7 @@ class ConcreteDependencies: Dependencies {
         })
         
         dependencyFactory.register(Store.self, factory: { dependencies in
-            return ConcreteStore(dependencies: self,
+            return ConcreteStore(dependencies: dependencies,
                                  delegate: self.storeBroadcaster)
         })
         
@@ -101,38 +112,91 @@ class ConcreteDependencies: Dependencies {
     }
     
     var sdkInfoProvider: SDKInfoProvider {
-        return dependencyFactory.resolve(SDKInfoProvider.self, dependencies: self)!
+        return dependencyFactory.resolve(SDKInfoProvider.self, dependencies: self)
     }
     
     var storeBroadcaster: StoreBroadcaster {
-        return dependencyFactory.resolve(StoreBroadcaster.self, dependencies: self)!
+        return dependencyFactory.resolve(StoreBroadcaster.self, dependencies: self)
     }
     
     var store: Store {
-        return dependencyFactory.resolve(Store.self, dependencies: self)!
+        return dependencyFactory.resolve(Store.self, dependencies: self)
     }
     
     var instanceFactory: InstanceFactory {
-        return dependencyFactory.resolve(InstanceFactory.self, dependencies: self)!
+        return dependencyFactory.resolve(InstanceFactory.self, dependencies: self)
     }
     
     var subscriptionResponder: SubscriptionResponder {
-        return dependencyFactory.resolve(SubscriptionResponder.self, dependencies: self)!
+        return dependencyFactory.resolve(SubscriptionResponder.self, dependencies: self)
     }
     
     var subscriptionFactory: SubscriptionFactory {
-        return dependencyFactory.resolve(SubscriptionFactory.self, dependencies: self)!
+        return dependencyFactory.resolve(SubscriptionFactory.self, dependencies: self)
     }
     
     var subscriptionManager: SubscriptionManager {
-        return dependencyFactory.resolve(SubscriptionManager.self, dependencies: self)!
+        return dependencyFactory.resolve(SubscriptionManager.self, dependencies: self)
     }
     
     var userService: UserService {
-        return dependencyFactory.resolve(UserService.self, dependencies: self)!
+        return dependencyFactory.resolve(UserService.self, dependencies: self)
     }
     
     var userHydrator: UserHydrator {
-        return dependencyFactory.resolve(UserHydrator.self, dependencies: self)!
+        return dependencyFactory.resolve(UserHydrator.self, dependencies: self)
     }
 }
+
+
+//class ConcreteDependencies: Dependencies {
+//
+//    private let instanceLocator: String
+//    private let instanceFactoryOverride: InstanceFactory?
+//
+//    init(instanceLocator: String, instanceFactoryOverride: InstanceFactory? = nil) {
+//        self.instanceLocator = instanceLocator
+//        self.instanceFactoryOverride = instanceFactoryOverride
+//    }
+//
+//    private(set) lazy var sdkInfoProvider: SDKInfoProvider = {
+//        return ConcreteSDKInfoProvider(locator: instanceLocator,
+//                                       serviceName: ServiceName.chat.rawValue,
+//                                       serviceVersion: ServiceVersion.version7.rawValue,
+//                                       sdkInfo: PPSDKInfo.current)
+//    }()
+//
+//    private(set) lazy var storeBroadcaster: StoreBroadcaster = {
+//        return ConcreteStoreBroadcaster(dependencies: self)
+//    }()
+//
+//    private(set) lazy var store: Store = {
+//        return ConcreteStore(dependencies: self,
+//                             delegate: storeBroadcaster)
+//    }()
+//
+//    private(set) lazy var instanceFactory: InstanceFactory = {
+//        return instanceFactoryOverride ?? ConcreteInstanceFactory(dependencies: self)
+//    }()
+//
+//    private(set) lazy var subscriptionResponder: SubscriptionResponder = {
+//        return ConcreteSubscriptionResponder(dependencies: self)
+//    }()
+//
+//    private(set) lazy var subscriptionFactory: SubscriptionFactory = {
+//        return ConcreteSubscriptionFactory(dependencies: self)
+//    }()
+//
+//    private(set) lazy var subscriptionManager: SubscriptionManager = {
+//        return ConcreteSubscriptionManager(dependencies: self)
+//    }()
+//
+//    private(set) lazy var userService: UserService = {
+//        return ConcreteUserService(dependencies: self)
+//    }()
+//
+//    private(set) lazy var userHydrator: UserHydrator = {
+//        return ConcreteUserHydrator(dependencies: self)
+//    }()
+//
+//}
