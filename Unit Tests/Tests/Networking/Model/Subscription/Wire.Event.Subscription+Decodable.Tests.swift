@@ -7,10 +7,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
+            "timestamp": "2017-04-14T14:00:42Z",
             "data": {
                 "room_id": "ac43dfef"
             },
-            "timestamp": "2017-04-14T14:00:42Z",
         }
         """.toJsonData()
         
@@ -24,10 +24,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": null,
+            "timestamp": "2017-04-14T14:00:42Z",
             "data": {
                 "room_id": "ac43dfef"
             },
-            "timestamp": "2017-04-14T14:00:42Z",
         }
         """.toJsonData()
         
@@ -42,10 +42,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": 123,
+            "timestamp": "2017-04-14T14:00:42Z",
             "data": {
                 "room_id": "ac43dfef"
             },
-            "timestamp": "2017-04-14T14:00:42Z",
         }
         """.toJsonData()
         
@@ -60,10 +60,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "unknown",
+            "timestamp": "2017-04-14T14:00:42Z",
             "data": {
                 "room_id": "ac43dfef"
             },
-            "timestamp": "2017-04-14T14:00:42Z",
         }
         """.toJsonData()
         
@@ -94,10 +94,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "room_deleted",
+            "timestamp": null,
             "data": {
                 "room_id": "ac43dfef"
             },
-            "timestamp": null,
         }
         """.toJsonData()
         
@@ -112,10 +112,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "room_deleted",
+            "timestamp": 123,
             "data": {
                 "room_id": "ac43dfef"
             },
-            "timestamp": 123,
         }
         """.toJsonData()
         
@@ -130,10 +130,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "room_deleted",
+            "timestamp": "not a valid date",
             "data": {
                 "room_id": "ac43dfef1"
             },
-            "timestamp": "not a valid date",
         }
         """.toJsonData()
         
@@ -162,8 +162,8 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "room_deleted",
-            "data": null,
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": null,
         }
         """.toJsonData()
         
@@ -178,8 +178,8 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "room_deleted",
-            "data": "not a dictionary",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": "not a dictionary",
         }
         """.toJsonData()
         
@@ -195,6 +195,8 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
+            "event_name": "initial_state",
+            "timestamp": "2017-04-14T14:00:42Z",
             "data": {
                 "current_user": {
                     "id": "alice",
@@ -237,8 +239,6 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                     }
                 ]
             },
-            "event_name": "initial_state",
-            "timestamp": "2017-04-14T14:00:42Z"
         }
         """.toJsonData()
         
@@ -259,7 +259,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
             XCTAssertEqual(initialState.readStates[0].unreadCount, 7)
             XCTAssertEqual(initialState.memberships.count, 2)
             XCTAssertEqual(initialState.memberships[0].userIdentifiers, ["alice", "carol"])
-            XCTAssertEqual(initialState.memberships[1].userIdentifiers, ["ham"])
+            XCTAssertEqual(initialState.memberships[1].userIdentifiers, ["bob", "carol"])
         }
     }
     
@@ -267,9 +267,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "initial_state",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -283,7 +283,18 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
+            "event_name": "added_to_room",
+            "timestamp": "2017-04-14T14:00:42Z",
             "data": {
+                "room": {
+                    "id": "ac43dfef",
+                    "name": "Chatkit chat",
+                    "created_by_id": "alice",
+                    "private": false,
+                    "last_message_at": "2020-01-03T18:15:15Z",
+                    "created_at": "2017-03-23T11:36:42Z",
+                    "updated_at": "2017-07-28T22:19:32Z",
+                },
                 "membership": {
                     "room_id": "ac43dfef",
                     "user_ids": [
@@ -302,18 +313,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                     "room_id": "cool-room-2",
                     "unread_count": 15
                 },
-                "room": {
-                    "id": "ac43dfef",
-                    "name": "Chatkit chat",
-                    "created_by_id": "alice",
-                    "private": false,
-                    "last_message_at": "2020-01-03T18:15:15Z",
-                    "created_at": "2017-03-23T11:36:42Z",
-                    "updated_at": "2017-07-28T22:19:32Z",
-                }
             },
-            "event_name": "added_to_room",
-            "timestamp": "2017-04-14T14:00:42Z"
         }
         """.toJsonData()
         
@@ -335,9 +335,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "added_to_room",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -352,11 +352,11 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
+            "event_name": "removed_from_room",
+            "timestamp": "2017-03-23T17:36:42Z",
             "data": {
                 "room_id": "ac43dfef"
             },
-            "event_name": "removed_from_room",
-            "timestamp": "2017-03-23T17:36:42Z"
         }
         """.toJsonData()
         
@@ -378,9 +378,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "removed_from_room",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -396,6 +396,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "room_updated",
+            "timestamp": "2017-04-14T14:00:42Z",
             "data": {
                 "room": {
                     "id": "ac43dfef",
@@ -407,7 +408,6 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                     "updated_at": "2017-07-28T22:19:32Z",
                 },
             },
-            "timestamp": "2017-04-14T14:00:42Z"
         }
         """.toJsonData()
         
@@ -429,9 +429,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "room_updated",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -447,10 +447,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "room_deleted",
+            "timestamp": "2017-03-23T11:36:42Z",
             "data": {
                 "room_id": "ac43dfef"
             },
-            "timestamp": "2017-03-23T11:36:42Z"
         }
         """.toJsonData()
         
@@ -472,9 +472,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "room_deleted",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -490,11 +490,11 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "user_joined_room",
+            "timestamp": "2017-03-23T11:36:42Z",
             "data": {
                 "room_id": "ac43dfef",
                 "user_id": "xavier"
             },
-            "timestamp": "2017-03-23T11:36:42Z"
         }
         """.toJsonData()
         
@@ -516,9 +516,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "user_joined_room",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -534,11 +534,11 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "user_left_room",
+            "timestamp": "2017-03-23T11:36:42Z",
             "data": {
                 "room_id": "ac43dfef",
                 "user_id": "xavier"
             },
-            "timestamp": "2017-03-23T11:36:42Z"
         }
         """.toJsonData()
         
@@ -560,9 +560,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "user_left_room",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -578,6 +578,7 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "read_state_updated",
+            "timestamp": "2017-03-23T11:36:42Z",
             "data": {
                 "read_state": {
                     "cursor": {
@@ -591,7 +592,6 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                     "unread_count": 90,
                 },
             },
-            "timestamp": "2017-03-23T11:36:42Z",
         }
         """.toJsonData()
         
@@ -614,8 +614,8 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "data": { },
-            "event_name": "read_state_updated",
             "timestamp": "2017-04-14T14:00:42Z",
+            "event_name": "read_state_updated",
         }
         """.toJsonData()
         
@@ -669,9 +669,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "new_message",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -711,9 +711,9 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "data": { },
             "event_name": "is_typing",
             "timestamp": "2017-04-14T14:00:42Z",
+            "data": { },
         }
         """.toJsonData()
         
@@ -731,10 +731,10 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "event_name": "presence_state",
+            "timestamp": "2017-03-23T11:36:42Z",
             "data": {
                 "state": "online"
             },
-            "timestamp": "2017-03-23T11:36:42Z"
         }
         """.toJsonData()
         
@@ -756,8 +756,8 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
         let jsonData = """
         {
             "data": { },
-            "event_name": "presence_state",
             "timestamp": "2017-04-14T14:00:42Z",
+            "event_name": "presence_state",
         }
         """.toJsonData()
         
