@@ -7,7 +7,7 @@ extension Wire {
         let identifier: String
         let name: String
         let avatarUrl: URL?
-        let customData: [String: Any]?
+        let customData: [String: AnyHashable]?
         let createdAt: Date
         let updatedAt: Date
         let deletedAt: Date?
@@ -38,7 +38,7 @@ extension Wire.User: Decodable {
         self.identifier = try container.decode(String.self, forKey: .identifier)
         self.name = try container.decode(String.self, forKey: .name)
         self.avatarUrl = try container.decodeIfPresent(URL.self, forKey: .avatarUrl)
-        self.customData = try container.decodeIfPresent([String: Any].self, forKey: .customData)
+        self.customData = try container.decodeIfPresent([String: AnyHashable].self, forKey: .customData)
         self.createdAt = try container.decode(type(of: self.createdAt), forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
         self.deletedAt = try container.decodeIfPresent(Date.self, forKey: .deletedAt)
