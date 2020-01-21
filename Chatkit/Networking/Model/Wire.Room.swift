@@ -8,7 +8,7 @@ extension Wire {
         let createdById: String
         let isPrivate: Bool
         let pushNotificationTitleOverride: String?
-        let customData: [String: Any]?
+        let customData: [String: AnyHashable]?
         let lastMessageAt: Date?
         let createdAt: Date
         let updatedAt: Date
@@ -17,26 +17,7 @@ extension Wire {
 
 }
 
-// A custom Eqautable implementation is required because `customData: [String: Any]?` cannot be auto synthensized
-extension Wire.Room: Equatable {
-    
-    static func == (lhs: Wire.Room, rhs: Wire.Room) -> Bool {
-        
-        return lhs.identifier == rhs.identifier
-            && lhs.name == rhs.name
-            && lhs.createdById == rhs.createdById
-            && lhs.isPrivate == rhs.isPrivate
-            && lhs.pushNotificationTitleOverride == rhs.pushNotificationTitleOverride
-        // TODO FIXME
-//            && lhs.customData == rhs.customData
-            && lhs.lastMessageAt == rhs.lastMessageAt
-            && lhs.createdAt == rhs.createdAt
-            && lhs.createdAt == rhs.createdAt
-            && lhs.updatedAt == rhs.updatedAt
-            && lhs.deletedAt == rhs.deletedAt
-    }
-    
-}
+extension Wire.Room: Equatable {}
 
 extension Wire.Room: Decodable {
 
@@ -65,7 +46,7 @@ extension Wire.Room: Decodable {
         self.name = try container.decode(String.self, forKey: .name)
         self.createdById = try container.decode(String.self, forKey: .createdById)
         self.pushNotificationTitleOverride = try container.decodeIfPresent(String.self, forKey: .pushNotificationTitleOverride)
-        self.customData = try container.decodeIfPresent([String: Any].self, forKey: .customData)
+        self.customData = try container.decodeIfPresent([String: AnyHashable].self, forKey: .customData)
         self.isPrivate = try container.decode(Bool.self, forKey: .isPrivate)
         self.lastMessageAt = try container.decodeIfPresent(Date.self, forKey: .lastMessageAt)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)

@@ -7,7 +7,7 @@ extension Wire {
         let identifier: String
         let name: String
         let avatarURL: URL?
-        let customData: [String: Any]?
+        let customData: [String: AnyHashable]?
         let createdAt: Date
         let updatedAt: Date
         let deletedAt: Date?
@@ -15,22 +15,7 @@ extension Wire {
     
 }
 
-
-// A custom Eqautable implementation is required because `customData: [String: Any]?` cannot be auto synthensized
-extension Wire.User: Equatable {
-    
-    static func == (lhs: Wire.User, rhs: Wire.User) -> Bool {
-        
-        return lhs.identifier == rhs.identifier
-            && lhs.name == rhs.name
-            && lhs.avatarURL == rhs.avatarURL
-        // TODO FIXME
-//            && lhs.customData == rhs.customData
-            && lhs.createdAt == rhs.createdAt
-            && lhs.updatedAt == rhs.updatedAt
-            && lhs.deletedAt == rhs.deletedAt
-    }
-}
+extension Wire.User: Equatable {}
 
 extension Wire.User: Decodable {
     
@@ -55,7 +40,7 @@ extension Wire.User: Decodable {
         self.identifier = try container.decode(String.self, forKey: .identifier)
         self.name = try container.decode(String.self, forKey: .name)
         self.avatarURL = try container.decodeIfPresent(URL.self, forKey: .avatarURL)
-        self.customData = try container.decodeIfPresent([String: Any].self, forKey: .customData)
+        self.customData = try container.decodeIfPresent([String: AnyHashable].self, forKey: .customData)
         self.createdAt = try container.decode(type(of: self.createdAt), forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
         self.deletedAt = try container.decodeIfPresent(Date.self, forKey: .deletedAt)
