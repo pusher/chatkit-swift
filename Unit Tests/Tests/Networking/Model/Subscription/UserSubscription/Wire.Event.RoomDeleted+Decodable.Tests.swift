@@ -7,12 +7,12 @@ class WireEventRoomDeletedDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "room_id": "cool-room-2",
+            "room_id": "ac43dfef",
         }
         """.toJsonData()
         
         XCTAssertNoThrow(try Wire.Event.RoomDeleted(from: jsonData.jsonDecoder())) { event in
-            XCTAssertEqual(event.roomIdentifier, "cool-room-2")
+            XCTAssertEqual(event.roomIdentifier, "ac43dfef")
         }
     }
     

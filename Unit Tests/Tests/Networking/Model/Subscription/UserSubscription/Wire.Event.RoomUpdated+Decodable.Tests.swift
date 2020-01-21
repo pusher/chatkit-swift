@@ -8,18 +8,13 @@ class WireEventRoomUpdatedDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room": {
-                "id": "cool-room-1",
-                "created_by_id": "jean",
-                "name": "myamazingroom",
-                "push_notification_title_override": null,
+                "id": "ac43dfef",
+                "name": "Chatkit chat",
+                "created_by_id": "alice",
                 "private": false,
-                "custom_data": {
-                    "something": "interesting"
-                },
-                "last_message_at": "2017-04-14T14:00:42Z",
+                "last_message_at": "2020-01-08T14:55:10Z",
                 "created_at": "2017-03-23T11:36:42Z",
-                "updated_at": "2017-03-23T11:36:42Z",
-                "deleted_at": null
+                "updated_at": "2017-04-23T11:36:42Z",
             },
         }
         """.toJsonData()
@@ -76,17 +71,12 @@ class WireEventRoomUpdatedDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room": {
-                "created_by_id": "jean",
-                "name": "myamazingroom",
-                "push_notification_title_override": null,
+                "name": "Chatkit chat",
+                "created_by_id": "alice",
                 "private": false,
-                "custom_data": {
-                    "something": "interesting"
-                },
-                "last_message_at": "2017-04-14T14:00:42Z",
+                "last_message_at": "2020-01-08T14:55:10Z",
                 "created_at": "2017-03-23T11:36:42Z",
-                "updated_at": "2017-03-23T11:36:42Z",
-                "deleted_at": null
+                "updated_at": "2017-04-23T11:36:42Z",
             }
         }
         """.toJsonData()

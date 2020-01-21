@@ -107,6 +107,11 @@
 		73233B3623CF83C4001909B7 /* ConcreteStoreBroadcasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B3523CF83C4001909B7 /* ConcreteStoreBroadcasterTests.swift */; };
 		73233B3823CF843D001909B7 /* StoreListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B3723CF843D001909B7 /* StoreListener.swift */; };
 		7326360723ACDF56009E44E2 /* Wire.Event.Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7326360623ACDF55009E44E2 /* Wire.Event.Subscription.swift */; };
+		7335D26623D60CA700E51909 /* Wire.Event.NewMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D26523D60CA700E51909 /* Wire.Event.NewMessage.swift */; };
+		7335D26823D60DD900E51909 /* Wire.Event.NewMessage+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D26723D60DD900E51909 /* Wire.Event.NewMessage+Decodable.Tests.swift */; };
+		7335D26A23D60FFC00E51909 /* Wire.Event.MessageDeleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D26923D60FFC00E51909 /* Wire.Event.MessageDeleted.swift */; };
+		7335D26C23D610C300E51909 /* Wire.Event.MessageDeleted+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D26B23D610C300E51909 /* Wire.Event.MessageDeleted+Decodable.Tests.swift */; };
+		7335D26D23D6F31B00E51909 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7389802C23C8DD1B0029E09F /* Data+Extensions.swift */; };
 		734C16FD23A3D51600330245 /* JSONDecoder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734C16FC23A3D51600330245 /* JSONDecoder+Extensions.swift */; };
 		734C170323A3E17F00330245 /* JSONEncoder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734C170223A3E17F00330245 /* JSONEncoder+Extensions.swift */; };
 		734D6A3823AA91FB00105479 /* Wire.User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734D6A3723AA91FB00105479 /* Wire.User.swift */; };
@@ -121,7 +126,6 @@
 		7389802823C8AC850029E09F /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7389802623C8A9880029E09F /* Dependencies.swift */; };
 		7389802A23C8AC880029E09F /* Instance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738DDA7A23C6206E00B5C79A /* Instance.swift */; };
 		7389802B23C8AC8C0029E09F /* SDKInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7389802423C8A9140029E09F /* SDKInfoProvider.swift */; };
-		7389802D23C8DD1B0029E09F /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7389802C23C8DD1B0029E09F /* Data+Extensions.swift */; };
 		738DDA7923C61FD400B5C79A /* Functional-Tests-Sandbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738DDA7823C61FD400B5C79A /* Functional-Tests-Sandbox.swift */; };
 		7396B2D823A78E08009F08FD /* XCTest+Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7396B2D723A78E08009F08FD /* XCTest+Assertions.swift */; };
 		7396B2E223A7F7F6009F08FD /* JSONEncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7396B2E123A7F7F6009F08FD /* JSONEncoderTests.swift */; };
@@ -272,6 +276,10 @@
 		73233B3523CF83C4001909B7 /* ConcreteStoreBroadcasterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteStoreBroadcasterTests.swift; sourceTree = "<group>"; };
 		73233B3723CF843D001909B7 /* StoreListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListener.swift; sourceTree = "<group>"; };
 		7326360623ACDF55009E44E2 /* Wire.Event.Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.Subscription.swift; sourceTree = "<group>"; };
+		7335D26523D60CA700E51909 /* Wire.Event.NewMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.NewMessage.swift; sourceTree = "<group>"; };
+		7335D26723D60DD900E51909 /* Wire.Event.NewMessage+Decodable.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Wire.Event.NewMessage+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		7335D26923D60FFC00E51909 /* Wire.Event.MessageDeleted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.MessageDeleted.swift; sourceTree = "<group>"; };
+		7335D26B23D610C300E51909 /* Wire.Event.MessageDeleted+Decodable.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Wire.Event.MessageDeleted+Decodable.Tests.swift"; sourceTree = "<group>"; };
 		734C16FC23A3D51600330245 /* JSONDecoder+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONDecoder+Extensions.swift"; sourceTree = "<group>"; };
 		734C170223A3E17F00330245 /* JSONEncoder+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "JSONEncoder+Extensions.swift"; sourceTree = "<group>"; };
 		734D6A3723AA91FB00105479 /* Wire.User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.User.swift; sourceTree = "<group>"; };
@@ -699,6 +707,8 @@
 		7301BC5223B0E65200F162C7 /* RoomSubscription */ = {
 			isa = PBXGroup;
 			children = (
+				7335D26523D60CA700E51909 /* Wire.Event.NewMessage.swift */,
+				7335D26923D60FFC00E51909 /* Wire.Event.MessageDeleted.swift */,
 				7301BC7223B1143D00F162C7 /* Wire.Event.IsTyping.swift */,
 			);
 			path = RoomSubscription;
@@ -769,6 +779,8 @@
 		7301BC6023B0E86700F162C7 /* RoomSubscription */ = {
 			isa = PBXGroup;
 			children = (
+				7335D26723D60DD900E51909 /* Wire.Event.NewMessage+Decodable.Tests.swift */,
+				7335D26B23D610C300E51909 /* Wire.Event.MessageDeleted+Decodable.Tests.swift */,
 				7301BC7423B1149D00F162C7 /* Wire.Event.IsTyping+Decodable.Tests.swift */,
 			);
 			path = RoomSubscription;
@@ -1061,6 +1073,7 @@
 				73233B2823CF694C001909B7 /* ConcreteSubscriptionManagerTests.swift in Sources */,
 				7396B2E423A7F8CA009F08FD /* Collections+EncodableTests.swift in Sources */,
 				7301BC7F23B1294500F162C7 /* Wire.MessagePart+Decodable.Tests.swift in Sources */,
+				7335D26823D60DD900E51909 /* Wire.Event.NewMessage+Decodable.Tests.swift in Sources */,
 				7301BC7723B1151600F162C7 /* Wire.Event.PresenceState+Decodable.Tests.swift in Sources */,
 				73233B1023CF2028001909B7 /* Store.swift in Sources */,
 				73233B3223CF7110001909B7 /* StoreDelegate.swift in Sources */,
@@ -1094,6 +1107,7 @@
 				73F85CF323CF8CD20008D0D6 /* ListenersFunctionalTests.swift in Sources */,
 				73F85CF523D074EC0008D0D6 /* TestData.swift in Sources */,
 				227E946F231FC5950025B691 /* XCTest+Networking.swift in Sources */,
+				7335D26D23D6F31B00E51909 /* Data+Extensions.swift in Sources */,
 				73F85D0623D0AB0A0008D0D6 /* Hydrator.UserHydrator.swift in Sources */,
 				73F85D0523D0AB0A0008D0D6 /* Service.UserService.swift in Sources */,
 				73233B3623CF83C4001909B7 /* ConcreteStoreBroadcasterTests.swift in Sources */,
@@ -1105,6 +1119,7 @@
 				7396B2E623A7FE56009F08FD /* Collections+DecodableTests.swift in Sources */,
 				7301BC6523B0E9C700F162C7 /* Wire.Event.UserLeftRoom+Decodable.Tests.swift in Sources */,
 				73233B2023CF41ED001909B7 /* SDKInfoProvider.swift in Sources */,
+				7335D26C23D610C300E51909 /* Wire.Event.MessageDeleted+Decodable.Tests.swift in Sources */,
 				73B00EAE23A2822F0062C718 /* String+Extensions.swift in Sources */,
 				73233B1E23CF40B6001909B7 /* Dependencies.swift in Sources */,
 				73233B2C23CF69F2001909B7 /* ConcreteStoreTests.swift in Sources */,
@@ -1121,7 +1136,6 @@
 				7396B2E223A7F7F6009F08FD /* JSONEncoderTests.swift in Sources */,
 				2274984E23210D6500D10C76 /* PPSDKInfoExtensionsTests.swift in Sources */,
 				227498472321028700D10C76 /* DateFormatterExtensionsTests.swift in Sources */,
-				7389802D23C8DD1B0029E09F /* Data+Extensions.swift in Sources */,
 				22749857232147AD00D10C76 /* ServiceVersionTests.swift in Sources */,
 				73233B3823CF843D001909B7 /* StoreListener.swift in Sources */,
 				73233B0823CF1930001909B7 /* Base.swift in Sources */,
@@ -1150,6 +1164,7 @@
 				22FC112D233E50FB0013A9D7 /* UsersProvider.swift in Sources */,
 				22D2A2E523197AD50095757C /* Service.swift in Sources */,
 				22D2A2E723197B620095757C /* ChatService.swift in Sources */,
+				7335D26A23D60FFC00E51909 /* Wire.Event.MessageDeleted.swift in Sources */,
 				22D2A2E1231978010095757C /* ServiceName.swift in Sources */,
 				736C7AE723B0B6D400018707 /* Wire.Event.InitialState.swift in Sources */,
 				22EDCB80231D2D6D00419C75 /* NetworkingController.swift in Sources */,
@@ -1168,6 +1183,7 @@
 				229018312358AE99008FAB07 /* TypingUsersProvider.swift in Sources */,
 				7301BC7D23B1261300F162C7 /* Wire.MessagePart.swift in Sources */,
 				22FD93C02361DD8A00AB841F /* TypingUsersViewModel.swift in Sources */,
+				7335D26623D60CA700E51909 /* Wire.Event.NewMessage.swift in Sources */,
 				73CF01CC23ACC8E6006FB43E /* Wire.swift in Sources */,
 				73F85CFB23D092400008D0D6 /* Hydrator.swift in Sources */,
 				7389802A23C8AC880029E09F /* Instance.swift in Sources */,

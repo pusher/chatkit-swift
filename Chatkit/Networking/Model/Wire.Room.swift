@@ -45,8 +45,8 @@ extension Wire.Room: Decodable {
         case name
         case createdById = "created_by_id"
         case pushNotificationTitleOverride = "push_notification_title_override"
-        case isPrivate = "private"
         case customData = "custom_data"
+        case isPrivate = "private"
         case lastMessageAt = "last_message_at"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
@@ -65,8 +65,8 @@ extension Wire.Room: Decodable {
         self.name = try container.decode(String.self, forKey: .name)
         self.createdById = try container.decode(String.self, forKey: .createdById)
         self.pushNotificationTitleOverride = try container.decodeIfPresent(String.self, forKey: .pushNotificationTitleOverride)
-        self.isPrivate = try container.decode(Bool.self, forKey: .isPrivate)
         self.customData = try container.decodeIfPresent([String: Any].self, forKey: .customData)
+        self.isPrivate = try container.decode(Bool.self, forKey: .isPrivate)
         self.lastMessageAt = try container.decodeIfPresent(Date.self, forKey: .lastMessageAt)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)

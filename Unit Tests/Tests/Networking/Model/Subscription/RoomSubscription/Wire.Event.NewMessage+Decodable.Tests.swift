@@ -1,7 +1,7 @@
 import XCTest
 @testable import PusherChatkit
 
-class WireMessageDecodableTests: XCTestCase {
+class WireEventNewMessageDecodableTests: XCTestCase {
     
     func test_init_allFieldsValid_entityFullyPopulated() {
         
@@ -21,13 +21,13 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertNoThrow(try Wire.Message(from: jsonData.jsonDecoder())) { message in
-            XCTAssertEqual(message.identifier, 2)
-            XCTAssertEqual(message.roomIdentifier, "ac43dfef")
-            XCTAssertEqual(message.userIdentifier, "alice")
-            XCTAssertEqual(message.parts.count, 1)
-            XCTAssertEqual(message.createdAt, Date(fromISO8601String: "2017-03-23T11:36:42Z"))
-            XCTAssertEqual(message.updatedAt, Date(fromISO8601String: "2017-04-23T11:36:42Z"))
+        XCTAssertNoThrow(try Wire.Event.NewMessage(from: jsonData.jsonDecoder())) { event in
+            XCTAssertEqual(event.message.identifier, 2)
+            XCTAssertEqual(event.message.roomIdentifier, "ac43dfef")
+            XCTAssertEqual(event.message.userIdentifier, "alice")
+            XCTAssertEqual(event.message.parts.count, 1)
+            XCTAssertEqual(event.message.createdAt, Date(fromISO8601String: "2017-03-23T11:36:42Z"))
+            XCTAssertEqual(event.message.updatedAt, Date(fromISO8601String: "2017-04-23T11:36:42Z"))
         }
     }
     
@@ -48,7 +48,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["keyNotFound",
                                           "\"id\""])
     }
@@ -71,7 +71,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["valueNotFound",
                                           "\"id\"",
                                           "Expected Int64 value but found null instead."])
@@ -95,7 +95,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["typeMismatch",
                                           "\"id\"",
                                           "Expected to decode Int64 but found a string/data instead."])
@@ -118,7 +118,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["keyNotFound",
                                           "\"room_id\""])
     }
@@ -141,7 +141,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["valueNotFound",
                                           "\"room_id\"",
                                           "Expected String value but found null instead."])
@@ -165,7 +165,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["typeMismatch",
                                           "\"room_id\"",
                                           "Expected to decode String but found a number instead."])
@@ -188,7 +188,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["keyNotFound",
                                           "\"user_id\""])
     }
@@ -211,7 +211,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["valueNotFound",
                                           "\"user_id\"",
                                           "Expected String value but found null instead."])
@@ -235,7 +235,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["typeMismatch",
                                           "\"user_id\"",
                                           "Expected to decode String but found a number instead."])
@@ -271,7 +271,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["valueNotFound",
                                           "\"parts\"",
                                           "Cannot get unkeyed decoding container -- found null value instead."])
@@ -290,7 +290,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["typeMismatch",
                                           "\"parts\"",
                                           "Expected to decode Array<Any> but found a string/data instead."])
@@ -314,7 +314,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["keyNotFound",
                                           "\"type\""])
     }
@@ -336,7 +336,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["keyNotFound",
                                           "\"created_at\""])
       }
@@ -359,7 +359,7 @@ class WireMessageDecodableTests: XCTestCase {
           }
           """.toJsonData()
           
-          XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+          XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                                containing: ["valueNotFound",
                                             "\"created_at\"",
                                             "Expected Date value but found null instead."])
@@ -383,7 +383,7 @@ class WireMessageDecodableTests: XCTestCase {
           }
           """.toJsonData()
           
-          XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+          XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                                containing: ["typeMismatch",
                                             "\"created_at\"",
                                             "Expected to decode String but found a number instead."])
@@ -407,7 +407,7 @@ class WireMessageDecodableTests: XCTestCase {
           }
           """.toJsonData()
           
-          XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+          XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                                containing: ["dataCorrupted",
                                             "\"created_at\"",
                                             "Expected date string to be ISO8601-formatted."])
@@ -430,7 +430,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["keyNotFound",
                                           "\"updated_at\""])
     }
@@ -453,7 +453,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["valueNotFound",
                                           "\"updated_at\"",
                                           "Expected Date value but found null instead."])
@@ -477,7 +477,7 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["typeMismatch",
                                           "\"updated_at\"",
                                           "Expected to decode String but found a number instead."])
@@ -501,9 +501,10 @@ class WireMessageDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Message(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.NewMessage(from: jsonData.jsonDecoder()),
                              containing: ["dataCorrupted",
                                           "\"updated_at\"",
                                           "Expected date string to be ISO8601-formatted."])
     }
+    
 }
