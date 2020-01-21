@@ -12,7 +12,6 @@ class WireEventRoomUpdatedDecodableTests: XCTestCase {
                 "name": "Chatkit chat",
                 "created_by_id": "alice",
                 "private": false,
-                "last_message_at": "2020-01-08T14:55:10Z",
                 "created_at": "2017-03-23T11:36:42Z",
                 "updated_at": "2017-04-23T11:36:42Z",
             },
@@ -74,7 +73,6 @@ class WireEventRoomUpdatedDecodableTests: XCTestCase {
                 "name": "Chatkit chat",
                 "created_by_id": "alice",
                 "private": false,
-                "last_message_at": "2020-01-08T14:55:10Z",
                 "created_at": "2017-03-23T11:36:42Z",
                 "updated_at": "2017-04-23T11:36:42Z",
             }
