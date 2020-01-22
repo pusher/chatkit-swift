@@ -2,5 +2,5 @@ import XCTest
 @testable import PusherChatkit
 
 
-class DummyUserHydrator: DummyStoreListener, UserHydrator {
+class DummyMissingUserFetcher: DummyStoreListener, MissingUserFetcher {
 }

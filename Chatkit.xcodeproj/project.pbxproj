@@ -152,8 +152,7 @@
 		73F85CF523D074EC0008D0D6 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85CF423D074EC0008D0D6 /* TestData.swift */; };
 		73F85CF723D088720008D0D6 /* Service.UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85CF623D088720008D0D6 /* Service.UserService.swift */; };
 		73F85CF923D08CD60008D0D6 /* ServiceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85CF823D08CD60008D0D6 /* ServiceType.swift */; };
-		73F85CFB23D092400008D0D6 /* Hydrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85CFA23D092400008D0D6 /* Hydrator.swift */; };
-		73F85CFD23D092AD0008D0D6 /* Hydrator.UserHydrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85CFC23D092AD0008D0D6 /* Hydrator.UserHydrator.swift */; };
+		73F85CFD23D092AD0008D0D6 /* MissingUserFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85CFC23D092AD0008D0D6 /* MissingUserFetcher.swift */; };
 		73F85D0523D0AB0A0008D0D6 /* Service.UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85D0323D0AB0A0008D0D6 /* Service.UserService.swift */; };
 		73F85D0623D0AB0A0008D0D6 /* Hydrator.UserHydrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85D0423D0AB0A0008D0D6 /* Hydrator.UserHydrator.swift */; };
 		73F85D0923D0D8670008D0D6 /* Dependencies_.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85D0823D0D8670008D0D6 /* Dependencies_.swift */; };
@@ -322,8 +321,7 @@
 		73F85CF423D074EC0008D0D6 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		73F85CF623D088720008D0D6 /* Service.UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.UserService.swift; sourceTree = "<group>"; };
 		73F85CF823D08CD60008D0D6 /* ServiceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceType.swift; sourceTree = "<group>"; };
-		73F85CFA23D092400008D0D6 /* Hydrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hydrator.swift; sourceTree = "<group>"; };
-		73F85CFC23D092AD0008D0D6 /* Hydrator.UserHydrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hydrator.UserHydrator.swift; sourceTree = "<group>"; };
+		73F85CFC23D092AD0008D0D6 /* MissingUserFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingUserFetcher.swift; sourceTree = "<group>"; };
 		73F85D0323D0AB0A0008D0D6 /* Service.UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Service.UserService.swift; sourceTree = "<group>"; };
 		73F85D0423D0AB0A0008D0D6 /* Hydrator.UserHydrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hydrator.UserHydrator.swift; sourceTree = "<group>"; };
 		73F85D0823D0D8670008D0D6 /* Dependencies_.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies_.swift; sourceTree = "<group>"; };
@@ -915,8 +913,7 @@
 				73233AC623CE1AD3001909B7 /* SubscriptionResponder.swift */,
 				73F85CF823D08CD60008D0D6 /* ServiceType.swift */,
 				73F85CF623D088720008D0D6 /* Service.UserService.swift */,
-				73F85CFA23D092400008D0D6 /* Hydrator.swift */,
-				73F85CFC23D092AD0008D0D6 /* Hydrator.UserHydrator.swift */,
+				73F85CFC23D092AD0008D0D6 /* MissingUserFetcher.swift */,
 			);
 			path = OKP;
 			sourceTree = "<group>";
@@ -1189,7 +1186,6 @@
 				22FD93C02361DD8A00AB841F /* TypingUsersViewModel.swift in Sources */,
 				7335D26623D60CA700E51909 /* Wire.Event.NewMessage.swift in Sources */,
 				73CF01CC23ACC8E6006FB43E /* Wire.swift in Sources */,
-				73F85CFB23D092400008D0D6 /* Hydrator.swift in Sources */,
 				7389802A23C8AC880029E09F /* Instance.swift in Sources */,
 				734D6A4223AAA77F00105479 /* Wire.CursorType.swift in Sources */,
 				7389802823C8AC850029E09F /* Dependencies.swift in Sources */,
@@ -1203,7 +1199,7 @@
 				22D2A2E32319780F0095757C /* ServiceVersion.swift in Sources */,
 				73ABC07E23B0B5D100ECD162 /* Wire.Message.swift in Sources */,
 				22D2A2D5231963C70095757C /* Bundle+Extensions.swift in Sources */,
-				73F85CFD23D092AD0008D0D6 /* Hydrator.UserHydrator.swift in Sources */,
+				73F85CFD23D092AD0008D0D6 /* MissingUserFetcher.swift in Sources */,
 				224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */,
 				734D6A3823AA91FB00105479 /* Wire.User.swift in Sources */,
 				73233AC723CE1AD3001909B7 /* SubscriptionResponder.swift in Sources */,

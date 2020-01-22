@@ -10,7 +10,7 @@ protocol Dependencies:
     HasSubscriptionFactory &
     HasSubscriptionManager &
     HasUserService &
-    HasUserHydrator
+    HasMissingUserFetcher
 {}
 
 
@@ -107,8 +107,8 @@ class ConcreteDependencies: Dependencies {
             return ConcreteUserService(dependencies: dependencies)
         })
         
-        dependencyFactory.register(UserHydrator.self, factory: { dependencies in
-            return ConcreteUserHydrator(dependencies: dependencies)
+        dependencyFactory.register(MissingUserFetcher.self, factory: { dependencies in
+            return ConcreteMissingUserFetcher(dependencies: dependencies)
         })
         
         override?(dependencyFactory)
@@ -146,60 +146,8 @@ class ConcreteDependencies: Dependencies {
         return dependencyFactory.resolve(UserService.self, dependencies: self)
     }
     
-    var userHydrator: UserHydrator {
-        return dependencyFactory.resolve(UserHydrator.self, dependencies: self)
+    var missingUserFetcher: MissingUserFetcher {
+        return dependencyFactory.resolve(MissingUserFetcher.self, dependencies: self)
     }
 }
 
-
-//class ConcreteDependencies: Dependencies {
-//
-//    private let instanceLocator: String
-//    private let instanceFactoryOverride: InstanceFactory?
-//
-//    init(instanceLocator: String, instanceFactoryOverride: InstanceFactory? = nil) {
-//        self.instanceLocator = instanceLocator
-//        self.instanceFactoryOverride = instanceFactoryOverride
-//    }
-//
-//    private(set) lazy var sdkInfoProvider: SDKInfoProvider = {
-//        return ConcreteSDKInfoProvider(locator: instanceLocator,
-//                                       serviceName: ServiceName.chat.rawValue,
-//                                       serviceVersion: ServiceVersion.version7.rawValue,
-//                                       sdkInfo: PPSDKInfo.current)
-//    }()
-//
-//    private(set) lazy var storeBroadcaster: StoreBroadcaster = {
-//        return ConcreteStoreBroadcaster(dependencies: self)
-//    }()
-//
-//    private(set) lazy var store: Store = {
-//        return ConcreteStore(dependencies: self,
-//                             delegate: storeBroadcaster)
-//    }()
-//
-//    private(set) lazy var instanceFactory: InstanceFactory = {
-//        return instanceFactoryOverride ?? ConcreteInstanceFactory(dependencies: self)
-//    }()
-//
-//    private(set) lazy var subscriptionResponder: SubscriptionResponder = {
-//        return ConcreteSubscriptionResponder(dependencies: self)
-//    }()
-//
-//    private(set) lazy var subscriptionFactory: SubscriptionFactory = {
-//        return ConcreteSubscriptionFactory(dependencies: self)
-//    }()
-//
-//    private(set) lazy var subscriptionManager: SubscriptionManager = {
-//        return ConcreteSubscriptionManager(dependencies: self)
-//    }()
-//
-//    private(set) lazy var userService: UserService = {
-//        return ConcreteUserService(dependencies: self)
-//    }()
-//
-//    private(set) lazy var userHydrator: UserHydrator = {
-//        return ConcreteUserHydrator(dependencies: self)
-//    }()
-//
-//}

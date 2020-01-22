@@ -14,8 +14,8 @@ class ConcreteDependencyTests: XCTestCase {
         XCTAssertNotNil(dependencies.subscriptionResponder as? ConcreteSubscriptionResponder)
         XCTAssertNotNil(dependencies.subscriptionFactory as? ConcreteSubscriptionFactory)
         XCTAssertNotNil(dependencies.subscriptionManager as? ConcreteSubscriptionManager)
-        XCTAssertNotNil(dependencies.userService as? UserService)
-        XCTAssertNotNil(dependencies.userHydrator as? UserHydrator)
+        XCTAssertNotNil(dependencies.userService as? ConcreteUserService)
+        XCTAssertNotNil(dependencies.missingUserFetcher as? ConcreteMissingUserFetcher)
     }
     
     func test_initWithInstanceFactory_success() {

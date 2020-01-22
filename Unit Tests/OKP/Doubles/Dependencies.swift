@@ -12,7 +12,7 @@ class DependenciesDoubles: StubBase, Dependencies {
     let subscriptionFactory: SubscriptionFactory
     let subscriptionManager: SubscriptionManager
     let userService: UserService
-    let userHydrator: UserHydrator
+    let missingUserFetcher: MissingUserFetcher
     
     init(sdkInfoProvider: SDKInfoProvider? = nil,
          storeBroadcaster: StoreBroadcaster? = nil,
@@ -22,7 +22,7 @@ class DependenciesDoubles: StubBase, Dependencies {
          subscriptionFactory: SubscriptionFactory? = nil,
          subscriptionManager: SubscriptionManager? = nil,
          userService: UserService? = nil,
-         userHydrator: UserHydrator? = nil,
+         missingUserFetcher: MissingUserFetcher? = nil,
          
          file: StaticString = #file, line: UInt = #line) {
         
@@ -34,7 +34,7 @@ class DependenciesDoubles: StubBase, Dependencies {
         self.subscriptionFactory = subscriptionFactory ?? DummySubscriptionFactory(file: file, line: line)
         self.subscriptionManager = subscriptionManager ?? DummySubscriptionManager(file: file, line: line)
         self.userService = userService ?? DummyUserService(file: file, line: line)
-        self.userHydrator = userHydrator ?? DummyUserHydrator(file: file, line: line)
+        self.missingUserFetcher = missingUserFetcher ?? DummyMissingUserFetcher(file: file, line: line)
         
         super.init(file: file, line: line)
     }

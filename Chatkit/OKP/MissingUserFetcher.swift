@@ -3,15 +3,15 @@ import class PusherPlatform.PPRequestOptions
 
 
 
-protocol HasUserHydrator {
-    var userHydrator: UserHydrator { get }
+protocol HasMissingUserFetcher {
+    var missingUserFetcher: MissingUserFetcher { get }
 }
 
-protocol UserHydrator: StoreListener {
+protocol MissingUserFetcher: StoreListener {
     
 }
 
-class ConcreteUserHydrator: UserHydrator {
+class ConcreteMissingUserFetcher: MissingUserFetcher {
     
     typealias Dependencies = HasUserService & HasStore
     
