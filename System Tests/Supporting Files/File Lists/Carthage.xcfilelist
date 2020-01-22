@@ -1,0 +1,1 @@
+$(SRCROOT)/Carthage/Build/$(CARTHAGE_PLATFORM)/PusherPlatform.framework
