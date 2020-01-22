@@ -1,20 +1,20 @@
 import XCTest
 @testable import PusherChatkit
 
-class WireMemebershipDecodableTests: XCTestCase {
+class WireEventUserLeftRoomDecodableTests: XCTestCase {
     
     func test_init_allFieldsValid_entityFullyPopulated() {
         
         let jsonData = """
         {
             "room_id": "ac43dfef",
-            "user_ids": ["alice", "carol"],
+            "user_id": "alice",
         }
         """.toJsonData()
         
-        XCTAssertNoThrow(try Wire.Membership(from: jsonData.jsonDecoder())) { membership in
-            XCTAssertEqual(membership.roomIdentifier, "ac43dfef")
-            XCTAssertEqual(membership.userIdentifiers, ["alice", "carol"])
+        XCTAssertNoThrow(try Wire.Event.UserLeftRoom(from: jsonData.jsonDecoder())) { event in
+            XCTAssertEqual(event.roomIdentifier, "ac43dfef")
+            XCTAssertEqual(event.userIdentifier, "alice")
         }
     }
     
@@ -22,11 +22,11 @@ class WireMemebershipDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "user_ids": ["alice", "carol"],
+            "user_ids": "alice",
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Membership(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.UserLeftRoom(from: jsonData.jsonDecoder()),
                              containing: ["keyNotFound",
                                           "\"room_id\""])
     }
@@ -36,11 +36,11 @@ class WireMemebershipDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": null,
-            "user_ids": ["alice", "carol"],
+            "user_id": "alice",
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Membership(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.UserLeftRoom(from: jsonData.jsonDecoder()),
                              containing: ["valueNotFound",
                                           "\"room_id\"",
                                           "Expected String value but found null instead."])
@@ -51,17 +51,17 @@ class WireMemebershipDecodableTests: XCTestCase {
         let jsonData = """
         {
             "room_id": 123,
-            "user_ids": ["alice", "carol"],
+            "user_id": "alice",
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Membership(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.UserLeftRoom(from: jsonData.jsonDecoder()),
                              containing: ["typeMismatch",
                                           "\"room_id\"",
                                           "Expected to decode String but found a number instead."])
     }
     
-    func test_init_userIdentifiersMissing_throws() {
+    func test_init_userIdentifierMissing_throws() {
         
         let jsonData = """
         {
@@ -69,39 +69,39 @@ class WireMemebershipDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Membership(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.UserLeftRoom(from: jsonData.jsonDecoder()),
                              containing: ["keyNotFound",
-                                          "\"user_ids\""])
+                                          "\"user_id\""])
     }
     
-    func test_init_userIdentifiersNull_throws() {
+    func test_init_userIdentifierNull_throws() {
         
         let jsonData = """
         {
             "room_id": "ac43dfef",
-            "user_ids": null,
+            "user_id": null,
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Membership(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.UserLeftRoom(from: jsonData.jsonDecoder()),
                              containing: ["valueNotFound",
-                                          "\"user_ids\"",
-                                          "Cannot get unkeyed decoding container -- found null value instead."])
+                                          "\"user_id\"",
+                                          "Expected String value but found null instead."])
     }
     
-    func test_init_userIdentifiersInvalidType_throws() {
+    func test_init_userIdentifierInvalidType_throws() {
         
         let jsonData = """
         {
             "room_id": "ac43dfef",
-            "user_ids": "not an array",
+            "user_id": 123,
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.Membership(from: jsonData.jsonDecoder()),
+        XCTAssertThrowsError(try Wire.Event.UserLeftRoom(from: jsonData.jsonDecoder()),
                              containing: ["typeMismatch",
-                                          "\"user_ids\"",
-                                          "Expected to decode Array<Any> but found a string/data instead."])
+                                          "\"user_id\"",
+                                          "Expected to decode String but found a number instead."])
     }
     
 }

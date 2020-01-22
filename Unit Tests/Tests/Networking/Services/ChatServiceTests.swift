@@ -1,5 +1,4 @@
 import XCTest
-import Mockingjay
 import PusherPlatform
 @testable import PusherChatkit
 

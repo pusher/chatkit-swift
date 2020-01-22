@@ -1,6 +1,4 @@
 import XCTest
-import Mockingjay
-import PusherPlatform
 @testable import PusherChatkit
 
 class NetworkingControllerTests: XCTestCase {

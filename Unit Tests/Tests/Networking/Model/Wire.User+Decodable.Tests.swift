@@ -7,11 +7,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -20,10 +20,10 @@ class WireUserDecodableTests: XCTestCase {
         """.toJsonData()
         
         XCTAssertNoThrow(try Wire.User(from: jsonData.jsonDecoder())) { room in
-            XCTAssertEqual(room.identifier, "cool-room-1")
-            XCTAssertEqual(room.name, "mycoolroom")
-            XCTAssertEqual(room.avatarUrl, URL(string: "https://images.com/avatar"))
-            XCTAssertEqual(room.customData as? [String: Bool], ["cool": true])
+            XCTAssertEqual(room.identifier, "alice")
+            XCTAssertEqual(room.name, "Alice A")
+            XCTAssertEqual(room.avatarUrl, URL(string: "https://example.com/img/alice.png"))
+            XCTAssertEqual(room.customData as? [String: String], ["email": "alice@example.com"])
             XCTAssertEqual(room.createdAt, Date(fromISO8601String: "2017-03-23T11:36:42Z"))
             XCTAssertEqual(room.updatedAt, Date(fromISO8601String: "2017-04-23T11:36:42Z"))
             XCTAssertEqual(room.deletedAt, Date(fromISO8601String: "2017-05-23T11:36:42Z"))
@@ -34,10 +34,10 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -55,10 +55,10 @@ class WireUserDecodableTests: XCTestCase {
         let jsonData = """
         {
             "id": null,
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -77,10 +77,10 @@ class WireUserDecodableTests: XCTestCase {
         let jsonData = """
         {
             "id": 123,
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -98,10 +98,10 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -118,11 +118,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
+            "id": "alice",
             "name": null,
-            "avatar_url": "https://images.com/avatar",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -140,11 +140,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
+            "id": "alice",
             "name": 123,
-            "avatar_url": "https://images.com/avatar",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -162,10 +162,10 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
+            "id": "alice",
+            "name": "Alice A",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -182,11 +182,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
+            "id": "alice",
+            "name": "Alice A",
             "avatar_url": null,
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -203,11 +203,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
+            "id": "alice",
+            "name": "Alice A",
             "avatar_url": 123,
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -221,13 +221,35 @@ class WireUserDecodableTests: XCTestCase {
                                           "Expected to decode String but found a number instead."])
     }
     
+    func test_init_avatarUrlInvalidFormat_throws() {
+        
+        let jsonData = """
+        {
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "not a url",
+            "custom_data": {
+                "email": "alice@example.com"
+            },
+            "created_at": "2017-03-23T11:36:42Z",
+            "updated_at": "2017-04-23T11:36:42Z",
+            "deleted_at": "2017-05-23T11:36:42Z",
+        }
+        """.toJsonData()
+        
+        XCTAssertThrowsError(try Wire.User(from: jsonData.jsonDecoder()),
+                             containing: ["dataCorrupted",
+                                          "\"avatar_url\"",
+                                          "Invalid URL string."])
+    }
+    
     func test_init_customDataMissing_noProblem() {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -243,9 +265,9 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": null,
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -263,9 +285,9 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": 123,
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -283,11 +305,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "updated_at": "2017-04-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -303,11 +325,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": null,
             "updated_at": "2017-04-23T11:36:42Z",
@@ -325,11 +347,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": 123,
             "updated_at": "2017-04-23T11:36:42Z",
@@ -347,11 +369,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "not a date",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -369,11 +391,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "deleted_at": "2017-05-23T11:36:42Z",
@@ -389,11 +411,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": null,
@@ -411,11 +433,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": 123,
@@ -433,11 +455,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "not a date",
@@ -455,11 +477,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -475,11 +497,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -496,11 +518,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",
@@ -518,11 +540,11 @@ class WireUserDecodableTests: XCTestCase {
         
         let jsonData = """
         {
-            "id": "cool-room-1",
-            "name": "mycoolroom",
-            "avatar_url": "https://images.com/avatar",
+            "id": "alice",
+            "name": "Alice A",
+            "avatar_url": "https://example.com/img/alice.png",
             "custom_data": {
-                "cool": true
+                "email": "alice@example.com"
             },
             "created_at": "2017-03-23T11:36:42Z",
             "updated_at": "2017-04-23T11:36:42Z",

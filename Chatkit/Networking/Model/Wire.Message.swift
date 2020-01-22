@@ -1,29 +1,31 @@
 import Foundation
 
+
 extension Wire {
     
-    internal struct Cursor {
-        let roomIdentifier: String
+    internal struct Message {
+        
+        let identifier: Int64
         let userIdentifier: String
-        let cursorType: CursorType
-        let position: Int64
+        let roomIdentifier: String
+        let parts: [MessagePart]
+        let createdAt: Date
         let updatedAt: Date
     }
     
 }
-
-extension Wire.Cursor: Decodable {
+extension Wire.Message: Decodable {
     
     private enum CodingKeys: String, CodingKey {
-        case roomIdentifier = "room_id"
+        case identifier = "id"
         case userIdentifier = "user_id"
-        case cursorType = "cursor_type"
-        case position
+        case roomIdentifier = "room_id"
+        case parts
+        case createdAt = "created_at"
         case updatedAt = "updated_at"
-
+        
         var description: String {
             return "\"\(self.rawValue)\""
         }
     }
 }
-
