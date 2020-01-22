@@ -14,7 +14,7 @@ class ConcreteUserService: UserService {
     
     typealias Dependencies = HasInstanceFactory & HasStore
     
-    let dependencies: Dependencies
+    private let dependencies: Dependencies
     
     private let instance: Instance
     private let jsonDecoder = JSONDecoder.default

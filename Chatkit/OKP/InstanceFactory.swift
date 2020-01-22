@@ -19,7 +19,7 @@ class ConcreteInstanceFactory: InstanceFactory {
 
     typealias Dependencies = HasSDKInfoProvider
     
-    let dependencies: Dependencies
+    private let dependencies: Dependencies
     init(dependencies: Dependencies) {
         self.dependencies = dependencies
     }

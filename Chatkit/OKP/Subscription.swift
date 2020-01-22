@@ -25,7 +25,7 @@ class ConcreteSubscription: Subscription {
     
     typealias Dependencies = HasInstanceFactory
 
-    let dependencies: Dependencies
+    private let dependencies: Dependencies
     weak var delegate: SubscriptionDelegate?
     
     init(dependencies: Dependencies, delegate: SubscriptionDelegate?) {

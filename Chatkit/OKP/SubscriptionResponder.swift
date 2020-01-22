@@ -10,7 +10,7 @@ class ConcreteSubscriptionResponder: SubscriptionResponder {
     
     typealias Dependencies = HasStore
     
-    let dependencies: Dependencies
+    private let dependencies: Dependencies
     
     private let jsonDecoder = JSONDecoder.default
     

@@ -11,7 +11,7 @@ class ConcreteSubscriptionManager: SubscriptionManager {
     
     typealias Dependencies = HasSubscriptionFactory
     
-    let dependencies: Dependencies
+    private let dependencies: Dependencies
     
     private var subscriptions: [Subscription] = []
 //    private var subscriptions: [Subscription: SubscriptionType] = [:]

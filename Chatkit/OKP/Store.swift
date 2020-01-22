@@ -26,7 +26,7 @@ class ConcreteStore: Store {
     
     typealias Dependencies = Any // No dependencies for now
     
-    let dependencies: Dependencies
+    private let dependencies: Dependencies
     weak var delegate: StoreDelegate?
     
     var state: State {

@@ -15,7 +15,7 @@ class ConcreteMissingUserFetcher: MissingUserFetcher {
     
     typealias Dependencies = HasUserService & HasStore
     
-    let dependencies: Dependencies
+    private let dependencies: Dependencies
     
     init(dependencies: Dependencies) {
         self.dependencies = dependencies

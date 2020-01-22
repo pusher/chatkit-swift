@@ -33,9 +33,9 @@ class ConcreteStoreBroadcaster: StoreBroadcaster {
     
     typealias Dependencies = Any // No dependencies for now
     
-    let dependencies: Dependencies
+    private let dependencies: Dependencies
     
-    var listeners = Array<StoreListener>()
+    private var listeners = Array<StoreListener>()
     
     init(dependencies: Dependencies) {
         self.dependencies = dependencies
