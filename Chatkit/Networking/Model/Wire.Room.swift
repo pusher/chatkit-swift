@@ -8,7 +8,7 @@ extension Wire {
         let createdById: String
         let isPrivate: Bool
         let pushNotificationTitleOverride: String?
-        let customData: [String: Any]?
+        let customData: [String: AnyHashable]?
         let lastMessageAt: Date?
         let createdAt: Date
         let updatedAt: Date
@@ -44,7 +44,7 @@ extension Wire.Room: Decodable {
         self.name = try container.decode(String.self, forKey: .name)
         self.createdById = try container.decode(String.self, forKey: .createdById)
         self.pushNotificationTitleOverride = try container.decodeIfPresent(String.self, forKey: .pushNotificationTitleOverride)
-        self.customData = try container.decodeIfPresent([String: Any].self, forKey: .customData)
+        self.customData = try container.decodeIfPresent([String: AnyHashable].self, forKey: .customData)
         self.isPrivate = try container.decode(Bool.self, forKey: .isPrivate)
         self.lastMessageAt = try container.decodeIfPresent(Date.self, forKey: .lastMessageAt)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
