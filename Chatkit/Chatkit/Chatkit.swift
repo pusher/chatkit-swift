@@ -29,6 +29,8 @@ public class Chatkit {
     
     private let networkingController: NetworkingController
     
+    typealias Dependencies = HasStoreBroadcaster & HasSubscriptionManager
+    
     private let dependencies: Dependencies
     
     // MARK: - Initializers
@@ -124,7 +126,9 @@ public class Chatkit {
                                customData: nil,
                                createdAt: Date(),
                                updatedAt: Date())
-        let provider = JoinedRoomsProvider(currentUser: currentUser)
+        
+        let provider = JoinedRoomsProvider(currentUser: currentUser, dependencies: dependencies)
+        
         completionHandler(provider, nil)
     }
     

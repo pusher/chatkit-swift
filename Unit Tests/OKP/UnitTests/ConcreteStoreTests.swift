@@ -24,8 +24,8 @@ class ConcreteStoreTests: XCTestCase {
             Wire.Event.EventType.initialState(
                 event: Wire.Event.InitialState(
                     currentUser: Wire.User(
-                        identifier: "viv",
-                        name: "Vivan",
+                        identifier: "alice",
+                        name: "Alice A",
                         avatarURL: nil,
                         customData: nil,
                         createdAt: Date.distantPast,
@@ -45,8 +45,8 @@ class ConcreteStoreTests: XCTestCase {
         
         let expectedState = State(
             currentUser: Internal.User(
-                identifier: "viv",
-                name: "Vivan"
+                identifier: "alice",
+                name: "Alice A"
             ),
             joinedRooms: []
         )

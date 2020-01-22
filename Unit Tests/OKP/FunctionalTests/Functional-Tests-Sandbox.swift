@@ -139,7 +139,7 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             waitForExpectations(timeout: 1)
             
             XCTAssertNotNil(result)
-            XCTAssertEqual(result.debugDescription, "ChatKit could not connect, user unauthorized or something")
+            XCTAssertEqual(result as? String, "Failure")
         }())
     }
     
@@ -169,12 +169,21 @@ class JoinedRoomsProviderInitialisedFunctionalTests: XCTestCase {
                 "event_name": "initial_state",
                 "data": {
                     "current_user": {
-                        "id": "viv",
-                        "name": "Vivan",
+                        "id": "alice",
+                        "name": "Alice A",
                         "created_at": "2017-04-13T14:10:04Z",
                         "updated_at": "2017-04-13T14:10:04Z",
                     },
-                    "rooms": [],
+                    "rooms": [
+                        {
+                            "id": "ac43dfef",
+                            "name": "Chatkit chat",
+                            "created_by_id": "alice",
+                            "private": false,
+                            "created_at": "2017-03-23T11:36:42Z",
+                            "updated_at": "2017-07-28T22:19:32Z",
+                        }
+                    ],
                     "read_states": [],
                     "memberships": [],
                 },
@@ -190,7 +199,7 @@ class JoinedRoomsProviderInitialisedFunctionalTests: XCTestCase {
             })
             joinedRoomsProvider.delegate = stubJoinedRoomsProviderDelegate
             
-            XCTAssertEqual(joinedRoomsProvider.rooms.count, 0)
+            XCTAssertEqual(joinedRoomsProvider.rooms.count, 1)
             
             /******************/
             /*----- WHEN -----*/
@@ -199,7 +208,7 @@ class JoinedRoomsProviderInitialisedFunctionalTests: XCTestCase {
             let removedFromRoomEventJsonData = """
             {
                 "data": {
-                    "room_id": "cool-room-2",
+                    "room_id": "ac43dfef",
                 },
                 "event_name": "removed_from_room",
                 "timestamp": "2017-04-14T14:00:42Z",
@@ -211,10 +220,10 @@ class JoinedRoomsProviderInitialisedFunctionalTests: XCTestCase {
             /*----- THEN -----*/
             /******************/
             
-            // Wait for the delegate's `didJoinRoom` func to fire (to allow time for the joined room to propagate through the state machine)
+            // Wait for the delegate's `didLeaveRoom` func to fire (to allow time for the joined room to propagate through the state machine)
             waitForExpectations(timeout: 1)
             
-            XCTAssertEqual(joinedRoomsProvider.rooms.count, 1)
+            XCTAssertEqual(joinedRoomsProvider.rooms.count, 0)
             
         }())
     }

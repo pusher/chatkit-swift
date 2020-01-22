@@ -25,8 +25,8 @@ protocol HasStoreBroadcaster {
 }
 
 protocol StoreBroadcaster: StoreDelegate {
-    func register(_ listener: StoreListener)
-    // TODO unregister
+    func register(_ listener: StoreListener) -> State
+    func unregister(_ listener: StoreListener)
 }
 
 class ConcreteStoreBroadcaster: StoreBroadcaster {
@@ -37,21 +37,31 @@ class ConcreteStoreBroadcaster: StoreBroadcaster {
     
     private var listeners = Array<StoreListener>()
     
+    // TODO is this cool or would it be better if the store itself exposed its current state?
+    private var state: State?
+    
     init(dependencies: Dependencies) {
         self.dependencies = dependencies
     }
     
     // MARK: StoreBroadcaster
     
-    func register(_ listener: StoreListener) {
+    func register(_ listener: StoreListener) -> State {
         if !listeners.contains(where: { $0 === listener }) {
             listeners.append(listener)
         }
+        // TODO can this be made better?
+        return self.state ?? State.emptyState
+    }
+    
+    func unregister(_ listener: StoreListener) {
+        listeners.removeAll(where: { $0 === listener })
     }
 
     // MARK: StoreDelegate
     
     func store(_ store: Store, didUpdateState state: State) {
+        self.state = state
         for listener in listeners {
             listener.store(store, didUpdateState: state)
         }

@@ -39,6 +39,7 @@ class ConcreteStore: Store {
     init(dependencies: Dependencies, delegate: StoreDelegate?) {
         self.dependencies = dependencies
         self.delegate = delegate
+        // Ensure the state is set *AFTER* the delegate to ensure the `didSet` triggers a call to the delegate so its notified of the initial state
         self.state = State.emptyState
     }
     
@@ -72,6 +73,13 @@ class ConcreteStore: Store {
                     joinedRooms: joinedRooms
                 )
 
+            case let .removedFromRoom(removedFromRoom):
+                
+                newState = State(
+                    currentUser: existingState.currentUser,
+                    joinedRooms: existingState.joinedRooms.filter { $0.identifier != removedFromRoom.roomIdentifier }
+                )
+                
             default:
                 fatalError()
             }

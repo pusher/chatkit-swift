@@ -81,12 +81,27 @@ class ConcreteSubscription: Subscription {
             */
         }
         
+        let onEnd: Instance.OnEnd = { [weak self] statusCode, headers, info in
+            
+            // TODO I have no idea if this is correct at present
+            let error: Error
+            if let passedError: Error = info as? Error {
+                error = passedError
+            } else {
+                let statusCodeString = statusCode != nil ? String(describing: statusCode) : "nil"
+                let headersString = headers != nil ? String(describing: headers) : "nil"
+                let infoString = info != nil ? String(describing: headers) : "nil"
+                error = "Unknown reason for end. Status code=\(statusCodeString). Headers=\(headersString). Info=\(infoString)"
+            }
+            completion(.failure(error))
+        }
+        
         let _ = instance.subscribeWithResume(using: requestOptions,
                                              onOpening: nil,
                                              onOpen: onOpen,
                                              onResuming: nil,
                                              onEvent: onEvent,
-                                             onEnd: nil,
+                                             onEnd: onEnd,
                                              onError: onError)
     }
     

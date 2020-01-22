@@ -22,6 +22,10 @@ import Foundation
 ///
 public class JoinedRoomsProvider {
     
+    typealias Dependencies = HasStoreBroadcaster
+    
+    private let dependencies: Dependencies
+    
     // MARK: - Properties
     
     /// The current state of the provider.
@@ -31,17 +35,69 @@ public class JoinedRoomsProvider {
     public weak var delegate: JoinedRoomsProviderDelegate?
     
     /// The set of all rooms joined by the user.
-    public var rooms: Set<Room> {
-        return []
-    }
+    public var rooms: Set<Room>
     
     // MARK: - Initializers
     
-    init(currentUser: User) {
+    init(currentUser: User, dependencies: Dependencies) {
         self.state = .connected
+        self.dependencies = dependencies
+        self.rooms = []
+        
+        // TODO needs to move elsewhere once we have a transformer
+        let state = dependencies.storeBroadcaster.register(self)
+        
+        var rooms: Set<Room> = []
+        for joinedRoom in state.joinedRooms {
+            let room = Self.room(fromJoinedRoom: joinedRoom)
+            rooms.insert(room)
+        }
+        self.rooms = rooms
+    }
+    
+    deinit {
+        self.dependencies.storeBroadcaster.unregister(self)
     }
     
 }
+
+// TODO this is temporary, until the transformer is implemented
+extension JoinedRoomsProvider: StoreListener {
+    
+    func store(_ store: Store, didUpdateState state: State) {
+        
+        for joinedRoom in state.joinedRooms {
+            if rooms.contains(where: { $0.identifier != joinedRoom.identifier} ) {
+                let room = Self.room(fromJoinedRoom: joinedRoom)
+                self.rooms.insert(room)
+                self.delegate?.joinedRoomsProvider(self, didJoinRoom: room)
+            }
+        }
+        
+        for currentRoom in rooms {
+            if !state.joinedRooms.contains(where: { $0.identifier == currentRoom.identifier }) {
+                self.rooms.remove(currentRoom)
+                self.delegate?.joinedRoomsProvider(self, didLeaveRoom: currentRoom)
+            }
+        }
+        
+    }
+
+    // TODO needs to move elsewhere
+    static private func room(fromJoinedRoom joinedRoom: Internal.Room) -> Room {
+        // TODO fill in the blanks
+        return Room(identifier: joinedRoom.identifier,
+                    name: joinedRoom.name,
+                    isPrivate: false,
+                    unreadCount: 0,
+                    lastMessage: nil,
+                    customData: nil,
+                    createdAt: Date(),
+                    updatedAt: Date(),
+                    deletedAt: nil)
+    }
+}
+
 
 // MARK: - Delegate
 

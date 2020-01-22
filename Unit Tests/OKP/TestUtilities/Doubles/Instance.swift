@@ -128,10 +128,15 @@ class StubInstance: StubBase, Instance {
         self.onError = onError
         
         switch(subscribe_completionResult) {
+            // TODO no idea if this is correct
         case .success:
             onOpen?()
         case let .failure(error):
-            onError?(error)
+            // TODO no idea if this is correct
+            let statusCode = 404
+            let headers: [String: String]? = nil
+            let info: Any? = error
+            onEnd?(statusCode, headers, info)
         }
         
         return makeDummyPPResumableSubscription(requestOptions: requestOptions)
