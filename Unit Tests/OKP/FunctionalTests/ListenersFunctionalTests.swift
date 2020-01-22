@@ -16,12 +16,12 @@ class ListenersFunctionalTests: XCTestCase {
         let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
         dependencies.storeBroadcaster.register(stubStoreListener)
         
-        stubNetworking.stubSubscribe(.session, .success)
+        stubNetworking.stubSubscribe(.user, .success)
         
-        let expectation = self.expectation(description: "session subscription successfully connected")
-        dependencies.subscriptionManager.subscribe(.session) { result in
+        let expectation = self.expectation(description: "User subscription successfully connected")
+        dependencies.subscriptionManager.subscribe(.user) { result in
             if case .success = result {} else {
-                XCTFail("Unexpected session subscription connection failure")
+                XCTFail("Unexpected user subscription connection failure")
             }
             expectation.fulfill()
         }
@@ -53,7 +53,7 @@ class ListenersFunctionalTests: XCTestCase {
         """.toJsonData()
 //        let jsonData = JsonString.initialStateSubscriptionEvent(type: .withCurrentUserOnly).toJsonData()
         
-        stubNetworking.fireSubscriptionEvent(.session, jsonData)
+        stubNetworking.fireSubscriptionEvent(.user, jsonData)
         
         /******************/
         /*----- THEN -----*/

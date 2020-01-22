@@ -32,7 +32,7 @@ extension XCTestCase {
         let chatkit = try Chatkit(instanceLocator: DummyInstanceLocator, dependencies: depedencies)
         
         // Prepare for the client to register for a user subscription
-        stubNetworking.stubSubscribe(.session, .success(()))
+        stubNetworking.stubSubscribe(.user, .success(()))
         
         let expectation = self.expectation(description: "Waiting for ChatKit to become connected")
         chatkit.connect { _ in
@@ -40,7 +40,7 @@ extension XCTestCase {
         }
         
         // Fire the "initial_state" User subscription event which will cause `Chatkit` to become successfully `connected`
-        stubNetworking.fireSubscriptionEvent(.session, initialStateJsonData)
+        stubNetworking.fireSubscriptionEvent(.user, initialStateJsonData)
         
         waitForExpectations(timeout: 1)
         
@@ -81,12 +81,12 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             
             let chatkit = try Chatkit(instanceLocator: DummyInstanceLocator, dependencies: depedencies)
 
-            // Prepare for the client to register for a user subscription
-            stubNetworking.stubSubscribe(.session, .success(()))
-            
             /*****************/
             /*---- WHEN -----*/
             /*****************/
+            
+            // Prepare user subscription to return success with the client attempts to register
+            stubNetworking.stubSubscribe(.user, .success(()))
             
             let expectation = self.expectation(description: "Waiting for ChatKit to become connected")
             var result: Error?
@@ -122,7 +122,8 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             /*---- WHEN -----*/
             /*****************/
             
-            stubNetworking.stubSubscribe(.session, .failure("Failure"))
+            // Prepare user subscription to return failure with the client attempts to register
+            stubNetworking.stubSubscribe(.user, .failure("Failure"))
             
             let expectation = self.expectation(description: "Waiting for ChatKit to become connected")
             var result: Error?
@@ -204,7 +205,7 @@ class JoinedRoomsProviderInitialisedFunctionalTests: XCTestCase {
                 "timestamp": "2017-04-14T14:00:42Z",
             }
             """.toJsonData()
-            stubNetworking.fireSubscriptionEvent(.session, removedFromRoomEventJsonData)
+            stubNetworking.fireSubscriptionEvent(.user, removedFromRoomEventJsonData)
             
             /******************/
             /*----- THEN -----*/

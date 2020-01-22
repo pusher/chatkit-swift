@@ -68,7 +68,7 @@ public class Chatkit {
         
         // TODO: Implement properly
         
-        dependencies.subscriptionManager.subscribe(.session) { result in
+        dependencies.subscriptionManager.subscribe(.user) { result in
             switch result {
             case .success:
                 self.connectionStatus = .connected

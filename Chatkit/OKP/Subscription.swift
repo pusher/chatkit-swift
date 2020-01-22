@@ -3,7 +3,7 @@ import enum PusherPlatform.HTTPMethod
 
 
 enum SubscriptionType {
-    case session
+    case user
     case room(roomIdentifier: String)
 }
 extension SubscriptionType: Hashable {}
@@ -90,9 +90,11 @@ class ConcreteSubscription: Subscription {
                                              onError: onError)
     }
     
+    // MARK: - Private
+    
     private func makeRequestPath(for subscriptionType: SubscriptionType) -> String {
         switch (subscriptionType) {
-        case .session:
+        case .user:
             return "/users"
         case let .room(roomIdentifier):
             return "/room/\(roomIdentifier)"

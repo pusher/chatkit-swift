@@ -19,10 +19,10 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         
         let sut = ConcreteSubscriptionManager(dependencies: dependencies)
         
-        let expectation = self.expectation(description: "session subscription successfully connected")
-        sut.subscribe(.session) { result in
+        let expectation = self.expectation(description: "User subscription successfully connected")
+        sut.subscribe(.user) { result in
             if case .success = result {} else {
-                XCTFail("Unexpected session subscription connection failure")
+                XCTFail("Unexpected user subscription connection failure")
             }
             expectation.fulfill()
         }
