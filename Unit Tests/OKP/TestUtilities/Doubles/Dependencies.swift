@@ -2,6 +2,12 @@ import XCTest
 @testable import PusherChatkit
 
 
+let DummyInstanceLocator = "dummy:instance:locator"
+
+
+// Allows us to define test doubles for Unit testing.
+// If a dependency is not explicitly defined a "Dummy" version is used so that if it is interacted
+// with in any way the test should fail.
 class DependenciesDoubles: StubBase, Dependencies {
     
     let sdkInfoProvider: SDKInfoProvider
@@ -37,6 +43,24 @@ class DependenciesDoubles: StubBase, Dependencies {
         self.missingUserFetcher = missingUserFetcher ?? DummyMissingUserFetcher(file: file, line: line)
         
         super.init(file: file, line: line)
+    }
+    
+}
+
+// Allows us to test with ALL the Concrete dependencies except the InstanceFactory
+// which is exactly what we want for Functional tests
+extension ConcreteDependencies {
+    
+    convenience init(instanceLocator: String, instanceFactory: InstanceFactory) {
+        self.init(instanceLocator: instanceLocator) { dependencyFactory in
+            dependencyFactory.register(InstanceFactory.self) { dependencies in
+                return instanceFactory
+            }
+        }
+    }
+    
+    convenience init(instanceFactory: InstanceFactory) {
+        self.init(instanceLocator: DummyInstanceLocator, instanceFactory: instanceFactory)
     }
     
 }
