@@ -8,9 +8,9 @@ extension Instance {
     typealias OnOpening = () -> Void
     typealias OnOpen = () -> Void
     typealias OnResuming = () -> Void
-    typealias OnEvent = (String, [String : String], Any) -> Void
-    typealias OnEnd = (Int?, [String : String]?, Any?) -> Void
-    typealias OnError = (Error) -> Void
+    typealias OnEvent = (_ eventId: String, _ headers: [String : String], _ data: Any) -> Void
+    typealias OnEnd = (_ statusCode: Int?, _ headers: [String : String]?, _ info: Any?) -> Void
+    typealias OnError = (_ error: Error) -> Void
 }
 
 
