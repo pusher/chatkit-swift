@@ -54,7 +54,7 @@ public class Chatkit {
         
         self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, logger: self.logger)
         
-        self.dependencies = ConcreteDependencies(instanceLocator: instanceLocator)
+        self.dependencies = dependencies
     }
     
     // MARK: - Connecting

@@ -27,9 +27,9 @@ extension XCTestCase {
     func setUpChatKit(initialState initialStateJsonData: Data) throws -> (StubNetworking, Chatkit)  {
 
         let stubNetworking = StubNetworking()
-        let depedencies = ConcreteDependencies(instanceFactory: stubNetworking)
+        let depedencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator, instanceFactory: stubNetworking)
         
-        let chatkit = try Chatkit(instanceLocator: "dummy:instance:locator", dependencies: depedencies)
+        let chatkit = try Chatkit(instanceLocator: DummyInstanceLocator, dependencies: depedencies)
         
         // Prepare for the client to register for a user subscription
         stubNetworking.stubSubscribe(.session, .success(()))
@@ -66,9 +66,9 @@ extension XCTestCase {
     
 }
 
-class ChatkitInitialisedFunctionalTests: XCTestCase {
+class Functional_ChatkitInitialised_Tests: XCTestCase {
     
-    func test_connect_userSubscribeSucceeds_success() {
+    func test_chatkitConnect_userSubscribeSucceeds_success() {
     
         XCTAssertNoThrow( try {
         
@@ -77,9 +77,9 @@ class ChatkitInitialisedFunctionalTests: XCTestCase {
             /******************/
             
             let stubNetworking = StubNetworking()
-            let depedencies = ConcreteDependencies(instanceFactory: stubNetworking)
+            let depedencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator, instanceFactory: stubNetworking)
             
-            let chatkit = try Chatkit(instanceLocator: "dummy:instance:locator", dependencies: depedencies)
+            let chatkit = try Chatkit(instanceLocator: DummyInstanceLocator, dependencies: depedencies)
 
             // Prepare for the client to register for a user subscription
             stubNetworking.stubSubscribe(.session, .success(()))
@@ -101,11 +101,11 @@ class ChatkitInitialisedFunctionalTests: XCTestCase {
             
             waitForExpectations(timeout: 1)
             
-            XCTAssertNotNil(result)
+            XCTAssertNil(result)
         }())
     }
     
-    func test_connect_userSubscribeFails_success() {
+    func test_chatkitConnect_userSubscribeFails_success() {
     
         XCTAssertNoThrow( try {
         
@@ -114,9 +114,9 @@ class ChatkitInitialisedFunctionalTests: XCTestCase {
             /******************/
             
             let stubNetworking = StubNetworking()
-            let depedencies = ConcreteDependencies(instanceFactory: stubNetworking)
+            let depedencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator, instanceFactory: stubNetworking)
             
-            let chatkit = try Chatkit(instanceLocator: "dummy:instance:locator", dependencies: depedencies)
+            let chatkit = try Chatkit(instanceLocator: DummyInstanceLocator, dependencies: depedencies)
             
             /*****************/
             /*---- WHEN -----*/
@@ -137,11 +137,12 @@ class ChatkitInitialisedFunctionalTests: XCTestCase {
             
             waitForExpectations(timeout: 1)
             
+            XCTAssertNotNil(result)
             XCTAssertEqual(result.debugDescription, "ChatKit could not connect, user unauthorized or something")
         }())
     }
     
-    func test_disconnect_success() {
+    func test_chatkitDisconnect_success() {
         // Assume it should succeed (if its idempotent)
     }
     

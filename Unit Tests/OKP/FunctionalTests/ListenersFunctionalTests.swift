@@ -2,8 +2,6 @@ import XCTest
 @testable import PusherChatkit
 
 
-
-
 class ListenersFunctionalTests: XCTestCase {
     
     func test_stuff() {

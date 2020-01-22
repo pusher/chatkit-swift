@@ -66,9 +66,10 @@ class DependencyFactory {
 
 class ConcreteDependencies: Dependencies {
     
-    let dependencyFactory = DependencyFactory()
+    private let dependencyFactory = DependencyFactory()
     
-    init(instanceLocator: String) {
+    // `override` gives tests an opportunity to override any concrete dependencies with test doubles.
+    init(instanceLocator: String, override: ((DependencyFactory) -> Void)? = nil) {
         
         dependencyFactory.register(SDKInfoProvider.self, factory: { dependencies in
             return ConcreteSDKInfoProvider(locator: instanceLocator,
@@ -109,6 +110,8 @@ class ConcreteDependencies: Dependencies {
         dependencyFactory.register(UserHydrator.self, factory: { dependencies in
             return ConcreteUserHydrator(dependencies: dependencies)
         })
+        
+        override?(dependencyFactory)
     }
     
     var sdkInfoProvider: SDKInfoProvider {
