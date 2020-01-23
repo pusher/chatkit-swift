@@ -57,10 +57,7 @@ public class TestTokenProvider: TokenProvider {
     ///     - completionHandler: The completion handler that provides
     ///     `AuthenticationResult` to the SDK.
     public func fetchToken(completionHandler: @escaping (AuthenticationResult) -> Void) {
-//        self.nestedTokenProvider.fetchToken(completionHandler: completionHandler)
-        self.nestedTokenProvider.fetchToken { result in
-            completionHandler(result)
-        }
+        self.nestedTokenProvider.fetchToken(completionHandler: completionHandler)
     }
     
     // MARK: - Private methods
