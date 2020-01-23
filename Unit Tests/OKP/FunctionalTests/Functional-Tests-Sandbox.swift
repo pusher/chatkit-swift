@@ -1,6 +1,7 @@
 import XCTest
 @testable import PusherChatkit
 
+
 typealias Instance = PusherChatkit.Instance
 
 
@@ -23,35 +24,97 @@ extension Chatkit {
 
 
 extension XCTestCase {
-    
-    func setUpChatKit(initialState initialStateJsonData: Data) throws -> (StubNetworking, Chatkit)  {
 
-        let stubNetworking = StubNetworking()
-        let depedencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator, instanceFactory: stubNetworking)
+    /*
+     Functional Test "Contexts" Explained
+     
+        ChatKitInitialised
+            `Chatkit` instance has been initialised,
+            `Chatkit.subscribe()` HAS NOT been invoked
+
+        ChakitSubscribed
+            `Chatkit` instance has been initialised
+            `chatkit.subscribe()` HAS been invoked and handler called with `success`
+            (i.e. the user subscription IS active)
         
-        let chatkit = try Chatkit(instanceLocator: DummyInstanceLocator, dependencies: depedencies)
+        ChatKitSubscribedAndInitalStateFired
+     
+        ChatkitSubscribeFailure
+            `Chatkit` instance has been initialised
+            `chatkit.subscribe()` HAS been invoked and handler called with `failure`
+            (i.e. the user subscription is NOT active)
+
+        JoinedRoomsProviderInitialised
+            As "ChatkitSubscribedWithSuccess"
+            `JoinedRoomsProvider` instance has been initialised (via `chatKit.makeJoinedRoomsProvider()`)
+     
+    */
+    
+    
+    // TODO remove this method & returning of `dependencies` once we've properly implemented JoinedRoomProvider & Transformers
+    func setUp_ChatKitInitialised_withDependencies(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, Dependencies)  {
+        
+        let stubNetworking = StubNetworking(file: file, line: line)
+        let dependencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator, instanceFactory: stubNetworking)
+        
+        let chatkit = try Chatkit(instanceLocator: DummyInstanceLocator, dependencies: dependencies)
+        
+        return (stubNetworking, chatkit, dependencies)
+    }
+        
+    func setUp_ChatKitInitialised(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit)  {
+        
+        let (stubNetworking, chatkit, _) = try setUp_ChatKitInitialised_withDependencies(file: file, line: line)
+        return (stubNetworking, chatkit)
+    }
+    
+    func setUp_ChatKitSubscribed(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit)  {
+
+        let (stubNetworking, chatkit, _) = try setUp_ChatKitSubscribed_withStoreBroadcaster(file: file, line: line)
+        return (stubNetworking, chatkit)
+    }
+    
+    // TODO remove this method & returning of `storeBroadcaster` once we've properly implemented JoinedRoomProvider & Transformers
+    func setUp_ChatKitSubscribed_withStoreBroadcaster(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, StoreBroadcaster)  {
+
+        let (stubNetworking, chatkit, dependencies) = try setUp_ChatKitInitialised_withDependencies(file: file, line: line)
         
         // Prepare for the client to register for a user subscription
-        stubNetworking.stubSubscribe(.user, .success(()))
+        // Fire the "initial_state" User subscription event which will cause `Chatkit` to become successfully `connected`
+        stubNetworking.stubSubscribe(.user, .success)
         
-        let expectation = self.expectation(description: "Waiting for ChatKit to become connected")
+        let expectation = self.expectation(description: "`ChatKit.connect` completion handler should be invoked")
         chatkit.connect { _ in
             expectation.fulfill()
         }
         
-        // Fire the "initial_state" User subscription event which will cause `Chatkit` to become successfully `connected`
-        stubNetworking.fireSubscriptionEvent(.user, initialStateJsonData)
-        
         waitForExpectations(timeout: 1)
+
+        XCTAssertEqual(chatkit.connectionStatus, .connected, file: file, line: line)
         
+        return (stubNetworking, chatkit, dependencies.storeBroadcaster)
+    }
+    
+    func setUp_InitalStateFired(initialState initialStateJsonData: Data, file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit)  {
+        let (stubNetworking, chatkit, _) = try setUp_InitalStateFired_withStoreBroadcaster(initialState: initialStateJsonData, file: file, line: line)
         return (stubNetworking, chatkit)
     }
     
-    func setUpJoinedRoomsProvider(initialState initialStateJsonData: Data) throws -> (StubNetworking, Chatkit, JoinedRoomsProvider) {
+    // TODO remove this method & returning of `storeBroadcaster` once we've properly implemented JoinedRoomProvider & Transformers
+    func setUp_InitalStateFired_withStoreBroadcaster(initialState initialStateJsonData: Data, file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, StoreBroadcaster)  {
+
+        let (stubNetworking, chatkit, storeBroadcaster) = try setUp_ChatKitSubscribed_withStoreBroadcaster(file: file, line: line)
         
-        let (stubNetworking, chatkit) = try setUpChatKit(initialState: initialStateJsonData)
+        stubNetworking.fireSubscriptionEvent(.user, initialStateJsonData)
         
-        let expectation = self.expectation(description: "Waiting for JoinedRoomsProvider to be instantiated")
+        return (stubNetworking, chatkit, storeBroadcaster)
+    }
+    
+    func setUp_JoinedRoomsProviderInitialised(initialState initialStateJsonData: Data, file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, JoinedRoomsProvider) {
+        
+        let (stubNetworking, chatkit) = try setUp_InitalStateFired(initialState: initialStateJsonData, file: file, line: line)
+        
+        let expectation = self.expectation(description: "`ChatKit.createJoinedRoomsProvider` completion handler should be invoked")
         
         var joinedRoomsProviderOut: JoinedRoomsProvider!
         chatkit.createJoinedRoomsProvider { (joinedRoomsProvider, error) in
@@ -68,30 +131,27 @@ extension XCTestCase {
 
 class Functional_ChatkitInitialised_Tests: XCTestCase {
     
-    func test_chatkitConnect_userSubscribeSucceeds_success() {
+    func test_chatkitConnect_userSubscriptionRegistrationSuccess_returnsSuccess() {
     
-        XCTAssertNoThrow( try {
+        XCTAssertNoThrow(try {
         
             /******************/
             /*---- GIVEN -----*/
             /******************/
             
-            let stubNetworking = StubNetworking()
-            let depedencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator, instanceFactory: stubNetworking)
-            
-            let chatkit = try Chatkit(instanceLocator: DummyInstanceLocator, dependencies: depedencies)
+            let (stubNetworking, chatkit) = try setUp_ChatKitInitialised()
 
             /*****************/
             /*---- WHEN -----*/
             /*****************/
             
-            // Prepare user subscription to return success with the client attempts to register
-            stubNetworking.stubSubscribe(.user, .success(()))
+            // Prepare user subscription to return success when the client attempts to register
+            stubNetworking.stubSubscribe(.user, .success)
             
-            let expectation = self.expectation(description: "Waiting for ChatKit to become connected")
-            var result: Error?
+            let expectation = self.expectation(description: "`ChatKit.connect` completion handler should be invoked")
+            var actualError: Error?
             chatkit.connect() { error in
-                result = error
+                actualError = error
                 expectation.fulfill()
             }
             
@@ -101,34 +161,32 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             
             waitForExpectations(timeout: 1)
             
-            XCTAssertNil(result)
+            XCTAssertNil(actualError)
+            XCTAssertEqual(chatkit.connectionStatus, .connected)
         }())
     }
     
-    func test_chatkitConnect_userSubscribeFails_success() {
+    func test_chatkitConnect_userSubscriptionRegistrationFailure_returnsSuccess() {
     
-        XCTAssertNoThrow( try {
+        XCTAssertNoThrow(try {
         
             /******************/
             /*---- GIVEN -----*/
             /******************/
             
-            let stubNetworking = StubNetworking()
-            let depedencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator, instanceFactory: stubNetworking)
-            
-            let chatkit = try Chatkit(instanceLocator: DummyInstanceLocator, dependencies: depedencies)
+            let (stubNetworking, chatkit) = try setUp_ChatKitInitialised()
             
             /*****************/
             /*---- WHEN -----*/
             /*****************/
             
-            // Prepare user subscription to return failure with the client attempts to register
+            // Prepare user subscription to return failure when the client attempts to register
             stubNetworking.stubSubscribe(.user, .failure("Failure"))
             
-            let expectation = self.expectation(description: "Waiting for ChatKit to become connected")
-            var result: Error?
+            let expectation = self.expectation(description: "`ChatKit.connect` completion handler should be invoked")
+            var actualError: Error?
             chatkit.connect() { error in
-                result = error
+                actualError = error
                 expectation.fulfill()
             }
             
@@ -138,23 +196,351 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             
             waitForExpectations(timeout: 1)
             
-            XCTAssertNotNil(result)
-            XCTAssertEqual(result as? String, "Failure")
+            XCTAssertEqual(actualError as? String, "Failure")
+            XCTAssertEqual(chatkit.connectionStatus, .disconnected)
         }())
     }
     
-    func test_chatkitDisconnect_success() {
-        // Assume it should succeed (if its idempotent)
+    func test_chatkitDisconnect_remainsDisconnected() {
+        
+        XCTAssertNoThrow(try {
+        
+            /******************/
+            /*---- GIVEN -----*/
+            /******************/
+            
+            let (_, chatkit) = try setUp_ChatKitInitialised()
+            
+            /*****************/
+            /*---- WHEN -----*/
+            /*****************/
+            
+            chatkit.disconnect()
+            
+            /*****************/
+            /*---- THEN -----*/
+            /*****************/
+            
+            XCTAssertEqual(chatkit.connectionStatus, .disconnected)
+        }())
     }
     
-    func test_createJoinedRoomsProvider_tbd() {
-        // What happens if you try to create a Provider/ViewModel before calling `connect`?
+    func test_chatkitCreateJoinedRoomsProvider_returnsError() {
+        
+        XCTAssertNoThrow(try {
+        
+            /******************/
+            /*---- GIVEN -----*/
+            /******************/
+            
+            let (_, chatkit) = try setUp_ChatKitInitialised()
+            
+            /*****************/
+            /*---- WHEN -----*/
+            /*****************/
+            
+            var result: (joinedRoomsProvider: JoinedRoomsProvider?, error: Error?)!
+            chatkit.createJoinedRoomsProvider { (joinedRoomsProvider, error) in
+                result = (joinedRoomsProvider, error)
+            }
+            
+            /*****************/
+            /*---- THEN -----*/
+            /*****************/
+            
+            XCTAssertNil(result.joinedRoomsProvider)
+            // TODO improved assertion to better check content of error
+            XCTAssertNotNil(result.error)
+            XCTAssertEqual(chatkit.connectionStatus, .disconnected)
+        }())
+    }
+
+}
+
+class Functional_ChatkitSubscribed_Tests: XCTestCase {
+    
+    func test_chatkitConnect_returnsSuccessDoesNotAttemptReconnectionAndRemainsConnected() {
+        
+        XCTAssertNoThrow(try {
+        
+            /******************/
+            /*---- GIVEN -----*/
+            /******************/
+            
+            let (_, chatkit) = try setUp_ChatKitSubscribed()
+            
+            /*****************/
+            /*---- WHEN -----*/
+            /*****************/
+            
+            let expectation = self.expectation(description: "`ChatKit.connect` completion handler should be invoked")
+            var actualError: Error?
+            chatkit.connect() { error in
+                actualError = error
+                expectation.fulfill()
+            }
+            
+            /*****************/
+            /*---- THEN -----*/
+            /*****************/
+            
+            waitForExpectations(timeout: 1)
+            
+            // `connect` is idempotent - chatkit remains connected, no reconnection is attempted and no error is returned,
+            XCTAssertNil(actualError)
+            XCTAssertEqual(chatkit.connectionStatus, .connected)
+        }())
     }
     
+    func test_chatkitDisconnect_chatkitBecomesDisconnected() {
+        
+        XCTAssertNoThrow(try {
+        
+            /******************/
+            /*---- GIVEN -----*/
+            /******************/
+            
+            let (_, chatkit) = try setUp_ChatKitSubscribed()
+            
+            /*****************/
+            /*---- WHEN -----*/
+            /*****************/
+            
+            chatkit.disconnect()
+            
+            /*****************/
+            /*---- THEN -----*/
+            /*****************/
+            
+            XCTAssertEqual(chatkit.connectionStatus, .disconnected)
+        }())
+    }
+    
+    func test_chatkitCreateJoinedRoomsProvider_returnsJoinedRoomsProvider() {
+        
+        XCTAssertNoThrow(try {
+        
+            /******************/
+            /*---- GIVEN -----*/
+            /******************/
+            
+            let (_, chatkit) = try setUp_ChatKitSubscribed()
+            
+            /*****************/
+            /*---- WHEN -----*/
+            /*****************/
+            
+            let expectation = self.expectation(description: "`ChatKit.createJoinedRoomsProvider` completion handler should be invoked")
+            var result: (joinedRoomsProvider: JoinedRoomsProvider?, error: Error?)!
+            chatkit.createJoinedRoomsProvider { (joinedRoomsProvider, error) in
+                result = (joinedRoomsProvider, error)
+                expectation.fulfill()
+            }
+            
+            /*****************/
+            /*---- THEN -----*/
+            /*****************/
+            
+            waitForExpectations(timeout: 1)
+            
+            XCTAssertNotNil(result.joinedRoomsProvider)
+            XCTAssertNil(result.error)
+            XCTAssertEqual(chatkit.connectionStatus, .connected)
+        }())
+    }
+    
+    func test_storeBroadcasterRegister_listenerReceivesStateOnSubscriptionEvents() {
+        
+        XCTAssertNoThrow(try {
+            
+            /******************/
+            /*---- GIVEN -----*/
+            /******************/
+            
+            let (stubNetworking, _, storeBroadcaster) = try setUp_ChatKitSubscribed_withStoreBroadcaster()
+            
+            let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 2)
+            
+            XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
+            XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 0)
+            
+            var latestState: State?
+            
+            /******************/
+            /*----- WHEN -----*/
+            /******************/
+            
+            latestState = storeBroadcaster.register(stubStoreListener)
+            
+            /******************/
+            /*----- THEN -----*/
+            /******************/
+            
+            XCTAssertEqual(latestState, State.emptyState)
+            XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 0)
+            
+            /******************/
+            /*----- WHEN -----*/
+            /******************/
+            
+            let initialStateJsonData = """
+            {
+                "event_name": "initial_state",
+                "timestamp": "2017-04-14T14:00:42Z",
+                "data": {
+                    "current_user": {
+                        "id": "viv",
+                        "name": "Vivan",
+                        "created_at": "2017-04-13T14:10:04Z",
+                        "updated_at": "2017-04-13T14:10:04Z"
+                    },
+                    "rooms": [
+                        {
+                            "id": "ac43dfef",
+                            "name": "Chatkit chat",
+                            "created_by_id": "alice",
+                            "private": false,
+                            "created_at": "2017-03-23T11:36:42Z",
+                            "updated_at": "2017-07-28T22:19:32Z",
+                        }
+                    ],
+                    "read_states": [],
+                    "memberships": [],
+                },
+            }
+            """.toJsonData()
+            
+            stubNetworking.fireSubscriptionEvent(.user, initialStateJsonData)
+            
+            /******************/
+            /*----- THEN -----*/
+            /******************/
+            
+            latestState = stubStoreListener.didUpdateState_stateLastReceived
+            XCTAssertEqual(latestState?.joinedRooms.count, 1)
+            XCTAssertEqual(latestState?.joinedRooms[0].identifier, "ac43dfef")
+            XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 1)
+            
+            /******************/
+            /*----- WHEN -----*/
+            /******************/
+
+            let removedFromRoomEventJsonData = """
+            {
+                "event_name": "removed_from_room",
+                "timestamp": "2017-04-14T14:00:42Z",
+                "data": {
+                    "room_id": "ac43dfef",
+                },
+            }
+            """.toJsonData()
+            
+            stubNetworking.fireSubscriptionEvent(.user, removedFromRoomEventJsonData)
+            
+            /******************/
+            /*----- THEN -----*/
+            /******************/
+            
+            latestState = stubStoreListener.didUpdateState_stateLastReceived
+            XCTAssertEqual(latestState?.joinedRooms.count, 0)
+            XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 2)
+
+        }())
+        
+    }
+
+}
+
+class Functional_InitialStateFired_Tests: XCTestCase {
+    
+    func test_storeBroadcasterRegister_listenerReceivesStateOnSubscriptionEvents() {
+
+        XCTAssertNoThrow(try {
+            
+            /******************/
+            /*---- GIVEN -----*/
+            /******************/
+            
+            let initialStateJsonData = """
+            {
+                "event_name": "initial_state",
+                "timestamp": "2017-04-14T14:00:42Z",
+                "data": {
+                    "current_user": {
+                        "id": "viv",
+                        "name": "Vivan",
+                        "created_at": "2017-04-13T14:10:04Z",
+                        "updated_at": "2017-04-13T14:10:04Z"
+                    },
+                    "rooms": [
+                        {
+                            "id": "ac43dfef",
+                            "name": "Chatkit chat",
+                            "created_by_id": "alice",
+                            "private": false,
+                            "created_at": "2017-03-23T11:36:42Z",
+                            "updated_at": "2017-07-28T22:19:32Z",
+                        }
+                    ],
+                    "read_states": [],
+                    "memberships": [],
+                },
+            }
+            """.toJsonData()
+            
+            let (stubNetworking, _, storeBroadcaster) = try setUp_InitalStateFired_withStoreBroadcaster(initialState: initialStateJsonData)
+            
+            let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
+            
+            XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
+            XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 0)
+            
+            var latestState: State?
+            
+            /******************/
+            /*----- WHEN -----*/
+            /******************/
+            
+            latestState = storeBroadcaster.register(stubStoreListener)
+            
+            /******************/
+            /*----- THEN -----*/
+            /******************/
+            
+            XCTAssertEqual(latestState?.joinedRooms.count, 1)
+            XCTAssertEqual(latestState?.joinedRooms[0].identifier, "ac43dfef")
+            XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 0)
+            
+            /******************/
+            /*----- WHEN -----*/
+            /******************/
+
+            let removedFromRoomEventJsonData = """
+            {
+                "event_name": "removed_from_room",
+                "timestamp": "2017-04-14T14:00:42Z",
+                "data": {
+                    "room_id": "ac43dfef",
+                },
+            }
+            """.toJsonData()
+            
+            stubNetworking.fireSubscriptionEvent(.user, removedFromRoomEventJsonData)
+            
+            /******************/
+            /*----- THEN -----*/
+            /******************/
+            
+            latestState = stubStoreListener.didUpdateState_stateLastReceived
+            XCTAssertEqual(latestState?.joinedRooms.count, 0)
+            XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 1)
+
+        }())
+    }
 }
     
 
-class JoinedRoomsProviderInitialisedFunctionalTests: XCTestCase {
+class Functional_JoinedRoomsProviderInitialised_Tests: XCTestCase {
         
     func test_removedFromRoomRemotely_success() {
         
@@ -167,6 +553,7 @@ class JoinedRoomsProviderInitialisedFunctionalTests: XCTestCase {
             let initialStateEventJsonData = """
             {
                 "event_name": "initial_state",
+                "timestamp": "2017-03-23T11:36:42Z",
                 "data": {
                     "current_user": {
                         "id": "alice",
@@ -187,13 +574,12 @@ class JoinedRoomsProviderInitialisedFunctionalTests: XCTestCase {
                     "read_states": [],
                     "memberships": [],
                 },
-                "timestamp": "2017-03-23T11:36:42Z"
             }
             """.toJsonData()
             
-            let (stubNetworking, _, joinedRoomsProvider) = try setUpJoinedRoomsProvider(initialState: initialStateEventJsonData)
+            let (stubNetworking, _, joinedRoomsProvider) = try setUp_JoinedRoomsProviderInitialised(initialState: initialStateEventJsonData)
             
-            let expectation = self.expectation(description: "JoinedRoomsProviderDelegate.didLeaveRoom will be invoked")
+            let expectation = self.expectation(description: "`JoinedRoomsProviderDelegate` `didLeaveRoom` should be invoked")
             let stubJoinedRoomsProviderDelegate = StubJoinedRoomsProviderDelegate(onDidLeaveRoom: { room in
                 expectation.fulfill()
             })
@@ -207,11 +593,11 @@ class JoinedRoomsProviderInitialisedFunctionalTests: XCTestCase {
             
             let removedFromRoomEventJsonData = """
             {
+                "event_name": "removed_from_room",
+                "timestamp": "2017-04-14T14:00:42Z",
                 "data": {
                     "room_id": "ac43dfef",
                 },
-                "event_name": "removed_from_room",
-                "timestamp": "2017-04-14T14:00:42Z",
             }
             """.toJsonData()
             stubNetworking.fireSubscriptionEvent(.user, removedFromRoomEventJsonData)
@@ -239,6 +625,7 @@ class JoinedRoomsProviderInitialisedFunctionalTests: XCTestCase {
             let initialStateEventJsonData = """
             {
                 "event_name": "initial_state",
+                "timestamp": "2017-03-23T11:36:42Z",
                 "data": {
                     "current_user": {
                         "id": "viv",
@@ -250,11 +637,10 @@ class JoinedRoomsProviderInitialisedFunctionalTests: XCTestCase {
                     "read_states": [],
                     "memberships": [],
                 },
-                "timestamp": "2017-03-23T11:36:42Z"
             }
             """.toJsonData()
             
-            let (stubNetworking, chatkit, joinedRoomsProvider) = try self.setUpJoinedRoomsProvider(initialState: initialStateEventJsonData)
+            let (stubNetworking, chatkit, joinedRoomsProvider) = try self.setUp_JoinedRoomsProviderInitialised(initialState: initialStateEventJsonData)
             
             let expectationA = self.expectation(description: "JoinedRoomsProviderDelegate.didJoinRoom will be invoked")
             let stubJoinedRoomsProviderDelegate = StubJoinedRoomsProviderDelegate(onDidJoinRoom: { room in

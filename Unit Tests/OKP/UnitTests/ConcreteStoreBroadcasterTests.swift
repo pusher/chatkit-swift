@@ -19,7 +19,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         ),
         joinedRooms: []
     )
-            
+    
     func test_didUpdateState_listenerRegistered_forwardsToListener() {
         
         /******************/

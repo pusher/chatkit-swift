@@ -35,9 +35,6 @@ class DummyInstance: DummyBase, Instance {
 }
 
 
-typealias SubscribeResult = Result<Void, Error>
-
-
 class StubInstance: StubBase, Instance {
     
     struct Expectation {
@@ -65,8 +62,8 @@ class StubInstance: StubBase, Instance {
     }
     
     // Preparing for registration to a subscription
-    var subscribe_completionResult: Result<Void, Error>? = nil
-    func stubSubscribe(result: Result<Void, Error>) {
+    var subscribe_completionResult: VoidResult? = nil
+    func stubSubscribe(result: VoidResult) {
         subscribe_completionResult = result
     }
     

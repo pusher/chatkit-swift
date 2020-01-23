@@ -31,7 +31,9 @@ class ConcreteStore: Store {
     
     var state: State {
         didSet {
-            self.delegate?.store(self, didUpdateState: self.state)
+            if state != oldValue {
+                self.delegate?.store(self, didUpdateState: state)
+            }
         }
         
     }

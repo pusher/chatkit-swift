@@ -117,6 +117,7 @@
 		7335D27323D715E800E51909 /* CodableJSONCollections+DictionaryEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D27223D715E800E51909 /* CodableJSONCollections+DictionaryEncodingTests.swift */; };
 		7335D27523D7330900E51909 /* CodableJSONCollections+ArrayEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D27423D7330900E51909 /* CodableJSONCollections+ArrayEncodingTests.swift */; };
 		7335D27723D7335C00E51909 /* NonJSONHashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D27623D7335C00E51909 /* NonJSONHashable.swift */; };
+		734A28B723D9A7B5003E2BC9 /* JoinedRoomsTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734A28B623D9A7B5003E2BC9 /* JoinedRoomsTransformer.swift */; };
 		734C16FD23A3D51600330245 /* JSONDecoder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734C16FC23A3D51600330245 /* JSONDecoder+Extensions.swift */; };
 		734C170323A3E17F00330245 /* JSONEncoder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734C170223A3E17F00330245 /* JSONEncoder+Extensions.swift */; };
 		734D6A3823AA91FB00105479 /* Wire.User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734D6A3723AA91FB00105479 /* Wire.User.swift */; };
@@ -148,7 +149,12 @@
 		73CF01C823ABC38A006FB43E /* CodableJSONCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CF01C723ABC38A006FB43E /* CodableJSONCollections.swift */; };
 		73CF01CC23ACC8E6006FB43E /* Wire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CF01CB23ACC8E6006FB43E /* Wire.swift */; };
 		73E7312823AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E7312723AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift */; };
-		73F85CF323CF8CD20008D0D6 /* ListenersFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85CF223CF8CD20008D0D6 /* ListenersFunctionalTests.swift */; };
+		73EDEE5223D8ABCB00DE566D /* ConcreteInstanceFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EDEE5123D8ABCB00DE566D /* ConcreteInstanceFactoryTests.swift */; };
+		73EDEE5423D8ADD500DE566D /* ConcreteSubscriptionFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EDEE5323D8ADD500DE566D /* ConcreteSubscriptionFactoryTests.swift */; };
+		73EDEE5623D8C2D400DE566D /* EquatableResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EDEE5523D8C2D400DE566D /* EquatableResult.swift */; };
+		73EDEE5823D8C4D900DE566D /* VoidResult+EquatableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EDEE5723D8C4D900DE566D /* VoidResult+EquatableTests.swift */; };
+		73EDEE5C23D8C4FD00DE566D /* VoidResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EDEE5B23D8C4FD00DE566D /* VoidResult.swift */; };
+		73EDEE5E23D8C52E00DE566D /* EquatableResult+EquatableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EDEE5D23D8C52E00DE566D /* EquatableResult+EquatableTests.swift */; };
 		73F85CF723D088720008D0D6 /* Service.UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85CF623D088720008D0D6 /* Service.UserService.swift */; };
 		73F85CF923D08CD60008D0D6 /* ServiceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85CF823D08CD60008D0D6 /* ServiceType.swift */; };
 		73F85CFD23D092AD0008D0D6 /* MissingUserFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85CFC23D092AD0008D0D6 /* MissingUserFetcher.swift */; };
@@ -283,6 +289,7 @@
 		7335D27223D715E800E51909 /* CodableJSONCollections+DictionaryEncodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CodableJSONCollections+DictionaryEncodingTests.swift"; sourceTree = "<group>"; };
 		7335D27423D7330900E51909 /* CodableJSONCollections+ArrayEncodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CodableJSONCollections+ArrayEncodingTests.swift"; sourceTree = "<group>"; };
 		7335D27623D7335C00E51909 /* NonJSONHashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonJSONHashable.swift; sourceTree = "<group>"; };
+		734A28B623D9A7B5003E2BC9 /* JoinedRoomsTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsTransformer.swift; sourceTree = "<group>"; };
 		734C16FC23A3D51600330245 /* JSONDecoder+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONDecoder+Extensions.swift"; sourceTree = "<group>"; };
 		734C170223A3E17F00330245 /* JSONEncoder+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "JSONEncoder+Extensions.swift"; sourceTree = "<group>"; };
 		734D6A3723AA91FB00105479 /* Wire.User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.User.swift; sourceTree = "<group>"; };
@@ -315,7 +322,12 @@
 		73CF01C723ABC38A006FB43E /* CodableJSONCollections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CodableJSONCollections.swift; sourceTree = "<group>"; };
 		73CF01CB23ACC8E6006FB43E /* Wire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wire.swift; sourceTree = "<group>"; };
 		73E7312723AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Wire.Event.Subscription+Decodable.Tests.swift"; sourceTree = "<group>"; };
-		73F85CF223CF8CD20008D0D6 /* ListenersFunctionalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListenersFunctionalTests.swift; sourceTree = "<group>"; };
+		73EDEE5123D8ABCB00DE566D /* ConcreteInstanceFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteInstanceFactoryTests.swift; sourceTree = "<group>"; };
+		73EDEE5323D8ADD500DE566D /* ConcreteSubscriptionFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteSubscriptionFactoryTests.swift; sourceTree = "<group>"; };
+		73EDEE5523D8C2D400DE566D /* EquatableResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquatableResult.swift; sourceTree = "<group>"; };
+		73EDEE5723D8C4D900DE566D /* VoidResult+EquatableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoidResult+EquatableTests.swift"; sourceTree = "<group>"; };
+		73EDEE5B23D8C4FD00DE566D /* VoidResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoidResult.swift; sourceTree = "<group>"; };
+		73EDEE5D23D8C52E00DE566D /* EquatableResult+EquatableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EquatableResult+EquatableTests.swift"; sourceTree = "<group>"; };
 		73F85CF623D088720008D0D6 /* Service.UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.UserService.swift; sourceTree = "<group>"; };
 		73F85CF823D08CD60008D0D6 /* ServiceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceType.swift; sourceTree = "<group>"; };
 		73F85CFC23D092AD0008D0D6 /* MissingUserFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingUserFetcher.swift; sourceTree = "<group>"; };
@@ -803,11 +815,14 @@
 		73233B1423CF2D9B001909B7 /* UnitTests */ = {
 			isa = PBXGroup;
 			children = (
+				73EDEE5923D8C4E500DE566D /* Result */,
 				73233AD023CE4605001909B7 /* ConcreteDependencyTests.swift */,
-				73233B2723CF694C001909B7 /* ConcreteSubscriptionManagerTests.swift */,
-				73233B2923CF69A7001909B7 /* ConcreteSubscriptionResponderTests.swift */,
+				73EDEE5123D8ABCB00DE566D /* ConcreteInstanceFactoryTests.swift */,
 				73233B3523CF83C4001909B7 /* ConcreteStoreBroadcasterTests.swift */,
 				73233B2B23CF69F2001909B7 /* ConcreteStoreTests.swift */,
+				73EDEE5323D8ADD500DE566D /* ConcreteSubscriptionFactoryTests.swift */,
+				73233B2723CF694C001909B7 /* ConcreteSubscriptionManagerTests.swift */,
+				73233B2923CF69A7001909B7 /* ConcreteSubscriptionResponderTests.swift */,
 				73233B1523CF2DAD001909B7 /* StubInstanceTests.swift */,
 			);
 			path = UnitTests;
@@ -818,6 +833,7 @@
 			children = (
 				73233B0723CF192F001909B7 /* Base.swift */,
 				73233B1D23CF40B6001909B7 /* Dependencies.swift */,
+				73233B1F23CF41ED001909B7 /* SDKInfoProvider.swift */,
 				73233B2F23CF70C9001909B7 /* StoreBroadcaster.swift */,
 				73233B0F23CF2028001909B7 /* Store.swift */,
 				73233B3123CF7110001909B7 /* StoreDelegate.swift */,
@@ -825,7 +841,6 @@
 				73233B1123CF2CFF001909B7 /* JoinedRoomsProviderDelegate.swift */,
 				73233B0B23CF1BC8001909B7 /* Instance.swift */,
 				73233B0923CF1B0B001909B7 /* InstanceFactory.swift */,
-				73233B1F23CF41ED001909B7 /* SDKInfoProvider.swift */,
 				73F85D0A23D0D8A60008D0D6 /* StubNetworking.swift */,
 				73233B0523CF18DA001909B7 /* Subscription.swift */,
 				73233B0D23CF1ECD001909B7 /* SubscriptionDelegate.swift */,
@@ -841,7 +856,6 @@
 		73233B2623CF691D001909B7 /* FunctionalTests */ = {
 			isa = PBXGroup;
 			children = (
-				73F85CF223CF8CD20008D0D6 /* ListenersFunctionalTests.swift */,
 				738DDA7823C61FD400B5C79A /* Functional-Tests-Sandbox.swift */,
 			);
 			path = FunctionalTests;
@@ -900,23 +914,43 @@
 			path = TestUtilities;
 			sourceTree = "<group>";
 		};
+		73EDEE5923D8C4E500DE566D /* Result */ = {
+			isa = PBXGroup;
+			children = (
+				73EDEE5D23D8C52E00DE566D /* EquatableResult+EquatableTests.swift */,
+				73EDEE5723D8C4D900DE566D /* VoidResult+EquatableTests.swift */,
+			);
+			path = Result;
+			sourceTree = "<group>";
+		};
+		73EDEE5A23D8C4F000DE566D /* Result */ = {
+			isa = PBXGroup;
+			children = (
+				73EDEE5523D8C2D400DE566D /* EquatableResult.swift */,
+				73EDEE5B23D8C4FD00DE566D /* VoidResult.swift */,
+			);
+			path = Result;
+			sourceTree = "<group>";
+		};
 		73F85D0223D0A7D90008D0D6 /* OKP */ = {
 			isa = PBXGroup;
 			children = (
+				73EDEE5A23D8C4F000DE566D /* Result */,
 				7389802623C8A9880029E09F /* Dependencies.swift */,
 				738DDA7A23C6206E00B5C79A /* Instance.swift */,
 				73233AC823CE1B14001909B7 /* InstanceFactory.swift */,
+				73F85CFC23D092AD0008D0D6 /* MissingUserFetcher.swift */,
 				7389802423C8A9140029E09F /* SDKInfoProvider.swift */,
-				73233B2D23CF6B20001909B7 /* StoreBroadcaster.swift */,
+				73F85CF623D088720008D0D6 /* Service.UserService.swift */,
+				73F85CF823D08CD60008D0D6 /* ServiceType.swift */,
 				73233B3323CF7BFC001909B7 /* State.swift */,
 				73233ACA23CE1B6A001909B7 /* Store.swift */,
+				73233B2D23CF6B20001909B7 /* StoreBroadcaster.swift */,
 				73233AC423CE1A9C001909B7 /* Subscription.swift */,
 				73233AC223CE1A0D001909B7 /* SubscriptionFactory.swift */,
 				73233AC023CE19DC001909B7 /* SubscriptionManager.swift */,
 				73233AC623CE1AD3001909B7 /* SubscriptionResponder.swift */,
-				73F85CF823D08CD60008D0D6 /* ServiceType.swift */,
-				73F85CF623D088720008D0D6 /* Service.UserService.swift */,
-				73F85CFC23D092AD0008D0D6 /* MissingUserFetcher.swift */,
+				734A28B623D9A7B5003E2BC9 /* JoinedRoomsTransformer.swift */,
 			);
 			path = OKP;
 			sourceTree = "<group>";
@@ -1092,13 +1126,15 @@
 				7301BC7B23B11F6F00F162C7 /* Wire.Message+Decodable.Tests.swift in Sources */,
 				228E1D6D230D9FDC0014B1A9 /* MessageTests.swift in Sources */,
 				7335D27323D715E800E51909 /* CodableJSONCollections+DictionaryEncodingTests.swift in Sources */,
+				73EDEE5223D8ABCB00DE566D /* ConcreteInstanceFactoryTests.swift in Sources */,
 				7301BC7023B0FCCE00F162C7 /* Wire.Event.RoomUpdated+Decodable.Tests.swift in Sources */,
 				7301BC6D23B0FCCE00F162C7 /* Wire.Event.ReadStateUpdated+Decodable.Tests.swift in Sources */,
 				7301BC7123B0FCCE00F162C7 /* Wire.Event.AddedToRoom+Decodable.Tests.swift in Sources */,
 				73CF01C023AB8B84006FB43E /* Wire.Membership+Decodable.Tests.swift in Sources */,
 				73F85D0B23D0D8A60008D0D6 /* StubNetworking.swift in Sources */,
+				73EDEE5E23D8C52E00DE566D /* EquatableResult+EquatableTests.swift in Sources */,
 				73233B0E23CF1ECD001909B7 /* SubscriptionDelegate.swift in Sources */,
-				73F85CF323CF8CD20008D0D6 /* ListenersFunctionalTests.swift in Sources */,
+				73EDEE5823D8C4D900DE566D /* VoidResult+EquatableTests.swift in Sources */,
 				227E946F231FC5950025B691 /* XCTest+Networking.swift in Sources */,
 				7335D26D23D6F31B00E51909 /* Data+Extensions.swift in Sources */,
 				73F85D0623D0AB0A0008D0D6 /* MissingUserFetcher.swift in Sources */,
@@ -1129,6 +1165,7 @@
 				228AD276232675D400AB280B /* NetworkingControllerTests.swift in Sources */,
 				2274984E23210D6500D10C76 /* PPSDKInfoExtensionsTests.swift in Sources */,
 				227498472321028700D10C76 /* DateFormatterExtensionsTests.swift in Sources */,
+				73EDEE5423D8ADD500DE566D /* ConcreteSubscriptionFactoryTests.swift in Sources */,
 				22749857232147AD00D10C76 /* ServiceVersionTests.swift in Sources */,
 				73233B3823CF843D001909B7 /* StoreListener.swift in Sources */,
 				73233B0823CF1930001909B7 /* Base.swift in Sources */,
@@ -1193,7 +1230,9 @@
 				22D2A2D5231963C70095757C /* Bundle+Extensions.swift in Sources */,
 				73F85CFD23D092AD0008D0D6 /* MissingUserFetcher.swift in Sources */,
 				224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */,
+				734A28B723D9A7B5003E2BC9 /* JoinedRoomsTransformer.swift in Sources */,
 				734D6A3823AA91FB00105479 /* Wire.User.swift in Sources */,
+				73EDEE5623D8C2D400DE566D /* EquatableResult.swift in Sources */,
 				73233AC723CE1AD3001909B7 /* SubscriptionResponder.swift in Sources */,
 				73233B3423CF7BFC001909B7 /* State.swift in Sources */,
 				73CF01BE23AB8AF9006FB43E /* Wire.Membership.swift in Sources */,
@@ -1203,6 +1242,7 @@
 				73CF01C523AB93FB006FB43E /* Data+Extensions.swift in Sources */,
 				73F85CF723D088720008D0D6 /* Service.UserService.swift in Sources */,
 				73A5169023B0BB0500CF8B77 /* Wire.Event.EventType.swift in Sources */,
+				73EDEE5C23D8C4FD00DE566D /* VoidResult.swift in Sources */,
 				7301BC5923B0E74800F162C7 /* Wire.Event.UserJoinedRoom.swift in Sources */,
 				ED2919D9239A73320095B344 /* TokenProvider.swift in Sources */,
 				73F85CF923D08CD60008D0D6 /* ServiceType.swift in Sources */,

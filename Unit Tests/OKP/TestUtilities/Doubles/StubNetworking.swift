@@ -4,7 +4,7 @@ import XCTest
 
 class StubNetworking: StubBase, InstanceFactory {
     
-    private var expectedSubscribeCalls: [SubscriptionType: SubscribeResult] = .init()
+    private var expectedSubscribeCalls: [SubscriptionType: VoidResult] = .init()
     private var registeredStubInstances: [InstanceType: StubInstance] = .init()
     
     override init(file: StaticString = #file, line: UInt = #line) {
@@ -18,9 +18,8 @@ class StubNetworking: StubBase, InstanceFactory {
         
     }
     
-    
     // Preparing for registration to a subscription
-    func stubSubscribe(_ subscriptionType: SubscriptionType, _ result: SubscribeResult,
+    func stubSubscribe(_ subscriptionType: SubscriptionType, _ result: VoidResult,
                        file: StaticString = #file, line: UInt = #line) {
         guard expectedSubscribeCalls[subscriptionType] == nil else {
             XCTFail("Call to `\(#function)` on `\(String(describing: self))` with subscriptionType: `\(subscriptionType)` made but we are *already* anticipating a call to `subscribe` that has not yet been fulfilled", file: file, line: line)
@@ -72,7 +71,7 @@ class StubNetworking: StubBase, InstanceFactory {
             
         case let .subscription(subscriptionType):
         
-            guard let expectedSubscribeResult = expectedSubscribeCalls[subscriptionType] else {
+            guard let expectedVoidResult = expectedSubscribeCalls[subscriptionType] else {
                 XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))` with instanceType: `\(instanceType)`", file: file, line: line)
                 return dummyInstance
             }
@@ -80,7 +79,7 @@ class StubNetworking: StubBase, InstanceFactory {
             expectedSubscribeCalls[subscriptionType] = nil
             
             let stubInstance = StubInstance()
-            stubInstance.stubSubscribe(result: expectedSubscribeResult)
+            stubInstance.stubSubscribe(result: expectedVoidResult)
             
             registeredStubInstances[instanceType] = stubInstance
             

@@ -70,17 +70,30 @@ public class Chatkit {
         
         // TODO: Implement properly
         
-        dependencies.subscriptionManager.subscribe(.user) { result in
-            switch result {
-            case .success:
-                self.connectionStatus = .connected
-                completionHandler?(nil)
-            case let .failure(error):
-                self.connectionStatus = .disconnected
-                completionHandler?(error)
+        switch connectionStatus {
+
+        case .disconnected:
+            
+            dependencies.subscriptionManager.subscribe(.user) { result in
+                switch result {
+                case .success:
+                    self.connectionStatus = .connected
+                    completionHandler?(nil)
+                case let .failure(error):
+                    self.connectionStatus = .disconnected
+                    completionHandler?(error)
+                }
             }
-        }
         
+        case .connected:
+            // TODO is it correct that this is imdepotent?
+            completionHandler?(nil)
+            
+        case .connecting:
+            // TODO curate a better error message (probably typed as well)
+            let error: Error = "Chatkit is already connecting."
+            completionHandler?(error)
+        }
     }
     
     /// Terminates the previously established connection to the Chatkit web service.
@@ -118,18 +131,35 @@ public class Chatkit {
     /// - Parameters:
     ///     - completionHandler: A completion handler which will be called when the `JoinedRoomsProvider` is ready, or an `Error` occurs creating it.
     public func createJoinedRoomsProvider(completionHandler: @escaping (JoinedRoomsProvider?, Error?) -> Void) {
-        // TODO: Implement
-        let currentUser = User(identifier: "identifier",
-                               name: "name",
-                               avatar: nil,
-                               presenceState: .online,
-                               customData: nil,
-                               createdAt: Date(),
-                               updatedAt: Date())
         
-        let provider = JoinedRoomsProvider(currentUser: currentUser, dependencies: dependencies)
+        switch connectionStatus {
+
+        case .connected:
+            
+            // TODO: Implement
+            let currentUser = User(identifier: "identifier",
+                                   name: "name",
+                                   avatar: nil,
+                                   presenceState: .online,
+                                   customData: nil,
+                                   createdAt: Date(),
+                                   updatedAt: Date())
+            
+            let provider = JoinedRoomsProvider(currentUser: currentUser, dependencies: dependencies)
+            
+            completionHandler(provider, nil)
         
-        completionHandler(provider, nil)
+        case .disconnected:
+            // TODO curate a better error message (probably typed as well)
+            let error: Error = "Chatkit is disconnected, please invoke the `connect` method first."
+            completionHandler(nil, error)
+            
+        case .connecting:
+            // TODO curate a better error message (probably typed as well)
+            let error: Error = "Chatkit is  connecting, pleas use the handler of the `connect` method to wait until its successfully connected."
+            completionHandler(nil, error)
+        }
+        
     }
     
     /// Creates an instance of `MessagesProvider`.

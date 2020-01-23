@@ -3,7 +3,7 @@ import XCTest
 
 
 class DummySubscription: DummyBase, Subscription {
-    func subscribe(_ subscriptionType: SubscriptionType, completion: @escaping (Result<Void, Error>) -> Void) {
+    func subscribe(_ subscriptionType: SubscriptionType, completion: @escaping (VoidResult) -> Void) {
         DummyFail(sender: self, function: #function)
     }
 }
@@ -21,13 +21,13 @@ extension XCTest {
 
 class StubSubscription: StubBase, Subscription {
     
-    private var subscribe_completionResult: Result<Void, Error>?
+    private var subscribe_completionResult: VoidResult?
     private let delegate: SubscriptionDelegate?
     
     private var isSubscribed = false
     private(set) var action_lastReceived: Action?
     
-    init(subscribe_completionResult: Result<Void, Error>,
+    init(subscribe_completionResult: VoidResult,
          delegate: SubscriptionDelegate?,
          file: StaticString = #file, line: UInt = #line) {
         
@@ -47,7 +47,7 @@ class StubSubscription: StubBase, Subscription {
     
     // MARK: Subscription
     
-    func subscribe(_ subscriptionType: SubscriptionType, completion: @escaping (Result<Void, Error>) -> Void) {
+    func subscribe(_ subscriptionType: SubscriptionType, completion: @escaping (VoidResult) -> Void) {
         guard let subscribe_completionResult = self.subscribe_completionResult else {
             XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: file, line: line)
             return

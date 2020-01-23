@@ -16,7 +16,7 @@ class StubInstanceTests: XCTestCase {
         
         let stubInstance = StubInstance()
         
-        stubInstance.stubSubscribe(result: .success(()))
+        stubInstance.stubSubscribe(result: .success)
         
         let requestOptions = PusherPlatform.PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: "/user")
         

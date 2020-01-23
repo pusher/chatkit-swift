@@ -19,7 +19,6 @@ class ConcreteSubscriptionResponderTests: XCTestCase {
         
         let sut = ConcreteSubscriptionResponder(dependencies: dependencies)
         
-        
         /******************/
         /*----- WHEN -----*/
         /******************/

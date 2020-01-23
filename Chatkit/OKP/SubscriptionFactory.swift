@@ -12,7 +12,7 @@ class ConcreteSubscriptionFactory: SubscriptionFactory {
     typealias Dependencies = HasInstanceFactory & HasSubscriptionResponder
     
     private let dependencies: Dependencies
-    let subscriptionResponder: SubscriptionResponder
+    private let subscriptionResponder: SubscriptionResponder
     
     init(dependencies: Dependencies) {
         self.dependencies = dependencies

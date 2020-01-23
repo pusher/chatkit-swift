@@ -9,7 +9,7 @@ enum SubscriptionType {
 extension SubscriptionType: Hashable {}
 
 
-typealias SubscribeHandler = (Result<Void, Error>) -> Void
+typealias SubscribeHandler = (VoidResult) -> Void
 
 protocol SubscriptionDelegate: class {
     func subscription(_ subscription: Subscription, didReceiveEventWithJsonData jsonData: Data)
