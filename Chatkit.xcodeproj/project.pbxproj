@@ -21,7 +21,7 @@
 		222EA2AF23424A7D004EE90F /* AvailableRoomsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EA2AE23424A7D004EE90F /* AvailableRoomsProvider.swift */; };
 		22437C8D23D86ACF0013E4A8 /* TestTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22437C8C23D86ACF0013E4A8 /* TestTokenProvider.swift */; };
 		22437C9023D86ADC0013E4A8 /* InstanceLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22437C8F23D86ADC0013E4A8 /* InstanceLocator.swift */; };
-		22437C9223D86B040013E4A8 /* DummyTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22437C9123D86B030013E4A8 /* DummyTokenProvider.swift */; };
+		22437C9223D86B040013E4A8 /* FakeTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22437C9123D86B030013E4A8 /* FakeTokenProvider.swift */; };
 		22437C9523D86B680013E4A8 /* InstanceLocatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22437C9423D86B680013E4A8 /* InstanceLocatorTests.swift */; };
 		22437C9A23D86B940013E4A8 /* TestTokenProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22437C9923D86B940013E4A8 /* TestTokenProviderTests.swift */; };
 		22437C9D23D893DB0013E4A8 /* token.json in Resources */ = {isa = PBXBuildFile; fileRef = 22437C9C23D893DB0013E4A8 /* token.json */; };
@@ -162,7 +162,7 @@
 		222EA2AE23424A7D004EE90F /* AvailableRoomsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvailableRoomsProvider.swift; sourceTree = "<group>"; };
 		22437C8C23D86ACF0013E4A8 /* TestTokenProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestTokenProvider.swift; sourceTree = "<group>"; };
 		22437C8F23D86ADC0013E4A8 /* InstanceLocator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstanceLocator.swift; sourceTree = "<group>"; };
-		22437C9123D86B030013E4A8 /* DummyTokenProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyTokenProvider.swift; sourceTree = "<group>"; };
+		22437C9123D86B030013E4A8 /* FakeTokenProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeTokenProvider.swift; sourceTree = "<group>"; };
 		22437C9423D86B680013E4A8 /* InstanceLocatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceLocatorTests.swift; sourceTree = "<group>"; };
 		22437C9923D86B940013E4A8 /* TestTokenProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTokenProviderTests.swift; sourceTree = "<group>"; };
 		22437C9C23D893DB0013E4A8 /* token.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = token.json; sourceTree = "<group>"; };
@@ -428,7 +428,7 @@
 			children = (
 				734D6A4523AB78A400105479 /* Array+Extensions.swift */,
 				7389802C23C8DD1B0029E09F /* Data+Extensions.swift */,
-				22437C9123D86B030013E4A8 /* DummyTokenProvider.swift */,
+				22437C9123D86B030013E4A8 /* FakeTokenProvider.swift */,
 				222910D523D8A56100A3ACDF /* InputStream+Extensions.swift */,
 				73B00EAD23A2822F0062C718 /* String+Extensions.swift */,
 				2200BB96231EA5C200BF9545 /* TestLogger.swift */,
@@ -1144,7 +1144,7 @@
 				224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */,
 				7335D27723D7335C00E51909 /* NonJSONHashable.swift in Sources */,
 				7301BC6523B0E9C700F162C7 /* Wire.Event.UserLeftRoom+Decodable.Tests.swift in Sources */,
-				22437C9223D86B040013E4A8 /* DummyTokenProvider.swift in Sources */,
+				22437C9223D86B040013E4A8 /* FakeTokenProvider.swift in Sources */,
 				7335D26C23D610C300E51909 /* Wire.Event.MessageDeleted+Decodable.Tests.swift in Sources */,
 				73B00EAE23A2822F0062C718 /* String+Extensions.swift in Sources */,
 				7335D26F23D705F300E51909 /* CodableJSONCollections+DictionaryDecodingTests.swift in Sources */,

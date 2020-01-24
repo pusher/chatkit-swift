@@ -1,22 +1,22 @@
 import Foundation
 import PusherPlatform
 
-class DummyTokenProvider: TokenProvider {
+class FakeTokenProvider: TokenProvider {
     
     // MARK: - Token retrieval
     
     public func fetchToken(completionHandler: @escaping (AuthenticationResult) -> Void) {
-        let token = DummyToken()
+        let token = FakeToken()
         completionHandler(.authenticated(token: token))
     }
     
 }
 
-// MARK: - Dummy token
+// MARK: - Fake token
 
-extension DummyTokenProvider {
+extension FakeTokenProvider {
     
-    struct DummyToken: Token {
+    struct FakeToken: Token {
         
         // MARK: - Properties
         
