@@ -6,7 +6,7 @@ class TestTokenProviderTests: XCTestCase {
     // MARK: - Tests
     
     func testShouldRetrieveTokenFromTestTokenSerivce() {
-        guard let tokenProvider = try? TestTokenProvider(instanceLocator: Environment.instanceLocator, userID: "joe") else {
+        guard let tokenProvider = try? TestTokenProvider(instanceLocator: Environment.instanceLocator, userID: TestUser.joe) else {
             preconditionFailure("Failed to instantiate test token provider.")
         }
         
