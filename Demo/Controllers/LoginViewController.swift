@@ -78,7 +78,7 @@ class LoginViewController: UIViewController {
     
     private func connect() {
         guard let username = self.usernameTextField.text,
-            let tokenProvider = try? TestTokenProvider(instanceLocator: Environment.instanceLocator, userID: username) else {
+            let tokenProvider = try? TestTokenProvider(instanceLocator: Environment.instanceLocator, userIdentifier: username) else {
                 self.displayError("Failed to login due to incorrect format of instance locator.")
                 return
         }

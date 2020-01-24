@@ -16,34 +16,24 @@ public class TestTokenProvider: TokenProvider {
     private static let urlService = "services/chatkit_token_provider"
     private static let urlResource = "token"
     
-    /// The locator for your instance, the same value from the Dashboard which you use to construct
-    /// the Chatkit object.
-    public let instanceLocator: String
-    
-    /// The userID to fetch tokens for. A token will always be signed for this userID without any
-    /// authentication being applied.
-    public let userID: String
-    
-    /// An optional logger used by the token provider.
-    public let logger: PPLogger?
+    private let logger: PPLogger?
     
     private let nestedTokenProvider: DefaultTokenProvider
     
     // MARK: - Initializers
     
+    /// Create an TestTokenProvider which retrieves tokens from the Chatkit service's Test Token Provider
+    ///
     /// - Parameters:
     ///     - instanceLocator: The locator for your instance, the same value from the Dashboard
     ///     which you use to construct the Chatkit object.
-    ///     - userID: The userID to fetch tokens for. A token will always be signed for this userID
+    ///     - userID: The userID for whom to fetch tokens. A token will always be signed for this userID
     ///     without any authentication being applied.
     ///     - logger: An optional logger used by the token provider.
-    public init(instanceLocator: String, userID: String, logger: PPLogger? = nil) throws {
-        self.instanceLocator = instanceLocator
-        self.userID = userID
-        
+    public init(instanceLocator: String, userIdentifier: String, logger: PPLogger? = nil) throws {
         let locator = try InstanceLocator(instanceLocator)
         let url = try TestTokenProvider.url(for: locator)
-        let queryItem = URLQueryItem(name: TestTokenProvider.userIdentifierQueryItemName, value: userID)
+        let queryItem = URLQueryItem(name: TestTokenProvider.userIdentifierQueryItemName, value: userIdentifier)
         self.nestedTokenProvider = DefaultTokenProvider(url: url, queryItems: [queryItem], logger: logger)
         
         self.logger = logger

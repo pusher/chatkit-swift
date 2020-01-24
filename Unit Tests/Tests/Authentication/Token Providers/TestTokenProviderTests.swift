@@ -15,7 +15,7 @@ class TestTokenProviderTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        guard let testURL = URL(string: "https://instance.pusherplatform.io/services/chatkit_token_provider/test/locator/token?user_id=testUserID") else {
+        guard let testURL = URL(string: "https://instance.pusherplatform.io/services/chatkit_token_provider/test/locator/token?user_id=testUserIdentifier") else {
             preconditionFailure("Failed to instantiate test URL.")
         }
         
@@ -33,29 +33,27 @@ class TestTokenProviderTests: XCTestCase {
     
     func testShouldInitializeTokenProviderWithCorrectValues() {
         let instanceLocator = Networking.testInstanceLocator
-        let userID = Networking.testUserID
+        let userID = Networking.testUserIdentifier
         
-        XCTAssertNoThrow(try TestTokenProvider(instanceLocator: instanceLocator, userID: userID, logger: TestLogger())) { tokenProvider in
-            XCTAssertEqual(tokenProvider.instanceLocator, instanceLocator)
-            XCTAssertEqual(tokenProvider.userID, userID)
-            XCTAssertTrue(tokenProvider.logger is TestLogger)
+        XCTAssertNoThrow(try TestTokenProvider(instanceLocator: instanceLocator, userIdentifier: userID, logger: TestLogger())) { tokenProvider in
+            XCTAssertNotNil(tokenProvider)
         }
     }
     
     func testShouldThrowErrorForInstanceLocatorWithTooFewComponents() {
         let instanceLocator = "invalid:locator"
-        let userID = Networking.testUserID
+        let userID = Networking.testUserIdentifier
         
-        XCTAssertThrowsError(try TestTokenProvider(instanceLocator: instanceLocator, userID: userID, logger: TestLogger()), "Failed to catch an error for invalid instance locator.") { error in
+        XCTAssertThrowsError(try TestTokenProvider(instanceLocator: instanceLocator, userIdentifier: userID, logger: TestLogger()), "Failed to catch an error for invalid instance locator.") { error in
             XCTAssertEqual(error as? NetworkingError, NetworkingError.invalidInstanceLocator)
         }
     }
     
     func testShouldThrowErrorForInstanceLocatorWithTooManyComponents() {
         let instanceLocator = "invalid:test:instance:locator"
-        let userID = Networking.testUserID
+        let userID = Networking.testUserIdentifier
         
-        XCTAssertThrowsError(try TestTokenProvider(instanceLocator: instanceLocator, userID: userID, logger: TestLogger()), "Failed to catch an error for invalid instance locator.") { error in
+        XCTAssertThrowsError(try TestTokenProvider(instanceLocator: instanceLocator, userIdentifier: userID, logger: TestLogger()), "Failed to catch an error for invalid instance locator.") { error in
             XCTAssertEqual(error as? NetworkingError, NetworkingError.invalidInstanceLocator)
         }
     }
@@ -65,7 +63,7 @@ class TestTokenProviderTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        guard let tokenProvider = try? TestTokenProvider(instanceLocator: Networking.testInstanceLocator, userID: Networking.testUserID) else {
+        guard let tokenProvider = try? TestTokenProvider(instanceLocator: Networking.testInstanceLocator, userIdentifier: Networking.testUserIdentifier) else {
             preconditionFailure("Failed to instantiate test token provider.")
         }
         
@@ -103,7 +101,7 @@ class TestTokenProviderTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        guard let tokenProvider = try? TestTokenProvider(instanceLocator: Networking.testInstanceLocator, userID: Networking.testUserID) else {
+        guard let tokenProvider = try? TestTokenProvider(instanceLocator: Networking.testInstanceLocator, userIdentifier: Networking.testUserIdentifier) else {
             preconditionFailure("Failed to instantiate test token provider.")
         }
         
@@ -140,7 +138,7 @@ class TestTokenProviderTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        guard let tokenProvider = try? TestTokenProvider(instanceLocator: Networking.testInstanceLocator, userID: Networking.testUserID) else {
+        guard let tokenProvider = try? TestTokenProvider(instanceLocator: Networking.testInstanceLocator, userIdentifier: Networking.testUserIdentifier) else {
             preconditionFailure("Failed to instantiate test token provider.")
         }
         
@@ -184,7 +182,7 @@ class TestTokenProviderTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        guard let tokenProvider = try? TestTokenProvider(instanceLocator: Networking.testInstanceLocator, userID: Networking.testUserID) else {
+        guard let tokenProvider = try? TestTokenProvider(instanceLocator: Networking.testInstanceLocator, userIdentifier: Networking.testUserIdentifier) else {
             preconditionFailure("Failed to instantiate test token provider.")
         }
         
