@@ -1,6 +1,10 @@
 import Foundation
 import PusherPlatform
 
+
+// TODO: Temporary
+extension String: Error { }
+
 /// This class is the entry point to the SDK.
 ///
 /// An instance of this class will maintain a real time connection to the

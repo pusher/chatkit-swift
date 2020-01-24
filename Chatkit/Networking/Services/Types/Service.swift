@@ -13,6 +13,6 @@ protocol Service {
     
     // MARK: - Initializers
     
-    init(instanceLocator: String, client: PPBaseClient, tokenProvider: PPTokenProvider, logger: PPLogger)
+    init(instanceLocator: String, client: PPBaseClient, tokenProvider: TokenProvider, logger: PPLogger)
     
 }

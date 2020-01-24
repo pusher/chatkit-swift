@@ -14,7 +14,7 @@ class ChatkitTests: XCTestCase {
     // MARK: - Tests
     
     func testShouldSetRequiredConfiguration() {
-        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: TestTokenProvider(), logger: TestLogger())
+        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: DummyTokenProvider(), logger: TestLogger())
         
 //        XCTAssertEqual(chatkit?.instanceLocator, Networking.testInstanceLocator)
 //        XCTAssertTrue(chatkit?.tokenProvider is TestTokenProvider)
@@ -22,19 +22,19 @@ class ChatkitTests: XCTestCase {
     }
     
     func testShouldHaveDefaultLogger() {
-        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: TestTokenProvider())
+        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: DummyTokenProvider())
         
         XCTAssertNotNil(chatkit?.logger)
     }
     
     func testShouldNotInstantiateWithInstanceLocatorInIncorrectFormat() {
-        let chatkit = try? Chatkit(instanceLocator: "invalidInstanceLocator", tokenProvider: TestTokenProvider())
+        let chatkit = try? Chatkit(instanceLocator: "invalidInstanceLocator", tokenProvider: DummyTokenProvider())
         
         XCTAssertNil(chatkit)
     }
     
     func testShouldHaveConnectionStatusSetToDisconnectedAfterInstantiation() {
-        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: TestTokenProvider())
+        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: DummyTokenProvider())
         
         XCTAssertEqual(chatkit?.connectionStatus, ConnectionStatus.disconnected)
     }
@@ -42,7 +42,7 @@ class ChatkitTests: XCTestCase {
     func testShouldReturnNoErrorAfterSuccessfulConnection() {
         stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
         
-        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: TestTokenProvider())
+        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: DummyTokenProvider())
         
         let expectation = self.expectation(description: "Connection")
         
@@ -60,7 +60,7 @@ class ChatkitTests: XCTestCase {
         
         stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: 404)
         
-        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: TestTokenProvider())
+        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: DummyTokenProvider())
         
         let expectation = self.expectation(description: "Connection")
         
@@ -76,7 +76,7 @@ class ChatkitTests: XCTestCase {
     func testShouldHaveConnectionStatusSetToConnectedAfterSuccessfulConnection() {
         stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
         
-        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: TestTokenProvider())
+        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: DummyTokenProvider())
         
         let expectation = self.expectation(description: "Connection")
         
@@ -92,7 +92,7 @@ class ChatkitTests: XCTestCase {
     func testShouldHaveConnectionStatusSetToDisconnectedAfterSuccessfullyDisconnecting() {
         stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
         
-        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: TestTokenProvider())
+        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: DummyTokenProvider())
         
         let expectation = self.expectation(description: "Connection")
         
@@ -112,7 +112,7 @@ class ChatkitTests: XCTestCase {
         
         stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: 404)
         
-        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: TestTokenProvider())
+        let chatkit = try? Chatkit(instanceLocator: Networking.testInstanceLocator, tokenProvider: DummyTokenProvider())
         
         let expectation = self.expectation(description: "Connection")
         

@@ -30,14 +30,14 @@ class ChatServiceTests: XCTestCase {
     // MARK: - Tests
     
     func testShouldSetRequiredConfiguration() {
-        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
+        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: DummyTokenProvider(), logger: TestLogger())
         
         XCTAssertEqual(service.name, ServiceName.chat)
         XCTAssertTrue(service.logger is TestLogger)
     }
     
     func testShouldHaveConnectionStatusSetToDisconnectedAfterInstantiation() {
-        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
+        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: DummyTokenProvider(), logger: TestLogger())
         
         XCTAssertEqual(service.connectionStatus, ConnectionStatus.disconnected)
     }
@@ -45,7 +45,7 @@ class ChatServiceTests: XCTestCase {
     func testShouldReturnNoErrorAfterSuccessfulConnection() {
         stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
         
-        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
+        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: DummyTokenProvider(), logger: TestLogger())
         
         let expectation = self.expectation(description: "Connection")
         
@@ -63,7 +63,7 @@ class ChatServiceTests: XCTestCase {
         
         stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: 404)
         
-        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
+        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: DummyTokenProvider(), logger: TestLogger())
         
         let expectation = self.expectation(description: "Connection")
         
@@ -79,7 +79,7 @@ class ChatServiceTests: XCTestCase {
     func testShouldHaveConnectionStatusSetToConnectedAfterSuccessfulConnection() {
         stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
         
-        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
+        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: DummyTokenProvider(), logger: TestLogger())
         
         let expectation = self.expectation(description: "Connection")
         
@@ -95,7 +95,7 @@ class ChatServiceTests: XCTestCase {
     func testShouldHaveConnectionStatusSetToDisconnectedAfterSuccessfullyDisconnecting() {
         stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: "chat-initial_state")
         
-        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
+        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: DummyTokenProvider(), logger: TestLogger())
         
         let expectation = self.expectation(description: "Connection")
         
@@ -115,7 +115,7 @@ class ChatServiceTests: XCTestCase {
         
         stubSubscription(of: .chat, version: .version7, instanceLocator: Networking.testInstanceLocator, path: .users, with: 404)
         
-        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: TestTokenProvider(), logger: TestLogger())
+        let service = ChatService(instanceLocator: Networking.testInstanceLocator, client: self.client, tokenProvider: DummyTokenProvider(), logger: TestLogger())
         
         let expectation = self.expectation(description: "Connection")
         
