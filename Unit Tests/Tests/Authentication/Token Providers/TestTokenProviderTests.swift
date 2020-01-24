@@ -1,5 +1,6 @@
 import XCTest
 import Mockingjay
+import PusherPlatform
 @testable import PusherChatkit
 
 class TestTokenProviderTests: XCTestCase {
@@ -7,7 +8,7 @@ class TestTokenProviderTests: XCTestCase {
     // MARK: - Properties
     
     var testURL: URL!
-    var matcher: (URLRequest) -> Bool = uri("https://instance.pusherplatform.io/services/chatkit_token_provider/test/locator/token?user_id=testUserID")
+    var matcher: ((URLRequest) -> Bool)!
     
     // MARK: - Tests lifecycle
     
@@ -60,55 +61,93 @@ class TestTokenProviderTests: XCTestCase {
     }
     
     func testShouldRetrieveTokenFromTestTokenSerivce() {
-        stub(self.matcher, jsonFile(named: "token"))
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
         
         guard let tokenProvider = try? TestTokenProvider(instanceLocator: Networking.testInstanceLocator, userID: Networking.testUserID) else {
             preconditionFailure("Failed to instantiate test token provider.")
         }
         
-        let expectation = self.expectation(description: "Token retrieval")
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
         
-        tokenProvider.fetchToken { result in
-            switch result {
-            case let .authenticated(token):
-                XCTAssertEqual(token.token, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk2MDQxNDcsImlhdCI6MTU3OTUxNzc0NywiaW5zdGFuY2UiOiI5NzU1MTZmMS1mOWUzLTRlNTUtYTQ0ZC1lNDA3OTIzMmY5NDciLCJpc3MiOiJhcGlfa2V5cy80ZTQyOWNjNS0wM2YzLTQwNzctYmY4ZC04YTcxYWMwYWM2ODgiLCJzdWIiOiJib2IifQ.5uyq_dBsGfdyqnDVDhm7d0R9w6HGApllBLVhwYHCNBI")
-                XCTAssertEqual(token.expiryDate.timeIntervalSinceNow, 86400, accuracy: 0.001)
-                
-            default:
-                XCTFail("Failed to retrieve token from the web service.")
-            }
-            
+        stub(self.matcher, jsonFile(named: "token"))
+        
+        let expectation = self.expectation(description: "Token retrieval")
+        var result: AuthenticationResult?
+        
+        tokenProvider.fetchToken { authenticationResult in
+            result = authenticationResult
             expectation.fulfill()
         }
         
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
         waitForExpectations(timeout: 1.0)
+        
+        guard case let .authenticated(token: token) = result else {
+            XCTFail("Failed to retrieve token from the web service.")
+            return
+        }
+        
+        XCTAssertEqual(token.token, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk2MDQxNDcsImlhdCI6MTU3OTUxNzc0NywiaW5zdGFuY2UiOiI5NzU1MTZmMS1mOWUzLTRlNTUtYTQ0ZC1lNDA3OTIzMmY5NDciLCJpc3MiOiJhcGlfa2V5cy80ZTQyOWNjNS0wM2YzLTQwNzctYmY4ZC04YTcxYWMwYWM2ODgiLCJzdWIiOiJib2IifQ.5uyq_dBsGfdyqnDVDhm7d0R9w6HGApllBLVhwYHCNBI")
+        XCTAssertEqual(token.expiryDate.timeIntervalSinceNow, 86400, accuracy: 0.001)
     }
     
     func testShouldReportAnErrorWhenTokenRetrievalFailed() {
-        stub(self.matcher, http(404))
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
         
         guard let tokenProvider = try? TestTokenProvider(instanceLocator: Networking.testInstanceLocator, userID: Networking.testUserID) else {
             preconditionFailure("Failed to instantiate test token provider.")
         }
         
-        let expectation = self.expectation(description: "Token retrieval")
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
         
-        tokenProvider.fetchToken { result in
-            switch result {
-            case let .failure(error: error):
-                XCTAssertNotNil(error)
-            
-            default:
-                XCTFail("Unexpectedly retrieved token from the web service.")
-            }
-            
+        stub(self.matcher, http(404))
+        
+        let expectation = self.expectation(description: "Token retrieval")
+        var result: AuthenticationResult?
+        
+        tokenProvider.fetchToken { authenticationResult in
+            result = authenticationResult
             expectation.fulfill()
         }
         
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
         waitForExpectations(timeout: 1.0)
+        
+        guard case let .failure(error: error) = result else {
+            XCTFail("Unexpectedly retrieved token from the web service.")
+            return
+        }
+        
+        XCTAssertNotNil(error)
     }
     
     func testShouldSetDefaultContentTypeHeader() {
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        guard let tokenProvider = try? TestTokenProvider(instanceLocator: Networking.testInstanceLocator, userID: Networking.testUserID) else {
+            preconditionFailure("Failed to instantiate test token provider.")
+        }
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
         stub({ request -> Bool in
             guard let headers = request.allHTTPHeaderFields,
                 let contentType = headers["Content-Type"] else {
@@ -118,28 +157,41 @@ class TestTokenProviderTests: XCTestCase {
             return request.url == self.testURL && contentType == "application/x-www-form-urlencoded"
         }, jsonFile(named: "token"))
         
+        let expectation = self.expectation(description: "Token retrieval")
+        var result: AuthenticationResult?
+        
+        tokenProvider.fetchToken { authenticationResult in
+            result = authenticationResult
+            expectation.fulfill()
+        }
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        waitForExpectations(timeout: 1.0)
+        
+        guard case let .authenticated(token: token) = result else {
+            XCTFail("Request has not been stubbed due to missing headers.")
+            return
+        }
+        
+        XCTAssertGreaterThan(token.token.count, 0)
+    }
+    
+    func testShouldSetDefaultContentTypeBodyItem() {
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
         guard let tokenProvider = try? TestTokenProvider(instanceLocator: Networking.testInstanceLocator, userID: Networking.testUserID) else {
             preconditionFailure("Failed to instantiate test token provider.")
         }
         
-        let expectation = self.expectation(description: "Token retrieval")
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
         
-        tokenProvider.fetchToken { result in
-            switch result {
-            case let .authenticated(token):
-                XCTAssertNotNil(token)
-                
-            default:
-                XCTFail("Request has not been stubbed due to missing headers.")
-            }
-            
-            expectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 1.0)
-    }
-    
-    func testShouldSetDefaultContentTypeBodyItem() {
         stub({ request -> Bool in
             guard let expectedBody = "grant_type=client_credentials".data(using: .utf8),
                 let body = request.httpBodyStream?.exhaust() else {
@@ -149,25 +201,26 @@ class TestTokenProviderTests: XCTestCase {
             return request.url == self.testURL && body == expectedBody
         }, jsonFile(named: "token"))
         
-        guard let tokenProvider = try? TestTokenProvider(instanceLocator: Networking.testInstanceLocator, userID: Networking.testUserID) else {
-            preconditionFailure("Failed to instantiate test token provider.")
-        }
-        
         let expectation = self.expectation(description: "Token retrieval")
+        var result: AuthenticationResult?
         
-        tokenProvider.fetchToken { result in
-            switch result {
-            case let .authenticated(token):
-                XCTAssertNotNil(token)
-                
-            default:
-                XCTFail("Request has not been stubbed due to incorrect content of the body.")
-            }
-            
+        tokenProvider.fetchToken { authenticationResult in
+            result = authenticationResult
             expectation.fulfill()
         }
         
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
         waitForExpectations(timeout: 1.0)
+        
+        guard case let .authenticated(token: token) = result else {
+            XCTFail("Request has not been stubbed due to incorrect content of the body.")
+            return
+        }
+        
+        XCTAssertGreaterThan(token.token.count, 0)
     }
     
 }
