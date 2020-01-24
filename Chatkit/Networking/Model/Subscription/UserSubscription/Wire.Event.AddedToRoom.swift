@@ -12,6 +12,8 @@ extension Wire.Event {
     
 }
 
+extension Wire.Event.AddedToRoom: Equatable {}
+
 extension Wire.Event.AddedToRoom: Decodable {
     
     private enum CodingKeys: String, CodingKey {

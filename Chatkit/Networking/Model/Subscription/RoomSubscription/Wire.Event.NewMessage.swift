@@ -9,6 +9,8 @@ extension Wire.Event {
     
 }
 
+extension Wire.Event.NewMessage: Equatable {}
+
 extension Wire.Event.NewMessage: Decodable {
     
     init(from decoder: Decoder) throws {

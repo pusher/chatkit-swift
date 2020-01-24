@@ -12,6 +12,8 @@ extension Wire.Event {
     
 }
 
+extension Wire.Event.InitialState: Equatable {}
+
 extension Wire.Event.InitialState: Decodable {
     
     private enum CodingKeys: String, CodingKey {

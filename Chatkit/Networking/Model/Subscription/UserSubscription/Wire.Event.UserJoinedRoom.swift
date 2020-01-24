@@ -10,6 +10,8 @@ extension Wire.Event {
     
 }
 
+extension Wire.Event.UserJoinedRoom: Equatable {}
+
 extension Wire.Event.UserJoinedRoom: Decodable {
     
     private enum CodingKeys: String, CodingKey {

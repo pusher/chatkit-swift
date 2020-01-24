@@ -14,6 +14,9 @@ extension Wire {
     }
     
 }
+
+extension Wire.Message: Equatable {}
+
 extension Wire.Message: Decodable {
     
     private enum CodingKeys: String, CodingKey {

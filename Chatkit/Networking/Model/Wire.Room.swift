@@ -17,6 +17,8 @@ extension Wire {
 
 }
 
+extension Wire.Room: Equatable {}
+
 extension Wire.Room: Decodable {
 
     private enum CodingKeys: String, CodingKey {
@@ -52,4 +54,3 @@ extension Wire.Room: Decodable {
         self.deletedAt = try container.decodeIfPresent(Date.self, forKey: .deletedAt)
     }
 }
-
