@@ -2,7 +2,7 @@ import Foundation
 import PusherPlatform
 
 /// TestTokenProvider retrieves tokens from the Chatkit service's Test Token Provider, which
-/// is for development user only, and must be enabled for your instance in the Chatkit Dashboard.
+/// is for development use only, and must be enabled for your instance in the Chatkit Dashboard.
 ///
 /// The test token provider will always sign a token for the requested userID, without applying any
 /// form of authentication.
