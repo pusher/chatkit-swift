@@ -210,7 +210,6 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                         "name": "Chatkit chat",
                         "created_by_id": "alice",
                         "private": false,
-                        "last_message_at": "2020-01-03T18:15:15Z",
                         "created_at": "2017-03-23T11:36:42Z",
                         "updated_at": "2017-07-28T22:19:32Z",
                     }
@@ -291,7 +290,6 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                     "name": "Chatkit chat",
                     "created_by_id": "alice",
                     "private": false,
-                    "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
                 },
@@ -400,7 +398,6 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                     "name": "Chatkit chat",
                     "created_by_id": "alice",
                     "private": false,
-                    "last_message_at": "2020-01-03T18:15:15Z",
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
                 },
