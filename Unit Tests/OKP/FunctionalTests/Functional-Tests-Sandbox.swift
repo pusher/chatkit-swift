@@ -45,7 +45,7 @@ extension XCTestCase {
     
     
     // TODO remove this method & returning of `dependencies` once we've properly implemented JoinedRoomProvider & Transformers
-    func setUp_ChatKitInitialised_withDependencies(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, Dependencies)  {
+    func setUp_ChatKitInitialised_withDependencies(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, Dependencies) {
         
         let stubNetworking = StubNetworking(file: file, line: line)
         let dependencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator, instanceFactory: stubNetworking)
@@ -57,20 +57,20 @@ extension XCTestCase {
         return (stubNetworking, chatkit, dependencies)
     }
         
-    func setUp_ChatKitInitialised(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit)  {
+    func setUp_ChatKitInitialised(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit) {
         
         let (stubNetworking, chatkit, _) = try setUp_ChatKitInitialised_withDependencies(file: file, line: line)
         return (stubNetworking, chatkit)
     }
     
-    func setUp_ChatKitSubscribed(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit)  {
+    func setUp_ChatKitSubscribed(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit) {
 
         let (stubNetworking, chatkit, _) = try setUp_ChatKitSubscribed_withStoreBroadcaster(file: file, line: line)
         return (stubNetworking, chatkit)
     }
     
     // TODO remove this method & returning of `storeBroadcaster` once we've properly implemented JoinedRoomProvider & Transformers
-    func setUp_ChatKitSubscribed_withStoreBroadcaster(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, StoreBroadcaster)  {
+    func setUp_ChatKitSubscribed_withStoreBroadcaster(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, StoreBroadcaster) {
 
         let (stubNetworking, chatkit, dependencies) = try setUp_ChatKitInitialised_withDependencies(file: file, line: line)
         
@@ -90,13 +90,13 @@ extension XCTestCase {
         return (stubNetworking, chatkit, dependencies.storeBroadcaster)
     }
     
-    func setUp_InitalStateFired(initialState initialStateJsonData: Data, file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit)  {
+    func setUp_InitalStateFired(initialState initialStateJsonData: Data, file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit) {
         let (stubNetworking, chatkit, _) = try setUp_InitalStateFired_withStoreBroadcaster(initialState: initialStateJsonData, file: file, line: line)
         return (stubNetworking, chatkit)
     }
     
     // TODO remove this method & returning of `storeBroadcaster` once we've properly implemented JoinedRoomProvider & Transformers
-    func setUp_InitalStateFired_withStoreBroadcaster(initialState initialStateJsonData: Data, file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, StoreBroadcaster)  {
+    func setUp_InitalStateFired_withStoreBroadcaster(initialState initialStateJsonData: Data, file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, StoreBroadcaster) {
 
         let (stubNetworking, chatkit, storeBroadcaster) = try setUp_ChatKitSubscribed_withStoreBroadcaster(file: file, line: line)
         

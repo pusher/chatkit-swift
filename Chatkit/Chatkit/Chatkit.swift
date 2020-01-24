@@ -160,7 +160,7 @@ public class Chatkit {
             
         case .connecting:
             // TODO curate a better error message (probably typed as well)
-            let error: Error = "Chatkit is  connecting, pleas use the handler of the `connect` method to wait until its successfully connected."
+            let error: Error = "Chatkit is connecting, pleas use the handler of the `connect` method to wait until its successfully connected."
             completionHandler(nil, error)
         }
         

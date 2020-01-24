@@ -56,7 +56,7 @@ class ConcreteDependencyTests: XCTestCase {
         
         let stubNetworking = StubNetworking()
         
-        let dependencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator,  instanceFactory: stubNetworking)
+        let dependencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator, instanceFactory: stubNetworking)
         
         XCTAssertNotNil(dependencies.instanceFactory as? StubNetworking)
     }

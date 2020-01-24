@@ -39,7 +39,7 @@ class ConcreteMissingUserFetcher: MissingUserFetcher {
                 print("unimplemented")
                 fatalError()
                 
-            case  let .failure(error):
+            case let .failure(error):
                 // TODO FAILURE needs some thought
                 print("unimplemented: \(error)")
                 fatalError()

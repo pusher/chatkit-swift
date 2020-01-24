@@ -1,7 +1,7 @@
 import XCTest
 
 
-func XCTAssertThrowsError<T>(_ expression: @autoclosure () throws -> T, containing: [String], file: StaticString = #file, line: UInt = #line, _ errorHandler: (Error) -> Void  = { _ in }) {
+func XCTAssertThrowsError<T>(_ expression: @autoclosure () throws -> T, containing: [String], file: StaticString = #file, line: UInt = #line, _ errorHandler: (Error) -> Void = { _ in }) {
     
     var thrownError: Error?
     
@@ -10,7 +10,7 @@ func XCTAssertThrowsError<T>(_ expression: @autoclosure () throws -> T, containi
     }
     
     guard let error = thrownError else {
-        XCTFail("No error thrown.  Expected error containing text: \"\(containing)\"")
+        XCTFail("No error thrown. Expected error containing text: \"\(containing)\"")
         return
     }
     
