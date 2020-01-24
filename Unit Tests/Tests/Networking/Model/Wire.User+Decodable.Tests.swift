@@ -22,7 +22,7 @@ class WireUserDecodableTests: XCTestCase {
         XCTAssertNoThrow(try Wire.User(from: jsonData.jsonDecoder())) { room in
             XCTAssertEqual(room.identifier, "alice")
             XCTAssertEqual(room.name, "Alice A")
-            XCTAssertEqual(room.avatarUrl, URL(string: "https://example.com/img/alice.png"))
+            XCTAssertEqual(room.avatarURL, URL(string: "https://example.com/img/alice.png"))
             XCTAssertEqual(room.customData as? [String: String], ["email": "alice@example.com"])
             XCTAssertEqual(room.createdAt, Date(fromISO8601String: "2017-03-23T11:36:42Z"))
             XCTAssertEqual(room.updatedAt, Date(fromISO8601String: "2017-04-23T11:36:42Z"))
@@ -158,7 +158,7 @@ class WireUserDecodableTests: XCTestCase {
                                           "Expected to decode String but found a number instead."])
     }
     
-    func test_init_avatarUrlMissing_noProblem() {
+    func test_init_avatarURLMissing_noProblem() {
         
         let jsonData = """
         {
@@ -174,11 +174,11 @@ class WireUserDecodableTests: XCTestCase {
         """.toJsonData()
         
         XCTAssertNoThrow(try Wire.User(from: jsonData.jsonDecoder())) { room in
-            XCTAssertEqual(room.avatarUrl, nil)
+            XCTAssertEqual(room.avatarURL, nil)
         }
     }
     
-    func test_init_avatarUrlNull_noProblem() {
+    func test_init_avatarURLNull_noProblem() {
         
         let jsonData = """
         {
@@ -195,11 +195,11 @@ class WireUserDecodableTests: XCTestCase {
         """.toJsonData()
         
         XCTAssertNoThrow(try Wire.User(from: jsonData.jsonDecoder())) { room in
-            XCTAssertEqual(room.avatarUrl, nil)
+            XCTAssertEqual(room.avatarURL, nil)
         }
     }
     
-    func test_init_avatarUrlInvalidType_throws() {
+    func test_init_avatarURLInvalidType_throws() {
         
         let jsonData = """
         {
@@ -221,7 +221,7 @@ class WireUserDecodableTests: XCTestCase {
                                           "Expected to decode String but found a number instead."])
     }
     
-    func test_init_avatarUrlInvalidFormat_throws() {
+    func test_init_avatarURLInvalidFormat_throws() {
         
         let jsonData = """
         {
