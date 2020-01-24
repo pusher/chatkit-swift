@@ -32,8 +32,8 @@ public class TestTokenProvider: TokenProvider {
     ///     - logger: An optional logger used by the token provider.
     public init(instanceLocator: String, userIdentifier: String, logger: PPLogger? = nil) throws {
         let locator = try InstanceLocator(instanceLocator)
-        let url = try TestTokenProvider.url(for: locator)
-        let queryItem = URLQueryItem(name: TestTokenProvider.userIdentifierQueryItemName, value: userIdentifier)
+        let url = try Self.url(for: locator)
+        let queryItem = URLQueryItem(name: Self.userIdentifierQueryItemName, value: userIdentifier)
         self.nestedTokenProvider = DefaultTokenProvider(url: url, queryItems: [queryItem], logger: logger)
         
         self.logger = logger
@@ -54,9 +54,9 @@ public class TestTokenProvider: TokenProvider {
     
     private static func url(for instanceLocator: InstanceLocator) throws -> URL {
         var components = URLComponents()
-        components.scheme = TestTokenProvider.urlScheme
-        components.host = "\(instanceLocator.region).\(TestTokenProvider.urlHost)"
-        components.path = "/\(TestTokenProvider.urlService)/\(instanceLocator.version)/\(instanceLocator.identifier)/\(TestTokenProvider.urlResource)"
+        components.scheme = Self.urlScheme
+        components.host = "\(instanceLocator.region).\(Self.urlHost)"
+        components.path = "/\(Self.urlService)/\(instanceLocator.version)/\(instanceLocator.identifier)/\(Self.urlResource)"
         
         guard let url = components.url else {
             throw NetworkingError.invalidInstanceLocator
