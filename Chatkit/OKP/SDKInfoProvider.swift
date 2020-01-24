@@ -17,15 +17,3 @@ struct ConcreteSDKInfoProvider: SDKInfoProvider {
     let serviceVersion: String
     let sdkInfo: PPSDKInfo
 }
-
-
-
-
-
-
-
-
-
-
-
-

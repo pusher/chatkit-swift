@@ -88,6 +88,7 @@
 		7301BC7B23B11F6F00F162C7 /* Wire.Message+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC7A23B11F6F00F162C7 /* Wire.Message+Decodable.Tests.swift */; };
 		7301BC7D23B1261300F162C7 /* Wire.MessagePart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC7C23B1261300F162C7 /* Wire.MessagePart.swift */; };
 		7301BC7F23B1294500F162C7 /* Wire.MessagePart+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC7E23B1294500F162C7 /* Wire.MessagePart+Decodable.Tests.swift */; };
+		730E44D323DB02F700A3AF94 /* TokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E44D223DB02F700A3AF94 /* TokenProvider.swift */; };
 		73233AC123CE19DC001909B7 /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233AC023CE19DC001909B7 /* SubscriptionManager.swift */; };
 		73233AC323CE1A0D001909B7 /* SubscriptionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233AC223CE1A0D001909B7 /* SubscriptionFactory.swift */; };
 		73233AC523CE1A9C001909B7 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233AC423CE1A9C001909B7 /* Subscription.swift */; };
@@ -280,6 +281,7 @@
 		7301BC7A23B11F6F00F162C7 /* Wire.Message+Decodable.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wire.Message+Decodable.Tests.swift"; sourceTree = "<group>"; };
 		7301BC7C23B1261300F162C7 /* Wire.MessagePart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.MessagePart.swift; sourceTree = "<group>"; };
 		7301BC7E23B1294500F162C7 /* Wire.MessagePart+Decodable.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Wire.MessagePart+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		730E44D223DB02F700A3AF94 /* TokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenProvider.swift; sourceTree = "<group>"; };
 		73233AC023CE19DC001909B7 /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
 		73233AC223CE1A0D001909B7 /* SubscriptionFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionFactory.swift; sourceTree = "<group>"; };
 		73233AC423CE1A9C001909B7 /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
@@ -993,6 +995,7 @@
 			children = (
 				73233B0723CF192F001909B7 /* Base.swift */,
 				73233B1D23CF40B6001909B7 /* Dependencies.swift */,
+				730E44D223DB02F700A3AF94 /* TokenProvider.swift */,
 				73233B1F23CF41ED001909B7 /* SDKInfoProvider.swift */,
 				73233B2F23CF70C9001909B7 /* StoreBroadcaster.swift */,
 				73233B0F23CF2028001909B7 /* Store.swift */,
@@ -1363,6 +1366,7 @@
 				7335D26D23D6F31B00E51909 /* Data+Extensions.swift in Sources */,
 				73F85D0623D0AB0A0008D0D6 /* MissingUserFetcher.swift in Sources */,
 				73F85D0523D0AB0A0008D0D6 /* Service.UserService.swift in Sources */,
+				730E44D323DB02F700A3AF94 /* TokenProvider.swift in Sources */,
 				73233B3623CF83C4001909B7 /* ConcreteStoreBroadcasterTests.swift in Sources */,
 				7301BC6323B0E8DE00F162C7 /* Wire.Event.UserJoinedRoom+Decodable.Tests.swift in Sources */,
 				7301BC6F23B0FCCE00F162C7 /* Wire.Event.RemovedFromRoom+Decodable.Tests.swift in Sources */,

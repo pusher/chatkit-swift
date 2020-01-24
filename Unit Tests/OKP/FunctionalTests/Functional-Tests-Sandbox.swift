@@ -9,13 +9,6 @@ extension Chatkit {
 
     // TODO these functions exists just to make things compile for now
     
-    convenience init(instanceLocator: String, instance: Instance) throws {
-        try self.init(instanceLocator: instanceLocator, tokenProvider: TestTokenProvider())
-    }
-    convenience init(instanceLocator: String, dependencies: Dependencies) throws {
-        try self.init(instanceLocator: instanceLocator, tokenProvider: TestTokenProvider(), dependencies: dependencies)
-    }
-    
     func joinRoom(id roomIdentifier: String, _ handler: (Result<Void, Error>) -> Void) {
         
     }
@@ -57,7 +50,9 @@ extension XCTestCase {
         let stubNetworking = StubNetworking(file: file, line: line)
         let dependencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator, instanceFactory: stubNetworking)
         
-        let chatkit = try Chatkit(instanceLocator: DummyInstanceLocator, dependencies: dependencies)
+        let tokenProvider = DummyTokenProviderX(file: file, line: line)
+        
+        let chatkit = try Chatkit(instanceLocator: DummyInstanceLocator, tokenProvider: tokenProvider, dependencies: dependencies)
         
         return (stubNetworking, chatkit, dependencies)
     }
