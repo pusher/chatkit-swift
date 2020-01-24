@@ -1,7 +1,6 @@
 import XCTest
 @testable import PusherChatkit
 
-
 class EquatableResult_Equatable_Tests: XCTestCase {
     
     let errorA = "errorA"

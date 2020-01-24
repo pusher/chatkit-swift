@@ -1,7 +1,6 @@
 import XCTest
 @testable import PusherChatkit
 
-
 class ConcreteStoreTests: XCTestCase {
     
     func test_action_actionThatDoesChangeInternalState_delegateTriggered() {
@@ -32,10 +31,12 @@ class ConcreteStoreTests: XCTestCase {
                         customData: nil,
                         createdAt: Date.distantPast,
                         updatedAt: Date.distantFuture,
-                        deletedAt: nil),
+                        deletedAt: nil
+                    ),
                     rooms: [],
                     readStates: [],
-                    memberships: [])
+                    memberships: []
+                )
             )
         )
         
@@ -79,10 +80,12 @@ class ConcreteStoreTests: XCTestCase {
                         customData: nil,
                         createdAt: Date.distantPast,
                         updatedAt: Date.distantFuture,
-                        deletedAt: nil),
+                        deletedAt: nil
+                    ),
                     rooms: [],
                     readStates: [],
-                    memberships: [])
+                    memberships: []
+                )
             )
         )
         

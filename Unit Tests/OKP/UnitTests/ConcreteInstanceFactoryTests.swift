@@ -4,7 +4,6 @@ import XCTest
 import struct PusherPlatform.PPSDKInfo
 import class PusherPlatform.Instance
 
-
 class ConcreteInstanceFactoryTests: XCTestCase {
     
     func test_makeInstance_forServiceUser_returnsInstance() {

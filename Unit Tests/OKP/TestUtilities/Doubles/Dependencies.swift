@@ -1,9 +1,7 @@
 import XCTest
 @testable import PusherChatkit
 
-
 let DummyInstanceLocator = "dummy:instance:locator"
-
 
 // Allows us to define test doubles for Unit testing.
 // If a dependency is not explicitly defined a "Dummy" version is used so that if it is interacted
@@ -54,7 +52,7 @@ extension ConcreteDependencies {
     convenience init(instanceLocator: String, instanceFactory: InstanceFactory) {
         self.init(instanceLocator: instanceLocator) { dependencyFactory in
             dependencyFactory.register(InstanceFactory.self) { dependencies in
-                return instanceFactory
+                instanceFactory
             }
         }
     }

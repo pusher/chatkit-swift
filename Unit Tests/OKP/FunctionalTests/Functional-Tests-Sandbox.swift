@@ -1,20 +1,14 @@
 import XCTest
 @testable import PusherChatkit
 
-
 typealias Instance = PusherChatkit.Instance
-
 
 extension Chatkit {
 
-    // TODO these functions exists just to make things compile for now
+    // TODO: these functions exists just to make things compile for now
     
-    func joinRoom(id roomIdentifier: String, _ handler: (Result<Void, Error>) -> Void) {
-        
-    }
+    func joinRoom(id roomIdentifier: String, _ handler: (Result<Void, Error>) -> Void) {}
 }
-
-
 
 extension XCTestCase {
 
@@ -43,8 +37,7 @@ extension XCTestCase {
      
     */
     
-    
-    // TODO remove this method & returning of `dependencies` once we've properly implemented JoinedRoomProvider & Transformers
+    // TODO: remove this method & returning of `dependencies` once we've properly implemented JoinedRoomProvider & Transformers
     func setUp_ChatKitInitialised_withDependencies(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, Dependencies) {
         
         let stubNetworking = StubNetworking(file: file, line: line)
@@ -69,7 +62,7 @@ extension XCTestCase {
         return (stubNetworking, chatkit)
     }
     
-    // TODO remove this method & returning of `storeBroadcaster` once we've properly implemented JoinedRoomProvider & Transformers
+    // TODO: remove this method & returning of `storeBroadcaster` once we've properly implemented JoinedRoomProvider & Transformers
     func setUp_ChatKitSubscribed_withStoreBroadcaster(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, StoreBroadcaster) {
 
         let (stubNetworking, chatkit, dependencies) = try setUp_ChatKitInitialised_withDependencies(file: file, line: line)
@@ -95,7 +88,7 @@ extension XCTestCase {
         return (stubNetworking, chatkit)
     }
     
-    // TODO remove this method & returning of `storeBroadcaster` once we've properly implemented JoinedRoomProvider & Transformers
+    // TODO: remove this method & returning of `storeBroadcaster` once we've properly implemented JoinedRoomProvider & Transformers
     func setUp_InitalStateFired_withStoreBroadcaster(initialState initialStateJsonData: Data, file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, StoreBroadcaster) {
 
         let (stubNetworking, chatkit, storeBroadcaster) = try setUp_ChatKitSubscribed_withStoreBroadcaster(file: file, line: line)
@@ -112,7 +105,7 @@ extension XCTestCase {
         let expectation = self.expectation(description: "`ChatKit.createJoinedRoomsProvider` completion handler should be invoked")
         
         var joinedRoomsProviderOut: JoinedRoomsProvider!
-        chatkit.createJoinedRoomsProvider { (joinedRoomsProvider, error) in
+        chatkit.createJoinedRoomsProvider { joinedRoomsProvider, error in
             joinedRoomsProviderOut = joinedRoomsProvider!
             expectation.fulfill()
         }
@@ -120,7 +113,6 @@ extension XCTestCase {
         waitForExpectations(timeout: 1)
         return (stubNetworking, chatkit, joinedRoomsProviderOut!)
     }
-    
     
 }
 
@@ -145,7 +137,7 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             
             let expectation = self.expectation(description: "`ChatKit.connect` completion handler should be invoked")
             var actualError: Error?
-            chatkit.connect() { error in
+            chatkit.connect { error in
                 actualError = error
                 expectation.fulfill()
             }
@@ -180,7 +172,7 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             
             let expectation = self.expectation(description: "`ChatKit.connect` completion handler should be invoked")
             var actualError: Error?
-            chatkit.connect() { error in
+            chatkit.connect { error in
                 actualError = error
                 expectation.fulfill()
             }
@@ -235,7 +227,7 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             /*****************/
             
             var result: (joinedRoomsProvider: JoinedRoomsProvider?, error: Error?)!
-            chatkit.createJoinedRoomsProvider { (joinedRoomsProvider, error) in
+            chatkit.createJoinedRoomsProvider { joinedRoomsProvider, error in
                 result = (joinedRoomsProvider, error)
             }
             
@@ -244,7 +236,7 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             /*****************/
             
             XCTAssertNil(result.joinedRoomsProvider)
-            // TODO improved assertion to better check content of error
+            // TODO: improved assertion to better check content of error
             XCTAssertNotNil(result.error)
             XCTAssertEqual(chatkit.connectionStatus, .disconnected)
         }())
@@ -270,7 +262,7 @@ class Functional_ChatkitSubscribed_Tests: XCTestCase {
             
             let expectation = self.expectation(description: "`ChatKit.connect` completion handler should be invoked")
             var actualError: Error?
-            chatkit.connect() { error in
+            chatkit.connect { error in
                 actualError = error
                 expectation.fulfill()
             }
@@ -327,7 +319,7 @@ class Functional_ChatkitSubscribed_Tests: XCTestCase {
             
             let expectation = self.expectation(description: "`ChatKit.createJoinedRoomsProvider` completion handler should be invoked")
             var result: (joinedRoomsProvider: JoinedRoomsProvider?, error: Error?)!
-            chatkit.createJoinedRoomsProvider { (joinedRoomsProvider, error) in
+            chatkit.createJoinedRoomsProvider { joinedRoomsProvider, error in
                 result = (joinedRoomsProvider, error)
                 expectation.fulfill()
             }
@@ -534,7 +526,6 @@ class Functional_InitialStateFired_Tests: XCTestCase {
     }
 }
     
-
 class Functional_JoinedRoomsProviderInitialised_Tests: XCTestCase {
         
     func test_removedFromRoomRemotely_success() {
@@ -685,5 +676,3 @@ class Functional_JoinedRoomsProviderInitialised_Tests: XCTestCase {
     }
 
 }
-
-

@@ -1,13 +1,11 @@
 import XCTest
 @testable import PusherChatkit
 
-
 class DummyStoreDelegate: DummyBase, StoreDelegate {
     func store(_ store: Store, didUpdateState state: State) {
         DummyFail(sender: self, function: #function)
     }
 }
-
 
 class StubStoreDelegate: StubBase, StoreDelegate {
 

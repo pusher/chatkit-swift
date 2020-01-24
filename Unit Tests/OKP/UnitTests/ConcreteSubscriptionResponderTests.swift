@@ -1,7 +1,6 @@
 import XCTest
 @testable import PusherChatkit
 
-
 class ConcreteSubscriptionResponderTests: XCTestCase {
     
     func test_stuff() {

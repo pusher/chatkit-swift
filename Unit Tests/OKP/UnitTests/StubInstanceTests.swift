@@ -31,13 +31,13 @@ class StubInstanceTests: XCTestCase {
             XCTAssertEqual(jsonData.toString(), expectedJsonData.toString())
         }
         
-        let _ = stubInstance.subscribeWithResume(using: requestOptions,
-                                                 onOpening: nil,
-                                                 onOpen: nil,
-                                                 onResuming: nil,
-                                                 onEvent: onEvent,
-                                                 onEnd: nil,
-                                                 onError: nil)
+        _ = stubInstance.subscribeWithResume(using: requestOptions,
+                                             onOpening: nil,
+                                             onOpen: nil,
+                                             onResuming: nil,
+                                             onEvent: onEvent,
+                                             onEnd: nil,
+                                             onError: nil)
         
         stubInstance.fireSubscriptionEvent(jsonData: expectedJsonData)
         

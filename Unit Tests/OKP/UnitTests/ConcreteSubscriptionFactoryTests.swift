@@ -3,7 +3,6 @@ import XCTest
 
 import struct PusherPlatform.PPSDKInfo
 
-
 class ConcreteSubscriptionFactoryTests: XCTestCase {
     
     func test_makeSubscription_forServiceUser_returnsInstance() {

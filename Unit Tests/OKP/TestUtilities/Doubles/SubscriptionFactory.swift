@@ -1,14 +1,12 @@
 import XCTest
 @testable import PusherChatkit
 
-
 class DummySubscriptionFactory: DummyBase, SubscriptionFactory {
     func makeSubscription() -> Subscription {
         return DummySubscription(file: file, line: line)
     }
 }
 
-    
 class StubSubscriptionFactory: StubBase, SubscriptionFactory {
     
     private var makeSubscription_subscriptionToReturn: Subscription?

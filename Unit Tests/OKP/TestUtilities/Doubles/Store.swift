@@ -1,7 +1,6 @@
 import XCTest
 @testable import PusherChatkit
 
-
 class DummyStore: DummyBase, Store {
     func action(_ action: Action) {
         DummyFail(sender: self, function: #function)
@@ -18,7 +17,6 @@ extension XCTest {
         return dummy
     }
 }
-
 
 class StubStore: StubBase, Store {
 

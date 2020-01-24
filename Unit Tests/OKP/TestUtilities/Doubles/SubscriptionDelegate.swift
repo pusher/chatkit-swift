@@ -1,16 +1,15 @@
 import XCTest
 @testable import PusherChatkit
 
-
 class DummySubscriptionDelegate: DummyBase, SubscriptionDelegate {
     func subscription(_ subscription: Subscription, didReceiveEventWithJsonData jsonData: Data) {
         DummyFail(sender: self, function: #function)
     }
+
     func subscription(_ subscription: Subscription, didReceiveError error: Error) {
         DummyFail(sender: self, function: #function)
     }
 }
-
 
 class StubSubscriptionDelegate: StubBase, SubscriptionDelegate {
 

@@ -1,7 +1,6 @@
 import XCTest
 @testable import PusherChatkit
 
-
 class StubJoinedRoomsProviderDelegate: JoinedRoomsProviderDelegate {
     
     typealias DidJoinRoom = (Room) -> Void

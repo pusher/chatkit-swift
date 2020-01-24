@@ -7,19 +7,17 @@ import class PusherPlatform.Instance
 import class PusherPlatform.PPResumableSubscription
 import struct PusherPlatform.PPSDKInfo
 
-
-fileprivate func makeDummyPPInstance() -> PusherPlatform.Instance {
+private func makeDummyPPInstance() -> PusherPlatform.Instance {
     return PusherPlatform.Instance(locator: "bob:fred:viv",
                                    serviceName: ServiceName.chat.rawValue,
                                    serviceVersion: ServiceVersion.version7.rawValue,
                                    sdkInfo: PPSDKInfo.current)
 }
 
-fileprivate func makeDummyPPResumableSubscription(requestOptions: PPRequestOptions) -> PusherPlatform.PPResumableSubscription {
+private func makeDummyPPResumableSubscription(requestOptions: PPRequestOptions) -> PusherPlatform.PPResumableSubscription {
     let dummyPPInstance = makeDummyPPInstance()
     return PPResumableSubscription(instance: dummyPPInstance, requestOptions: requestOptions)
 }
-
 
 class DummyInstance: DummyBase, Instance {
     
@@ -28,12 +26,11 @@ class DummyInstance: DummyBase, Instance {
         return PPGeneralRequest()
     }
     
-    func subscribeWithResume(using requestOptions: PPRequestOptions, onOpening: (() -> Void)?, onOpen: (() -> Void)?, onResuming: (() -> Void)?, onEvent: ((String, [String : String], Any) -> Void)?, onEnd: ((Int?, [String : String]?, Any?) -> Void)?, onError: ((Error) -> Void)?) -> PPResumableSubscription {
+    func subscribeWithResume(using requestOptions: PPRequestOptions, onOpening: (() -> Void)?, onOpen: (() -> Void)?, onResuming: (() -> Void)?, onEvent: ((String, [String: String], Any) -> Void)?, onEnd: ((Int?, [String: String]?, Any?) -> Void)?, onError: ((Error) -> Void)?) -> PPResumableSubscription {
         DummyFail(sender: self, function: #function)
         return makeDummyPPResumableSubscription(requestOptions: requestOptions)
     }
 }
-
 
 class StubInstance: StubBase, Instance {
     
@@ -57,12 +54,10 @@ class StubInstance: StubBase, Instance {
         super.init(file: file, line: line)
     }
     
-    func stub(_ urlString: String, _ jsonData: Data) {
-        
-    }
+    func stub(_ urlString: String, _ jsonData: Data) {}
     
     // Preparing for registration to a subscription
-    var subscribe_completionResult: VoidResult? = nil
+    var subscribe_completionResult: VoidResult?
     func stubSubscribe(result: VoidResult) {
         subscribe_completionResult = result
     }
@@ -97,12 +92,12 @@ class StubInstance: StubBase, Instance {
         return generalRequest
     }
     
-    var onOpening: Instance.OnOpening? = nil
-    var onOpen: Instance.OnOpen? = nil
-    var onResuming: Instance.OnResuming? = nil
-    var onEvent: Instance.OnEvent? = nil
-    var onEnd: Instance.OnEnd? = nil
-    var onError: Instance.OnError? = nil
+    var onOpening: Instance.OnOpening?
+    var onOpen: Instance.OnOpen?
+    var onResuming: Instance.OnResuming?
+    var onEvent: Instance.OnEvent?
+    var onEnd: Instance.OnEnd?
+    var onError: Instance.OnError?
     
     func subscribeWithResume(using requestOptions: PPRequestOptions,
                              onOpening: Instance.OnOpening?,
@@ -124,12 +119,12 @@ class StubInstance: StubBase, Instance {
         self.onEnd = onEnd
         self.onError = onError
         
-        switch(subscribe_completionResult) {
-            // TODO no idea if this is correct
+        switch subscribe_completionResult {
+            // TODO: no idea if this is correct
         case .success:
             onOpen?()
         case let .failure(error):
-            // TODO no idea if this is correct
+            // TODO: no idea if this is correct
             let statusCode = 404
             let headers: [String: String]? = nil
             let info: Any? = error

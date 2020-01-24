@@ -1,7 +1,6 @@
 import XCTest
 @testable import PusherChatkit
 
-
 class DummyStoreListener: DummyBase, StoreListener {
     func store(_ store: Store, didUpdateState state: State) {
         DummyFail(sender: self, function: #function)

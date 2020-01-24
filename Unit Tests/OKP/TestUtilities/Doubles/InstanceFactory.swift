@@ -1,13 +1,11 @@
 import XCTest
 @testable import PusherChatkit
 
-
 class DummyInstanceFactory: DummyBase, InstanceFactory {
     func makeInstance(forType instanceType: InstanceType) -> Instance {
         return DummyInstance(file: file, line: line)
     }
 }
-
 
 class StubInstanceFactory: StubBase, InstanceFactory {
     
@@ -17,6 +15,7 @@ class StubInstanceFactory: StubBase, InstanceFactory {
         case single(Instance)
         case handler(MakeInstanceHandler)
     }
+
     private let makeInstance_Type: MakeInstanceType
     
     init(makeInstance_instanceToReturn: Instance,
@@ -38,7 +37,7 @@ class StubInstanceFactory: StubBase, InstanceFactory {
     // MARK: InstanceFactory
     
     func makeInstance(forType instanceType: InstanceType) -> Instance {
-        switch(makeInstance_Type) {
+        switch makeInstance_Type {
         
         case let .single(instanceToReturn):
             return instanceToReturn

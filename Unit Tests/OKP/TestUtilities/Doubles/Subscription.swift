@@ -1,7 +1,6 @@
 import XCTest
 @testable import PusherChatkit
 
-
 class DummySubscription: DummyBase, Subscription {
     func subscribe(_ subscriptionType: SubscriptionType, completion: @escaping (VoidResult) -> Void) {
         DummyFail(sender: self, function: #function)

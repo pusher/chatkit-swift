@@ -1,7 +1,6 @@
 import XCTest
 @testable import PusherChatkit
 
-
 class ConcreteStoreBroadcasterTests: XCTestCase {
 
     let stateA = State(
@@ -30,7 +29,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         
         let sut = ConcreteStoreBroadcaster(dependencies: DependenciesDoubles())
 
-        let _ = sut.register(stubStoreListener)
+        _ = sut.register(stubStoreListener)
         
         XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
         XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 0)
@@ -59,8 +58,8 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         
         let sut = ConcreteStoreBroadcaster(dependencies: DependenciesDoubles())
         
-        // TODO implement unregister
-        let _ = sut.register(stubStoreListener)
+        // TODO: implement unregister
+        _ = sut.register(stubStoreListener)
         sut.unregister(stubStoreListener)
         
         XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
@@ -90,8 +89,8 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         
         let sut = ConcreteStoreBroadcaster(dependencies: DependenciesDoubles())
 
-        let _ = sut.register(stubStoreListener)
-        let _ = sut.register(stubStoreListener)
+        _ = sut.register(stubStoreListener)
+        _ = sut.register(stubStoreListener)
         
         XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
         XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 0)

@@ -1,7 +1,6 @@
 import XCTest
 @testable import PusherChatkit
 
-
 class StubNetworking: StubBase, InstanceFactory {
     
     private var expectedSubscribeCalls: [SubscriptionType: VoidResult] = .init()
@@ -14,9 +13,7 @@ class StubNetworking: StubBase, InstanceFactory {
     // MARK: Faux Networking
     
     // Preparing for CRUD requests
-    func stub(_ urlString: String, _ jsonData: Data) {
-        
-    }
+    func stub(_ urlString: String, _ jsonData: Data) {}
     
     // Preparing for registration to a subscription
     func stubSubscribe(_ subscriptionType: SubscriptionType, _ result: VoidResult,
@@ -28,8 +25,7 @@ class StubNetworking: StubBase, InstanceFactory {
         
         if let stubInstance = registeredStubInstances[.subscription(subscriptionType)] {
             stubInstance.stubSubscribe(result: result)
-        }
-        else {
+        } else {
             expectedSubscribeCalls[subscriptionType] = result
         }
     }
@@ -51,9 +47,9 @@ class StubNetworking: StubBase, InstanceFactory {
             XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))` with subscriptionType: `\(subscriptionType)`", file: file, line: line)
             return
         }
-        // TODO
+        // TODO:
         fatalError()
-        //stubInstance.fireSubscriptionError()
+        // stubInstance.fireSubscriptionError()
     }
     
     // MARK: InstanceFactory
@@ -85,7 +81,7 @@ class StubNetworking: StubBase, InstanceFactory {
             
             return stubInstance
             
-        case let .service(_):
+        case let .service:
             XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))` with instanceType: `\(instanceType)`", file: file, line: line)
             return DummyInstance(file: file, line: line)
         }

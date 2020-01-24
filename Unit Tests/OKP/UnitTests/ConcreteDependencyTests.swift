@@ -1,7 +1,6 @@
 import XCTest
 @testable import PusherChatkit
 
-
 class ConcreteDependencyTests: XCTestCase {
     
     func test_initWithInstanceLocator_success() {
@@ -25,7 +24,7 @@ class ConcreteDependencyTests: XCTestCase {
         
         let dependencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator) { dependencyFactory in
             dependencyFactory.register(Store.self) { dependencies in
-                return StubStore()
+                StubStore()
             }
             expectation.fulfill()
         }
