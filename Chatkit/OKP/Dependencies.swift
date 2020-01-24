@@ -1,6 +1,5 @@
 import struct PusherPlatform.PPSDKInfo
 
-
 protocol Dependencies:
     HasSDKInfoProvider &
     HasStoreBroadcaster &
@@ -12,7 +11,6 @@ protocol Dependencies:
     HasUserService &
     HasMissingUserFetcher
 {}
-
 
 class DependencyFactory {
     
@@ -72,43 +70,43 @@ class ConcreteDependencies: Dependencies {
     init(instanceLocator: String, override: ((DependencyFactory) -> Void)? = nil) {
         
         dependencyFactory.register(SDKInfoProvider.self, factory: { dependencies in
-            return ConcreteSDKInfoProvider(locator: instanceLocator,
-                                           serviceName: ServiceName.chat.rawValue,
-                                           serviceVersion: ServiceVersion.version7.rawValue,
-                                           sdkInfo: PPSDKInfo.current)
+            ConcreteSDKInfoProvider(locator: instanceLocator,
+                                    serviceName: ServiceName.chat.rawValue,
+                                    serviceVersion: ServiceVersion.version7.rawValue,
+                                    sdkInfo: PPSDKInfo.current)
         })
         
         dependencyFactory.register(StoreBroadcaster.self, factory: { dependencies in
-            return ConcreteStoreBroadcaster(dependencies: dependencies)
+            ConcreteStoreBroadcaster(dependencies: dependencies)
         })
         
         dependencyFactory.register(Store.self, factory: { dependencies in
-            return ConcreteStore(dependencies: dependencies,
-                                 delegate: self.storeBroadcaster)
+            ConcreteStore(dependencies: dependencies,
+                          delegate: self.storeBroadcaster)
         })
         
         dependencyFactory.register(InstanceFactory.self, factory: { dependencies in
-            return ConcreteInstanceFactory(dependencies: dependencies)
+            ConcreteInstanceFactory(dependencies: dependencies)
         })
         
         dependencyFactory.register(SubscriptionResponder.self, factory: { dependencies in
-            return ConcreteSubscriptionResponder(dependencies: dependencies)
+            ConcreteSubscriptionResponder(dependencies: dependencies)
         })
         
         dependencyFactory.register(SubscriptionFactory.self, factory: { dependencies in
-            return ConcreteSubscriptionFactory(dependencies: dependencies)
+            ConcreteSubscriptionFactory(dependencies: dependencies)
         })
         
         dependencyFactory.register(SubscriptionManager.self, factory: { dependencies in
-            return ConcreteSubscriptionManager(dependencies: dependencies)
+            ConcreteSubscriptionManager(dependencies: dependencies)
         })
         
         dependencyFactory.register(UserService.self, factory: { dependencies in
-            return ConcreteUserService(dependencies: dependencies)
+            ConcreteUserService(dependencies: dependencies)
         })
         
         dependencyFactory.register(MissingUserFetcher.self, factory: { dependencies in
-            return ConcreteMissingUserFetcher(dependencies: dependencies)
+            ConcreteMissingUserFetcher(dependencies: dependencies)
         })
         
         override?(dependencyFactory)
@@ -150,4 +148,3 @@ class ConcreteDependencies: Dependencies {
         return dependencyFactory.resolve(MissingUserFetcher.self, dependencies: self)
     }
 }
-

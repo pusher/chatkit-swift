@@ -1,7 +1,5 @@
 
 
-
 enum ServiceType {
     case user
 }
-

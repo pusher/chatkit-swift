@@ -1,15 +1,11 @@
 import enum PusherPlatform.HTTPMethod
 import class PusherPlatform.PPRequestOptions
 
-
-
 protocol HasMissingUserFetcher {
     var missingUserFetcher: MissingUserFetcher { get }
 }
 
-protocol MissingUserFetcher: StoreListener {
-    
-}
+protocol MissingUserFetcher: StoreListener {}
 
 class ConcreteMissingUserFetcher: MissingUserFetcher {
     
@@ -40,7 +36,7 @@ class ConcreteMissingUserFetcher: MissingUserFetcher {
                 fatalError()
                 
             case let .failure(error):
-                // TODO FAILURE needs some thought
+                // TODO: FAILURE needs some thought
                 print("unimplemented: \(error)")
                 fatalError()
             }

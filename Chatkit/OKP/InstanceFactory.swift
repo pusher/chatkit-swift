@@ -1,6 +1,5 @@
 import class PusherPlatform.Instance
 
-
 protocol HasInstanceFactory {
     var instanceFactory: InstanceFactory { get }
 }
@@ -9,6 +8,7 @@ enum InstanceType {
     case subscription(SubscriptionType)
     case service(ServiceType)
 }
+
 extension InstanceType: Hashable {}
 
 protocol InstanceFactory {

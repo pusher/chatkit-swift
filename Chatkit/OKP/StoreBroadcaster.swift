@@ -2,23 +2,19 @@
 // We may want to use a Set<StoreListener> in future but that will require type erasing
 // I am using an Array at present for ease and speed.
 
-//struct AnyStoreListener {
+// struct AnyStoreListener {
 //    private let storeListener: StoreListener
 //    init(storeListener: StoreListener) {
 //        self.storeListener = storeListener
 //    }
-//}
+// }
 //
-//// Use our existing Hashable implementation
-//extension AnyStoreListener: Hashable {}
+/// / Use our existing Hashable implementation
+// extension AnyStoreListener: Hashable {}
 
-
-
-
-protocol StoreListener: class { // class is neccessary to use `===` operator
+protocol StoreListener: AnyObject { // AnyObject is neccessary to use `===` operator
     func store(_ store: Store, didUpdateState state: State)
 }
-
 
 protocol HasStoreBroadcaster {
     var storeBroadcaster: StoreBroadcaster { get }
@@ -35,9 +31,9 @@ class ConcreteStoreBroadcaster: StoreBroadcaster {
     
     private let dependencies: Dependencies
     
-    private var listeners = Array<StoreListener>()
+    private var listeners = [StoreListener]()
     
-    // TODO is this cool or would it be better if the store itself exposed its current state?
+    // TODO: is this cool or would it be better if the store itself exposed its current state?
     private var state: State?
     
     init(dependencies: Dependencies) {
@@ -50,7 +46,7 @@ class ConcreteStoreBroadcaster: StoreBroadcaster {
         if !listeners.contains(where: { $0 === listener }) {
             listeners.append(listener)
         }
-        // TODO can this be made better?
+        // TODO: can this be made better?
         return self.state ?? State.emptyState
     }
     

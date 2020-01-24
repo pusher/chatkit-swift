@@ -1,21 +1,19 @@
 import class PusherPlatform.PPRequestOptions
 import enum PusherPlatform.HTTPMethod
 
-
 enum SubscriptionType {
     case user
     case room(roomIdentifier: String)
 }
-extension SubscriptionType: Hashable {}
 
+extension SubscriptionType: Hashable {}
 
 typealias SubscribeHandler = (VoidResult) -> Void
 
-protocol SubscriptionDelegate: class {
+protocol SubscriptionDelegate: AnyObject {
     func subscription(_ subscription: Subscription, didReceiveEventWithJsonData jsonData: Data)
     func subscription(_ subscription: Subscription, didReceiveError error: Error)
 }
-
 
 protocol Subscription {
     func subscribe(_ subscriptionType: SubscriptionType, completion: @escaping SubscribeHandler)
@@ -41,7 +39,7 @@ class ConcreteSubscription: Subscription {
         let requestOptions = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: requestPath)
     
         let onOpen = {
-            // TODO should we now nil `onOpen` to avoid the completion potentially being called again?
+            // TODO: should we now nil `onOpen` to avoid the completion potentially being called again?
             completion(.success)
         }
     
@@ -51,7 +49,7 @@ class ConcreteSubscription: Subscription {
             }
             // TODO: Implement properly
             guard let jsonData = any as? Data else {
-                // TODO probably create a Json falvoured Error here and call `self.delegate?.subscription(self, didReceiveError: error)`
+                // TODO: probably create a Json falvoured Error here and call `self.delegate?.subscription(self, didReceiveError: error)`
                 fatalError()
             }
             self.delegate?.subscription(self, didReceiveEventWithJsonData: jsonData)
@@ -83,7 +81,7 @@ class ConcreteSubscription: Subscription {
         
         let onEnd: Instance.OnEnd = { [weak self] statusCode, headers, info in
             
-            // TODO I have no idea if this is correct at present
+            // TODO: I have no idea if this is correct at present
             let error: Error
             if let passedError: Error = info as? Error {
                 error = passedError
@@ -96,19 +94,19 @@ class ConcreteSubscription: Subscription {
             completion(.failure(error))
         }
         
-        let _ = instance.subscribeWithResume(using: requestOptions,
-                                             onOpening: nil,
-                                             onOpen: onOpen,
-                                             onResuming: nil,
-                                             onEvent: onEvent,
-                                             onEnd: onEnd,
-                                             onError: onError)
+        _ = instance.subscribeWithResume(using: requestOptions,
+                                         onOpening: nil,
+                                         onOpen: onOpen,
+                                         onResuming: nil,
+                                         onEvent: onEvent,
+                                         onEnd: onEnd,
+                                         onError: onError)
     }
     
     // MARK: - Private
     
     private func makeRequestPath(for subscriptionType: SubscriptionType) -> String {
-        switch (subscriptionType) {
+        switch subscriptionType {
         case .user:
             return "/users"
         case let .room(roomIdentifier):

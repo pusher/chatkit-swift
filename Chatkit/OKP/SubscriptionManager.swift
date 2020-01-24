@@ -29,7 +29,7 @@ class ConcreteSubscriptionManager: SubscriptionManager {
                 return
             }
             
-            // TODO is it correct to not hold a reference on subscribe failure?
+            // TODO: is it correct to not hold a reference on subscribe failure?
             if case .success = result {
                 self.subscriptions.append(subscription)
             }

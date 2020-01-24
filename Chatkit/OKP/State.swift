@@ -7,8 +7,8 @@ extension Internal {
         let name: String
     }
 }
-extension Internal.Room: Equatable {}
 
+extension Internal.Room: Equatable {}
 
 extension Internal {
     struct User {
@@ -16,8 +16,8 @@ extension Internal {
         let name: String
     }
 }
-extension Internal.User: Equatable {}
 
+extension Internal.User: Equatable {}
 
 struct State {
     let currentUser: Internal.User?
@@ -30,4 +30,5 @@ struct State {
         )
     }
 }
+
 extension State: Equatable {}

@@ -1,7 +1,6 @@
 import enum PusherPlatform.HTTPMethod
 import class PusherPlatform.PPRequestOptions
 
-
 protocol HasUserService {
     var userService: UserService { get }
 }
@@ -21,28 +20,27 @@ class ConcreteUserService: UserService {
     
     init(dependencies: Dependencies) {
         self.dependencies = dependencies
-        // TODO fix this call
+        // TODO: fix this call
         self.instance = self.dependencies.instanceFactory.makeInstance(forType: .service(.user))
     }
     
     func fetchUser(withIdentifier identifier: String, handler: @escaping (Result<Void, Error>) -> Void) {
         
-        // TODO work out what this path is
+        // TODO: work out what this path is
         let requestPath = "/user/\(identifier)"
         let requestOptions = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: requestPath)
         
         let onSuccess = { (jsonData: Data) in
             
             do {
-                // TODO move elsewhere `UserServiceResponder`?
+                // TODO: move elsewhere `UserServiceResponder`?
                 let user = try self.jsonDecoder.decode(Wire.User.self, from: jsonData)
                 let action = Action.received(user: user)
                 
-                // TODO Is the order of these calls important?
+                // TODO: Is the order of these calls important?
                 self.dependencies.store.action(action)
                 handler(.success(()))
-            }
-            catch {
+            } catch {
                 print(error)
                 handler(.failure(error))
             }
@@ -52,9 +50,9 @@ class ConcreteUserService: UserService {
             handler(.failure(error))
         }
         
-        let _ = instance.request(using: requestOptions,
-                                 onSuccess: onSuccess,
-                                 onError: onError)
+        _ = instance.request(using: requestOptions,
+                             onSuccess: onSuccess,
+                             onError: onError)
     }
     
 }

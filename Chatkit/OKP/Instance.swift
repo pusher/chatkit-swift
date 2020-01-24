@@ -1,22 +1,16 @@
 import Foundation
 import PusherPlatform
 
-
-
-
 extension Instance {
     typealias OnOpening = () -> Void
     typealias OnOpen = () -> Void
     typealias OnResuming = () -> Void
-    typealias OnEvent = (_ eventId: String, _ headers: [String : String], _ data: Any) -> Void
-    typealias OnEnd = (_ statusCode: Int?, _ headers: [String : String]?, _ info: Any?) -> Void
+    typealias OnEvent = (_ eventId: String, _ headers: [String: String], _ data: Any) -> Void
+    typealias OnEnd = (_ statusCode: Int?, _ headers: [String: String]?, _ info: Any?) -> Void
     typealias OnError = (_ error: Error) -> Void
 }
 
-
-
 protocol Instance {
-    
     
 //    func makeResumableSubscription() -> PPResumableSubscription
     
@@ -32,7 +26,7 @@ protocol Instance {
     func subscribe(using requestOptions: PPRequestOptions, onOpening: (() -> Void)?, onOpen: (() -> Void)?, onEvent: ((String, [String : String], Any) -> Void)?, onEnd: ((Int?, [String : String]?, Any?) -> Void)?, onError: ((Error) -> Void)?) -> PPSubscription
 
     */
-    func subscribeWithResume(using requestOptions: PPRequestOptions, onOpening: (() -> Void)?, onOpen: (() -> Void)?, onResuming: (() -> Void)?, onEvent: ((String, [String : String], Any) -> Void)?, onEnd: ((Int?, [String : String]?, Any?) -> Void)?, onError: ((Error) -> Void)?) -> PPResumableSubscription
+    func subscribeWithResume(using requestOptions: PPRequestOptions, onOpening: (() -> Void)?, onOpen: (() -> Void)?, onResuming: (() -> Void)?, onEvent: ((String, [String: String], Any) -> Void)?, onEnd: ((Int?, [String: String]?, Any?) -> Void)?, onError: ((Error) -> Void)?) -> PPResumableSubscription
 
      /*
     func download(using requestOptions: PPRequestOptions, to destination: PPDownloadFileDestination?, onSuccess: ((URL) -> Void)?, onError: ((Error) -> Void)?, progressHandler: ((Int64, Int64) -> Void)?) -> PPDownload
@@ -58,7 +52,6 @@ extension PusherPlatform.Instance: Instance {
         return PPResumableSubscription(instance: self, requestOptions: requestOption)
     }
     
-
     func subscribeWithResume(with resumableSubscription: inout ResumableSubscription,
                              using requestOptions: PPRequestOptions,
                              onOpening: (() -> Void)?,

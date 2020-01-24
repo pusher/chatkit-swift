@@ -3,8 +3,7 @@ protocol HasSubscriptionResponder {
     var subscriptionResponder: SubscriptionResponder { get }
 }
 
-protocol SubscriptionResponder: SubscriptionDelegate {
-}
+protocol SubscriptionResponder: SubscriptionDelegate {}
 
 class ConcreteSubscriptionResponder: SubscriptionResponder {
     
@@ -22,13 +21,12 @@ class ConcreteSubscriptionResponder: SubscriptionResponder {
     
     func subscription(_ subscription: Subscription, didReceiveEventWithJsonData jsonData: Data) {
         
-        // TODO move parsing elsewhere?
+        // TODO: move parsing elsewhere?
         do {
             let subscriptionEvent = try self.jsonDecoder.decode(Wire.Event.Subscription.self, from: jsonData)
             let action = Action.subscriptionEvent(subscriptionEvent.data)
             self.dependencies.store.action(action)
-        }
-        catch {
+        } catch {
             // ???
             print(error)
             fatalError()
@@ -36,7 +34,7 @@ class ConcreteSubscriptionResponder: SubscriptionResponder {
     }
     
     func subscription(_ subscription: Subscription, didReceiveError: Error) {
-        // TODO
+        // TODO:
         fatalError()
     }
 }

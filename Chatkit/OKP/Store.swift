@@ -1,18 +1,16 @@
 
 
-
 enum Action {
     case subscriptionEvent(Wire.Event.EventType)
     case received(user: Wire.User)
     case fetching(userWithIdentifier: String)
 }
+
 extension Action: Equatable {}
 
-
-protocol StoreDelegate: class {
+protocol StoreDelegate: AnyObject {
     func store(_ store: Store, didUpdateState state: State)
 }
-
 
 protocol HasStore {
     var store: Store { get }
@@ -58,7 +56,7 @@ class ConcreteStore: Store {
             switch eventType {
                 
             case let .initialState(initialState):
-                // TODO move elsewhere
+                // TODO: move elsewhere
                 let currentUser = Internal.User(
                     identifier: initialState.currentUser.identifier,
                     name: initialState.currentUser.name
@@ -87,7 +85,7 @@ class ConcreteStore: Store {
             }
             
         case let .received(user: wireUser):
-            // TODO
+            // TODO:
             let internalUser = Internal.User(
                 identifier: wireUser.identifier,
                 name: wireUser.name
@@ -99,7 +97,7 @@ class ConcreteStore: Store {
             newState = existingState
             
         case let .fetching(userWithIdentifier):
-            // TODO
+            // TODO:
             print("unimplemented, fetching user \(userWithIdentifier)")
             fatalError()
             
