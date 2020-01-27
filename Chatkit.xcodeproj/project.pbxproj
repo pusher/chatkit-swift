@@ -17,9 +17,7 @@
 		222EA2AD23424A11004EE90F /* JoinedRoomsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EA2AC23424A11004EE90F /* JoinedRoomsProvider.swift */; };
 		222EA2AF23424A7D004EE90F /* AvailableRoomsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EA2AE23424A7D004EE90F /* AvailableRoomsProvider.swift */; };
 		22437C8D23D86ACF0013E4A8 /* TestTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22437C8C23D86ACF0013E4A8 /* TestTokenProvider.swift */; };
-		22437C9023D86ADC0013E4A8 /* InstanceLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22437C8F23D86ADC0013E4A8 /* InstanceLocator.swift */; };
 		22437C9223D86B040013E4A8 /* FakeTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22437C9123D86B030013E4A8 /* FakeTokenProvider.swift */; };
-		22437C9523D86B680013E4A8 /* InstanceLocatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22437C9423D86B680013E4A8 /* InstanceLocatorTests.swift */; };
 		22437C9A23D86B940013E4A8 /* TestTokenProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22437C9923D86B940013E4A8 /* TestTokenProviderTests.swift */; };
 		22437C9D23D893DB0013E4A8 /* token.json in Resources */ = {isa = PBXBuildFile; fileRef = 22437C9C23D893DB0013E4A8 /* token.json */; };
 		224B803D22F1E009003CB8DC /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229093D522F1DDB4003DDE2C /* PusherChatkit.framework */; };
@@ -171,9 +169,7 @@
 		222EA2AC23424A11004EE90F /* JoinedRoomsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinedRoomsProvider.swift; sourceTree = "<group>"; };
 		222EA2AE23424A7D004EE90F /* AvailableRoomsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvailableRoomsProvider.swift; sourceTree = "<group>"; };
 		22437C8C23D86ACF0013E4A8 /* TestTokenProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestTokenProvider.swift; sourceTree = "<group>"; };
-		22437C8F23D86ADC0013E4A8 /* InstanceLocator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstanceLocator.swift; sourceTree = "<group>"; };
 		22437C9123D86B030013E4A8 /* FakeTokenProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeTokenProvider.swift; sourceTree = "<group>"; };
-		22437C9423D86B680013E4A8 /* InstanceLocatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceLocatorTests.swift; sourceTree = "<group>"; };
 		22437C9923D86B940013E4A8 /* TestTokenProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTokenProviderTests.swift; sourceTree = "<group>"; };
 		22437C9C23D893DB0013E4A8 /* token.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = token.json; sourceTree = "<group>"; };
 		224B803822F1E009003CB8DC /* Unit Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -396,22 +392,6 @@
 			path = "Token Providers";
 			sourceTree = "<group>";
 		};
-		22437C8E23D86ADC0013E4A8 /* Instance Locator */ = {
-			isa = PBXGroup;
-			children = (
-				22437C8F23D86ADC0013E4A8 /* InstanceLocator.swift */,
-			);
-			path = "Instance Locator";
-			sourceTree = "<group>";
-		};
-		22437C9323D86B570013E4A8 /* Instance Locator */ = {
-			isa = PBXGroup;
-			children = (
-				22437C9423D86B680013E4A8 /* InstanceLocatorTests.swift */,
-			);
-			path = "Instance Locator";
-			sourceTree = "<group>";
-		};
 		22437C9723D86B750013E4A8 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
@@ -523,7 +503,6 @@
 			children = (
 				22749851232146C700D10C76 /* Client */,
 				228AD274232675C400AB280B /* Controller */,
-				22437C9323D86B570013E4A8 /* Instance Locator */,
 				73CF01C223AB8FE5006FB43E /* Model */,
 				22749850232146BE00D10C76 /* SDK Info */,
 				22749852232146D900D10C76 /* Services */,
@@ -691,7 +670,6 @@
 				22D2A2E823197E6A0095757C /* Connection Status */,
 				22EDCB7C231D2D4000419C75 /* Controller */,
 				22D2A2D923196FC60095757C /* Error Handling */,
-				22437C8E23D86ADC0013E4A8 /* Instance Locator */,
 				73CF01C123AB8EF3006FB43E /* Model */,
 				22D2A2CE231960820095757C /* SDK Info */,
 				22D2A2DE231977DE0095757C /* Services */,
@@ -1212,7 +1190,6 @@
 				22437C9A23D86B940013E4A8 /* TestTokenProviderTests.swift in Sources */,
 				2200BB97231EA5C200BF9545 /* TestLogger.swift in Sources */,
 				7396B2D823A78E08009F08FD /* XCTest+Assertions.swift in Sources */,
-				22437C9523D86B680013E4A8 /* InstanceLocatorTests.swift in Sources */,
 				73CF01BC23AB823F006FB43E /* Wire.ReadState+Decodable.Tests.swift in Sources */,
 				7335D27523D7330900E51909 /* CodableJSONCollections+ArrayEncodingTests.swift in Sources */,
 				73E7312823AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift in Sources */,
@@ -1300,7 +1277,6 @@
 				22D2A2E32319780F0095757C /* ServiceVersion.swift in Sources */,
 				73ABC07E23B0B5D100ECD162 /* Wire.Message.swift in Sources */,
 				22D2A2D5231963C70095757C /* Bundle+Extensions.swift in Sources */,
-				22437C9023D86ADC0013E4A8 /* InstanceLocator.swift in Sources */,
 				224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */,
 				734D6A3823AA91FB00105479 /* Wire.User.swift in Sources */,
 				73CF01BE23AB8AF9006FB43E /* Wire.Membership.swift in Sources */,

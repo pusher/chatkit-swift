@@ -31,7 +31,10 @@ public class TestTokenProvider: TokenProvider {
     ///     be signed for this user identifier without any authentication being applied.
     ///     - logger: An optional logger used by the token provider.
     public init(instanceLocator: String, userIdentifier: String, logger: PPLogger? = nil) throws {
-        let locator = try InstanceLocator(instanceLocator)
+        guard let locator = InstanceLocator(string: instanceLocator) else {
+            throw NetworkingError.invalidInstanceLocator
+        }
+        
         let url = try Self.url(for: locator)
         let queryItem = URLQueryItem(name: Self.userIdentifierQueryItemName, value: userIdentifier)
         self.nestedTokenProvider = DefaultTokenProvider(url: url, queryItems: [queryItem], logger: logger)
