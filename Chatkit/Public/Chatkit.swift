@@ -40,6 +40,10 @@ public class Chatkit {
     ///
     /// - Returns: An instance of `Chatkit` or throws an error when the initialization failed.
     public init(instanceLocator: String, tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
+        guard let _ = InstanceLocator(string: instanceLocator) else {
+            throw NetworkingError.invalidInstanceLocator
+        }
+        
         self.logger = logger
         self.connectionStatus = .disconnected
     }
