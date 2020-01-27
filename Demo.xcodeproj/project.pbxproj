@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		222EA2B223425823004EE90F /* TestTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EA2B123425823004EE90F /* TestTokenProvider.swift */; };
-		223D2C20238EBE8E007B0BC6 /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223D2C1F238EBE8E007B0BC6 /* DateFormatter+Extensions.swift */; };
 		223D2C1C238EA5ED007B0BC6 /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229656EE232FC8BB0016DA7C /* PusherChatkit.framework */; };
 		223D2C1D238EA5ED007B0BC6 /* PusherChatkit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 229656EE232FC8BB0016DA7C /* PusherChatkit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		223D2C20238EBE8E007B0BC6 /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223D2C1F238EBE8E007B0BC6 /* DateFormatter+Extensions.swift */; };
+		2248D75923D9A35A00643B3F /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2248D75823D9A35A00643B3F /* LoginViewController.swift */; };
 		226A15E2236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226A15E1236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift */; };
 		227843B4237AC6DF00EB9B26 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227843B3237AC6DF00EB9B26 /* MessageTableViewCell.swift */; };
 		227843B7237AD0D200EB9B26 /* BubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227843B6237AD0D200EB9B26 /* BubbleView.swift */; };
@@ -24,6 +24,9 @@
 		229656FE232FD2C40016DA7C /* TextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656FD232FD2C40016DA7C /* TextTableViewCell.swift */; };
 		22BFC030237D7AEC00B55C5E /* IndicatorLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFC02F237D7AEC00B55C5E /* IndicatorLabel.swift */; };
 		22BFC032237D852900B55C5E /* RoomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFC031237D852900B55C5E /* RoomTableViewCell.swift */; };
+		22BFE7FD23DF24090073E6D4 /* Environment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7FC23DF24090073E6D4 /* Environment.framework */; };
+		22BFE7FE23DF24090073E6D4 /* Environment.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7FC23DF24090073E6D4 /* Environment.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22BFE80023DF25640073E6D4 /* Environment+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFE7FF23DF25640073E6D4 /* Environment+Extensions.swift */; };
 		22FDE9C8237B2127005F13CA /* UIBezierPath+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +37,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				22BFE7FE23DF24090073E6D4 /* Environment.framework in Embed Frameworks */,
 				223D2C1D238EA5ED007B0BC6 /* PusherChatkit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -42,8 +46,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		222EA2B123425823004EE90F /* TestTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTokenProvider.swift; sourceTree = "<group>"; };
 		223D2C1F238EBE8E007B0BC6 /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
+		2248D75823D9A35A00643B3F /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		226A15E1236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicatorTableViewCell.swift; sourceTree = "<group>"; };
 		227843B3237AC6DF00EB9B26 /* MessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTableViewCell.swift; sourceTree = "<group>"; };
 		227843B6237AD0D200EB9B26 /* BubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleView.swift; sourceTree = "<group>"; };
@@ -60,6 +64,8 @@
 		229656FD232FD2C40016DA7C /* TextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTableViewCell.swift; sourceTree = "<group>"; };
 		22BFC02F237D7AEC00B55C5E /* IndicatorLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorLabel.swift; sourceTree = "<group>"; };
 		22BFC031237D852900B55C5E /* RoomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTableViewCell.swift; sourceTree = "<group>"; };
+		22BFE7FC23DF24090073E6D4 /* Environment.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Environment.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		22BFE7FF23DF25640073E6D4 /* Environment+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Environment+Extensions.swift"; sourceTree = "<group>"; };
 		22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBezierPath+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,20 +76,13 @@
 			files = (
 				223D2C1C238EA5ED007B0BC6 /* PusherChatkit.framework in Frameworks */,
 				229656F8232FCAE90016DA7C /* PusherPlatform.framework in Frameworks */,
+				22BFE7FD23DF24090073E6D4 /* Environment.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		222EA2B023425810004EE90F /* Token Provider */ = {
-			isa = PBXGroup;
-			children = (
-				222EA2B123425823004EE90F /* TestTokenProvider.swift */,
-			);
-			path = "Token Provider";
-			sourceTree = "<group>";
-		};
 		227843B5237AD0C600EB9B26 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -97,8 +96,8 @@
 			isa = PBXGroup;
 			children = (
 				229656D4232FC8880016DA7C /* Demo */,
-				229656D3232FC8880016DA7C /* Products */,
 				229656ED232FC8BB0016DA7C /* Frameworks */,
+				229656D3232FC8880016DA7C /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -118,7 +117,6 @@
 				229656F2232FC8CC0016DA7C /* Controllers */,
 				22FDE9C6237B210E005F13CA /* Extensions */,
 				229656F1232FC8C90016DA7C /* Supporting Files */,
-				222EA2B023425810004EE90F /* Token Provider */,
 				227843B5237AD0C600EB9B26 /* Views */,
 			);
 			path = Demo;
@@ -127,6 +125,7 @@
 		229656ED232FC8BB0016DA7C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				22BFE7FC23DF24090073E6D4 /* Environment.framework */,
 				229656EE232FC8BB0016DA7C /* PusherChatkit.framework */,
 				229656F7232FCAE90016DA7C /* PusherPlatform.framework */,
 			);
@@ -155,6 +154,7 @@
 		229656F2232FC8CC0016DA7C /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				2248D75823D9A35A00643B3F /* LoginViewController.swift */,
 				229656D7232FC8880016DA7C /* MessageViewController.swift */,
 				228865CE233BC5940044BCD8 /* RoomListViewController.swift */,
 			);
@@ -175,8 +175,9 @@
 		22FDE9C6237B210E005F13CA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */,
 				223D2C1F238EBE8E007B0BC6 /* DateFormatter+Extensions.swift */,
+				22BFE7FF23DF25640073E6D4 /* Environment+Extensions.swift */,
+				22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -277,16 +278,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				22FDE9C8237B2127005F13CA /* UIBezierPath+Extensions.swift in Sources */,
+				2248D75923D9A35A00643B3F /* LoginViewController.swift in Sources */,
 				227843B7237AD0D200EB9B26 /* BubbleView.swift in Sources */,
 				223D2C20238EBE8E007B0BC6 /* DateFormatter+Extensions.swift in Sources */,
 				22BFC030237D7AEC00B55C5E /* IndicatorLabel.swift in Sources */,
 				227843B4237AC6DF00EB9B26 /* MessageTableViewCell.swift in Sources */,
 				229656D8232FC8880016DA7C /* MessageViewController.swift in Sources */,
+				22BFE80023DF25640073E6D4 /* Environment+Extensions.swift in Sources */,
 				229656D6232FC8880016DA7C /* AppDelegate.swift in Sources */,
 				226A15E2236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift in Sources */,
 				22BFC032237D852900B55C5E /* RoomTableViewCell.swift in Sources */,
 				229656FE232FD2C40016DA7C /* TextTableViewCell.swift in Sources */,
-				222EA2B223425823004EE90F /* TestTokenProvider.swift in Sources */,
 				228865CF233BC5940044BCD8 /* RoomListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -444,7 +446,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pusher.demo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pusher.chatkit.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -466,7 +468,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.pusher.demo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pusher.chatkit.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

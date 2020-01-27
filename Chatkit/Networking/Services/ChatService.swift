@@ -31,7 +31,7 @@ class ChatService: Service {
     
     // MARK: - Initializers
     
-    required init(instanceLocator: String, client: PPBaseClient, tokenProvider: PPTokenProvider, logger: PPLogger) {
+    required init(instanceLocator: String, client: PPBaseClient, tokenProvider: TokenProvider, logger: PPLogger) {
         self.name = .chat
         self.version = .version7
         self.logger = logger

@@ -12,6 +12,7 @@ internal extension XCTest {
         // MARK: - Properties
         
         static let testInstanceLocator = "test:instance:locator"
+        static let testUserIdentifier = "testUserIdentifier"
         
         // MARK: - Paths
         
@@ -36,10 +37,8 @@ internal extension XCTest {
     // MARK: - Internal methods
     
     @discardableResult func stubSubscription(of service: ServiceName, version: ServiceVersion, instanceLocator: String, path: Networking.Path, with jsonFilename: String) -> Mockingjay.Stub? {
-        let bundle = Bundle(for: type(of: self))
-        
         guard let uri = uri(of: service, version: version, instanceLocator: instanceLocator, path: path),
-            let stubURL = bundle.url(forResource: jsonFilename, withExtension: "json"),
+            let stubURL = Bundle(for: BundleLocator.self).url(forResource: jsonFilename, withExtension: "json"),
             let json = try? String(contentsOf: stubURL).replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "\t", with: ""),
             let data = "[1, \"\", {}, \(json)]\n".data(using: .utf8) else {
                 return nil
@@ -71,3 +70,18 @@ internal extension XCTest {
     }
     
 }
+
+func jsonFile(named name: String) -> (URLRequest) -> Mockingjay.Response {
+    let bundle = Bundle(for: BundleLocator.self)
+    
+    guard let url = bundle.url(forResource: name, withExtension: "json"),
+        let data = try? Data(contentsOf: url) else {
+            fatalError("Failed to locate JSON fixture.")
+    }
+    
+    return jsonData(data)
+}
+
+// MARK: - Bundle locator
+
+private class BundleLocator {}

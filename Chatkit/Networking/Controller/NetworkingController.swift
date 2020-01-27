@@ -6,7 +6,7 @@ class NetworkingController {
     // MARK: - Properties
     
     let instanceLocator: String
-    let tokenProvider: PPTokenProvider
+    let tokenProvider: TokenProvider
     let logger: PPLogger
     
     let chatService: ChatService
@@ -21,7 +21,7 @@ class NetworkingController {
     
     // MARK: - Initializers
     
-    init(instanceLocator: String, tokenProvider: PPTokenProvider, logger: PPLogger) throws {
+    init(instanceLocator: String, tokenProvider: TokenProvider, logger: PPLogger) throws {
         self.instanceLocator = instanceLocator
         self.tokenProvider = tokenProvider
         self.logger = logger
