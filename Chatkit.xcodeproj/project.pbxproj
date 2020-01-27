@@ -606,7 +606,7 @@
 			path = Variables;
 			sourceTree = "<group>";
 		};
-		22CEBB5322FC6F2B005CB021 /* Network */ = {
+		22D2A2CD231960770095757C /* Network */ = {
 			isa = PBXGroup;
 			children = (
 				22D2A2D623196B940095757C /* Client */,
