@@ -28,8 +28,3 @@ public enum PresenceState {
     }
     
 }
-
-// MARK: - Model
-
-extension PresenceState: Model {
-}

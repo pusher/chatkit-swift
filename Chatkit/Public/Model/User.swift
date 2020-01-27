@@ -79,8 +79,3 @@ extension User: Equatable {
     }
     
 }
-
-// MARK: - Model
-
-extension User: Model {
-}

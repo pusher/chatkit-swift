@@ -114,8 +114,3 @@ extension MessagePart: Equatable {
     }
     
 }
-
-// MARK: - Model
-
-extension MessagePart: Model {
-}

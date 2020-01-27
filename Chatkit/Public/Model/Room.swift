@@ -93,8 +93,3 @@ extension Room: Equatable {
     }
     
 }
-
-// MARK: - Model
-
-extension Room: Model {
-}

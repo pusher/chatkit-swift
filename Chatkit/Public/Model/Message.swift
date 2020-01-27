@@ -85,8 +85,3 @@ extension Message: Equatable {
     }
     
 }
-
-// MARK: - Model
-
-extension Message: Model {
-}
