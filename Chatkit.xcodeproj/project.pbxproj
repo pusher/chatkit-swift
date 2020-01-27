@@ -380,14 +380,6 @@
 			path = "File Lists";
 			sourceTree = "<group>";
 		};
-		22437C8B23D86ACF0013E4A8 /* Token Providers */ = {
-			isa = PBXGroup;
-			children = (
-				22437C8C23D86ACF0013E4A8 /* TestTokenProvider.swift */,
-			);
-			path = "Token Providers";
-			sourceTree = "<group>";
-		};
 		22437C8E23D86ADC0013E4A8 /* Instance Locator */ = {
 			isa = PBXGroup;
 			children = (
@@ -472,12 +464,18 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		224B805722F2DAD3003CB8DC /* Chatkit */ = {
+		224B805722F2DAD3003CB8DC /* Public */ = {
 			isa = PBXGroup;
 			children = (
 				224B805822F2DADC003CB8DC /* Chatkit.swift */,
+				22D2A2E923197E7F0095757C /* ConnectionStatus.swift */,
+				22437C8C23D86ACF0013E4A8 /* TestTokenProvider.swift */,
+				22CEBB5422FC6F37005CB021 /* Types.swift */,
+				22D537D22302D24200A92341 /* Model */,
+				22D537C82302BCD600A92341 /* Providers */,
+				22FD93BE2361DC3200AB841F /* ViewModels */,
 			);
-			path = Chatkit;
+			path = Public;
 			sourceTree = "<group>";
 		};
 		224B805A22F2E0B1003CB8DC /* Tests */ = {
@@ -626,32 +624,19 @@
 		229093D722F1DDB4003DDE2C /* Chatkit */ = {
 			isa = PBXGroup;
 			children = (
-				ED2919D7239A73150095B344 /* Authentication */,
-				224B805722F2DAD3003CB8DC /* Chatkit */,
-				22D537C82302BCD600A92341 /* Data Providers */,
-				22D537D22302D24200A92341 /* Model */,
-				22D2A2CD231960770095757C /* Networking */,
-				224B805222F1E154003CB8DC /* Supporting Files */,
-				22CEBB5322FC6F2B005CB021 /* Types */,
+				224B805722F2DAD3003CB8DC /* Public */,
+				730E457023DEDE6000A3AF94 /* Redux */,
+				22D2A2CD231960770095757C /* Network */,
 				22D2A2D3231963BC0095757C /* Utilities */,
-				22FD93BE2361DC3200AB841F /* View Models */,
+				224B805222F1E154003CB8DC /* Supporting Files */,
 			);
 			path = Chatkit;
 			sourceTree = "<group>";
 		};
-		22CEBB5322FC6F2B005CB021 /* Types */ = {
-			isa = PBXGroup;
-			children = (
-				22CEBB5422FC6F37005CB021 /* Types.swift */,
-			);
-			path = Types;
-			sourceTree = "<group>";
-		};
-		22D2A2CD231960770095757C /* Networking */ = {
+		22D2A2CD231960770095757C /* Network */ = {
 			isa = PBXGroup;
 			children = (
 				22D2A2D623196B940095757C /* Client */,
-				22D2A2E823197E6A0095757C /* Connection Status */,
 				22EDCB7C231D2D4000419C75 /* Controller */,
 				22D2A2D923196FC60095757C /* Error Handling */,
 				22437C8E23D86ADC0013E4A8 /* Instance Locator */,
@@ -659,7 +644,7 @@
 				22D2A2CE231960820095757C /* SDK Info */,
 				22D2A2DE231977DE0095757C /* Services */,
 			);
-			path = Networking;
+			path = Network;
 			sourceTree = "<group>";
 		};
 		22D2A2CE231960820095757C /* SDK Info */ = {
@@ -719,14 +704,6 @@
 			path = Types;
 			sourceTree = "<group>";
 		};
-		22D2A2E823197E6A0095757C /* Connection Status */ = {
-			isa = PBXGroup;
-			children = (
-				22D2A2E923197E7F0095757C /* ConnectionStatus.swift */,
-			);
-			path = "Connection Status";
-			sourceTree = "<group>";
-		};
 		22D2A2ED2319BA450095757C /* Types */ = {
 			isa = PBXGroup;
 			children = (
@@ -735,7 +712,7 @@
 			path = Types;
 			sourceTree = "<group>";
 		};
-		22D537C82302BCD600A92341 /* Data Providers */ = {
+		22D537C82302BCD600A92341 /* Providers */ = {
 			isa = PBXGroup;
 			children = (
 				22D2A2ED2319BA450095757C /* Types */,
@@ -746,7 +723,7 @@
 				229018302358AE99008FAB07 /* TypingUsersProvider.swift */,
 				22FC112C233E50FB0013A9D7 /* UsersProvider.swift */,
 			);
-			path = "Data Providers";
+			path = Providers;
 			sourceTree = "<group>";
 		};
 		22D537D22302D24200A92341 /* Model */ = {
@@ -778,14 +755,14 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		22FD93BE2361DC3200AB841F /* View Models */ = {
+		22FD93BE2361DC3200AB841F /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
 				22BECDFB2366F24D00FAB7DC /* JoinedRoomsViewModel.swift */,
 				227177FD236894AA00B89376 /* MessagesViewModel.swift */,
 				22FD93BF2361DD8A00AB841F /* TypingUsersViewModel.swift */,
 			);
-			path = "View Models";
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		7301BC5223B0E65200F162C7 /* RoomSubscription */ = {
@@ -878,6 +855,13 @@
 			path = PresenceSubscription;
 			sourceTree = "<group>";
 		};
+		730E457023DEDE6000A3AF94 /* Redux */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Redux;
+			sourceTree = "<group>";
+		};
 		7396B2DF23A7F76F009F08FD /* CodableJSONCollections */ = {
 			isa = PBXGroup;
 			children = (
@@ -921,14 +905,6 @@
 				734D6A3923AA95DC00105479 /* Wire.User+Decodable.Tests.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		ED2919D7239A73150095B344 /* Authentication */ = {
-			isa = PBXGroup;
-			children = (
-				22437C8B23D86ACF0013E4A8 /* Token Providers */,
-			);
-			path = Authentication;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
