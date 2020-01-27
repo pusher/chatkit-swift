@@ -1,5 +1,6 @@
 import XCTest
 import PusherPlatform
+import Environment
 @testable import PusherChatkit
 
 class TestTokenProviderTests: XCTestCase {
