@@ -90,7 +90,7 @@ To add PusherChatkit as a dependency of your own package use the follwing code:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/pusher/chatkit-swift.git", from: "2.0.0")
+    .package(url: "https://github.com/pusher/chatkit-swift.git", from: "2.0")
 ]
 ```
 
