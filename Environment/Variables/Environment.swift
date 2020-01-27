@@ -1,10 +1,10 @@
 import Foundation
 
-struct Environment {
+public struct Environment {
     
     // MARK: - Properties
     
-    static let instanceLocator: String = Environment.variable(named: "INSTANCE_LOCATOR")
+    public static let instanceLocator: String = Environment.variable(named: "INSTANCE_LOCATOR")
     
 }
 
