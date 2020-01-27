@@ -9,4 +9,6 @@ extension Wire.Event {
     
 }
 
+extension Wire.Event.RoomUpdated: Equatable {}
+
 extension Wire.Event.RoomUpdated: Decodable {}

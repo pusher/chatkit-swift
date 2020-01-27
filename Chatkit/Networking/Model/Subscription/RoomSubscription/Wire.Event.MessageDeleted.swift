@@ -9,6 +9,8 @@ extension Wire.Event {
     
 }
 
+extension Wire.Event.MessageDeleted: Equatable {}
+
 extension Wire.Event.MessageDeleted: Decodable {
     
     private enum CodingKeys: String, CodingKey {

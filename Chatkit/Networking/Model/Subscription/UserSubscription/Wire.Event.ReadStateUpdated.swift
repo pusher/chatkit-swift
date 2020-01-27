@@ -9,6 +9,8 @@ extension Wire.Event {
     
 }
 
+extension Wire.Event.ReadStateUpdated: Equatable {}
+
 extension Wire.Event.ReadStateUpdated: Decodable {
     
     private enum CodingKeys: String, CodingKey {

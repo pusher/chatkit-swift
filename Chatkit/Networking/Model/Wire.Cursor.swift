@@ -12,6 +12,8 @@ extension Wire {
     
 }
 
+extension Wire.Cursor: Equatable {}
+
 extension Wire.Cursor: Decodable {
     
     private enum CodingKeys: String, CodingKey {
@@ -26,4 +28,3 @@ extension Wire.Cursor: Decodable {
         }
     }
 }
-
