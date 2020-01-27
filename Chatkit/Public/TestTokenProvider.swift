@@ -4,7 +4,7 @@ import PusherPlatform
 /// TestTokenProvider retrieves tokens from the Chatkit service's Test Token Provider, which
 /// is for development use only, and must be enabled for your instance in the Chatkit Dashboard.
 ///
-/// The test token provider will always sign a token for the requested userID, without applying any
+/// The test token provider will always sign a token for the requested userIdentifier, without applying any
 /// form of authentication.
 public class TestTokenProvider: TokenProvider {
     
@@ -27,11 +27,14 @@ public class TestTokenProvider: TokenProvider {
     /// - Parameters:
     ///     - instanceLocator: The locator for your instance, the same value from the Dashboard
     ///     which you use to construct the Chatkit object.
-    ///     - userID: The userID for whom to fetch tokens. A token will always be signed for this userID
-    ///     without any authentication being applied.
+    ///     - userIdentifier: The user identifier for whom to fetch tokens. A token will always
+    ///     be signed for this user identifier without any authentication being applied.
     ///     - logger: An optional logger used by the token provider.
     public init(instanceLocator: String, userIdentifier: String, logger: PPLogger? = nil) throws {
-        let locator = try InstanceLocator(instanceLocator)
+        guard let locator = InstanceLocator(string: instanceLocator) else {
+            throw NetworkingError.invalidInstanceLocator
+        }
+        
         let url = try Self.url(for: locator)
         let queryItem = URLQueryItem(name: Self.userIdentifierQueryItemName, value: userIdentifier)
         self.nestedTokenProvider = DefaultTokenProvider(url: url, queryItems: [queryItem], logger: logger)
