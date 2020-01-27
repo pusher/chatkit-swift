@@ -40,7 +40,7 @@ class TestTokenProviderTests: XCTestCase {
         }
         
         XCTAssertTrue(token.token.count > 0)
-        XCTAssertEqual(token.expiryDate.timeIntervalSinceNow, 86400, accuracy: 0.001)
+        XCTAssertEqual(token.expiryDate.timeIntervalSinceNow, 86400, accuracy: 0.01)
     }
     
 }
