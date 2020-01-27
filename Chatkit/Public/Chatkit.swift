@@ -27,8 +27,6 @@ public class Chatkit {
     /// The object that is notified when the status of the connection to Chatkit web service changed.
     public weak var delegate: ChatkitDelegate?
     
-    private let networkingController: NetworkingController
-    
     // MARK: - Initializers
     
     /// Creates and returns an instance of `Chatkit` entry point.
@@ -44,8 +42,6 @@ public class Chatkit {
     public init(instanceLocator: String, tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
         self.logger = logger
         self.connectionStatus = .disconnected
-        
-        self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, logger: self.logger)
     }
     
     // MARK: - Connecting
