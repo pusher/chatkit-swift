@@ -1,4 +1,5 @@
 import XCTest
+@testable import Tests_Utilities
 @testable import PusherChatkit
 
 class NetworkingControllerTests: XCTestCase {
