@@ -1149,7 +1149,7 @@
 					};
 					229093D422F1DDB4003DDE2C = {
 						CreatedOnToolsVersion = 10.3;
-						LastSwiftMigration = 1030;
+						LastSwiftMigration = 1130;
 					};
 					22BFE7E923DF205E0073E6D4 = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -1157,6 +1157,7 @@
 					};
 					73E585BE23E087500047C6FA = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1130;
 					};
 				};
 			};
