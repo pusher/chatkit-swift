@@ -965,9 +965,9 @@
 		730E44DA23DB47A000A3AF94 /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				730E44E123DB486C00A3AF94 /* StoreBroadcaster.swift */,
-				730E44DD23DB482500A3AF94 /* Store.swift */,
 				730E44DF23DB482C00A3AF94 /* State.swift */,
+				730E44DD23DB482500A3AF94 /* Store.swift */,
+				730E44E123DB486C00A3AF94 /* StoreBroadcaster.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -995,9 +995,9 @@
 		73A9391923E0A78E0025AF90 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				222910D523D8A56100A3ACDF /* InputStream+Extensions.swift */,
 				734D6A4523AB78A400105479 /* Array+Extensions.swift */,
 				7389802C23C8DD1B0029E09F /* Data+Extensions.swift */,
+				222910D523D8A56100A3ACDF /* InputStream+Extensions.swift */,
 				73B00EAD23A2822F0062C718 /* String+Extensions.swift */,
 				7396B2D723A78E08009F08FD /* XCTest+Assertions.swift */,
 			);
@@ -1079,13 +1079,13 @@
 			isa = PBXGroup;
 			children = (
 				73E585D523E08E130047C6FA /* Types */,
-				2200BB96231EA5C200BF9545 /* TestLogger.swift */,
-				730E453A23DB4DD800A3AF94 /* StoreBroadcaster.swift */,
-				730E453C23DB4DD800A3AF94 /* StoreDelegate.swift */,
 				730E453D23DB4DD800A3AF94 /* Dependencies.swift */,
-				730E453E23DB4DD800A3AF94 /* StoreListener.swift */,
 				730E454023DB4DD800A3AF94 /* JoinedRoomsProviderDelegate.swift */,
 				730E454323DB4DD800A3AF94 /* Store.swift */,
+				730E453A23DB4DD800A3AF94 /* StoreBroadcaster.swift */,
+				730E453C23DB4DD800A3AF94 /* StoreDelegate.swift */,
+				730E453E23DB4DD800A3AF94 /* StoreListener.swift */,
+				2200BB96231EA5C200BF9545 /* TestLogger.swift */,
 				730E454623DB4DD800A3AF94 /* TokenProvider.swift */,
 			);
 			path = Doubles;
