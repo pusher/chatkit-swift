@@ -71,6 +71,29 @@ github "pusher/chatkit-swift"
 
 Run `carthage update` to build the framework and drag the built `PusherChatkit.framework`, `PusherPlatform.framework` and `PushNotifications.framework` into your Xcode project.
 
+### Swift Package Manager
+
+[Swift Package Manager](https://swift.org/package-manager/)  is a tool for managing the distribution of Swift code. It’s integrated with the Swift build system to automate the process of downloading, compiling, and linking dependencies.
+
+
+####  Manual Xcode integration
+
+To integrate PusherChatkit into your Xcode project using Swift Package Manager, in your Xcode choose `File` > `Swift Packages` > `Add Package Dependency...`  and provide the following URL:
+
+```
+https://github.com/pusher/chatkit-swift
+```
+
+####  Swift Package Manager dependency
+
+To add PusherChatkit as a dependency of your own package use the follwing code:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/pusher/chatkit-swift.git", from: "2.0")
+]
+```
+
 ## Deprecated versions
 
  Versions of the library below

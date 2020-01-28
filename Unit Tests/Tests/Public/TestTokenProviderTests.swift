@@ -93,7 +93,7 @@ class TestTokenProviderTests: XCTestCase {
         }
         
         XCTAssertEqual(token.token, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk2MDQxNDcsImlhdCI6MTU3OTUxNzc0NywiaW5zdGFuY2UiOiI5NzU1MTZmMS1mOWUzLTRlNTUtYTQ0ZC1lNDA3OTIzMmY5NDciLCJpc3MiOiJhcGlfa2V5cy80ZTQyOWNjNS0wM2YzLTQwNzctYmY4ZC04YTcxYWMwYWM2ODgiLCJzdWIiOiJib2IifQ.5uyq_dBsGfdyqnDVDhm7d0R9w6HGApllBLVhwYHCNBI")
-        XCTAssertEqual(token.expiryDate.timeIntervalSinceNow, 86400, accuracy: 0.001)
+        XCTAssertEqual(token.expiryDate.timeIntervalSinceNow, 86400, accuracy: 0.01)
     }
     
     func testShouldReportAnErrorWhenTokenRetrievalFailed() {

@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "PushNotifications",
+        "repositoryURL": "https://github.com/pusher/push-notifications-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "b2c163bab17a509edadd9b02449101a097fa4328",
+          "version": "3.0.3"
+        }
+      },
+      {
+        "package": "PusherPlatform",
+        "repositoryURL": "https://github.com/pusher/pusher-platform-swift.git",
+        "state": {
+          "branch": "v1",
+          "revision": "361d44d2750b44c76b645892df7261b1dbd9be00",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
