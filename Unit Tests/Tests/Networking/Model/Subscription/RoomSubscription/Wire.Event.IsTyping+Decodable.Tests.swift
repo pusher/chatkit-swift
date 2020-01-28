@@ -1,4 +1,5 @@
 import XCTest
+@testable import TestUtilities
 @testable import PusherChatkit
 
 class WireEventIsTypingDecodableTests: XCTestCase {
