@@ -5,7 +5,23 @@ internal extension String {
     // MARK: - Internal methods
     
     func camelcased(separator: Character) -> String {
-        return self.lowercased().split(separator: separator).enumerated().map { $0.offset > 0 ? $0.element.capitalized : String($0.element) }.joined()
+        return self.split(separator: separator)
+            .map { return $0.lowercased().capitalizingFirstLetter() }
+            .joined()
+    }
+    
+    func hungarianCased(separator: Character) -> String {
+        return self.camelcased(separator: separator).lowercasingFirstLetter()
+    }
+    
+    // MARK: - Private methods
+    
+    private func capitalizingFirstLetter() -> String {
+        return prefix(1).uppercased() + dropFirst()
+    }
+    
+    private func lowercasingFirstLetter() -> String {
+        return prefix(1).lowercased() + dropFirst()
     }
     
 }
