@@ -32,7 +32,7 @@ class DependencyFactory {
         let key = self.key(type)
         
         guard let dependencyState = dependencyStates[key] as? DependencyState<T> else {
-            fatalError("Attempt to access unregistered `\(type)` dependency")
+            preconditionFailure("Attempt to access unregistered `\(type)` dependency")
         }
         
         switch dependencyState {

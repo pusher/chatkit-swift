@@ -82,7 +82,7 @@ class ConcreteStore: Store {
                 )
                 
             default:
-                fatalError()
+                preconditionFailure()
             }
             
         case let .received(user: wireUser):
@@ -95,14 +95,14 @@ class ConcreteStore: Store {
             newState = existingState
             
             print("unimplemented, received user \(internalUser)")
-            fatalError()
+            preconditionFailure()
             
         case let .fetching(userWithIdentifier):
             // TODO:
             newState = existingState
             
             print("unimplemented, fetching user \(userWithIdentifier)")
-            fatalError()
+            preconditionFailure()
         }
         
         self.state = newState
