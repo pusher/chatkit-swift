@@ -1,3 +1,4 @@
+import TestUtilities
 import XCTest
 @testable import PusherChatkit
 
