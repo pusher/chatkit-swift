@@ -4,19 +4,38 @@ import XCTest
 
 class ConcreteStoreTests: XCTestCase {
     
-    func test_action_actionThatDoesChangeInternalState_delegateTriggered() {
+    func test_init_stateStartsAsEmpty() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
+        let dependencies = DependenciesDoubles()
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertEqual(sut.state, State.emptyState)
+    }
+    
+    func test_action_withActionThatDoesChangeInternalState_stateIsUpdated() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
         
         let dependencies = DependenciesDoubles()
         
-        let sut = ConcreteStore(dependencies: dependencies, delegate: stubStoreDelegate)
+        let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
         
-        XCTAssertEqual(stubStoreDelegate.didUpdateState_callCount, 0)
+        XCTAssertEqual(sut.state, State.emptyState)
         
         /******************/
         /*----- WHEN -----*/
@@ -55,23 +74,28 @@ class ConcreteStoreTests: XCTestCase {
             joinedRooms: []
         )
         
-        XCTAssertEqual(stubStoreDelegate.didUpdateState_callCount, 1)
-        XCTAssertEqual(stubStoreDelegate.didUpdateState_stateLastReceived, expectedState)
+        XCTAssertEqual(sut.state, expectedState)
     }
     
-    func test_action_actionThatDoesNotChangeInternalState_delegateNotTriggered() {
+    func test_action_withActionThatDoesChangeInternalState_delegateTriggered() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 2)
+        let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles()
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: stubStoreDelegate)
         
-        let initialStateAction = Action.subscriptionEvent(
+        XCTAssertEqual(stubStoreDelegate.didUpdateState_actualCallCount, 0)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let action = Action.subscriptionEvent(
             Wire.Event.EventType.initialState(
                 event: Wire.Event.InitialState(
                     currentUser: Wire.User(
@@ -90,9 +114,35 @@ class ConcreteStoreTests: XCTestCase {
             )
         )
         
-        sut.action(initialStateAction)
+        sut.action(action)
         
-        XCTAssertEqual(stubStoreDelegate.didUpdateState_callCount, 1)
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        let expectedState = State(
+            currentUser: Internal.User(
+                identifier: "alice",
+                name: "Alice A"
+            ),
+            joinedRooms: []
+        )
+        
+        XCTAssertEqual(stubStoreDelegate.didUpdateState_actualCallCount, 1)
+        XCTAssertEqual(stubStoreDelegate.didUpdateState_stateLastReceived, expectedState)
+    }
+    
+    func test_action_withActionThatDoesNotChangeInternalState_stateIsUnchanged() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let dependencies = DependenciesDoubles()
+        
+        let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
+        
+        XCTAssertEqual(sut.state, State.emptyState)
         
         /******************/
         /*----- WHEN -----*/
@@ -112,15 +162,42 @@ class ConcreteStoreTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState = State(
-            currentUser: Internal.User(
-                identifier: "alice",
-                name: "Alice A"
-            ),
-            joinedRooms: []
+        XCTAssertEqual(sut.state, State.emptyState)
+    }
+    
+    func test_action_withActionThatDoesNotChangeInternalState_delegateNotTriggered() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 2)
+        
+        let dependencies = DependenciesDoubles()
+        
+        let sut = ConcreteStore(dependencies: dependencies, delegate: stubStoreDelegate)
+        
+        XCTAssertEqual(stubStoreDelegate.didUpdateState_actualCallCount, 0)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let action = Action.subscriptionEvent(
+            Wire.Event.EventType.removedFromRoom(
+                event: Wire.Event.RemovedFromRoom(
+                    roomIdentifier: "not-a-known-room"
+                )
+            )
         )
         
-        XCTAssertEqual(stubStoreDelegate.didUpdateState_stateLastReceived, expectedState)
-        XCTAssertEqual(stubStoreDelegate.didUpdateState_callCount, 1) // <--- Call count has NOT increased!
+        sut.action(action)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertEqual(stubStoreDelegate.didUpdateState_stateLastReceived, nil)
+        XCTAssertEqual(stubStoreDelegate.didUpdateState_actualCallCount, 0) // <--- Call count has NOT increased!
     }
 }

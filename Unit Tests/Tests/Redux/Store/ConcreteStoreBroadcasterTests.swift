@@ -20,20 +20,146 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         joinedRooms: []
     )
     
-    func test_didUpdateState_listenerRegistered_forwardsToListener() {
+    func test_register_withListenerThatIsNotCurrentlyRegistered_returnsStateFromStore() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
+        let stubStore = StubStore(state_toReturn: stateA)
+        let stubStoreListener = StubStoreListener()
+        let dependencies = DependenciesDoubles(store: stubStore)
         
-        let sut = ConcreteStoreBroadcaster(dependencies: DependenciesDoubles())
+        let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
+
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let initialState = sut.register(stubStoreListener)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertEqual(initialState, stateA)
+        XCTAssertEqual(stubStore.state_actualCallCount, 1)
+        XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
+    }
+    
+    func test_register_withListenerThatIsCurrentlyRegistered_returnsStateFromStore() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let stubStore = StubStore(state_toReturn: stateA)
+        let stubStoreListener = StubStoreListener()
+        let dependencies = DependenciesDoubles(store: stubStore)
+        
+        let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
+        
+        _ = sut.register(stubStoreListener)
+        // TODO:
+        XCTAssertEqual(stubStore.state_actualCallCount, 1)
+        XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let initialState = sut.register(stubStoreListener)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertEqual(initialState, stateA)
+        XCTAssertEqual(stubStore.state_actualCallCount, 2)
+        XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
+    }
+        
+    func test_unregister_withListenerThatIsNotCurrentlyRegistered_success() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let stubStore = StubStore(state_toReturn: stateA)
+        let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 0)
+        let dependencies = DependenciesDoubles(store: stubStore)
+        
+        let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
+        
+        XCTAssertEqual(stubStore.state_actualCallCount, 0)
+        XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
+        XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        sut.unregister(stubStoreListener)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertEqual(stubStore.state_actualCallCount, 0)
+        XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
+        XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
+    }
+    
+    func test_unregister_withListenerThatIsCurrentlyRegistered_success() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let stubStore = StubStore(state_toReturn: stateA)
+        let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 0)
+        let dependencies = DependenciesDoubles(store: stubStore)
+        
+        let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
+        
+        _ = sut.register(stubStoreListener)
+        
+        XCTAssertEqual(stubStore.state_actualCallCount, 1)
+        XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
+        XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        sut.unregister(stubStoreListener)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertEqual(stubStore.state_actualCallCount, 1)
+        XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
+        XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
+    }
+    
+    func test_didUpdateState_withListenerRegistered_forwardsToListener() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let stubStore = StubStore(state_toReturn: State.emptyState)
+        let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
+        let dependencies = DependenciesDoubles(store: stubStore)
+        
+        let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
 
         _ = sut.register(stubStoreListener)
         
+        XCTAssertEqual(stubStore.state_actualCallCount, 1)
         XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
-        XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 0)
+        XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
         
         /******************/
         /*----- WHEN -----*/
@@ -45,26 +171,29 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
+        XCTAssertEqual(stubStore.state_actualCallCount, 1)
         XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, stateA)
-        XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 1)
+        XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 1)
     }
     
-    func test_didUpdateState_listenerUnregistered_listenerNotCalled() {
+    func test_didUpdateState_withListenerThatHasUnregistered_listenerNotCalled() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
+        let stubStore = StubStore(state_toReturn: State.emptyState)
         let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
+        let dependencies = DependenciesDoubles(store: stubStore)
         
-        let sut = ConcreteStoreBroadcaster(dependencies: DependenciesDoubles())
+        let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
         
-        // TODO: implement unregister
         _ = sut.register(stubStoreListener)
         sut.unregister(stubStoreListener)
         
+        XCTAssertEqual(stubStore.state_actualCallCount, 1)
         XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
-        XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 0)
+        XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
 
         /******************/
         /*----- WHEN -----*/
@@ -76,25 +205,29 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
+        XCTAssertEqual(stubStore.state_actualCallCount, 1)
         XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
-        XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 0)
+        XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
     }
     
-    func test_didUpdateState_listenerRegisteredTwice_forwardsOnlyOncePerUniqueListener() {
+    func test_didUpdateState_withListenerRegisteredTwice_forwardsOnlyOncePerUniqueListener() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
+        let stubStore = StubStore(state_toReturn: State.emptyState)
         let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
+        let dependencies = DependenciesDoubles(store: stubStore)
         
-        let sut = ConcreteStoreBroadcaster(dependencies: DependenciesDoubles())
+        let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
 
         _ = sut.register(stubStoreListener)
         _ = sut.register(stubStoreListener)
         
+        XCTAssertEqual(stubStore.state_actualCallCount, 2)
         XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
-        XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 0)
+        XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
         
         /******************/
         /*----- WHEN -----*/
@@ -106,42 +239,45 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
+        XCTAssertEqual(stubStore.state_actualCallCount, 2)
         XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, stateA)
-        XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 1)
+        XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 1)
     }
     
-    func test_didUpdateState_multipleListenersMutlipleActions_forwardsAsAppropriate() {
+    func test_didUpdateState_withMultipleListenersAndMutlipleActions_forwardsAsAppropriate() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
+        let stubStore = StubStore(state_toReturn: State.emptyState)
         let stubStoreListener1 = StubStoreListener(didUpdateState_expectedCallCount: 2)
         let stubStoreListener2 = StubStoreListener(didUpdateState_expectedCallCount: 1)
+        let dependencies = DependenciesDoubles(store: stubStore)
         
-        let sut = ConcreteStoreBroadcaster(dependencies: DependenciesDoubles())
+        let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
         
+        XCTAssertEqual(stubStore.state_actualCallCount, 0)
         XCTAssertEqual(stubStoreListener1.didUpdateState_stateLastReceived, nil)
-        XCTAssertEqual(stubStoreListener1.didUpdateState_callCount, 0)
+        XCTAssertEqual(stubStoreListener1.didUpdateState_actualCallCount, 0)
         XCTAssertEqual(stubStoreListener2.didUpdateState_stateLastReceived, nil)
-        XCTAssertEqual(stubStoreListener2.didUpdateState_callCount, 0)
+        XCTAssertEqual(stubStoreListener2.didUpdateState_actualCallCount, 0)
         
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let initialState1 = sut.register(stubStoreListener1)
+        _ = sut.register(stubStoreListener1)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertEqual(initialState1, State.emptyState)
-        
+        XCTAssertEqual(stubStore.state_actualCallCount, 1)
         XCTAssertEqual(stubStoreListener1.didUpdateState_stateLastReceived, nil)
-        XCTAssertEqual(stubStoreListener1.didUpdateState_callCount, 0)
+        XCTAssertEqual(stubStoreListener1.didUpdateState_actualCallCount, 0)
         XCTAssertEqual(stubStoreListener2.didUpdateState_stateLastReceived, nil)
-        XCTAssertEqual(stubStoreListener2.didUpdateState_callCount, 0)
+        XCTAssertEqual(stubStoreListener2.didUpdateState_actualCallCount, 0)
         
         /******************/
         /*----- WHEN -----*/
@@ -153,27 +289,27 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
+        XCTAssertEqual(stubStore.state_actualCallCount, 1)
         XCTAssertEqual(stubStoreListener1.didUpdateState_stateLastReceived, stateA)
-        XCTAssertEqual(stubStoreListener1.didUpdateState_callCount, 1)
+        XCTAssertEqual(stubStoreListener1.didUpdateState_actualCallCount, 1)
         XCTAssertEqual(stubStoreListener2.didUpdateState_stateLastReceived, nil)
-        XCTAssertEqual(stubStoreListener2.didUpdateState_callCount, 0)
+        XCTAssertEqual(stubStoreListener2.didUpdateState_actualCallCount, 0)
         
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let initialState2 = sut.register(stubStoreListener2)
+        _ = sut.register(stubStoreListener2)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertEqual(initialState2, stateA)
-        
+        XCTAssertEqual(stubStore.state_actualCallCount, 2)
         XCTAssertEqual(stubStoreListener1.didUpdateState_stateLastReceived, stateA)
-        XCTAssertEqual(stubStoreListener1.didUpdateState_callCount, 1)
+        XCTAssertEqual(stubStoreListener1.didUpdateState_actualCallCount, 1)
         XCTAssertEqual(stubStoreListener2.didUpdateState_stateLastReceived, nil)
-        XCTAssertEqual(stubStoreListener2.didUpdateState_callCount, 0)
+        XCTAssertEqual(stubStoreListener2.didUpdateState_actualCallCount, 0)
         
         /******************/
         /*----- WHEN -----*/
@@ -185,9 +321,10 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
+        XCTAssertEqual(stubStore.state_actualCallCount, 2)
         XCTAssertEqual(stubStoreListener1.didUpdateState_stateLastReceived, stateB)
-        XCTAssertEqual(stubStoreListener1.didUpdateState_callCount, 2)
+        XCTAssertEqual(stubStoreListener1.didUpdateState_actualCallCount, 2)
         XCTAssertEqual(stubStoreListener2.didUpdateState_stateLastReceived, stateB)
-        XCTAssertEqual(stubStoreListener2.didUpdateState_callCount, 1)
+        XCTAssertEqual(stubStoreListener2.didUpdateState_actualCallCount, 1)
     }
 }

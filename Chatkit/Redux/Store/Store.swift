@@ -1,5 +1,4 @@
 
-
 enum Action {
     case subscriptionEvent(Wire.Event.EventType)
     case received(user: Wire.User)
@@ -17,6 +16,7 @@ protocol HasStore {
 }
 
 protocol Store {
+    var state: State { get }
     func action(_ action: Action)
 }
 
@@ -25,21 +25,20 @@ class ConcreteStore: Store {
     typealias Dependencies = Any // No dependencies for now
     
     private let dependencies: Dependencies
-    weak var delegate: StoreDelegate?
+    private weak var delegate: StoreDelegate?
     
-    var state: State {
+    private(set) var state: State {
         didSet {
             if state != oldValue {
                 self.delegate?.store(self, didUpdateState: state)
             }
         }
-        
     }
     
     init(dependencies: Dependencies, delegate: StoreDelegate?) {
         self.dependencies = dependencies
         self.delegate = delegate
-        // Ensure the state is set *AFTER* the delegate to ensure the `didSet` triggers a call to the delegate so its notified of the initial state
+        // Ensure the state is set *AFTER* the delegate so its `didSet` triggers a call to the delegate and its notified of the initial state
         self.state = State.emptyState
     }
     
@@ -49,6 +48,8 @@ class ConcreteStore: Store {
         
         let newState: State
         
+        // TODO: this whole block needs to move into a `Reducer` or `ReductionManager`
+        // (and therefore this does not have full test coverage at present)
         switch action {
             
         case let .subscriptionEvent(eventType):
@@ -56,7 +57,7 @@ class ConcreteStore: Store {
             switch eventType {
                 
             case let .initialState(initialState):
-                // TODO: move elsewhere
+                // TODO:
                 let currentUser = Internal.User(
                     identifier: initialState.currentUser.identifier,
                     name: initialState.currentUser.name
@@ -74,7 +75,7 @@ class ConcreteStore: Store {
                 )
 
             case let .removedFromRoom(removedFromRoom):
-                
+                // TODO:
                 newState = State(
                     currentUser: existingState.currentUser,
                     joinedRooms: existingState.joinedRooms.filter { $0.identifier != removedFromRoom.roomIdentifier }
