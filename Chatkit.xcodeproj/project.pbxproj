@@ -142,7 +142,6 @@
 		73E585DB23E08EFF0047C6FA /* StoreDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E453C23DB4DD800A3AF94 /* StoreDelegate.swift */; };
 		73E585DC23E08EFF0047C6FA /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E453D23DB4DD800A3AF94 /* Dependencies.swift */; };
 		73E585DD23E08EFF0047C6FA /* StoreListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E453E23DB4DD800A3AF94 /* StoreListener.swift */; };
-		73E585DE23E08EFF0047C6FA /* JoinedRoomsProviderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E454023DB4DD800A3AF94 /* JoinedRoomsProviderDelegate.swift */; };
 		73E585DF23E08EFF0047C6FA /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E454323DB4DD800A3AF94 /* Store.swift */; };
 		73E585E023E08EFF0047C6FA /* TokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E454623DB4DD800A3AF94 /* TokenProvider.swift */; };
 		73E7312823AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E7312723AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift */; };
@@ -295,7 +294,6 @@
 		730E453C23DB4DD800A3AF94 /* StoreDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreDelegate.swift; sourceTree = "<group>"; };
 		730E453D23DB4DD800A3AF94 /* Dependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		730E453E23DB4DD800A3AF94 /* StoreListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreListener.swift; sourceTree = "<group>"; };
-		730E454023DB4DD800A3AF94 /* JoinedRoomsProviderDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinedRoomsProviderDelegate.swift; sourceTree = "<group>"; };
 		730E454223DB4DD800A3AF94 /* DummyBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyBase.swift; sourceTree = "<group>"; };
 		730E454323DB4DD800A3AF94 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		730E454623DB4DD800A3AF94 /* TokenProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenProvider.swift; sourceTree = "<group>"; };
@@ -1080,7 +1078,6 @@
 			children = (
 				73E585D523E08E130047C6FA /* Types */,
 				730E453D23DB4DD800A3AF94 /* Dependencies.swift */,
-				730E454023DB4DD800A3AF94 /* JoinedRoomsProviderDelegate.swift */,
 				730E454323DB4DD800A3AF94 /* Store.swift */,
 				730E453A23DB4DD800A3AF94 /* StoreBroadcaster.swift */,
 				730E453C23DB4DD800A3AF94 /* StoreDelegate.swift */,
@@ -1537,7 +1534,6 @@
 				73E585DC23E08EFF0047C6FA /* Dependencies.swift in Sources */,
 				73A9391E23E0A8E60025AF90 /* Data+Extensions.swift in Sources */,
 				73A9391A23E0A7A90025AF90 /* String+Extensions.swift in Sources */,
-				73E585DE23E08EFF0047C6FA /* JoinedRoomsProviderDelegate.swift in Sources */,
 				73E585E023E08EFF0047C6FA /* TokenProvider.swift in Sources */,
 				73E585DB23E08EFF0047C6FA /* StoreDelegate.swift in Sources */,
 				73E585DF23E08EFF0047C6FA /* Store.swift in Sources */,
