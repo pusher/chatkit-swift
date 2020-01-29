@@ -1,5 +1,6 @@
 import XCTest
 import PusherPlatform
+@testable import TestUtilities
 @testable import PusherChatkit
 
 class ChatServiceTests: XCTestCase {
