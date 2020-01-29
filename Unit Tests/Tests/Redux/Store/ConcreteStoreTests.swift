@@ -22,7 +22,7 @@ class ConcreteStoreTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertEqual(sut.state, State.emptyState)
+        XCTAssertEqual(sut.state, State.empty)
     }
     
     func test_action_withActionThatDoesChangeInternalState_stateIsUpdated() {
@@ -35,7 +35,7 @@ class ConcreteStoreTests: XCTestCase {
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
         
-        XCTAssertEqual(sut.state, State.emptyState)
+        XCTAssertEqual(sut.state, State.empty)
         
         /******************/
         /*----- WHEN -----*/
@@ -142,7 +142,7 @@ class ConcreteStoreTests: XCTestCase {
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
         
-        XCTAssertEqual(sut.state, State.emptyState)
+        XCTAssertEqual(sut.state, State.empty)
         
         /******************/
         /*----- WHEN -----*/
@@ -162,7 +162,7 @@ class ConcreteStoreTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertEqual(sut.state, State.emptyState)
+        XCTAssertEqual(sut.state, State.empty)
     }
     
     func test_action_withActionThatDoesNotChangeInternalState_delegateNotTriggered() {

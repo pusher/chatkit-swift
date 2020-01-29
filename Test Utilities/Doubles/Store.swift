@@ -5,7 +5,7 @@ class DummyStore: DummyBase, Store {
     
     var state: State {
         DummyFail(sender: self, function: #function)
-        return State.emptyState
+        return State.empty
     }
     
     func action(_ action: Action) {
@@ -47,7 +47,7 @@ class StubStore: StubBase, Store {
         state_actualCallCount += 1
         guard let state_toReturn = state_toReturn else {
             XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: file, line: line)
-            return State.emptyState
+            return State.empty
         }
         return state_toReturn
     }

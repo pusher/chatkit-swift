@@ -149,7 +149,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: State.emptyState)
+        let stubStore = StubStore(state_toReturn: State.empty)
         let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -182,7 +182,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: State.emptyState)
+        let stubStore = StubStore(state_toReturn: State.empty)
         let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -216,7 +216,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: State.emptyState)
+        let stubStore = StubStore(state_toReturn: State.empty)
         let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -250,7 +250,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: State.emptyState)
+        let stubStore = StubStore(state_toReturn: State.empty)
         let stubStoreListener1 = StubStoreListener(didUpdateState_expectedCallCount: 2)
         let stubStoreListener2 = StubStoreListener(didUpdateState_expectedCallCount: 1)
         let dependencies = DependenciesDoubles(store: stubStore)

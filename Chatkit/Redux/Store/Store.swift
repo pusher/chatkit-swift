@@ -39,7 +39,7 @@ class ConcreteStore: Store {
         self.dependencies = dependencies
         self.delegate = delegate
         // Ensure the state is set *AFTER* the delegate so its `didSet` triggers a call to the delegate and its notified of the initial state
-        self.state = State.emptyState
+        self.state = State.empty
     }
     
     func action(_ action: Action) {

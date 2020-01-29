@@ -5,7 +5,7 @@ class DummyStoreBroadcaster: DummyStoreDelegate, StoreBroadcaster {
     
     func register(_ listener: StoreListener) -> State {
         DummyFail(sender: self, function: #function)
-        return State.emptyState
+        return State.empty
     }
     
     func unregister(_ listener: StoreListener) {

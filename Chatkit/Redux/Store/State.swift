@@ -23,12 +23,7 @@ struct State {
     let currentUser: Internal.User?
     let joinedRooms: [Internal.Room]
     
-    static var emptyState: State {
-        return State(
-            currentUser: nil,
-            joinedRooms: []
-        )
-    }
+    static let empty: State = State(currentUser: nil, joinedRooms: [])
 }
 
 extension State: Equatable {}
