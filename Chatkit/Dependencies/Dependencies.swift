@@ -1,6 +1,7 @@
 import struct PusherPlatform.PPSDKInfo
 
 protocol Dependencies:
+    HasInstanceLocator &
     HasStoreBroadcaster &
     HasStore
 {}
@@ -59,8 +60,12 @@ class ConcreteDependencies: Dependencies {
     
     private let dependencyFactory = DependencyFactory()
     
+    let instanceLocator: InstanceLocator
+    
     // `override` gives tests an opportunity to override any concrete dependencies with test doubles.
-    init(instanceLocator: String, override: ((DependencyFactory) -> Void)? = nil) {
+    init(instanceLocator: InstanceLocator, override: ((DependencyFactory) -> Void)? = nil) {
+        
+        self.instanceLocator = instanceLocator
         
         dependencyFactory.register(StoreBroadcaster.self, factory: { dependencies in
             ConcreteStoreBroadcaster(dependencies: dependencies)

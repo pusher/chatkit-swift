@@ -4,24 +4,54 @@ import XCTest
 
 class ConcreteDependencyTests: XCTestCase {
     
-    func test_initWithInstanceLocator_success() {
+    func test_initWithInstanceLocator_withInstanceLocatorButNoOverride_returnsConcreteDependencies() {
         
-        let dependencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator)
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let instanceLocator = DummyInstanceLocator()
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let dependencies = ConcreteDependencies(instanceLocator: instanceLocator)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
         
         XCTAssertNotNil(dependencies.storeBroadcaster as? ConcreteStoreBroadcaster)
         XCTAssertNotNil(dependencies.store as? ConcreteStore)
     }
     
-    func test_initWithInstanceLocatorAndOverride_success() {
+    func test_initWithInstanceLocatorAndOverride_withInstanceLocatorAndOverride_overridesDepedencies() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let instanceLocator = DummyInstanceLocator()
         
         let expectation = self.expectation(description: "`override` closure should be called on `ConcreteDependencies`")
-        
-        let dependencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator) { dependencyFactory in
+        let override: (DependencyFactory) -> Void = { dependencyFactory in
             dependencyFactory.register(Store.self) { dependencies in
                 StubStore()
             }
             expectation.fulfill()
         }
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let dependencies = ConcreteDependencies(instanceLocator: instanceLocator,
+                                                override: override)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
         
         waitForExpectations(timeout: 1)
         
