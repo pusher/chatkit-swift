@@ -1,19 +1,20 @@
 import XCTest
 @testable import PusherChatkit
 
-class DummyStoreListener: DummyBase, StoreListener {
-    func store(_ store: Store, didUpdateState state: State) {
+public class DummyStoreListener: DummyBase, StoreListener {
+    
+    public func store(_ store: Store, didUpdateState state: State) {
         DummyFail(sender: self, function: #function)
     }
 }
 
-class StubStoreListener: StubBase, StoreListener {
+public class StubStoreListener: StubBase, StoreListener {
 
     private var didUpdateState_expectedCallCount: UInt
-    private(set) var didUpdateState_stateLastReceived: State?
-    private(set) var didUpdateState_actualCallCount: UInt = 0
+    public private(set) var didUpdateState_stateLastReceived: State?
+    public private(set) var didUpdateState_actualCallCount: UInt = 0
 
-    init(didUpdateState_expectedCallCount: UInt = 0,
+    public init(didUpdateState_expectedCallCount: UInt = 0,
          file: StaticString = #file, line: UInt = #line) {
         
         self.didUpdateState_expectedCallCount = didUpdateState_expectedCallCount
@@ -23,7 +24,7 @@ class StubStoreListener: StubBase, StoreListener {
 
     // MARK: StoreListener
     
-    func store(_ store: Store, didUpdateState state: State) {
+    public func store(_ store: Store, didUpdateState state: State) {
         didUpdateState_stateLastReceived = state
         didUpdateState_actualCallCount += 1
         

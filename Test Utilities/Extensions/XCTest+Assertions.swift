@@ -1,7 +1,7 @@
 import XCTest
 
 
-func XCTAssertThrowsError<T>(_ expression: @autoclosure () throws -> T, containing: [String], file: StaticString = #file, line: UInt = #line, _ errorHandler: (Error) -> Void  = { _ in }) {
+public func XCTAssertThrowsError<T>(_ expression: @autoclosure () throws -> T, containing: [String], file: StaticString = #file, line: UInt = #line, _ errorHandler: (Error) -> Void  = { _ in }) {
     
     var thrownError: Error?
     
@@ -24,7 +24,7 @@ func XCTAssertThrowsError<T>(_ expression: @autoclosure () throws -> T, containi
 }
 
 
-func XCTAssertString(_ str: String?, contains search: String, file: StaticString = #file, line: UInt = #line) {
+public func XCTAssertString(_ str: String?, contains search: String, file: StaticString = #file, line: UInt = #line) {
     
     guard let str = str else {
         XCTFail("Expected string containing \"\(search)\"' but got nil instead.", file: file, line: line)

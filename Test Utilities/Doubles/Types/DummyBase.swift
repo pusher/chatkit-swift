@@ -1,6 +1,6 @@
 import XCTest
 
-class DummyBase {
+public class DummyBase {
     
     let file: StaticString
     let line: UInt

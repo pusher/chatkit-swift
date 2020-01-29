@@ -4,13 +4,13 @@ import XCTest
 // Allows us to define test doubles for Unit testing.
 // If a dependency is not explicitly defined a "Dummy" version is used so that if it is interacted
 // with in any way the test should fail.
-class DependenciesDoubles: StubBase, Dependencies {
+public class DependenciesDoubles: StubBase, Dependencies {
     
-    let instanceLocator: InstanceLocator
-    let storeBroadcaster: StoreBroadcaster
-    let store: Store
+    public let instanceLocator: InstanceLocator
+    public let storeBroadcaster: StoreBroadcaster
+    public let store: Store
     
-    init(instanceLocator: InstanceLocator? = nil,
+    public init(instanceLocator: InstanceLocator? = nil,
          storeBroadcaster: StoreBroadcaster? = nil,
          store: Store? = nil,
          

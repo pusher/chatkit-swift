@@ -1,11 +1,13 @@
 import Foundation
 import PusherPlatform
 
-class TestLogger: PPLogger {
+public class TestLogger: PPLogger {
+    
+    public init() {}
     
     // MARK: - PPLogger
     
-    func log(_ message: @autoclosure @escaping () -> String, logLevel: PPLogLevel) {
+    public func log(_ message: @autoclosure @escaping () -> String, logLevel: PPLogLevel) {
     }
     
 }

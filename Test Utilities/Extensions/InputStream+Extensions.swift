@@ -2,7 +2,7 @@ import Foundation
 
 extension InputStream {
     
-    func exhaust() -> Data {
+    public func exhaust() -> Data {
         var result = Data()
         var buffer = [UInt8](repeating: 0, count: 4096)
         

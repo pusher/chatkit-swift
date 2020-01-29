@@ -6,25 +6,25 @@ extension XCTest {
     // provide a (faux) initialiser that sets `file` and `line` automatically
     // making the tests themeselves cleaner and more readable.
     // Typically we shouldn't do this on Dummy's though which is why we restrict to within XCTest only.
-    func DummyInstanceLocator(file: StaticString = #file, line: UInt = #line) -> DummyInstanceLocator {
+    public func DummyInstanceLocator(file: StaticString = #file, line: UInt = #line) -> DummyInstanceLocator {
         let dummy: DummyInstanceLocator = .init(file: file, line: line)
         return dummy
     }
 }
 
-class DummyInstanceLocator: DummyBase, InstanceLocator {
+public class DummyInstanceLocator: DummyBase, InstanceLocator {
     
-    var region: String {
+    public var region: String {
         DummyFail(sender: self, function: #function)
         return ""
     }
     
-    var identifier: String {
+    public var identifier: String {
         DummyFail(sender: self, function: #function)
         return ""
     }
     
-    var version: String {
+    public var version: String {
         DummyFail(sender: self, function: #function)
         return ""
     }

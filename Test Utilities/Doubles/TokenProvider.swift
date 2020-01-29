@@ -5,7 +5,7 @@ import enum PusherPlatform.AuthenticationResult
 import protocol PusherPlatform.Token
 import protocol PusherPlatform.TokenProvider
 
-class DummyTokenProvider: DummyBase, TokenProvider {
+public class DummyTokenProvider: DummyBase, TokenProvider {
 
     public func fetchToken(completionHandler: @escaping (AuthenticationResult) -> Void) {
         DummyFail(sender: self, function: #function)

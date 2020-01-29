@@ -1,7 +1,7 @@
-import XCTest
 import Mockingjay
 import PusherPlatform
-@testable import TestUtilities
+import TestUtilities
+import XCTest
 @testable import PusherChatkit
 
 class TestTokenProviderTests: XCTestCase {

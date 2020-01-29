@@ -2,7 +2,7 @@ import XCTest
 
 extension String: Error {
     
-    func toJsonData(validate: Bool = true, file: StaticString = #file, line: UInt = #line) -> Data {
+    public func toJsonData(validate: Bool = true, file: StaticString = #file, line: UInt = #line) -> Data {
         do {
             let data = try self.toData()
             if validate {
