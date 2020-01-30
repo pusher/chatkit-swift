@@ -6,6 +6,20 @@
 	objectVersion = 51;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		73A9394523E1FB800025AF90 /* MakeInstanceLocatorFile */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 73A9394623E1FB800025AF90 /* Build configuration list for PBXAggregateTarget "MakeInstanceLocatorFile" */;
+			buildPhases = (
+				73A9394923E1FB8B0025AF90 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = MakeInstanceLocatorFile;
+			productName = MakeInstanceLocatorFile;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		2200BB93231E727000BF9545 /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2200BB92231E727000BF9545 /* DateFormatter+Extensions.swift */; };
 		2212EC55235725B8002212A4 /* MessagesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC54235725B8002212A4 /* MessagesProvider.swift */; };
@@ -122,6 +136,8 @@
 		73A9391D23E0A8E60025AF90 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734D6A4523AB78A400105479 /* Array+Extensions.swift */; };
 		73A9391E23E0A8E60025AF90 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7389802C23C8DD1B0029E09F /* Data+Extensions.swift */; };
 		73A9391F23E0A8F00025AF90 /* InputStream+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222910D523D8A56100A3ACDF /* InputStream+Extensions.swift */; };
+		73A9392323E192FC0025AF90 /* String+ExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A9392223E192FC0025AF90 /* String+ExtensionTests.swift */; };
+		73A9392723E1945C0025AF90 /* Environment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7EA23DF205E0073E6D4 /* Environment.framework */; };
 		73A9392B23E1AA210025AF90 /* InstanceLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A9392A23E1AA210025AF90 /* InstanceLocator.swift */; };
 		73A9392E23E1AC6E0025AF90 /* InstanceLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A9392D23E1AC6E0025AF90 /* InstanceLocator.swift */; };
 		73ABC07E23B0B5D100ECD162 /* Wire.Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73ABC07D23B0B5D100ECD162 /* Wire.Message.swift */; };
@@ -143,6 +159,7 @@
 		73E585DF23E08EFF0047C6FA /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E454323DB4DD800A3AF94 /* Store.swift */; };
 		73E585E023E08EFF0047C6FA /* TokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E454623DB4DD800A3AF94 /* TokenProvider.swift */; };
 		73E7312823AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E7312723AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift */; };
+		73FF749C23E2011D00A6FEA9 /* InstanceLocator in Resources */ = {isa = PBXBuildFile; fileRef = 73FF749B23E2011C00A6FEA9 /* InstanceLocator */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -173,6 +190,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 229093D422F1DDB4003DDE2C;
 			remoteInfo = Chatkit;
+		};
+		73A9392423E1932F0025AF90 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 229093CC22F1DDB4003DDE2C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 22BFE7E923DF205E0073E6D4;
+			remoteInfo = Environment;
+		};
+		73A9394A23E1FBCE0025AF90 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 229093CC22F1DDB4003DDE2C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 73A9394523E1FB800025AF90;
+			remoteInfo = MakeInstanceLocatorFile;
+		};
+		73A9394C23E1FC7F0025AF90 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 229093CC22F1DDB4003DDE2C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 22BFE7E923DF205E0073E6D4;
+			remoteInfo = Environment;
 		};
 		73E585CB23E089420047C6FA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -320,6 +358,7 @@
 		73A5168F23B0BB0500CF8B77 /* Wire.Event.EventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.EventType.swift; sourceTree = "<group>"; };
 		73A5169123B0BBE000CF8B77 /* Wire.Event.PresenceState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.PresenceState.swift; sourceTree = "<group>"; };
 		73A9390823E0926B0025AF90 /* Carthage.xcfilelist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcfilelist; path = Carthage.xcfilelist; sourceTree = "<group>"; };
+		73A9392223E192FC0025AF90 /* String+ExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+ExtensionTests.swift"; sourceTree = "<group>"; };
 		73A9392A23E1AA210025AF90 /* InstanceLocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceLocator.swift; sourceTree = "<group>"; };
 		73A9392D23E1AC6E0025AF90 /* InstanceLocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceLocator.swift; sourceTree = "<group>"; };
 		73ABC07D23B0B5D100ECD162 /* Wire.Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Message.swift; sourceTree = "<group>"; };
@@ -336,6 +375,7 @@
 		73E585C223E087500047C6FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		73E585D623E08E270047C6FA /* StubBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubBase.swift; sourceTree = "<group>"; };
 		73E7312723AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Wire.Event.Subscription+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		73FF749B23E2011C00A6FEA9 /* InstanceLocator */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = InstanceLocator; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -352,6 +392,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				224B803D22F1E009003CB8DC /* PusherChatkit.framework in Frameworks */,
+				73A9392723E1945C0025AF90 /* Environment.framework in Frameworks */,
 				73A9390B23E094940025AF90 /* TestUtilities.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -531,6 +572,7 @@
 			children = (
 				22437C9723D86B750013E4A8 /* Authentication */,
 				227B8400230EAC3200921E0D /* Chatkit */,
+				73A9392123E192DE0025AF90 /* Environment */,
 				227B83FF230EAC2A00921E0D /* Model */,
 				2274984A232107F700D10C76 /* Networking */,
 				73E585CF23E08D6D0047C6FA /* Redux */,
@@ -693,6 +735,7 @@
 		22BFE7F423DF216A0073E6D4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				73FF749B23E2011C00A6FEA9 /* InstanceLocator */,
 				22BFE7EC23DF205E0073E6D4 /* Environment.h */,
 				22BFE7ED23DF205E0073E6D4 /* Info.plist */,
 			);
@@ -979,6 +1022,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		73A9392123E192DE0025AF90 /* Environment */ = {
+			isa = PBXGroup;
+			children = (
+				73A9392223E192FC0025AF90 /* String+ExtensionTests.swift */,
+			);
+			path = Environment;
+			sourceTree = "<group>";
+		};
 		73A9392C23E1AC5D0025AF90 /* Instance Locator */ = {
 			isa = PBXGroup;
 			children = (
@@ -1171,6 +1222,7 @@
 			);
 			dependencies = (
 				224B803F22F1E009003CB8DC /* PBXTargetDependency */,
+				73A9392523E1932F0025AF90 /* PBXTargetDependency */,
 				73E585CC23E089420047C6FA /* PBXTargetDependency */,
 			);
 			name = "Unit Tests";
@@ -1190,6 +1242,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				73A9394D23E1FC7F0025AF90 /* PBXTargetDependency */,
 			);
 			name = Chatkit;
 			productName = Chatkit;
@@ -1200,14 +1253,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 22BFE7F123DF205E0073E6D4 /* Build configuration list for PBXNativeTarget "Environment" */;
 			buildPhases = (
+				22BFE7E823DF205E0073E6D4 /* Resources */,
 				22BFE7E523DF205E0073E6D4 /* Headers */,
 				22BFE7E623DF205E0073E6D4 /* Sources */,
 				22BFE7E723DF205E0073E6D4 /* Frameworks */,
-				22BFE7E823DF205E0073E6D4 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				73A9394B23E1FBCE0025AF90 /* PBXTargetDependency */,
 			);
 			name = Environment;
 			productName = Environment;
@@ -1259,6 +1313,9 @@
 						CreatedOnToolsVersion = 11.3.1;
 						LastSwiftMigration = 1130;
 					};
+					73A9394523E1FB800025AF90 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
 					73E585BE23E087500047C6FA = {
 						CreatedOnToolsVersion = 11.3.1;
 						LastSwiftMigration = 1130;
@@ -1283,6 +1340,7 @@
 				73E585BE23E087500047C6FA /* Test Utilities */,
 				224B803722F1E009003CB8DC /* Unit Tests */,
 				222910DA23D8A5D900A3ACDF /* System Tests */,
+				73A9394523E1FB800025AF90 /* MakeInstanceLocatorFile */,
 			);
 		};
 /* End PBXProject section */
@@ -1316,6 +1374,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73FF749C23E2011D00A6FEA9 /* InstanceLocator in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1367,6 +1426,23 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
+		73A9394923E1FB8B0025AF90 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Checks if an `<repo-root>/InstanceLocator` file exists and if it does not \n# creates one with contents \"<UNSPECIFIED>\"\n# Note the `<repo-root>/InstanceLocator` file is included in `.gitignore`\n\nINSTANCE_LOCATOR_FILEPATH=\"${SRCROOT}/InstanceLocator\"\n\necho \"Checking for existance of file '${INSTANCE_LOCATOR_FILEPATH}'\"\n\nif test ! -f \"${INSTANCE_LOCATOR_FILEPATH}\"; then\n    echo \"File missing, creating now...\"\n    echo \"<UNSPECIFIED>\" >> \"${INSTANCE_LOCATOR_FILEPATH}\"\n    echo \"Done\"\nelse \n    echo \"File exists, nothing to do.\"\nfi\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1392,6 +1468,7 @@
 				227B83FC230E9D7C00921E0D /* MessagePartTests.swift in Sources */,
 				22437C9A23D86B940013E4A8 /* TestTokenProviderTests.swift in Sources */,
 				730E455023DB4DD800A3AF94 /* ConcreteStoreBroadcasterTests.swift in Sources */,
+				73A9392323E192FC0025AF90 /* String+ExtensionTests.swift in Sources */,
 				73CF01BC23AB823F006FB43E /* Wire.ReadState+Decodable.Tests.swift in Sources */,
 				7335D27523D7330900E51909 /* CodableJSONCollections+ArrayEncodingTests.swift in Sources */,
 				73E7312823AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift in Sources */,
@@ -1554,6 +1631,21 @@
 			isa = PBXTargetDependency;
 			target = 229093D422F1DDB4003DDE2C /* Chatkit */;
 			targetProxy = 73A9391723E0A7440025AF90 /* PBXContainerItemProxy */;
+		};
+		73A9392523E1932F0025AF90 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 22BFE7E923DF205E0073E6D4 /* Environment */;
+			targetProxy = 73A9392423E1932F0025AF90 /* PBXContainerItemProxy */;
+		};
+		73A9394B23E1FBCE0025AF90 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 73A9394523E1FB800025AF90 /* MakeInstanceLocatorFile */;
+			targetProxy = 73A9394A23E1FBCE0025AF90 /* PBXContainerItemProxy */;
+		};
+		73A9394D23E1FC7F0025AF90 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 22BFE7E923DF205E0073E6D4 /* Environment */;
+			targetProxy = 73A9394C23E1FC7F0025AF90 /* PBXContainerItemProxy */;
 		};
 		73E585CC23E089420047C6FA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1824,6 +1916,18 @@
 			};
 			name = Release;
 		};
+		73A9394723E1FB800025AF90 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		73A9394823E1FB800025AF90 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
 		73E585C423E087500047C6FA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1900,6 +2004,15 @@
 			buildConfigurations = (
 				22BFE7EF23DF205E0073E6D4 /* Debug */,
 				22BFE7F023DF205E0073E6D4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		73A9394623E1FB800025AF90 /* Build configuration list for PBXAggregateTarget "MakeInstanceLocatorFile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				73A9394723E1FB800025AF90 /* Debug */,
+				73A9394823E1FB800025AF90 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
