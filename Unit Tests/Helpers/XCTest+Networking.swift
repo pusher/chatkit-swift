@@ -12,7 +12,7 @@ internal extension XCTest {
         // MARK: - Properties
         
         static let testInstanceLocator = "test:instance:locator"
-        static let testUserID = "testUserID"
+        static let testUserIdentifier = "testUserIdentifier"
         
         // MARK: - Paths
         

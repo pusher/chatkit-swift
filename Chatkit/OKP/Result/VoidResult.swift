@@ -1,3 +1,4 @@
+import Foundation
 
 enum VoidResult {
     case success

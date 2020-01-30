@@ -1,3 +1,4 @@
+import TestUtilities
 import XCTest
 @testable import PusherChatkit
 
@@ -10,7 +11,7 @@ class ConcreteSubscriptionFactoryTests: XCTestCase {
         /******************/
         /*---- GIVEN -----*/
         /******************/
-        
+    
         let sut = ConcreteSubscriptionFactory(dependencies: DependenciesDoubles())
         
         /******************/

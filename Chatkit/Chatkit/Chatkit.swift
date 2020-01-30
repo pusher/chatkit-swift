@@ -31,8 +31,6 @@ public class Chatkit {
     /// The object that is notified when the status of the connection to Chatkit web service changed.
     public weak var delegate: ChatkitDelegate?
     
-    private let networkingController: NetworkingController
-    
     typealias Dependencies = HasStoreBroadcaster & HasSubscriptionManager
     
     private let dependencies: Dependencies
@@ -49,16 +47,17 @@ public class Chatkit {
     ///     - logger: The logger used by the SDK.
     ///
     /// - Returns: An instance of `Chatkit` or throws an error when the initialization failed.
-    public convenience init(instanceLocator: String, tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
+    public convenience init(instanceLocator instanceLocatorString: String, tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
+        guard let instanceLocator = PusherPlatform.InstanceLocator(string: instanceLocatorString) else {
+            throw NetworkingError.invalidInstanceLocator
+        }
         let dependencies = ConcreteDependencies(instanceLocator: instanceLocator)
-        try self.init(instanceLocator: instanceLocator, tokenProvider: tokenProvider, logger: logger, dependencies: dependencies)
+        try self.init(tokenProvider: tokenProvider, logger: logger, dependencies: dependencies)
     }
     
-    internal init(instanceLocator: String, tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger(), dependencies: Dependencies) throws {
+    internal init(tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger(), dependencies: Dependencies) throws {
         self.logger = logger
         self.connectionStatus = .disconnected
-        
-        self.networkingController = try NetworkingController(instanceLocator: instanceLocator, tokenProvider: tokenProvider, logger: self.logger)
         
         self.dependencies = dependencies
     }

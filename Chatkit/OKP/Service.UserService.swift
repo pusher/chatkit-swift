@@ -1,3 +1,4 @@
+import Foundation
 import enum PusherPlatform.HTTPMethod
 import class PusherPlatform.PPRequestOptions
 

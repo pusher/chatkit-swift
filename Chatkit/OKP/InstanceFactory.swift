@@ -17,7 +17,7 @@ protocol InstanceFactory {
 
 class ConcreteInstanceFactory: InstanceFactory {
 
-    typealias Dependencies = HasSDKInfoProvider
+    typealias Dependencies = HasInstanceLocator & HasSDKInfoProvider
     
     private let dependencies: Dependencies
     init(dependencies: Dependencies) {
@@ -25,7 +25,7 @@ class ConcreteInstanceFactory: InstanceFactory {
     }
     
     func makeInstance(forType instanceType: InstanceType) -> Instance {
-        return PusherPlatform.Instance(locator: self.dependencies.sdkInfoProvider.locator,
+        return PusherPlatform.Instance(locator: self.dependencies.instanceLocator.string,
                                        serviceName: self.dependencies.sdkInfoProvider.serviceName,
                                        serviceVersion: self.dependencies.sdkInfoProvider.serviceVersion,
                                        sdkInfo: self.dependencies.sdkInfoProvider.sdkInfo)

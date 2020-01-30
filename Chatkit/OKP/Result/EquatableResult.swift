@@ -1,3 +1,4 @@
+import Foundation
 
 enum EquatableResult<Success: Equatable> {
     case success(Success)

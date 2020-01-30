@@ -1,4 +1,4 @@
-
+import Foundation
 
 // TODO: this is temporary, until the transformer is implemented
 extension JoinedRoomsProvider: StoreListener {

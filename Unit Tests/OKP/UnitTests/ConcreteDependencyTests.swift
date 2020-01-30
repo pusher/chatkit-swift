@@ -1,12 +1,28 @@
+import TestUtilities
 import XCTest
 @testable import PusherChatkit
 
 class ConcreteDependencyTests: XCTestCase {
     
-    func test_initWithInstanceLocator_success() {
+    func test_initWithInstanceLocator_withInstanceLocatorButNoOverride_returnsConcreteDependencies() {
         
-        let dependencies = ConcreteDependencies(instanceLocator: "dummy:instance:locator")
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
         
+        let instanceLocator = DummyInstanceLocator()
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let dependencies = ConcreteDependencies(instanceLocator: instanceLocator)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertNotNil(dependencies.instanceLocator as? DummyInstanceLocator)
         XCTAssertNotNil(dependencies.sdkInfoProvider as? ConcreteSDKInfoProvider)
         XCTAssertNotNil(dependencies.storeBroadcaster as? ConcreteStoreBroadcaster)
         XCTAssertNotNil(dependencies.store as? ConcreteStore)
@@ -18,22 +34,39 @@ class ConcreteDependencyTests: XCTestCase {
         XCTAssertNotNil(dependencies.missingUserFetcher as? ConcreteMissingUserFetcher)
     }
     
-    func test_initWithInstanceLocatorAndOverride_success() {
+    func test_initWithInstanceLocatorAndOverride_withInstanceLocatorAndOverride_overridesDepedencies() {
         
-        let expectation = self.expectation(description: "`override` closure called on `ConcreteDependencies`")
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
         
-        let dependencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator) { dependencyFactory in
+        let instanceLocator = DummyInstanceLocator()
+        
+        let expectation = self.expectation(description: "`override` closure should be called on `ConcreteDependencies`")
+        let override: (DependencyFactory) -> Void = { dependencyFactory in
             dependencyFactory.register(Store.self) { dependencies in
                 StubStore()
             }
             expectation.fulfill()
         }
         
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let dependencies = ConcreteDependencies(instanceLocator: instanceLocator,
+                                                override: override)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
         waitForExpectations(timeout: 1)
         
+        XCTAssertNotNil(dependencies.instanceLocator as? DummyInstanceLocator)
         XCTAssertNotNil(dependencies.sdkInfoProvider as? ConcreteSDKInfoProvider)
         XCTAssertNotNil(dependencies.storeBroadcaster as? ConcreteStoreBroadcaster)
-        XCTAssertNotNil(dependencies.store as? StubStore)
+        XCTAssertNotNil(dependencies.store as? StubStore) // <------ Not a `ConcreteStore`!
         XCTAssertNotNil(dependencies.instanceFactory as? ConcreteInstanceFactory)
         XCTAssertNotNil(dependencies.subscriptionResponder as? ConcreteSubscriptionResponder)
         XCTAssertNotNil(dependencies.subscriptionFactory as? ConcreteSubscriptionFactory)
@@ -42,20 +75,46 @@ class ConcreteDependencyTests: XCTestCase {
         XCTAssertNotNil(dependencies.missingUserFetcher as? ConcreteMissingUserFetcher)
     }
     
+    // This tests the extension methods in `TestUtilities`
     func test_initWithInstanceFactory_success() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
         
         let stubNetworking = StubNetworking()
         
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
         let dependencies = ConcreteDependencies(instanceFactory: stubNetworking)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
         
         XCTAssertNotNil(dependencies.instanceFactory as? StubNetworking)
     }
     
     func test_initWithInstanceLocatorAndInstanceFactory_success() {
         
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let instanceLocator = DummyInstanceLocator()
         let stubNetworking = StubNetworking()
         
-        let dependencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator, instanceFactory: stubNetworking)
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let dependencies = ConcreteDependencies(instanceLocator: instanceLocator, instanceFactory: stubNetworking)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
         
         XCTAssertNotNil(dependencies.instanceFactory as? StubNetworking)
     }

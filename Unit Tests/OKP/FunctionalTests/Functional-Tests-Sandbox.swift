@@ -1,3 +1,4 @@
+import TestUtilities
 import XCTest
 @testable import PusherChatkit
 
@@ -41,11 +42,11 @@ extension XCTestCase {
     func setUp_ChatKitInitialised_withDependencies(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, Dependencies) {
         
         let stubNetworking = StubNetworking(file: file, line: line)
-        let dependencies = ConcreteDependencies(instanceLocator: DummyInstanceLocator, instanceFactory: stubNetworking)
+        let dependencies = ConcreteDependencies(instanceFactory: stubNetworking)
         
-        let tokenProvider = DummyTokenProviderX(file: file, line: line)
+        let tokenProvider = DummyTokenProvider(file: file, line: line)
         
-        let chatkit = try Chatkit(instanceLocator: DummyInstanceLocator, tokenProvider: tokenProvider, dependencies: dependencies)
+        let chatkit = try Chatkit(tokenProvider: tokenProvider, dependencies: dependencies)
         
         return (stubNetworking, chatkit, dependencies)
     }
@@ -349,7 +350,7 @@ class Functional_ChatkitSubscribed_Tests: XCTestCase {
             let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 2)
             
             XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
-            XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 0)
+            XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
             
             var latestState: State?
             
@@ -363,8 +364,8 @@ class Functional_ChatkitSubscribed_Tests: XCTestCase {
             /*----- THEN -----*/
             /******************/
             
-            XCTAssertEqual(latestState, State.emptyState)
-            XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 0)
+            XCTAssertEqual(latestState, State.empty)
+            XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
             
             /******************/
             /*----- WHEN -----*/
@@ -406,7 +407,7 @@ class Functional_ChatkitSubscribed_Tests: XCTestCase {
             latestState = stubStoreListener.didUpdateState_stateLastReceived
             XCTAssertEqual(latestState?.joinedRooms.count, 1)
             XCTAssertEqual(latestState?.joinedRooms[0].identifier, "ac43dfef")
-            XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 1)
+            XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 1)
             
             /******************/
             /*----- WHEN -----*/
@@ -430,7 +431,7 @@ class Functional_ChatkitSubscribed_Tests: XCTestCase {
             
             latestState = stubStoreListener.didUpdateState_stateLastReceived
             XCTAssertEqual(latestState?.joinedRooms.count, 0)
-            XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 2)
+            XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 2)
 
         }())
         
@@ -480,7 +481,7 @@ class Functional_InitialStateFired_Tests: XCTestCase {
             let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
             
             XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
-            XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 0)
+            XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
             
             var latestState: State?
             
@@ -496,7 +497,7 @@ class Functional_InitialStateFired_Tests: XCTestCase {
             
             XCTAssertEqual(latestState?.joinedRooms.count, 1)
             XCTAssertEqual(latestState?.joinedRooms[0].identifier, "ac43dfef")
-            XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 0)
+            XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
             
             /******************/
             /*----- WHEN -----*/
@@ -520,7 +521,7 @@ class Functional_InitialStateFired_Tests: XCTestCase {
             
             latestState = stubStoreListener.didUpdateState_stateLastReceived
             XCTAssertEqual(latestState?.joinedRooms.count, 0)
-            XCTAssertEqual(stubStoreListener.didUpdateState_callCount, 1)
+            XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 1)
 
         }())
     }

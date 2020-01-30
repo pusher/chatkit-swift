@@ -63,22 +63,7 @@ class RoomListViewController: UITableViewController {
         return cell
     }
     
-    private func connect() {
-        guard let tokenProvider = try? TestTokenProvider(instanceLocator: "", userID: "joe"),
-            let chatkit = try? Chatkit(instanceLocator: "test:Instance:Locator", tokenProvider: tokenProvider) else {
-                return
-        }
-        
-        self.chatkit = chatkit
-        
-        self.chatkit?.connect { error in
-            guard error == nil else {
-                return
-            }
-            
-            self.createJoinedRoomsProvider()
-        }
-    }
+    private func connect() {}
     
     private func createJoinedRoomsProvider() {
         self.chatkit?.createJoinedRoomsViewModel { viewModel, error in
