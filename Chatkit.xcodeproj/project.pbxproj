@@ -11,7 +11,6 @@
 		2212EC55235725B8002212A4 /* MessagesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC54235725B8002212A4 /* MessagesProvider.swift */; };
 		2212EC5723572A3F002212A4 /* RoomMembersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC5623572A3F002212A4 /* RoomMembersProvider.swift */; };
 		222910EA23D8A6C300A3ACDF /* TestTokenProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222910E923D8A6C300A3ACDF /* TestTokenProviderTests.swift */; };
-		222910F623D8A88C00A3ACDF /* Carthage.xcfilelist in Resources */ = {isa = PBXBuildFile; fileRef = 222910F523D8A88C00A3ACDF /* Carthage.xcfilelist */; };
 		222EA2AD23424A11004EE90F /* JoinedRoomsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EA2AC23424A11004EE90F /* JoinedRoomsProvider.swift */; };
 		222EA2AF23424A7D004EE90F /* AvailableRoomsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EA2AE23424A7D004EE90F /* AvailableRoomsProvider.swift */; };
 		22437C8D23D86ACF0013E4A8 /* TestTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22437C8C23D86ACF0013E4A8 /* TestTokenProvider.swift */; };
@@ -193,7 +192,6 @@
 /* Begin PBXFileReference section */
 		2200BB92231E727000BF9545 /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
 		2200BB96231EA5C200BF9545 /* TestLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestLogger.swift; sourceTree = "<group>"; };
-		220904D023BF8BB900FC57B8 /* Carthage.xcfilelist */ = {isa = PBXFileReference; lastKnownFileType = text.xcfilelist; path = Carthage.xcfilelist; sourceTree = "<group>"; };
 		2212EC54235725B8002212A4 /* MessagesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesProvider.swift; sourceTree = "<group>"; };
 		2212EC5623572A3F002212A4 /* RoomMembersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMembersProvider.swift; sourceTree = "<group>"; };
 		222910D523D8A56100A3ACDF /* InputStream+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputStream+Extensions.swift"; sourceTree = "<group>"; };
@@ -203,7 +201,6 @@
 		222910EC23D8A76A00A3ACDF /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		222910EF23D8A78600A3ACDF /* ProcessInfo+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProcessInfo+Extensions.swift"; sourceTree = "<group>"; };
 		222910F123D8A79C00A3ACDF /* CI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CI.swift; sourceTree = "<group>"; };
-		222910F523D8A88C00A3ACDF /* Carthage.xcfilelist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcfilelist; path = Carthage.xcfilelist; sourceTree = "<group>"; };
 		222EA2AC23424A11004EE90F /* JoinedRoomsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinedRoomsProvider.swift; sourceTree = "<group>"; };
 		222EA2AE23424A7D004EE90F /* AvailableRoomsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvailableRoomsProvider.swift; sourceTree = "<group>"; };
 		22437C8C23D86ACF0013E4A8 /* TestTokenProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestTokenProvider.swift; sourceTree = "<group>"; };
@@ -319,7 +316,6 @@
 		73A5168D23B0B78400CF8B77 /* Wire.Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.swift; sourceTree = "<group>"; };
 		73A5168F23B0BB0500CF8B77 /* Wire.Event.EventType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.EventType.swift; sourceTree = "<group>"; };
 		73A5169123B0BBE000CF8B77 /* Wire.Event.PresenceState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.PresenceState.swift; sourceTree = "<group>"; };
-		73A9390823E0926B0025AF90 /* Carthage.xcfilelist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcfilelist; path = Carthage.xcfilelist; sourceTree = "<group>"; };
 		73A9392A23E1AA210025AF90 /* InstanceLocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceLocator.swift; sourceTree = "<group>"; };
 		73A9392D23E1AC6E0025AF90 /* InstanceLocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceLocator.swift; sourceTree = "<group>"; };
 		73ABC07D23B0B5D100ECD162 /* Wire.Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Message.swift; sourceTree = "<group>"; };
@@ -380,14 +376,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		220904CE23BF8B7D00FC57B8 /* File Lists */ = {
-			isa = PBXGroup;
-			children = (
-				220904D023BF8BB900FC57B8 /* Carthage.xcfilelist */,
-			);
-			path = "File Lists";
-			sourceTree = "<group>";
-		};
 		222910DC23D8A5D900A3ACDF /* System Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -401,7 +389,6 @@
 		222910E523D8A62C00A3ACDF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				222910F423D8A87600A3ACDF /* File Lists */,
 				222910DF23D8A5D900A3ACDF /* Info.plist */,
 			);
 			path = "Supporting Files";
@@ -438,14 +425,6 @@
 				226DD52323DB3F670024A27D /* String+Extensions.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		222910F423D8A87600A3ACDF /* File Lists */ = {
-			isa = PBXGroup;
-			children = (
-				222910F523D8A88C00A3ACDF /* Carthage.xcfilelist */,
-			);
-			path = "File Lists";
 			sourceTree = "<group>";
 		};
 		22437C8B23D86ACF0013E4A8 /* Token Providers */ = {
@@ -511,7 +490,6 @@
 		224B805322F1E15C003CB8DC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				220904CE23BF8B7D00FC57B8 /* File Lists */,
 				227E946B231FBD420025B691 /* Stubs */,
 				224B803C22F1E009003CB8DC /* Info.plist */,
 			);
@@ -959,14 +937,6 @@
 			path = CodableJSONCollections;
 			sourceTree = "<group>";
 		};
-		73A9390723E092470025AF90 /* File Lists */ = {
-			isa = PBXGroup;
-			children = (
-				73A9390823E0926B0025AF90 /* Carthage.xcfilelist */,
-			);
-			path = "File Lists";
-			sourceTree = "<group>";
-		};
 		73A9391923E0A78E0025AF90 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1033,7 +1003,6 @@
 		73E585C723E088AA0047C6FA /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				73A9390723E092470025AF90 /* File Lists */,
 				73E585C123E087500047C6FA /* TestUtilities.h */,
 				73E585C223E087500047C6FA /* Info.plist */,
 			);
@@ -1144,7 +1113,6 @@
 				222910D723D8A5D900A3ACDF /* Sources */,
 				222910D823D8A5D900A3ACDF /* Frameworks */,
 				222910D923D8A5D900A3ACDF /* Resources */,
-				222910F323D8A85E00A3ACDF /* Copy Carthage Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1165,7 +1133,6 @@
 				224B803422F1E009003CB8DC /* Sources */,
 				224B803522F1E009003CB8DC /* Frameworks */,
 				224B803622F1E009003CB8DC /* Resources */,
-				2244FC3022F2FE3600FE8D50 /* Copy Carthage Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1292,7 +1259,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				222910F623D8A88C00A3ACDF /* Carthage.xcfilelist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1327,47 +1293,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		222910F323D8A85E00A3ACDF /* Copy Carthage Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"$(SRCROOT)/System Tests/Supporting Files/File Lists/Carthage.xcfilelist",
-			);
-			inputPaths = (
-			);
-			name = "Copy Carthage Frameworks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
-		};
-		2244FC3022F2FE3600FE8D50 /* Copy Carthage Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"$(SRCROOT)/Unit Tests/Supporting Files/File Lists/Carthage.xcfilelist",
-			);
-			inputPaths = (
-			);
-			name = "Copy Carthage Frameworks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		222910D723D8A5D900A3ACDF /* Sources */ = {
@@ -1604,13 +1529,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CARTHAGE_PLATFORM[sdk=appletvos*]" = tvOS;
-				"CARTHAGE_PLATFORM[sdk=appletvsimulator*]" = tvOS;
-				"CARTHAGE_PLATFORM[sdk=iphoneos*]" = iOS;
-				"CARTHAGE_PLATFORM[sdk=iphonesimulator*]" = iOS;
-				"CARTHAGE_PLATFORM[sdk=macosx*]" = Mac;
-				"CARTHAGE_PLATFORM[sdk=watchos*]" = watchOS;
-				"CARTHAGE_PLATFORM[sdk=watchsimulator*]" = watchOS;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1646,10 +1564,6 @@
 				DEFINES_MODULE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/$(CARTHAGE_PLATFORM)",
-				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1694,13 +1608,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CARTHAGE_PLATFORM[sdk=appletvos*]" = tvOS;
-				"CARTHAGE_PLATFORM[sdk=appletvsimulator*]" = tvOS;
-				"CARTHAGE_PLATFORM[sdk=iphoneos*]" = iOS;
-				"CARTHAGE_PLATFORM[sdk=iphonesimulator*]" = iOS;
-				"CARTHAGE_PLATFORM[sdk=macosx*]" = Mac;
-				"CARTHAGE_PLATFORM[sdk=watchos*]" = watchOS;
-				"CARTHAGE_PLATFORM[sdk=watchsimulator*]" = watchOS;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1736,10 +1643,6 @@
 				DEFINES_MODULE = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/$(CARTHAGE_PLATFORM)",
-				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
