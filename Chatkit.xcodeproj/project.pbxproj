@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -37,6 +37,11 @@
 		228E1D6D230D9FDC0014B1A9 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */; };
 		229018312358AE99008FAB07 /* TypingUsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229018302358AE99008FAB07 /* TypingUsersProvider.swift */; };
 		229093DA22F1DDB4003DDE2C /* PusherChatkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 229093D822F1DDB4003DDE2C /* PusherChatkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22B2D2A223E2F9020085D79C /* PusherPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = 22B2D2A123E2F9020085D79C /* PusherPlatform */; };
+		22B2D2BD23E2FEE00085D79C /* PusherChatkit in Frameworks */ = {isa = PBXBuildFile; productRef = 22B2D2BC23E2FEE00085D79C /* PusherChatkit */; };
+		22B2D2BE23E2FF700085D79C /* Environment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7EA23DF205E0073E6D4 /* Environment.framework */; };
+		22B2D2C723E303390085D79C /* OHHTTPStubs in Frameworks */ = {isa = PBXBuildFile; productRef = 22B2D2C623E303390085D79C /* OHHTTPStubs */; };
+		22B2D2CD23E304CB0085D79C /* OHHTTPStubsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 22B2D2CC23E304CB0085D79C /* OHHTTPStubsSwift */; };
 		22BECDFC2366F24D00FAB7DC /* JoinedRoomsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BECDFB2366F24D00FAB7DC /* JoinedRoomsViewModel.swift */; };
 		22BFE7EE23DF205E0073E6D4 /* Environment.h in Headers */ = {isa = PBXBuildFile; fileRef = 22BFE7EC23DF205E0073E6D4 /* Environment.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		22BFE7F523DF21ED0073E6D4 /* ProcessInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222910EF23D8A78600A3ACDF /* ProcessInfo+Extensions.swift */; };
@@ -165,13 +170,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 22BFE7E923DF205E0073E6D4;
 			remoteInfo = Environment;
-		};
-		73A9391723E0A7440025AF90 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 229093CC22F1DDB4003DDE2C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 229093D422F1DDB4003DDE2C;
-			remoteInfo = Chatkit;
 		};
 		73E585CB23E089420047C6FA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -339,6 +337,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22B2D2BE23E2FF700085D79C /* Environment.framework in Frameworks */,
 				73A9390C23E094990025AF90 /* TestUtilities.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -348,7 +347,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				224B803D22F1E009003CB8DC /* PusherChatkit.framework in Frameworks */,
+				22B2D2CD23E304CB0085D79C /* OHHTTPStubsSwift in Frameworks */,
 				73A9390B23E094940025AF90 /* TestUtilities.framework in Frameworks */,
+				22B2D2C723E303390085D79C /* OHHTTPStubs in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,6 +357,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22B2D2A223E2F9020085D79C /* PusherPlatform in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,6 +372,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22B2D2BD23E2FEE00085D79C /* PusherChatkit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -625,6 +628,7 @@
 				224B803922F1E009003CB8DC /* Unit Tests */,
 				222910DC23D8A5D900A3ACDF /* System Tests */,
 				229093D622F1DDB4003DDE2C /* Products */,
+				22B2D2AE23E2FBF10085D79C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -656,6 +660,13 @@
 				22FD93BE2361DC3200AB841F /* View Models */,
 			);
 			path = Chatkit;
+			sourceTree = "<group>";
+		};
+		22B2D2AE23E2FBF10085D79C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		22BFE7EB23DF205E0073E6D4 /* Environment */ = {
@@ -1141,6 +1152,10 @@
 				73E585CC23E089420047C6FA /* PBXTargetDependency */,
 			);
 			name = "Unit Tests";
+			packageProductDependencies = (
+				22B2D2C623E303390085D79C /* OHHTTPStubs */,
+				22B2D2CC23E304CB0085D79C /* OHHTTPStubsSwift */,
+			);
 			productName = "Unit Tests";
 			productReference = 224B803822F1E009003CB8DC /* Unit Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -1159,6 +1174,9 @@
 			dependencies = (
 			);
 			name = Chatkit;
+			packageProductDependencies = (
+				22B2D2A123E2F9020085D79C /* PusherPlatform */,
+			);
 			productName = Chatkit;
 			productReference = 229093D522F1DDB4003DDE2C /* PusherChatkit.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1193,9 +1211,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				73A9391823E0A7440025AF90 /* PBXTargetDependency */,
 			);
 			name = "Test Utilities";
+			packageProductDependencies = (
+				22B2D2BC23E2FEE00085D79C /* PusherChatkit */,
+			);
 			productName = "Test Utilities";
 			productReference = 73E585BF23E087500047C6FA /* TestUtilities.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1241,6 +1261,10 @@
 				Base,
 			);
 			mainGroup = 229093CB22F1DDB4003DDE2C;
+			packageReferences = (
+				22B2D2A023E2F9020085D79C /* XCRemoteSwiftPackageReference "pusher-platform-swift" */,
+				22B2D2BF23E3004B0085D79C /* XCRemoteSwiftPackageReference "OHHTTPStubs" */,
+			);
 			productRefGroup = 229093D622F1DDB4003DDE2C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1474,11 +1498,6 @@
 			isa = PBXTargetDependency;
 			target = 22BFE7E923DF205E0073E6D4 /* Environment */;
 			targetProxy = 22BFE7FA23DF23590073E6D4 /* PBXContainerItemProxy */;
-		};
-		73A9391823E0A7440025AF90 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 229093D422F1DDB4003DDE2C /* Chatkit */;
-			targetProxy = 73A9391723E0A7440025AF90 /* PBXContainerItemProxy */;
 		};
 		73E585CC23E089420047C6FA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1817,6 +1836,47 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		22B2D2A023E2F9020085D79C /* XCRemoteSwiftPackageReference "pusher-platform-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pusher/pusher-platform-swift.git";
+			requirement = {
+				branch = v1;
+				kind = branch;
+			};
+		};
+		22B2D2BF23E3004B0085D79C /* XCRemoteSwiftPackageReference "OHHTTPStubs" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AliSoftware/OHHTTPStubs.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		22B2D2A123E2F9020085D79C /* PusherPlatform */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 22B2D2A023E2F9020085D79C /* XCRemoteSwiftPackageReference "pusher-platform-swift" */;
+			productName = PusherPlatform;
+		};
+		22B2D2BC23E2FEE00085D79C /* PusherChatkit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PusherChatkit;
+		};
+		22B2D2C623E303390085D79C /* OHHTTPStubs */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 22B2D2BF23E3004B0085D79C /* XCRemoteSwiftPackageReference "OHHTTPStubs" */;
+			productName = OHHTTPStubs;
+		};
+		22B2D2CC23E304CB0085D79C /* OHHTTPStubsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 22B2D2BF23E3004B0085D79C /* XCRemoteSwiftPackageReference "OHHTTPStubs" */;
+			productName = OHHTTPStubsSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 229093CC22F1DDB4003DDE2C /* Project object */;
 }
