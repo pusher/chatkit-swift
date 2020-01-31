@@ -65,3 +65,4 @@ fastlane/screenshots
 
 Tests/Config/TestConfig.swift
 *.DS_Store
+InstanceLocator
