@@ -1,4 +1,5 @@
-import Mockingjay
+import OHHTTPStubs
+import OHHTTPStubsSwift
 import PusherPlatform
 import TestUtilities
 import XCTest
@@ -9,7 +10,6 @@ class TestTokenProviderTests: XCTestCase {
     // MARK: - Properties
     
     var testURL: URL!
-    var matcher: ((URLRequest) -> Bool)!
     
     // MARK: - Tests lifecycle
     
@@ -21,11 +21,10 @@ class TestTokenProviderTests: XCTestCase {
         }
         
         self.testURL = testURL
-        self.matcher = uri(self.testURL.absoluteString)
     }
     
     override func tearDown() {
-        removeAllStubs()
+        HTTPStubs.removeAllStubs()
         
         super.tearDown()
     }
@@ -72,7 +71,9 @@ class TestTokenProviderTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        stub(self.matcher, jsonFile(named: "token"))
+        stub(condition: isAbsoluteURLString(self.testURL.absoluteString)) { _ in
+            return jsonFixture(named: "token")
+        }
         
         let expectation = self.expectation(description: "Token retrieval")
         var result: AuthenticationResult?
@@ -110,7 +111,11 @@ class TestTokenProviderTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        stub(self.matcher, http(404))
+        let expectedError = NSError(domain: NSURLErrorDomain, code: NSURLErrorResourceUnavailable, userInfo: nil)
+        
+        stub(condition: isAbsoluteURLString(self.testURL.absoluteString)) { _ in
+            return HTTPStubsResponse(error: expectedError)
+        }
         
         let expectation = self.expectation(description: "Token retrieval")
         var result: AuthenticationResult?
@@ -131,7 +136,7 @@ class TestTokenProviderTests: XCTestCase {
             return
         }
         
-        XCTAssertNotNil(error)
+        XCTAssertEqual(error as NSError, expectedError)
     }
     
     func testShouldSetDefaultContentTypeHeader() {
@@ -147,14 +152,16 @@ class TestTokenProviderTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        stub({ request -> Bool in
+        stub(condition: { request -> Bool in
             guard let headers = request.allHTTPHeaderFields,
                 let contentType = headers["Content-Type"] else {
                     return false
             }
             
             return request.url == self.testURL && contentType == "application/x-www-form-urlencoded"
-        }, jsonFile(named: "token"))
+        }) { _ in
+            return jsonFixture(named: "token")
+        }
         
         let expectation = self.expectation(description: "Token retrieval")
         var result: AuthenticationResult?
@@ -191,14 +198,16 @@ class TestTokenProviderTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        stub({ request -> Bool in
+        stub(condition: { request -> Bool in
             guard let expectedBody = "grant_type=client_credentials".data(using: .utf8),
-                let body = request.httpBodyStream?.exhaust() else {
+                let body = request.ohhttpStubs_httpBody else {
                     return false
             }
             
             return request.url == self.testURL && body == expectedBody
-        }, jsonFile(named: "token"))
+        }) { _ in
+            return jsonFixture(named: "token")
+        }
         
         let expectation = self.expectation(description: "Token retrieval")
         var result: AuthenticationResult?

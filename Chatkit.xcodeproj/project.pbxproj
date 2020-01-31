@@ -125,7 +125,6 @@
 		73A9391C23E0A8BA0025AF90 /* XCTest+Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7396B2D723A78E08009F08FD /* XCTest+Assertions.swift */; };
 		73A9391D23E0A8E60025AF90 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734D6A4523AB78A400105479 /* Array+Extensions.swift */; };
 		73A9391E23E0A8E60025AF90 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7389802C23C8DD1B0029E09F /* Data+Extensions.swift */; };
-		73A9391F23E0A8F00025AF90 /* InputStream+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222910D523D8A56100A3ACDF /* InputStream+Extensions.swift */; };
 		73A9392B23E1AA210025AF90 /* InstanceLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A9392A23E1AA210025AF90 /* InstanceLocator.swift */; };
 		73A9392E23E1AC6E0025AF90 /* InstanceLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A9392D23E1AC6E0025AF90 /* InstanceLocator.swift */; };
 		73ABC07E23B0B5D100ECD162 /* Wire.Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73ABC07D23B0B5D100ECD162 /* Wire.Message.swift */; };
@@ -192,7 +191,6 @@
 		2200BB96231EA5C200BF9545 /* TestLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestLogger.swift; sourceTree = "<group>"; };
 		2212EC54235725B8002212A4 /* MessagesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesProvider.swift; sourceTree = "<group>"; };
 		2212EC5623572A3F002212A4 /* RoomMembersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMembersProvider.swift; sourceTree = "<group>"; };
-		222910D523D8A56100A3ACDF /* InputStream+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputStream+Extensions.swift"; sourceTree = "<group>"; };
 		222910DB23D8A5D900A3ACDF /* System Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "System Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		222910DF23D8A5D900A3ACDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		222910E923D8A6C300A3ACDF /* TestTokenProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTokenProviderTests.swift; sourceTree = "<group>"; };
@@ -953,7 +951,6 @@
 			children = (
 				734D6A4523AB78A400105479 /* Array+Extensions.swift */,
 				7389802C23C8DD1B0029E09F /* Data+Extensions.swift */,
-				222910D523D8A56100A3ACDF /* InputStream+Extensions.swift */,
 				73B00EAD23A2822F0062C718 /* String+Extensions.swift */,
 				7396B2D723A78E08009F08FD /* XCTest+Assertions.swift */,
 			);
@@ -1469,7 +1466,6 @@
 				73E585E023E08EFF0047C6FA /* TokenProvider.swift in Sources */,
 				73E585DB23E08EFF0047C6FA /* StoreDelegate.swift in Sources */,
 				73E585DF23E08EFF0047C6FA /* Store.swift in Sources */,
-				73A9391F23E0A8F00025AF90 /* InputStream+Extensions.swift in Sources */,
 				73E585DD23E08EFF0047C6FA /* StoreListener.swift in Sources */,
 				73E585DA23E08EFF0047C6FA /* StoreBroadcaster.swift in Sources */,
 				73E585D923E08EF90047C6FA /* TestLogger.swift in Sources */,
