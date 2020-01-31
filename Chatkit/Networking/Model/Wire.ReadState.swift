@@ -5,7 +5,7 @@ extension Wire {
     internal struct ReadState {
         let roomIdentifier: String
         let unreadCount: UInt64
-        let cursor: Cursor
+        let cursor: Wire.Cursor?
     }
 
 }

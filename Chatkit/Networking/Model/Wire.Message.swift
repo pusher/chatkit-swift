@@ -8,7 +8,7 @@ extension Wire {
         let identifier: Int64
         let userIdentifier: String
         let roomIdentifier: String
-        let parts: [MessagePart]
+        let parts: [Wire.MessagePart]
         let createdAt: Date
         let updatedAt: Date
     }

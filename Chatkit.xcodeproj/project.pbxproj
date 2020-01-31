@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		73A9394523E1FB800025AF90 /* MakeInstanceLocatorFile */ = {
+		73A9394523E1FB800025AF90 /* Make InstanceLocator File */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 73A9394623E1FB800025AF90 /* Build configuration list for PBXAggregateTarget "MakeInstanceLocatorFile" */;
+			buildConfigurationList = 73A9394623E1FB800025AF90 /* Build configuration list for PBXAggregateTarget "Make InstanceLocator File" */;
 			buildPhases = (
 				73A9394923E1FB8B0025AF90 /* ShellScript */,
 			);
 			dependencies = (
 			);
-			name = MakeInstanceLocatorFile;
-			productName = MakeInstanceLocatorFile;
+			name = "Make InstanceLocator File";
+			productName = "Make InstanceLocator File";
 		};
 /* End PBXAggregateTarget section */
 
@@ -206,7 +206,7 @@
 			containerPortal = 229093CC22F1DDB4003DDE2C /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 73A9394523E1FB800025AF90;
-			remoteInfo = MakeInstanceLocatorFile;
+			remoteInfo = "Make InstanceLocator File";
 		};
 		73E585CB23E089420047C6FA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1319,7 +1319,7 @@
 				73E585BE23E087500047C6FA /* Test Utilities */,
 				224B803722F1E009003CB8DC /* Unit Tests */,
 				222910DA23D8A5D900A3ACDF /* System Tests */,
-				73A9394523E1FB800025AF90 /* MakeInstanceLocatorFile */,
+				73A9394523E1FB800025AF90 /* Make InstanceLocator File */,
 			);
 		};
 /* End PBXProject section */
@@ -1578,7 +1578,7 @@
 		};
 		73A9394B23E1FBCE0025AF90 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 73A9394523E1FB800025AF90 /* MakeInstanceLocatorFile */;
+			target = 73A9394523E1FB800025AF90 /* Make InstanceLocator File */;
 			targetProxy = 73A9394A23E1FBCE0025AF90 /* PBXContainerItemProxy */;
 		};
 		73E585CC23E089420047C6FA /* PBXTargetDependency */ = {
@@ -1922,7 +1922,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		73A9394623E1FB800025AF90 /* Build configuration list for PBXAggregateTarget "MakeInstanceLocatorFile" */ = {
+		73A9394623E1FB800025AF90 /* Build configuration list for PBXAggregateTarget "Make InstanceLocator File" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				73A9394723E1FB800025AF90 /* Debug */,
