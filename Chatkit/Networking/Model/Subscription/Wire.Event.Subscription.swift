@@ -5,7 +5,7 @@ extension Wire.Event {
     internal struct Subscription {
         
         let eventName: Name
-        let data: EventType
+        let data: Wire.Event.EventType
         let timestamp: Date
         
         enum Name: String {

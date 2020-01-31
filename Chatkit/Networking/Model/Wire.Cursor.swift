@@ -5,7 +5,7 @@ extension Wire {
     internal struct Cursor {
         let roomIdentifier: String
         let userIdentifier: String
-        let cursorType: CursorType
+        let cursorType: Wire.CursorType
         let position: Int64
         let updatedAt: Date
     }

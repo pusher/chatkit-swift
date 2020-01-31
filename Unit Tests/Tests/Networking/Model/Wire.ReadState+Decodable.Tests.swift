@@ -23,11 +23,11 @@ class WireReadStateDecodableTests: XCTestCase {
         XCTAssertNoThrow(try Wire.ReadState(from: jsonData.jsonDecoder())) { readState in
             XCTAssertEqual(readState.roomIdentifier, "ac43dfef")
             XCTAssertEqual(readState.unreadCount, 3)
-            XCTAssertEqual(readState.cursor.roomIdentifier, "ac43dfef")
-            XCTAssertEqual(readState.cursor.userIdentifier, "alice")
-            XCTAssertEqual(readState.cursor.cursorType, .read)
-            XCTAssertEqual(readState.cursor.position, 43398)
-            XCTAssertEqual(readState.cursor.updatedAt, Date(fromISO8601String: "2017-04-13T14:10:04Z"))
+            XCTAssertEqual(readState.cursor?.roomIdentifier, "ac43dfef")
+            XCTAssertEqual(readState.cursor?.userIdentifier, "alice")
+            XCTAssertEqual(readState.cursor?.cursorType, .read)
+            XCTAssertEqual(readState.cursor?.position, 43398)
+            XCTAssertEqual(readState.cursor?.updatedAt, Date(fromISO8601String: "2017-04-13T14:10:04Z"))
         }
     }
     
@@ -159,7 +159,7 @@ class WireReadStateDecodableTests: XCTestCase {
                                           "Expected to decode UInt64 but found a string/data instead."])
     }
     
-    func test_init_cursorMissing_throws() {
+    func test_init_cursorMissing_noProblem() {
         
         let jsonData = """
         {
@@ -168,12 +168,14 @@ class WireReadStateDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.ReadState(from: jsonData.jsonDecoder()),
-                             containing: ["keyNotFound",
-                                          "\"cursor\""])
+        XCTAssertNoThrow(try Wire.ReadState(from: jsonData.jsonDecoder())) { readState in
+            XCTAssertEqual(readState.roomIdentifier, "ac43dfef")
+            XCTAssertEqual(readState.unreadCount, 3)
+            XCTAssertEqual(readState.cursor, nil)
+        }
     }
     
-    func test_init_cursorNull_throws() {
+    func test_init_cursorNull_noProblem() {
         
         let jsonData = """
         {
@@ -183,10 +185,11 @@ class WireReadStateDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        XCTAssertThrowsError(try Wire.ReadState(from: jsonData.jsonDecoder()),
-                             containing: ["valueNotFound",
-                                          "\"cursor\"",
-                                          "Cannot get keyed decoding container -- found null value instead."])
+        XCTAssertNoThrow(try Wire.ReadState(from: jsonData.jsonDecoder())) { readState in
+            XCTAssertEqual(readState.roomIdentifier, "ac43dfef")
+            XCTAssertEqual(readState.unreadCount, 3)
+            XCTAssertEqual(readState.cursor, nil)
+        }
     }
     
     func test_init_cursorInvalidType_throws() {
