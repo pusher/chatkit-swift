@@ -20,7 +20,7 @@ extension FakeTokenProvider {
         
         // MARK: - Properties
         
-        let token: String = "testToken"
+        let value: String = "testToken"
         let expiryDate: Date = .distantFuture
         
     }
