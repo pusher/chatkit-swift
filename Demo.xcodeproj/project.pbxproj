@@ -12,7 +12,6 @@
 		226A15E2236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226A15E1236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift */; };
 		227843B4237AC6DF00EB9B26 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227843B3237AC6DF00EB9B26 /* MessageTableViewCell.swift */; };
 		227843B7237AD0D200EB9B26 /* BubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227843B6237AD0D200EB9B26 /* BubbleView.swift */; };
-		22867EC023D9BBC1008ABF07 /* PusherChatkit in Frameworks */ = {isa = PBXBuildFile; productRef = 22867EBF23D9BBC1008ABF07 /* PusherChatkit */; };
 		228865CF233BC5940044BCD8 /* RoomListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228865CE233BC5940044BCD8 /* RoomListViewController.swift */; };
 		229656D6232FC8880016DA7C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656D5232FC8880016DA7C /* AppDelegate.swift */; };
 		229656D8232FC8880016DA7C /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656D7232FC8880016DA7C /* MessageViewController.swift */; };
@@ -23,24 +22,11 @@
 		22BFC030237D7AEC00B55C5E /* IndicatorLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFC02F237D7AEC00B55C5E /* IndicatorLabel.swift */; };
 		22BFC032237D852900B55C5E /* RoomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFC031237D852900B55C5E /* RoomTableViewCell.swift */; };
 		22BFE7FD23DF24090073E6D4 /* Environment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7FC23DF24090073E6D4 /* Environment.framework */; };
-		22BFE7FE23DF24090073E6D4 /* Environment.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7FC23DF24090073E6D4 /* Environment.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22BFE80023DF25640073E6D4 /* Environment+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFE7FF23DF25640073E6D4 /* Environment+Extensions.swift */; };
 		22FDE9C8237B2127005F13CA /* UIBezierPath+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */; };
+		73565CFC23EB27DF00A2790D /* PusherChatkit in Frameworks */ = {isa = PBXBuildFile; productRef = 22867EBF23D9BBC1008ABF07 /* PusherChatkit */; };
+		73565CFF23EB303900A2790D /* PusherSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 73565CFE23EB303900A2790D /* PusherSwift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		223D2C1E238EA5ED007B0BC6 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				22BFE7FE23DF24090073E6D4 /* Environment.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		223D2C1F238EBE8E007B0BC6 /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
@@ -71,6 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73565CFF23EB303900A2790D /* PusherSwift in Frameworks */,
+				73565CFC23EB27DF00A2790D /* PusherChatkit in Frameworks */,
 				22BFE7FD23DF24090073E6D4 /* Environment.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -195,6 +183,7 @@
 			name = Demo;
 			packageProductDependencies = (
 				22867EBF23D9BBC1008ABF07 /* PusherChatkit */,
+				73565CFE23EB303900A2790D /* PusherSwift */,
 			);
 			productName = Test;
 			productReference = 229656D2232FC8880016DA7C /* Demo.app */;
@@ -224,6 +213,9 @@
 				Base,
 			);
 			mainGroup = 229656C9232FC8880016DA7C;
+			packageReferences = (
+				73565CFD23EB303900A2790D /* XCRemoteSwiftPackageReference "pusher-websocket-swift" */,
+			);
 			productRefGroup = 229656D3232FC8880016DA7C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -464,10 +456,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		73565CFD23EB303900A2790D /* XCRemoteSwiftPackageReference "pusher-websocket-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pusher/pusher-websocket-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		22867EBF23D9BBC1008ABF07 /* PusherChatkit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PusherChatkit;
+		};
+		73565CFE23EB303900A2790D /* PusherSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 73565CFD23EB303900A2790D /* XCRemoteSwiftPackageReference "pusher-websocket-swift" */;
+			productName = PusherSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
