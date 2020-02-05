@@ -19,7 +19,7 @@ extension Environment {
         if let environmentValue = self.environmentVariable(named: name), environmentValue != ProcessInfo.unspecifiedValue {
             return environmentValue
         }
-        else if let ciValue = self.ciVariable(named: name), !ciValue.hasPrefix("$(") && !ciValue.hasSuffix(")") {
+        else if let ciValue = self.ciVariable(named: name), !ciValue.hasPrefix("$") {
             return ciValue
         }
         else if let repoFileValue = self.repoFile(named: name), repoFileValue != ProcessInfo.unspecifiedValue {
