@@ -4,6 +4,6 @@ struct CI {
     
     // MARK: - Properties
     
-    let instanceLocator: String = "$INSTANCE_LOCATOR"
+    let instanceLocator: String = "$(INSTANCE_LOCATOR)"
     
 }
