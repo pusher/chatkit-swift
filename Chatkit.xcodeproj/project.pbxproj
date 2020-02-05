@@ -707,7 +707,6 @@
 				737E3F8423EAC9E000B50837 /* Functional Tests */,
 				222910DC23D8A5D900A3ACDF /* System Tests */,
 				229093D622F1DDB4003DDE2C /* Products */,
-				737E3F9323EACACB00B50837 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1032,13 +1031,6 @@
 			children = (
 			);
 			path = Tests;
-			sourceTree = "<group>";
-		};
-		737E3F9323EACACB00B50837 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		7396B2DF23A7F76F009F08FD /* CodableJSONCollections */ = {
