@@ -118,6 +118,26 @@
                </Test>
             </SkippedTests>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "737E3F8223EAC9E000B50837"
+               BuildableName = "Functional Tests.xctest"
+               BlueprintName = "Functional Tests"
+               ReferencedContainer = "container:Chatkit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "222910DA23D8A5D900A3ACDF"
+               BuildableName = "System Tests.xctest"
+               BlueprintName = "System Tests"
+               ReferencedContainer = "container:Chatkit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
