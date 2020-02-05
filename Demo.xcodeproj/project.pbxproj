@@ -24,7 +24,7 @@
 		22BFE7FD23DF24090073E6D4 /* Environment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7FC23DF24090073E6D4 /* Environment.framework */; };
 		22BFE80023DF25640073E6D4 /* Environment+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFE7FF23DF25640073E6D4 /* Environment+Extensions.swift */; };
 		22FDE9C8237B2127005F13CA /* UIBezierPath+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */; };
-		73565CFF23EB303900A2790D /* PusherChatkit in Frameworks */ = {isa = PBXBuildFile; productRef = 22867EBF23D9BBC1008ABF07 /* PusherChatkit */; };
+		735A834A23EB3B2E0094086A /* PusherChatkit in Frameworks */ = {isa = PBXBuildFile; productRef = 735A834923EB3B2E0094086A /* PusherChatkit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +49,7 @@
 		22BFE7FC23DF24090073E6D4 /* Environment.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Environment.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		22BFE7FF23DF25640073E6D4 /* Environment+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Environment+Extensions.swift"; sourceTree = "<group>"; };
 		22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBezierPath+Extensions.swift"; sourceTree = "<group>"; };
+		735A834823EB3ACD0094086A /*  */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ""; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				73565CFF23EB303900A2790D /* PusherChatkit in Frameworks */,
+				735A834A23EB3B2E0094086A /* PusherChatkit in Frameworks */,
 				22BFE7FD23DF24090073E6D4 /* Environment.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -76,6 +77,7 @@
 		229656C9232FC8880016DA7C = {
 			isa = PBXGroup;
 			children = (
+				735A834823EB3ACD0094086A /*  */,
 				229656D4232FC8880016DA7C /* Demo */,
 				229656ED232FC8BB0016DA7C /* Frameworks */,
 				229656D3232FC8880016DA7C /* Products */,
@@ -180,7 +182,7 @@
 			);
 			name = Demo;
 			packageProductDependencies = (
-				73565CFE23EB303900A2790D /* PusherChatkit */,
+				735A834923EB3B2E0094086A /* PusherChatkit */,
 			);
 			productName = Test;
 			productReference = 229656D2232FC8880016DA7C /* Demo.app */;
@@ -211,7 +213,6 @@
 			);
 			mainGroup = 229656C9232FC8880016DA7C;
 			packageReferences = (
-				73565CFD23EB303900A2790D /* XCRemoteSwiftPackageReference "chatkit-swift" */,
 			);
 			productRefGroup = 229656D3232FC8880016DA7C /* Products */;
 			projectDirPath = "";
@@ -453,21 +454,9 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		73565CFD23EB303900A2790D /* XCRemoteSwiftPackageReference "chatkit-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pusher/chatkit-swift.git";
-			requirement = {
-				branch = version-2.0;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		73565CFE23EB303900A2790D /* PusherChatkit */ = {
+		735A834923EB3B2E0094086A /* PusherChatkit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 73565CFD23EB303900A2790D /* XCRemoteSwiftPackageReference "chatkit-swift" */;
 			productName = PusherChatkit;
 		};
 /* End XCSwiftPackageProductDependency section */
