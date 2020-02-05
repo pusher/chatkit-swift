@@ -24,8 +24,7 @@
 		22BFE7FD23DF24090073E6D4 /* Environment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7FC23DF24090073E6D4 /* Environment.framework */; };
 		22BFE80023DF25640073E6D4 /* Environment+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFE7FF23DF25640073E6D4 /* Environment+Extensions.swift */; };
 		22FDE9C8237B2127005F13CA /* UIBezierPath+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */; };
-		73565CFC23EB27DF00A2790D /* PusherChatkit in Frameworks */ = {isa = PBXBuildFile; productRef = 22867EBF23D9BBC1008ABF07 /* PusherChatkit */; };
-		73565CFF23EB303900A2790D /* PusherSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 73565CFE23EB303900A2790D /* PusherSwift */; };
+		73565CFF23EB303900A2790D /* PusherChatkit in Frameworks */ = {isa = PBXBuildFile; productRef = 22867EBF23D9BBC1008ABF07 /* PusherChatkit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,8 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				73565CFF23EB303900A2790D /* PusherSwift in Frameworks */,
-				73565CFC23EB27DF00A2790D /* PusherChatkit in Frameworks */,
+				73565CFF23EB303900A2790D /* PusherChatkit in Frameworks */,
 				22BFE7FD23DF24090073E6D4 /* Environment.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -182,8 +180,7 @@
 			);
 			name = Demo;
 			packageProductDependencies = (
-				22867EBF23D9BBC1008ABF07 /* PusherChatkit */,
-				73565CFE23EB303900A2790D /* PusherSwift */,
+				73565CFE23EB303900A2790D /* PusherChatkit */,
 			);
 			productName = Test;
 			productReference = 229656D2232FC8880016DA7C /* Demo.app */;
@@ -214,7 +211,7 @@
 			);
 			mainGroup = 229656C9232FC8880016DA7C;
 			packageReferences = (
-				73565CFD23EB303900A2790D /* XCRemoteSwiftPackageReference "pusher-websocket-swift" */,
+				73565CFD23EB303900A2790D /* XCRemoteSwiftPackageReference "chatkit-swift" */,
 			);
 			productRefGroup = 229656D3232FC8880016DA7C /* Products */;
 			projectDirPath = "";
@@ -457,25 +454,21 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		73565CFD23EB303900A2790D /* XCRemoteSwiftPackageReference "pusher-websocket-swift" */ = {
+		73565CFD23EB303900A2790D /* XCRemoteSwiftPackageReference "chatkit-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pusher/pusher-websocket-swift.git";
+			repositoryURL = "https://github.com/pusher/chatkit-swift.git";
 			requirement = {
-				branch = master;
+				branch = version-2.0;
 				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		22867EBF23D9BBC1008ABF07 /* PusherChatkit */ = {
+		73565CFE23EB303900A2790D /* PusherChatkit */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 73565CFD23EB303900A2790D /* XCRemoteSwiftPackageReference "chatkit-swift" */;
 			productName = PusherChatkit;
-		};
-		73565CFE23EB303900A2790D /* PusherSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 73565CFD23EB303900A2790D /* XCRemoteSwiftPackageReference "pusher-websocket-swift" */;
-			productName = PusherSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
