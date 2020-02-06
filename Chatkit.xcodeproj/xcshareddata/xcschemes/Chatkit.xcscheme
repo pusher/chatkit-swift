@@ -20,13 +20,55 @@
                ReferencedContainer = "container:Chatkit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "224B803722F1E009003CB8DC"
+               BuildableName = "Unit Tests.xctest"
+               BlueprintName = "Unit Tests"
+               ReferencedContainer = "container:Chatkit.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "737E3F8223EAC9E000B50837"
+               BuildableName = "Functional Tests.xctest"
+               BlueprintName = "Functional Tests"
+               ReferencedContainer = "container:Chatkit.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "222910DA23D8A5D900A3ACDF"
+               BuildableName = "System Tests.xctest"
+               BlueprintName = "System Tests"
+               ReferencedContainer = "container:Chatkit.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldUseLaunchSchemeArgsEnv = "NO"
       enableThreadSanitizer = "YES"
       codeCoverageEnabled = "YES">
       <MacroExpansion>
@@ -38,6 +80,13 @@
             ReferencedContainer = "container:Chatkit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "INSTANCE_LOCATOR"
+            value = "&lt;UNSPECIFIED&gt;"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -68,6 +117,26 @@
                   Identifier = "NetworkingControllerTests/testShouldReturnErrorAfterUnsuccessfulConnection()">
                </Test>
             </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "737E3F8223EAC9E000B50837"
+               BuildableName = "Functional Tests.xctest"
+               BlueprintName = "Functional Tests"
+               ReferencedContainer = "container:Chatkit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "222910DA23D8A5D900A3ACDF"
+               BuildableName = "System Tests.xctest"
+               BlueprintName = "System Tests"
+               ReferencedContainer = "container:Chatkit.xcodeproj">
+            </BuildableReference>
          </TestableReference>
       </Testables>
    </TestAction>

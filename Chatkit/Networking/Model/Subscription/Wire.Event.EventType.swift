@@ -20,10 +20,6 @@ extension Wire.Event {
         
         // Presence Subscription
         case presenceState(event: Wire.Event.PresenceState)
-        
-        var description: String {
-            return String(describing: self)
-        }
     }
     
 }
