@@ -3,9 +3,9 @@ import XCTest
 
 public class DummyStoreBroadcaster: DummyStoreDelegate, StoreBroadcaster {
     
-    public func register(_ listener: StoreListener) -> State {
+    public func register(_ listener: StoreListener) -> ChatState {
         DummyFail(sender: self, function: #function)
-        return State.empty
+        return ChatState.empty
     }
     
     public func unregister(_ listener: StoreListener) {

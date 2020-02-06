@@ -9,16 +9,19 @@ public class DependenciesDoubles: StubBase, Dependencies {
     public let instanceLocator: InstanceLocator
     public let storeBroadcaster: StoreBroadcaster
     public let store: Store
+    public let reductionManager: ReductionManager
     
     public init(instanceLocator: InstanceLocator? = nil,
          storeBroadcaster: StoreBroadcaster? = nil,
          store: Store? = nil,
+         reductionManager: ReductionManager? = nil,
          
          file: StaticString = #file, line: UInt = #line) {
         
         self.instanceLocator = instanceLocator ?? DummyInstanceLocator(file: file, line: line)
         self.storeBroadcaster = storeBroadcaster ?? DummyStoreBroadcaster(file: file, line: line)
         self.store = store ?? DummyStore(file: file, line: line)
+        self.reductionManager = reductionManager ?? DummyReductionManager(file: file, line: line)
         
         super.init(file: file, line: line)
     }

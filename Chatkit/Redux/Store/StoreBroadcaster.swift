@@ -1,6 +1,6 @@
 
 protocol StoreListener: AnyObject { // AnyObject is neccessary to use `===` operator
-    func store(_ store: Store, didUpdateState state: State)
+    func store(_ store: Store, didUpdateState state: ChatState)
 }
 
 protocol HasStoreBroadcaster {
@@ -8,7 +8,7 @@ protocol HasStoreBroadcaster {
 }
 
 protocol StoreBroadcaster: StoreDelegate {
-    func register(_ listener: StoreListener) -> State
+    func register(_ listener: StoreListener) -> ChatState
     func unregister(_ listener: StoreListener)
 }
 
@@ -26,7 +26,7 @@ class ConcreteStoreBroadcaster: StoreBroadcaster {
     
     // MARK: StoreBroadcaster
     
-    func register(_ listener: StoreListener) -> State {
+    func register(_ listener: StoreListener) -> ChatState {
         if !listeners.contains(where: { $0 === listener }) {
             listeners.append(listener)
         }
@@ -39,7 +39,7 @@ class ConcreteStoreBroadcaster: StoreBroadcaster {
 
     // MARK: StoreDelegate
     
-    func store(_ store: Store, didUpdateState state: State) {
+    func store(_ store: Store, didUpdateState state: ChatState) {
         for listener in listeners {
             listener.store(store, didUpdateState: state)
         }

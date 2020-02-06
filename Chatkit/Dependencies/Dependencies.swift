@@ -3,7 +3,8 @@ import struct PusherPlatform.PPSDKInfo
 protocol Dependencies:
     HasInstanceLocator &
     HasStoreBroadcaster &
-    HasStore
+    HasStore &
+    HasReductionManager
 {}
 
 class DependencyFactory {
@@ -86,4 +87,9 @@ class ConcreteDependencies: Dependencies {
     var store: Store {
         return dependencyFactory.resolve(Store.self, dependencies: self)
     }
+    
+    var reductionManager: ReductionManager {
+        return dependencyFactory.resolve(ReductionManager.self, dependencies: self)
+    }
+    
 }

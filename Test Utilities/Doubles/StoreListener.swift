@@ -3,7 +3,7 @@ import XCTest
 
 public class DummyStoreListener: DummyBase, StoreListener {
     
-    public func store(_ store: Store, didUpdateState state: State) {
+    public func store(_ store: Store, didUpdateState state: ChatState) {
         DummyFail(sender: self, function: #function)
     }
 }
@@ -11,7 +11,7 @@ public class DummyStoreListener: DummyBase, StoreListener {
 public class StubStoreListener: StubBase, StoreListener {
 
     private var didUpdateState_expectedCallCount: UInt
-    public private(set) var didUpdateState_stateLastReceived: State?
+    public private(set) var didUpdateState_stateLastReceived: ChatState?
     public private(set) var didUpdateState_actualCallCount: UInt = 0
 
     public init(didUpdateState_expectedCallCount: UInt = 0,
@@ -24,7 +24,7 @@ public class StubStoreListener: StubBase, StoreListener {
 
     // MARK: StoreListener
     
-    public func store(_ store: Store, didUpdateState state: State) {
+    public func store(_ store: Store, didUpdateState state: ChatState) {
         didUpdateState_stateLastReceived = state
         didUpdateState_actualCallCount += 1
         
