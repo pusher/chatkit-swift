@@ -7,7 +7,8 @@ class TestTokenProviderTests: XCTestCase {
     
     // MARK: - Tests
     
-    func testShouldRetrieveTokenFromTestTokenSerivce() {
+    func testShouldRetrieveTokenFromTestTokenService() {
+        
         /******************/
         /*---- GIVEN -----*/
         /******************/
@@ -39,7 +40,7 @@ class TestTokenProviderTests: XCTestCase {
             return
         }
         
-        XCTAssertTrue(token.token.count > 0)
+        XCTAssertTrue(token.value.count > 0)
         XCTAssertEqual(token.expiryDate.timeIntervalSinceNow, 86400, accuracy: 0.01)
     }
     
