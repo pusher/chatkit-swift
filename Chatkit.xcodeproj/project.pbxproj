@@ -155,7 +155,6 @@
 		738A3ECC23E2E69A00B6A614 /* Service.UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85D0323D0AB0A0008D0D6 /* Service.UserService.swift */; };
 		738A3ECD23E2E69A00B6A614 /* MissingUserFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85D0423D0AB0A0008D0D6 /* MissingUserFetcher.swift */; };
 		738DDA7923C61FD400B5C79A /* Functional-Tests-Sandbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738DDA7823C61FD400B5C79A /* Functional-Tests-Sandbox.swift */; };
-		737E3F9423EACACB00B50837 /* Environment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7EA23DF205E0073E6D4 /* Environment.framework */; };
 		737E3F9523EACACB00B50837 /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229093D522F1DDB4003DDE2C /* PusherChatkit.framework */; };
 		737E3F9623EACACB00B50837 /* TestUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73E585BF23E087500047C6FA /* TestUtilities.framework */; };
 		737E3F9723EACAD300B50837 /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229093D522F1DDB4003DDE2C /* PusherChatkit.framework */; };
@@ -247,13 +246,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 229093D422F1DDB4003DDE2C;
 			remoteInfo = Chatkit;
-		};
-		737E3F8F23EACAB200B50837 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 229093CC22F1DDB4003DDE2C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 22BFE7E923DF205E0073E6D4;
-			remoteInfo = Environment;
 		};
 		737E3F9123EACAB200B50837 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -511,7 +503,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				737E3F9523EACACB00B50837 /* PusherChatkit.framework in Frameworks */,
-				737E3F9423EACACB00B50837 /* Environment.framework in Frameworks */,
 				737E3F9623EACACB00B50837 /* TestUtilities.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1487,7 +1478,6 @@
 			);
 			dependencies = (
 				737E3F8E23EACAB200B50837 /* PBXTargetDependency */,
-				737E3F9023EACAB200B50837 /* PBXTargetDependency */,
 				737E3F9223EACAB200B50837 /* PBXTargetDependency */,
 			);
 			name = "Functional Tests";
@@ -1888,11 +1878,6 @@
 			isa = PBXTargetDependency;
 			target = 229093D422F1DDB4003DDE2C /* Chatkit */;
 			targetProxy = 737E3F8D23EACAB200B50837 /* PBXContainerItemProxy */;
-		};
-		737E3F9023EACAB200B50837 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 22BFE7E923DF205E0073E6D4 /* Environment */;
-			targetProxy = 737E3F8F23EACAB200B50837 /* PBXContainerItemProxy */;
 		};
 		737E3F9223EACAB200B50837 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
