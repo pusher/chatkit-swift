@@ -41,8 +41,6 @@
 		229656DC232FC8890016DA7C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		229656DF232FC8890016DA7C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		229656E1232FC8890016DA7C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		229656EE232FC8BB0016DA7C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		229656F7232FCAE90016DA7C /* PusherPlatform.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PusherPlatform.framework; path = Carthage/Build/iOS/PusherPlatform.framework; sourceTree = "<group>"; };
 		229656FD232FD2C40016DA7C /* TextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTableViewCell.swift; sourceTree = "<group>"; };
 		22BFC02F237D7AEC00B55C5E /* IndicatorLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorLabel.swift; sourceTree = "<group>"; };
 		22BFC031237D852900B55C5E /* RoomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTableViewCell.swift; sourceTree = "<group>"; };
@@ -109,8 +107,6 @@
 			children = (
 				735A834823EB3ACD0094086A /*  */,
 				22BFE7FC23DF24090073E6D4 /* Environment.framework */,
-				229656EE232FC8BB0016DA7C /* PusherChatkit.framework */,
-				229656F7232FCAE90016DA7C /* PusherPlatform.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
