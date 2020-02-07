@@ -22,10 +22,25 @@
 		22BFC030237D7AEC00B55C5E /* IndicatorLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFC02F237D7AEC00B55C5E /* IndicatorLabel.swift */; };
 		22BFC032237D852900B55C5E /* RoomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFC031237D852900B55C5E /* RoomTableViewCell.swift */; };
 		22BFE7FD23DF24090073E6D4 /* Environment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7FC23DF24090073E6D4 /* Environment.framework */; };
+		22BFE7FE23DF24090073E6D4 /* Environment.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7FC23DF24090073E6D4 /* Environment.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22BFE80023DF25640073E6D4 /* Environment+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFE7FF23DF25640073E6D4 /* Environment+Extensions.swift */; };
 		22FDE9C8237B2127005F13CA /* UIBezierPath+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */; };
 		735A834A23EB3B2E0094086A /* PusherChatkit in Frameworks */ = {isa = PBXBuildFile; productRef = 735A834923EB3B2E0094086A /* PusherChatkit */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		223D2C1E238EA5ED007B0BC6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				22BFE7FE23DF24090073E6D4 /* Environment.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		223D2C1F238EBE8E007B0BC6 /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
