@@ -22,6 +22,14 @@ struct ConcreteReductionManager: ReductionManager {
     private let userSubscriptionInitialStateReducer: Reducer.ReducerType<ChatState>
     private let userSubscriptionRemovedFromRoomReducer: Reducer.ReducerType<ChatState>
     
+    // MARK: - Initializers
+    
+    init(userSubscriptionInitialStateReducer: @escaping Reducer.ReducerType<ChatState>,
+         userSubscriptionRemovedFromRoomReducer: @escaping Reducer.ReducerType<ChatState>) {
+        self.userSubscriptionInitialStateReducer = userSubscriptionInitialStateReducer
+        self.userSubscriptionRemovedFromRoomReducer = userSubscriptionRemovedFromRoomReducer
+    }
+    
     // MARK: - Internal methods
     
     func reduce(action: Action, state: ChatState) -> ChatState {
@@ -32,6 +40,7 @@ struct ConcreteReductionManager: ReductionManager {
         case .receivedRemovedFromRoom(_):
             return self.userSubscriptionRemovedFromRoomReducer(action, state)
             
+        // TODO: Test all cases listed below.
         case .received(_):
             // TODO: To be implemented
             return .empty
