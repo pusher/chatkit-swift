@@ -30,7 +30,7 @@ class UserSubscriptionReducerTests: XCTestCase {
                         name: "First",
                         createdById: "user-id",
                         isPrivate: true,
-                        pushNotificationTitleOverride: nil,
+                        pushNotificationTitleOverride: "title",
                         customData: nil,
                         lastMessageAt: .distantPast,
                         createdAt: .distantPast,
@@ -42,7 +42,9 @@ class UserSubscriptionReducerTests: XCTestCase {
                         createdById: "user-id",
                         isPrivate: false,
                         pushNotificationTitleOverride: nil,
-                        customData: nil,
+                        customData: [
+                            "key" : "value"
+                        ],
                         lastMessageAt: .distantPast,
                         createdAt: .distantPast,
                         updatedAt: .distantPast,
@@ -62,11 +64,25 @@ class UserSubscriptionReducerTests: XCTestCase {
                 rooms: [
                     RoomState(
                         identifier: "first-room",
-                        name: "First"
+                        name: "First",
+                        isPrivate: true,
+                        pushNotificationTitle: "title",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
                     ),
                     RoomState(
                         identifier: "second-room",
-                        name: "Second"
+                        name: "Second",
+                        isPrivate: false,
+                        pushNotificationTitle: nil,
+                        customData: [
+                            "key" : "value"
+                        ],
+                        lastMessageAt: .distantPast,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
                     )
                 ]
             )
@@ -100,11 +116,23 @@ class UserSubscriptionReducerTests: XCTestCase {
                 rooms: [
                     RoomState(
                         identifier: "first-room",
-                        name: "First"
+                        name: "First",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
                     ),
                     RoomState(
                         identifier: "second-room",
-                        name: "Second"
+                        name: "Second",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
                     )
                 ]
             )
@@ -125,7 +153,13 @@ class UserSubscriptionReducerTests: XCTestCase {
                 rooms: [
                     RoomState(
                         identifier: "first-room",
-                        name: "First"
+                        name: "First",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
                     )
                 ]
             )
@@ -159,11 +193,23 @@ class UserSubscriptionReducerTests: XCTestCase {
                 rooms: [
                     RoomState(
                         identifier: "first-room",
-                        name: "First"
+                        name: "First",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
                     ),
                     RoomState(
                         identifier: "second-room",
-                        name: "Second"
+                        name: "Second",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
                     )
                 ]
             )
@@ -184,11 +230,23 @@ class UserSubscriptionReducerTests: XCTestCase {
                 rooms: [
                     RoomState(
                         identifier: "first-room",
-                        name: "First"
+                        name: "First",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
                     ),
                     RoomState(
                         identifier: "second-room",
-                        name: "Second"
+                        name: "Second",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
                     )
                 ]
             )

@@ -73,7 +73,13 @@ class ConcreteReductionManagerTests: XCTestCase {
                 rooms: [
                     RoomState(
                         identifier: "first-room",
-                        name: "First"
+                        name: "First",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
                     )
                 ]
             )
@@ -91,11 +97,23 @@ class ConcreteReductionManagerTests: XCTestCase {
                 rooms: [
                     RoomState(
                         identifier: "first-room",
-                        name: "First"
+                        name: "First",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
                     ),
                     RoomState(
                         identifier: "second-room",
-                        name: "Second"
+                        name: "Second",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
                     )
                 ]
             )
@@ -135,7 +153,13 @@ class ConcreteReductionManagerTests: XCTestCase {
                 rooms: [
                     RoomState(
                         identifier: "first-room",
-                        name: "First"
+                        name: "First",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
                     )
                 ]
             )
@@ -153,7 +177,13 @@ class ConcreteReductionManagerTests: XCTestCase {
                 rooms: [
                     RoomState(
                         identifier: "first-room",
-                        name: "First"
+                        name: "First",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
                     )
                 ]
             )

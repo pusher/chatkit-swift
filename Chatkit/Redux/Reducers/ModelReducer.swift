@@ -10,7 +10,16 @@ extension Reducer {
         }
         
         static func roomList(action: ReceivedInitialStateAction, state: RoomListState) -> RoomListState {
-            let rooms = action.event.rooms.map { RoomState(identifier: $0.identifier, name: $0.name) }
+            let rooms = action.event.rooms.map {
+                RoomState(identifier: $0.identifier,
+                          name: $0.name,
+                          isPrivate: $0.isPrivate,
+                          pushNotificationTitle: $0.pushNotificationTitleOverride,
+                          customData: $0.customData,
+                          lastMessageAt: $0.lastMessageAt,
+                          createdAt: $0.createdAt,
+                          updatedAt: $0.updatedAt)
+            }
             
             return RoomListState(rooms: rooms)
         }
