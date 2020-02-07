@@ -79,7 +79,7 @@ class ModelReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let currentState: RoomListState = .empty
+        let currentState: [RoomState] = []
         
         let action = ReceivedInitialStateAction(
             event: Wire.Event.InitialState(
@@ -123,32 +123,30 @@ class ModelReducerTests: XCTestCase {
             )
         )
         
-        let expectedState = RoomListState(
-            rooms: [
-                RoomState(
-                    identifier: "first-room",
-                    name: "First",
-                    isPrivate: true,
-                    pushNotificationTitle: "title",
-                    customData: nil,
-                    lastMessageAt: .distantPast,
-                    createdAt: .distantPast,
-                    updatedAt: .distantPast
-                ),
-                RoomState(
-                    identifier: "second-room",
-                    name: "Second",
-                    isPrivate: false,
-                    pushNotificationTitle: nil,
-                    customData: [
-                        "key" : "value"
-                    ],
-                    lastMessageAt: .distantPast,
-                    createdAt: .distantPast,
-                    updatedAt: .distantPast
-                )
-            ]
-        )
+        let expectedState = [
+            RoomState(
+                identifier: "first-room",
+                name: "First",
+                isPrivate: true,
+                pushNotificationTitle: "title",
+                customData: nil,
+                lastMessageAt: .distantPast,
+                createdAt: .distantPast,
+                updatedAt: .distantPast
+            ),
+            RoomState(
+                identifier: "second-room",
+                name: "Second",
+                isPrivate: false,
+                pushNotificationTitle: nil,
+                customData: [
+                    "key" : "value"
+                ],
+                lastMessageAt: .distantPast,
+                createdAt: .distantPast,
+                updatedAt: .distantPast
+            )
+        ]
         
         /******************/
         /*----- WHEN -----*/
@@ -169,30 +167,28 @@ class ModelReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let currentState = RoomListState(
-            rooms: [
-                RoomState(
-                    identifier: "first-room",
-                    name: "First",
-                    isPrivate: false,
-                    pushNotificationTitle: "nil",
-                    customData: nil,
-                    lastMessageAt: .distantPast,
-                    createdAt: .distantPast,
-                    updatedAt: .distantPast
-                ),
-                RoomState(
-                    identifier: "second-room",
-                    name: "Second",
-                    isPrivate: false,
-                    pushNotificationTitle: "nil",
-                    customData: nil,
-                    lastMessageAt: .distantPast,
-                    createdAt: .distantPast,
-                    updatedAt: .distantPast
-                )
-            ]
-        )
+        let currentState = [
+            RoomState(
+                identifier: "first-room",
+                name: "First",
+                isPrivate: false,
+                pushNotificationTitle: "nil",
+                customData: nil,
+                lastMessageAt: .distantPast,
+                createdAt: .distantPast,
+                updatedAt: .distantPast
+            ),
+            RoomState(
+                identifier: "second-room",
+                name: "Second",
+                isPrivate: false,
+                pushNotificationTitle: "nil",
+                customData: nil,
+                lastMessageAt: .distantPast,
+                createdAt: .distantPast,
+                updatedAt: .distantPast
+            )
+        ]
         
         let action = ReceivedRemovedFromRoomAction(
             event: Wire.Event.RemovedFromRoom(
@@ -200,20 +196,18 @@ class ModelReducerTests: XCTestCase {
             )
         )
         
-        let expectedState = RoomListState(
-            rooms: [
-                RoomState(
-                    identifier: "first-room",
-                    name: "First",
-                    isPrivate: false,
-                    pushNotificationTitle: "nil",
-                    customData: nil,
-                    lastMessageAt: .distantPast,
-                    createdAt: .distantPast,
-                    updatedAt: .distantPast
-                )
-            ]
-        )
+        let expectedState = [
+            RoomState(
+                identifier: "first-room",
+                name: "First",
+                isPrivate: false,
+                pushNotificationTitle: "nil",
+                customData: nil,
+                lastMessageAt: .distantPast,
+                createdAt: .distantPast,
+                updatedAt: .distantPast
+            )
+        ]
         
         /******************/
         /*----- WHEN -----*/
@@ -234,30 +228,28 @@ class ModelReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let currentState = RoomListState(
-            rooms: [
-                RoomState(
-                    identifier: "first-room",
-                    name: "First",
-                    isPrivate: false,
-                    pushNotificationTitle: "nil",
-                    customData: nil,
-                    lastMessageAt: .distantPast,
-                    createdAt: .distantPast,
-                    updatedAt: .distantPast
-                ),
-                RoomState(
-                    identifier: "second-room",
-                    name: "Second",
-                    isPrivate: false,
-                    pushNotificationTitle: "nil",
-                    customData: nil,
-                    lastMessageAt: .distantPast,
-                    createdAt: .distantPast,
-                    updatedAt: .distantPast
-                )
-            ]
-        )
+        let currentState = [
+            RoomState(
+                identifier: "first-room",
+                name: "First",
+                isPrivate: false,
+                pushNotificationTitle: "nil",
+                customData: nil,
+                lastMessageAt: .distantPast,
+                createdAt: .distantPast,
+                updatedAt: .distantPast
+            ),
+            RoomState(
+                identifier: "second-room",
+                name: "Second",
+                isPrivate: false,
+                pushNotificationTitle: "nil",
+                customData: nil,
+                lastMessageAt: .distantPast,
+                createdAt: .distantPast,
+                updatedAt: .distantPast
+            )
+        ]
         
         let action = ReceivedRemovedFromRoomAction(
             event: Wire.Event.RemovedFromRoom(
@@ -265,30 +257,28 @@ class ModelReducerTests: XCTestCase {
             )
         )
         
-        let expectedState = RoomListState(
-            rooms: [
-                RoomState(
-                    identifier: "first-room",
-                    name: "First",
-                    isPrivate: false,
-                    pushNotificationTitle: "nil",
-                    customData: nil,
-                    lastMessageAt: .distantPast,
-                    createdAt: .distantPast,
-                    updatedAt: .distantPast
-                ),
-                RoomState(
-                    identifier: "second-room",
-                    name: "Second",
-                    isPrivate: false,
-                    pushNotificationTitle: "nil",
-                    customData: nil,
-                    lastMessageAt: .distantPast,
-                    createdAt: .distantPast,
-                    updatedAt: .distantPast
-                )
-            ]
-        )
+        let expectedState = [
+            RoomState(
+                identifier: "first-room",
+                name: "First",
+                isPrivate: false,
+                pushNotificationTitle: "nil",
+                customData: nil,
+                lastMessageAt: .distantPast,
+                createdAt: .distantPast,
+                updatedAt: .distantPast
+            ),
+            RoomState(
+                identifier: "second-room",
+                name: "Second",
+                isPrivate: false,
+                pushNotificationTitle: "nil",
+                customData: nil,
+                lastMessageAt: .distantPast,
+                createdAt: .distantPast,
+                updatedAt: .distantPast
+            )
+        ]
         
         /******************/
         /*----- WHEN -----*/

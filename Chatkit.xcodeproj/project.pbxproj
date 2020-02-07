@@ -92,7 +92,6 @@
 		22D537D92302D2EB00A92341 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537D82302D2EB00A92341 /* Message.swift */; };
 		22DA90AC23E844FA0023A7DC /* Reducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DA90AB23E844FA0023A7DC /* Reducer.swift */; };
 		22F670F423EC2098001D3BF2 /* ModelReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F670F323EC2098001D3BF2 /* ModelReducer.swift */; };
-		22F670F623EC23C8001D3BF2 /* RoomListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F670F523EC23C8001D3BF2 /* RoomListState.swift */; };
 		22F670FA23EC50D5001D3BF2 /* ConcreteReductionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F670F923EC50D5001D3BF2 /* ConcreteReductionManagerTests.swift */; };
 		22F670FC23EC5A01001D3BF2 /* Reducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F670FB23EC5A01001D3BF2 /* Reducer.swift */; };
 		22F670FE23EC7DAB001D3BF2 /* ModelReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F670FD23EC7DAB001D3BF2 /* ModelReducerTests.swift */; };
@@ -332,7 +331,6 @@
 		22D537D82302D2EB00A92341 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		22DA90AB23E844FA0023A7DC /* Reducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.swift; sourceTree = "<group>"; };
 		22F670F323EC2098001D3BF2 /* ModelReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelReducer.swift; sourceTree = "<group>"; };
-		22F670F523EC23C8001D3BF2 /* RoomListState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListState.swift; sourceTree = "<group>"; };
 		22F670F923EC50D5001D3BF2 /* ConcreteReductionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteReductionManagerTests.swift; sourceTree = "<group>"; };
 		22F670FB23EC5A01001D3BF2 /* Reducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.swift; sourceTree = "<group>"; };
 		22F670FD23EC7DAB001D3BF2 /* ModelReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelReducerTests.swift; sourceTree = "<group>"; };
@@ -485,7 +483,6 @@
 			isa = PBXGroup;
 			children = (
 				2217A7FF23E9BA3F002FE365 /* ChatState.swift */,
-				22F670F523EC23C8001D3BF2 /* RoomListState.swift */,
 				2217A7FB23E9B886002FE365 /* RoomState.swift */,
 				730E44DF23DB482C00A3AF94 /* State.swift */,
 				2217A7FD23E9B8C0002FE365 /* UserState.swift */,
@@ -1686,7 +1683,6 @@
 				7326360723ACDF56009E44E2 /* Wire.Event.Subscription.swift in Sources */,
 				22D537D92302D2EB00A92341 /* Message.swift in Sources */,
 				73A9392E23E1AC6E0025AF90 /* InstanceLocator.swift in Sources */,
-				22F670F623EC23C8001D3BF2 /* RoomListState.swift in Sources */,
 				7301BC5723B0E71500F162C7 /* Wire.Event.RoomDeleted.swift in Sources */,
 				22C5F3EF2306B08C009A7383 /* MessagePart.swift in Sources */,
 				7301BC5D23B0E79F00F162C7 /* Wire.Event.UserLeftRoom.swift in Sources */,

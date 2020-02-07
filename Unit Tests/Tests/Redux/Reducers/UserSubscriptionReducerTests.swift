@@ -60,32 +60,30 @@ class UserSubscriptionReducerTests: XCTestCase {
                 identifier: "alice",
                 name: "Alice A"
             ),
-            joinedRooms: RoomListState(
-                rooms: [
-                    RoomState(
-                        identifier: "first-room",
-                        name: "First",
-                        isPrivate: true,
-                        pushNotificationTitle: "title",
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    ),
-                    RoomState(
-                        identifier: "second-room",
-                        name: "Second",
-                        isPrivate: false,
-                        pushNotificationTitle: nil,
-                        customData: [
-                            "key" : "value"
-                        ],
-                        lastMessageAt: .distantPast,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    )
-                ]
-            )
+            joinedRooms: [
+                RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: true,
+                    pushNotificationTitle: "title",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: nil,
+                    customData: [
+                        "key" : "value"
+                    ],
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
         )
         
         /******************/
@@ -112,30 +110,28 @@ class UserSubscriptionReducerTests: XCTestCase {
                 identifier: "alice",
                 name: "Alice A"
             ),
-            joinedRooms: RoomListState(
-                rooms: [
-                    RoomState(
-                        identifier: "first-room",
-                        name: "First",
-                        isPrivate: false,
-                        pushNotificationTitle: "nil",
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    ),
-                    RoomState(
-                        identifier: "second-room",
-                        name: "Second",
-                        isPrivate: false,
-                        pushNotificationTitle: "nil",
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    )
-                ]
-            )
+            joinedRooms: [
+                RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
         )
         
         let action = ReceivedRemovedFromRoomAction(
@@ -149,20 +145,18 @@ class UserSubscriptionReducerTests: XCTestCase {
                 identifier: "alice",
                 name: "Alice A"
             ),
-            joinedRooms: RoomListState(
-                rooms: [
-                    RoomState(
-                        identifier: "first-room",
-                        name: "First",
-                        isPrivate: false,
-                        pushNotificationTitle: "nil",
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    )
-                ]
-            )
+            joinedRooms: [
+                RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
         )
         
         /******************/
@@ -189,30 +183,28 @@ class UserSubscriptionReducerTests: XCTestCase {
                 identifier: "alice",
                 name: "Alice A"
             ),
-            joinedRooms: RoomListState(
-                rooms: [
-                    RoomState(
-                        identifier: "first-room",
-                        name: "First",
-                        isPrivate: false,
-                        pushNotificationTitle: "nil",
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    ),
-                    RoomState(
-                        identifier: "second-room",
-                        name: "Second",
-                        isPrivate: false,
-                        pushNotificationTitle: "nil",
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    )
-                ]
-            )
+            joinedRooms: [
+                RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
         )
         
         let action = ReceivedRemovedFromRoomAction(
@@ -226,30 +218,28 @@ class UserSubscriptionReducerTests: XCTestCase {
                 identifier: "alice",
                 name: "Alice A"
             ),
-            joinedRooms: RoomListState(
-                rooms: [
-                    RoomState(
-                        identifier: "first-room",
-                        name: "First",
-                        isPrivate: false,
-                        pushNotificationTitle: "nil",
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    ),
-                    RoomState(
-                        identifier: "second-room",
-                        name: "Second",
-                        isPrivate: false,
-                        pushNotificationTitle: "nil",
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    )
-                ]
-            )
+            joinedRooms: [
+                RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
         )
         
         /******************/

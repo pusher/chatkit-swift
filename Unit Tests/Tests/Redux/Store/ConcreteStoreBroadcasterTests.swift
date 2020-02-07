@@ -9,7 +9,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
             identifier: "alice",
             name: "Alice A"
         ),
-        joinedRooms: .empty
+        joinedRooms: []
     )
 
     let stateB = ChatState(
@@ -17,7 +17,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
             identifier: "bob",
             name: "Bob B"
         ),
-        joinedRooms: .empty
+        joinedRooms: []
     )
     
     func test_register_withListenerThatIsNotCurrentlyRegistered_returnsStateFromStore() {

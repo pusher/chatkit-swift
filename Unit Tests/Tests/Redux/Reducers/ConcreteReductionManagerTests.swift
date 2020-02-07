@@ -17,7 +17,7 @@ class ConcreteReductionManagerTests: XCTestCase {
                 identifier: "alice",
                 name: "Alice A"
             ),
-            joinedRooms: .empty
+            joinedRooms: []
         )
         
         let userSubscriptionInitialStateReducer = StubReducer<ReceivedInitialStateAction, ChatState>(reducer_expectedState: expectedState, reducer_expectedCallCount: 1)
@@ -69,20 +69,18 @@ class ConcreteReductionManagerTests: XCTestCase {
         
         let expectedState = ChatState(
             currentUser: .empty,
-            joinedRooms: RoomListState(
-                rooms: [
-                    RoomState(
-                        identifier: "first-room",
-                        name: "First",
-                        isPrivate: false,
-                        pushNotificationTitle: "nil",
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    )
-                ]
-            )
+            joinedRooms: [
+                RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
         )
         
         let userSubscriptionInitialStateReducer = DummyReducer<ReceivedInitialStateAction, ChatState>()
@@ -93,30 +91,28 @@ class ConcreteReductionManagerTests: XCTestCase {
         
         let currentState = ChatState(
             currentUser: .empty,
-            joinedRooms: RoomListState(
-                rooms: [
-                    RoomState(
-                        identifier: "first-room",
-                        name: "First",
-                        isPrivate: false,
-                        pushNotificationTitle: "nil",
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    ),
-                    RoomState(
-                        identifier: "second-room",
-                        name: "Second",
-                        isPrivate: false,
-                        pushNotificationTitle: "nil",
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    )
-                ]
-            )
+            joinedRooms: [
+                RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
         )
         
         let action = ReceivedRemovedFromRoomAction(
@@ -149,20 +145,18 @@ class ConcreteReductionManagerTests: XCTestCase {
         
         let expectedState = ChatState(
             currentUser: .empty,
-            joinedRooms: RoomListState(
-                rooms: [
-                    RoomState(
-                        identifier: "first-room",
-                        name: "First",
-                        isPrivate: false,
-                        pushNotificationTitle: "nil",
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    )
-                ]
-            )
+            joinedRooms: [
+                RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
         )
         
         let userSubscriptionInitialStateReducer = DummyReducer<ReceivedInitialStateAction, ChatState>()
@@ -173,20 +167,18 @@ class ConcreteReductionManagerTests: XCTestCase {
         
         let currentState = ChatState(
             currentUser: .empty,
-            joinedRooms: RoomListState(
-                rooms: [
-                    RoomState(
-                        identifier: "first-room",
-                        name: "First",
-                        isPrivate: false,
-                        pushNotificationTitle: "nil",
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    )
-                ]
-            )
+            joinedRooms: [
+                RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
         )
         
         let action = DummyAction()
