@@ -1,6 +1,6 @@
 
 struct Reducer {
     
-    typealias ReducerType<StateType: State> = (Action, StateType) -> StateType
+    typealias ReducerType<ActionType: Action, StateType: State> = (ActionType, StateType) -> StateType
     
 }

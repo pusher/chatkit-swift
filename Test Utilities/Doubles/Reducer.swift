@@ -1,24 +1,24 @@
 import XCTest
 @testable import PusherChatkit
 
-public class DummyReducer<StateType: State>: DummyBase {
+public class DummyReducer<ActionType: Action, StateType: State>: DummyBase {
     
     public override init(file: StaticString = #file, line: UInt = #line) {
         super.init(file: file, line: line)
     }
     
-    public func reducer(action: Action, state: StateType) -> StateType {
+    public func reducer(action: ActionType, state: StateType) -> StateType {
         DummyFail(sender: self, function: #function)
         return state
     }
     
 }
 
-public class StubReducer<StateType: State>: StubBase {
+public class StubReducer<ActionType: Action, StateType: State>: StubBase {
     
     private var reducer_expectedCallCount: UInt
     private var reducer_expectedState: StateType
-    public private(set) var reducer_actionLastReceived: Action?
+    public private(set) var reducer_actionLastReceived: ActionType?
     public private(set) var reducer_stateLastReceived: StateType?
     public private(set) var reducer_actualCallCount: UInt = 0
     
@@ -32,7 +32,7 @@ public class StubReducer<StateType: State>: StubBase {
         super.init(file: file, line: line)
     }
     
-    public func reducer(action: Action, state: StateType) -> StateType {
+    public func reducer(action: ActionType, state: StateType) -> StateType {
         reducer_actionLastReceived = action
         reducer_stateLastReceived = state
         reducer_actualCallCount += 1

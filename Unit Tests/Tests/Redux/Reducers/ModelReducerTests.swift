@@ -13,7 +13,7 @@ class ModelReducerTests: XCTestCase {
         
         let currentState: UserState = .empty
         
-        let action = Action.receivedInitialState(
+        let action = ReceivedInitialStateAction(
             event: Wire.Event.InitialState(
                 currentUser: Wire.User(
                     identifier: "alice",
@@ -71,35 +71,6 @@ class ModelReducerTests: XCTestCase {
         XCTAssertEqual(result, expectedState)
     }
     
-    func test_user_withCurrentStateAndUnsupportedAction_returnsUnmodifiedState() {
-        
-        /******************/
-        /*---- GIVEN -----*/
-        /******************/
-        
-        let currentState: UserState = .empty
-        
-        let action = Action.receivedRemovedFromRoom(
-            event: Wire.Event.RemovedFromRoom(
-                roomIdentifier: "room-identifier"
-            )
-        )
-        
-        let expectedState: UserState = .empty
-        
-        /******************/
-        /*----- WHEN -----*/
-        /******************/
-        
-        let result = Reducer.Model.user(action: action, state: currentState)
-        
-        /******************/
-        /*----- THEN -----*/
-        /******************/
-        
-        XCTAssertEqual(result, expectedState)
-    }
-    
     func test_roomList_withCurrentStateAndReceivedInitialStateAction_returnsModifiedState() {
         
         /******************/
@@ -108,7 +79,7 @@ class ModelReducerTests: XCTestCase {
         
         let currentState: RoomListState = .empty
         
-        let action = Action.receivedInitialState(
+        let action = ReceivedInitialStateAction(
             event: Wire.Event.InitialState(
                 currentUser: Wire.User(
                     identifier: "alice",
@@ -193,7 +164,8 @@ class ModelReducerTests: XCTestCase {
             ]
         )
         
-        let action = Action.receivedRemovedFromRoom(event: Wire.Event.RemovedFromRoom(
+        let action = ReceivedRemovedFromRoomAction(
+            event: Wire.Event.RemovedFromRoom(
                 roomIdentifier: "second-room"
             )
         )
@@ -239,57 +211,11 @@ class ModelReducerTests: XCTestCase {
             ]
         )
         
-        let action = Action.receivedRemovedFromRoom(event: Wire.Event.RemovedFromRoom(
+        let action = ReceivedRemovedFromRoomAction(
+            event: Wire.Event.RemovedFromRoom(
                 roomIdentifier: "third-room"
             )
         )
-        
-        let expectedState = RoomListState(
-            rooms: [
-                RoomState(
-                    identifier: "first-room",
-                    name: "First"
-                ),
-                RoomState(
-                    identifier: "second-room",
-                    name: "Second"
-                )
-            ]
-        )
-        
-        /******************/
-        /*----- WHEN -----*/
-        /******************/
-        
-        let result = Reducer.Model.roomList(action: action, state: currentState)
-        
-        /******************/
-        /*----- THEN -----*/
-        /******************/
-        
-        XCTAssertEqual(result, expectedState)
-    }
-    
-    func test_roomList_withCurrentStateAndUnsupportedAction_returnsUnmodifiedState() {
-        
-        /******************/
-        /*---- GIVEN -----*/
-        /******************/
-        
-        let currentState = RoomListState(
-            rooms: [
-                RoomState(
-                    identifier: "first-room",
-                    name: "First"
-                ),
-                RoomState(
-                    identifier: "second-room",
-                    name: "Second"
-                )
-            ]
-        )
-        
-        let action = Action.fetching(userWithIdentifier: "user-id")
         
         let expectedState = RoomListState(
             rooms: [

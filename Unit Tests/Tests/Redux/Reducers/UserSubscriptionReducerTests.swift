@@ -13,7 +13,7 @@ class UserSubscriptionReducerTests: XCTestCase {
         
         let currentState: ChatState = .empty
         
-        let action = Action.receivedInitialState(
+        let action = ReceivedInitialStateAction(
             event: Wire.Event.InitialState(
                 currentUser: Wire.User(
                     identifier: "alice",
@@ -85,35 +85,6 @@ class UserSubscriptionReducerTests: XCTestCase {
         XCTAssertEqual(result, expectedState)
     }
     
-    func test_initialState_withCurrentStateAndUnsupportedAction_returnsUnmodifiedState() {
-        
-        /******************/
-        /*---- GIVEN -----*/
-        /******************/
-        
-        let currentState: ChatState = .empty
-        
-        let action = Action.receivedRemovedFromRoom(
-            event: Wire.Event.RemovedFromRoom(
-                roomIdentifier: "room-identifier"
-            )
-        )
-        
-        let expectedState: ChatState = .empty
-        
-        /******************/
-        /*----- WHEN -----*/
-        /******************/
-        
-        let result = Reducer.UserSubscription.initialState(action: action, state: currentState)
-        
-        /******************/
-        /*----- THEN -----*/
-        /******************/
-        
-        XCTAssertEqual(result, expectedState)
-    }
-    
     func test_removedFromRoom_withCurrentStateAndReceivedRemovedFromRoomForExistingRoom_returnsModifiedState() {
         
         /******************/
@@ -139,7 +110,8 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
-        let action = Action.receivedRemovedFromRoom(event: Wire.Event.RemovedFromRoom(
+        let action = ReceivedRemovedFromRoomAction(
+            event: Wire.Event.RemovedFromRoom(
                 roomIdentifier: "second-room"
             )
         )
@@ -197,71 +169,11 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
-        let action = Action.receivedRemovedFromRoom(event: Wire.Event.RemovedFromRoom(
+        let action = ReceivedRemovedFromRoomAction(
+            event: Wire.Event.RemovedFromRoom(
                 roomIdentifier: "third-room"
             )
         )
-        
-        let expectedState = ChatState(
-            currentUser: .populated(
-                identifier: "alice",
-                name: "Alice A"
-            ),
-            joinedRooms: RoomListState(
-                rooms: [
-                    RoomState(
-                        identifier: "first-room",
-                        name: "First"
-                    ),
-                    RoomState(
-                        identifier: "second-room",
-                        name: "Second"
-                    )
-                ]
-            )
-        )
-        
-        /******************/
-        /*----- WHEN -----*/
-        /******************/
-        
-        let result = Reducer.UserSubscription.removedFromRoom(action: action, state: currentState)
-        
-        /******************/
-        /*----- THEN -----*/
-        /******************/
-        
-        XCTAssertEqual(result, expectedState)
-    }
-    
-    // TODO: Implement
-    
-    func test_removedFromRoom_withCurrentStateAndUnsupportedAction_returnsUnmodifiedState() {
-        
-        /******************/
-        /*---- GIVEN -----*/
-        /******************/
-        
-        let currentState = ChatState(
-            currentUser: .populated(
-                identifier: "alice",
-                name: "Alice A"
-            ),
-            joinedRooms: RoomListState(
-                rooms: [
-                    RoomState(
-                        identifier: "first-room",
-                        name: "First"
-                    ),
-                    RoomState(
-                        identifier: "second-room",
-                        name: "Second"
-                    )
-                ]
-            )
-        )
-        
-        let action = Action.fetching(userWithIdentifier: "user-id")
         
         let expectedState = ChatState(
             currentUser: .populated(

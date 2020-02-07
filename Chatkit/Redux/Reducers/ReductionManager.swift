@@ -19,13 +19,13 @@ struct ConcreteReductionManager: ReductionManager {
     
     // MARK: - Properties
     
-    private let userSubscriptionInitialStateReducer: Reducer.ReducerType<ChatState>
-    private let userSubscriptionRemovedFromRoomReducer: Reducer.ReducerType<ChatState>
+    private let userSubscriptionInitialStateReducer: Reducer.ReducerType<ReceivedInitialStateAction, ChatState>
+    private let userSubscriptionRemovedFromRoomReducer: Reducer.ReducerType<ReceivedRemovedFromRoomAction, ChatState>
     
     // MARK: - Initializers
     
-    init(userSubscriptionInitialStateReducer: @escaping Reducer.ReducerType<ChatState>,
-         userSubscriptionRemovedFromRoomReducer: @escaping Reducer.ReducerType<ChatState>) {
+    init(userSubscriptionInitialStateReducer: @escaping Reducer.ReducerType<ReceivedInitialStateAction, ChatState>,
+         userSubscriptionRemovedFromRoomReducer: @escaping Reducer.ReducerType<ReceivedRemovedFromRoomAction, ChatState>) {
         self.userSubscriptionInitialStateReducer = userSubscriptionInitialStateReducer
         self.userSubscriptionRemovedFromRoomReducer = userSubscriptionRemovedFromRoomReducer
     }
@@ -33,22 +33,14 @@ struct ConcreteReductionManager: ReductionManager {
     // MARK: - Internal methods
     
     func reduce(action: Action, state: ChatState) -> ChatState {
-        switch action {
-        case .receivedInitialState(_):
+        if let action = action as? ReceivedInitialStateAction {
             return self.userSubscriptionInitialStateReducer(action, state)
-            
-        case .receivedRemovedFromRoom(_):
-            return self.userSubscriptionRemovedFromRoomReducer(action, state)
-            
-        // TODO: Test all cases listed below.
-        case .received(_):
-            // TODO: To be implemented
-            return .empty
-            
-        case .fetching(_):
-            // TODO: To be implemented
-            return .empty
         }
+        else if let action = action as? ReceivedRemovedFromRoomAction {
+            return self.userSubscriptionRemovedFromRoomReducer(action, state)
+        }
+        
+        return state
     }
     
 }

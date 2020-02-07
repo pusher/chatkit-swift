@@ -51,7 +51,7 @@ class ConcreteStoreTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let action = Action.receivedInitialState(
+        let action = ReceivedInitialStateAction(
             event: Wire.Event.InitialState(
                 currentUser: Wire.User(
                     identifier: "alice",
@@ -104,7 +104,7 @@ class ConcreteStoreTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let action = Action.receivedInitialState(
+        let action = ReceivedInitialStateAction(
             event: Wire.Event.InitialState(
                 currentUser: Wire.User(
                     identifier: "alice",
@@ -151,7 +151,7 @@ class ConcreteStoreTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let action = Action.receivedRemovedFromRoom(
+        let action = ReceivedRemovedFromRoomAction(
             event: Wire.Event.RemovedFromRoom(
                 roomIdentifier: "not-a-known-room"
             )
@@ -185,7 +185,7 @@ class ConcreteStoreTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let action = Action.receivedRemovedFromRoom(
+        let action = ReceivedRemovedFromRoomAction(
             event: Wire.Event.RemovedFromRoom(
                 roomIdentifier: "not-a-known-room"
             )
@@ -228,7 +228,7 @@ class ConcreteStoreTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let action = Action.receivedInitialState(
+        let action = ReceivedInitialStateAction(
             event: Wire.Event.InitialState(
                 currentUser: Wire.User(
                     identifier: "alice",
@@ -252,7 +252,7 @@ class ConcreteStoreTests: XCTestCase {
         /******************/
         
         XCTAssertEqual(stubReductionManager.reduce_actualCallCount, 1)
-        XCTAssertEqual(stubReductionManager.reduce_actionLastReceived, action)
+        XCTAssertEqual(stubReductionManager.reduce_actionLastReceived as? ReceivedInitialStateAction, action)
         XCTAssertEqual(stubReductionManager.reduce_stateLastReceived, ChatState.empty)
     }
     
