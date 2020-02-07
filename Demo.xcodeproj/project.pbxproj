@@ -12,7 +12,6 @@
 		226A15E2236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226A15E1236B31B7005D8E4C /* LoadingIndicatorTableViewCell.swift */; };
 		227843B4237AC6DF00EB9B26 /* MessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227843B3237AC6DF00EB9B26 /* MessageTableViewCell.swift */; };
 		227843B7237AD0D200EB9B26 /* BubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227843B6237AD0D200EB9B26 /* BubbleView.swift */; };
-		22867EC023D9BBC1008ABF07 /* PusherChatkit in Frameworks */ = {isa = PBXBuildFile; productRef = 22867EBF23D9BBC1008ABF07 /* PusherChatkit */; };
 		228865CF233BC5940044BCD8 /* RoomListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228865CE233BC5940044BCD8 /* RoomListViewController.swift */; };
 		229656D6232FC8880016DA7C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656D5232FC8880016DA7C /* AppDelegate.swift */; };
 		229656D8232FC8880016DA7C /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229656D7232FC8880016DA7C /* MessageViewController.swift */; };
@@ -26,6 +25,7 @@
 		22BFE7FE23DF24090073E6D4 /* Environment.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7FC23DF24090073E6D4 /* Environment.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22BFE80023DF25640073E6D4 /* Environment+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BFE7FF23DF25640073E6D4 /* Environment+Extensions.swift */; };
 		22FDE9C8237B2127005F13CA /* UIBezierPath+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */; };
+		735A834A23EB3B2E0094086A /* PusherChatkit in Frameworks */ = {isa = PBXBuildFile; productRef = 735A834923EB3B2E0094086A /* PusherChatkit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,14 +56,13 @@
 		229656DC232FC8890016DA7C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		229656DF232FC8890016DA7C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		229656E1232FC8890016DA7C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		229656EE232FC8BB0016DA7C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		229656F7232FCAE90016DA7C /* PusherPlatform.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PusherPlatform.framework; path = Carthage/Build/iOS/PusherPlatform.framework; sourceTree = "<group>"; };
 		229656FD232FD2C40016DA7C /* TextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTableViewCell.swift; sourceTree = "<group>"; };
 		22BFC02F237D7AEC00B55C5E /* IndicatorLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorLabel.swift; sourceTree = "<group>"; };
 		22BFC031237D852900B55C5E /* RoomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTableViewCell.swift; sourceTree = "<group>"; };
 		22BFE7FC23DF24090073E6D4 /* Environment.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Environment.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		22BFE7FF23DF25640073E6D4 /* Environment+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Environment+Extensions.swift"; sourceTree = "<group>"; };
 		22FDE9C7237B2127005F13CA /* UIBezierPath+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBezierPath+Extensions.swift"; sourceTree = "<group>"; };
+		735A834823EB3ACD0094086A /*  */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ""; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				735A834A23EB3B2E0094086A /* PusherChatkit in Frameworks */,
 				22BFE7FD23DF24090073E6D4 /* Environment.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -120,9 +120,8 @@
 		229656ED232FC8BB0016DA7C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				735A834823EB3ACD0094086A /*  */,
 				22BFE7FC23DF24090073E6D4 /* Environment.framework */,
-				229656EE232FC8BB0016DA7C /* PusherChatkit.framework */,
-				229656F7232FCAE90016DA7C /* PusherPlatform.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -194,7 +193,7 @@
 			);
 			name = Demo;
 			packageProductDependencies = (
-				22867EBF23D9BBC1008ABF07 /* PusherChatkit */,
+				735A834923EB3B2E0094086A /* PusherChatkit */,
 			);
 			productName = Test;
 			productReference = 229656D2232FC8880016DA7C /* Demo.app */;
@@ -224,6 +223,8 @@
 				Base,
 			);
 			mainGroup = 229656C9232FC8880016DA7C;
+			packageReferences = (
+			);
 			productRefGroup = 229656D3232FC8880016DA7C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -465,7 +466,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		22867EBF23D9BBC1008ABF07 /* PusherChatkit */ = {
+		735A834923EB3B2E0094086A /* PusherChatkit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PusherChatkit;
 		};
