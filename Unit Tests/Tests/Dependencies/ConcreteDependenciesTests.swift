@@ -2,7 +2,7 @@ import TestUtilities
 import XCTest
 @testable import PusherChatkit
 
-class ConcreteDependencyTests: XCTestCase {
+class ConcreteDependenciesTests: XCTestCase {
     
     func test_initWithInstanceLocator_withInstanceLocatorButNoOverride_returnsConcreteDependencies() {
         
@@ -24,6 +24,7 @@ class ConcreteDependencyTests: XCTestCase {
         
         XCTAssertNotNil(dependencies.storeBroadcaster as? ConcreteStoreBroadcaster)
         XCTAssertNotNil(dependencies.store as? ConcreteStore)
+        XCTAssertNotNil(dependencies.reductionManager as? ConcreteReductionManager)
     }
     
     func test_initWithInstanceLocatorAndOverride_withInstanceLocatorAndOverride_overridesDepedencies() {
@@ -39,6 +40,11 @@ class ConcreteDependencyTests: XCTestCase {
             dependencyFactory.register(Store.self) { dependencies in
                 StubStore()
             }
+            
+            dependencyFactory.register(ReductionManager.self) { dependencies in
+                StubReductionManager()
+            }
+            
             expectation.fulfill()
         }
         
@@ -57,6 +63,7 @@ class ConcreteDependencyTests: XCTestCase {
         
         XCTAssertNotNil(dependencies.storeBroadcaster as? ConcreteStoreBroadcaster)
         XCTAssertNotNil(dependencies.store as? StubStore)
+        XCTAssertNotNil(dependencies.reductionManager as? StubReductionManager)
     }
     
 }

@@ -18,12 +18,12 @@ public class StubReductionManager: StubBase, ReductionManager {
     public private(set) var reduce_stateLastReceived: ChatState?
     public private(set) var reduce_actualCallCount: UInt = 0
     
-    public init(reduce_expectedState: ChatState,
+    public init(reduce_expectedState: ChatState? = nil,
                 reduce_expectedCallCount: UInt = 0,
                 
                 file: StaticString = #file, line: UInt = #line) {
         
-        self.reduce_expectedState = reduce_expectedState
+        self.reduce_expectedState = reduce_expectedState ?? .empty
         self.reduce_expectedCallCount = reduce_expectedCallCount
         
         super.init(file: file, line: line)

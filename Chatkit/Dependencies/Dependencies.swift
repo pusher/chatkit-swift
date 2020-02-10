@@ -77,6 +77,11 @@ class ConcreteDependencies: Dependencies {
                           delegate: self.storeBroadcaster)
         })
         
+        dependencyFactory.register(ReductionManager.self, factory: { dependencies in
+            ConcreteReductionManager(userSubscriptionInitialStateReducer: Reducer.UserSubscription.initialState(action:state:),
+                                     userSubscriptionRemovedFromRoomReducer: Reducer.UserSubscription.removedFromRoom(action:state:))
+        })
+        
         override?(dependencyFactory)
     }
     
