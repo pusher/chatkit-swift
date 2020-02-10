@@ -10,22 +10,22 @@ public class DependenciesDoubles: StubBase, Dependencies {
     public let storeBroadcaster: StoreBroadcaster
     public let store: Store
     
-    public let reducer_master: Reducer.Master.Typing.ExpressionType
-    public let reducer_model_user_forInitialState: Reducer.Model.User_forInitialState.Typing.ExpressionType
-    public let reducer_model_rooms_forInitialState: Reducer.Model.Rooms_forInitialState.Typing.ExpressionType
-    public let reducer_model_rooms_forRemovedFromRoom: Reducer.Model.Rooms_forRemovedFromRoom.Typing.ExpressionType
-    public let reducer_userSubscription_initialState: Reducer.UserSubscription.InitialState.Typing.ExpressionType
-    public let reducer_userSubscription_removedFromRoom: Reducer.UserSubscription.RemovedFromRoom.Typing.ExpressionType
+    public let reducer_master: Reducer.Master.ExpressionType
+    public let reducer_model_user_forInitialState: Reducer.Model.User_forInitialState.ExpressionType
+    public let reducer_model_rooms_forInitialState: Reducer.Model.Rooms_forInitialState.ExpressionType
+    public let reducer_model_rooms_forRemovedFromRoom: Reducer.Model.Rooms_forRemovedFromRoom.ExpressionType
+    public let reducer_userSubscription_initialState: Reducer.UserSubscription.InitialState.ExpressionType
+    public let reducer_userSubscription_removedFromRoom: Reducer.UserSubscription.RemovedFromRoom.ExpressionType
     
     public init(instanceLocator: InstanceLocator? = nil,
          storeBroadcaster: StoreBroadcaster? = nil,
          store: Store? = nil,
-         reducer_master: Reducer.Master.Typing.ExpressionType? = nil,
-         reducer_model_user_forInitialState: Reducer.Model.User_forInitialState.Typing.ExpressionType? = nil,
-         reducer_model_rooms_forInitialState: Reducer.Model.Rooms_forInitialState.Typing.ExpressionType? = nil,
-         reducer_model_rooms_forRemovedFromRoom: Reducer.Model.Rooms_forRemovedFromRoom.Typing.ExpressionType? = nil,
-         reducer_userSubscription_initialState: Reducer.UserSubscription.InitialState.Typing.ExpressionType? = nil,
-         reducer_userSubscription_removedFromRoom: Reducer.UserSubscription.RemovedFromRoom.Typing.ExpressionType? = nil,
+         reducer_master: Reducer.Master.ExpressionType? = nil,
+         reducer_model_user_forInitialState: Reducer.Model.User_forInitialState.ExpressionType? = nil,
+         reducer_model_rooms_forInitialState: Reducer.Model.Rooms_forInitialState.ExpressionType? = nil,
+         reducer_model_rooms_forRemovedFromRoom: Reducer.Model.Rooms_forRemovedFromRoom.ExpressionType? = nil,
+         reducer_userSubscription_initialState: Reducer.UserSubscription.InitialState.ExpressionType? = nil,
+         reducer_userSubscription_removedFromRoom: Reducer.UserSubscription.RemovedFromRoom.ExpressionType? = nil,
          
          file: StaticString = #file, line: UInt = #line) {
         

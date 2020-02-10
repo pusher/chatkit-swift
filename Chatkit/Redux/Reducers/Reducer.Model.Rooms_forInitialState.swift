@@ -1,22 +1,18 @@
 
 protocol HasReducer_Model_Rooms_forInitialState {
     var reducer_model_rooms_forInitialState:
-        Reducer.Model.Rooms_forInitialState.Typing.ExpressionType { get }
+        Reducer.Model.Rooms_forInitialState.ExpressionType { get }
 }
 
 extension Reducer.Model {
 
     struct Rooms_forInitialState: Reducing {
         
-        struct Typing: ReducerTyping {
-            typealias ActionType = ReceivedInitialStateAction
-            typealias StateType = RoomListState
-            typealias DependenciesType = Any // No dependencies at present
-        }
+        typealias ActionType = ReceivedInitialStateAction
+        typealias StateType = RoomListState
+        typealias DependenciesType = Any // No dependencies at present
 
-        typealias T = Typing
-
-        static func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> T.StateType {
+        static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
             
             let rooms = action.event.rooms.map {
                 RoomState(identifier: $0.identifier,

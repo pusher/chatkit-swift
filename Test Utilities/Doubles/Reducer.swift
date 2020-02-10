@@ -2,9 +2,7 @@ import XCTest
 @testable import PusherChatkit
 
 
-public class DummyReducer<R: Reducing>: DummyBase {
-    
-    public typealias T = R.T
+public class DummyReducer<T: Reducing>: DummyBase {
     
     public func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> T.StateType {
         DummyFail(sender: self, function: #function)
@@ -24,9 +22,7 @@ extension XCTest {
     }
 }
 
-public class StubReducer<R: Reducing>: StubBase {
-    
-    public typealias T = R.T
+public class StubReducer<T: Reducing>: StubBase {
     
     private var reduce_expectedCallCount: UInt
     private var reduce_expectedState: T.StateType
@@ -34,7 +30,7 @@ public class StubReducer<R: Reducing>: StubBase {
     public private(set) var reduce_stateLastReceived: T.StateType?
     public private(set) var reduce_actualCallCount: UInt = 0
     
-    public init(reduce_expectedState: R.T.StateType,
+    public init(reduce_expectedState: T.StateType,
                 reduce_expectedCallCount: UInt = 0,
                 file: StaticString = #file, line: UInt = #line) {
         

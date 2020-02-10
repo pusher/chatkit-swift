@@ -1,26 +1,22 @@
 
 protocol HasReducer_Master {
-    var reducer_master: Reducer.Master.Typing.ExpressionType { get }
+    var reducer_master: Reducer.Master.ExpressionType { get }
 }
 
 extension Reducer {
     
     struct Master: Reducing {
         
-        struct Typing: ReducerTyping {
-            typealias ActionType = Action
-            typealias StateType = ChatState
-            typealias DependenciesType =
-                HasReducer_Model_User_forInitialState
-                & HasReducer_Model_Rooms_forInitialState
-                & HasReducer_Model_Rooms_forRemovedFromRoom
-                & HasReducer_UserSubscription_InitialState
-                & HasReducer_UserSubscription_RemovedFromRoom
-        }
+        typealias ActionType = Action
+        typealias StateType = ChatState
+        typealias DependenciesType =
+            HasReducer_Model_User_forInitialState
+            & HasReducer_Model_Rooms_forInitialState
+            & HasReducer_Model_Rooms_forRemovedFromRoom
+            & HasReducer_UserSubscription_InitialState
+            & HasReducer_UserSubscription_RemovedFromRoom
         
-        typealias T = Typing
-        
-        static func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> T.StateType {
+        static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
             
             if let action = action as? ReceivedInitialStateAction {
                 return dependencies.reducer_userSubscription_initialState(action, state, dependencies)

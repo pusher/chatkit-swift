@@ -1,22 +1,18 @@
 
 protocol HasReducer_UserSubscription_RemovedFromRoom {
     var reducer_userSubscription_removedFromRoom:
-        Reducer.UserSubscription.RemovedFromRoom.Typing.ExpressionType { get }
+        Reducer.UserSubscription.RemovedFromRoom.ExpressionType { get }
 }
 
 extension Reducer.UserSubscription {
     
     struct RemovedFromRoom: Reducing {
 
-        struct Typing: ReducerTyping {
-            typealias ActionType = ReceivedRemovedFromRoomAction
-            typealias StateType = ChatState
-            typealias DependenciesType = HasReducer_Model_Rooms_forRemovedFromRoom
-        }
-
-        typealias T = Typing
-
-        static func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> T.StateType {
+        typealias ActionType = ReceivedRemovedFromRoomAction
+        typealias StateType = ChatState
+        typealias DependenciesType = HasReducer_Model_Rooms_forRemovedFromRoom
+        
+        static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
             
             let joinedRooms = dependencies.reducer_model_rooms_forRemovedFromRoom(action, state.joinedRooms, dependencies)
             
