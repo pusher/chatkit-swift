@@ -1,10 +1,7 @@
 
 protocol HasReducer_Model_User_forInitialState {
-    var reducer_model_user_forInitialState: T.ExpressionType { get }
-}
-
-extension HasReducer_Model_User_forInitialState {
-    typealias T = Reducer.Model.User_forInitialState.Typing
+    var reducer_model_user_forInitialState:
+        Reducer.Model.User_forInitialState.Typing.ExpressionType { get }
 }
 
 extension Reducer.Model {

@@ -1,10 +1,6 @@
 
 protocol HasReducer_Master {
-    var reducer_master: T.ExpressionType { get }
-}
-
-extension HasReducer_Master {
-    typealias T = Reducer.Master.Typing
+    var reducer_master: Reducer.Master.Typing.ExpressionType { get }
 }
 
 extension Reducer {

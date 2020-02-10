@@ -1,10 +1,7 @@
 
 protocol HasReducer_UserSubscription_InitialState {
-    var reducer_userSubscription_initialState: T.ExpressionType { get }
-}
-
-extension HasReducer_UserSubscription_InitialState {
-    typealias T = Reducer.UserSubscription.InitialState.Typing
+    var reducer_userSubscription_initialState:
+        Reducer.UserSubscription.InitialState.Typing.ExpressionType { get }
 }
 
 extension Reducer.UserSubscription {

@@ -1,10 +1,7 @@
 
 protocol HasReducer_Model_Rooms_forRemovedFromRoom {
-    var reducer_model_rooms_forRemovedFromRoom:T.ExpressionType { get }
-}
-
-extension HasReducer_Model_Rooms_forRemovedFromRoom {
-    typealias T = Reducer.Model.Rooms_forRemovedFromRoom.Typing
+    var reducer_model_rooms_forRemovedFromRoom:
+        Reducer.Model.Rooms_forRemovedFromRoom.Typing.ExpressionType { get }
 }
 
 extension Reducer.Model {

@@ -1,10 +1,7 @@
 
 protocol HasReducer_UserSubscription_RemovedFromRoom {
-    var reducer_userSubscription_removedFromRoom: Reducer.UserSubscription.RemovedFromRoom.Typing.ExpressionType { get }
-}
-
-extension HasReducer_UserSubscription_RemovedFromRoom {
-    typealias T = Reducer.UserSubscription.RemovedFromRoom.Typing
+    var reducer_userSubscription_removedFromRoom:
+        Reducer.UserSubscription.RemovedFromRoom.Typing.ExpressionType { get }
 }
 
 extension Reducer.UserSubscription {

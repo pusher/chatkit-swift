@@ -1,10 +1,7 @@
 
 protocol HasReducer_Model_Rooms_forInitialState {
-    var reducer_model_rooms_forInitialState: T.ExpressionType { get }
-}
-
-extension HasReducer_Model_Rooms_forInitialState {
-    typealias T = Reducer.Model.Rooms_forInitialState.Typing
+    var reducer_model_rooms_forInitialState:
+        Reducer.Model.Rooms_forInitialState.Typing.ExpressionType { get }
 }
 
 extension Reducer.Model {
