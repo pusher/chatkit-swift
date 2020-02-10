@@ -4,14 +4,14 @@ protocol HasReducer_Master {
 }
 
 extension HasReducer_Master {
-    typealias T = Reducer.Master.Types
+    typealias T = Reducer.Master.Typing
 }
 
 extension Reducer {
     
     struct Master {
         
-        struct Types: ReducerTyping {
+        struct Typing: ReducerTyping {
             typealias ActionType = Action
             typealias StateType = ChatState
             typealias DependenciesType =
@@ -22,7 +22,35 @@ extension Reducer {
                 & HasReducer_UserSubscription_RemovedFromRoom
         }
         
-        typealias T = Types
+        typealias T = Typing
+        
+        static func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> ChatState {
+            
+            if let action = action as? ReceivedInitialStateAction {
+                return dependencies.reducer_userSubscription_initialState(action, state, dependencies)
+            }
+            else if let action = action as? ReceivedRemovedFromRoomAction {
+                return dependencies.reducer_userSubscription_removedFromRoom(action, state, dependencies)
+            }
+            
+            return state
+        }
+    }
+    
+    struct MasterX {
+        
+        struct Typing: ReducerTyping {
+            typealias ActionType = Action
+            typealias StateType = ChatState
+            typealias DependenciesType =
+                HasReducer_Model_User_forInitialState
+                & HasReducer_Model_Rooms_forInitialState
+                & HasReducer_Model_Rooms_forRemovedFromRoom
+                & HasReducer_UserSubscription_InitialState
+                & HasReducer_UserSubscription_RemovedFromRoom
+        }
+        
+        typealias T = Typing
         
         static func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> ChatState {
             

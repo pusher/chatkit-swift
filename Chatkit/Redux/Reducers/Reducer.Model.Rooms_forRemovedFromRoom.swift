@@ -4,20 +4,20 @@ protocol HasReducer_Model_Rooms_forRemovedFromRoom {
 }
 
 extension HasReducer_Model_Rooms_forRemovedFromRoom {
-    typealias T = Reducer.Model.Rooms_forRemovedFromRoom.Types
+    typealias T = Reducer.Model.Rooms_forRemovedFromRoom.Typing
 }
 
 extension Reducer.Model {
 
     struct Rooms_forRemovedFromRoom {
         
-        struct Types: ReducerTyping {
+        struct Typing: ReducerTyping {
             typealias ActionType = ReceivedRemovedFromRoomAction
             typealias StateType = RoomListState
             typealias DependenciesType = Any // No dependencies at present
         }
 
-        typealias T = Types
+        typealias T = Typing
 
         static func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> T.StateType {
             

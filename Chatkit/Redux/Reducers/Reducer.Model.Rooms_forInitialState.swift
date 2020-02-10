@@ -4,20 +4,20 @@ protocol HasReducer_Model_Rooms_forInitialState {
 }
 
 extension HasReducer_Model_Rooms_forInitialState {
-    typealias T = Reducer.Model.Rooms_forInitialState.Types
+    typealias T = Reducer.Model.Rooms_forInitialState.Typing
 }
 
 extension Reducer.Model {
 
     struct Rooms_forInitialState {
         
-        struct Types: ReducerTyping {
+        struct Typing: ReducerTyping {
             typealias ActionType = ReceivedInitialStateAction
             typealias StateType = RoomListState
             typealias DependenciesType = Any // No dependencies at present
         }
 
-        typealias T = Types
+        typealias T = Typing
 
         static func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> T.StateType {
             let rooms = action.event.rooms.map {

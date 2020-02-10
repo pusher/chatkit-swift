@@ -89,11 +89,11 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
-        let stubUsersReducer: StubReducer<Reducer.Model.User_forInitialState.Types> =
+        let stubUsersReducer: StubReducer<Reducer.Model.User_forInitialState.Typing> =
             .init(reduce_expectedState: expectedState.currentUser,
                   reduce_expectedCallCount: 1)
         
-        let stubRoomsReducer: StubReducer<Reducer.Model.Rooms_forInitialState.Types> =
+        let stubRoomsReducer: StubReducer<Reducer.Model.Rooms_forInitialState.Typing> =
             .init(reduce_expectedState: expectedState.joinedRooms,
                   reduce_expectedCallCount: 1)
         
@@ -179,7 +179,7 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
-        let stubReducer: StubReducer<Reducer.Model.Rooms_forRemovedFromRoom.Types> =
+        let stubReducer: StubReducer<Reducer.Model.Rooms_forRemovedFromRoom.Typing> =
             .init(reduce_expectedState: expectedState.joinedRooms,
                   reduce_expectedCallCount: 1)
         
@@ -274,7 +274,7 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
-        let stubReducer: StubReducer<Reducer.Model.Rooms_forRemovedFromRoom.Types> =
+        let stubReducer: StubReducer<Reducer.Model.Rooms_forRemovedFromRoom.Typing> =
             .init(reduce_expectedState: expectedState.joinedRooms,
                   reduce_expectedCallCount: 1)
         

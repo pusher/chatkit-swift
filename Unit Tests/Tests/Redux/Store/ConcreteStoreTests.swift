@@ -39,7 +39,7 @@ class ConcreteStoreTests: XCTestCase {
             joinedRooms: .empty
         )
         
-        let stubMasterReducer: StubReducer<Reducer.Master.Types> =
+        let stubMasterReducer: StubReducer<Reducer.Master.Typing> =
             .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
@@ -94,7 +94,7 @@ class ConcreteStoreTests: XCTestCase {
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
         
-        let stubMasterReducer: StubReducer<Reducer.Master.Types> =
+        let stubMasterReducer: StubReducer<Reducer.Master.Typing> =
             .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
@@ -142,7 +142,7 @@ class ConcreteStoreTests: XCTestCase {
         
         let expectedState = ChatState.empty
         
-        let stubMasterReducer: StubReducer<Reducer.Master.Types> =
+        let stubMasterReducer: StubReducer<Reducer.Master.Typing> =
             .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
@@ -178,7 +178,7 @@ class ConcreteStoreTests: XCTestCase {
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 2)
         
-        let stubMasterReducer: StubReducer<Reducer.Master.Types> =
+        let stubMasterReducer: StubReducer<Reducer.Master.Typing> =
             .init(reduce_expectedState: .empty, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
@@ -223,7 +223,7 @@ class ConcreteStoreTests: XCTestCase {
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
         
-        let stubMasterReducer: StubReducer<Reducer.Master.Types> =
+        let stubMasterReducer: StubReducer<Reducer.Master.Typing> =
             .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)

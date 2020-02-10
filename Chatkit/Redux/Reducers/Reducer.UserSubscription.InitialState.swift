@@ -4,21 +4,21 @@ protocol HasReducer_UserSubscription_InitialState {
 }
 
 extension HasReducer_UserSubscription_InitialState {
-    typealias T = Reducer.UserSubscription.InitialState.Types
+    typealias T = Reducer.UserSubscription.InitialState.Typing
 }
 
 extension Reducer.UserSubscription {
 
     struct InitialState {
         
-        struct Types: ReducerTyping {
+        struct Typing: ReducerTyping {
             typealias ActionType = ReceivedInitialStateAction
             typealias StateType = ChatState
             typealias DependenciesType = HasReducer_Model_User_forInitialState
                 & HasReducer_Model_Rooms_forInitialState
         }
 
-        typealias T = Types
+        typealias T = Typing
         
         static func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> T.StateType {
 
