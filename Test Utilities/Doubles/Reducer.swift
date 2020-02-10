@@ -2,7 +2,9 @@ import XCTest
 @testable import PusherChatkit
 
 
-public class DummyReducer<T: ReducerTyping>: DummyBase {
+public class DummyReducer<R: Reducing>: DummyBase {
+    
+    public typealias T = R.T
     
     public func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> T.StateType {
         DummyFail(sender: self, function: #function)
@@ -16,14 +18,15 @@ extension XCTest {
     // provide a (faux) initialiser that sets `file` and `line` automatically
     // making the tests themeselves cleaner and more readable.
     // Typically we shouldn't do this on Dummy's though which is why we restrict to within XCTest only.
-    public func DummyReducer<T: ReducerTyping>(file: StaticString = #file, line: UInt = #line) -> DummyReducer<T> {
+    public func DummyReducer<T: Reducing>(file: StaticString = #file, line: UInt = #line) -> DummyReducer<T> {
         let dummy: DummyReducer<T> = .init(file: file, line: line)
-        let _: T.ActionType
         return dummy
     }
 }
 
-public class StubReducer<T: ReducerTyping>: StubBase {
+public class StubReducer<R: Reducing>: StubBase {
+    
+    public typealias T = R.T
     
     private var reduce_expectedCallCount: UInt
     private var reduce_expectedState: T.StateType
@@ -31,7 +34,7 @@ public class StubReducer<T: ReducerTyping>: StubBase {
     public private(set) var reduce_stateLastReceived: T.StateType?
     public private(set) var reduce_actualCallCount: UInt = 0
     
-    public init(reduce_expectedState: T.StateType,
+    public init(reduce_expectedState: R.T.StateType,
                 reduce_expectedCallCount: UInt = 0,
                 file: StaticString = #file, line: UInt = #line) {
         

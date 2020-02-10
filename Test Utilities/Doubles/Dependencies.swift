@@ -34,17 +34,17 @@ public class DependenciesDoubles: StubBase, Dependencies {
         self.store = store ?? DummyStore(file: file, line: line)
         
         self.reducer_master = reducer_master ??
-            DummyReducer<Reducer.Master.Typing>(file: file, line: line).reduce
+            DummyReducer<Reducer.Master>(file: file, line: line).reduce
         self.reducer_model_user_forInitialState = reducer_model_user_forInitialState ??
-            DummyReducer<Reducer.Model.User_forInitialState.Typing>(file: file, line: line).reduce
+            DummyReducer<Reducer.Model.User_forInitialState>(file: file, line: line).reduce
         self.reducer_model_rooms_forInitialState = reducer_model_rooms_forInitialState ??
-            DummyReducer<Reducer.Model.Rooms_forInitialState.Typing>(file: file, line: line).reduce
+            DummyReducer<Reducer.Model.Rooms_forInitialState>(file: file, line: line).reduce
         self.reducer_model_rooms_forRemovedFromRoom = reducer_model_rooms_forRemovedFromRoom ??
-            DummyReducer<Reducer.Model.Rooms_forRemovedFromRoom.Typing>(file: file, line: line).reduce
+            DummyReducer<Reducer.Model.Rooms_forRemovedFromRoom>(file: file, line: line).reduce
         self.reducer_userSubscription_initialState = reducer_userSubscription_initialState ??
-            DummyReducer<Reducer.UserSubscription.InitialState.Typing>(file: file, line: line).reduce
+            DummyReducer<Reducer.UserSubscription.InitialState>(file: file, line: line).reduce
         self.reducer_userSubscription_removedFromRoom = reducer_userSubscription_removedFromRoom ??
-            DummyReducer<Reducer.UserSubscription.RemovedFromRoom.Typing>(file: file, line: line).reduce
+            DummyReducer<Reducer.UserSubscription.RemovedFromRoom>(file: file, line: line).reduce
         
         super.init(file: file, line: line)
     }

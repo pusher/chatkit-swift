@@ -6,7 +6,7 @@ protocol HasReducer_Model_Rooms_forRemovedFromRoom {
 
 extension Reducer.Model {
 
-    struct Rooms_forRemovedFromRoom {
+    struct Rooms_forRemovedFromRoom: Reducing {
         
         struct Typing: ReducerTyping {
             typealias ActionType = ReceivedRemovedFromRoomAction

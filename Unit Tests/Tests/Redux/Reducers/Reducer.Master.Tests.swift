@@ -20,9 +20,11 @@ class Reducer_Master_Tests: XCTestCase {
             joinedRooms: .empty
         )
         
-        let userSubscriptionInitialStateReducer: StubReducer<Reducer.UserSubscription.InitialState.Typing> = .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
+        let userSubscriptionInitialStateReducer: StubReducer<Reducer.UserSubscription.InitialState> =
+            .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
         
-        let userSubscriptionRemovedFromRoomReducer: DummyReducer<Reducer.UserSubscription.RemovedFromRoom.Typing> = DummyReducer()
+        let userSubscriptionRemovedFromRoomReducer: DummyReducer<Reducer.UserSubscription.RemovedFromRoom> =
+            DummyReducer()
         
         let dependencies = DependenciesDoubles(
             reducer_userSubscription_initialState: userSubscriptionInitialStateReducer.reduce,
@@ -90,9 +92,10 @@ class Reducer_Master_Tests: XCTestCase {
             )
         )
         
-        let userSubscriptionInitialStateReducer: DummyReducer<Reducer.UserSubscription.InitialState.Typing> = DummyReducer()
+        let userSubscriptionInitialStateReducer: DummyReducer<Reducer.UserSubscription.InitialState> =
+            DummyReducer()
         
-        let userSubscriptionRemovedFromRoomReducer: StubReducer<Reducer.UserSubscription.RemovedFromRoom.Typing> =
+        let userSubscriptionRemovedFromRoomReducer: StubReducer<Reducer.UserSubscription.RemovedFromRoom> =
             .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(
@@ -176,9 +179,11 @@ class Reducer_Master_Tests: XCTestCase {
             )
         )
         
-        let userSubscriptionInitialStateReducer: DummyReducer<Reducer.UserSubscription.InitialState.Typing> = DummyReducer()
+        let userSubscriptionInitialStateReducer: DummyReducer<Reducer.UserSubscription.InitialState> =
+            DummyReducer()
         
-        let userSubscriptionRemovedFromRoomReducer: DummyReducer<Reducer.UserSubscription.RemovedFromRoom.Typing> = DummyReducer()
+        let userSubscriptionRemovedFromRoomReducer: DummyReducer<Reducer.UserSubscription.RemovedFromRoom> =
+            DummyReducer()
         
         let dependencies = DependenciesDoubles(
             reducer_userSubscription_initialState: userSubscriptionInitialStateReducer.reduce,

@@ -6,7 +6,7 @@ protocol HasReducer_UserSubscription_RemovedFromRoom {
 
 extension Reducer.UserSubscription {
     
-    struct RemovedFromRoom {
+    struct RemovedFromRoom: Reducing {
 
         struct Typing: ReducerTyping {
             typealias ActionType = ReceivedRemovedFromRoomAction
@@ -22,6 +22,7 @@ extension Reducer.UserSubscription {
             
             return ChatState(currentUser: state.currentUser, joinedRooms: joinedRooms)
         }
+        
     }
     
 }

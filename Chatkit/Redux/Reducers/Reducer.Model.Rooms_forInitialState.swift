@@ -6,7 +6,7 @@ protocol HasReducer_Model_Rooms_forInitialState {
 
 extension Reducer.Model {
 
-    struct Rooms_forInitialState {
+    struct Rooms_forInitialState: Reducing {
         
         struct Typing: ReducerTyping {
             typealias ActionType = ReceivedInitialStateAction
@@ -17,6 +17,7 @@ extension Reducer.Model {
         typealias T = Typing
 
         static func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> T.StateType {
+            
             let rooms = action.event.rooms.map {
                 RoomState(identifier: $0.identifier,
                           name: $0.name,

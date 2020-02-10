@@ -6,7 +6,7 @@ protocol HasReducer_UserSubscription_InitialState {
 
 extension Reducer.UserSubscription {
 
-    struct InitialState {
+    struct InitialState: Reducing {
         
         struct Typing: ReducerTyping {
             typealias ActionType = ReceivedInitialStateAction
