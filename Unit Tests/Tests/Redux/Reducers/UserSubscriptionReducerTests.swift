@@ -11,7 +11,7 @@ class UserSubscriptionReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let currentState: ChatState = .empty
+        let inputState: ChatState = .empty
         
         let action = ReceivedInitialStateAction(
             event: Wire.Event.InitialState(
@@ -55,6 +55,16 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let outputState = Reducer.UserSubscription.initialState(action: action, state: inputState)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
         let expectedState = ChatState(
             currentUser: .populated(
                 identifier: "alice",
@@ -88,17 +98,7 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
-        /******************/
-        /*----- WHEN -----*/
-        /******************/
-        
-        let result = Reducer.UserSubscription.initialState(action: action, state: currentState)
-        
-        /******************/
-        /*----- THEN -----*/
-        /******************/
-        
-        XCTAssertEqual(result, expectedState)
+        XCTAssertEqual(outputState, expectedState)
     }
     
     func test_removedFromRoom_withCurrentStateAndReceivedRemovedFromRoomForExistingRoom_returnsModifiedState() {
@@ -107,7 +107,7 @@ class UserSubscriptionReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let currentState = ChatState(
+        let inputState = ChatState(
             currentUser: .populated(
                 identifier: "alice",
                 name: "Alice A"
@@ -144,6 +144,16 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let outputState = Reducer.UserSubscription.removedFromRoom(action: action, state: inputState)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
         let expectedState = ChatState(
             currentUser: .populated(
                 identifier: "alice",
@@ -165,17 +175,7 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
-        /******************/
-        /*----- WHEN -----*/
-        /******************/
-        
-        let result = Reducer.UserSubscription.removedFromRoom(action: action, state: currentState)
-        
-        /******************/
-        /*----- THEN -----*/
-        /******************/
-        
-        XCTAssertEqual(result, expectedState)
+        XCTAssertEqual(outputState, expectedState)
     }
     
     func test_removedFromRoom_withCurrentStateAndReceivedRemovedFromRoomForNonExistingRoom_returnsUnmodifiedState() {
@@ -184,7 +184,7 @@ class UserSubscriptionReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let currentState = ChatState(
+        let inputState = ChatState(
             currentUser: .populated(
                 identifier: "alice",
                 name: "Alice A"
@@ -221,6 +221,16 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let outputState = Reducer.UserSubscription.removedFromRoom(action: action, state: inputState)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
         let expectedState = ChatState(
             currentUser: .populated(
                 identifier: "alice",
@@ -252,17 +262,7 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
-        /******************/
-        /*----- WHEN -----*/
-        /******************/
-        
-        let result = Reducer.UserSubscription.removedFromRoom(action: action, state: currentState)
-        
-        /******************/
-        /*----- THEN -----*/
-        /******************/
-        
-        XCTAssertEqual(result, expectedState)
+        XCTAssertEqual(outputState, expectedState)
     }
     
 }

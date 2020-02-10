@@ -11,7 +11,7 @@ class ModelReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let currentState: UserState? = nil
+        let inputState: UserState? = nil
         
         let action = ReceivedInitialStateAction(
             event: Wire.Event.InitialState(
@@ -55,22 +55,22 @@ class ModelReducerTests: XCTestCase {
             )
         )
         
-        let expectedState: UserState = .populated(
-            identifier: "alice",
-            name: "Alice A"
-        )
-        
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let result = Reducer.Model.user(action: action, state: currentState)
+        let outputState = Reducer.Model.user(action: action, state: inputState)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertEqual(result, expectedState)
+        let expectedState: UserState = .populated(
+            identifier: "alice",
+            name: "Alice A"
+        )
+        
+        XCTAssertEqual(outputState, expectedState)
     }
     
     func test_roomList_withCurrentStateAndReceivedInitialStateAction_returnsModifiedState() {
@@ -79,7 +79,7 @@ class ModelReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let currentState: RoomListState = .empty
+        let inputState: RoomListState = .empty
         
         let action = ReceivedInitialStateAction(
             event: Wire.Event.InitialState(
@@ -122,6 +122,16 @@ class ModelReducerTests: XCTestCase {
                 memberships: []
             )
         )
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let outputState = Reducer.Model.roomList(action: action, state: inputState)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
         
         let expectedState = RoomListState(
             rooms: [
@@ -150,17 +160,7 @@ class ModelReducerTests: XCTestCase {
             ]
         )
         
-        /******************/
-        /*----- WHEN -----*/
-        /******************/
-        
-        let result = Reducer.Model.roomList(action: action, state: currentState)
-        
-        /******************/
-        /*----- THEN -----*/
-        /******************/
-        
-        XCTAssertEqual(result, expectedState)
+        XCTAssertEqual(outputState, expectedState)
     }
     
     func test_roomList_withCurrentStateAndReceivedRemovedFromRoomForExistingRoom_returnsModifiedState() {
@@ -169,7 +169,7 @@ class ModelReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let currentState = RoomListState(
+        let inputState = RoomListState(
             rooms: [
                 RoomState(
                     identifier: "first-room",
@@ -200,6 +200,16 @@ class ModelReducerTests: XCTestCase {
             )
         )
         
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let outputState = Reducer.Model.roomList(action: action, state: inputState)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
         let expectedState = RoomListState(
             rooms: [
                 RoomState(
@@ -215,17 +225,7 @@ class ModelReducerTests: XCTestCase {
             ]
         )
         
-        /******************/
-        /*----- WHEN -----*/
-        /******************/
-        
-        let result = Reducer.Model.roomList(action: action, state: currentState)
-        
-        /******************/
-        /*----- THEN -----*/
-        /******************/
-        
-        XCTAssertEqual(result, expectedState)
+        XCTAssertEqual(outputState, expectedState)
     }
     
     func test_roomList_withCurrentStateAndReceivedRemovedFromRoomForNonExistingRoom_returnsUnmodifiedState() {
@@ -234,7 +234,7 @@ class ModelReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let currentState = RoomListState(
+        let inputState = RoomListState(
             rooms: [
                 RoomState(
                     identifier: "first-room",
@@ -265,6 +265,16 @@ class ModelReducerTests: XCTestCase {
             )
         )
         
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let outputState = Reducer.Model.roomList(action: action, state: inputState)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
         let expectedState = RoomListState(
             rooms: [
                 RoomState(
@@ -290,17 +300,7 @@ class ModelReducerTests: XCTestCase {
             ]
         )
         
-        /******************/
-        /*----- WHEN -----*/
-        /******************/
-        
-        let result = Reducer.Model.roomList(action: action, state: currentState)
-        
-        /******************/
-        /*----- THEN -----*/
-        /******************/
-        
-        XCTAssertEqual(result, expectedState)
+        XCTAssertEqual(outputState, expectedState)
     }
     
 }
