@@ -1,6 +1,6 @@
 
 protocol HasReducer_Model_User_forInitialState {
-    var reducer_model_user_forInitialState: T.ReduceFunctionSignature { get }
+    var reducer_model_user_forInitialState: T.ExpressionType { get }
 }
 
 extension HasReducer_Model_User_forInitialState {

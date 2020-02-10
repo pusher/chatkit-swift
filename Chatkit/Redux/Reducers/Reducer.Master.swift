@@ -1,6 +1,6 @@
 
 protocol HasReducer_Master {
-    var reducer_master: T.ReduceFunctionSignature { get }
+    var reducer_master: T.ExpressionType { get }
 }
 
 extension HasReducer_Master {

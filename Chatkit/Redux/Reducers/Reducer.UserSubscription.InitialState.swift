@@ -1,6 +1,6 @@
 
 protocol HasReducer_UserSubscription_InitialState {
-    var reducer_userSubscription_initialState: T.ReduceFunctionSignature { get }
+    var reducer_userSubscription_initialState: T.ExpressionType { get }
 }
 
 extension HasReducer_UserSubscription_InitialState {

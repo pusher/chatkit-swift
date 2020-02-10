@@ -1,6 +1,6 @@
 
 protocol HasReducer_UserSubscription_RemovedFromRoom {
-    var reducer_userSubscription_removedFromRoom: T.ReduceFunctionSignature { get }
+    var reducer_userSubscription_removedFromRoom: T.ExpressionType { get }
 }
 
 extension HasReducer_UserSubscription_RemovedFromRoom {

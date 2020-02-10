@@ -10,22 +10,22 @@ public class DependenciesDoubles: StubBase, Dependencies {
     public let storeBroadcaster: StoreBroadcaster
     public let store: Store
     
-    public let reducer_master: Reducer.Master.Types.ReduceFunctionSignature
-    public let reducer_model_user_forInitialState: Reducer.Model.User_forInitialState.Types.ReduceFunctionSignature
-    public let reducer_model_rooms_forInitialState: Reducer.Model.Rooms_forInitialState.Types.ReduceFunctionSignature
-    public let reducer_model_rooms_forRemovedFromRoom: Reducer.Model.Rooms_forRemovedFromRoom.Types.ReduceFunctionSignature
-    public let reducer_userSubscription_initialState: Reducer.UserSubscription.InitialState.Types.ReduceFunctionSignature
-    public let reducer_userSubscription_removedFromRoom: Reducer.UserSubscription.RemovedFromRoom.Types.ReduceFunctionSignature
+    public let reducer_master: Reducer.Master.Types.ExpressionType
+    public let reducer_model_user_forInitialState: Reducer.Model.User_forInitialState.Types.ExpressionType
+    public let reducer_model_rooms_forInitialState: Reducer.Model.Rooms_forInitialState.Types.ExpressionType
+    public let reducer_model_rooms_forRemovedFromRoom: Reducer.Model.Rooms_forRemovedFromRoom.Types.ExpressionType
+    public let reducer_userSubscription_initialState: Reducer.UserSubscription.InitialState.Types.ExpressionType
+    public let reducer_userSubscription_removedFromRoom: Reducer.UserSubscription.RemovedFromRoom.Types.ExpressionType
     
     public init(instanceLocator: InstanceLocator? = nil,
          storeBroadcaster: StoreBroadcaster? = nil,
          store: Store? = nil,
-         reducer_master: Reducer.Master.Types.ReduceFunctionSignature? = nil,
-         reducer_model_user_forInitialState: Reducer.Model.User_forInitialState.Types.ReduceFunctionSignature? = nil,
-         reducer_model_rooms_forInitialState: Reducer.Model.Rooms_forInitialState.Types.ReduceFunctionSignature? = nil,
-         reducer_model_rooms_forRemovedFromRoom: Reducer.Model.Rooms_forRemovedFromRoom.Types.ReduceFunctionSignature? = nil,
-         reducer_userSubscription_initialState: Reducer.UserSubscription.InitialState.Types.ReduceFunctionSignature? = nil,
-         reducer_userSubscription_removedFromRoom: Reducer.UserSubscription.RemovedFromRoom.Types.ReduceFunctionSignature? = nil,
+         reducer_master: Reducer.Master.Types.ExpressionType? = nil,
+         reducer_model_user_forInitialState: Reducer.Model.User_forInitialState.Types.ExpressionType? = nil,
+         reducer_model_rooms_forInitialState: Reducer.Model.Rooms_forInitialState.Types.ExpressionType? = nil,
+         reducer_model_rooms_forRemovedFromRoom: Reducer.Model.Rooms_forRemovedFromRoom.Types.ExpressionType? = nil,
+         reducer_userSubscription_initialState: Reducer.UserSubscription.InitialState.Types.ExpressionType? = nil,
+         reducer_userSubscription_removedFromRoom: Reducer.UserSubscription.RemovedFromRoom.Types.ExpressionType? = nil,
          
          file: StaticString = #file, line: UInt = #line) {
         

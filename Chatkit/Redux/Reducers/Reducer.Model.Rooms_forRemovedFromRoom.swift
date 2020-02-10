@@ -1,6 +1,6 @@
 
 protocol HasReducer_Model_Rooms_forRemovedFromRoom {
-    var reducer_model_rooms_forRemovedFromRoom:T.ReduceFunctionSignature { get }
+    var reducer_model_rooms_forRemovedFromRoom:T.ExpressionType { get }
 }
 
 extension HasReducer_Model_Rooms_forRemovedFromRoom {
