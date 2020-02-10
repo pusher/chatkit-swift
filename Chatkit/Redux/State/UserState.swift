@@ -1,7 +1,6 @@
 
 enum UserState {
     
-    case empty
     // TODO: Consider in future for DependencyFetcher
 //    case partial(identifier: String)
     case populated(identifier: String, name: String)

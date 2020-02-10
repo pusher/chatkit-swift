@@ -5,7 +5,7 @@ extension Reducer {
         
         // MARK: - Reducers
         
-        static func user(action: ReceivedInitialStateAction, state: UserState) -> UserState {
+        static func user(action: ReceivedInitialStateAction, state: UserState?) -> UserState {
             return .populated(identifier: action.event.currentUser.identifier, name: action.event.currentUser.name)
         }
         

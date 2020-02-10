@@ -11,7 +11,7 @@ class ModelReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let currentState: UserState = .empty
+        let currentState: UserState? = nil
         
         let action = ReceivedInitialStateAction(
             event: Wire.Event.InitialState(

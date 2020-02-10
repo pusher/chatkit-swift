@@ -68,7 +68,7 @@ class ConcreteReductionManagerTests: XCTestCase {
         /******************/
         
         let expectedState = ChatState(
-            currentUser: .empty,
+            currentUser: nil,
             joinedRooms: RoomListState(
                 rooms: [
                     RoomState(
@@ -92,7 +92,7 @@ class ConcreteReductionManagerTests: XCTestCase {
                                            userSubscriptionRemovedFromRoomReducer: userSubscriptionRemovedFromRoomReducer.reducer)
         
         let currentState = ChatState(
-            currentUser: .empty,
+            currentUser: nil,
             joinedRooms: RoomListState(
                 rooms: [
                     RoomState(
@@ -148,7 +148,7 @@ class ConcreteReductionManagerTests: XCTestCase {
         /******************/
         
         let expectedState = ChatState(
-            currentUser: .empty,
+            currentUser: nil,
             joinedRooms: RoomListState(
                 rooms: [
                     RoomState(
@@ -172,7 +172,7 @@ class ConcreteReductionManagerTests: XCTestCase {
                                            userSubscriptionRemovedFromRoomReducer: userSubscriptionRemovedFromRoomReducer.reducer)
         
         let currentState = ChatState(
-            currentUser: .empty,
+            currentUser: nil,
             joinedRooms: RoomListState(
                 rooms: [
                     RoomState(
