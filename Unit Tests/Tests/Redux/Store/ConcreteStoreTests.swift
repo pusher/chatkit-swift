@@ -36,7 +36,7 @@ class ConcreteStoreTests: XCTestCase {
                 identifier: "alice",
                 name: "Alice A"
             ),
-            joinedRooms: .empty
+            joinedRooms: []
         )
         
         let stubReductionManager = StubReductionManager(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
@@ -88,7 +88,7 @@ class ConcreteStoreTests: XCTestCase {
                 identifier: "alice",
                 name: "Alice A"
             ),
-            joinedRooms: .empty
+            joinedRooms: []
         )
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
@@ -212,7 +212,7 @@ class ConcreteStoreTests: XCTestCase {
                 identifier: "alice",
                 name: "Alice A"
             ),
-            joinedRooms: .empty
+            joinedRooms: []
         )
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)

@@ -4,11 +4,11 @@ struct ChatState: State {
     // MARK: - Properties
     
     let currentUser: UserState?
-    let joinedRooms: RoomListState
+    let joinedRooms: [RoomState]
     // TODO: Add readStates.
     // TODO: Add memberships.
     
-    static let empty: ChatState = ChatState(currentUser: nil, joinedRooms: .empty)
+    static let empty: ChatState = ChatState(currentUser: nil, joinedRooms: [])
     
 }
 
