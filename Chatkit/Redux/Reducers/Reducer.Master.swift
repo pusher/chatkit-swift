@@ -20,7 +20,7 @@ extension Reducer {
         
         typealias T = Typing
         
-        static func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> ChatState {
+        static func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> T.StateType {
             
             if let action = action as? ReceivedInitialStateAction {
                 return dependencies.reducer_userSubscription_initialState(action, state, dependencies)
@@ -45,8 +45,7 @@ extension Reducer {
                 & HasReducer_UserSubscription_InitialState
                 & HasReducer_UserSubscription_RemovedFromRoom
         }
-        
-        typealias T = Typing
+    
         
         static func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> ChatState {
             
