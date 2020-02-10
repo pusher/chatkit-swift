@@ -14,7 +14,7 @@ protocol Store {
 
 class ConcreteStore: Store {
     
-    typealias Dependencies = HasReductionManager
+    typealias Dependencies = HasReducer_Master & ReducerDependencies
     
     private let dependencies: Dependencies
     private weak var delegate: StoreDelegate?
@@ -35,6 +35,7 @@ class ConcreteStore: Store {
     }
     
     func dispatch(action: Action) {
-        self.state = self.dependencies.reductionManager.reduce(action: action, state: self.state)
+        
+        state = self.dependencies.reducer_master(action, state, dependencies)
     }
 }

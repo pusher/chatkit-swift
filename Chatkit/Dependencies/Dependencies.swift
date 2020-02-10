@@ -4,7 +4,7 @@ protocol Dependencies:
     HasInstanceLocator &
     HasStoreBroadcaster &
     HasStore &
-    HasReductionManager
+    ReducerDependencies
 {}
 
 class DependencyFactory {
@@ -62,6 +62,13 @@ class ConcreteDependencies: Dependencies {
     private let dependencyFactory = DependencyFactory()
     
     let instanceLocator: InstanceLocator
+
+    let reducer_master = ConcreteReducerDependencies().reducer_master
+    let reducer_model_user_forInitialState = ConcreteReducerDependencies().reducer_model_user_forInitialState
+    let reducer_model_rooms_forInitialState = ConcreteReducerDependencies().reducer_model_rooms_forInitialState
+    let reducer_model_rooms_forRemovedFromRoom = ConcreteReducerDependencies().reducer_model_rooms_forRemovedFromRoom
+    let reducer_userSubscription_initialState = ConcreteReducerDependencies().reducer_userSubscription_initialState
+    let reducer_userSubscription_removedFromRoom = ConcreteReducerDependencies().reducer_userSubscription_removedFromRoom
     
     // `override` gives tests an opportunity to override any concrete dependencies with test doubles.
     init(instanceLocator: InstanceLocator, override: ((DependencyFactory) -> Void)? = nil) {
@@ -86,10 +93,6 @@ class ConcreteDependencies: Dependencies {
     
     var store: Store {
         return dependencyFactory.resolve(Store.self, dependencies: self)
-    }
-    
-    var reductionManager: ReductionManager {
-        return dependencyFactory.resolve(ReductionManager.self, dependencies: self)
     }
     
 }

@@ -1,0 +1,4 @@
+
+extension Reducer {
+    struct Model {}
+}
