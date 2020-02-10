@@ -11,7 +11,7 @@ extension Reducer {
     
     struct Master {
         
-        struct Types: ReducerTypes {
+        struct Types: ReducerTyping {
             typealias ActionType = Action
             typealias StateType = ChatState
             typealias DependenciesType =

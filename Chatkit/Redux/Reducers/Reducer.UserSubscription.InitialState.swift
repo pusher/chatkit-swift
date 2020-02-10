@@ -11,7 +11,7 @@ extension Reducer.UserSubscription {
 
     struct InitialState {
         
-        struct Types: ReducerTypes {
+        struct Types: ReducerTyping {
             typealias ActionType = ReceivedInitialStateAction
             typealias StateType = ChatState
             typealias DependenciesType = HasReducer_Model_User_forInitialState

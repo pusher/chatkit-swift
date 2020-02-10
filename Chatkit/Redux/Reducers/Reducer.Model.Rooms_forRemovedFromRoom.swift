@@ -11,7 +11,7 @@ extension Reducer.Model {
 
     struct Rooms_forRemovedFromRoom {
         
-        struct Types: ReducerTypes {
+        struct Types: ReducerTyping {
             typealias ActionType = ReceivedRemovedFromRoomAction
             typealias StateType = RoomListState
             typealias DependenciesType = Any // No dependencies at present

@@ -11,7 +11,7 @@ extension Reducer.Model {
 
     struct Rooms_forInitialState {
         
-        struct Types: ReducerTypes {
+        struct Types: ReducerTyping {
             typealias ActionType = ReceivedInitialStateAction
             typealias StateType = RoomListState
             typealias DependenciesType = Any // No dependencies at present

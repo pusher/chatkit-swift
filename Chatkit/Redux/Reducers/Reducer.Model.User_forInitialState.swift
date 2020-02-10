@@ -11,7 +11,7 @@ extension Reducer.Model {
 
     struct User_forInitialState {
         
-        struct Types: ReducerTypes {
+        struct Types: ReducerTyping {
             typealias ActionType = ReceivedInitialStateAction
             typealias StateType = UserState
             typealias DependenciesType = Any // No dependencies at present

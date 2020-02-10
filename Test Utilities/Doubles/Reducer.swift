@@ -2,7 +2,7 @@ import XCTest
 @testable import PusherChatkit
 
 
-public class DummyReducer<T: ReducerTypes>: DummyBase {
+public class DummyReducer<T: ReducerTyping>: DummyBase {
     
     public func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> T.StateType {
         DummyFail(sender: self, function: #function)
@@ -16,14 +16,14 @@ extension XCTest {
     // provide a (faux) initialiser that sets `file` and `line` automatically
     // making the tests themeselves cleaner and more readable.
     // Typically we shouldn't do this on Dummy's though which is why we restrict to within XCTest only.
-    public func DummyReducer<T: ReducerTypes>(file: StaticString = #file, line: UInt = #line) -> DummyReducer<T> {
+    public func DummyReducer<T: ReducerTyping>(file: StaticString = #file, line: UInt = #line) -> DummyReducer<T> {
         let dummy: DummyReducer<T> = .init(file: file, line: line)
         let _: T.ActionType
         return dummy
     }
 }
 
-public class StubReducer<T: ReducerTypes>: StubBase {
+public class StubReducer<T: ReducerTyping>: StubBase {
     
     private var reduce_expectedCallCount: UInt
     private var reduce_expectedState: T.StateType

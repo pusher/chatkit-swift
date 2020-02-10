@@ -11,7 +11,7 @@ extension Reducer.UserSubscription {
     
     struct RemovedFromRoom {
 
-        struct Types: ReducerTypes {
+        struct Types: ReducerTyping {
             typealias ActionType = ReceivedRemovedFromRoomAction
             typealias StateType = ChatState
             typealias DependenciesType = HasReducer_Model_Rooms_forRemovedFromRoom

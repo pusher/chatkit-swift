@@ -2,7 +2,7 @@
 // For namespacing
 struct Reducer {}
 
-protocol ReducerTypes {
+protocol ReducerTyping {
     associatedtype ActionType: Any
     associatedtype StateType: State
     associatedtype DependenciesType
