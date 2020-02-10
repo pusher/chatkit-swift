@@ -20,7 +20,7 @@ class ConcreteReductionManagerTests: XCTestCase {
             joinedRooms: .empty
         )
         
-        let userSubscriptionInitialStateReducer = StubReducer<ReceivedInitialStateAction, ChatState>(reducer_expectedState: expectedState, reducer_expectedCallCount: 1)
+        let userSubscriptionInitialStateReducer = StubReducer<ReceivedInitialStateAction, ChatState>(reducer_stateToReturn: expectedState, reducer_expectedCallCount: 1)
         let userSubscriptionRemovedFromRoomReducer = DummyReducer<ReceivedRemovedFromRoomAction, ChatState>()
         
         let sut = ConcreteReductionManager(userSubscriptionInitialStateReducer: userSubscriptionInitialStateReducer.reducer,
@@ -86,7 +86,7 @@ class ConcreteReductionManagerTests: XCTestCase {
         )
         
         let userSubscriptionInitialStateReducer = DummyReducer<ReceivedInitialStateAction, ChatState>()
-        let userSubscriptionRemovedFromRoomReducer = StubReducer<ReceivedRemovedFromRoomAction, ChatState>(reducer_expectedState: expectedState, reducer_expectedCallCount: 1)
+        let userSubscriptionRemovedFromRoomReducer = StubReducer<ReceivedRemovedFromRoomAction, ChatState>(reducer_stateToReturn: expectedState, reducer_expectedCallCount: 1)
         
         let sut = ConcreteReductionManager(userSubscriptionInitialStateReducer: userSubscriptionInitialStateReducer.reducer,
                                            userSubscriptionRemovedFromRoomReducer: userSubscriptionRemovedFromRoomReducer.reducer)
