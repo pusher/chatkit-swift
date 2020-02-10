@@ -4,6 +4,13 @@ import TestUtilities
 
 class ConcreteReductionManagerTests: XCTestCase {
     
+    // MARK: - Properties
+    
+    let testUser = UserState.populated(
+        identifier: "alice",
+        name: "Alice A"
+    )
+    
     // MARK: - Tests
     
     func test_reduce_withReceivedInitialStateAction_returnsStateFromDedicatedReducer() {
@@ -13,10 +20,8 @@ class ConcreteReductionManagerTests: XCTestCase {
         /******************/
         
         let reducer_stateToReturn = ChatState(
-            currentUser: .populated(
-                identifier: "alice",
-                name: "Alice A"
-            ),
+            users: [self.testUser],
+            currentUser: self.testUser,
             joinedRooms: []
         )
         
@@ -70,6 +75,7 @@ class ConcreteReductionManagerTests: XCTestCase {
         /******************/
         
         let reducer_stateToReturn = ChatState(
+            users: [],
             currentUser: nil,
             joinedRooms: [
                 RoomState(
@@ -92,6 +98,7 @@ class ConcreteReductionManagerTests: XCTestCase {
                                            userSubscriptionRemovedFromRoomReducer: userSubscriptionRemovedFromRoomReducer.reducer)
         
         let inputState = ChatState(
+            users: [],
             currentUser: nil,
             joinedRooms: [
                 RoomState(
@@ -154,6 +161,7 @@ class ConcreteReductionManagerTests: XCTestCase {
                                            userSubscriptionRemovedFromRoomReducer: userSubscriptionRemovedFromRoomReducer.reducer)
         
         let inputState = ChatState(
+            users: [],
             currentUser: nil,
             joinedRooms: [
                 RoomState(
@@ -182,6 +190,7 @@ class ConcreteReductionManagerTests: XCTestCase {
         /******************/
         
         let expectedState = ChatState(
+            users: [],
             currentUser: nil,
             joinedRooms: [
                 RoomState(

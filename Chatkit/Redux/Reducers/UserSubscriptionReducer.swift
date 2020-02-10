@@ -9,13 +9,13 @@ extension Reducer {
             let currentUser = Reducer.Model.user(action: action, state: state.currentUser)
             let joinedRooms = Reducer.Model.roomList(action: action, state: state.joinedRooms)
             
-            return ChatState(currentUser: currentUser, joinedRooms: joinedRooms)
+            return ChatState(users: [currentUser], currentUser: currentUser, joinedRooms: joinedRooms)
         }
         
         static func removedFromRoom(action: ReceivedRemovedFromRoomAction, state: ChatState) -> ChatState {
             let joinedRooms = Reducer.Model.roomList(action: action, state: state.joinedRooms)
             
-            return ChatState(currentUser: state.currentUser, joinedRooms: joinedRooms)
+            return ChatState(users: state.users, currentUser: state.currentUser, joinedRooms: joinedRooms)
         }
         
     }

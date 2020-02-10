@@ -4,6 +4,15 @@ import XCTest
 
 class ConcreteStoreTests: XCTestCase {
     
+    // MARK: - Properties
+    
+    let testUser = UserState.populated(
+        identifier: "alice",
+        name: "Alice A"
+    )
+    
+    // MARK: - Tests
+    
     func test_init_stateStartsAsEmpty() {
         
         /******************/
@@ -32,10 +41,8 @@ class ConcreteStoreTests: XCTestCase {
         /******************/
         
         let expectedState = ChatState(
-            currentUser: UserState.populated(
-                identifier: "alice",
-                name: "Alice A"
-            ),
+            users: [self.testUser],
+            currentUser: self.testUser,
             joinedRooms: []
         )
         
@@ -84,10 +91,8 @@ class ConcreteStoreTests: XCTestCase {
         /******************/
         
         let expectedState = ChatState(
-            currentUser: UserState.populated(
-                identifier: "alice",
-                name: "Alice A"
-            ),
+            users: [self.testUser],
+            currentUser: self.testUser,
             joinedRooms: []
         )
         
@@ -208,10 +213,8 @@ class ConcreteStoreTests: XCTestCase {
         /******************/
         
         let expectedState = ChatState(
-            currentUser: UserState.populated(
-                identifier: "alice",
-                name: "Alice A"
-            ),
+            users: [self.testUser],
+            currentUser: self.testUser,
             joinedRooms: []
         )
         

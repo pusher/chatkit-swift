@@ -3,16 +3,28 @@ import XCTest
 @testable import PusherChatkit
 
 class ConcreteStoreBroadcasterTests: XCTestCase {
-
+    
     let stateA = ChatState(
+        users: [
+            UserState.populated(
+                identifier: "alice",
+                name: "Alice A"
+            )
+        ],
         currentUser: UserState.populated(
             identifier: "alice",
             name: "Alice A"
         ),
         joinedRooms: []
     )
-
+    
     let stateB = ChatState(
+        users: [
+            UserState.populated(
+                identifier: "bob",
+                name: "Bob B"
+            )
+        ],
         currentUser: UserState.populated(
             identifier: "bob",
             name: "Bob B"
@@ -31,7 +43,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         let dependencies = DependenciesDoubles(store: stubStore)
         
         let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
-
+        
         /******************/
         /*----- WHEN -----*/
         /******************/
@@ -78,7 +90,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         XCTAssertEqual(stubStore.state_actualCallCount, 2)
         XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
     }
-        
+    
     func test_unregister_withListenerThatIsNotCurrentlyRegistered_success() {
         
         /******************/
@@ -154,7 +166,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         let dependencies = DependenciesDoubles(store: stubStore)
         
         let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
-
+        
         _ = sut.register(stubStoreListener)
         
         XCTAssertEqual(stubStore.state_actualCallCount, 1)
@@ -194,7 +206,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         XCTAssertEqual(stubStore.state_actualCallCount, 1)
         XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
         XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
-
+        
         /******************/
         /*----- WHEN -----*/
         /******************/
@@ -221,7 +233,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         let dependencies = DependenciesDoubles(store: stubStore)
         
         let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
-
+        
         _ = sut.register(stubStoreListener)
         _ = sut.register(stubStoreListener)
         

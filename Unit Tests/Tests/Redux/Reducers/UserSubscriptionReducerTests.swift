@@ -3,6 +3,13 @@ import XCTest
 
 class UserSubscriptionReducerTests: XCTestCase {
     
+    // MARK: - Properties
+    
+    let testUser = UserState.populated(
+        identifier: "alice",
+        name: "Alice A"
+    )
+    
     // MARK: - Tests
     
     func test_initialState_withCurrentStateAndReceivedInitialStateAction_returnsModifiedState() {
@@ -66,10 +73,8 @@ class UserSubscriptionReducerTests: XCTestCase {
         /******************/
         
         let expectedState = ChatState(
-            currentUser: .populated(
-                identifier: "alice",
-                name: "Alice A"
-            ),
+            users: [self.testUser],
+            currentUser: self.testUser,
             joinedRooms: [
                 RoomState(
                     identifier: "first-room",
@@ -106,10 +111,8 @@ class UserSubscriptionReducerTests: XCTestCase {
         /******************/
         
         let inputState = ChatState(
-            currentUser: .populated(
-                identifier: "alice",
-                name: "Alice A"
-            ),
+            users: [self.testUser],
+            currentUser: self.testUser,
             joinedRooms: [
                 RoomState(
                     identifier: "first-room",
@@ -151,10 +154,8 @@ class UserSubscriptionReducerTests: XCTestCase {
         /******************/
         
         let expectedState = ChatState(
-            currentUser: .populated(
-                identifier: "alice",
-                name: "Alice A"
-            ),
+            users: [self.testUser],
+            currentUser: self.testUser,
             joinedRooms: [
                 RoomState(
                     identifier: "first-room",
@@ -179,10 +180,8 @@ class UserSubscriptionReducerTests: XCTestCase {
         /******************/
         
         let inputState = ChatState(
-            currentUser: .populated(
-                identifier: "alice",
-                name: "Alice A"
-            ),
+            users: [self.testUser],
+            currentUser: self.testUser,
             joinedRooms: [
                 RoomState(
                     identifier: "first-room",
@@ -224,10 +223,8 @@ class UserSubscriptionReducerTests: XCTestCase {
         /******************/
         
         let expectedState = ChatState(
-            currentUser: .populated(
-                identifier: "alice",
-                name: "Alice A"
-            ),
+            users: [self.testUser],
+            currentUser: self.testUser,
             joinedRooms: [
                 RoomState(
                     identifier: "first-room",
