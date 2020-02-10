@@ -1,48 +1,59 @@
 import XCTest
 @testable import PusherChatkit
 
-public class DummyReducer<ActionType: Action, StateType: State>: DummyBase {
+
+public class DummyReducer<T: ReducerTypes>: DummyBase {
     
-    public override init(file: StaticString = #file, line: UInt = #line) {
-        super.init(file: file, line: line)
-    }
-    
-    public func reducer(action: ActionType, state: StateType) -> StateType {
+    public func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> T.StateType {
         DummyFail(sender: self, function: #function)
         return state
     }
     
 }
 
-public class StubReducer<ActionType: Action, StateType: State>: StubBase {
+extension XCTest {
+    // We might like to use a `DummyReducer` directly in a test so here we
+    // provide a (faux) initialiser that sets `file` and `line` automatically
+    // making the tests themeselves cleaner and more readable.
+    // Typically we shouldn't do this on Dummy's though which is why we restrict to within XCTest only.
+    public func DummyReducer<T: ReducerTypes>(file: StaticString = #file, line: UInt = #line) -> DummyReducer<T> {
+        let dummy: DummyReducer<T> = .init(file: file, line: line)
+        let _: T.ActionType
+        return dummy
+    }
+}
+
+public class StubReducer<T: ReducerTypes>: StubBase {
     
-    private var reducer_expectedCallCount: UInt
-    private var reducer_expectedState: StateType
-    public private(set) var reducer_actionLastReceived: ActionType?
-    public private(set) var reducer_stateLastReceived: StateType?
-    public private(set) var reducer_actualCallCount: UInt = 0
+    private var reduce_expectedCallCount: UInt
+    private var reduce_expectedState: T.StateType
+    public private(set) var reduce_actionLastReceived: T.ActionType?
+    public private(set) var reduce_stateLastReceived: T.StateType?
+    public private(set) var reduce_actualCallCount: UInt = 0
     
-    public init(reducer_expectedState: StateType,
-                reducer_expectedCallCount: UInt = 0,
+    public init(reduce_expectedState: T.StateType,
+                reduce_expectedCallCount: UInt = 0,
                 file: StaticString = #file, line: UInt = #line) {
         
-        self.reducer_expectedState = reducer_expectedState
-        self.reducer_expectedCallCount = reducer_expectedCallCount
+        self.reduce_expectedState = reduce_expectedState
+        self.reduce_expectedCallCount = reduce_expectedCallCount
         
         super.init(file: file, line: line)
     }
     
-    public func reducer(action: ActionType, state: StateType) -> StateType {
-        reducer_actionLastReceived = action
-        reducer_stateLastReceived = state
-        reducer_actualCallCount += 1
+    public func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> T.StateType {
+        reduce_actionLastReceived = action
+        reduce_stateLastReceived = state
+        reduce_actualCallCount += 1
         
-        guard reducer_expectedCallCount > 0 else {
+        guard reduce_expectedCallCount > 0 else {
             XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: file, line: line)
             return state
         }
-        reducer_expectedCallCount -= 1
+        reduce_expectedCallCount -= 1
         
-        return reducer_expectedState
+        return reduce_expectedState
     }
+    
 }
+

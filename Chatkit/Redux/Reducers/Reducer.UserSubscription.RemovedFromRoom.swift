@@ -1,17 +1,17 @@
 
 protocol HasReducer_UserSubscription_RemovedFromRoom {
+    var reducer_userSubscription_removedFromRoom: T.ReduceFunctionSignature { get }
+}
 
+extension HasReducer_UserSubscription_RemovedFromRoom {
     typealias T = Reducer.UserSubscription.RemovedFromRoom.Types
-
-    var reducer_userSubscription_removedFromRoom: (T.ActionType, T.StateType, T.DependenciesType) -> T.StateType { get }
-    
 }
 
 extension Reducer.UserSubscription {
     
     struct RemovedFromRoom {
 
-        struct Types {
+        struct Types: ReducerTypes {
             typealias ActionType = ReceivedRemovedFromRoomAction
             typealias StateType = ChatState
             typealias DependenciesType = HasReducer_Model_Rooms_forRemovedFromRoom

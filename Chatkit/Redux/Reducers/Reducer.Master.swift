@@ -1,19 +1,28 @@
 
 protocol HasReducer_Master {
-    var reducer_master: (ActionType, StateType, DependenciesType) -> ChatState { get }
+    var reducer_master: T.ReduceFunctionSignature { get }
 }
 
 extension HasReducer_Master {
-    typealias ActionType = Action
-    typealias StateType = ChatState
-    typealias DependenciesType = ReducerDependencies
+    typealias T = Reducer.Master.Types
 }
 
 extension Reducer {
     
     struct Master {
-
-        typealias T = HasReducer_Master
+        
+        struct Types: ReducerTypes {
+            typealias ActionType = Action
+            typealias StateType = ChatState
+            typealias DependenciesType =
+                HasReducer_Model_User_forInitialState
+                & HasReducer_Model_Rooms_forInitialState
+                & HasReducer_Model_Rooms_forRemovedFromRoom
+                & HasReducer_UserSubscription_InitialState
+                & HasReducer_UserSubscription_RemovedFromRoom
+        }
+        
+        typealias T = Types
         
         static func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> ChatState {
             

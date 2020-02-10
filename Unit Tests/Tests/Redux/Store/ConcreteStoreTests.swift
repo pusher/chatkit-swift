@@ -39,9 +39,10 @@ class ConcreteStoreTests: XCTestCase {
             joinedRooms: .empty
         )
         
-        let stubReductionManager = StubReductionManager(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
+        let stubMasterReducer: StubReducer<Reducer.Master.Types> =
+            .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
         
-        let dependencies = DependenciesDoubles(reductionManager: stubReductionManager)
+        let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
         
@@ -92,9 +93,11 @@ class ConcreteStoreTests: XCTestCase {
         )
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
-        let stubReductionManager = StubReductionManager(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
         
-        let dependencies = DependenciesDoubles(reductionManager: stubReductionManager)
+        let stubMasterReducer: StubReducer<Reducer.Master.Types> =
+            .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
+        
+        let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: stubStoreDelegate)
         
@@ -139,9 +142,10 @@ class ConcreteStoreTests: XCTestCase {
         
         let expectedState = ChatState.empty
         
-        let stubReductionManager = StubReductionManager(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
+        let stubMasterReducer: StubReducer<Reducer.Master.Types> =
+            .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
         
-        let dependencies = DependenciesDoubles(reductionManager: stubReductionManager)
+        let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
         
@@ -173,9 +177,11 @@ class ConcreteStoreTests: XCTestCase {
         /******************/
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 2)
-        let stubReductionManager = StubReductionManager(reduce_expectedState: .empty, reduce_expectedCallCount: 1)
         
-        let dependencies = DependenciesDoubles(reductionManager: stubReductionManager)
+        let stubMasterReducer: StubReducer<Reducer.Master.Types> =
+            .init(reduce_expectedState: .empty, reduce_expectedCallCount: 1)
+        
+        let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: stubStoreDelegate)
         
@@ -216,9 +222,11 @@ class ConcreteStoreTests: XCTestCase {
         )
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
-        let stubReductionManager = StubReductionManager(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
         
-        let dependencies = DependenciesDoubles(reductionManager: stubReductionManager)
+        let stubMasterReducer: StubReducer<Reducer.Master.Types> =
+            .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
+        
+        let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: stubStoreDelegate)
         
@@ -251,9 +259,9 @@ class ConcreteStoreTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertEqual(stubReductionManager.reduce_actualCallCount, 1)
-        XCTAssertEqual(stubReductionManager.reduce_actionLastReceived as? ReceivedInitialStateAction, action)
-        XCTAssertEqual(stubReductionManager.reduce_stateLastReceived, ChatState.empty)
+        XCTAssertEqual(stubMasterReducer.reduce_actualCallCount, 1)
+        XCTAssertEqual(stubMasterReducer.reduce_actionLastReceived as? ReceivedInitialStateAction, action)
+        XCTAssertEqual(stubMasterReducer.reduce_stateLastReceived, ChatState.empty)
     }
     
 }

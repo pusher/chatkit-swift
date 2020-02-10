@@ -1,20 +1,23 @@
 
 protocol HasReducer_Model_Rooms_forRemovedFromRoom {
-
-    var reducer_model_rooms_forRemovedFromRoom: (ActionType, StateType, DependenciesType) -> Self.StateType { get }
+    var reducer_model_rooms_forRemovedFromRoom:T.ReduceFunctionSignature { get }
 }
 
 extension HasReducer_Model_Rooms_forRemovedFromRoom {
-    typealias ActionType = ReceivedRemovedFromRoomAction
-    typealias StateType = RoomListState
-    typealias DependenciesType = Any // No dependencies at present
+    typealias T = Reducer.Model.Rooms_forRemovedFromRoom.Types
 }
 
 extension Reducer.Model {
 
     struct Rooms_forRemovedFromRoom {
+        
+        struct Types: ReducerTypes {
+            typealias ActionType = ReceivedRemovedFromRoomAction
+            typealias StateType = RoomListState
+            typealias DependenciesType = Any // No dependencies at present
+        }
 
-        typealias T = HasReducer_Model_Rooms_forRemovedFromRoom
+        typealias T = Types
 
         static func reduce(action: T.ActionType, state: T.StateType, dependencies: T.DependenciesType) -> T.StateType {
             
@@ -25,16 +28,3 @@ extension Reducer.Model {
     }
     
 }
-
-//protocol HasReducer_Model_Rooms_forRemovedFromRoom {
-//    var reducer_model_rooms_forRemovedFromRoom: (ReceivedRemovedFromRoomAction, RoomListState) -> RoomListState { get }
-//}
-//
-//extension Reducer.Model {
-//
-//    static func rooms_forRemovedFromRoom(action: ReceivedRemovedFromRoomAction, state: RoomListState) -> RoomListState {
-//        let rooms = state.rooms.filter { $0.identifier != action.event.roomIdentifier }
-//
-//        return RoomListState(rooms: rooms)
-//    }
-//}

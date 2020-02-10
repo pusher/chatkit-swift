@@ -2,7 +2,7 @@ import XCTest
 import TestUtilities
 @testable import PusherChatkit
 
-class ConcreteReductionManagerTests: XCTestCase {
+class Reducer_Master_Tests: XCTestCase {
     
     // MARK: - Tests
     
@@ -20,11 +20,14 @@ class ConcreteReductionManagerTests: XCTestCase {
             joinedRooms: .empty
         )
         
-        let userSubscriptionInitialStateReducer = StubReducer<ReceivedInitialStateAction, ChatState>(reducer_expectedState: expectedState, reducer_expectedCallCount: 1)
-        let userSubscriptionRemovedFromRoomReducer = DummyReducer<ReceivedRemovedFromRoomAction, ChatState>()
+        let userSubscriptionInitialStateReducer: StubReducer<Reducer.UserSubscription.InitialState.Types> = .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
         
-        let sut = ConcreteReductionManager(userSubscriptionInitialStateReducer: userSubscriptionInitialStateReducer.reducer,
-                                           userSubscriptionRemovedFromRoomReducer: userSubscriptionRemovedFromRoomReducer.reducer)
+        let userSubscriptionRemovedFromRoomReducer: DummyReducer<Reducer.UserSubscription.RemovedFromRoom.Types> = DummyReducer()
+        
+        let dependencies = DependenciesDoubles(
+            reducer_userSubscription_initialState: userSubscriptionInitialStateReducer.reduce,
+            reducer_userSubscription_removedFromRoom: userSubscriptionRemovedFromRoomReducer.reduce
+        )
         
         let currentState: ChatState = .empty
         
@@ -49,16 +52,18 @@ class ConcreteReductionManagerTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = sut.reduce(action: action, state: currentState)
+        let result = Reducer.Master.reduce(action: action,
+                                           state: currentState,
+                                           dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
         XCTAssertEqual(result, expectedState)
-        XCTAssertEqual(userSubscriptionInitialStateReducer.reducer_actualCallCount, 1)
-        XCTAssertEqual(userSubscriptionInitialStateReducer.reducer_actionLastReceived, action)
-        XCTAssertEqual(userSubscriptionInitialStateReducer.reducer_stateLastReceived, currentState)
+        XCTAssertEqual(userSubscriptionInitialStateReducer.reduce_actualCallCount, 1)
+        XCTAssertEqual(userSubscriptionInitialStateReducer.reduce_actionLastReceived, action)
+        XCTAssertEqual(userSubscriptionInitialStateReducer.reduce_stateLastReceived, currentState)
     }
     
     func test_reduce_withReceivedRemovedFromRoomAction_returnsStateFromDedicatedReducer() {
@@ -85,11 +90,15 @@ class ConcreteReductionManagerTests: XCTestCase {
             )
         )
         
-        let userSubscriptionInitialStateReducer = DummyReducer<ReceivedInitialStateAction, ChatState>()
-        let userSubscriptionRemovedFromRoomReducer = StubReducer<ReceivedRemovedFromRoomAction, ChatState>(reducer_expectedState: expectedState, reducer_expectedCallCount: 1)
+        let userSubscriptionInitialStateReducer: DummyReducer<Reducer.UserSubscription.InitialState.Types> = DummyReducer()
         
-        let sut = ConcreteReductionManager(userSubscriptionInitialStateReducer: userSubscriptionInitialStateReducer.reducer,
-                                           userSubscriptionRemovedFromRoomReducer: userSubscriptionRemovedFromRoomReducer.reducer)
+        let userSubscriptionRemovedFromRoomReducer: StubReducer<Reducer.UserSubscription.RemovedFromRoom.Types> =
+            .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
+        
+        let dependencies = DependenciesDoubles(
+            reducer_userSubscription_initialState: userSubscriptionInitialStateReducer.reduce,
+            reducer_userSubscription_removedFromRoom: userSubscriptionRemovedFromRoomReducer.reduce
+        )
         
         let currentState = ChatState(
             currentUser: .empty,
@@ -129,16 +138,18 @@ class ConcreteReductionManagerTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = sut.reduce(action: action, state: currentState)
+        let result = Reducer.Master.reduce(action: action,
+                                           state: currentState,
+                                           dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
         XCTAssertEqual(result, expectedState)
-        XCTAssertEqual(userSubscriptionRemovedFromRoomReducer.reducer_actualCallCount, 1)
-        XCTAssertEqual(userSubscriptionRemovedFromRoomReducer.reducer_actionLastReceived, action)
-        XCTAssertEqual(userSubscriptionRemovedFromRoomReducer.reducer_stateLastReceived, currentState)
+        XCTAssertEqual(userSubscriptionRemovedFromRoomReducer.reduce_actualCallCount, 1)
+        XCTAssertEqual(userSubscriptionRemovedFromRoomReducer.reduce_actionLastReceived, action)
+        XCTAssertEqual(userSubscriptionRemovedFromRoomReducer.reduce_stateLastReceived, currentState)
     }
     
     func test_reduce_withUnsupportedAction_returnsUnmodifiedState() {
@@ -165,11 +176,14 @@ class ConcreteReductionManagerTests: XCTestCase {
             )
         )
         
-        let userSubscriptionInitialStateReducer = DummyReducer<ReceivedInitialStateAction, ChatState>()
-        let userSubscriptionRemovedFromRoomReducer = DummyReducer<ReceivedRemovedFromRoomAction, ChatState>()
+        let userSubscriptionInitialStateReducer: DummyReducer<Reducer.UserSubscription.InitialState.Types> = DummyReducer()
         
-        let sut = ConcreteReductionManager(userSubscriptionInitialStateReducer: userSubscriptionInitialStateReducer.reducer,
-                                           userSubscriptionRemovedFromRoomReducer: userSubscriptionRemovedFromRoomReducer.reducer)
+        let userSubscriptionRemovedFromRoomReducer: DummyReducer<Reducer.UserSubscription.RemovedFromRoom.Types> = DummyReducer()
+        
+        let dependencies = DependenciesDoubles(
+            reducer_userSubscription_initialState: userSubscriptionInitialStateReducer.reduce,
+            reducer_userSubscription_removedFromRoom: userSubscriptionRemovedFromRoomReducer.reduce
+        )
         
         let currentState = ChatState(
             currentUser: .empty,
@@ -195,7 +209,9 @@ class ConcreteReductionManagerTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = sut.reduce(action: action, state: currentState)
+        let result = Reducer.Master.reduce(action: action,
+                                           state: currentState,
+                                           dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/

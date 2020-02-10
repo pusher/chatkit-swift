@@ -1,4 +1,5 @@
 import XCTest
+import TestUtilities
 @testable import PusherChatkit
 
 class UserSubscriptionReducerTests: XCTestCase {
@@ -88,11 +89,24 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
+        let stubUsersReducer: StubReducer<Reducer.Model.User_forInitialState.Types> =
+            .init(reduce_expectedState: expectedState.currentUser,
+                  reduce_expectedCallCount: 1)
+        
+        let stubRoomsReducer: StubReducer<Reducer.Model.Rooms_forInitialState.Types> =
+            .init(reduce_expectedState: expectedState.joinedRooms,
+                  reduce_expectedCallCount: 1)
+        
+        let dependencies = DependenciesDoubles(reducer_model_user_forInitialState: stubUsersReducer.reduce,
+                                               reducer_model_rooms_forInitialState: stubRoomsReducer.reduce)
+        
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let result = Reducer.UserSubscription.initialState(action: action, state: currentState)
+        let result = Reducer.UserSubscription.InitialState.reduce(action: action,
+                                                                  state: currentState,
+                                                                  dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -165,11 +179,19 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
+        let stubReducer: StubReducer<Reducer.Model.Rooms_forRemovedFromRoom.Types> =
+            .init(reduce_expectedState: expectedState.joinedRooms,
+                  reduce_expectedCallCount: 1)
+        
+        let dependencies = DependenciesDoubles(reducer_model_rooms_forRemovedFromRoom: stubReducer.reduce)
+        
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let result = Reducer.UserSubscription.removedFromRoom(action: action, state: currentState)
+        let result = Reducer.UserSubscription.RemovedFromRoom.reduce(action: action,
+                                                                     state: currentState,
+                                                                     dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -252,11 +274,19 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
+        let stubReducer: StubReducer<Reducer.Model.Rooms_forRemovedFromRoom.Types> =
+            .init(reduce_expectedState: expectedState.joinedRooms,
+                  reduce_expectedCallCount: 1)
+        
+        let dependencies = DependenciesDoubles(reducer_model_rooms_forRemovedFromRoom: stubReducer.reduce)
+        
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let result = Reducer.UserSubscription.removedFromRoom(action: action, state: currentState)
+        let result = Reducer.UserSubscription.RemovedFromRoom.reduce(action: action,
+                                                                     state: currentState,
+                                                                     dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/

@@ -14,7 +14,13 @@ protocol Store {
 
 class ConcreteStore: Store {
     
-    typealias Dependencies = HasReducer_Master & ReducerDependencies
+    typealias Dependencies =
+        HasReducer_Master
+        & HasReducer_Model_User_forInitialState
+        & HasReducer_Model_Rooms_forInitialState
+        & HasReducer_Model_Rooms_forRemovedFromRoom
+        & HasReducer_UserSubscription_InitialState
+        & HasReducer_UserSubscription_RemovedFromRoom
     
     private let dependencies: Dependencies
     private weak var delegate: StoreDelegate?

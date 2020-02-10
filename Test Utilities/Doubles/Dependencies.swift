@@ -6,29 +6,45 @@ import XCTest
 // with in any way the test should fail.
 public class DependenciesDoubles: StubBase, Dependencies {
     
-    public let reducer_master = ConcreteReducerDependencies().reducer_master
-    public let reducer_model_user_forInitialState = ConcreteReducerDependencies().reducer_model_user_forInitialState
-    public let reducer_model_rooms_forInitialState = ConcreteReducerDependencies().reducer_model_rooms_forInitialState
-    public let reducer_model_rooms_forRemovedFromRoom = ConcreteReducerDependencies().reducer_model_rooms_forRemovedFromRoom
-    public let reducer_userSubscription_initialState = ConcreteReducerDependencies().reducer_userSubscription_initialState
-    public let reducer_userSubscription_removedFromRoom = ConcreteReducerDependencies().reducer_userSubscription_removedFromRoom
-    
     public let instanceLocator: InstanceLocator
     public let storeBroadcaster: StoreBroadcaster
     public let store: Store
-//    public let reductionManager: ReductionManager
+    
+    public let reducer_master: Reducer.Master.Types.ReduceFunctionSignature
+    public let reducer_model_user_forInitialState: Reducer.Model.User_forInitialState.Types.ReduceFunctionSignature
+    public let reducer_model_rooms_forInitialState: Reducer.Model.Rooms_forInitialState.Types.ReduceFunctionSignature
+    public let reducer_model_rooms_forRemovedFromRoom: Reducer.Model.Rooms_forRemovedFromRoom.Types.ReduceFunctionSignature
+    public let reducer_userSubscription_initialState: Reducer.UserSubscription.InitialState.Types.ReduceFunctionSignature
+    public let reducer_userSubscription_removedFromRoom: Reducer.UserSubscription.RemovedFromRoom.Types.ReduceFunctionSignature
     
     public init(instanceLocator: InstanceLocator? = nil,
          storeBroadcaster: StoreBroadcaster? = nil,
          store: Store? = nil,
-//         reductionManager: ReductionManager? = nil,
+         reducer_master: Reducer.Master.Types.ReduceFunctionSignature? = nil,
+         reducer_model_user_forInitialState: Reducer.Model.User_forInitialState.Types.ReduceFunctionSignature? = nil,
+         reducer_model_rooms_forInitialState: Reducer.Model.Rooms_forInitialState.Types.ReduceFunctionSignature? = nil,
+         reducer_model_rooms_forRemovedFromRoom: Reducer.Model.Rooms_forRemovedFromRoom.Types.ReduceFunctionSignature? = nil,
+         reducer_userSubscription_initialState: Reducer.UserSubscription.InitialState.Types.ReduceFunctionSignature? = nil,
+         reducer_userSubscription_removedFromRoom: Reducer.UserSubscription.RemovedFromRoom.Types.ReduceFunctionSignature? = nil,
          
          file: StaticString = #file, line: UInt = #line) {
         
         self.instanceLocator = instanceLocator ?? DummyInstanceLocator(file: file, line: line)
         self.storeBroadcaster = storeBroadcaster ?? DummyStoreBroadcaster(file: file, line: line)
         self.store = store ?? DummyStore(file: file, line: line)
-//        self.reductionManager = reductionManager ?? DummyReductionManager(file: file, line: line)
+        
+        self.reducer_master = reducer_master ??
+            DummyReducer<Reducer.Master.Types>(file: file, line: line).reduce
+        self.reducer_model_user_forInitialState = reducer_model_user_forInitialState ??
+            DummyReducer<Reducer.Model.User_forInitialState.Types>(file: file, line: line).reduce
+        self.reducer_model_rooms_forInitialState = reducer_model_rooms_forInitialState ??
+            DummyReducer<Reducer.Model.Rooms_forInitialState.Types>(file: file, line: line).reduce
+        self.reducer_model_rooms_forRemovedFromRoom = reducer_model_rooms_forRemovedFromRoom ??
+            DummyReducer<Reducer.Model.Rooms_forRemovedFromRoom.Types>(file: file, line: line).reduce
+        self.reducer_userSubscription_initialState = reducer_userSubscription_initialState ??
+            DummyReducer<Reducer.UserSubscription.InitialState.Types>(file: file, line: line).reduce
+        self.reducer_userSubscription_removedFromRoom = reducer_userSubscription_removedFromRoom ??
+            DummyReducer<Reducer.UserSubscription.RemovedFromRoom.Types>(file: file, line: line).reduce
         
         super.init(file: file, line: line)
     }

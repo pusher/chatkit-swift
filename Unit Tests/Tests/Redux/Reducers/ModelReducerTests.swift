@@ -1,4 +1,5 @@
 import XCTest
+import TestUtilities
 @testable import PusherChatkit
 
 class ModelReducerTests: XCTestCase {
@@ -60,11 +61,15 @@ class ModelReducerTests: XCTestCase {
             name: "Alice A"
         )
         
+        let dependencies = DependenciesDoubles()
+        
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let result = Reducer.Model.user(action: action, state: currentState)
+        let result = Reducer.Model.User_forInitialState.reduce(action: action,
+                                                               state: currentState,
+                                                               dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -150,11 +155,15 @@ class ModelReducerTests: XCTestCase {
             ]
         )
         
+        let dependencies = DependenciesDoubles()
+        
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let result = Reducer.Model.roomList(action: action, state: currentState)
+        let result = Reducer.Model.Rooms_forInitialState.reduce(action: action,
+                                                                state: currentState,
+                                                                dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -215,11 +224,15 @@ class ModelReducerTests: XCTestCase {
             ]
         )
         
+        let dependencies = DependenciesDoubles()
+        
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let result = Reducer.Model.roomList(action: action, state: currentState)
+        let result = Reducer.Model.Rooms_forRemovedFromRoom.reduce(action: action,
+                                                                   state: currentState,
+                                                                   dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -290,11 +303,15 @@ class ModelReducerTests: XCTestCase {
             ]
         )
         
+        let dependencies = DependenciesDoubles()
+        
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let result = Reducer.Model.roomList(action: action, state: currentState)
+        let result = Reducer.Model.Rooms_forRemovedFromRoom.reduce(action: action,
+                                                                   state: currentState,
+                                                                   dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/

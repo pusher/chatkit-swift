@@ -1,5 +1,5 @@
 
-enum UserState {
+enum UserState: State {
     
     case empty
     // TODO: Consider in future for DependencyFetcher
