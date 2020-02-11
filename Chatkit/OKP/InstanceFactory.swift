@@ -1,4 +1,4 @@
-import class PusherPlatform.Instance
+import Foundation
 
 protocol HasInstanceFactory {
     var instanceFactory: InstanceFactory { get }
@@ -17,18 +17,16 @@ protocol InstanceFactory {
 
 class ConcreteInstanceFactory: InstanceFactory {
 
-    typealias Dependencies = HasInstanceLocator & HasSDKInfoProvider
+    typealias Dependencies = HasInstanceLocator & HasSDKInfoProvider & HasTokenProvider
     
     private let dependencies: Dependencies
+    
     init(dependencies: Dependencies) {
         self.dependencies = dependencies
     }
     
     func makeInstance(forType instanceType: InstanceType) -> Instance {
-        return PusherPlatform.Instance(locator: self.dependencies.instanceLocator.string,
-                                       serviceName: self.dependencies.sdkInfoProvider.serviceName,
-                                       serviceVersion: self.dependencies.sdkInfoProvider.serviceVersion,
-                                       sdkInfo: self.dependencies.sdkInfoProvider.sdkInfo)
+        return ConcreteInstance(dependencies: self.dependencies)
     }
     
 }

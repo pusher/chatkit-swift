@@ -51,15 +51,14 @@ public class Chatkit {
         guard let instanceLocator = PusherPlatform.InstanceLocator(string: instanceLocatorString) else {
             throw NetworkingError.invalidInstanceLocator
         }
-        let dependencies = ConcreteDependencies(instanceLocator: instanceLocator)
-        try self.init(tokenProvider: tokenProvider, logger: logger, dependencies: dependencies)
+        let dependencies = ConcreteDependencies(instanceLocator: instanceLocator, tokenProvider: tokenProvider)
+        try self.init(dependencies: dependencies, logger: logger)
     }
     
-    internal init(tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger(), dependencies: Dependencies) throws {
+    internal init(dependencies: Dependencies, logger: PPLogger = PPDefaultLogger()) throws {
+        self.dependencies = dependencies
         self.logger = logger
         self.connectionStatus = .disconnected
-        
-        self.dependencies = dependencies
     }
     
     // MARK: - Connecting
@@ -102,6 +101,9 @@ public class Chatkit {
     /// Terminates the previously established connection to the Chatkit web service.
     public func disconnect() {
         // TODO: Implement
+
+        dependencies.subscriptionManager.unsubscribeFromAll()
+        
         self.connectionStatus = .disconnected
     }
     

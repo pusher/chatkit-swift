@@ -3,35 +3,35 @@ import XCTest
 
 public class DummySubscription: DummyBase, Subscription {
     
-    public func subscribe(_ subscriptionType: SubscriptionType, completion: @escaping (VoidResult) -> Void) {
+    public func subscribe(completion: @escaping (VoidResult) -> Void) {
+        DummyFail(sender: self, function: #function)
+    }
+    
+    public func unsubscribe() {
         DummyFail(sender: self, function: #function)
     }
 }
 
-extension XCTest {
-    // We might like to use a `DummySubscription` directly in a test so here we
-    // provide a (faux) initialiser that sets `file` and `line` automatically
-    // making the tests themeselves cleaner and more readable.
-    // Typically we shouldn't do this on Dummy's though which is why we restrict to within XCTest only.
-    public func DummySubscription(file: StaticString = #file, line: UInt = #line) -> DummySubscription {
-        let dummy: DummySubscription = .init(file: file, line: line)
-        return dummy
-    }
-}
-
-public class StubSubscription: StubBase, Subscription {
+public class StubSubscription: DoubleBase, Subscription {
     
-    private var subscribe_completionResult: VoidResult?
+    private var subscribe_completionResults: [VoidResult]
+    public private(set) var subscribe_actualCallCount: UInt = 0
+    
+    private let unsubscribe_expectedCallCount: UInt
+    public private(set) var unsubscribe_actualCallCount: UInt = 0
+    
     private let delegate: SubscriptionDelegate?
     
     private var isSubscribed = false
     public private(set) var action_lastReceived: Action?
-    
-    public init(subscribe_completionResult: VoidResult,
-         delegate: SubscriptionDelegate?,
-         file: StaticString = #file, line: UInt = #line) {
+            
+    public init(subscribe_completionResults: [VoidResult] = [],
+                unsubscribe_expectedCallCount: UInt = 0,
+                delegate: SubscriptionDelegate?,
+                file: StaticString = #file, line: UInt = #line) {
         
-        self.subscribe_completionResult = subscribe_completionResult
+        self.subscribe_completionResults = subscribe_completionResults
+        self.unsubscribe_expectedCallCount = unsubscribe_expectedCallCount
         self.delegate = delegate
         
         super.init(file: file, line: line)
@@ -47,8 +47,10 @@ public class StubSubscription: StubBase, Subscription {
     
     // MARK: Subscription
     
-    public func subscribe(_ subscriptionType: SubscriptionType, completion: @escaping (VoidResult) -> Void) {
-        guard let subscribe_completionResult = self.subscribe_completionResult else {
+    public func subscribe(completion: @escaping (VoidResult) -> Void) {
+        subscribe_actualCallCount += 1
+        
+        guard let subscribe_completionResult = self.subscribe_completionResults.removeOptionalFirst() else {
             XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: file, line: line)
             return
         }
@@ -60,5 +62,13 @@ public class StubSubscription: StubBase, Subscription {
         }
         
         completion(subscribe_completionResult)
+    }
+    
+    public func unsubscribe() {
+        unsubscribe_actualCallCount += 1
+        guard unsubscribe_actualCallCount < unsubscribe_expectedCallCount else {
+            XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: file, line: line)
+            return
+        }
     }
 }

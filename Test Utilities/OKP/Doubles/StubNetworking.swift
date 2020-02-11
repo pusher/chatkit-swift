@@ -1,9 +1,10 @@
 import XCTest
 @testable import PusherChatkit
 
-public class StubNetworking: StubBase, InstanceFactory {
+public class StubNetworking: DoubleBase, InstanceFactory {
     
     private var expectedSubscribeCalls: [SubscriptionType: VoidResult] = .init()
+    private var expectedSubscriptionEndCalls: Set<SubscriptionType> = .init()
     private var registeredStubInstances: [InstanceType: StubInstance] = .init()
     
     public override init(file: StaticString = #file, line: UInt = #line) {
@@ -30,6 +31,19 @@ public class StubNetworking: StubBase, InstanceFactory {
         }
     }
     
+    public func stubSubscriptionEnd(_ subscriptionType: SubscriptionType) {
+        guard !expectedSubscriptionEndCalls.contains(subscriptionType) else {
+            XCTFail("Call to `\(#function)` on `\(String(describing: self))` with subscriptionType: `\(subscriptionType)` made but we are *already* anticipating a call to end the subscription that has not yet been fulfilled", file: file, line: line)
+            return
+        }
+        
+        if let stubInstance = registeredStubInstances[.subscription(subscriptionType)] {
+            stubInstance.stubSubscriptionEnd()
+        } else {
+            expectedSubscriptionEndCalls.insert(subscriptionType)
+        }
+    }
+    
     // Live firing of subscription events
     public func fireSubscriptionEvent(_ subscriptionType: SubscriptionType, _ jsonData: Data,
                                file: StaticString = #file, line: UInt = #line) {
@@ -48,8 +62,8 @@ public class StubNetworking: StubBase, InstanceFactory {
             return
         }
         // TODO:
-        fatalError()
-        // stubInstance.fireSubscriptionError()
+        preconditionFailure()
+//        stubInstance.fireSubscriptionError()
     }
     
     // MARK: InstanceFactory
@@ -74,8 +88,12 @@ public class StubNetworking: StubBase, InstanceFactory {
             
             expectedSubscribeCalls[subscriptionType] = nil
             
-            let stubInstance = StubInstance()
+            let stubInstance = StubInstance(file: file, line: line)
             stubInstance.stubSubscribe(result: expectedVoidResult)
+            
+            if expectedSubscriptionEndCalls.contains(subscriptionType) {
+                stubInstance.stubSubscriptionEnd()
+            }
             
             registeredStubInstances[instanceType] = stubInstance
             

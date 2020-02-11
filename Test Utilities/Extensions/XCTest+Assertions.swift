@@ -81,3 +81,39 @@ public func XCTAssertEqual<T>(_ expression1: @autoclosure () throws -> T, _ expr
         validateResult()
     }
 }
+
+public func XCTAssertType<ExpectedType>(_ expression: @autoclosure () throws -> Any?,  _ message: String = "", file: StaticString = #file, line: UInt = #line, also validateResult: (ExpectedType) -> Void) {
+    
+    var result: Any?
+    XCTAssertNoThrow(try executeAndAssignResult(expression, to: &result), message, file: file, line: line)
+    
+    guard let nonNilResult = result else {
+        XCTFail("Expected type `\(ExpectedType.self)` but got nil value instead", file: file, line: line)
+        return
+    }
+    guard let typedResult = nonNilResult as? ExpectedType else {
+        XCTFail("Expected type `\(ExpectedType.self)` but got `\(type(of: result))` instead", file: file, line: line)
+        return
+    }
+    validateResult(typedResult)
+}
+
+public func XCTAssertExpectationFulfilled<ResultType>(_ expectation: XCTestExpectation.Expectation<ResultType>, _ message: String = "", file: StaticString = #file, line: UInt = #line, also validateResult: (ResultType) -> Void) {
+    
+    switch expectation.resultType {
+    case let .fulfilled(result):
+        validateResult(result)
+    case .unfulfilled:
+        XCTFail(message, file: file, line: line)
+    }
+}
+
+public func XCTAssertExpectationFulfilled<ResultTypeA, ResultTypeB>(_ expectation: XCTestExpectation.TwoArgExpectation<ResultTypeA, ResultTypeB>, _ message: String = "", file: StaticString = #file, line: UInt = #line, also validateResult: ((ResultTypeA, ResultTypeB)) -> Void) {
+    
+    switch expectation.resultType {
+    case let .fulfilled(result):
+        validateResult(result)
+    case .unfulfilled:
+        XCTFail(message, file: file, line: line)
+    }
+}

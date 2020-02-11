@@ -4,7 +4,7 @@ protocol HasSubscriptionFactory {
 }
 
 protocol SubscriptionFactory {
-    func makeSubscription() -> Subscription
+    func makeSubscription(subscriptionType: SubscriptionType) -> Subscription
 }
 
 class ConcreteSubscriptionFactory: SubscriptionFactory {
@@ -21,8 +21,9 @@ class ConcreteSubscriptionFactory: SubscriptionFactory {
     
     // MARK: SubscriptionFactory
     
-    func makeSubscription() -> Subscription {
-        return ConcreteSubscription(dependencies: dependencies,
+    func makeSubscription(subscriptionType: SubscriptionType) -> Subscription {
+        return ConcreteSubscription(subscriptionType: subscriptionType,
+                                    dependencies: dependencies,
                                     delegate: subscriptionResponder)
     }
 }

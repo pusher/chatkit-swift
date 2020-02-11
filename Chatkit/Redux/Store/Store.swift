@@ -80,6 +80,14 @@ class ConcreteStore: Store {
                     currentUser: existingState.currentUser,
                     joinedRooms: existingState.joinedRooms.filter { $0.identifier != removedFromRoom.roomIdentifier }
                 )
+
+            case let .addedToRoom(addedToRoom):
+                // TODO:
+                let newRoom = joinedRoom(withWireRoom: addedToRoom.room)
+                newState = State(
+                    currentUser: existingState.currentUser,
+                    joinedRooms: existingState.joinedRooms.appending(newRoom)
+                )
                 
             default:
                 preconditionFailure()
@@ -106,5 +114,9 @@ class ConcreteStore: Store {
         }
         
         self.state = newState
+    }
+    
+    private func joinedRoom(withWireRoom wireRoom: Wire.Room) -> Internal.Room {
+        return Internal.Room(identifier: wireRoom.identifier, name: wireRoom.name)
     }
 }

@@ -1,6 +1,8 @@
 import Foundation
 
-// TODO: this is temporary, until the transformer is implemented
+// TODO: The `JoinedRoomsTransformer` code should be implemented here
+// Until that time we temporary have this code to pass messages to the JoinedRoomsProvider
+
 extension JoinedRoomsProvider: StoreListener {
     
     func store(_ store: Store, didUpdateState state: State) {

@@ -8,7 +8,7 @@ public class DummyInstanceFactory: DummyBase, InstanceFactory {
     }
 }
 
-public class StubInstanceFactory: StubBase, InstanceFactory {
+public class StubInstanceFactory: DoubleBase, InstanceFactory {
     
     public typealias MakeInstanceHandler = (InstanceType) -> Instance
     

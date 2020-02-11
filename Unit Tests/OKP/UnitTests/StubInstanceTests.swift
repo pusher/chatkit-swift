@@ -2,8 +2,8 @@ import TestUtilities
 import XCTest
 @testable import PusherChatkit
 
-import enum PusherPlatform.HTTPMethod
 import class PusherPlatform.PPRequestOptions
+import enum PusherPlatform.HTTPMethod
 
 class StubInstanceTests: XCTestCase {
     
@@ -25,11 +25,16 @@ class StubInstanceTests: XCTestCase {
         
         let onEvent: Instance.OnEvent = { _, _, any in
             expectation.fulfill()
-            guard let jsonData = any as? Data else {
+            guard let jsonDict = any as? [String: Any] else {
                 XCTFail()
                 return
             }
-            XCTAssertEqual(jsonData.toString(), expectedJsonData.toString())
+            guard let expectedJson = try? JSONSerialization.jsonObject(with: expectedJsonData, options: []),
+                let expectedJsonDict = expectedJson as? [String: Any] else {
+                XCTFail()
+                return
+            }
+            XCTAssertEqual(jsonDict.description, expectedJsonDict.description)
         }
         
         _ = stubInstance.subscribeWithResume(using: requestOptions,
@@ -42,7 +47,7 @@ class StubInstanceTests: XCTestCase {
         
         stubInstance.fireSubscriptionEvent(jsonData: expectedJsonData)
         
-        waitForExpectations(timeout: 1)
+        wait(for: [expectation], timeout: 1)
     }
     
 }

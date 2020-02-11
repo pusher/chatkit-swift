@@ -1,12 +1,17 @@
 import XCTest
+import struct PusherPlatform.InstanceLocator
+import protocol PusherPlatform.TokenProvider
 @testable import PusherChatkit
+
+private let defaultInstanceLocator = PusherPlatform.InstanceLocator(string: "dummy_version:dummy_region:dummy_location")!
 
 // Allows us to define test doubles for Unit testing.
 // If a dependency is not explicitly defined a "Dummy" version is used so that if it is interacted
 // with in any way the test should fail.
-public class DependenciesDoubles: StubBase, Dependencies {
-    
-    public let instanceLocator: InstanceLocator
+public class DependenciesDoubles: DoubleBase, Dependencies {
+
+    public let instanceLocator: PusherPlatform.InstanceLocator
+    public let tokenProvider: PusherPlatform.TokenProvider
     public let sdkInfoProvider: SDKInfoProvider
     public let storeBroadcaster: StoreBroadcaster
     public let store: Store
@@ -17,7 +22,8 @@ public class DependenciesDoubles: StubBase, Dependencies {
     public let userService: UserService
     public let missingUserFetcher: MissingUserFetcher
     
-    public init(instanceLocator: InstanceLocator? = nil,
+    public init(instanceLocator: PusherPlatform.InstanceLocator? = nil,
+                tokenProvider: PusherPlatform.TokenProvider? = nil,
                 sdkInfoProvider: SDKInfoProvider? = nil,
                 storeBroadcaster: StoreBroadcaster? = nil,
                 store: Store? = nil,
@@ -30,7 +36,8 @@ public class DependenciesDoubles: StubBase, Dependencies {
                 
                 file: StaticString = #file, line: UInt = #line) {
         
-        self.instanceLocator = instanceLocator ?? DummyInstanceLocator(file: file, line: line)
+        self.instanceLocator = instanceLocator ?? defaultInstanceLocator
+        self.tokenProvider = tokenProvider ?? DummyTokenProvider(file: file, line: line)
         self.sdkInfoProvider = sdkInfoProvider ?? DummySDKInfoProvider(file: file, line: line)
         self.storeBroadcaster = storeBroadcaster ?? DummyStoreBroadcaster(file: file, line: line)
         self.store = store ?? DummyStore(file: file, line: line)
@@ -46,24 +53,23 @@ public class DependenciesDoubles: StubBase, Dependencies {
     
 }
 
-
 // Allows us to test with ALL the Concrete dependencies except the InstanceFactory
 // which is exactly what we want for Functional tests
 extension ConcreteDependencies {
     
-    public convenience init(instanceLocator: InstanceLocator, instanceFactory: InstanceFactory,
-                     file: StaticString = #file, line: UInt = #line) {
-        self.init(instanceLocator: instanceLocator) { dependencyFactory in
+    public convenience init(instanceLocator: InstanceLocator? = nil,
+                            tokenProvider: TokenProvider? = nil,
+                            instanceFactory: InstanceFactory,
+                            file: StaticString = #file, line: UInt = #line) {
+        
+        let instanceLocator = instanceLocator ?? defaultInstanceLocator
+        let tokenProvider = tokenProvider ?? DummyTokenProvider(file: file, line: line)
+        
+        self.init(instanceLocator: instanceLocator, tokenProvider: tokenProvider) { dependencyFactory in
             dependencyFactory.register(InstanceFactory.self) { dependencies in
                 instanceFactory
             }
         }
-    }
-    
-    public convenience init(instanceFactory: InstanceFactory,
-                     file: StaticString = #file, line: UInt = #line) {
-        let instanceLocator = DummyInstanceLocator(file: file, line: line)
-        self.init(instanceLocator: instanceLocator, instanceFactory: instanceFactory, file: file, line: line)
     }
     
 }

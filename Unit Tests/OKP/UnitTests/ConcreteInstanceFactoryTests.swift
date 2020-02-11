@@ -1,13 +1,13 @@
 import TestUtilities
 import XCTest
-@testable import PusherChatkit
-
-import struct PusherPlatform.PPSDKInfo
 import class PusherPlatform.Instance
+import struct PusherPlatform.InstanceLocator
+import struct PusherPlatform.PPSDKInfo
+@testable import PusherChatkit
 
 class ConcreteInstanceFactoryTests: XCTestCase {
     
-    // TODO:
+    let instanceLocator = PusherPlatform.InstanceLocator(string: "version:region:identifier")!
     
     func test_makeInstance_forServiceUser_returnsInstance() {
         
@@ -15,7 +15,7 @@ class ConcreteInstanceFactoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let instanceLocator = StubInstanceLocator(string: "valid:instance:locator")
+        let instanceLocator = self.instanceLocator
         let sdkInfoProvider = ConcreteSDKInfoProvider(serviceName: "serviceName",
                                                       serviceVersion: "serviceVersion",
                                                       sdkInfo: PPSDKInfo.current)
@@ -34,10 +34,7 @@ class ConcreteInstanceFactoryTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertNotNil(instance as? PusherPlatform.Instance)
-        XCTAssertEqual(instanceLocator.region_actualCallCount, 1)
-        XCTAssertEqual(instanceLocator.identifier_actualCallCount, 1)
-        XCTAssertEqual(instanceLocator.version_actualCallCount, 1)
+        XCTAssertTrue(instance is ConcreteInstance)
     }
     
 }

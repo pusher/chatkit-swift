@@ -14,4 +14,7 @@ extension Array {
         return element
     }
     
+    public mutating func removeOptionalFirst() -> Element? {
+        return self.count > 0 ? self.removeFirst() : nil
+    }
 }

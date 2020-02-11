@@ -30,12 +30,12 @@ class ConcreteSubscriptionResponder: SubscriptionResponder {
         } catch {
             // ???
             print(error)
-            fatalError()
+            preconditionFailure()
         }
     }
     
-    func subscription(_ subscription: Subscription, didReceiveError: Error) {
-        // TODO:
-        fatalError()
+    func subscription(_ subscription: Subscription, didReceiveError error: Error) {
+        // TODO: really this needs to know if its a recoverable error or not
+        print(error)
     }
 }

@@ -5,6 +5,8 @@ protocol HasSubscriptionManager {
 
 protocol SubscriptionManager {
     func subscribe(_ subscriptionType: SubscriptionType, completion: @escaping SubscribeHandler)
+    func unsubscribe(_ subscriptionType: SubscriptionType)
+    func unsubscribeFromAll()
 }
 
 class ConcreteSubscriptionManager: SubscriptionManager {
@@ -13,8 +15,8 @@ class ConcreteSubscriptionManager: SubscriptionManager {
     
     private let dependencies: Dependencies
     
-    private var subscriptions: [Subscription] = []
-//    private var subscriptions: [Subscription: SubscriptionType] = [:]
+//    private var subscriptions: [Subscription] = []
+    private var subscriptionsByType: [SubscriptionType: Subscription] = [:]
     
     init(dependencies: Dependencies) {
         self.dependencies = dependencies
@@ -23,17 +25,29 @@ class ConcreteSubscriptionManager: SubscriptionManager {
     // MARK: SubscriptionManager
     
     func subscribe(_ subscriptionType: SubscriptionType, completion: @escaping SubscribeHandler) {
-        let subscription = self.dependencies.subscriptionFactory.makeSubscription()
-        subscription.subscribe(subscriptionType) { [weak self] result in
-            guard let self = self else {
-                return
-            }
-            
-            // TODO: is it correct to not hold a reference on subscribe failure?
-            if case .success = result {
-                self.subscriptions.append(subscription)
-            }
-            completion(result)
+        
+        // Check if we are already have a subscription for the specified SubscriptionType and if so use that
+        let subscription = subscriptionsByType[subscriptionType] ?? self.dependencies.subscriptionFactory.makeSubscription(subscriptionType: subscriptionType)
+
+        // Immediately hold a reference to the subscription so we don't attempt to factory it again
+        self.subscriptionsByType[subscriptionType] = subscription
+        
+        // TODO do we need to remove the subscription from subscriptionsByType if the subscribe call fails?
+        // At the moment I am thinking no because if someone calls subscribe again it should cause the dead
+        // subscription to come back to life and reattempt connection
+        
+        subscription.subscribe(completion: completion)
+    }
+    
+    func unsubscribe(_ subscriptionType: SubscriptionType) {
+        
+    }
+    
+    func unsubscribeFromAll() {
+        for (subscriptionType, subscription) in subscriptionsByType {
+            // TODO work out what happens if unsubscribe fails, should we remove from subscriptionsByType or not
+            subscription.unsubscribe()
+            subscriptionsByType.removeValue(forKey: subscriptionType)
         }
     }
 }

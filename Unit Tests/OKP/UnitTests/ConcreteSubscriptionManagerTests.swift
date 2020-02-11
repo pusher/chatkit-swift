@@ -4,15 +4,23 @@ import XCTest
 
 class ConcreteSubscriptionManagerTests: XCTestCase {
     
-    func test_subscribe_subscriptionRegistrationSucceeds_success() {
-
+    func test_subscribe_toUserWhenNoExistingSubscriptions_makesSubscirptionAndSubscribesAndReturnsSuccess() {
+        
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
-        let stubSubscriptionDelegate = StubSubscriptionDelegate(didReceiveEvent_expectedCallCount: 1)
-        let stubSubscription = StubSubscription(subscribe_completionResult: .success, delegate: stubSubscriptionDelegate)
-        let stubSubscriptionFactory = StubSubscriptionFactory(makeSubscription_subscriptionToReturn: stubSubscription)
+        let subscriptionType: SubscriptionType = .user
+        let subscriptionResult: VoidResult = .success
+        
+        let dummySubscriptionDelegate = DummySubscriptionDelegate()
+        
+        let stubSubscription = StubSubscription(subscribe_completionResults: [subscriptionResult],
+                                                delegate: dummySubscriptionDelegate)
+        
+        let subscriptionTypeAndSubscriptionToReturn = (subscriptionType: subscriptionType, subscription: stubSubscription)
+        
+        let stubSubscriptionFactory = StubSubscriptionFactory(makeSubscription_expectedTypesAndSubscriptionsToReturn: [subscriptionTypeAndSubscriptionToReturn])
         
         let dependencies = DependenciesDoubles(
             subscriptionFactory: stubSubscriptionFactory
@@ -20,19 +28,294 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         
         let sut = ConcreteSubscriptionManager(dependencies: dependencies)
         
-        let expectation = self.expectation(description: "User subscription successfully connected")
-        var actualResult: VoidResult?
+        let expectation = XCTestExpectation.SubscriptionManager.subscribe
+        
+        XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 0)
+        XCTAssertEqual(stubSubscription.subscribe_actualCallCount, 0)
         
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        sut.subscribe(.user) { result in
-            actualResult = result
-            expectation.fulfill()
+        sut.subscribe(subscriptionType, completion: expectation.handler)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        wait(for: [expectation], timeout: expectation.timeout)
+        
+        XCTAssertExpectationFulfilled(expectation) { result in
+            XCTAssertEqual(result, .success)
         }
         
-        waitForExpectations(timeout: 1)
+        XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 1) // <-- has increased by one
+        XCTAssertEqual(stubSubscription.subscribe_actualCallCount, 1) // <-- has increased by one
+    }
+    
+    func test_subscribe_toRoom1234WhenNoExistingSubscriptions_makesSubscirptionAndSubscribesAndReturnsSuccess() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let subscriptionType: SubscriptionType = .room(roomIdentifier: "1234")
+        let subscriptionResult: VoidResult = .success
+        
+        let dummySubscriptionDelegate = DummySubscriptionDelegate()
+        
+        let stubSubscription = StubSubscription(subscribe_completionResults: [subscriptionResult],
+                                                delegate: dummySubscriptionDelegate)
+        
+        let subscriptionTypeAndSubscriptionToReturn = (subscriptionType: subscriptionType, subscription: stubSubscription)
+        
+        let stubSubscriptionFactory = StubSubscriptionFactory(makeSubscription_expectedTypesAndSubscriptionsToReturn: [subscriptionTypeAndSubscriptionToReturn])
+        
+        let dependencies = DependenciesDoubles(
+            subscriptionFactory: stubSubscriptionFactory
+        )
+        
+        let sut = ConcreteSubscriptionManager(dependencies: dependencies)
+        
+        let expectation = XCTestExpectation.SubscriptionManager.subscribe
+        
+        XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 0)
+        XCTAssertEqual(stubSubscription.subscribe_actualCallCount, 0)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        sut.subscribe(subscriptionType, completion: expectation.handler)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        wait(for: [expectation], timeout: expectation.timeout)
+        
+        XCTAssertExpectationFulfilled(expectation) { result in
+            XCTAssertEqual(result, .success)
+        }
+        
+        XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 1) // <-- has increased by one
+        XCTAssertEqual(stubSubscription.subscribe_actualCallCount, 1) // <-- has increased by one
+    }
+    
+    func test_subscribe_toUserWhenUserSubscriptionAlreadyActive_doesNothingAndReturnsSuccess() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let firstSubscriptionType: SubscriptionType = .user
+        let firstSubscriptionResult: VoidResult = .success
+        
+        let secondSubscriptionType: SubscriptionType = .user
+        let secondSubscriptionResult: VoidResult = .success
+        
+        let dummySubscriptionDelegate = DummySubscriptionDelegate()
+        
+        let stubUserSubscription = StubSubscription(subscribe_completionResults: [firstSubscriptionResult, secondSubscriptionResult],
+                                                    delegate: dummySubscriptionDelegate)
+        
+        let firstSubscriptionTypeAndSubscriptionToReturn = (subscriptionType: firstSubscriptionType, subscription: stubUserSubscription)
+        let secondSubscriptionTypeAndSubscriptionToReturn = (subscriptionType: secondSubscriptionType, subscription: stubUserSubscription)
+        
+        let stubSubscriptionFactory = StubSubscriptionFactory(makeSubscription_expectedTypesAndSubscriptionsToReturn:
+            [firstSubscriptionTypeAndSubscriptionToReturn, secondSubscriptionTypeAndSubscriptionToReturn])
+        
+        let dependencies = DependenciesDoubles(
+            subscriptionFactory: stubSubscriptionFactory
+        )
+        
+        let sut = ConcreteSubscriptionManager(dependencies: dependencies)
+        
+        // Call `subscribe` ** with `.user` ** which should create and hold onto a User Subscription
+        let firstExpectation = XCTestExpectation.SubscriptionManager.subscribe
+        sut.subscribe(firstSubscriptionType, completion: firstExpectation.handler)
+        wait(for: [firstExpectation], timeout: firstExpectation.timeout)
+        
+        XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 1)
+        XCTAssertEqual(stubUserSubscription.subscribe_actualCallCount, 1)
+        
+        let secondExpectation = XCTestExpectation.SubscriptionManager.subscribe
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        sut.subscribe(secondSubscriptionType, completion: secondExpectation.handler)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        wait(for: [secondExpectation], timeout: secondExpectation.timeout)
+        
+        XCTAssertExpectationFulfilled(secondExpectation) { result in
+            XCTAssertEqual(result, .success)
+        }
+        
+        XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 1) // <-- unchanged (the subscription already existed)
+        XCTAssertEqual(stubUserSubscription.subscribe_actualCallCount, 2) // <-- has increased by one
+    }
+    
+    func test_subscribe_toUserWhenRoom1234SubscriptionAlreadyActive_makesSubscirptionAndSubscribesAndReturnsSuccess() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let firstSubscriptionType: SubscriptionType = .room(roomIdentifier: "1234")
+        let firstSubscriptionResult: VoidResult = .success
+        
+        let secondSubscriptionType: SubscriptionType = .user
+        let secondSubscriptionResult: VoidResult = .success
+        
+        let dummySubscriptionDelegate = DummySubscriptionDelegate()
+        
+        let firstStubSubscription = StubSubscription(subscribe_completionResults: [firstSubscriptionResult],
+                                                     delegate: dummySubscriptionDelegate)
+        let secondStubSubscription = StubSubscription(subscribe_completionResults: [secondSubscriptionResult],
+                                                      delegate: dummySubscriptionDelegate)
+        
+        let firstSubscriptionTypeAndSubscriptionToReturn = (subscriptionType: firstSubscriptionType, subscription: firstStubSubscription)
+        let secondSubscriptionTypeAndSubscriptionToReturn = (subscriptionType: secondSubscriptionType, subscription: secondStubSubscription)
+        
+        let stubSubscriptionFactory = StubSubscriptionFactory(makeSubscription_expectedTypesAndSubscriptionsToReturn:
+            [firstSubscriptionTypeAndSubscriptionToReturn, secondSubscriptionTypeAndSubscriptionToReturn])
+        
+        let dependencies = DependenciesDoubles(
+            subscriptionFactory: stubSubscriptionFactory
+        )
+        
+        let sut = ConcreteSubscriptionManager(dependencies: dependencies)
+        
+        // Call `subscribe` ** with `.room(roomIdentifier: "1234")` ** which should create and hold onto a Room Subscription
+        let firstExpectation = XCTestExpectation.SubscriptionManager.subscribe
+        sut.subscribe(firstSubscriptionType, completion: firstExpectation.handler)
+        wait(for: [firstExpectation], timeout: firstExpectation.timeout)
+        
+        XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 1)
+        XCTAssertEqual(firstStubSubscription.subscribe_actualCallCount, 1)
+        XCTAssertEqual(secondStubSubscription.subscribe_actualCallCount, 0)
+        
+        let secondExpectation = XCTestExpectation.SubscriptionManager.subscribe
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        sut.subscribe(secondSubscriptionType, completion: secondExpectation.handler)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        wait(for: [secondExpectation], timeout: secondExpectation.timeout)
+        
+        XCTAssertExpectationFulfilled(secondExpectation) { result in
+            XCTAssertEqual(result, .success)
+        }
+        
+        XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 2) // <-- has increased by one
+        XCTAssertEqual(firstStubSubscription.subscribe_actualCallCount, 1)// <-- unchanged
+        XCTAssertEqual(secondStubSubscription.subscribe_actualCallCount, 1) // <-- has increased by one
+    }
+    
+    func test_subscribe_toRoom1234WhenRoom1234SubscriptionAlreadyActive_doesNothingAndReturnsSuccess() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let firstSubscriptionType: SubscriptionType = .room(roomIdentifier: "1234")
+        let firstSubscriptionResult: VoidResult = .success
+        
+        let secondSubscriptionType: SubscriptionType = .room(roomIdentifier: "1234")
+        let secondSubscriptionResult: VoidResult = .success
+        
+        let dummySubscriptionDelegate = DummySubscriptionDelegate()
+        
+        let roomStubSubscription = StubSubscription(subscribe_completionResults: [firstSubscriptionResult, secondSubscriptionResult],
+                                                     delegate: dummySubscriptionDelegate)
+        
+        let firstSubscriptionTypeAndSubscriptionToReturn = (subscriptionType: firstSubscriptionType, subscription: roomStubSubscription)
+        let secondSubscriptionTypeAndSubscriptionToReturn = (subscriptionType: secondSubscriptionType, subscription: roomStubSubscription)
+        
+        let stubSubscriptionFactory = StubSubscriptionFactory(makeSubscription_expectedTypesAndSubscriptionsToReturn:
+            [firstSubscriptionTypeAndSubscriptionToReturn, secondSubscriptionTypeAndSubscriptionToReturn])
+        
+        let dependencies = DependenciesDoubles(
+            subscriptionFactory: stubSubscriptionFactory
+        )
+        
+        let sut = ConcreteSubscriptionManager(dependencies: dependencies)
+        
+        // Call `subscribe` ** with `.room(roomIdentifier: "1234")` ** which should create and hold onto a Room Subscription
+        let firstExpectation = XCTestExpectation.SubscriptionManager.subscribe
+        sut.subscribe(firstSubscriptionType, completion: firstExpectation.handler)
+        wait(for: [firstExpectation], timeout: firstExpectation.timeout)
+        
+        XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 1)
+        XCTAssertEqual(roomStubSubscription.subscribe_actualCallCount, 1)
+        
+        let secondExpectation = XCTestExpectation.SubscriptionManager.subscribe
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        sut.subscribe(secondSubscriptionType, completion: secondExpectation.handler)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        wait(for: [secondExpectation], timeout: secondExpectation.timeout)
+        
+        XCTAssertExpectationFulfilled(secondExpectation) { result in
+            XCTAssertEqual(result, .success)
+        }
+        
+        XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 1) // <-- unchanged (the subscription already existed)
+        XCTAssertEqual(roomStubSubscription.subscribe_actualCallCount, 2) // <-- has increased by one
+    }
+    
+    func test_subscribe_subscriptionRegistrationSucceeds_success() {
+
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let subscriptionType: SubscriptionType = .user
+        let subscriptionResult: VoidResult = .success
+        
+        let stubSubscriptionDelegate = StubSubscriptionDelegate(didReceiveEvent_expectedCallCount: 1)
+        
+        let stubSubscription = StubSubscription(subscribe_completionResults: [subscriptionResult],
+                                                delegate: stubSubscriptionDelegate)
+        
+        let subscriptionTypeAndSubscriptionToReturn = (subscriptionType: subscriptionType, subscription: stubSubscription)
+        
+        let stubSubscriptionFactory = StubSubscriptionFactory(makeSubscription_expectedTypesAndSubscriptionsToReturn: [subscriptionTypeAndSubscriptionToReturn])
+        
+        let dependencies = DependenciesDoubles(
+            subscriptionFactory: stubSubscriptionFactory
+        )
+        
+        let sut = ConcreteSubscriptionManager(dependencies: dependencies)
+        
+        let expectation = XCTestExpectation.SubscriptionManager.subscribe
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        sut.subscribe(subscriptionType, completion: expectation.handler)
+        
+        wait(for: [expectation], timeout: expectation.timeout)
         
         let jsonData = """
         {
@@ -54,10 +337,12 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
 
-        XCTAssertEqual(actualResult, .success)
+        XCTAssertExpectationFulfilled(expectation) { result in
+            XCTAssertEqual(result, .success)
+        }
         XCTAssertEqual(stubSubscriptionDelegate.didReceiveEvent_jsonDataLastReceived, jsonData)
-        XCTAssertEqual(stubSubscriptionDelegate.didReceiveEvent_callCount, 1)
-        XCTAssertEqual(stubSubscriptionDelegate.didReceiveError_callCount, 0)
+        XCTAssertEqual(stubSubscriptionDelegate.didReceiveEvent_actualCallCount, 1)
+        XCTAssertEqual(stubSubscriptionDelegate.didReceiveError_actualCallCount, 0)
     }
     
     func test_subscribe_subscriptionRegistrationErrors_failure() {
@@ -67,10 +352,17 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         /******************/
         
         let error = "some error"
-        let subscribeResult = VoidResult.failure(error)
-        let stubSubscriptionDelegate = StubSubscriptionDelegate(didReceiveEvent_expectedCallCount: 0)
-        let stubSubscription = StubSubscription(subscribe_completionResult: subscribeResult, delegate: stubSubscriptionDelegate)
-        let stubSubscriptionFactory = StubSubscriptionFactory(makeSubscription_subscriptionToReturn: stubSubscription)
+        let subscriptionType: SubscriptionType = .user
+        let subscriptionResult: VoidResult = .failure(error)
+        
+        let stubSubscriptionDelegate = StubSubscriptionDelegate(didReceiveEvent_expectedCallCount: 1)
+        
+        let stubSubscription = StubSubscription(subscribe_completionResults: [subscriptionResult],
+                                                delegate: stubSubscriptionDelegate)
+        
+        let subscriptionTypeAndSubscriptionToReturn = (subscriptionType: subscriptionType, subscription: stubSubscription)
+        
+        let stubSubscriptionFactory = StubSubscriptionFactory(makeSubscription_expectedTypesAndSubscriptionsToReturn: [subscriptionTypeAndSubscriptionToReturn])
         
         let dependencies = DependenciesDoubles(
             subscriptionFactory: stubSubscriptionFactory
@@ -78,27 +370,25 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         
         let sut = ConcreteSubscriptionManager(dependencies: dependencies)
         
-        let expectation = self.expectation(description: "User subscription successfully connected")
-        var actualResult: VoidResult?
+        let expectation = XCTestExpectation.SubscriptionManager.subscribe
         
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        sut.subscribe(.user) { result in
-            actualResult = result
-            expectation.fulfill()
-        }
+        sut.subscribe(subscriptionType, completion: expectation.handler)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        waitForExpectations(timeout: 1)
-
-        XCTAssertEqual(actualResult, .failure(error))
-        XCTAssertEqual(stubSubscriptionDelegate.didReceiveEvent_callCount, 0)
-        XCTAssertEqual(stubSubscriptionDelegate.didReceiveError_callCount, 0)
+        wait(for: [expectation], timeout: 1)
+        
+        XCTAssertExpectationFulfilled(expectation) { result in
+            XCTAssertEqual(result, .failure(error))
+        }
+        XCTAssertEqual(stubSubscriptionDelegate.didReceiveEvent_actualCallCount, 0)
+        XCTAssertEqual(stubSubscriptionDelegate.didReceiveError_actualCallCount, 0)
     }
     
 }

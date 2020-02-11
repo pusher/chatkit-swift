@@ -1,28 +1,36 @@
 import TestUtilities
 import XCTest
+import struct PusherPlatform.InstanceLocator
 @testable import PusherChatkit
 
 class ConcreteDependencyTests: XCTestCase {
     
-    func test_initWithInstanceLocator_withInstanceLocatorButNoOverride_returnsConcreteDependencies() {
+    let instanceLocator = PusherPlatform.InstanceLocator(string: "version:region:identifier")!
+    
+    func test_initWithoutOverride_withInstanceLocatorButNoOverride_returnsConcreteDependencies() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
-        let instanceLocator = DummyInstanceLocator()
+        let instanceLocator = self.instanceLocator
+        let tokenProvider = DummyTokenProvider()
         
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let dependencies = ConcreteDependencies(instanceLocator: instanceLocator)
+        let dependencies = ConcreteDependencies(instanceLocator: instanceLocator,
+                                                tokenProvider: tokenProvider)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertNotNil(dependencies.instanceLocator as? DummyInstanceLocator)
+        XCTAssertEqual(dependencies.instanceLocator.version, "version")
+        XCTAssertEqual(dependencies.instanceLocator.region, "region")
+        XCTAssertEqual(dependencies.instanceLocator.identifier, "identifier")
+        XCTAssertNotNil(dependencies.tokenProvider as? DummyTokenProvider)
         XCTAssertNotNil(dependencies.sdkInfoProvider as? ConcreteSDKInfoProvider)
         XCTAssertNotNil(dependencies.storeBroadcaster as? ConcreteStoreBroadcaster)
         XCTAssertNotNil(dependencies.store as? ConcreteStore)
@@ -40,7 +48,8 @@ class ConcreteDependencyTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let instanceLocator = DummyInstanceLocator()
+        let instanceLocator = self.instanceLocator
+        let tokenProvider = DummyTokenProvider()
         
         let expectation = self.expectation(description: "`override` closure should be called on `ConcreteDependencies`")
         let override: (DependencyFactory) -> Void = { dependencyFactory in
@@ -55,15 +64,18 @@ class ConcreteDependencyTests: XCTestCase {
         /******************/
         
         let dependencies = ConcreteDependencies(instanceLocator: instanceLocator,
+                                                tokenProvider: tokenProvider,
                                                 override: override)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        waitForExpectations(timeout: 1)
+        wait(for: [expectation], timeout: 1)
         
-        XCTAssertNotNil(dependencies.instanceLocator as? DummyInstanceLocator)
+        XCTAssertEqual(dependencies.instanceLocator.version, "version")
+        XCTAssertEqual(dependencies.instanceLocator.region, "region")
+        XCTAssertEqual(dependencies.instanceLocator.identifier, "identifier")
         XCTAssertNotNil(dependencies.sdkInfoProvider as? ConcreteSDKInfoProvider)
         XCTAssertNotNil(dependencies.storeBroadcaster as? ConcreteStoreBroadcaster)
         XCTAssertNotNil(dependencies.store as? StubStore) // <------ Not a `ConcreteStore`!
@@ -103,7 +115,7 @@ class ConcreteDependencyTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let instanceLocator = DummyInstanceLocator()
+        let instanceLocator = self.instanceLocator
         let stubNetworking = StubNetworking()
         
         /******************/

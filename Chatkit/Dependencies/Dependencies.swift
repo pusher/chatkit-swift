@@ -1,7 +1,10 @@
+import struct PusherPlatform.InstanceLocator
+import protocol PusherPlatform.TokenProvider
 import struct PusherPlatform.PPSDKInfo
 
 protocol Dependencies:
     HasInstanceLocator &
+    HasTokenProvider &
     HasSDKInfoProvider &
     HasStoreBroadcaster &
     HasStore &
@@ -67,12 +70,16 @@ class ConcreteDependencies: Dependencies {
     
     private let dependencyFactory = DependencyFactory()
     
-    let instanceLocator: InstanceLocator
+    let instanceLocator: PusherPlatform.InstanceLocator
+    let tokenProvider: TokenProvider
     
     // `override` gives tests an opportunity to override any concrete dependencies with test doubles.
-    init(instanceLocator: InstanceLocator, override: ((DependencyFactory) -> Void)? = nil) {
+    init(instanceLocator: PusherPlatform.InstanceLocator,
+         tokenProvider: TokenProvider,
+         override: ((DependencyFactory) -> Void)? = nil) {
         
         self.instanceLocator = instanceLocator
+        self.tokenProvider = tokenProvider
         
         dependencyFactory.register(SDKInfoProvider.self, factory: { dependencies in
             ConcreteSDKInfoProvider(serviceName: ServiceName.chat.rawValue,
