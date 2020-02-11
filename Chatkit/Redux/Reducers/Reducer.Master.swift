@@ -8,7 +8,7 @@ extension Reducer {
     struct Master: Reducing {
         
         typealias ActionType = Action
-        typealias StateType = ChatState
+        typealias StateType = MasterState
         typealias DependenciesType =
             HasReducer_Model_User_forInitialState
             & HasReducer_Model_Rooms_forInitialState

@@ -1,6 +1,6 @@
 
 protocol StoreDelegate: AnyObject {
-    func store(_ store: Store, didUpdateState state: ChatState)
+    func store(_ store: Store, didUpdateState state: MasterState)
 }
 
 protocol HasStore {
@@ -8,7 +8,7 @@ protocol HasStore {
 }
 
 protocol Store {
-    var state: ChatState { get }
+    var state: MasterState { get }
     func dispatch(action: Action)
 }
 
@@ -25,7 +25,7 @@ class ConcreteStore: Store {
     private let dependencies: Dependencies
     private weak var delegate: StoreDelegate?
     
-    private(set) var state: ChatState {
+    private(set) var state: MasterState {
         didSet {
             if state != oldValue {
                 self.delegate?.store(self, didUpdateState: state)

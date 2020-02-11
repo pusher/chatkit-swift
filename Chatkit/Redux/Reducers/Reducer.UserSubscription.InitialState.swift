@@ -9,7 +9,7 @@ extension Reducer.UserSubscription {
     struct InitialState: Reducing {
         
         typealias ActionType = ReceivedInitialStateAction
-        typealias StateType = ChatState
+        typealias StateType = MasterState
         typealias DependenciesType = HasReducer_Model_User_forInitialState
             & HasReducer_Model_Rooms_forInitialState
         
@@ -25,7 +25,7 @@ extension Reducer.UserSubscription {
                 users = []
             }
             
-            return ChatState(users: users, currentUser: currentUser, joinedRooms: joinedRooms)
+            return MasterState(users: users, currentUser: currentUser, joinedRooms: joinedRooms)
         }
     }
     

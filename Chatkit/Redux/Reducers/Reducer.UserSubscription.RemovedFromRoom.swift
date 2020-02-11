@@ -9,14 +9,14 @@ extension Reducer.UserSubscription {
     struct RemovedFromRoom: Reducing {
 
         typealias ActionType = ReceivedRemovedFromRoomAction
-        typealias StateType = ChatState
+        typealias StateType = MasterState
         typealias DependenciesType = HasReducer_Model_Rooms_forRemovedFromRoom
         
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
             
             let joinedRooms = dependencies.reducer_model_rooms_forRemovedFromRoom(action, state.joinedRooms, dependencies)
             
-            return ChatState(users: state.users, currentUser: state.currentUser, joinedRooms: joinedRooms)        }
+            return MasterState(users: state.users, currentUser: state.currentUser, joinedRooms: joinedRooms)        }
         
     }
     

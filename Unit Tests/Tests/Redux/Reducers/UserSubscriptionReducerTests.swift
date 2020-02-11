@@ -19,7 +19,7 @@ class UserSubscriptionReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let inputState: ChatState = .empty
+        let inputState: MasterState = .empty
         
         let action = ReceivedInitialStateAction(
             event: Wire.Event.InitialState(
@@ -113,7 +113,7 @@ class UserSubscriptionReducerTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState = ChatState(
+        let expectedState = MasterState(
             users: [userReducer_stateToReturn],
             currentUser: userReducer_stateToReturn,
             joinedRooms: roomsReducer_stateToReturn
@@ -128,7 +128,7 @@ class UserSubscriptionReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let inputState = ChatState(
+        let inputState = MasterState(
             users: [self.testUser],
             currentUser: self.testUser,
             joinedRooms: [
@@ -192,7 +192,7 @@ class UserSubscriptionReducerTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState = ChatState(
+        let expectedState = MasterState(
             users: [self.testUser],
             currentUser: self.testUser,
             joinedRooms: [
@@ -218,7 +218,7 @@ class UserSubscriptionReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let inputState = ChatState(
+        let inputState = MasterState(
             users: [self.testUser],
             currentUser: self.testUser,
             joinedRooms: [
@@ -292,7 +292,7 @@ class UserSubscriptionReducerTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState = ChatState(
+        let expectedState = MasterState(
             users: inputState.users,
             currentUser: inputState.currentUser,
             joinedRooms: reducer_stateToReturn

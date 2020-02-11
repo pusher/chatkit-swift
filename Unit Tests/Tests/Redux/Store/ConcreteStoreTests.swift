@@ -31,7 +31,7 @@ class ConcreteStoreTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertEqual(sut.state, ChatState.empty)
+        XCTAssertEqual(sut.state, MasterState.empty)
     }
     
     func test_dispatch_withActionThatDoesChangeInternalState_stateIsUpdated() {
@@ -40,7 +40,7 @@ class ConcreteStoreTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let expectedState = ChatState(
+        let expectedState = MasterState(
             users: [self.testUser],
             currentUser: self.testUser,
             joinedRooms: []
@@ -53,7 +53,7 @@ class ConcreteStoreTests: XCTestCase {
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
         
-        XCTAssertEqual(sut.state, ChatState.empty)
+        XCTAssertEqual(sut.state, MasterState.empty)
         
         /******************/
         /*----- WHEN -----*/
@@ -91,7 +91,7 @@ class ConcreteStoreTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let expectedState = ChatState(
+        let expectedState = MasterState(
             users: [self.testUser],
             currentUser: self.testUser,
             joinedRooms: []
@@ -145,7 +145,7 @@ class ConcreteStoreTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let expectedState = ChatState.empty
+        let expectedState = MasterState.empty
         
         let stubMasterReducer: StubReducer<Reducer.Master> =
             .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
@@ -154,7 +154,7 @@ class ConcreteStoreTests: XCTestCase {
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
         
-        XCTAssertEqual(sut.state, ChatState.empty)
+        XCTAssertEqual(sut.state, MasterState.empty)
         
         /******************/
         /*----- WHEN -----*/
@@ -218,7 +218,7 @@ class ConcreteStoreTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let expectedState = ChatState(
+        let expectedState = MasterState(
             users: [self.testUser],
             currentUser: self.testUser,
             joinedRooms: []
@@ -264,7 +264,7 @@ class ConcreteStoreTests: XCTestCase {
         
         XCTAssertEqual(stubMasterReducer.reduce_actualCallCount, 1)
         XCTAssertEqual(stubMasterReducer.reduce_actionLastReceived as? ReceivedInitialStateAction, action)
-        XCTAssertEqual(stubMasterReducer.reduce_stateLastReceived, ChatState.empty)
+        XCTAssertEqual(stubMasterReducer.reduce_stateLastReceived, MasterState.empty)
     }
     
 }
