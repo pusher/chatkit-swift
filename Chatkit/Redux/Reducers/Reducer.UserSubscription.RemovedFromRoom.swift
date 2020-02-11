@@ -16,8 +16,7 @@ extension Reducer.UserSubscription {
             
             let joinedRooms = dependencies.reducer_model_rooms_forRemovedFromRoom(action, state.joinedRooms, dependencies)
             
-            return ChatState(currentUser: state.currentUser, joinedRooms: joinedRooms)
-        }
+            return ChatState(users: state.users, currentUser: state.currentUser, joinedRooms: joinedRooms)        }
         
     }
     

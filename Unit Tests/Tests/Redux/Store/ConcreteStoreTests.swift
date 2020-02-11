@@ -4,6 +4,15 @@ import XCTest
 
 class ConcreteStoreTests: XCTestCase {
     
+    // MARK: - Properties
+    
+    let testUser = UserState.populated(
+        identifier: "alice",
+        name: "Alice A"
+    )
+    
+    // MARK: - Tests
+    
     func test_init_stateStartsAsEmpty() {
         
         /******************/
@@ -32,15 +41,13 @@ class ConcreteStoreTests: XCTestCase {
         /******************/
         
         let expectedState = ChatState(
-            currentUser: UserState.populated(
-                identifier: "alice",
-                name: "Alice A"
-            ),
-            joinedRooms: .empty
+            users: [self.testUser],
+            currentUser: self.testUser,
+            joinedRooms: []
         )
         
         let stubMasterReducer: StubReducer<Reducer.Master> =
-            .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
+            .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
         
@@ -85,17 +92,15 @@ class ConcreteStoreTests: XCTestCase {
         /******************/
         
         let expectedState = ChatState(
-            currentUser: UserState.populated(
-                identifier: "alice",
-                name: "Alice A"
-            ),
-            joinedRooms: .empty
+            users: [self.testUser],
+            currentUser: self.testUser,
+            joinedRooms: []
         )
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
         
         let stubMasterReducer: StubReducer<Reducer.Master> =
-            .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
+            .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
         
@@ -143,7 +148,7 @@ class ConcreteStoreTests: XCTestCase {
         let expectedState = ChatState.empty
         
         let stubMasterReducer: StubReducer<Reducer.Master> =
-            .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
+            .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
         
@@ -179,7 +184,7 @@ class ConcreteStoreTests: XCTestCase {
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 2)
         
         let stubMasterReducer: StubReducer<Reducer.Master> =
-            .init(reduce_expectedState: .empty, reduce_expectedCallCount: 1)
+            .init(reduce_stateToReturn: .empty, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
         
@@ -214,17 +219,15 @@ class ConcreteStoreTests: XCTestCase {
         /******************/
         
         let expectedState = ChatState(
-            currentUser: UserState.populated(
-                identifier: "alice",
-                name: "Alice A"
-            ),
-            joinedRooms: .empty
+            users: [self.testUser],
+            currentUser: self.testUser,
+            joinedRooms: []
         )
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
         
         let stubMasterReducer: StubReducer<Reducer.Master> =
-            .init(reduce_expectedState: expectedState, reduce_expectedCallCount: 1)
+            .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
         

@@ -9,14 +9,13 @@ extension Reducer.Model {
     struct Rooms_forRemovedFromRoom: Reducing {
         
         typealias ActionType = ReceivedRemovedFromRoomAction
-        typealias StateType = RoomListState
+        typealias StateType = [RoomState]
         typealias DependenciesType = Any // No dependencies at present
 
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
             
-            let rooms = state.rooms.filter { $0.identifier != action.event.roomIdentifier }
+            return state.filter { $0.identifier != action.event.roomIdentifier }
 
-            return RoomListState(rooms: rooms)
         }
     }
     

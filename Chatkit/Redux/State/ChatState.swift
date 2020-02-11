@@ -3,15 +3,19 @@ struct ChatState: State {
     
     // MARK: - Properties
     
-    let currentUser: UserState
-    let joinedRooms: RoomListState
+    let users: [UserState]
+    let currentUser: UserState?
+    
+    let joinedRooms: [RoomState]
+    
     // TODO: Add readStates.
     // TODO: Add memberships.
     
-    static let empty: ChatState = ChatState(currentUser: .empty, joinedRooms: .empty)
+    static let empty: ChatState = ChatState(users: [], currentUser: nil, joinedRooms: [])
     
 }
 
 // MARK: - Equatable
 
 extension ChatState: Equatable {}
+

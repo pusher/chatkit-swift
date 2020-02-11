@@ -2,7 +2,7 @@ import TestUtilities
 import XCTest
 @testable import PusherChatkit
 
-class ConcreteDependencyTests: XCTestCase {
+class ConcreteDependenciesTests: XCTestCase {
     
     func test_initWithInstanceLocator_withInstanceLocatorButNoOverride_returnsConcreteDependencies() {
         
@@ -24,6 +24,14 @@ class ConcreteDependencyTests: XCTestCase {
         
         XCTAssertNotNil(dependencies.storeBroadcaster as? ConcreteStoreBroadcaster)
         XCTAssertNotNil(dependencies.store as? ConcreteStore)
+
+        // TODO work out how to test this, not sure its possible?
+//        XCTAssertFalse(dependencies.reducer_master === Reducer.Master.reduce)
+//        XCTAssertFalse(dependencies.reducer_model_user_forInitialState === Reducer.Model.User_forInitialState.reduce)
+//        XCTAssertFalse(dependencies.reducer_model_rooms_forInitialState === Reducer.Model.Rooms_forInitialState.reduce)
+//        XCTAssertFalse(dependencies.reducer_model_rooms_forRemovedFromRoom === Reducer.Model.Rooms_forRemovedFromRoom.reduce)
+//        XCTAssertFalse(dependencies.reducer_userSubscription_initialState === Reducer.UserSubscription.InitialState.reduce)
+//        XCTAssertFalse(dependencies.reducer_userSubscription_removedFromRoom === Reducer.UserSubscription.RemovedFromRoom.reduce)
     }
     
     func test_initWithInstanceLocatorAndOverride_withInstanceLocatorAndOverride_overridesDepedencies() {
@@ -39,6 +47,7 @@ class ConcreteDependencyTests: XCTestCase {
             dependencyFactory.register(Store.self) { dependencies in
                 StubStore()
             }
+            
             expectation.fulfill()
         }
         

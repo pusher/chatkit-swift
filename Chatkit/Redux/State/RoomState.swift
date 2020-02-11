@@ -18,3 +18,7 @@ struct RoomState: State {
 // MARK: - Equatable
 
 extension RoomState: Equatable {}
+
+// MARK: - Types
+
+extension Array: State where Element == RoomState {}

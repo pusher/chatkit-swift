@@ -25,16 +25,16 @@ extension XCTest {
 public class StubReducer<T: Reducing>: StubBase {
     
     private var reduce_expectedCallCount: UInt
-    private var reduce_expectedState: T.StateType
+    private var reduce_stateToReturn: T.StateType
     public private(set) var reduce_actionLastReceived: T.ActionType?
     public private(set) var reduce_stateLastReceived: T.StateType?
     public private(set) var reduce_actualCallCount: UInt = 0
     
-    public init(reduce_expectedState: T.StateType,
+    public init(reduce_stateToReturn: T.StateType,
                 reduce_expectedCallCount: UInt = 0,
                 file: StaticString = #file, line: UInt = #line) {
         
-        self.reduce_expectedState = reduce_expectedState
+        self.reduce_stateToReturn = reduce_stateToReturn
         self.reduce_expectedCallCount = reduce_expectedCallCount
         
         super.init(file: file, line: line)
@@ -51,7 +51,7 @@ public class StubReducer<T: Reducing>: StubBase {
         }
         reduce_expectedCallCount -= 1
         
-        return reduce_expectedState
+        return reduce_stateToReturn
     }
     
 }

@@ -9,12 +9,12 @@ extension Reducer.Model {
     struct Rooms_forInitialState: Reducing {
         
         typealias ActionType = ReceivedInitialStateAction
-        typealias StateType = RoomListState
+        typealias StateType = [RoomState]
         typealias DependenciesType = Any // No dependencies at present
 
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
             
-            let rooms = action.event.rooms.map {
+            return action.event.rooms.map {
                 RoomState(identifier: $0.identifier,
                           name: $0.name,
                           isPrivate: $0.isPrivate,
@@ -24,8 +24,6 @@ extension Reducer.Model {
                           createdAt: $0.createdAt,
                           updatedAt: $0.updatedAt)
             }
-            
-            return RoomListState(rooms: rooms)
         }
     }
     

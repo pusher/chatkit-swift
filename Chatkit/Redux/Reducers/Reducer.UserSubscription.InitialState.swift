@@ -17,8 +17,15 @@ extension Reducer.UserSubscription {
 
             let currentUser = dependencies.reducer_model_user_forInitialState(action, state.currentUser, dependencies)
             let joinedRooms = dependencies.reducer_model_rooms_forInitialState(action, state.joinedRooms, dependencies)
-
-            return ChatState(currentUser: currentUser, joinedRooms: joinedRooms)
+            
+            let users: [UserState]
+            if let currentUser = currentUser {
+                users = [currentUser]
+            } else {
+                users = []
+            }
+            
+            return ChatState(users: users, currentUser: currentUser, joinedRooms: joinedRooms)
         }
     }
     
