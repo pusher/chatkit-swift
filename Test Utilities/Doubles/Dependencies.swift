@@ -10,40 +10,36 @@ public class DependenciesDoubles: StubBase, Dependencies {
     public let storeBroadcaster: StoreBroadcaster
     public let store: Store
     
-    public let reducer_master: Reducer.Master.ExpressionType
-    public let reducer_model_user_forInitialState: Reducer.Model.User_forInitialState.ExpressionType
-    public let reducer_model_rooms_forInitialState: Reducer.Model.Rooms_forInitialState.ExpressionType
-    public let reducer_model_rooms_forRemovedFromRoom: Reducer.Model.Rooms_forRemovedFromRoom.ExpressionType
-    public let reducer_userSubscription_initialState: Reducer.UserSubscription.InitialState.ExpressionType
-    public let reducer_userSubscription_removedFromRoom: Reducer.UserSubscription.RemovedFromRoom.ExpressionType
+    public let masterReducer: Reducer.Master.ExpressionType
+    public let userReducer: Reducer.Model.User.ExpressionType
+    public let roomsReducer: Reducer.Model.Rooms.ExpressionType
+    public let initialStateUserSubscriptionReducer: Reducer.UserSubscription.InitialState.ExpressionType
+    public let userSubscriptionRemovedFromRoomReducer: Reducer.UserSubscription.RemovedFromRoom.ExpressionType
     
     public init(instanceLocator: InstanceLocator? = nil,
-         storeBroadcaster: StoreBroadcaster? = nil,
-         store: Store? = nil,
-         reducer_master: Reducer.Master.ExpressionType? = nil,
-         reducer_model_user_forInitialState: Reducer.Model.User_forInitialState.ExpressionType? = nil,
-         reducer_model_rooms_forInitialState: Reducer.Model.Rooms_forInitialState.ExpressionType? = nil,
-         reducer_model_rooms_forRemovedFromRoom: Reducer.Model.Rooms_forRemovedFromRoom.ExpressionType? = nil,
-         reducer_userSubscription_initialState: Reducer.UserSubscription.InitialState.ExpressionType? = nil,
-         reducer_userSubscription_removedFromRoom: Reducer.UserSubscription.RemovedFromRoom.ExpressionType? = nil,
-         
-         file: StaticString = #file, line: UInt = #line) {
+                storeBroadcaster: StoreBroadcaster? = nil,
+                store: Store? = nil,
+                masterReducer: Reducer.Master.ExpressionType? = nil,
+                userReducer: Reducer.Model.User.ExpressionType? = nil,
+                roomsReducer: Reducer.Model.Rooms.ExpressionType? = nil,
+                initialStateUserSubscriptionReducer: Reducer.UserSubscription.InitialState.ExpressionType? = nil,
+                userSubscriptionRemovedFromRoomReducer: Reducer.UserSubscription.RemovedFromRoom.ExpressionType? = nil,
+                
+                file: StaticString = #file, line: UInt = #line) {
         
         self.instanceLocator = instanceLocator ?? DummyInstanceLocator(file: file, line: line)
         self.storeBroadcaster = storeBroadcaster ?? DummyStoreBroadcaster(file: file, line: line)
         self.store = store ?? DummyStore(file: file, line: line)
         
-        self.reducer_master = reducer_master ??
+        self.masterReducer = masterReducer ??
             DummyReducer<Reducer.Master>(file: file, line: line).reduce
-        self.reducer_model_user_forInitialState = reducer_model_user_forInitialState ??
-            DummyReducer<Reducer.Model.User_forInitialState>(file: file, line: line).reduce
-        self.reducer_model_rooms_forInitialState = reducer_model_rooms_forInitialState ??
-            DummyReducer<Reducer.Model.Rooms_forInitialState>(file: file, line: line).reduce
-        self.reducer_model_rooms_forRemovedFromRoom = reducer_model_rooms_forRemovedFromRoom ??
-            DummyReducer<Reducer.Model.Rooms_forRemovedFromRoom>(file: file, line: line).reduce
-        self.reducer_userSubscription_initialState = reducer_userSubscription_initialState ??
+        self.userReducer = userReducer ??
+            DummyReducer<Reducer.Model.User>(file: file, line: line).reduce
+        self.roomsReducer = roomsReducer ??
+            DummyReducer<Reducer.Model.Rooms>(file: file, line: line).reduce
+        self.initialStateUserSubscriptionReducer = initialStateUserSubscriptionReducer ??
             DummyReducer<Reducer.UserSubscription.InitialState>(file: file, line: line).reduce
-        self.reducer_userSubscription_removedFromRoom = reducer_userSubscription_removedFromRoom ??
+        self.userSubscriptionRemovedFromRoomReducer = userSubscriptionRemovedFromRoomReducer ??
             DummyReducer<Reducer.UserSubscription.RemovedFromRoom>(file: file, line: line).reduce
         
         super.init(file: file, line: line)

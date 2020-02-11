@@ -1,22 +1,20 @@
 
-protocol HasReducer_UserSubscription_InitialState {
-    var reducer_userSubscription_initialState:
-        Reducer.UserSubscription.InitialState.ExpressionType { get }
-}
-
 extension Reducer.UserSubscription {
-
+    
     struct InitialState: Reducing {
+        
+        // MARK: - Types
         
         typealias ActionType = ReceivedInitialStateAction
         typealias StateType = MasterState
-        typealias DependenciesType = HasReducer_Model_User_forInitialState
-            & HasReducer_Model_Rooms_forInitialState
+        typealias DependenciesType = HasUserReducer
+            & HasRoomsReducer
+        
+        // MARK: - Reducer
         
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
-
-            let currentUser = dependencies.reducer_model_user_forInitialState(action, state.currentUser, dependencies)
-            let joinedRooms = dependencies.reducer_model_rooms_forInitialState(action, state.joinedRooms, dependencies)
+            let currentUser = dependencies.userReducer(action, state.currentUser, dependencies)
+            let joinedRooms = dependencies.roomsReducer(action, state.joinedRooms, dependencies)
             
             let users: [UserState]
             if let currentUser = currentUser {
@@ -27,6 +25,15 @@ extension Reducer.UserSubscription {
             
             return MasterState(users: users, currentUser: currentUser, joinedRooms: joinedRooms)
         }
+        
     }
+    
+}
+
+// MARK: - Dependencies
+
+protocol HasUserSubscriptionInitialStateReducer {
+    
+    var initialStateUserSubscriptionReducer: Reducer.UserSubscription.InitialState.ExpressionType { get }
     
 }

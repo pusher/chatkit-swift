@@ -6,7 +6,7 @@ class ModelReducerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_user_withCurrentStateAndReceivedInitialStateAction_returnsModifiedState() {
+    func test_reduce_withCurrentStateAndReceivedInitialStateAction_returnsModifiedUserState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -62,9 +62,7 @@ class ModelReducerTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.Model.User_forInitialState.reduce(action: action,
-                                                                    state: inputState,
-                                                                    dependencies: dependencies)
+        let outputState = Reducer.Model.User.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -78,7 +76,7 @@ class ModelReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_roomList_withCurrentStateAndReceivedInitialStateAction_returnsModifiedState() {
+    func test_reduce_withCurrentStateAndReceivedInitialStateAction_returnsModifiedRoomsState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -134,9 +132,7 @@ class ModelReducerTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.Model.Rooms_forInitialState.reduce(action: action,
-                                                                     state: inputState,
-                                                                     dependencies: dependencies)
+        let outputState = Reducer.Model.Rooms.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -170,7 +166,7 @@ class ModelReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_roomList_withCurrentStateAndReceivedRemovedFromRoomForExistingRoom_returnsModifiedState() {
+    func test_reduce_withCurrentStateAndReceivedRemovedFromRoomForExistingRoom_returnsModifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -211,9 +207,7 @@ class ModelReducerTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.Model.Rooms_forRemovedFromRoom.reduce(action: action,
-                                                                        state: inputState,
-                                                                        dependencies: dependencies)
+        let outputState = Reducer.Model.Rooms.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -235,7 +229,7 @@ class ModelReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_roomList_withCurrentStateAndReceivedRemovedFromRoomForNonExistingRoom_returnsUnmodifiedState() {
+    func test_reduce_withCurrentStateAndReceivedRemovedFromRoomForNonExistingRoom_returnsUnmodifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -276,9 +270,76 @@ class ModelReducerTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.Model.Rooms_forRemovedFromRoom.reduce(action: action,
-                                                                        state: inputState,
-                                                                        dependencies: dependencies)
+        let outputState = Reducer.Model.Rooms.reduce(action: action, state: inputState, dependencies: dependencies)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        let expectedState = [
+            RoomState(
+                identifier: "first-room",
+                name: "First",
+                isPrivate: false,
+                pushNotificationTitle: "nil",
+                customData: nil,
+                lastMessageAt: .distantPast,
+                createdAt: .distantPast,
+                updatedAt: .distantPast
+            ),
+            RoomState(
+                identifier: "second-room",
+                name: "Second",
+                isPrivate: false,
+                pushNotificationTitle: "nil",
+                customData: nil,
+                lastMessageAt: .distantPast,
+                createdAt: .distantPast,
+                updatedAt: .distantPast
+            )
+        ]
+        
+        XCTAssertEqual(outputState, expectedState)
+    }
+    
+    func test_reduce_withCurrentStateAndUnsupportedAction_returnsUnmodifiedState() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let inputState = [
+            RoomState(
+                identifier: "first-room",
+                name: "First",
+                isPrivate: false,
+                pushNotificationTitle: "nil",
+                customData: nil,
+                lastMessageAt: .distantPast,
+                createdAt: .distantPast,
+                updatedAt: .distantPast
+            ),
+            RoomState(
+                identifier: "second-room",
+                name: "Second",
+                isPrivate: false,
+                pushNotificationTitle: "nil",
+                customData: nil,
+                lastMessageAt: .distantPast,
+                createdAt: .distantPast,
+                updatedAt: .distantPast
+            )
+        ]
+        
+        let action = DummyAction()
+        
+        let dependencies = DependenciesDoubles()
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let outputState = Reducer.Model.Rooms.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/

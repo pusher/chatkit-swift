@@ -49,7 +49,7 @@ class ConcreteStoreTests: XCTestCase {
         let stubMasterReducer: StubReducer<Reducer.Master> =
             .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
         
-        let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
+        let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
         
@@ -102,7 +102,7 @@ class ConcreteStoreTests: XCTestCase {
         let stubMasterReducer: StubReducer<Reducer.Master> =
             .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
         
-        let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
+        let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: stubStoreDelegate)
         
@@ -150,7 +150,7 @@ class ConcreteStoreTests: XCTestCase {
         let stubMasterReducer: StubReducer<Reducer.Master> =
             .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
         
-        let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
+        let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
         
@@ -186,7 +186,7 @@ class ConcreteStoreTests: XCTestCase {
         let stubMasterReducer: StubReducer<Reducer.Master> =
             .init(reduce_stateToReturn: .empty, reduce_expectedCallCount: 1)
         
-        let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
+        let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: stubStoreDelegate)
         
@@ -229,7 +229,7 @@ class ConcreteStoreTests: XCTestCase {
         let stubMasterReducer: StubReducer<Reducer.Master> =
             .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
         
-        let dependencies = DependenciesDoubles(reducer_master: stubMasterReducer.reduce)
+        let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: stubStoreDelegate)
         

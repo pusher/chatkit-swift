@@ -2,7 +2,7 @@ import XCTest
 import TestUtilities
 @testable import PusherChatkit
 
-class Reducer_Master_Tests: XCTestCase {
+class MasterReducerTests: XCTestCase {
     
     // MARK: - Properties
     
@@ -25,16 +25,12 @@ class Reducer_Master_Tests: XCTestCase {
             joinedRooms: []
         )
         
-        let userSubscriptionInitialStateReducer: StubReducer<Reducer.UserSubscription.InitialState> =
-            .init(reduce_stateToReturn: reducer_stateToReturn, reduce_expectedCallCount: 1)
+        let userSubscriptionInitialStateReducer = StubReducer<Reducer.UserSubscription.InitialState>(reduce_stateToReturn: reducer_stateToReturn,
+                                                                                                     reduce_expectedCallCount: 1)
+        let userSubscriptionRemovedFromRoomReducer: DummyReducer<Reducer.UserSubscription.RemovedFromRoom> = DummyReducer()
         
-        let userSubscriptionRemovedFromRoomReducer: DummyReducer<Reducer.UserSubscription.RemovedFromRoom> =
-            DummyReducer()
-        
-        let dependencies = DependenciesDoubles(
-            reducer_userSubscription_initialState: userSubscriptionInitialStateReducer.reduce,
-            reducer_userSubscription_removedFromRoom: userSubscriptionRemovedFromRoomReducer.reduce
-        )
+        let dependencies = DependenciesDoubles(initialStateUserSubscriptionReducer: userSubscriptionInitialStateReducer.reduce,
+                                               userSubscriptionRemovedFromRoomReducer: userSubscriptionRemovedFromRoomReducer.reduce)
         
         let inputState: MasterState = .empty
         
@@ -59,9 +55,7 @@ class Reducer_Master_Tests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.Master.reduce(action: action,
-                                                state: inputState,
-                                                dependencies: dependencies)
+        let outputState = Reducer.Master.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -98,16 +92,12 @@ class Reducer_Master_Tests: XCTestCase {
             ]
         )
         
-        let userSubscriptionInitialStateReducer: DummyReducer<Reducer.UserSubscription.InitialState> =
-            DummyReducer()
+        let userSubscriptionInitialStateReducer: DummyReducer<Reducer.UserSubscription.InitialState> = DummyReducer()
+        let userSubscriptionRemovedFromRoomReducer = StubReducer<Reducer.UserSubscription.RemovedFromRoom>(reduce_stateToReturn: reducer_stateToReturn,
+                                                                                                           reduce_expectedCallCount: 1)
         
-        let userSubscriptionRemovedFromRoomReducer: StubReducer<Reducer.UserSubscription.RemovedFromRoom> =
-            .init(reduce_stateToReturn: reducer_stateToReturn, reduce_expectedCallCount: 1)
-        
-        let dependencies = DependenciesDoubles(
-            reducer_userSubscription_initialState: userSubscriptionInitialStateReducer.reduce,
-            reducer_userSubscription_removedFromRoom: userSubscriptionRemovedFromRoomReducer.reduce
-        )
+        let dependencies = DependenciesDoubles(initialStateUserSubscriptionReducer: userSubscriptionInitialStateReducer.reduce,
+                                               userSubscriptionRemovedFromRoomReducer: userSubscriptionRemovedFromRoomReducer.reduce)
         
         let inputState = MasterState(
             users: [],
@@ -146,9 +136,7 @@ class Reducer_Master_Tests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.Master.reduce(action: action,
-                                                state: inputState,
-                                                dependencies: dependencies)
+        let outputState = Reducer.Master.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -168,16 +156,12 @@ class Reducer_Master_Tests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let userSubscriptionInitialStateReducer: DummyReducer<Reducer.UserSubscription.InitialState> =
-            DummyReducer()
+        let userSubscriptionInitialStateReducer: DummyReducer<Reducer.UserSubscription.InitialState> = DummyReducer()
         
-        let userSubscriptionRemovedFromRoomReducer: DummyReducer<Reducer.UserSubscription.RemovedFromRoom> =
-            DummyReducer()
+        let userSubscriptionRemovedFromRoomReducer: DummyReducer<Reducer.UserSubscription.RemovedFromRoom> = DummyReducer()
         
-        let dependencies = DependenciesDoubles(
-            reducer_userSubscription_initialState: userSubscriptionInitialStateReducer.reduce,
-            reducer_userSubscription_removedFromRoom: userSubscriptionRemovedFromRoomReducer.reduce
-        )
+        let dependencies = DependenciesDoubles(initialStateUserSubscriptionReducer: userSubscriptionInitialStateReducer.reduce,
+                                               userSubscriptionRemovedFromRoomReducer: userSubscriptionRemovedFromRoomReducer.reduce)
         
         let inputState = MasterState(
             users: [],
@@ -202,9 +186,7 @@ class Reducer_Master_Tests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.Master.reduce(action: action,
-                                                state: inputState,
-                                                dependencies: dependencies)
+        let outputState = Reducer.Master.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/

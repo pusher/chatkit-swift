@@ -1,14 +1,9 @@
 
-// For namespacing
-struct Reducer {}
-
-protocol Reducing {
+struct Reducer {
     
-    associatedtype ActionType: Action
-    associatedtype StateType: State
-    associatedtype DependenciesType
+    // MARK: - Types
     
-    typealias ExpressionType = (ActionType, StateType, DependenciesType) -> StateType
+    struct Model {}
+    struct UserSubscription {}
     
-    static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType
 }

@@ -15,12 +15,11 @@ protocol Store {
 class ConcreteStore: Store {
     
     typealias Dependencies =
-        HasReducer_Master
-        & HasReducer_Model_User_forInitialState
-        & HasReducer_Model_Rooms_forInitialState
-        & HasReducer_Model_Rooms_forRemovedFromRoom
-        & HasReducer_UserSubscription_InitialState
-        & HasReducer_UserSubscription_RemovedFromRoom
+        HasMasterReducer
+        & HasUserReducer
+        & HasRoomsReducer
+        & HasUserSubscriptionInitialStateReducer
+        & HasUserSubscriptionRemovedFromRoomReducer
     
     private let dependencies: Dependencies
     private weak var delegate: StoreDelegate?
@@ -41,6 +40,6 @@ class ConcreteStore: Store {
     }
     
     func dispatch(action: Action) {
-        state = self.dependencies.reducer_master(action, state, dependencies)
+        state = self.dependencies.masterReducer(action, state, dependencies)
     }
 }

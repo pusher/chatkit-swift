@@ -1,21 +1,28 @@
 
-protocol HasReducer_Model_User_forInitialState {
-    var reducer_model_user_forInitialState:
-        Reducer.Model.User_forInitialState.ExpressionType { get }
-}
-
 extension Reducer.Model {
-
-    struct User_forInitialState: Reducing {
+    
+    struct User: Reducing {
+        
+        // MARK: - Types
         
         typealias ActionType = ReceivedInitialStateAction
         typealias StateType = UserState?
-        typealias DependenciesType = Any // No dependencies at present
+        typealias DependenciesType = NoDependencies
+        
+        // MARK: - Reducer
         
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
-            
             return .populated(identifier: action.event.currentUser.identifier, name: action.event.currentUser.name)
         }
+        
     }
+    
+}
+
+// MARK: - Dependencies
+
+protocol HasUserReducer {
+    
+    var userReducer: Reducer.Model.User.ExpressionType { get }
     
 }

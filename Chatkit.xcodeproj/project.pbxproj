@@ -39,7 +39,8 @@
 		224B803D22F1E009003CB8DC /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229093D522F1DDB4003DDE2C /* PusherChatkit.framework */; };
 		224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805822F2DADC003CB8DC /* Chatkit.swift */; };
 		224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */; };
-		224FF0D023EB341D004B5CE6 /* Reducer.UserSubscription.RemovedFromRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224FF0CF23EB341D004B5CE6 /* Reducer.UserSubscription.RemovedFromRoom.swift */; };
+		224FF0D023EB341D004B5CE6 /* RemovedFromRoomReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224FF0CF23EB341D004B5CE6 /* RemovedFromRoomReducer.swift */; };
+		22623A7223F2E8B500B82808 /* Reducing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22623A7123F2E8B500B82808 /* Reducing.swift */; };
 		226DD52223DB36DA0024A27D /* XCTest+TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226DD52123DB36DA0024A27D /* XCTest+TestData.swift */; };
 		227177FE236894AA00B89376 /* MessagesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227177FD236894AA00B89376 /* MessagesViewModel.swift */; };
 		227498472321028700D10C76 /* DateFormatterExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227498462321028700D10C76 /* DateFormatterExtensionsTests.swift */; };
@@ -89,8 +90,7 @@
 		22D537D72302D2CE00A92341 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537D62302D2CE00A92341 /* User.swift */; };
 		22D537D92302D2EB00A92341 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D537D82302D2EB00A92341 /* Message.swift */; };
 		22DA90AC23E844FA0023A7DC /* Reducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DA90AB23E844FA0023A7DC /* Reducer.swift */; };
-		22F670F423EC2098001D3BF2 /* Reducer.Model.Rooms_forRemovedFromRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F670F323EC2098001D3BF2 /* Reducer.Model.Rooms_forRemovedFromRoom.swift */; };
-		22F670FA23EC50D5001D3BF2 /* Reducer.Master.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F670F923EC50D5001D3BF2 /* Reducer.Master.Tests.swift */; };
+		22F670FA23EC50D5001D3BF2 /* MasterReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F670F923EC50D5001D3BF2 /* MasterReducerTests.swift */; };
 		22F670FC23EC5A01001D3BF2 /* Reducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F670FB23EC5A01001D3BF2 /* Reducer.swift */; };
 		22F670FE23EC7DAB001D3BF2 /* ModelReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F670FD23EC7DAB001D3BF2 /* ModelReducerTests.swift */; };
 		22FC112D233E50FB0013A9D7 /* UsersProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC112C233E50FB0013A9D7 /* UsersProvider.swift */; };
@@ -161,12 +161,10 @@
 		73A9392B23E1AA210025AF90 /* InstanceLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A9392A23E1AA210025AF90 /* InstanceLocator.swift */; };
 		73A9392E23E1AC6E0025AF90 /* InstanceLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A9392D23E1AC6E0025AF90 /* InstanceLocator.swift */; };
 		73ABC07E23B0B5D100ECD162 /* Wire.Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73ABC07D23B0B5D100ECD162 /* Wire.Message.swift */; };
-		73B705B123EE03E800D1E5C8 /* Reducer.Model.Rooms_forInitialState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B705B023EE03E800D1E5C8 /* Reducer.Model.Rooms_forInitialState.swift */; };
-		73B705B323EE041600D1E5C8 /* Reducer.Model.User_forInitialState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B705B223EE041600D1E5C8 /* Reducer.Model.User_forInitialState.swift */; };
-		73B705B523EE046C00D1E5C8 /* Reducer.Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B705B423EE046C00D1E5C8 /* Reducer.Model.swift */; };
-		73B705B723EE04F400D1E5C8 /* Reducer.UserSubscription.InitialState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B705B623EE04F400D1E5C8 /* Reducer.UserSubscription.InitialState.swift */; };
-		73B705B923EE050200D1E5C8 /* Reducer.UserSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B705B823EE050200D1E5C8 /* Reducer.UserSubscription.swift */; };
-		73B705BB23EE075600D1E5C8 /* Reducer.Master.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B705BA23EE075600D1E5C8 /* Reducer.Master.swift */; };
+		73B705B123EE03E800D1E5C8 /* RoomsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B705B023EE03E800D1E5C8 /* RoomsReducer.swift */; };
+		73B705B323EE041600D1E5C8 /* UserReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B705B223EE041600D1E5C8 /* UserReducer.swift */; };
+		73B705B723EE04F400D1E5C8 /* InitialStateReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B705B623EE04F400D1E5C8 /* InitialStateReducer.swift */; };
+		73B705BB23EE075600D1E5C8 /* MasterReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B705BA23EE075600D1E5C8 /* MasterReducer.swift */; };
 		73CF01BC23AB823F006FB43E /* Wire.ReadState+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CF01BB23AB823F006FB43E /* Wire.ReadState+Decodable.Tests.swift */; };
 		73CF01BE23AB8AF9006FB43E /* Wire.Membership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CF01BD23AB8AF9006FB43E /* Wire.Membership.swift */; };
 		73CF01C023AB8B84006FB43E /* Wire.Membership+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CF01BF23AB8B84006FB43E /* Wire.Membership+Decodable.Tests.swift */; };
@@ -286,7 +284,8 @@
 		224B803C22F1E009003CB8DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		224B805822F2DADC003CB8DC /* Chatkit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chatkit.swift; sourceTree = "<group>"; };
 		224B805B22F2E0CE003CB8DC /* ChatkitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatkitTests.swift; sourceTree = "<group>"; };
-		224FF0CF23EB341D004B5CE6 /* Reducer.UserSubscription.RemovedFromRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.UserSubscription.RemovedFromRoom.swift; sourceTree = "<group>"; };
+		224FF0CF23EB341D004B5CE6 /* RemovedFromRoomReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemovedFromRoomReducer.swift; sourceTree = "<group>"; };
+		22623A7123F2E8B500B82808 /* Reducing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducing.swift; sourceTree = "<group>"; };
 		226DD52123DB36DA0024A27D /* XCTest+TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+TestData.swift"; sourceTree = "<group>"; };
 		226DD52323DB3F670024A27D /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		227177FD236894AA00B89376 /* MessagesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewModel.swift; sourceTree = "<group>"; };
@@ -332,8 +331,7 @@
 		22D537D62302D2CE00A92341 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		22D537D82302D2EB00A92341 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		22DA90AB23E844FA0023A7DC /* Reducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.swift; sourceTree = "<group>"; };
-		22F670F323EC2098001D3BF2 /* Reducer.Model.Rooms_forRemovedFromRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.Model.Rooms_forRemovedFromRoom.swift; sourceTree = "<group>"; };
-		22F670F923EC50D5001D3BF2 /* Reducer.Master.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.Master.Tests.swift; sourceTree = "<group>"; };
+		22F670F923EC50D5001D3BF2 /* MasterReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterReducerTests.swift; sourceTree = "<group>"; };
 		22F670FB23EC5A01001D3BF2 /* Reducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.swift; sourceTree = "<group>"; };
 		22F670FD23EC7DAB001D3BF2 /* ModelReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelReducerTests.swift; sourceTree = "<group>"; };
 		22FC112C233E50FB0013A9D7 /* UsersProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersProvider.swift; sourceTree = "<group>"; };
@@ -409,12 +407,10 @@
 		73ABC07D23B0B5D100ECD162 /* Wire.Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Message.swift; sourceTree = "<group>"; };
 		73B00EAD23A2822F0062C718 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		73B00EAF23A28B6A0062C718 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
-		73B705B023EE03E800D1E5C8 /* Reducer.Model.Rooms_forInitialState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.Model.Rooms_forInitialState.swift; sourceTree = "<group>"; };
-		73B705B223EE041600D1E5C8 /* Reducer.Model.User_forInitialState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.Model.User_forInitialState.swift; sourceTree = "<group>"; };
-		73B705B423EE046C00D1E5C8 /* Reducer.Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.Model.swift; sourceTree = "<group>"; };
-		73B705B623EE04F400D1E5C8 /* Reducer.UserSubscription.InitialState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.UserSubscription.InitialState.swift; sourceTree = "<group>"; };
-		73B705B823EE050200D1E5C8 /* Reducer.UserSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.UserSubscription.swift; sourceTree = "<group>"; };
-		73B705BA23EE075600D1E5C8 /* Reducer.Master.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reducer.Master.swift; sourceTree = "<group>"; };
+		73B705B023EE03E800D1E5C8 /* RoomsReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomsReducer.swift; sourceTree = "<group>"; };
+		73B705B223EE041600D1E5C8 /* UserReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserReducer.swift; sourceTree = "<group>"; };
+		73B705B623EE04F400D1E5C8 /* InitialStateReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialStateReducer.swift; sourceTree = "<group>"; };
+		73B705BA23EE075600D1E5C8 /* MasterReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterReducer.swift; sourceTree = "<group>"; };
 		73CF01BB23AB823F006FB43E /* Wire.ReadState+Decodable.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Wire.ReadState+Decodable.Tests.swift"; sourceTree = "<group>"; };
 		73CF01BD23AB8AF9006FB43E /* Wire.Membership.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Membership.swift; sourceTree = "<group>"; };
 		73CF01BF23AB8B84006FB43E /* Wire.Membership+Decodable.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wire.Membership+Decodable.Tests.swift"; sourceTree = "<group>"; };
@@ -647,6 +643,24 @@
 				730E453223DB4DD700A3AF94 /* ConcreteDependenciesTests.swift */,
 			);
 			path = Dependencies;
+			sourceTree = "<group>";
+		};
+		22623A7323F2E8F500B82808 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				73B705B023EE03E800D1E5C8 /* RoomsReducer.swift */,
+				73B705B223EE041600D1E5C8 /* UserReducer.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		22623A7423F2E8FF00B82808 /* User Subscription */ = {
+			isa = PBXGroup;
+			children = (
+				73B705B623EE04F400D1E5C8 /* InitialStateReducer.swift */,
+				224FF0CF23EB341D004B5CE6 /* RemovedFromRoomReducer.swift */,
+			);
+			path = "User Subscription";
 			sourceTree = "<group>";
 		};
 		226DD52023DB36C30024A27D /* Helpers */ = {
@@ -963,15 +977,11 @@
 		22DA90AA23E838DA0023A7DC /* Reducers */ = {
 			isa = PBXGroup;
 			children = (
+				22623A7323F2E8F500B82808 /* Model */,
+				22623A7423F2E8FF00B82808 /* User Subscription */,
+				73B705BA23EE075600D1E5C8 /* MasterReducer.swift */,
 				22DA90AB23E844FA0023A7DC /* Reducer.swift */,
-				73B705BA23EE075600D1E5C8 /* Reducer.Master.swift */,
-				73B705B423EE046C00D1E5C8 /* Reducer.Model.swift */,
-				73B705B023EE03E800D1E5C8 /* Reducer.Model.Rooms_forInitialState.swift */,
-				22F670F323EC2098001D3BF2 /* Reducer.Model.Rooms_forRemovedFromRoom.swift */,
-				73B705B223EE041600D1E5C8 /* Reducer.Model.User_forInitialState.swift */,
-				73B705B823EE050200D1E5C8 /* Reducer.UserSubscription.swift */,
-				73B705B623EE04F400D1E5C8 /* Reducer.UserSubscription.InitialState.swift */,
-				224FF0CF23EB341D004B5CE6 /* Reducer.UserSubscription.RemovedFromRoom.swift */,
+				22623A7123F2E8B500B82808 /* Reducing.swift */,
 			);
 			path = Reducers;
 			sourceTree = "<group>";
@@ -979,7 +989,7 @@
 		22F670F823EC50C0001D3BF2 /* Reducers */ = {
 			isa = PBXGroup;
 			children = (
-				22F670F923EC50D5001D3BF2 /* Reducer.Master.Tests.swift */,
+				22F670F923EC50D5001D3BF2 /* MasterReducerTests.swift */,
 				22F670FD23EC7DAB001D3BF2 /* ModelReducerTests.swift */,
 				220911D423ED6F97001A2D9A /* UserSubscriptionReducerTests.swift */,
 			);
@@ -1232,9 +1242,9 @@
 			isa = PBXGroup;
 			children = (
 				73E585D523E08E130047C6FA /* Types */,
+				22A7425623ED813600F2F26D /* Action.swift */,
 				730E453D23DB4DD800A3AF94 /* Dependencies.swift */,
 				73A9392A23E1AA210025AF90 /* InstanceLocator.swift */,
-				22A7425623ED813600F2F26D /* Action.swift */,
 				22F670FB23EC5A01001D3BF2 /* Reducer.swift */,
 				730E454323DB4DD800A3AF94 /* Store.swift */,
 				730E453A23DB4DD800A3AF94 /* StoreBroadcaster.swift */,
@@ -1584,7 +1594,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22F670FA23EC50D5001D3BF2 /* Reducer.Master.Tests.swift in Sources */,
+				22F670FA23EC50D5001D3BF2 /* MasterReducerTests.swift in Sources */,
 				7301BC7F23B1294500F162C7 /* Wire.MessagePart+Decodable.Tests.swift in Sources */,
 				7335D26823D60DD900E51909 /* Wire.Event.NewMessage+Decodable.Tests.swift in Sources */,
 				7301BC7723B1151600F162C7 /* Wire.Event.PresenceState+Decodable.Tests.swift in Sources */,
@@ -1647,6 +1657,7 @@
 				2212EC5723572A3F002212A4 /* RoomMembersProvider.swift in Sources */,
 				73CF01C823ABC38A006FB43E /* CodableJSONCollections.swift in Sources */,
 				734C170323A3E17F00330245 /* JSONEncoder+Extensions.swift in Sources */,
+				22623A7223F2E8B500B82808 /* Reducing.swift in Sources */,
 				734D6A3C23AAA1FA00105479 /* Wire.ReadState.swift in Sources */,
 				22FC112D233E50FB0013A9D7 /* UsersProvider.swift in Sources */,
 				22D2A2E523197AD50095757C /* Service.swift in Sources */,
@@ -1670,12 +1681,11 @@
 				229018312358AE99008FAB07 /* TypingUsersProvider.swift in Sources */,
 				7301BC7D23B1261300F162C7 /* Wire.MessagePart.swift in Sources */,
 				22FD93C02361DD8A00AB841F /* TypingUsersViewModel.swift in Sources */,
-				73B705BB23EE075600D1E5C8 /* Reducer.Master.swift in Sources */,
+				73B705BB23EE075600D1E5C8 /* MasterReducer.swift in Sources */,
 				2217A7FC23E9B886002FE365 /* RoomState.swift in Sources */,
 				7335D26623D60CA700E51909 /* Wire.Event.NewMessage.swift in Sources */,
 				73CF01CC23ACC8E6006FB43E /* Wire.swift in Sources */,
 				734D6A4223AAA77F00105479 /* Wire.CursorType.swift in Sources */,
-				73B705B523EE046C00D1E5C8 /* Reducer.Model.swift in Sources */,
 				22D2A2D823196B9F0095757C /* PCBaseClient+Extensions.swift in Sources */,
 				22DA90AC23E844FA0023A7DC /* Reducer.swift in Sources */,
 				222EA2AD23424A11004EE90F /* JoinedRoomsProvider.swift in Sources */,
@@ -1690,15 +1700,14 @@
 				73ABC07E23B0B5D100ECD162 /* Wire.Message.swift in Sources */,
 				22D2A2D5231963C70095757C /* Bundle+Extensions.swift in Sources */,
 				224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */,
-				224FF0D023EB341D004B5CE6 /* Reducer.UserSubscription.RemovedFromRoom.swift in Sources */,
-				73B705B923EE050200D1E5C8 /* Reducer.UserSubscription.swift in Sources */,
+				224FF0D023EB341D004B5CE6 /* RemovedFromRoomReducer.swift in Sources */,
 				734D6A3823AA91FB00105479 /* Wire.User.swift in Sources */,
 				73CF01BE23AB8AF9006FB43E /* Wire.Membership.swift in Sources */,
 				2217A7FE23E9B8C0002FE365 /* UserState.swift in Sources */,
 				22437C8D23D86ACF0013E4A8 /* TestTokenProvider.swift in Sources */,
 				227177FE236894AA00B89376 /* MessagesViewModel.swift in Sources */,
 				22D537D72302D2CE00A92341 /* User.swift in Sources */,
-				73B705B723EE04F400D1E5C8 /* Reducer.UserSubscription.InitialState.swift in Sources */,
+				73B705B723EE04F400D1E5C8 /* InitialStateReducer.swift in Sources */,
 				7301BC5123B0E64B00F162C7 /* Wire.Event.RoomUpdated.swift in Sources */,
 				73CF01C523AB93FB006FB43E /* Data+Extensions.swift in Sources */,
 				730E44DC23DB47F200A3AF94 /* Dependencies.swift in Sources */,
@@ -1708,14 +1717,13 @@
 				22D537D92302D2EB00A92341 /* Message.swift in Sources */,
 				73A9392E23E1AC6E0025AF90 /* InstanceLocator.swift in Sources */,
 				7301BC5723B0E71500F162C7 /* Wire.Event.RoomDeleted.swift in Sources */,
-				73B705B323EE041600D1E5C8 /* Reducer.Model.User_forInitialState.swift in Sources */,
+				73B705B323EE041600D1E5C8 /* UserReducer.swift in Sources */,
 				22C5F3EF2306B08C009A7383 /* MessagePart.swift in Sources */,
 				7301BC5D23B0E79F00F162C7 /* Wire.Event.UserLeftRoom.swift in Sources */,
 				2212EC55235725B8002212A4 /* MessagesProvider.swift in Sources */,
-				22F670F423EC2098001D3BF2 /* Reducer.Model.Rooms_forRemovedFromRoom.swift in Sources */,
 				22C5F3FF2306C7AB009A7383 /* PresenceState.swift in Sources */,
 				22D2A2DB23196FDE0095757C /* NetworkingError.swift in Sources */,
-				73B705B123EE03E800D1E5C8 /* Reducer.Model.Rooms_forInitialState.swift in Sources */,
+				73B705B123EE03E800D1E5C8 /* RoomsReducer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

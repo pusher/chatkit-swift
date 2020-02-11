@@ -13,7 +13,7 @@ class UserSubscriptionReducerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_initialState_withCurrentStateAndReceivedInitialStateAction_returnsModifiedState() {
+    func test_reduce_withCurrentStateAndReceivedInitialStateAction_returnsModifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -90,24 +90,16 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         ]
         
-        let stubUsersReducer: StubReducer<Reducer.Model.User_forInitialState> =
-            .init(reduce_stateToReturn: userReducer_stateToReturn,
-                  reduce_expectedCallCount: 1)
+        let stubUsersReducer = StubReducer<Reducer.Model.User>(reduce_stateToReturn: userReducer_stateToReturn, reduce_expectedCallCount: 1)
+        let stubRoomsReducer = StubReducer<Reducer.Model.Rooms>(reduce_stateToReturn: roomsReducer_stateToReturn, reduce_expectedCallCount: 1)
         
-        let stubRoomsReducer: StubReducer<Reducer.Model.Rooms_forInitialState> =
-            .init(reduce_stateToReturn: roomsReducer_stateToReturn,
-                  reduce_expectedCallCount: 1)
-        
-        let dependencies = DependenciesDoubles(reducer_model_user_forInitialState: stubUsersReducer.reduce,
-                                               reducer_model_rooms_forInitialState: stubRoomsReducer.reduce)
+        let dependencies = DependenciesDoubles(userReducer: stubUsersReducer.reduce, roomsReducer: stubRoomsReducer.reduce)
         
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.UserSubscription.InitialState.reduce(action: action,
-                                                                       state: inputState,
-                                                                       dependencies: dependencies)
+        let outputState = Reducer.UserSubscription.InitialState.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -122,7 +114,7 @@ class UserSubscriptionReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_removedFromRoom_withCurrentStateAndReceivedRemovedFromRoomForExistingRoom_returnsModifiedState() {
+    func test_reduce_withCurrentStateAndReceivedRemovedFromRoomForExistingRoom_returnsModifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -174,19 +166,15 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         ]
         
-        let stubReducer: StubReducer<Reducer.Model.Rooms_forRemovedFromRoom> =
-            .init(reduce_stateToReturn: reducer_stateToReturn,
-                  reduce_expectedCallCount: 1)
+        let stubReducer = StubReducer<Reducer.Model.Rooms>(reduce_stateToReturn: reducer_stateToReturn, reduce_expectedCallCount: 1)
         
-        let dependencies = DependenciesDoubles(reducer_model_rooms_forRemovedFromRoom: stubReducer.reduce)
+        let dependencies = DependenciesDoubles(roomsReducer: stubReducer.reduce)
         
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.UserSubscription.RemovedFromRoom.reduce(action: action,
-                                                                          state: inputState,
-                                                                          dependencies: dependencies)
+        let outputState = Reducer.UserSubscription.RemovedFromRoom.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -212,7 +200,7 @@ class UserSubscriptionReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_removedFromRoom_withCurrentStateAndReceivedRemovedFromRoomForNonExistingRoom_returnsUnmodifiedState() {
+    func test_reduce_withCurrentStateAndReceivedRemovedFromRoomForNonExistingRoom_returnsUnmodifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -274,19 +262,15 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         ]
         
-        let stubReducer: StubReducer<Reducer.Model.Rooms_forRemovedFromRoom> =
-            .init(reduce_stateToReturn: reducer_stateToReturn,
-                  reduce_expectedCallCount: 1)
+        let stubReducer = StubReducer<Reducer.Model.Rooms>(reduce_stateToReturn: reducer_stateToReturn, reduce_expectedCallCount: 1)
         
-        let dependencies = DependenciesDoubles(reducer_model_rooms_forRemovedFromRoom: stubReducer.reduce)
+        let dependencies = DependenciesDoubles(roomsReducer: stubReducer.reduce)
         
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.UserSubscription.RemovedFromRoom.reduce(action: action,
-                                                                          state: inputState,
-                                                                          dependencies: dependencies)
+        let outputState = Reducer.UserSubscription.RemovedFromRoom.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
