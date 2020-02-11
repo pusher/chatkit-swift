@@ -11,9 +11,7 @@ protocol Dependencies:
     HasInstanceFactory &
     HasSubscriptionResponder &
     HasSubscriptionFactory &
-    HasSubscriptionManager &
-    HasUserService &
-    HasMissingUserFetcher
+    HasSubscriptionManager
 {}
 
 class DependencyFactory {
@@ -112,14 +110,6 @@ class ConcreteDependencies: Dependencies {
             ConcreteSubscriptionManager(dependencies: dependencies)
         })
         
-        dependencyFactory.register(UserService.self, factory: { dependencies in
-            ConcreteUserService(dependencies: dependencies)
-        })
-        
-        dependencyFactory.register(MissingUserFetcher.self, factory: { dependencies in
-            ConcreteMissingUserFetcher(dependencies: dependencies)
-        })
-        
         override?(dependencyFactory)
     }
     
@@ -151,11 +141,4 @@ class ConcreteDependencies: Dependencies {
         return dependencyFactory.resolve(SubscriptionManager.self, dependencies: self)
     }
     
-    var userService: UserService {
-        return dependencyFactory.resolve(UserService.self, dependencies: self)
-    }
-    
-    var missingUserFetcher: MissingUserFetcher {
-        return dependencyFactory.resolve(MissingUserFetcher.self, dependencies: self)
-    }
 }

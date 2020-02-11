@@ -167,8 +167,6 @@
 		738A3EC923E2E69A00B6A614 /* SubscriptionResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B2423CF437C001909B7 /* SubscriptionResponder.swift */; };
 		738A3ECA23E2E69A00B6A614 /* SubscriptionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B0323CF1724001909B7 /* SubscriptionFactory.swift */; };
 		738A3ECB23E2E69A00B6A614 /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B2223CF431B001909B7 /* SubscriptionManager.swift */; };
-		738A3ECC23E2E69A00B6A614 /* Service.UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85D0323D0AB0A0008D0D6 /* Service.UserService.swift */; };
-		738A3ECD23E2E69A00B6A614 /* MissingUserFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85D0423D0AB0A0008D0D6 /* MissingUserFetcher.swift */; };
 		738A3ED223E2FF6200B6A614 /* TokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738A3ED123E2FF6200B6A614 /* TokenProvider.swift */; };
 		738A3ED423E3046300B6A614 /* XCTest+Doubles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738A3ED323E3046300B6A614 /* XCTest+Doubles.swift */; };
 		738A3EE023E334E000B6A614 /* InstanceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738A3EDF23E334E000B6A614 /* InstanceFactory.swift */; };
@@ -208,9 +206,7 @@
 		73EDEE5823D8C4D900DE566D /* VoidResult+EquatableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EDEE5723D8C4D900DE566D /* VoidResult+EquatableTests.swift */; };
 		73EDEE5C23D8C4FD00DE566D /* VoidResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EDEE5B23D8C4FD00DE566D /* VoidResult.swift */; };
 		73EDEE5E23D8C52E00DE566D /* EquatableResult+EquatableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EDEE5D23D8C52E00DE566D /* EquatableResult+EquatableTests.swift */; };
-		73F85CF723D088720008D0D6 /* Service.UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85CF623D088720008D0D6 /* Service.UserService.swift */; };
 		73F85CF923D08CD60008D0D6 /* ServiceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85CF823D08CD60008D0D6 /* ServiceType.swift */; };
-		73F85CFD23D092AD0008D0D6 /* MissingUserFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85CFC23D092AD0008D0D6 /* MissingUserFetcher.swift */; };
 		73FF749C23E2011D00A6FEA9 /* InstanceLocator in Resources */ = {isa = PBXBuildFile; fileRef = 73FF749B23E2011C00A6FEA9 /* InstanceLocator */; };
 /* End PBXBuildFile section */
 
@@ -474,11 +470,7 @@
 		73EDEE5723D8C4D900DE566D /* VoidResult+EquatableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoidResult+EquatableTests.swift"; sourceTree = "<group>"; };
 		73EDEE5B23D8C4FD00DE566D /* VoidResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoidResult.swift; sourceTree = "<group>"; };
 		73EDEE5D23D8C52E00DE566D /* EquatableResult+EquatableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EquatableResult+EquatableTests.swift"; sourceTree = "<group>"; };
-		73F85CF623D088720008D0D6 /* Service.UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.UserService.swift; sourceTree = "<group>"; };
 		73F85CF823D08CD60008D0D6 /* ServiceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceType.swift; sourceTree = "<group>"; };
-		73F85CFC23D092AD0008D0D6 /* MissingUserFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissingUserFetcher.swift; sourceTree = "<group>"; };
-		73F85D0323D0AB0A0008D0D6 /* Service.UserService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Service.UserService.swift; sourceTree = "<group>"; };
-		73F85D0423D0AB0A0008D0D6 /* MissingUserFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MissingUserFetcher.swift; sourceTree = "<group>"; };
 		73F85D0A23D0D8A60008D0D6 /* StubNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubNetworking.swift; sourceTree = "<group>"; };
 		73FF749B23E2011C00A6FEA9 /* InstanceLocator */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = InstanceLocator; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -1132,8 +1124,6 @@
 				73233B2423CF437C001909B7 /* SubscriptionResponder.swift */,
 				73233B0323CF1724001909B7 /* SubscriptionFactory.swift */,
 				73233B2223CF431B001909B7 /* SubscriptionManager.swift */,
-				73F85D0323D0AB0A0008D0D6 /* Service.UserService.swift */,
-				73F85D0423D0AB0A0008D0D6 /* MissingUserFetcher.swift */,
 			);
 			path = Doubles;
 			sourceTree = "<group>";
@@ -1364,9 +1354,7 @@
 				738A3ED123E2FF6200B6A614 /* TokenProvider.swift */,
 				738DDA7A23C6206E00B5C79A /* Instance.swift */,
 				738A3EDF23E334E000B6A614 /* InstanceFactory.swift */,
-				73F85CFC23D092AD0008D0D6 /* MissingUserFetcher.swift */,
 				7389802423C8A9140029E09F /* SDKInfoProvider.swift */,
-				73F85CF623D088720008D0D6 /* Service.UserService.swift */,
 				73F85CF823D08CD60008D0D6 /* ServiceType.swift */,
 				73233AC423CE1A9C001909B7 /* Subscription.swift */,
 				73233AC223CE1A0D001909B7 /* SubscriptionFactory.swift */,
@@ -1800,7 +1788,6 @@
 				22D2A2E32319780F0095757C /* ServiceVersion.swift in Sources */,
 				73ABC07E23B0B5D100ECD162 /* Wire.Message.swift in Sources */,
 				22D2A2D5231963C70095757C /* Bundle+Extensions.swift in Sources */,
-				73F85CFD23D092AD0008D0D6 /* MissingUserFetcher.swift in Sources */,
 				224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */,
 				734A28B723D9A7B5003E2BC9 /* JoinedRoomsTransformer.swift in Sources */,
 				734D6A3823AA91FB00105479 /* Wire.User.swift in Sources */,
@@ -1812,7 +1799,6 @@
 				22D537D72302D2CE00A92341 /* User.swift in Sources */,
 				7301BC5123B0E64B00F162C7 /* Wire.Event.RoomUpdated.swift in Sources */,
 				73CF01C523AB93FB006FB43E /* Data+Extensions.swift in Sources */,
-				73F85CF723D088720008D0D6 /* Service.UserService.swift in Sources */,
 				733731DF23E8198D0059A2F9 /* Array+Extensions.swift in Sources */,
 				730E44DC23DB47F200A3AF94 /* Dependencies.swift in Sources */,
 				73A5169023B0BB0500CF8B77 /* Wire.Event.EventType.swift in Sources */,
@@ -1870,7 +1856,6 @@
 				73E585DB23E08EFF0047C6FA /* StoreDelegate.swift in Sources */,
 				73E585DF23E08EFF0047C6FA /* Store.swift in Sources */,
 				738A3EC823E2E69A00B6A614 /* SubscriptionDelegate.swift in Sources */,
-				738A3ECD23E2E69A00B6A614 /* MissingUserFetcher.swift in Sources */,
 				732C8BC823F308BC006E7537 /* XCTestExpectation+ChatkitExpectations.swift in Sources */,
 				73E585DD23E08EFF0047C6FA /* StoreListener.swift in Sources */,
 				738A3EC623E2E69A00B6A614 /* StubNetworking.swift in Sources */,
@@ -1879,7 +1864,6 @@
 				738A3ECA23E2E69A00B6A614 /* SubscriptionFactory.swift in Sources */,
 				737E3F6623E845CE00B50837 /* ResumableSubscription.swift in Sources */,
 				738A3EC323E2E69A00B6A614 /* JoinedRoomsProviderDelegate.swift in Sources */,
-				738A3ECC23E2E69A00B6A614 /* Service.UserService.swift in Sources */,
 				738A3EC123E2E69A00B6A614 /* SDKInfoProvider.swift in Sources */,
 				738A3EC523E2E69A00B6A614 /* InstanceFactory.swift in Sources */,
 				73E585D923E08EF90047C6FA /* TestLogger.swift in Sources */,

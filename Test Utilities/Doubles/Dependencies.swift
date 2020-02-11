@@ -19,8 +19,6 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
     public let subscriptionResponder: SubscriptionResponder
     public let subscriptionFactory: SubscriptionFactory
     public let subscriptionManager: SubscriptionManager
-    public let userService: UserService
-    public let missingUserFetcher: MissingUserFetcher
     
     public init(instanceLocator: PusherPlatform.InstanceLocator? = nil,
                 tokenProvider: PusherPlatform.TokenProvider? = nil,
@@ -31,8 +29,6 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
                 subscriptionResponder: SubscriptionResponder? = nil,
                 subscriptionFactory: SubscriptionFactory? = nil,
                 subscriptionManager: SubscriptionManager? = nil,
-                userService: UserService? = nil,
-                missingUserFetcher: MissingUserFetcher? = nil,
                 
                 file: StaticString = #file, line: UInt = #line) {
         
@@ -45,8 +41,6 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
         self.subscriptionResponder = subscriptionResponder ?? DummySubscriptionResponder(file: file, line: line)
         self.subscriptionFactory = subscriptionFactory ?? DummySubscriptionFactory(file: file, line: line)
         self.subscriptionManager = subscriptionManager ?? DummySubscriptionManager(file: file, line: line)
-        self.userService = userService ?? DummyUserService(file: file, line: line)
-        self.missingUserFetcher = missingUserFetcher ?? DummyMissingUserFetcher(file: file, line: line)
         
         super.init(file: file, line: line)
     }

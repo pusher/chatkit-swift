@@ -38,8 +38,6 @@ class ConcreteDependencyTests: XCTestCase {
         XCTAssertNotNil(dependencies.subscriptionResponder as? ConcreteSubscriptionResponder)
         XCTAssertNotNil(dependencies.subscriptionFactory as? ConcreteSubscriptionFactory)
         XCTAssertNotNil(dependencies.subscriptionManager as? ConcreteSubscriptionManager)
-        XCTAssertNotNil(dependencies.userService as? ConcreteUserService)
-        XCTAssertNotNil(dependencies.missingUserFetcher as? ConcreteMissingUserFetcher)
     }
     
     func test_initWithInstanceLocatorAndOverride_withInstanceLocatorAndOverride_overridesDepedencies() {
@@ -83,8 +81,6 @@ class ConcreteDependencyTests: XCTestCase {
         XCTAssertNotNil(dependencies.subscriptionResponder as? ConcreteSubscriptionResponder)
         XCTAssertNotNil(dependencies.subscriptionFactory as? ConcreteSubscriptionFactory)
         XCTAssertNotNil(dependencies.subscriptionManager as? ConcreteSubscriptionManager)
-        XCTAssertNotNil(dependencies.userService as? ConcreteUserService)
-        XCTAssertNotNil(dependencies.missingUserFetcher as? ConcreteMissingUserFetcher)
     }
     
     // This tests the extension methods in `TestUtilities`
