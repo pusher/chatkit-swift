@@ -1,2 +1,2 @@
 
-protocol Action {}
+class Action {}

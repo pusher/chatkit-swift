@@ -41,7 +41,6 @@ class ConcreteStore: Store {
     }
     
     func dispatch(action: Action) {
-        
         state = self.dependencies.reducer_master(action, state, dependencies)
     }
 }

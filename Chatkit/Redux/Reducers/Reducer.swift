@@ -4,7 +4,7 @@ struct Reducer {}
 
 protocol Reducing {
     
-    associatedtype ActionType: Any
+    associatedtype ActionType: Action
     associatedtype StateType: State
     associatedtype DependenciesType
     

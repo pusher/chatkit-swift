@@ -1,9 +1,9 @@
 @testable import PusherChatkit
 
-public class DummyAction: DummyBase, Action {
+public class DummyAction: Action {
     
-    public override init(file: StaticString = #file, line: UInt = #line) {
-        super.init(file: file, line: line)
-    }
+    // MARK: - Initializers
+    
+    public override init() {}
     
 }
