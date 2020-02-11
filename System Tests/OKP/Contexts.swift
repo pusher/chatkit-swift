@@ -4,12 +4,6 @@ import XCTest
 import struct PusherPlatform.InstanceLocator
 @testable import PusherChatkit
 
-struct Timeout {
-    static let chatkit_connect: TimeInterval = 15
-    static let chatkit_createJoinedRoomsProvider: TimeInterval = 5
-    static let subscriptionManager_subscribe: TimeInterval = 15
-}
-
 extension XCTestCase {
 
     /*
@@ -54,7 +48,7 @@ extension XCTestCase {
         let expectation = XCTestExpectation.Chatkit.connect
         chatkit.connect(completionHandler: expectation.handler)
         
-        wait(for: [expectation], timeout: Timeout.chatkit_connect)
+        wait(for: [expectation], timeout: expectation.timeout)
         
         XCTAssertExpectationFulfilled(expectation) { error in
             XCTAssertNil(error)

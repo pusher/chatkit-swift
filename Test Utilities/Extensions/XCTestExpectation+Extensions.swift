@@ -1,5 +1,4 @@
 import XCTest
-@testable import PusherChatkit
 
 
 extension XCTest {
@@ -11,42 +10,6 @@ extension XCTest {
 }
 
 extension XCTestExpectation {
-
-    // Note all properties here are computed `var`s (and not `let`s) to avoid a
-    // "API violation - expectations can only be waited on once" error in the event
-    // the same expectation is used twice in the same test.
-    // (we often want to test two calls to `Chatkit.connect` for example)
-    
-    public struct Chatkit {
-        
-        public static var connect: Expectation<Error?> {
-            .init(functionName: "connect", timeout: 15)
-        }
-        
-        public static var createJoinedRoomsProvider: TwoArgExpectation<JoinedRoomsProvider?, Error?> {
-            .init(functionName: "createJoinedRoomsProvider", timeout: 5)
-        }
-        
-    }
-    
-    public struct SubscriptionManager {
-        
-        public static var subscribe: Expectation<VoidResult> {
-            .init(functionName: "subscribe", timeout: 15)
-        }
-        
-    }
-    
-    public struct JoinedRoomsProviderDelegate {
-        
-        public static var didJoinRoom: Expectation<Room> {
-            .init(functionName: "didJoinRoom", timeout: 15)
-        }
-        
-        public static var didLeaveRoom: Expectation<Room> {
-            .init(functionName: "didLeaveRoom", timeout: 15)
-        }
-    }
     
     public class Expectation<ResultType>: XCTestExpectation {
         
@@ -54,14 +17,17 @@ extension XCTestExpectation {
         public private(set) var result: ResultType?
         public private(set) var resultType: XCTest.ExpectationResult<ResultType> = .unfulfilled
         
-        public init(description: String, timeout: TimeInterval) {
-            self.timeout = timeout
+        public init(description: String, systemTestTimeout: TimeInterval, nonSystemTestTimeout: TimeInterval? = nil) {
+            self.timeout = Self.timeoutForCurrentTestTarget(systemTestTimeout: systemTestTimeout, nonSystemTestTimeout: nonSystemTestTimeout)
             super.init(description: description)
         }
         
-        public convenience init(forClassName className: String = #function, functionName: String, timeout: TimeInterval) {
+        public convenience init(forClassName className: String = #function,
+                                functionName: String,
+                                systemTestTimeout: TimeInterval,
+                                nonSystemTestTimeout: TimeInterval? = nil) {
             let description = "`\(className).\(functionName)` handler should be invoked"
-            self.init(description: description, timeout: timeout)
+            self.init(description: description, systemTestTimeout: systemTestTimeout, nonSystemTestTimeout: nonSystemTestTimeout)
         }
         
         public func handler(_ result: ResultType) {
@@ -77,16 +43,17 @@ extension XCTestExpectation {
         public private(set) var result: (ResultTypeA, ResultTypeB)?
         public private(set) var resultType: XCTest.ExpectationResult<(ResultTypeA, ResultTypeB)> = .unfulfilled
         
-        public init(description: String, timeout: TimeInterval) {
-            self.timeout = timeout
+        public init(description: String, systemTestTimeout: TimeInterval, nonSystemTestTimeout: TimeInterval? = nil) {
+            self.timeout = Self.timeoutForCurrentTestTarget(systemTestTimeout: systemTestTimeout, nonSystemTestTimeout: nonSystemTestTimeout)
             super.init(description: description)
         }
         
         public convenience init(forClassName className: String = #function,
                                 functionName: String,
-                                timeout: TimeInterval) {
+                                systemTestTimeout: TimeInterval,
+                                nonSystemTestTimeout: TimeInterval? = nil) {
             let description = "`\(className).\(functionName)` handler should be invoked"
-            self.init(description: description, timeout: timeout)
+            self.init(description: description, systemTestTimeout: systemTestTimeout, nonSystemTestTimeout: nonSystemTestTimeout)
         }
         
         public func handler(_ resultA: ResultTypeA, resultB: ResultTypeB) {
@@ -97,5 +64,16 @@ extension XCTestExpectation {
         }
     }
     
+    private static func timeoutForCurrentTestTarget(systemTestTimeout: TimeInterval, nonSystemTestTimeout: TimeInterval?) -> TimeInterval {
+    
+        let defaultNonSystemTestTimeout: TimeInterval = 1
+        
+        guard let testConfigurationFilePath = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"],
+            testConfigurationFilePath.contains("System Tests") else {
+            return nonSystemTestTimeout ?? defaultNonSystemTestTimeout
+        }
+        
+        return systemTestTimeout
+    }
     
 }

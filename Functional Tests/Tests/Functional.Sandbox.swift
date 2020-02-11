@@ -10,7 +10,7 @@ extension Chatkit {
 extension XCTestExpectation.Chatkit {
     
     static let joinRoom: XCTestExpectation.Expectation<Result<Void, Error>> =
-        .init(functionName: "joinRoom", timeout: 1)
+        .init(functionName: "joinRoom", systemTestTimeout: 15)
 }
 
 class Functional_Sandbox_Tests: XCTestCase {

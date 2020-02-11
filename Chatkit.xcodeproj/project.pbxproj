@@ -116,6 +116,7 @@
 		73233B2823CF694C001909B7 /* ConcreteSubscriptionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B2723CF694C001909B7 /* ConcreteSubscriptionManagerTests.swift */; };
 		73233B2A23CF69A7001909B7 /* ConcreteSubscriptionResponderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B2923CF69A7001909B7 /* ConcreteSubscriptionResponderTests.swift */; };
 		7326360723ACDF56009E44E2 /* Wire.Event.Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7326360623ACDF55009E44E2 /* Wire.Event.Subscription.swift */; };
+		732C8BC823F308BC006E7537 /* XCTestExpectation+ChatkitExpectations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732C8BC723F308BC006E7537 /* XCTestExpectation+ChatkitExpectations.swift */; };
 		7335D26623D60CA700E51909 /* Wire.Event.NewMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D26523D60CA700E51909 /* Wire.Event.NewMessage.swift */; };
 		7335D26823D60DD900E51909 /* Wire.Event.NewMessage+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D26723D60DD900E51909 /* Wire.Event.NewMessage+Decodable.Tests.swift */; };
 		7335D26A23D60FFC00E51909 /* Wire.Event.MessageDeleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D26923D60FFC00E51909 /* Wire.Event.MessageDeleted.swift */; };
@@ -401,6 +402,7 @@
 		73233B2723CF694C001909B7 /* ConcreteSubscriptionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteSubscriptionManagerTests.swift; sourceTree = "<group>"; };
 		73233B2923CF69A7001909B7 /* ConcreteSubscriptionResponderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteSubscriptionResponderTests.swift; sourceTree = "<group>"; };
 		7326360623ACDF55009E44E2 /* Wire.Event.Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.Subscription.swift; sourceTree = "<group>"; };
+		732C8BC723F308BC006E7537 /* XCTestExpectation+ChatkitExpectations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestExpectation+ChatkitExpectations.swift"; sourceTree = "<group>"; };
 		7335D26523D60CA700E51909 /* Wire.Event.NewMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.NewMessage.swift; sourceTree = "<group>"; };
 		7335D26723D60DD900E51909 /* Wire.Event.NewMessage+Decodable.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Wire.Event.NewMessage+Decodable.Tests.swift"; sourceTree = "<group>"; };
 		7335D26923D60FFC00E51909 /* Wire.Event.MessageDeleted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.MessageDeleted.swift; sourceTree = "<group>"; };
@@ -1205,6 +1207,7 @@
 				73B00EAD23A2822F0062C718 /* String+Extensions.swift */,
 				7396B2D723A78E08009F08FD /* XCTest+Assertions.swift */,
 				738A3ED323E3046300B6A614 /* XCTest+Doubles.swift */,
+				732C8BC723F308BC006E7537 /* XCTestExpectation+ChatkitExpectations.swift */,
 				73507D8A23EC59A90068C979 /* XCTestExpectation+Extensions.swift */,
 			);
 			path = Extensions;
@@ -1868,6 +1871,7 @@
 				73E585DF23E08EFF0047C6FA /* Store.swift in Sources */,
 				738A3EC823E2E69A00B6A614 /* SubscriptionDelegate.swift in Sources */,
 				738A3ECD23E2E69A00B6A614 /* MissingUserFetcher.swift in Sources */,
+				732C8BC823F308BC006E7537 /* XCTestExpectation+ChatkitExpectations.swift in Sources */,
 				73E585DD23E08EFF0047C6FA /* StoreListener.swift in Sources */,
 				738A3EC623E2E69A00B6A614 /* StubNetworking.swift in Sources */,
 				73E585DA23E08EFF0047C6FA /* StoreBroadcaster.swift in Sources */,

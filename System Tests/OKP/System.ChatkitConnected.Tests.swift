@@ -25,7 +25,7 @@ class System_ChatkitConnected_Tests: XCTestCase {
             /*---- THEN -----*/
             /*****************/
             
-            wait(for: [expectation], timeout: Timeout.chatkit_connect)
+            wait(for: [expectation], timeout: expectation.timeout)
                   
             XCTAssertExpectationFulfilled(expectation) { error in
                 XCTAssertNil(error)
@@ -81,7 +81,7 @@ class System_ChatkitConnected_Tests: XCTestCase {
             /*---- THEN -----*/
             /*****************/
             
-            wait(for: [expectation], timeout: Timeout.chatkit_createJoinedRoomsProvider)
+            wait(for: [expectation], timeout: expectation.timeout)
             
             XCTAssertExpectationFulfilled(expectation) { joinedRoomsProvider, error in
                 XCTAssertNotNil(joinedRoomsProvider) { joinedRoomsProvider in
