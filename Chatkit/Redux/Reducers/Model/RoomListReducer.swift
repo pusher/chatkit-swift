@@ -18,6 +18,9 @@ extension Reducer.Model {
             else if let action = action as? RemovedFromRoomAction {
                 return self.reduce(action: action, state: state, dependencies: dependencies)
             }
+            else if let action = action as? RoomDeletedAction {
+                return self.reduce(action: action, state: state, dependencies: dependencies)
+            }
             else if let action = action as? ReadStateUpdatedAction {
                 return self.reduce(action: action, state: state, dependencies: dependencies)
             }
@@ -25,7 +28,7 @@ extension Reducer.Model {
             return state
         }
         
-        // MARK: - Private methods
+        // MARK: - Private reducers
         
         private static func reduce(action: InitialStateAction, state: StateType, dependencies: DependenciesType) -> StateType {
             let readSummaries = action.event.readStates.reduce(into: [String : ReadSummaryState]()) {
@@ -50,8 +53,11 @@ extension Reducer.Model {
         }
         
         private static func reduce(action: RemovedFromRoomAction, state: StateType, dependencies: DependenciesType) -> StateType {
-            let rooms = state.rooms.filter { $0.value.identifier != action.event.roomIdentifier }
-            return RoomListState(rooms: rooms)
+            return self.deleteRoom(identifier: action.event.roomIdentifier, from: state)
+        }
+        
+        private static func reduce(action: RoomDeletedAction, state: StateType, dependencies: DependenciesType) -> StateType {
+            return self.deleteRoom(identifier: action.event.roomIdentifier, from: state)
         }
         
         private static func reduce(action: ReadStateUpdatedAction, state: StateType, dependencies: DependenciesType) -> StateType {
@@ -72,6 +78,13 @@ extension Reducer.Model {
                                                createdAt: room.createdAt,
                                                updatedAt: room.updatedAt)
             
+            return RoomListState(rooms: rooms)
+        }
+        
+        // MARK: - Private methods
+        
+        private static func deleteRoom(identifier: String, from state: RoomListState) -> RoomListState {
+            let rooms = state.rooms.filter { $0.value.identifier != identifier }
             return RoomListState(rooms: rooms)
         }
         

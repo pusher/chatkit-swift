@@ -382,6 +382,171 @@ class RoomsReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
+    func test_reduce_withCurrentStateAndRoomDeletedActionForExistingRoom_returnsModifiedState() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let inputState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 10
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                "second-room" : RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 0
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
+        )
+        
+        let action = RoomDeletedAction(
+            event: Wire.Event.RoomDeleted(
+                roomIdentifier: "second-room"
+            )
+        )
+        
+        let dependencies = DependenciesDoubles()
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let outputState = Reducer.Model.RoomList.reduce(action: action, state: inputState, dependencies: dependencies)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        let expectedState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 10
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
+        )
+        
+        XCTAssertEqual(outputState, expectedState)
+    }
+    
+    func test_reduce_withCurrentStateAndRoomDeletedActionForNonExistingRoom_returnsUnmodifiedState() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let inputState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 10
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                "second-room" : RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 0
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
+        )
+        
+        let action = RoomDeletedAction(
+            event: Wire.Event.RoomDeleted(
+                roomIdentifier: "third-room"
+            )
+        )
+        
+        let dependencies = DependenciesDoubles()
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let outputState = Reducer.Model.RoomList.reduce(action: action, state: inputState, dependencies: dependencies)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        let expectedState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 10
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                "second-room" : RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 0
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
+        )
+        
+        XCTAssertEqual(outputState, expectedState)
+    }
+    
     func test_reduce_withCurrentStateAndReadStateUpdatedActionForExistingRoom_returnsModifiedState() {
         
         /******************/

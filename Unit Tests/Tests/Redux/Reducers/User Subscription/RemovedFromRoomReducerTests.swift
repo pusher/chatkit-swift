@@ -13,7 +13,7 @@ class RemovedFromRoomReducerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_reduce_withCurrentStateAndRemovedFromRoomActionForExistingRoom_returnsModifiedState() {
+    func test_reduce_withCurrentStateAndRemovedFromRoomActionForExistingRoom_returnsStateFromDedicatedReducer() {
         
         /******************/
         /*---- GIVEN -----*/

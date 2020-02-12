@@ -153,6 +153,92 @@ class MasterReducerTests: XCTestCase {
         XCTAssertEqual(userSubscriptionRemovedFromRoomReducer.reduce_stateLastReceived, inputState)
     }
     
+    func test_reduce_withRoomDeletedAction_returnsStateFromDedicatedReducer() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let reducer_stateToReturn = MasterState(
+            users: [],
+            currentUser: .empty,
+            joinedRooms: RoomListState(
+                rooms: [
+                    "first-room" : RoomState(
+                        identifier: "first-room",
+                        name: "First",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        readSummary: .empty,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
+                    )
+                ]
+            )
+        )
+        
+        let userSubscriptionRoomDeletedReducer = StubReducer<Reducer.UserSubscription.RoomDeleted>(reduce_stateToReturn: reducer_stateToReturn,
+                                                                                                   reduce_expectedCallCount: 1)
+        
+        let dependencies = DependenciesDoubles(userSubscriptionRoomDeletedReducer: userSubscriptionRoomDeletedReducer.reduce)
+        
+        let inputState = MasterState(
+            users: [],
+            currentUser: .empty,
+            joinedRooms: RoomListState(
+                rooms: [
+                    "first-room" : RoomState(
+                        identifier: "first-room",
+                        name: "First",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        readSummary: .empty,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
+                    ),
+                    "second-room" : RoomState(
+                        identifier: "second-room",
+                        name: "Second",
+                        isPrivate: false,
+                        pushNotificationTitle: "nil",
+                        customData: nil,
+                        lastMessageAt: .distantPast,
+                        readSummary: .empty,
+                        createdAt: .distantPast,
+                        updatedAt: .distantPast
+                    )
+                ]
+            )
+        )
+        
+        let action = RoomDeletedAction(
+            event: Wire.Event.RoomDeleted(
+                roomIdentifier: "second-room"
+            )
+        )
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let outputState = Reducer.Master.reduce(action: action, state: inputState, dependencies: dependencies)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        let expectedState = reducer_stateToReturn
+        
+        XCTAssertEqual(outputState, expectedState)
+        XCTAssertEqual(userSubscriptionRoomDeletedReducer.reduce_actualCallCount, 1)
+        XCTAssertEqual(userSubscriptionRoomDeletedReducer.reduce_actionLastReceived, action)
+        XCTAssertEqual(userSubscriptionRoomDeletedReducer.reduce_stateLastReceived, inputState)
+    }
+    
     func test_reduce_withReadStateUpdatedAction_returnsStateFromDedicatedReducer() {
         
         /******************/

@@ -2,7 +2,7 @@ import XCTest
 import TestUtilities
 @testable import PusherChatkit
 
-class ReadStateUpdatedReducerTests: XCTestCase {
+class RoomDeletedReducerTests: XCTestCase {
     
     // MARK: - Properties
     
@@ -13,7 +13,7 @@ class ReadStateUpdatedReducerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_reduce_withCurrentStateAndReadStateUpdatedActionForExistingRoom_returnsStateFromDedicatedReducer() {
+    func test_reduce_withCurrentStateAndRoomDeletedActionForExistingRoom_returnsStateFromDedicatedReducer() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -31,9 +31,7 @@ class ReadStateUpdatedReducerTests: XCTestCase {
                         pushNotificationTitle: "nil",
                         customData: nil,
                         lastMessageAt: .distantPast,
-                        readSummary: ReadSummaryState(
-                            unreadCount: 10
-                        ),
+                        readSummary: .empty,
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     ),
@@ -44,9 +42,7 @@ class ReadStateUpdatedReducerTests: XCTestCase {
                         pushNotificationTitle: "nil",
                         customData: nil,
                         lastMessageAt: .distantPast,
-                        readSummary: ReadSummaryState(
-                            unreadCount: 0
-                        ),
+                        readSummary: .empty,
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     )
@@ -54,12 +50,9 @@ class ReadStateUpdatedReducerTests: XCTestCase {
             )
         )
         
-        let action = ReadStateUpdatedAction(
-            event: Wire.Event.ReadStateUpdated(
-                readState: Wire.ReadState(
-                    roomIdentifier: "second-room",
-                    unreadCount: 20,
-                    cursor: nil)
+        let action = RoomDeletedAction(
+            event: Wire.Event.RoomDeleted(
+                roomIdentifier: "second-room"
             )
         )
         
@@ -72,22 +65,7 @@ class ReadStateUpdatedReducerTests: XCTestCase {
                     pushNotificationTitle: "nil",
                     customData: nil,
                     lastMessageAt: .distantPast,
-                    readSummary: ReadSummaryState(
-                        unreadCount: 10
-                    ),
-                    createdAt: .distantPast,
-                    updatedAt: .distantPast
-                ),
-                "second-room" : RoomState(
-                    identifier: "second-room",
-                    name: "Second",
-                    isPrivate: false,
-                    pushNotificationTitle: "nil",
-                    customData: nil,
-                    lastMessageAt: .distantPast,
-                    readSummary: ReadSummaryState(
-                        unreadCount: 20
-                    ),
+                    readSummary: .empty,
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 )
@@ -102,7 +80,7 @@ class ReadStateUpdatedReducerTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.UserSubscription.ReadStateUpdated.reduce(action: action, state: inputState, dependencies: dependencies)
+        let outputState = Reducer.UserSubscription.RoomDeleted.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -120,22 +98,7 @@ class ReadStateUpdatedReducerTests: XCTestCase {
                         pushNotificationTitle: "nil",
                         customData: nil,
                         lastMessageAt: .distantPast,
-                        readSummary: ReadSummaryState(
-                            unreadCount: 10
-                        ),
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    ),
-                    "second-room" : RoomState(
-                        identifier: "second-room",
-                        name: "Second",
-                        isPrivate: false,
-                        pushNotificationTitle: "nil",
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        readSummary: ReadSummaryState(
-                            unreadCount: 20
-                        ),
+                        readSummary: .empty,
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     )

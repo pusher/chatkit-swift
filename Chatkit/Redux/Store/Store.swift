@@ -20,6 +20,7 @@ class ConcreteStore: Store {
         & HasRoomListReducer
         & HasUserSubscriptionInitialStateReducer
         & HasUserSubscriptionRemovedFromRoomReducer
+        & HasUserSubscriptionRoomDeletedReducer
         & HasUserSubscriptionReadStateUpdatedReducer
     
     private let dependencies: Dependencies
