@@ -51,7 +51,6 @@ public class StubResumableSubscription: DoubleBase, ResumableSubscription {
     
     public var onError: ((Error) -> Void)?
     
-    
     public func end() {
         end_actualCallCount += 1
         guard end_actualCallCount <= end_expectedCallCount else {

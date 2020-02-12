@@ -72,7 +72,7 @@ class ConcreteSubscription: Subscription {
         
         case let .subscribingA(_, completions):
             state = .notSubscribed
-            let error = makeUnsubscribeCalledWhileSubscribingError()
+            let error = Self.unsubscribeCalledWhileSubscribingError
             for completion in completions {
                 completion(.failure(error))
             }
@@ -85,18 +85,16 @@ class ConcreteSubscription: Subscription {
             
             state = .notSubscribed
             
-            let error = makeUnsubscribeCalledWhileSubscribingError()
+            let error = Self.unsubscribeCalledWhileSubscribingError
             for completion in completions {
                 completion(.failure(error))
             }
             
-        case let .subscribed(instance, resumableSubscription):
+        case let .subscribed(_, resumableSubscription):
             
             resumableSubscription.onOpen = nil
             resumableSubscription.onError = nil
             resumableSubscription.end()
-            
-            print(instance)
             
             state = .notSubscribed
         }
@@ -302,7 +300,7 @@ class ConcreteSubscription: Subscription {
         }
     }
     
-    private func makeUnsubscribeCalledWhileSubscribingError() -> Error {
-        return "ERROR: `Unsubscribe` called whilst still in the process of subscribing"
-    }
+    private static var unsubscribeCalledWhileSubscribingError: Error =
+        "ERROR: `Unsubscribe` called whilst still in the process of subscribing"
+    
 }
