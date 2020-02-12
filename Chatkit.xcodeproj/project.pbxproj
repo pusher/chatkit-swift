@@ -120,6 +120,7 @@
 		732C8BCE23F3FEFD006E7537 /* InstanceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732C8BCD23F3FEFD006E7537 /* InstanceType.swift */; };
 		732C8BD023F3FF26006E7537 /* SubscriptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732C8BCF23F3FF26006E7537 /* SubscriptionType.swift */; };
 		732C8BD223F40371006E7537 /* HasTokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732C8BD123F40371006E7537 /* HasTokenProvider.swift */; };
+		732C8BD423F40750006E7537 /* ConcreteSubscriptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732C8BD323F40750006E7537 /* ConcreteSubscriptionTests.swift */; };
 		7335D26623D60CA700E51909 /* Wire.Event.NewMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D26523D60CA700E51909 /* Wire.Event.NewMessage.swift */; };
 		7335D26823D60DD900E51909 /* Wire.Event.NewMessage+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D26723D60DD900E51909 /* Wire.Event.NewMessage+Decodable.Tests.swift */; };
 		7335D26A23D60FFC00E51909 /* Wire.Event.MessageDeleted.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D26923D60FFC00E51909 /* Wire.Event.MessageDeleted.swift */; };
@@ -403,6 +404,7 @@
 		732C8BCD23F3FEFD006E7537 /* InstanceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstanceType.swift; sourceTree = "<group>"; };
 		732C8BCF23F3FF26006E7537 /* SubscriptionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionType.swift; sourceTree = "<group>"; };
 		732C8BD123F40371006E7537 /* HasTokenProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HasTokenProvider.swift; sourceTree = "<group>"; };
+		732C8BD323F40750006E7537 /* ConcreteSubscriptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteSubscriptionTests.swift; sourceTree = "<group>"; };
 		7335D26523D60CA700E51909 /* Wire.Event.NewMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.NewMessage.swift; sourceTree = "<group>"; };
 		7335D26723D60DD900E51909 /* Wire.Event.NewMessage+Decodable.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Wire.Event.NewMessage+Decodable.Tests.swift"; sourceTree = "<group>"; };
 		7335D26923D60FFC00E51909 /* Wire.Event.MessageDeleted.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.MessageDeleted.swift; sourceTree = "<group>"; };
@@ -1104,6 +1106,7 @@
 				73233AD023CE4605001909B7 /* ConcreteDependencyTests.swift */,
 				73EDEE5123D8ABCB00DE566D /* ConcreteInstanceFactoryTests.swift */,
 				737E3F7923EABE2300B50837 /* ConcreteInstanceTests.swift */,
+				732C8BD323F40750006E7537 /* ConcreteSubscriptionTests.swift */,
 				73EDEE5323D8ADD500DE566D /* ConcreteSubscriptionFactoryTests.swift */,
 				73233B2723CF694C001909B7 /* ConcreteSubscriptionManagerTests.swift */,
 				73233B2923CF69A7001909B7 /* ConcreteSubscriptionResponderTests.swift */,
@@ -1118,14 +1121,8 @@
 				73233B1F23CF41ED001909B7 /* SDKInfoProvider.swift */,
 				73233B1123CF2CFF001909B7 /* JoinedRoomsProviderDelegate.swift */,
 				73233B0B23CF1BC8001909B7 /* Instance.swift */,
-				73233B0923CF1B0B001909B7 /* InstanceFactory.swift */,
 				737E3F6523E845CE00B50837 /* ResumableSubscription.swift */,
 				73F85D0A23D0D8A60008D0D6 /* StubNetworking.swift */,
-				73233B0523CF18DA001909B7 /* Subscription.swift */,
-				73233B0D23CF1ECD001909B7 /* SubscriptionDelegate.swift */,
-				73233B2423CF437C001909B7 /* SubscriptionResponder.swift */,
-				73233B0323CF1724001909B7 /* SubscriptionFactory.swift */,
-				73233B2223CF431B001909B7 /* SubscriptionManager.swift */,
 			);
 			path = Doubles;
 			sourceTree = "<group>";
@@ -1296,10 +1293,16 @@
 			children = (
 				73E585D523E08E130047C6FA /* Types */,
 				730E453D23DB4DD800A3AF94 /* Dependencies.swift */,
+				73233B0923CF1B0B001909B7 /* InstanceFactory.swift */,
 				730E454323DB4DD800A3AF94 /* Store.swift */,
 				730E453A23DB4DD800A3AF94 /* StoreBroadcaster.swift */,
 				730E453C23DB4DD800A3AF94 /* StoreDelegate.swift */,
 				730E453E23DB4DD800A3AF94 /* StoreListener.swift */,
+				73233B0523CF18DA001909B7 /* Subscription.swift */,
+				73233B0D23CF1ECD001909B7 /* SubscriptionDelegate.swift */,
+				73233B0323CF1724001909B7 /* SubscriptionFactory.swift */,
+				73233B2223CF431B001909B7 /* SubscriptionManager.swift */,
+				73233B2423CF437C001909B7 /* SubscriptionResponder.swift */,
 				2200BB96231EA5C200BF9545 /* TestLogger.swift */,
 				730E454623DB4DD800A3AF94 /* TokenProvider.swift */,
 			);
@@ -1715,6 +1718,7 @@
 				7301BC6F23B0FCCE00F162C7 /* Wire.Event.RemovedFromRoom+Decodable.Tests.swift in Sources */,
 				227B8403230EAC7900921E0D /* UserTests.swift in Sources */,
 				73233AD123CE4605001909B7 /* ConcreteDependencyTests.swift in Sources */,
+				732C8BD423F40750006E7537 /* ConcreteSubscriptionTests.swift in Sources */,
 				224B805C22F2E0CE003CB8DC /* ChatkitTests.swift in Sources */,
 				7335D27723D7335C00E51909 /* NonJSONHashable.swift in Sources */,
 				7301BC6523B0E9C700F162C7 /* Wire.Event.UserLeftRoom+Decodable.Tests.swift in Sources */,

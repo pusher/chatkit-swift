@@ -4,7 +4,6 @@ import class PusherPlatform.PPRequestOptions
 import struct PusherPlatform.PPSDKInfo
 @testable import PusherChatkit
 
-
 public class DummyInstance: DummyBase, Instance {
     
     public func request(using requestOptions: PPRequestOptions, onSuccess: ((Data) -> Void)?, onError: ((Error) -> Void)?) -> PPGeneralRequest {
