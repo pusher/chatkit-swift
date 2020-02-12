@@ -28,6 +28,14 @@ extension XCTestExpectation {
         
     }
     
+    public struct Subscription {
+        
+        public static var subscribe: Expectation<VoidResult> {
+            .init(functionName: "subscribe", systemTestTimeout: 15)
+        }
+        
+    }
+    
     public struct JoinedRoomsProviderDelegate {
         
         public static var didJoinRoom: Expectation<Room> {

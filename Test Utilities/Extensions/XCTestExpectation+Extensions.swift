@@ -1,21 +1,17 @@
 import XCTest
 
-
-extension XCTest {
+extension XCTestExpectation {
     
-    public enum ExpectationResult<ResultType> {
+    public enum ExpectationState<ResultType> {
         case fulfilled(ResultType)
         case unfulfilled
     }
-}
-
-extension XCTestExpectation {
     
     public class Expectation<ResultType>: XCTestExpectation {
         
         public let timeout: TimeInterval
         public private(set) var result: ResultType?
-        public private(set) var resultType: XCTest.ExpectationResult<ResultType> = .unfulfilled
+        public private(set) var state: ExpectationState<ResultType> = .unfulfilled
         
         public init(description: String, systemTestTimeout: TimeInterval, nonSystemTestTimeout: TimeInterval? = nil) {
             self.timeout = Self.timeoutForCurrentTestTarget(systemTestTimeout: systemTestTimeout, nonSystemTestTimeout: nonSystemTestTimeout)
@@ -32,7 +28,7 @@ extension XCTestExpectation {
         
         public func handler(_ result: ResultType) {
             self.result = result
-            resultType = .fulfilled(result)
+            state = .fulfilled(result)
             fulfill()
         }
     }
@@ -41,7 +37,7 @@ extension XCTestExpectation {
         
         public let timeout: TimeInterval
         public private(set) var result: (ResultTypeA, ResultTypeB)?
-        public private(set) var resultType: XCTest.ExpectationResult<(ResultTypeA, ResultTypeB)> = .unfulfilled
+        public private(set) var state: ExpectationState<(ResultTypeA, ResultTypeB)> = .unfulfilled
         
         public init(description: String, systemTestTimeout: TimeInterval, nonSystemTestTimeout: TimeInterval? = nil) {
             self.timeout = Self.timeoutForCurrentTestTarget(systemTestTimeout: systemTestTimeout, nonSystemTestTimeout: nonSystemTestTimeout)
@@ -59,7 +55,7 @@ extension XCTestExpectation {
         public func handler(_ resultA: ResultTypeA, resultB: ResultTypeB) {
             let combinedResult = (resultA, resultB)
             result = combinedResult
-            resultType = .fulfilled(combinedResult)
+            state = .fulfilled(combinedResult)
             fulfill()
         }
     }

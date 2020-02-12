@@ -37,8 +37,10 @@ public class StubInstance: DoubleBase, Instance {
     
     // Property is `weak` to emulate its real world equivalent
     private weak var internalStubResumableSubscription: StubResumableSubscription?
-    
-    public override init(file: StaticString = #file, line: UInt = #line) {
+
+    public init(subscribe_completionResult: VoidResult? = nil,
+        file: StaticString = #file, line: UInt = #line) {
+        self.subscribe_completionResult = subscribe_completionResult
         super.init(file: file, line: line)
     }
     
@@ -65,9 +67,9 @@ public class StubInstance: DoubleBase, Instance {
             XCTFail("`\(#function)` was called but `\(String(describing: self)).onEvent` was NOT defined", file: file, line: line)
             return
         }
-        // TODO: This should be removed once we've updated the pusher platform to return data rather than a jsonDict.
+        // TODO: This should be removed once we've updated the PusherPlatform to return data rather than a jsonDict.
         guard let jsonDict = try? JSONSerialization.jsonObject(with: jsonData, options: []) else {
-            XCTFail("`\(#function)` was called the jsonData passed was NOT JSON parsable", file: file, line: line)
+            XCTFail("`\(#function)` was called but the jsonData passed was NOT JSON parsable", file: file, line: line)
             return
         }
         
@@ -78,7 +80,11 @@ public class StubInstance: DoubleBase, Instance {
     
     // MARK: Instance implementation
     
+    public private(set) var request_actualCallCount: UInt = 0
+    
     public func request(using requestOptions: PPRequestOptions, onSuccess: ((Data) -> Void)?, onError: ((Error) -> Void)?) -> PPGeneralRequest {
+        
+        request_actualCallCount += 1
         
         let generalRequest = PPGeneralRequest()
         
@@ -106,6 +112,8 @@ public class StubInstance: DoubleBase, Instance {
 //    private var instance: Instance?
 //    private var resumableSubscription: PusherPlatform.PPResumableSubscription?
     
+    public private(set) var subscribeWithResume_actualCallCount: UInt = 0
+    
     public func subscribeWithResume(using requestOptions: PPRequestOptions,
                              onOpening: Instance.OnOpening?,
                              onOpen: Instance.OnOpen?,
@@ -113,6 +121,8 @@ public class StubInstance: DoubleBase, Instance {
                              onEvent: Instance.OnEvent?,
                              onEnd: Instance.OnEnd?,
                              onError: Instance.OnError?) -> ResumableSubscription {
+        
+        subscribeWithResume_actualCallCount += 1
         
         guard let subscribe_completionResult = subscribe_completionResult else {
             XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))`", file: file, line: line)

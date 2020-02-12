@@ -4,6 +4,7 @@ import XCTest
 public class DummyInstanceFactory: DummyBase, InstanceFactory {
     
     public func makeInstance(forType instanceType: InstanceType) -> Instance {
+        DummyFail(sender: self, function: #function)
         return DummyInstance(file: file, line: line)
     }
 }

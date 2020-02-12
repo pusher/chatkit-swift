@@ -98,9 +98,30 @@ public func XCTAssertType<ExpectedType>(_ expression: @autoclosure () throws -> 
     validateResult(typedResult)
 }
 
+public func XCTAssertExpectationUnfulfilled<ResultType>(_ expectation: XCTestExpectation.Expectation<ResultType>, _ message: String = "", file: StaticString = #file, line: UInt = #line) {
+    
+    switch expectation.state {
+    case let .fulfilled(result):
+        XCTFail("Expected expectation to be unfulfilled but it has already become fulfilled with result: \(result). \(message)", file: file, line: line)
+    case .unfulfilled:
+        () // passed
+    }
+}
+
+public func XCTAssertExpectationUnfulfilled<ResultTypeA, ResultTypeB>(_ expectation: XCTestExpectation.TwoArgExpectation<ResultTypeA, ResultTypeB>, _ message: String = "", file: StaticString = #file, line: UInt = #line) {
+    
+    switch expectation.state {
+    case let .fulfilled(result):
+        XCTFail("Expected expectation to be unfulfilled but it has already become fulfilled with result: \(result). \(message)", file: file, line: line)
+    case .unfulfilled:
+        () // passed
+    }
+}
+
+
 public func XCTAssertExpectationFulfilled<ResultType>(_ expectation: XCTestExpectation.Expectation<ResultType>, _ message: String = "", file: StaticString = #file, line: UInt = #line, also validateResult: (ResultType) -> Void) {
     
-    switch expectation.resultType {
+    switch expectation.state {
     case let .fulfilled(result):
         validateResult(result)
     case .unfulfilled:
@@ -110,7 +131,7 @@ public func XCTAssertExpectationFulfilled<ResultType>(_ expectation: XCTestExpec
 
 public func XCTAssertExpectationFulfilled<ResultTypeA, ResultTypeB>(_ expectation: XCTestExpectation.TwoArgExpectation<ResultTypeA, ResultTypeB>, _ message: String = "", file: StaticString = #file, line: UInt = #line, also validateResult: ((ResultTypeA, ResultTypeB)) -> Void) {
     
-    switch expectation.resultType {
+    switch expectation.state {
     case let .fulfilled(result):
         validateResult(result)
     case .unfulfilled:
