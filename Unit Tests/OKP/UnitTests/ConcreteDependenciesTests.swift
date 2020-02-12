@@ -30,14 +30,14 @@ class ConcreteDependenciesTests: XCTestCase {
         XCTAssertEqual(dependencies.instanceLocator.version, "version")
         XCTAssertEqual(dependencies.instanceLocator.region, "region")
         XCTAssertEqual(dependencies.instanceLocator.identifier, "identifier")
-        XCTAssertNotNil(dependencies.tokenProvider as? DummyTokenProvider)
-        XCTAssertNotNil(dependencies.sdkInfoProvider as? ConcreteSDKInfoProvider)
-        XCTAssertNotNil(dependencies.storeBroadcaster as? ConcreteStoreBroadcaster)
-        XCTAssertNotNil(dependencies.store as? ConcreteStore)
-        XCTAssertNotNil(dependencies.instanceFactory as? ConcreteInstanceFactory)
-        XCTAssertNotNil(dependencies.subscriptionResponder as? ConcreteSubscriptionResponder)
-        XCTAssertNotNil(dependencies.subscriptionFactory as? ConcreteSubscriptionFactory)
-        XCTAssertNotNil(dependencies.subscriptionManager as? ConcreteSubscriptionManager)
+        XCTAssertTrue(dependencies.tokenProvider is DummyTokenProvider)
+        XCTAssertTrue(dependencies.sdkInfoProvider is ConcreteSDKInfoProvider)
+        XCTAssertTrue(dependencies.storeBroadcaster is ConcreteStoreBroadcaster)
+        XCTAssertTrue(dependencies.store is ConcreteStore)
+        XCTAssertTrue(dependencies.instanceFactory is ConcreteInstanceFactory)
+        XCTAssertTrue(dependencies.subscriptionResponder is ConcreteSubscriptionResponder)
+        XCTAssertTrue(dependencies.subscriptionFactory is ConcreteSubscriptionFactory)
+        XCTAssertTrue(dependencies.subscriptionManager is ConcreteSubscriptionManager)
     }
     
     func test_initWithInstanceLocatorAndOverride_withInstanceLocatorAndOverride_overridesDepedencies() {
@@ -74,13 +74,13 @@ class ConcreteDependenciesTests: XCTestCase {
         XCTAssertEqual(dependencies.instanceLocator.version, "version")
         XCTAssertEqual(dependencies.instanceLocator.region, "region")
         XCTAssertEqual(dependencies.instanceLocator.identifier, "identifier")
-        XCTAssertNotNil(dependencies.sdkInfoProvider as? ConcreteSDKInfoProvider)
-        XCTAssertNotNil(dependencies.storeBroadcaster as? ConcreteStoreBroadcaster)
-        XCTAssertNotNil(dependencies.store as? StubStore) // <------ Not a `ConcreteStore`!
-        XCTAssertNotNil(dependencies.instanceFactory as? ConcreteInstanceFactory)
-        XCTAssertNotNil(dependencies.subscriptionResponder as? ConcreteSubscriptionResponder)
-        XCTAssertNotNil(dependencies.subscriptionFactory as? ConcreteSubscriptionFactory)
-        XCTAssertNotNil(dependencies.subscriptionManager as? ConcreteSubscriptionManager)
+        XCTAssertTrue(dependencies.sdkInfoProvider is ConcreteSDKInfoProvider)
+        XCTAssertTrue(dependencies.storeBroadcaster is ConcreteStoreBroadcaster)
+        XCTAssertTrue(dependencies.store is StubStore) // <------ Not a `ConcreteStore`!
+        XCTAssertTrue(dependencies.instanceFactory is ConcreteInstanceFactory)
+        XCTAssertTrue(dependencies.subscriptionResponder is ConcreteSubscriptionResponder)
+        XCTAssertTrue(dependencies.subscriptionFactory is ConcreteSubscriptionFactory)
+        XCTAssertTrue(dependencies.subscriptionManager is ConcreteSubscriptionManager)
     }
     
     // This tests the extension methods in `TestUtilities`
@@ -102,7 +102,7 @@ class ConcreteDependenciesTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertNotNil(dependencies.instanceFactory as? StubNetworking)
+        XCTAssertTrue(dependencies.instanceFactory is StubNetworking)
     }
     
     func test_initWithInstanceLocatorAndInstanceFactory_success() {
@@ -124,7 +124,7 @@ class ConcreteDependenciesTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertNotNil(dependencies.instanceFactory as? StubNetworking)
+        XCTAssertTrue(dependencies.instanceFactory is StubNetworking)
     }
     
 }
