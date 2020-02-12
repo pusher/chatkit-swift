@@ -4,13 +4,6 @@ protocol HasInstanceFactory {
     var instanceFactory: InstanceFactory { get }
 }
 
-enum InstanceType {
-    case subscription(SubscriptionType)
-    case service(ServiceType)
-}
-
-extension InstanceType: Hashable {}
-
 protocol InstanceFactory {
     func makeInstance(forType instanceType: InstanceType) -> Instance
 }

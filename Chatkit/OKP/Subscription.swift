@@ -2,13 +2,6 @@ import Foundation
 import class PusherPlatform.PPRequestOptions
 import enum PusherPlatform.HTTPMethod
 
-enum SubscriptionType {
-    case user
-    case room(roomIdentifier: String)
-}
-
-extension SubscriptionType: Hashable {}
-
 typealias SubscribeHandler = (VoidResult) -> Void
 
 protocol SubscriptionDelegate: AnyObject {
