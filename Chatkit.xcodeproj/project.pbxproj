@@ -669,6 +669,7 @@
 			children = (
 				22437C9723D86B750013E4A8 /* Authentication */,
 				227B8400230EAC3200921E0D /* Chatkit */,
+				732C8BD523F4142F006E7537 /* Dependencies */,
 				73A9392123E192DE0025AF90 /* Environment */,
 				227B83FF230EAC2A00921E0D /* Model */,
 				2274984A232107F700D10C76 /* Networking */,
@@ -1103,7 +1104,6 @@
 			isa = PBXGroup;
 			children = (
 				73EDEE5923D8C4E500DE566D /* Result */,
-				73233AD023CE4605001909B7 /* ConcreteDependenciesTests.swift */,
 				73EDEE5123D8ABCB00DE566D /* ConcreteInstanceFactoryTests.swift */,
 				737E3F7923EABE2300B50837 /* ConcreteInstanceTests.swift */,
 				732C8BD323F40750006E7537 /* ConcreteSubscriptionTests.swift */,
@@ -1125,6 +1125,14 @@
 				73F85D0A23D0D8A60008D0D6 /* StubNetworking.swift */,
 			);
 			path = Doubles;
+			sourceTree = "<group>";
+		};
+		732C8BD523F4142F006E7537 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				73233AD023CE4605001909B7 /* ConcreteDependenciesTests.swift */,
+			);
+			path = Dependencies;
 			sourceTree = "<group>";
 		};
 		737E3F8423EAC9E000B50837 /* Functional Tests */ = {
