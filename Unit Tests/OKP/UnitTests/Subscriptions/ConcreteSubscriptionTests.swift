@@ -5,14 +5,15 @@ import XCTest
 
 extension XCTestCase {
     
-    func setUp_notSubscribed(file: StaticString = #file, line: UInt = #line)
+    func setUp_notSubscribed(forType subscriptionType: SubscriptionType,
+                             file: StaticString = #file, line: UInt = #line)
         -> (ConcreteSubscription, StubInstance, StubInstanceFactory, StubSubscriptionDelegate) {
             
             let subscriptionType: SubscriptionType = .user
             let instanceType: InstanceType = .subscription(subscriptionType)
-            let result: VoidResult = .success
+            let instanceSubscribeResult: VoidResult = .success
             
-            let stubInstance = StubInstance(subscribe_completionResult: result)
+            let stubInstance = StubInstance(subscribe_completionResult: instanceSubscribeResult)
             
             let stubInstanceFactory = StubInstanceFactory(makeInstance_expectedTypesAndInstancesToReturn:
                 [(instanceType: instanceType, instance: stubInstance)])
@@ -34,10 +35,12 @@ extension XCTestCase {
             return (sut, stubInstance, stubInstanceFactory, stubDelegate)
     }
     
-    func setUp_subscribingStageTwo(file: StaticString = #file, line: UInt = #line)
+    func setUp_subscribingStageTwo(forType subscriptionType: SubscriptionType,
+                                   file: StaticString = #file, line: UInt = #line)
         -> (ConcreteSubscription, StubInstance, StubInstanceFactory, StubSubscriptionDelegate, XCTestExpectation.Expectation<VoidResult>) {
             
-            let (sut, stubInstance, stubInstanceFactory, stubDelegate) = setUp_notSubscribed()
+            let (sut, stubInstance, stubInstanceFactory, stubDelegate)
+                = setUp_notSubscribed(forType: subscriptionType)
             
             let expectation = XCTestExpectation.Subscription.subscribe
             
@@ -54,10 +57,12 @@ extension XCTestCase {
             return (sut, stubInstance, stubInstanceFactory, stubDelegate, expectation)
     }
     
-    func setUp_subscribed(file: StaticString = #file, line: UInt = #line)
+    func setUp_subscribed(forType subscriptionType: SubscriptionType,
+                          file: StaticString = #file, line: UInt = #line)
         -> (ConcreteSubscription, StubInstance, StubInstanceFactory, StubSubscriptionDelegate) {
             
-            let (sut, stubInstance, stubInstanceFactory, stubDelegate, expectation) = setUp_subscribingStageTwo()
+            let (sut, stubInstance, stubInstanceFactory, stubDelegate, expectation)
+                = setUp_subscribingStageTwo(forType: subscriptionType)
             
             let jsonData = "{}".toJsonData()
             stubInstance.fireSubscriptionEvent(jsonData: jsonData)
@@ -81,7 +86,6 @@ extension XCTestCase {
 }
 
 
-
 class ConcreteSubscriptionTests: XCTestCase {
     
     func test_subscribe_whenNotSubscribedAndEventSubsequentlyFires_completionInvokedWithSuccess() {
@@ -91,29 +95,10 @@ class ConcreteSubscriptionTests: XCTestCase {
         /******************/
         
         let subscriptionType: SubscriptionType = .user
-        let instanceType: InstanceType = .subscription(subscriptionType)
-        let result: VoidResult = .success
-        
-//        let stubInstance = StubInstance(subscribe_completionResult: result)
-//
-//        let stubInstanceFactory = StubInstanceFactory(makeInstance_expectedTypesAndInstancesToReturn:
-//            [(instanceType: instanceType, instance: stubInstance)])
-//        let dependencies = DependenciesDoubles(instanceFactory: stubInstanceFactory)
-//
-//        let stubDelegate = StubSubscriptionDelegate(didReceiveEvent_expectedCallCount: 1)
-//
-//        let sut = ConcreteSubscription(subscriptionType: subscriptionType,
-//                                       dependencies: dependencies,
-//                                       delegate: stubDelegate)
-//
-//
-//        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 0)
-//        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 0)
-//        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
-        
-        // `ConcreteSubscription.state` is currently `.notSubscribed`
-        
-        let (sut, stubInstance, stubInstanceFactory, stubDelegate) = setUp_notSubscribed()
+        let instanceSubscribeResult: VoidResult = .success
+
+        let (sut, stubInstance, stubInstanceFactory, stubDelegate)
+            = setUp_notSubscribed(forType: subscriptionType)
         
         /******************/
         /*----- WHEN -----*/
@@ -166,34 +151,10 @@ class ConcreteSubscriptionTests: XCTestCase {
         /******************/
         
         let subscriptionType: SubscriptionType = .user
-        let instanceType: InstanceType = .subscription(subscriptionType)
-        let result: VoidResult = .success
-        
-        //        let stubInstance = StubInstance(subscribe_completionResult: result)
-        //
-        //        let stubInstanceFactory = StubInstanceFactory(makeInstance_expectedTypesAndInstancesToReturn:
-        //            [(instanceType: instanceType, instance: stubInstance)])
-        //        let dependencies = DependenciesDoubles(instanceFactory: stubInstanceFactory)
-        //
-        //        let stubDelegate = StubSubscriptionDelegate(didReceiveEvent_expectedCallCount: 1)
-        //
-        //        let sut = ConcreteSubscription(subscriptionType: subscriptionType,
-        //                                       dependencies: dependencies,
-        //                                       delegate: stubDelegate)
-        //
-        //        let firstExpectation = XCTestExpectation.Subscription.subscribe
-        //
-        //        sut.subscribe(completion: firstExpectation.handler)
-        //
-        //        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
-        //        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
-        //        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
-        //
-        //        // `ConcreteSubscription.state` is currently `.subscribingStageTwo`
-        //        // And the first `completion` handler has not yet been invoked
+        let instanceSubscribeResult: VoidResult = .success
         
         let (sut, stubInstance, stubInstanceFactory, stubDelegate, firstExpectation)
-            = setUp_subscribingStageTwo()
+            = setUp_subscribingStageTwo(forType: subscriptionType)
         
         /******************/
         /*----- WHEN -----*/
@@ -256,42 +217,10 @@ class ConcreteSubscriptionTests: XCTestCase {
         /******************/
         
         let subscriptionType: SubscriptionType = .user
-        let instanceType: InstanceType = .subscription(subscriptionType)
-        let result: VoidResult = .success
-        
-        //        let stubInstance = StubInstance(subscribe_completionResult: result)
-        //
-        //        let stubInstanceFactory = StubInstanceFactory(makeInstance_expectedTypesAndInstancesToReturn:
-        //            [(instanceType: instanceType, instance: stubInstance)])
-        //        let dependencies = DependenciesDoubles(instanceFactory: stubInstanceFactory)
-        //
-        //        let stubDelegate = StubSubscriptionDelegate(didReceiveEvent_expectedCallCount: 1)
-        //
-        //        let sut = ConcreteSubscription(subscriptionType: subscriptionType,
-        //                                       dependencies: dependencies,
-        //                                       delegate: stubDelegate)
-        //
-        //        let firstExpectation = XCTestExpectation.Subscription.subscribe
-        //
-        //        sut.subscribe(completion: firstExpectation.handler)
-        //
-        //        let jsonData = "{}".toJsonData()
-        //        stubInstance.fireSubscriptionEvent(jsonData: jsonData)
-        //
-        //        wait(for: [firstExpectation], timeout: firstExpectation.timeout)
-        //
-        //        XCTAssertExpectationFulfilled(firstExpectation) { result in
-        //            XCTAssertEqual(result, .success)
-        //        }
-        //
-        //        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
-        //        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
-        //        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
-        //
-        //        // The first `completion` handler has already been invoked
-        //        // `ConcreteSubscription.state` is currently `.subscribed`
-        
-        let (sut, stubInstance, stubInstanceFactory, stubDelegate) = setUp_subscribed()
+        let instanceSubscribeResult: VoidResult = .success
+
+        let (sut, stubInstance, stubInstanceFactory, stubDelegate)
+            = setUp_subscribed(forType: subscriptionType)
         
         /******************/
         /*----- WHEN -----*/
