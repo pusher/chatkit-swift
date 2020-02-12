@@ -25,7 +25,7 @@ extension JoinedRoomsProvider: StoreListener {
     }
 }
 
-// TODO: no thought has gone into this what so ever, please re-write/move/rename etc
+// TODO: this needs to be completely replaced/rewritten as part of the `JoinedRoomsTransformer` work.
 class EntityParser {
     
     static func room(fromJoinedRoom joinedRoom: Internal.Room) -> Room {

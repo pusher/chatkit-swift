@@ -9,7 +9,7 @@ class ConcreteInstanceFactoryTests: XCTestCase {
     
     let instanceLocator = PusherPlatform.InstanceLocator(string: "version:region:identifier")!
     
-    func test_makeInstance_forServiceUser_returnsInstance() {
+    func test_makeInstance_forUserSubscription_returnsConcreteInstance() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -28,7 +28,7 @@ class ConcreteInstanceFactoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let instance = sut.makeInstance(forType: .service(.user))
+        let instance = sut.makeInstance(forType: .subscription(.user))
         
         /******************/
         /*----- THEN -----*/
