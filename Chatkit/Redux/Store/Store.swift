@@ -17,7 +17,7 @@ class ConcreteStore: Store {
     typealias Dependencies =
         HasMasterReducer
         & HasUserReducer
-        & HasRoomsReducer
+        & HasRoomListReducer
         & HasUserSubscriptionInitialStateReducer
         & HasUserSubscriptionRemovedFromRoomReducer
     

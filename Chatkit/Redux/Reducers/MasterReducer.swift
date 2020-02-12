@@ -9,7 +9,7 @@ extension Reducer {
         typealias StateType = MasterState
         typealias DependenciesType =
             HasUserReducer
-            & HasRoomsReducer
+            & HasRoomListReducer
             & HasUserSubscriptionInitialStateReducer
             & HasUserSubscriptionRemovedFromRoomReducer
         

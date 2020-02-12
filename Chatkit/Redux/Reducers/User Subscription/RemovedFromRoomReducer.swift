@@ -7,12 +7,12 @@ extension Reducer.UserSubscription {
         
         typealias ActionType = ReceivedRemovedFromRoomAction
         typealias StateType = MasterState
-        typealias DependenciesType = HasRoomsReducer
+        typealias DependenciesType = HasRoomListReducer
         
         // MARK: - Reducer
         
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
-            let joinedRooms = dependencies.roomsReducer(action, state.joinedRooms, dependencies)
+            let joinedRooms = dependencies.roomListReducer(action, state.joinedRooms, dependencies)
             
             return MasterState(users: state.users, currentUser: state.currentUser, joinedRooms: joinedRooms)
         }

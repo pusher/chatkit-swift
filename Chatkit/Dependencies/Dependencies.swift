@@ -6,7 +6,7 @@ protocol Dependencies:
     HasStore &
     HasMasterReducer &
     HasUserReducer &
-    HasRoomsReducer &
+    HasRoomListReducer &
     HasUserSubscriptionInitialStateReducer &
     HasUserSubscriptionRemovedFromRoomReducer
 {}
@@ -71,7 +71,7 @@ class ConcreteDependencies: Dependencies {
     
     let masterReducer = Reducer.Master.reduce
     let userReducer = Reducer.Model.User.reduce
-    let roomsReducer = Reducer.Model.Rooms.reduce
+    let roomListReducer = Reducer.Model.RoomList.reduce
     let initialStateUserSubscriptionReducer = Reducer.UserSubscription.InitialState.reduce
     let userSubscriptionRemovedFromRoomReducer = Reducer.UserSubscription.RemovedFromRoom.reduce
     

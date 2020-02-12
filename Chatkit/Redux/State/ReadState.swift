@@ -1,5 +1,5 @@
 
-struct RoomState: State {
+struct ReadState: State {
     
     // MARK: - Properties
     
@@ -16,4 +16,4 @@ struct RoomState: State {
 
 // MARK: - Equatable
 
-extension RoomState: Equatable {}
+extension ReadState: Equatable {}

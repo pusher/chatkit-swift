@@ -12,7 +12,7 @@ public class DependenciesDoubles: StubBase, Dependencies {
     
     public let masterReducer: Reducer.Master.ExpressionType
     public let userReducer: Reducer.Model.User.ExpressionType
-    public let roomsReducer: Reducer.Model.Rooms.ExpressionType
+    public let roomListReducer: Reducer.Model.RoomList.ExpressionType
     public let initialStateUserSubscriptionReducer: Reducer.UserSubscription.InitialState.ExpressionType
     public let userSubscriptionRemovedFromRoomReducer: Reducer.UserSubscription.RemovedFromRoom.ExpressionType
     
@@ -21,7 +21,7 @@ public class DependenciesDoubles: StubBase, Dependencies {
                 store: Store? = nil,
                 masterReducer: Reducer.Master.ExpressionType? = nil,
                 userReducer: Reducer.Model.User.ExpressionType? = nil,
-                roomsReducer: Reducer.Model.Rooms.ExpressionType? = nil,
+                roomListReducer: Reducer.Model.RoomList.ExpressionType? = nil,
                 initialStateUserSubscriptionReducer: Reducer.UserSubscription.InitialState.ExpressionType? = nil,
                 userSubscriptionRemovedFromRoomReducer: Reducer.UserSubscription.RemovedFromRoom.ExpressionType? = nil,
                 
@@ -35,8 +35,8 @@ public class DependenciesDoubles: StubBase, Dependencies {
             DummyReducer<Reducer.Master>(file: file, line: line).reduce
         self.userReducer = userReducer ??
             DummyReducer<Reducer.Model.User>(file: file, line: line).reduce
-        self.roomsReducer = roomsReducer ??
-            DummyReducer<Reducer.Model.Rooms>(file: file, line: line).reduce
+        self.roomListReducer = roomListReducer ??
+            DummyReducer<Reducer.Model.RoomList>(file: file, line: line).reduce
         self.initialStateUserSubscriptionReducer = initialStateUserSubscriptionReducer ??
             DummyReducer<Reducer.UserSubscription.InitialState>(file: file, line: line).reduce
         self.userSubscriptionRemovedFromRoomReducer = userSubscriptionRemovedFromRoomReducer ??

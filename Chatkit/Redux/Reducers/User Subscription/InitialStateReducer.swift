@@ -8,20 +8,15 @@ extension Reducer.UserSubscription {
         typealias ActionType = ReceivedInitialStateAction
         typealias StateType = MasterState
         typealias DependenciesType = HasUserReducer
-            & HasRoomsReducer
+            & HasRoomListReducer
         
         // MARK: - Reducer
         
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
             let currentUser = dependencies.userReducer(action, state.currentUser, dependencies)
-            let joinedRooms = dependencies.roomsReducer(action, state.joinedRooms, dependencies)
+            let joinedRooms = dependencies.roomListReducer(action, state.joinedRooms, dependencies)
             
-            let users: [UserState]
-            if let currentUser = currentUser {
-                users = [currentUser]
-            } else {
-                users = []
-            }
+            let users: [UserState] = currentUser == .empty ? [] : [currentUser]
             
             return MasterState(users: users, currentUser: currentUser, joinedRooms: joinedRooms)
         }

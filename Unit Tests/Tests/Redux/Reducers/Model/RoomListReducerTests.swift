@@ -2,14 +2,7 @@ import XCTest
 import TestUtilities
 @testable import PusherChatkit
 
-class UserSubscriptionReducerTests: XCTestCase {
-    
-    // MARK: - Properties
-    
-    let testUser = UserState.populated(
-        identifier: "alice",
-        name: "Alice A"
-    )
+class RoomsReducerTests: XCTestCase {
     
     // MARK: - Tests
     
@@ -19,7 +12,7 @@ class UserSubscriptionReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let inputState: MasterState = .empty
+        let inputState: RoomListState = .empty
         
         let action = ReceivedInitialStateAction(
             event: Wire.Event.InitialState(
@@ -63,52 +56,43 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
-        let userReducer_stateToReturn = self.testUser
-        
-        let roomsReducer_stateToReturn = [
-            RoomState(
-                identifier: "first-room",
-                name: "First",
-                isPrivate: true,
-                pushNotificationTitle: "title",
-                customData: nil,
-                lastMessageAt: .distantPast,
-                createdAt: .distantPast,
-                updatedAt: .distantPast
-            ),
-            RoomState(
-                identifier: "second-room",
-                name: "Second",
-                isPrivate: false,
-                pushNotificationTitle: nil,
-                customData: [
-                    "key" : "value"
-                ],
-                lastMessageAt: .distantPast,
-                createdAt: .distantPast,
-                updatedAt: .distantPast
-            )
-        ]
-        
-        let stubUsersReducer = StubReducer<Reducer.Model.User>(reduce_stateToReturn: userReducer_stateToReturn, reduce_expectedCallCount: 1)
-        let stubRoomsReducer = StubReducer<Reducer.Model.Rooms>(reduce_stateToReturn: roomsReducer_stateToReturn, reduce_expectedCallCount: 1)
-        
-        let dependencies = DependenciesDoubles(userReducer: stubUsersReducer.reduce, roomsReducer: stubRoomsReducer.reduce)
+        let dependencies = DependenciesDoubles()
         
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.UserSubscription.InitialState.reduce(action: action, state: inputState, dependencies: dependencies)
+        let outputState = Reducer.Model.RoomList.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedState = MasterState(
-            users: [userReducer_stateToReturn],
-            currentUser: userReducer_stateToReturn,
-            joinedRooms: roomsReducer_stateToReturn
+        let expectedState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: true,
+                    pushNotificationTitle: "title",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                "second-room" : RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: nil,
+                    customData: [
+                        "key" : "value"
+                    ],
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
         )
         
         XCTAssertEqual(outputState, expectedState)
@@ -120,11 +104,9 @@ class UserSubscriptionReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let inputState = MasterState(
-            users: [self.testUser],
-            currentUser: self.testUser,
-            joinedRooms: [
-                RoomState(
+        let inputState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -134,7 +116,7 @@ class UserSubscriptionReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                RoomState(
+                "second-room" : RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -153,38 +135,21 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
-        let reducer_stateToReturn = [
-            RoomState(
-                identifier: "first-room",
-                name: "First",
-                isPrivate: false,
-                pushNotificationTitle: "nil",
-                customData: nil,
-                lastMessageAt: .distantPast,
-                createdAt: .distantPast,
-                updatedAt: .distantPast
-            )
-        ]
-        
-        let stubReducer = StubReducer<Reducer.Model.Rooms>(reduce_stateToReturn: reducer_stateToReturn, reduce_expectedCallCount: 1)
-        
-        let dependencies = DependenciesDoubles(roomsReducer: stubReducer.reduce)
+        let dependencies = DependenciesDoubles()
         
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.UserSubscription.RemovedFromRoom.reduce(action: action, state: inputState, dependencies: dependencies)
+        let outputState = Reducer.Model.RoomList.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedState = MasterState(
-            users: [self.testUser],
-            currentUser: self.testUser,
-            joinedRooms: [
-                RoomState(
+        let expectedState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -206,11 +171,9 @@ class UserSubscriptionReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let inputState = MasterState(
-            users: [self.testUser],
-            currentUser: self.testUser,
-            joinedRooms: [
-                RoomState(
+        let inputState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -220,7 +183,7 @@ class UserSubscriptionReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                RoomState(
+                "second-room" : RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -239,47 +202,114 @@ class UserSubscriptionReducerTests: XCTestCase {
             )
         )
         
-        let reducer_stateToReturn = [
-            RoomState(
-                identifier: "first-room",
-                name: "First",
-                isPrivate: false,
-                pushNotificationTitle: "nil",
-                customData: nil,
-                lastMessageAt: .distantPast,
-                createdAt: .distantPast,
-                updatedAt: .distantPast
-            ),
-            RoomState(
-                identifier: "second-room",
-                name: "Second",
-                isPrivate: false,
-                pushNotificationTitle: "nil",
-                customData: nil,
-                lastMessageAt: .distantPast,
-                createdAt: .distantPast,
-                updatedAt: .distantPast
-            )
-        ]
-        
-        let stubReducer = StubReducer<Reducer.Model.Rooms>(reduce_stateToReturn: reducer_stateToReturn, reduce_expectedCallCount: 1)
-        
-        let dependencies = DependenciesDoubles(roomsReducer: stubReducer.reduce)
+        let dependencies = DependenciesDoubles()
         
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.UserSubscription.RemovedFromRoom.reduce(action: action, state: inputState, dependencies: dependencies)
+        let outputState = Reducer.Model.RoomList.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedState = MasterState(
-            users: inputState.users,
-            currentUser: inputState.currentUser,
-            joinedRooms: reducer_stateToReturn
+        let expectedState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                "second-room" : RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
+        )
+        
+        XCTAssertEqual(outputState, expectedState)
+    }
+    
+    func test_reduce_withCurrentStateAndUnsupportedAction_returnsUnmodifiedState() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let inputState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                "second-room" : RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
+        )
+        
+        let action = DummyAction()
+        
+        let dependencies = DependenciesDoubles()
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let outputState = Reducer.Model.RoomList.reduce(action: action, state: inputState, dependencies: dependencies)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        let expectedState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                "second-room" : RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: "nil",
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
         )
         
         XCTAssertEqual(outputState, expectedState)
