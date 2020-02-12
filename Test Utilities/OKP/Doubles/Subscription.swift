@@ -23,7 +23,6 @@ public class StubSubscription: DoubleBase, Subscription {
     private let delegate: SubscriptionDelegate?
     
     private var isSubscribed = false
-    public private(set) var action_lastReceived: Action?
             
     public init(subscribe_completionResults: [VoidResult] = [],
                 unsubscribe_expectedCallCount: UInt = 0,
@@ -42,7 +41,7 @@ public class StubSubscription: DoubleBase, Subscription {
             XCTFail("Unexpected call to \(#function) on \(String(describing: self)) when not subscribed", file: file, line: line)
             return
         }
-        self.delegate?.subscription(self, didReceiveEventWithJsonData: jsonData)
+        delegate?.subscription(self, didReceiveEventWithJsonData: jsonData)
     }
     
     // MARK: Subscription
@@ -56,9 +55,9 @@ public class StubSubscription: DoubleBase, Subscription {
         }
         
         if case .success = subscribe_completionResult {
-            self.isSubscribed = true
+            isSubscribed = true
         } else {
-            self.isSubscribed = false
+            isSubscribed = false
         }
         
         completion(subscribe_completionResult)
@@ -70,5 +69,6 @@ public class StubSubscription: DoubleBase, Subscription {
             XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: file, line: line)
             return
         }
+        isSubscribed = false
     }
 }
