@@ -1,5 +1,0 @@
-
-
-enum ServiceType {
-    case user
-}

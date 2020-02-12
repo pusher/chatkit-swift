@@ -98,10 +98,6 @@ public class StubNetworking: DoubleBase, InstanceFactory {
             registeredStubInstances[instanceType] = stubInstance
             
             return stubInstance
-            
-        case .service:
-            XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))` with instanceType: `\(instanceType)`", file: file, line: line)
-            return DummyInstance(file: file, line: line)
         }
     }
 }
