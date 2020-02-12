@@ -13,7 +13,7 @@ class InitialStateReducerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_reduce_withCurrentStateAndReceivedInitialStateAction_returnsModifiedState() {
+    func test_reduce_withCurrentStateAndInitialStateAction_returnsModifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -21,7 +21,7 @@ class InitialStateReducerTests: XCTestCase {
         
         let inputState: MasterState = .empty
         
-        let action = ReceivedInitialStateAction(
+        let action = InitialStateAction(
             event: Wire.Event.InitialState(
                 currentUser: Wire.User(
                     identifier: "alice",
@@ -58,7 +58,18 @@ class InitialStateReducerTests: XCTestCase {
                         updatedAt: .distantPast,
                         deletedAt: nil)
                 ],
-                readStates: [],
+                readStates: [
+                    Wire.ReadState(
+                        roomIdentifier: "first-room",
+                        unreadCount: 10,
+                        cursor: nil
+                    ),
+                    Wire.ReadState(
+                        roomIdentifier: "second-room",
+                        unreadCount: 0,
+                        cursor: nil
+                    )
+                ],
                 memberships: []
             )
         )
@@ -74,6 +85,9 @@ class InitialStateReducerTests: XCTestCase {
                     pushNotificationTitle: "title",
                     customData: nil,
                     lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 10
+                    ),
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
@@ -86,6 +100,9 @@ class InitialStateReducerTests: XCTestCase {
                         "key" : "value"
                     ],
                     lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 0
+                    ),
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 )
@@ -116,7 +133,7 @@ class InitialStateReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withCurrentStateAndReceivedInitialStateActionWithEmptyUserState_returnsEmptyListOfUsers() {
+    func test_reduce_withCurrentStateAndInitialStateActionWithEmptyUserState_returnsEmptyListOfUsers() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -124,7 +141,7 @@ class InitialStateReducerTests: XCTestCase {
         
         let inputState: MasterState = .empty
         
-        let action = ReceivedInitialStateAction(
+        let action = InitialStateAction(
             event: Wire.Event.InitialState(
                 currentUser: Wire.User(
                     identifier: "alice",
@@ -161,7 +178,18 @@ class InitialStateReducerTests: XCTestCase {
                         updatedAt: .distantPast,
                         deletedAt: nil)
                 ],
-                readStates: [],
+                readStates: [
+                    Wire.ReadState(
+                        roomIdentifier: "first-room",
+                        unreadCount: 10,
+                        cursor: nil
+                    ),
+                    Wire.ReadState(
+                        roomIdentifier: "second-room",
+                        unreadCount: 0,
+                        cursor: nil
+                    )
+                ],
                 memberships: []
             )
         )
@@ -177,6 +205,9 @@ class InitialStateReducerTests: XCTestCase {
                     pushNotificationTitle: "title",
                     customData: nil,
                     lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 10
+                    ),
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
@@ -189,6 +220,9 @@ class InitialStateReducerTests: XCTestCase {
                         "key" : "value"
                     ],
                     lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 0
+                    ),
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 )

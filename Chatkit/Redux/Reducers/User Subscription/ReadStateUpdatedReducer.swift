@@ -1,11 +1,11 @@
 
 extension Reducer.UserSubscription {
     
-    struct RemovedFromRoom: Reducing {
+    struct ReadStateUpdated: Reducing {
         
         // MARK: - Types
         
-        typealias ActionType = RemovedFromRoomAction
+        typealias ActionType = ReadStateUpdatedAction
         typealias StateType = MasterState
         typealias DependenciesType = HasRoomListReducer
         
@@ -23,8 +23,8 @@ extension Reducer.UserSubscription {
 
 // MARK: - Dependencies
 
-protocol HasUserSubscriptionRemovedFromRoomReducer {
+protocol HasUserSubscriptionReadStateUpdatedReducer {
     
-    var userSubscriptionRemovedFromRoomReducer: Reducer.UserSubscription.RemovedFromRoom.ExpressionType { get }
+    var userSubscriptionReadStateUpdatedReducer: Reducer.UserSubscription.ReadStateUpdated.ExpressionType { get }
     
 }

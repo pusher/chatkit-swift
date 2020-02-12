@@ -8,7 +8,8 @@ protocol Dependencies:
     HasUserReducer &
     HasRoomListReducer &
     HasUserSubscriptionInitialStateReducer &
-    HasUserSubscriptionRemovedFromRoomReducer
+    HasUserSubscriptionRemovedFromRoomReducer &
+    HasUserSubscriptionReadStateUpdatedReducer
 {}
 
 typealias NoDependencies = Any
@@ -74,6 +75,7 @@ class ConcreteDependencies: Dependencies {
     let roomListReducer = Reducer.Model.RoomList.reduce
     let initialStateUserSubscriptionReducer = Reducer.UserSubscription.InitialState.reduce
     let userSubscriptionRemovedFromRoomReducer = Reducer.UserSubscription.RemovedFromRoom.reduce
+    let userSubscriptionReadStateUpdatedReducer = Reducer.UserSubscription.ReadStateUpdated.reduce
     
     // `override` gives tests an opportunity to override any concrete dependencies with test doubles.
     init(instanceLocator: InstanceLocator, override: ((DependencyFactory) -> Void)? = nil) {

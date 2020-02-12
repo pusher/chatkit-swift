@@ -5,7 +5,7 @@ extension Reducer.Model {
         
         // MARK: - Types
         
-        typealias ActionType = ReceivedInitialStateAction
+        typealias ActionType = InitialStateAction
         typealias StateType = UserState
         typealias DependenciesType = NoDependencies
         

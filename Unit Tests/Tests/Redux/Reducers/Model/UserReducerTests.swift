@@ -6,7 +6,7 @@ class UserReducerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_reduce_withCurrentStateAndReceivedInitialStateAction_returnsModifiedState() {
+    func test_reduce_withCurrentStateAndInitialStateAction_returnsModifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -14,7 +14,7 @@ class UserReducerTests: XCTestCase {
         
         let inputState: UserState = .empty
         
-        let action = ReceivedInitialStateAction(
+        let action = InitialStateAction(
             event: Wire.Event.InitialState(
                 currentUser: Wire.User(
                     identifier: "alice",

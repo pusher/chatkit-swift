@@ -9,6 +9,7 @@ struct RoomState: State {
     let pushNotificationTitle: String?
     let customData: [String: AnyHashable]?
     let lastMessageAt: Date?
+    let readSummary: ReadSummaryState
     let createdAt: Date
     let updatedAt: Date
     

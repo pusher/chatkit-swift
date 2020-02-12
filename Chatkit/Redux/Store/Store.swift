@@ -20,6 +20,7 @@ class ConcreteStore: Store {
         & HasRoomListReducer
         & HasUserSubscriptionInitialStateReducer
         & HasUserSubscriptionRemovedFromRoomReducer
+        & HasUserSubscriptionReadStateUpdatedReducer
     
     private let dependencies: Dependencies
     private weak var delegate: StoreDelegate?

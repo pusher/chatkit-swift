@@ -5,7 +5,7 @@ extension Reducer.UserSubscription {
         
         // MARK: - Types
         
-        typealias ActionType = ReceivedInitialStateAction
+        typealias ActionType = InitialStateAction
         typealias StateType = MasterState
         typealias DependenciesType = HasUserReducer
             & HasRoomListReducer

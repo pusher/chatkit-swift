@@ -12,16 +12,20 @@ extension Reducer {
             & HasRoomListReducer
             & HasUserSubscriptionInitialStateReducer
             & HasUserSubscriptionRemovedFromRoomReducer
+            & HasUserSubscriptionReadStateUpdatedReducer
         
         // MARK: - Reducer
         
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
             
-            if let action = action as? ReceivedInitialStateAction {
+            if let action = action as? InitialStateAction {
                 return dependencies.initialStateUserSubscriptionReducer(action, state, dependencies)
             }
-            else if let action = action as? ReceivedRemovedFromRoomAction {
+            else if let action = action as? RemovedFromRoomAction {
                 return dependencies.userSubscriptionRemovedFromRoomReducer(action, state, dependencies)
+            }
+            else if let action = action as? ReadStateUpdatedAction {
+                return dependencies.userSubscriptionReadStateUpdatedReducer(action, state, dependencies)
             }
             
             return state

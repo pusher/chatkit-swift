@@ -1,5 +1,5 @@
 
-class ReceivedRemovedFromRoomAction: Action {
+class RemovedFromRoomAction: Action {
     
     // MARK: - Properties
     
@@ -15,9 +15,9 @@ class ReceivedRemovedFromRoomAction: Action {
 
 // MARK: - Equatable
 
-extension ReceivedRemovedFromRoomAction: Equatable {
+extension RemovedFromRoomAction: Equatable {
     
-    static func == (lhs: ReceivedRemovedFromRoomAction, rhs: ReceivedRemovedFromRoomAction) -> Bool {
+    static func == (lhs: RemovedFromRoomAction, rhs: RemovedFromRoomAction) -> Bool {
         return lhs.event == rhs.event
     }
     

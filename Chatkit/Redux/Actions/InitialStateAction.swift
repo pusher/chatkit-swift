@@ -1,5 +1,5 @@
 
-class ReceivedInitialStateAction: Action {
+class InitialStateAction: Action {
     
     // MARK: - Properties
     
@@ -15,9 +15,9 @@ class ReceivedInitialStateAction: Action {
 
 // MARK: - Equatable
 
-extension ReceivedInitialStateAction: Equatable {
+extension InitialStateAction: Equatable {
     
-    static func == (lhs: ReceivedInitialStateAction, rhs: ReceivedInitialStateAction) -> Bool {
+    static func == (lhs: InitialStateAction, rhs: InitialStateAction) -> Bool {
         return lhs.event == rhs.event
     }
     
