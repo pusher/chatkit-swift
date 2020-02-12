@@ -3,7 +3,7 @@ import XCTest
 import struct PusherPlatform.InstanceLocator
 @testable import PusherChatkit
 
-class ConcreteDependencyTests: XCTestCase {
+class ConcreteDependenciesTests: XCTestCase {
     
     let instanceLocator = PusherPlatform.InstanceLocator(string: "version:region:identifier")!
     
