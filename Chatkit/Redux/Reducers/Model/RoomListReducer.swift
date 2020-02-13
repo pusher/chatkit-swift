@@ -18,6 +18,9 @@ extension Reducer.Model {
             else if let action = action as? RemovedFromRoomAction {
                 return self.reduce(action: action, state: state, dependencies: dependencies)
             }
+            else if let action = action as? RoomUpdatedAction {
+                return self.reduce(action: action, state: state, dependencies: dependencies)
+            }
             else if let action = action as? RoomDeletedAction {
                 return self.reduce(action: action, state: state, dependencies: dependencies)
             }
@@ -58,6 +61,27 @@ extension Reducer.Model {
         
         private static func reduce(action: RoomDeletedAction, state: StateType, dependencies: DependenciesType) -> StateType {
             return self.deleteRoom(identifier: action.event.roomIdentifier, from: state)
+        }
+        
+        private static func reduce(action: RoomUpdatedAction, state: StateType, dependencies: DependenciesType) -> StateType {
+            guard let currentRoom = state.rooms[action.event.room.identifier] else {
+                return state
+            }
+            
+            let updatedRoom = RoomState(identifier: action.event.room.identifier,
+                                        name: action.event.room.name,
+                                        isPrivate: action.event.room.isPrivate,
+                                        pushNotificationTitle: action.event.room.pushNotificationTitleOverride,
+                                        customData: action.event.room.customData,
+                                        lastMessageAt: action.event.room.lastMessageAt,
+                                        readSummary: currentRoom.readSummary,
+                                        createdAt: action.event.room.createdAt,
+                                        updatedAt: action.event.room.updatedAt)
+            
+            var updatedRooms = state.rooms
+            updatedRooms[updatedRoom.identifier] = updatedRoom
+            
+            return RoomListState(rooms: updatedRooms)
         }
         
         private static func reduce(action: ReadStateUpdatedAction, state: StateType, dependencies: DependenciesType) -> StateType {

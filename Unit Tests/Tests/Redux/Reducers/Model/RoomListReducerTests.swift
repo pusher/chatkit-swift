@@ -229,7 +229,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -242,7 +242,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -278,7 +278,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -305,7 +305,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -318,7 +318,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -354,7 +354,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -367,7 +367,207 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 0
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
+        )
+        
+        XCTAssertEqual(outputState, expectedState)
+    }
+    
+    func test_reduce_withCurrentStateAndRoomUpdatedActionForExistingRoom_returnsModifiedState() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let inputState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: nil,
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 10
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                "second-room" : RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: nil,
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 0
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
+        )
+        
+        let action = RoomUpdatedAction(
+            event: Wire.Event.RoomUpdated(
+                room: Wire.Room(
+                    identifier: "second-room",
+                    name: "Second Room",
+                    createdById: TestState.userIdentifier,
+                    isPrivate: true,
+                    pushNotificationTitleOverride: nil,
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast,
+                    deletedAt: .distantPast
+                )
+            )
+        )
+        
+        let dependencies = DependenciesDoubles()
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let outputState = Reducer.Model.RoomList.reduce(action: action, state: inputState, dependencies: dependencies)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        let expectedState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: nil,
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 10
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                "second-room" : RoomState(
+                    identifier: "second-room",
+                    name: "Second Room",
+                    isPrivate: true,
+                    pushNotificationTitle: nil,
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 0
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
+        )
+        
+        XCTAssertEqual(outputState, expectedState)
+    }
+    
+    func test_reduce_withCurrentStateAndRoomUpdatedActionForNonExistingRoom_returnsUnmodifiedState() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let inputState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: nil,
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 10
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                "second-room" : RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: nil,
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 0
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                )
+            ]
+        )
+        
+        let action = RoomUpdatedAction(
+            event: Wire.Event.RoomUpdated(
+                room: Wire.Room(
+                    identifier: "third-room",
+                    name: "Third",
+                    createdById: TestState.userIdentifier,
+                    isPrivate: true,
+                    pushNotificationTitleOverride: nil,
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast,
+                    deletedAt: .distantPast
+                )
+            )
+        )
+        
+        let dependencies = DependenciesDoubles()
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let outputState = Reducer.Model.RoomList.reduce(action: action, state: inputState, dependencies: dependencies)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        let expectedState = RoomListState(
+            rooms: [
+                "first-room" : RoomState(
+                    identifier: "first-room",
+                    name: "First",
+                    isPrivate: false,
+                    pushNotificationTitle: nil,
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 10
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast
+                ),
+                "second-room" : RoomState(
+                    identifier: "second-room",
+                    name: "Second",
+                    isPrivate: false,
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -394,7 +594,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -407,7 +607,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -443,7 +643,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -470,7 +670,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -483,7 +683,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -519,7 +719,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -532,7 +732,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -559,7 +759,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -572,7 +772,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -611,7 +811,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -624,7 +824,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -651,7 +851,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -664,7 +864,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -703,7 +903,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -716,7 +916,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -743,7 +943,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -756,11 +956,11 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
-                        unreadCount: 0
+                        unreadCount: 20
                     ),
                     createdAt: .distantPast,
                     updatedAt: .distantPast
@@ -788,7 +988,7 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
@@ -801,11 +1001,11 @@ class RoomsReducerTests: XCTestCase {
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: ReadSummaryState(
-                        unreadCount: 0
+                        unreadCount: 20
                     ),
                     createdAt: .distantPast,
                     updatedAt: .distantPast

@@ -2,11 +2,11 @@ import XCTest
 import TestUtilities
 @testable import PusherChatkit
 
-class ReadStateUpdatedReducerTests: XCTestCase {
+class RoomUpdatedReducerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_reduce_withCurrentStateAndReadStateUpdatedAction_returnsStateFromDedicatedReducer() {
+    func test_reduce_withCurrentStateAndRoomUpdatedAction_returnsStateFromDedicatedReducer() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -23,9 +23,7 @@ class ReadStateUpdatedReducerTests: XCTestCase {
                         pushNotificationTitle: nil,
                         customData: nil,
                         lastMessageAt: .distantPast,
-                        readSummary: ReadSummaryState(
-                            unreadCount: 10
-                        ),
+                        readSummary: .empty,
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     ),
@@ -36,9 +34,7 @@ class ReadStateUpdatedReducerTests: XCTestCase {
                         pushNotificationTitle: nil,
                         customData: nil,
                         lastMessageAt: .distantPast,
-                        readSummary: ReadSummaryState(
-                            unreadCount: 0
-                        ),
+                        readSummary: .empty,
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     )
@@ -47,12 +43,20 @@ class ReadStateUpdatedReducerTests: XCTestCase {
             users: TestState.userList
         )
         
-        let action = ReadStateUpdatedAction(
-            event: Wire.Event.ReadStateUpdated(
-                readState: Wire.ReadState(
-                    roomIdentifier: "second-room",
-                    unreadCount: 20,
-                    cursor: nil)
+        let action = RoomUpdatedAction(
+            event: Wire.Event.RoomUpdated(
+                room: Wire.Room(
+                    identifier: "second-room",
+                    name: "Second Room",
+                    createdById: TestState.userIdentifier,
+                    isPrivate: true,
+                    pushNotificationTitleOverride: nil,
+                    customData: nil,
+                    lastMessageAt: .distantPast,
+                    createdAt: .distantPast,
+                    updatedAt: .distantPast,
+                    deletedAt: .distantPast
+                )
             )
         )
         
@@ -65,22 +69,18 @@ class ReadStateUpdatedReducerTests: XCTestCase {
                     pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
-                    readSummary: ReadSummaryState(
-                        unreadCount: 10
-                    ),
+                    readSummary: .empty,
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
                 "second-room" : RoomState(
                     identifier: "second-room",
-                    name: "Second",
-                    isPrivate: false,
+                    name: "Second Room",
+                    isPrivate: true,
                     pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
-                    readSummary: ReadSummaryState(
-                        unreadCount: 20
-                    ),
+                    readSummary: .empty,
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 )
@@ -95,7 +95,7 @@ class ReadStateUpdatedReducerTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let outputState = Reducer.UserSubscription.ReadStateUpdated.reduce(action: action, state: inputState, dependencies: dependencies)
+        let outputState = Reducer.UserSubscription.RoomUpdated.reduce(action: action, state: inputState, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -112,22 +112,18 @@ class ReadStateUpdatedReducerTests: XCTestCase {
                         pushNotificationTitle: nil,
                         customData: nil,
                         lastMessageAt: .distantPast,
-                        readSummary: ReadSummaryState(
-                            unreadCount: 10
-                        ),
+                        readSummary: .empty,
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     ),
                     "second-room" : RoomState(
                         identifier: "second-room",
-                        name: "Second",
-                        isPrivate: false,
+                        name: "Second Room",
+                        isPrivate: true,
                         pushNotificationTitle: nil,
                         customData: nil,
                         lastMessageAt: .distantPast,
-                        readSummary: ReadSummaryState(
-                            unreadCount: 20
-                        ),
+                        readSummary: .empty,
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     )

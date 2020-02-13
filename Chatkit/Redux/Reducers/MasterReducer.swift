@@ -12,6 +12,7 @@ extension Reducer {
             & HasRoomListReducer
             & HasUserSubscriptionInitialStateReducer
             & HasUserSubscriptionRemovedFromRoomReducer
+            & HasUserSubscriptionRoomUpdatedReducer
             & HasUserSubscriptionRoomDeletedReducer
             & HasUserSubscriptionReadStateUpdatedReducer
         
@@ -24,6 +25,9 @@ extension Reducer {
             }
             else if let action = action as? RemovedFromRoomAction {
                 return dependencies.userSubscriptionRemovedFromRoomReducer(action, state, dependencies)
+            }
+            else if let action = action as? RoomUpdatedAction {
+                return dependencies.userSubscriptionRoomUpdatedReducer(action, state, dependencies)
             }
             else if let action = action as? RoomDeletedAction {
                 return dependencies.userSubscriptionRoomDeletedReducer(action, state, dependencies)

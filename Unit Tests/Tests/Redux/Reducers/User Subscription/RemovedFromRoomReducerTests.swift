@@ -6,7 +6,7 @@ class RemovedFromRoomReducerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_reduce_withCurrentStateAndRemovedFromRoomActionForExistingRoom_returnsStateFromDedicatedReducer() {
+    func test_reduce_withCurrentStateAndRemovedFromRoomAction_returnsStateFromDedicatedReducer() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -20,7 +20,7 @@ class RemovedFromRoomReducerTests: XCTestCase {
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
-                        pushNotificationTitle: "nil",
+                        pushNotificationTitle: nil,
                         customData: nil,
                         lastMessageAt: .distantPast,
                         readSummary: .empty,
@@ -31,7 +31,7 @@ class RemovedFromRoomReducerTests: XCTestCase {
                         identifier: "second-room",
                         name: "Second",
                         isPrivate: false,
-                        pushNotificationTitle: "nil",
+                        pushNotificationTitle: nil,
                         customData: nil,
                         lastMessageAt: .distantPast,
                         readSummary: .empty,
@@ -55,7 +55,7 @@ class RemovedFromRoomReducerTests: XCTestCase {
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
-                    pushNotificationTitle: "nil",
+                    pushNotificationTitle: nil,
                     customData: nil,
                     lastMessageAt: .distantPast,
                     readSummary: .empty,
@@ -87,7 +87,7 @@ class RemovedFromRoomReducerTests: XCTestCase {
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
-                        pushNotificationTitle: "nil",
+                        pushNotificationTitle: nil,
                         customData: nil,
                         lastMessageAt: .distantPast,
                         readSummary: .empty,

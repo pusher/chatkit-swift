@@ -15,6 +15,7 @@ public class DependenciesDoubles: StubBase, Dependencies {
     public let roomListReducer: Reducer.Model.RoomList.ExpressionType
     public let initialStateUserSubscriptionReducer: Reducer.UserSubscription.InitialState.ExpressionType
     public let userSubscriptionRemovedFromRoomReducer: Reducer.UserSubscription.RemovedFromRoom.ExpressionType
+    public let userSubscriptionRoomUpdatedReducer: Reducer.UserSubscription.RoomUpdated.ExpressionType
     public let userSubscriptionRoomDeletedReducer: Reducer.UserSubscription.RoomDeleted.ExpressionType
     public let userSubscriptionReadStateUpdatedReducer: Reducer.UserSubscription.ReadStateUpdated.ExpressionType
     
@@ -26,6 +27,7 @@ public class DependenciesDoubles: StubBase, Dependencies {
                 roomListReducer: Reducer.Model.RoomList.ExpressionType? = nil,
                 initialStateUserSubscriptionReducer: Reducer.UserSubscription.InitialState.ExpressionType? = nil,
                 userSubscriptionRemovedFromRoomReducer: Reducer.UserSubscription.RemovedFromRoom.ExpressionType? = nil,
+                userSubscriptionRoomUpdatedReducer: Reducer.UserSubscription.RoomUpdated.ExpressionType? = nil,
                 userSubscriptionRoomDeletedReducer: Reducer.UserSubscription.RoomDeleted.ExpressionType? = nil,
                 userSubscriptionReadStateUpdatedReducer: Reducer.UserSubscription.ReadStateUpdated.ExpressionType? = nil,
                 
@@ -45,6 +47,8 @@ public class DependenciesDoubles: StubBase, Dependencies {
             DummyReducer<Reducer.UserSubscription.InitialState>(file: file, line: line).reduce
         self.userSubscriptionRemovedFromRoomReducer = userSubscriptionRemovedFromRoomReducer ??
             DummyReducer<Reducer.UserSubscription.RemovedFromRoom>(file: file, line: line).reduce
+        self.userSubscriptionRoomUpdatedReducer = userSubscriptionRoomUpdatedReducer ??
+            DummyReducer<Reducer.UserSubscription.RoomUpdated>(file: file, line: line).reduce
         self.userSubscriptionRoomDeletedReducer = userSubscriptionRoomDeletedReducer ??
             DummyReducer<Reducer.UserSubscription.RoomDeleted>(file: file, line: line).reduce
         self.userSubscriptionReadStateUpdatedReducer = userSubscriptionReadStateUpdatedReducer ??

@@ -9,6 +9,7 @@ protocol Dependencies:
     HasRoomListReducer &
     HasUserSubscriptionInitialStateReducer &
     HasUserSubscriptionRemovedFromRoomReducer &
+    HasUserSubscriptionRoomUpdatedReducer &
     HasUserSubscriptionRoomDeletedReducer &
     HasUserSubscriptionReadStateUpdatedReducer
 {}
@@ -76,6 +77,7 @@ class ConcreteDependencies: Dependencies {
     let roomListReducer = Reducer.Model.RoomList.reduce
     let initialStateUserSubscriptionReducer = Reducer.UserSubscription.InitialState.reduce
     let userSubscriptionRemovedFromRoomReducer = Reducer.UserSubscription.RemovedFromRoom.reduce
+    let userSubscriptionRoomUpdatedReducer = Reducer.UserSubscription.RoomUpdated.reduce
     let userSubscriptionRoomDeletedReducer = Reducer.UserSubscription.RoomDeleted.reduce
     let userSubscriptionReadStateUpdatedReducer = Reducer.UserSubscription.ReadStateUpdated.reduce
     
