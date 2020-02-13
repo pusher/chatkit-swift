@@ -4,7 +4,7 @@ import XCTest
 
 class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
     
-    func test_stuff() {
+    func test_didReceiveEvent_withValidJson_notifiesStore() {
 
         /******************/
         /*---- GIVEN -----*/
@@ -62,7 +62,73 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
             )
         )
         
+        XCTAssertEqual(stubStore.action_actualCallCount, 1)
         XCTAssertEqual(stubStore.action_lastReceived, expectedAction)
     }
     
+    func test_didReceiveEvent_withInvalidJson_doesNotNotifyStore() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let stubStore = StubStore(action_expectedCallCount: 0)
+        let dummySubscription = DummySubscription()
+        
+        let dependencies = DependenciesDoubles(
+            store: stubStore
+        )
+        
+        let sut = ConcreteSubscriptionActionDispatcher(dependencies: dependencies)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let jsonData = """
+        {
+            "not valid"
+        }
+        """.toJsonData(validate: false)
+        
+        sut.subscription(dummySubscription, didReceiveEventWithJsonData: jsonData)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+
+        XCTAssertEqual(stubStore.action_actualCallCount, 0)
+        XCTAssertEqual(stubStore.action_lastReceived, nil)
+    }
+    
+    func test_didReceiveError_regardless_doesNotNotifyStore() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let stubStore = StubStore(action_expectedCallCount: 0)
+        let dummySubscription = DummySubscription()
+        
+        let dependencies = DependenciesDoubles(
+            store: stubStore
+        )
+        
+        let sut = ConcreteSubscriptionActionDispatcher(dependencies: dependencies)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let error = "Dummy error message"
+        
+        sut.subscription(dummySubscription, didReceiveError: error)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+
+        XCTAssertEqual(stubStore.action_actualCallCount, 0)
+        XCTAssertEqual(stubStore.action_lastReceived, nil)
+    }
 }

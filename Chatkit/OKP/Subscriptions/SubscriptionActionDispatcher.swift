@@ -22,20 +22,19 @@ class ConcreteSubscriptionActionDispatcher: SubscriptionActionDispatcher {
     
     func subscription(_ subscription: Subscription, didReceiveEventWithJsonData jsonData: Data) {
         
-        // TODO: move parsing elsewhere?
         do {
             let subscriptionEvent = try self.jsonDecoder.decode(Wire.Event.Subscription.self, from: jsonData)
             let action = Action.subscriptionEvent(subscriptionEvent.data)
             self.dependencies.store.action(action)
         } catch {
-            // ???
+            // TODO work needs to be done on handling errors in future
             print(error)
-            preconditionFailure()
         }
     }
     
     func subscription(_ subscription: Subscription, didReceiveError error: Error) {
-        // TODO: really this needs to know if its a recoverable error or not
+        // TODO work needs to be done on handling errors in future
+        // Ideally we need to know if its a recoverable error or not
         print(error)
     }
 }
