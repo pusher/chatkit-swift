@@ -69,12 +69,6 @@ class System_UnInitialised_Tests: XCTestCase {
             
             wait(for: [expectation], timeout: expectation.timeout)
             
-            // The below can never work because the failure will not appear in the test
-            // unfortunately none of the system `wait` functions accept file/line parameters.
-            //            subscribeExpectation.wait()
-            
-            print(stubStoreListener.didUpdateState_stateLastReceived)
-            
             XCTAssertEqual(expectation.result, .success)
             XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 1)
             XCTAssertNotNil(stubStoreListener.didUpdateState_stateLastReceived?.currentUser)

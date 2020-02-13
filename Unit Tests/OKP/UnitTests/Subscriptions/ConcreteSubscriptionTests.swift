@@ -308,8 +308,8 @@ class ConcreteSubscriptionTests: XCTestCase {
             
         let expectation = XCTestExpectation.Subscription.subscribe
         
-        XCTAssertExpectationUnfulfilled(expectation)
         XCTAssertEqualState(sut.state, .subscribed)
+        XCTAssertExpectationUnfulfilled(expectation)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
@@ -332,8 +332,8 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         wait(for: [expectation], timeout: expectation.timeout)
         
-        XCTAssertExpectationFulfilledWithResult(expectation, .success)
         XCTAssertEqualState(sut.state, .subscribed)
+        XCTAssertExpectationFulfilledWithResult(expectation, .success)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
@@ -354,8 +354,8 @@ class ConcreteSubscriptionTests: XCTestCase {
         let (sut, stubInstance, stubInstanceFactory, stubDelegate, expectation)
             = setUp_subscribingStageTwo(forType: subscriptionType)
         
-        XCTAssertExpectationUnfulfilled(expectation)
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
+        XCTAssertExpectationUnfulfilled(expectation)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
@@ -378,8 +378,8 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         wait(for: [expectation], timeout: expectation.timeout)
         
-        XCTAssertExpectationFulfilledWithResult(expectation, .success)
         XCTAssertEqualState(sut.state, .subscribed)
+        XCTAssertExpectationFulfilledWithResult(expectation, .success)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1) // <- Increased by one
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
@@ -399,9 +399,9 @@ class ConcreteSubscriptionTests: XCTestCase {
             = setUp_subscribingStageTwoWithMultipleWaitingCompletions(forType: subscriptionType)
         
         // Confirm setUp
+        XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(firstExpectation)
         XCTAssertExpectationUnfulfilled(secondExpectation)
-        XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
@@ -492,8 +492,8 @@ class ConcreteSubscriptionTests: XCTestCase {
                                         stubResumableSubscription_end_expected: true)
         
         // Confirm setUp
-        XCTAssertExpectationUnfulfilled(expectation)
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
+        XCTAssertExpectationUnfulfilled(expectation)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
@@ -516,8 +516,8 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         wait(for: [expectation], timeout: expectation.timeout)
         
-        XCTAssertExpectationFulfilledWithResult(expectation, .failure("Dummy Error Message"))
         XCTAssertEqualState(sut.state, .notSubscribed)
+        XCTAssertExpectationFulfilledWithResult(expectation, .failure("Dummy Error Message"))
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
@@ -540,9 +540,9 @@ class ConcreteSubscriptionTests: XCTestCase {
                 stubResumableSubscription_end_expected: true)
         
         // Confirm setUp
+        XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(firstExpectation)
         XCTAssertExpectationUnfulfilled(secondExpectation)
-        XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
@@ -620,6 +620,159 @@ class ConcreteSubscriptionTests: XCTestCase {
         
     }
     
+    // MARK: Incoming End
+    
+    func test_incomingEnd_whenSubscribingStageTwo_() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let subscriptionType: SubscriptionType = .user
+        
+        let (sut, stubInstance, stubInstanceFactory, stubDelegate, expectation)
+            = setUp_subscribingStageTwo(forType: subscriptionType,
+                                        stubDelegate_didReceivedError_expectedCallCount: 1,
+                                        stubResumableSubscription_end_expected: true)
+        
+        // Confirm setUp
+        XCTAssertEqualState(sut.state, .subscribingStageTwo)
+        XCTAssertExpectationUnfulfilled(expectation)
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        // Emulate the firing of a subscription *End*, which should:
+        //      move `ConcreteSubscription.state` from `.subscribingStageTwo` -> `.notSubscribed`
+        //      invoked the delegates `didReceiveError` method
+        //      invoke the waiting `completion` handler with `.failure`
+        
+        stubInstance.fireOnEnd()
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        wait(for: [expectation], timeout: expectation.timeout)
+        
+        let expectedError = "ERROR: `onEnd` received unexpectedly whilst still in the process of subscribing"
+        
+        XCTAssertEqualState(sut.state, .notSubscribed)
+        XCTAssertExpectationFulfilledWithResult(expectation, .failure(expectedError))
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
+        XCTAssertEqualError(stubDelegate.didReceiveError_errorLastReceived, expectedError)
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
+        
+    }
+    
+    func test_incomingEnd_whenSubscribingStageTwoAndMultipleWaitingdCompletions_allSubscribeCompletionsInvokedWithFailured() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let subscriptionType: SubscriptionType = .user
+        
+        let (sut, stubInstance, stubInstanceFactory, stubDelegate, firstExpectation, secondExpectation)
+            = setUp_subscribingStageTwoWithMultipleWaitingCompletions(
+                forType: subscriptionType,
+                stubDelegate_didReceivedError_expectedCallCount: 1,
+                stubResumableSubscription_end_expected: true)
+        
+        // Confirm setUp
+        XCTAssertEqualState(sut.state, .subscribingStageTwo)
+        XCTAssertExpectationUnfulfilled(firstExpectation)
+        XCTAssertExpectationUnfulfilled(secondExpectation)
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        // Emulate the firing of a subscription *End*, which should:
+        //      move `ConcreteSubscription.state` from `.subscribingStageTwo` -> `.notSubscribed`
+        //      invoked the delegates `didReceiveError` method
+        //      invoke BOTH waiting `completion` handlers with `.failure`
+        
+        stubInstance.fireOnEnd()
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        // Wait for both expecations to become fulfilled
+        wait(for: [firstExpectation, secondExpectation],
+             timeout: max(firstExpectation.timeout, secondExpectation.timeout))
+        
+        let expectedError = "ERROR: `onEnd` received unexpectedly whilst still in the process of subscribing"
+        
+        // Both expectations shoudld have been fulfilled with `.failure`
+        XCTAssertEqualState(sut.state, .notSubscribed)
+        XCTAssertExpectationFulfilledWithResult(firstExpectation, .failure(expectedError))
+        XCTAssertExpectationFulfilledWithResult(secondExpectation, .failure(expectedError))
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <-- increased by one
+        XCTAssertEqualError(stubDelegate.didReceiveError_errorLastReceived, expectedError)
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
+        
+    }
+    
+    func test_incomingEnd_whenSubscribed_callsDelegateDidReceiveError() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let subscriptionType: SubscriptionType = .user
+        
+        let (sut, stubInstance, stubInstanceFactory, stubDelegate)
+            = setUp_subscribed(forType: subscriptionType,
+                               stubDelegate_didReceivedError_expectedCallCount: 1,
+                               stubResumableSubscription_end_expected: true)
+        
+        // Confirm setUp
+        XCTAssertEqualState(sut.state, .subscribed)
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        // Emulate the firing of a subscription *End*, which should:
+        //      move `ConcreteSubscription.state` from `.subscribed` -> `.notSubscribed`
+        //      invoked the delegates `didReceiveError` method
+        //      leave everything else unchanged
+        
+        stubInstance.fireOnEnd()
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        let expectedError = "ERROR: `onEnd` received unexpectedly whilst subscribed"
+        
+        XCTAssertEqualState(sut.state, .notSubscribed)
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
+        XCTAssertEqualError(stubDelegate.didReceiveError_errorLastReceived, expectedError)
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
+        
+    }
     // MARK: unsubscribe
     
     func test_unsubscribe_whenNotSubscribed_() {
@@ -719,9 +872,9 @@ class ConcreteSubscriptionTests: XCTestCase {
                 stubResumableSubscription_end_expected: true)
         
         // Confirm setUp
+        XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(firstExpectation)
         XCTAssertExpectationUnfulfilled(secondExpectation)
-        XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)

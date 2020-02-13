@@ -13,12 +13,12 @@ public class StubNetworking: DoubleBase, InstanceFactory {
     
     // MARK: Faux Networking
     
-    // Preparing for CRUD requests
+    // TODO Preparing for CRUD requests.  Needs to be implemented in future.
     public func stub(_ urlString: String, _ jsonData: Data) {}
     
     // Preparing for registration to a subscription
     public func stubSubscribe(_ subscriptionType: SubscriptionType, _ result: VoidResult,
-                       file: StaticString = #file, line: UInt = #line) {
+                              file: StaticString = #file, line: UInt = #line) {
         guard expectedSubscribeCalls[subscriptionType] == nil else {
             XCTFail("Call to `\(#function)` on `\(String(describing: self))` with subscriptionType: `\(subscriptionType)` made but we are *already* anticipating a call to `subscribe` that has not yet been fulfilled", file: file, line: line)
             return
@@ -44,9 +44,10 @@ public class StubNetworking: DoubleBase, InstanceFactory {
         }
     }
     
-    // Live firing of subscription events
+    // MARK: Live firing of subscription events
+    
     public func fireSubscriptionEvent(_ subscriptionType: SubscriptionType, _ jsonData: Data,
-                               file: StaticString = #file, line: UInt = #line) {
+                                      file: StaticString = #file, line: UInt = #line) {
         guard let stubInstance = registeredStubInstances[.subscription(subscriptionType)] else {
             XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))` with subscriptionType: `\(subscriptionType)`", file: file, line: line)
             return
@@ -55,16 +56,23 @@ public class StubNetworking: DoubleBase, InstanceFactory {
     }
     
     // Live firing of subscription error
-    public func fireSubscriptionError(_ subscriptionType: SubscriptionType, _httpCode: Int, _ jsonData: Data,
-                               file: StaticString = #file, line: UInt = #line) {
+    public func fireSubscriptionError(_ subscriptionType: SubscriptionType, error: Error,
+                                      file: StaticString = #file, line: UInt = #line) {
         guard let stubInstance = registeredStubInstances[.subscription(subscriptionType)] else {
             XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))` with subscriptionType: `\(subscriptionType)`", file: file, line: line)
             return
         }
-        // TODO:
-        preconditionFailure()
-//        stubInstance.fireOnError()
+        stubInstance.fireOnError(error: error)
     }
+    
+    public func fireSubscriptiOnEnd(_ subscriptionType: SubscriptionType,
+                                   file: StaticString = #file, line: UInt = #line) {
+            guard let stubInstance = registeredStubInstances[.subscription(subscriptionType)] else {
+                XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))` with subscriptionType: `\(subscriptionType)`", file: file, line: line)
+                return
+            }
+            stubInstance.fireOnEnd()
+        }
     
     // MARK: InstanceFactory
     

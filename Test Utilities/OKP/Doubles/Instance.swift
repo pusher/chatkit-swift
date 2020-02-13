@@ -91,11 +91,12 @@ public class StubInstance: DoubleBase, Instance {
         onEvent?(eventId, headers, jsonDict)
     }
     
-    public func fireOnEnd(error: Error) {
+    public func fireOnEnd() {
         // TODO: no idea if this correctly maps to what a PusherPlatform.Instance does in real life
+        // We have decided to sort the error handling at a later state
         let statusCode = 404
         let headers: [String: String]? = nil
-        let info: Any? = error
+        let info: Any? = nil
         onEnd?(statusCode, headers, info)
     }
     
@@ -170,7 +171,7 @@ public class StubInstance: DoubleBase, Instance {
                 fireOnOpen()
             case let .failure(error):
                 fireOnError(error: error)
-                fireOnEnd(error: error)
+                fireOnEnd()
             }
         }
         

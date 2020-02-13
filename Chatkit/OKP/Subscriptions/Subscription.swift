@@ -219,31 +219,22 @@ class ConcreteSubscription: Subscription {
                 return
             }
             
-            // TODO: I have no idea if this is correct at present
-            // Extract an error, or make one
-            let error: Error
-            if let passedError: Error = info as? Error {
-                error = passedError
-            } else {
-                let statusCodeString = statusCode != nil ? String(describing: statusCode) : "nil"
-                let headersString = headers != nil ? String(describing: headers) : "nil"
-                let infoString = info != nil ? String(describing: headers) : "nil"
-                error = "Unknown reason for end. Status code=\(statusCodeString). Headers=\(headersString). Info=\(infoString)"
-            }
-            
             switch self.state {
                 
             case .notSubscribed:
-                // TODO ignore?
+                let error = Self.onEndReceivedWhileNotSubscribedError
+                self.delegate?.subscription(self, didReceiveError: error)
                 return
                 
             case let .subscribingStageOne(_, completions):
-                // TODO is ordering correct?
+                
                 // The ORDER of the code here is VITAL:
                 //   We MUST set the state before we call the delegate/completions
                 //   We MUST invoke the delegate method before the completions
                 
                 self.state = .notSubscribed
+
+                let error = Self.onEndReceivedWhileSubscribingError
                 
                 self.delegate?.subscription(self, didReceiveError: error)
                 
@@ -257,12 +248,13 @@ class ConcreteSubscription: Subscription {
                 resumableSubscription.onError = nil
                 resumableSubscription.end()
                 
-                // TODO is ordering correct?
                 // The ORDER of the code here is VITAL:
                 //   We MUST set the state before we call the delegate/completions
                 //   We MUST invoke the delegate method before the completions
                 
                 self.state = .notSubscribed
+                
+                let error = Self.onEndReceivedWhileSubscribingError
                 
                 self.delegate?.subscription(self, didReceiveError: error)
                 
@@ -273,6 +265,8 @@ class ConcreteSubscription: Subscription {
             case .subscribed(_, _):
                 
                 self.state = .notSubscribed
+                
+                let error = Self.onEndReceivedWhileSubscribedError
                 
                 self.delegate?.subscription(self, didReceiveError: error)
                 
@@ -309,5 +303,14 @@ class ConcreteSubscription: Subscription {
     
     private static var unsubscribeCalledWhileSubscribingError: Error
         = "ERROR: `unsubscribe` called whilst still in the process of subscribing"
+    
+    private static var onEndReceivedWhileNotSubscribedError: Error
+        = "ERROR: `onEnd` received unexpectedly whilst not subscribed"
+    
+    private static var onEndReceivedWhileSubscribingError: Error
+        = "ERROR: `onEnd` received unexpectedly whilst still in the process of subscribing"
+    
+    private static var onEndReceivedWhileSubscribedError: Error
+        = "ERROR: `onEnd` received unexpectedly whilst subscribed"
     
 }
