@@ -5,7 +5,7 @@ extension Reducer {
         
         // MARK: - Types
         
-        typealias ActionType = Action
+        typealias ActionType = MasterAction
         typealias StateType = MasterState
         typealias DependenciesType =
             HasUserReducer
@@ -21,26 +21,27 @@ extension Reducer {
         
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
             
-            if let action = action as? InitialStateAction {
+            switch action {
+                
+            case let .initialStateAction(action):
                 return dependencies.initialStateUserSubscriptionReducer(action, state, dependencies)
-            }
-            else if let action = action as? AddedToRoomAction {
+                
+            case let .addedToRoomAction((action)):
                 return dependencies.userSubscriptionAddedToRoomReducer(action, state, dependencies)
-            }
-            else if let action = action as? RemovedFromRoomAction {
+                
+            case let .removedFromRoomAction((action)):
                 return dependencies.userSubscriptionRemovedFromRoomReducer(action, state, dependencies)
-            }
-            else if let action = action as? RoomUpdatedAction {
+                
+            case let .roomUpdatedAction((action)):
                 return dependencies.userSubscriptionRoomUpdatedReducer(action, state, dependencies)
-            }
-            else if let action = action as? RoomDeletedAction {
+                
+            case let .roomDeletedAction((action)):
                 return dependencies.userSubscriptionRoomDeletedReducer(action, state, dependencies)
-            }
-            else if let action = action as? ReadStateUpdatedAction {
+                
+            case let .readStateUpdatedAction((action)):
                 return dependencies.userSubscriptionReadStateUpdatedReducer(action, state, dependencies)
             }
-            
-            return state
+        
         }
         
     }

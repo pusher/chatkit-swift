@@ -8,7 +8,7 @@ public class DummyStore: DummyBase, Store {
         return MasterState.empty
     }
     
-    public func dispatch(action: Action) {
+    public func dispatch(action: MasterAction) {
         DummyFail(sender: self, function: #function)
     }
 }
@@ -54,7 +54,7 @@ public class StubStore: StubBase, Store {
         return state_toReturn
     }
     
-    public func dispatch(action: Action) {
+    public func dispatch(action: MasterAction) {
         action_actualCallCount += 1
         action_lastReceived = action
         guard self.action_expectedCallCount > 0 else {

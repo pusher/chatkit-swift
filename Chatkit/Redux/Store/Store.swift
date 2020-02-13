@@ -9,7 +9,7 @@ protocol HasStore {
 
 protocol Store {
     var state: MasterState { get }
-    func dispatch(action: Action)
+    func dispatch(action: MasterAction)
 }
 
 class ConcreteStore: Store {
@@ -43,7 +43,7 @@ class ConcreteStore: Store {
         self.state = .empty
     }
     
-    func dispatch(action: Action) {
+    func dispatch(action: MasterAction) {
         state = self.dependencies.masterReducer(action, state, dependencies)
     }
 }

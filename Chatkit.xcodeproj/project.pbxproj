@@ -150,6 +150,7 @@
 		7335D27323D715E800E51909 /* CodableJSONCollections+DictionaryEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D27223D715E800E51909 /* CodableJSONCollections+DictionaryEncodingTests.swift */; };
 		7335D27523D7330900E51909 /* CodableJSONCollections+ArrayEncodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D27423D7330900E51909 /* CodableJSONCollections+ArrayEncodingTests.swift */; };
 		7335D27723D7335C00E51909 /* NonJSONHashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D27623D7335C00E51909 /* NonJSONHashable.swift */; };
+		7336E19823F5911800A2D031 /* MasterAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7336E19723F5911800A2D031 /* MasterAction.swift */; };
 		734C16FD23A3D51600330245 /* JSONDecoder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734C16FC23A3D51600330245 /* JSONDecoder+Extensions.swift */; };
 		734C170323A3E17F00330245 /* JSONEncoder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734C170223A3E17F00330245 /* JSONEncoder+Extensions.swift */; };
 		734D6A3823AA91FB00105479 /* Wire.User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734D6A3723AA91FB00105479 /* Wire.User.swift */; };
@@ -415,6 +416,7 @@
 		7335D27223D715E800E51909 /* CodableJSONCollections+DictionaryEncodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CodableJSONCollections+DictionaryEncodingTests.swift"; sourceTree = "<group>"; };
 		7335D27423D7330900E51909 /* CodableJSONCollections+ArrayEncodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CodableJSONCollections+ArrayEncodingTests.swift"; sourceTree = "<group>"; };
 		7335D27623D7335C00E51909 /* NonJSONHashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonJSONHashable.swift; sourceTree = "<group>"; };
+		7336E19723F5911800A2D031 /* MasterAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterAction.swift; sourceTree = "<group>"; };
 		734C16FC23A3D51600330245 /* JSONDecoder+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSONDecoder+Extensions.swift"; sourceTree = "<group>"; };
 		734C170223A3E17F00330245 /* JSONEncoder+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "JSONEncoder+Extensions.swift"; sourceTree = "<group>"; };
 		734D6A3723AA91FB00105479 /* Wire.User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.User.swift; sourceTree = "<group>"; };
@@ -873,6 +875,7 @@
 			isa = PBXGroup;
 			children = (
 				22A7425023ED7ADE00F2F26D /* Action.swift */,
+				7336E19723F5911800A2D031 /* MasterAction.swift */,
 				222C964823F55B6D00321C94 /* AddedToRoomAction.swift */,
 				22A7425223ED7B2F00F2F26D /* InitialStateAction.swift */,
 				22406A9023F44AD500EE24BE /* ReadStateUpdatedAction.swift */,
@@ -1753,6 +1756,7 @@
 				734D6A3E23AAA2C900105479 /* Wire.Cursor.swift in Sources */,
 				222EA2AF23424A7D004EE90F /* AvailableRoomsProvider.swift in Sources */,
 				734C16FD23A3D51600330245 /* JSONDecoder+Extensions.swift in Sources */,
+				7336E19823F5911800A2D031 /* MasterAction.swift in Sources */,
 				73A5168E23B0B78400CF8B77 /* Wire.Event.swift in Sources */,
 				229018312358AE99008FAB07 /* TypingUsersProvider.swift in Sources */,
 				7301BC7D23B1261300F162C7 /* Wire.MessagePart.swift in Sources */,

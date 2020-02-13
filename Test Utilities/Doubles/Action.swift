@@ -4,6 +4,6 @@ public class DummyAction: Action {
     
     // MARK: - Initializers
     
-    public override init() {}
+    public init() {}
     
 }

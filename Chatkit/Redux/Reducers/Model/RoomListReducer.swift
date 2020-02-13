@@ -5,33 +5,34 @@ extension Reducer.Model {
         
         // MARK: - Types
         
-        typealias ActionType = Action
+        typealias ActionType = MasterAction
         typealias StateType = RoomListState
         typealias DependenciesType = NoDependencies
         
         // MARK: - Reducer
         
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
-            if let action = action as? InitialStateAction {
-                return self.reduce(action: action, state: state, dependencies: dependencies)
-            }
-            else if let action = action as? AddedToRoomAction {
-                return self.reduce(action: action, state: state, dependencies: dependencies)
-            }
-            else if let action = action as? RemovedFromRoomAction {
-                return self.reduce(action: action, state: state, dependencies: dependencies)
-            }
-            else if let action = action as? RoomUpdatedAction {
-                return self.reduce(action: action, state: state, dependencies: dependencies)
-            }
-            else if let action = action as? RoomDeletedAction {
-                return self.reduce(action: action, state: state, dependencies: dependencies)
-            }
-            else if let action = action as? ReadStateUpdatedAction {
-                return self.reduce(action: action, state: state, dependencies: dependencies)
-            }
             
-            return state
+            switch action {
+                
+            case let .initialStateAction(action):
+                return self.reduce(action: action, state: state, dependencies: dependencies)
+                
+            case let .addedToRoomAction((action)):
+                return self.reduce(action: action, state: state, dependencies: dependencies)
+                
+            case let .removedFromRoomAction((action)):
+                return self.reduce(action: action, state: state, dependencies: dependencies)
+                
+            case let .roomUpdatedAction((action)):
+                return self.reduce(action: action, state: state, dependencies: dependencies)
+                
+            case let .roomDeletedAction((action)):
+                return self.reduce(action: action, state: state, dependencies: dependencies)
+                
+            case let .readStateUpdatedAction((action)):
+                return self.reduce(action: action, state: state, dependencies: dependencies)
+            }
         }
         
         // MARK: - Private reducers
