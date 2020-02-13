@@ -38,7 +38,7 @@ public class StubNetworking: DoubleBase, InstanceFactory {
         }
         
         if let stubInstance = registeredStubInstances[.subscription(subscriptionType)] {
-            stubInstance.stubSubscriptionEnd()
+            stubInstance.stubResumableSubscriptionEnd()
         } else {
             expectedSubscriptionEndCalls.insert(subscriptionType)
         }
@@ -51,7 +51,7 @@ public class StubNetworking: DoubleBase, InstanceFactory {
             XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))` with subscriptionType: `\(subscriptionType)`", file: file, line: line)
             return
         }
-        stubInstance.fireSubscriptionEvent(jsonData: jsonData)
+        stubInstance.fireOnEvent(jsonData: jsonData)
     }
     
     // Live firing of subscription error
@@ -63,7 +63,7 @@ public class StubNetworking: DoubleBase, InstanceFactory {
         }
         // TODO:
         preconditionFailure()
-//        stubInstance.fireSubscriptionError()
+//        stubInstance.fireOnError()
     }
     
     // MARK: InstanceFactory
@@ -92,7 +92,7 @@ public class StubNetworking: DoubleBase, InstanceFactory {
             stubInstance.stubSubscribe(result: expectedVoidResult)
             
             if expectedSubscriptionEndCalls.contains(subscriptionType) {
-                stubInstance.stubSubscriptionEnd()
+                stubInstance.stubResumableSubscriptionEnd()
             }
             
             registeredStubInstances[instanceType] = stubInstance

@@ -45,7 +45,7 @@ class StubInstanceTests: XCTestCase {
                                              onEnd: nil,
                                              onError: nil)
         
-        stubInstance.fireSubscriptionEvent(jsonData: expectedJsonData)
+        stubInstance.fireOnEvent(jsonData: expectedJsonData)
         
         wait(for: [expectation], timeout: 1)
     }

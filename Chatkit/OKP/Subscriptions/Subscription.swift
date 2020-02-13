@@ -16,7 +16,7 @@ protocol Subscription {
 
 class ConcreteSubscription: Subscription {
     
-    private enum State {
+    enum State {
         case notSubscribed
         case subscribingStageOne(instance: Instance, completions: [SubscribeHandler])
         case subscribingStageTwo(instance: Instance, resumableSubscription: ResumableSubscription, completions: [SubscribeHandler])
@@ -25,11 +25,11 @@ class ConcreteSubscription: Subscription {
     
     typealias Dependencies = HasInstanceFactory
     
-    internal let subscriptionType: SubscriptionType
+    let subscriptionType: SubscriptionType // Internal `get` aids testing
     private let dependencies: Dependencies
     weak var delegate: SubscriptionDelegate?
     
-    private var state: State = .notSubscribed
+    private(set) var state: State = .notSubscribed // Internal `get` aids testing
     
     init(subscriptionType: SubscriptionType, dependencies: Dependencies, delegate: SubscriptionDelegate?) {
         self.subscriptionType = subscriptionType

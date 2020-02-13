@@ -69,7 +69,7 @@ extension XCTestCase {
         
         wait(for: [expectation], timeout: expectation.timeout)
 
-        XCTAssertExpectationFulfilledWithResult(expectation, nil)
+        XCTAssertExpectationFulfilledWithResult(expectation, nil, file: file, line: line)
         XCTAssertEqual(chatkit.connectionStatus, .connected, file: file, line: line)
         
         return (stubNetworking, chatkit, dependencies.storeBroadcaster)
@@ -84,12 +84,16 @@ extension XCTestCase {
         
         wait(for: [expectation], timeout: 1)
 
-        XCTAssertExpectationFulfilled(expectation) { joinedRoomsProvider, error in
-            XCTAssertNotNil(joinedRoomsProvider)
-            XCTAssertNil(error)
+        XCTAssertExpectationFulfilled(expectation, file: file, line: line) { joinedRoomsProvider, error in
+            XCTAssertNotNil(joinedRoomsProvider, file: file, line: line)
+            XCTAssertNil(error, file: file, line: line)
         }
-
-        return (stubNetworking, chatkit, (expectation.result?.0)!)
+        
+        guard let joinedRoomsProvider = expectation.result?.0 else {
+            throw "joinedRoomsProvider was not initialised"
+        }
+        
+        return (stubNetworking, chatkit, joinedRoomsProvider)
     }
     
 }

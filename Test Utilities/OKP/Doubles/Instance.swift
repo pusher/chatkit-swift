@@ -38,35 +38,48 @@ public class StubInstance: DoubleBase, Instance {
     // Property is `weak` to emulate its real world equivalent
     private weak var internalStubResumableSubscription: StubResumableSubscription?
 
-    public init(subscribe_completionResult: VoidResult? = nil,
+    public init(subscribeWithResume_expectedCallCount: UInt = 0,
+                resumableSubscription_end_expected: Bool = false,
         file: StaticString = #file, line: UInt = #line) {
-        self.subscribe_completionResult = subscribe_completionResult
+        self.subscribeWithResume_expectedCallCount = subscribeWithResume_expectedCallCount
+        self.resumableSubscription_end_expected = resumableSubscription_end_expected
         super.init(file: file, line: line)
     }
     
     public func stub(_ urlString: String, _ jsonData: Data) {}
     
     // Preparing for registration to a subscription
-    private var subscribe_completionResult: VoidResult?
+    private var subscribeWithResume_expectedCallCount: UInt
+    private var stubbedSubscribeResult: VoidResult?
     public func stubSubscribe(result: VoidResult) {
-        subscribe_completionResult = result
+        subscribeWithResume_expectedCallCount += 1
+        stubbedSubscribeResult = result
     }
     
-    private var subscriptionEnd_expected = false
-    public func stubSubscriptionEnd() {
+    private var resumableSubscription_end_expected = false
+    public func stubResumableSubscriptionEnd() {
         if let internalStubResumableSubscription = internalStubResumableSubscription {
             internalStubResumableSubscription.increment_end_expectedCallCount()
         } else {
-            subscriptionEnd_expected = true
+            resumableSubscription_end_expected = true
         }
     }
     
-    // Live firing of subscription events
-    public func fireSubscriptionEvent(jsonData: Data) {
-        guard let onEvent = self.onEvent else {
-            XCTFail("`\(#function)` was called but `\(String(describing: self)).onEvent` was NOT defined", file: file, line: line)
-            return
-        }
+    // MARK: Live firing of subscription events
+    
+    public func fireOnOpening() {
+        onOpening?()
+    }
+    
+    public func fireOnOpen() {
+        onOpen?()
+    }
+    
+    public func fireOnResuming() {
+        onResuming?()
+    }
+    
+    public func fireOnEvent(jsonData: Data) {
         // TODO: This should be removed once we've updated the PusherPlatform to return data rather than a jsonDict.
         guard let jsonDict = try? JSONSerialization.jsonObject(with: jsonData, options: []) else {
             XCTFail("`\(#function)` was called but the jsonData passed was NOT JSON parsable", file: file, line: line)
@@ -75,7 +88,19 @@ public class StubInstance: DoubleBase, Instance {
         
         let eventId = ""
         let headers: [String: String] = [:]
-        onEvent(eventId, headers, jsonDict)
+        onEvent?(eventId, headers, jsonDict)
+    }
+    
+    public func fireOnEnd(error: Error) {
+        // TODO: no idea if this correctly maps to what a PusherPlatform.Instance does in real life
+        let statusCode = 404
+        let headers: [String: String]? = nil
+        let info: Any? = error
+        onEnd?(statusCode, headers, info)
+    }
+    
+    public func fireOnError(error: Error) {
+        onError?(error)
     }
     
     // MARK: Instance implementation
@@ -124,7 +149,7 @@ public class StubInstance: DoubleBase, Instance {
         
         subscribeWithResume_actualCallCount += 1
         
-        guard let subscribe_completionResult = subscribe_completionResult else {
+        guard subscribeWithResume_actualCallCount <= subscribeWithResume_expectedCallCount else {
             XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))`", file: file, line: line)
             return DummyResumableSubscription(file: file, line: line)
         }
@@ -136,20 +161,20 @@ public class StubInstance: DoubleBase, Instance {
         self.onEnd = onEnd
         self.onError = onError
         
-        switch subscribe_completionResult {
+        fireOnOpening()
+        
+        if let stubbedSubscribeResult = stubbedSubscribeResult {
             // TODO: no idea if this is correct
-        case .success:
-            onOpen?()
-        case let .failure(error):
-            // TODO: no idea if this is correct
-            let statusCode = 404
-            let headers: [String: String]? = nil
-            let info: Any? = error
-            onError?(error)
-            onEnd?(statusCode, headers, info)
+            switch stubbedSubscribeResult {
+            case .success:
+                fireOnOpen()
+            case let .failure(error):
+                fireOnError(error: error)
+                fireOnEnd(error: error)
+            }
         }
         
-        let end_expectedCallCount: UInt = subscriptionEnd_expected ? 1 : 0
+        let end_expectedCallCount: UInt = resumableSubscription_end_expected ? 1 : 0
         let stubResumableSubscription = StubResumableSubscription(end_expectedCallCount: end_expectedCallCount, file: file, line: line)
         internalStubResumableSubscription = stubResumableSubscription
         return stubResumableSubscription

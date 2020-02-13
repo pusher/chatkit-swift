@@ -147,11 +147,11 @@ public func XCTAssertExpectationFulfilledWithResult<ResultType>(_ expectation: X
 }
 
 // Custom implementation speficially for a result type of <Error?>
-public func XCTAssertExpectationFulfilledWithResult(_ expectation: XCTestExpectation.Expectation<Error?>, _ expectedResult: Error, _ message: String = "", file: StaticString = #file, line: UInt = #line) {
+public func XCTAssertExpectationFulfilledWithResult(_ expectation: XCTestExpectation.Expectation<Error?>, _ expectedResult: Error?, _ message: String = "", file: StaticString = #file, line: UInt = #line) {
 
     XCTAssertExpectationFulfilled(expectation, message, file: file, line: line) { result in
         // Cast the `Error`s to `NSError` so we get Equatable behaviour
         // (Apple guarantee that Error can always be bridged to an NSError)
-        XCTAssertEqual(result as NSError?, expectedResult as NSError)
+        XCTAssertEqual(result as NSError?, expectedResult as NSError?)
     }
 }
