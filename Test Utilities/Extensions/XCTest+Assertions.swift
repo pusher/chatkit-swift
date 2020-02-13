@@ -142,7 +142,7 @@ public func XCTAssertExpectationFulfilled<ResultTypeA, ResultTypeB>(_ expectatio
 public func XCTAssertExpectationFulfilledWithResult<ResultType>(_ expectation: XCTestExpectation.Expectation<ResultType>, _ expectedResult: ResultType, _ message: String = "", file: StaticString = #file, line: UInt = #line) where ResultType : Equatable {
     
     XCTAssertExpectationFulfilled(expectation, message, file: file, line: line) { result in
-        XCTAssertEqual(result, expectedResult)
+        XCTAssertEqual(result, expectedResult, file: file, line: line)
     }
 }
 
@@ -150,8 +150,12 @@ public func XCTAssertExpectationFulfilledWithResult<ResultType>(_ expectation: X
 public func XCTAssertExpectationFulfilledWithResult(_ expectation: XCTestExpectation.Expectation<Error?>, _ expectedResult: Error?, _ message: String = "", file: StaticString = #file, line: UInt = #line) {
 
     XCTAssertExpectationFulfilled(expectation, message, file: file, line: line) { result in
-        // Cast the `Error`s to `NSError` so we get Equatable behaviour
-        // (Apple guarantee that Error can always be bridged to an NSError)
-        XCTAssertEqual(result as NSError?, expectedResult as NSError?)
+        XCTAssertEqualError(result, expectedResult, message, file: file, line: line)
     }
+}
+
+public func XCTAssertEqualError(_ actualError: Error?, _ expectedError: Error?, _ message: String = "", file: StaticString = #file, line: UInt = #line) {
+    // Cast the `Error`s to `NSError` so we get Equatable behaviour
+    // (Apple guarantee that Error can always be bridged to an NSError)
+    XCTAssertEqual(actualError as NSError?, expectedError as NSError?, message, file: file, line: line)
 }

@@ -29,40 +29,12 @@ extension XCTestCase {
         XCTFail("Expected state of `\(expectedAssertableState)` but got `\(actualState) instead", file: file, line: line)
     }
 
-    //    func setUp_notSubscribed(forType subscriptionType: SubscriptionType,
-    //                             file: StaticString = #file, line: UInt = #line)
-    //        -> (ConcreteSubscription, StubInstance, StubInstanceFactory, StubSubscriptionDelegate) {
-    //
-    //            let instanceType: InstanceType = .subscription(subscriptionType)
-    //
-    //            let stubInstance = StubInstance(subscribeWithResume_expectedCallCount: 1, file: file, line: line)
-    //
-    //            let stubInstanceFactory = StubInstanceFactory(makeInstance_expectedTypesAndInstancesToReturn:
-    //                [(instanceType: instanceType, instance: stubInstance)], file: file, line: line)
-    //            let dependencies = DependenciesDoubles(instanceFactory: stubInstanceFactory, file: file, line: line)
-    //
-    //            let stubDelegate = StubSubscriptionDelegate(didReceiveEvent_expectedCallCount: 1, file: file, line: line)
-    //
-    //            let sut = ConcreteSubscription(subscriptionType: subscriptionType,
-    //                                           dependencies: dependencies,
-    //                                           delegate: stubDelegate)
-    //
-    //            XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 0, file: file, line: line)
-    //            XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 0, file: file, line: line)
-    //            XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0, file: file, line: line)
-    //
-    //            // Current state:
-    //            // `ConcreteSubscription.state` is `.notSubscribed`
-    //
-    //            return (sut, stubInstance, stubInstanceFactory, stubDelegate)
-    //    }
-    
-    func setUp_subscribingStageTwo(forType subscriptionType: SubscriptionType,
-                                   stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
-                                   stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
-                                   stubResumableSubscription_end_expected: Bool? = nil,
-                                   file: StaticString = #file, line: UInt = #line)
-        -> (ConcreteSubscription, StubInstance, StubInstanceFactory, StubSubscriptionDelegate, XCTestExpectation.Expectation<VoidResult>) {
+    func setUp_notSubscribed(forType subscriptionType: SubscriptionType,
+                             stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
+                             stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
+                             stubResumableSubscription_end_expected: Bool? = nil,
+                             file: StaticString = #file, line: UInt = #line)
+        -> (ConcreteSubscription, StubInstance, StubInstanceFactory, StubSubscriptionDelegate) {
             
             let instanceType: InstanceType = .subscription(subscriptionType)
             
@@ -85,17 +57,34 @@ extension XCTestCase {
                                            dependencies: dependencies,
                                            delegate: stubDelegate)
             
-//            let (sut, stubInstance, stubInstanceFactory, stubDelegate)
-//                = setUp_notSubscribed(forType: subscriptionType, file: file, line: line)
-            
-            let expectation = XCTestExpectation.Subscription.subscribe
-            
             XCTAssertEqualState(sut.state, .notSubscribed, file: file, line: line)
-            XCTAssertExpectationUnfulfilled(expectation, file: file, line: line)
             XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0, file: file, line: line)
             XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0, file: file, line: line)
             XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 0, file: file, line: line)
             XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 0, file: file, line: line)
+            
+            // Current state
+            // `ConcreteSubscription.state` is `.subscribingStageTwo`
+            // `completion` handler has NOT been invoked
+            
+            return (sut, stubInstance, stubInstanceFactory, stubDelegate)
+    }
+    
+    func setUp_subscribingStageTwo(forType subscriptionType: SubscriptionType,
+                                   stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
+                                   stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
+                                   stubResumableSubscription_end_expected: Bool? = nil,
+                                   file: StaticString = #file, line: UInt = #line)
+        -> (ConcreteSubscription, StubInstance, StubInstanceFactory, StubSubscriptionDelegate, XCTestExpectation.Expectation<VoidResult>) {
+            
+            let (sut, stubInstance, stubInstanceFactory, stubDelegate)
+                = setUp_notSubscribed(forType: subscriptionType,
+                                      stubDelegate_didReceivedEvent_expectedCallCount: stubDelegate_didReceivedEvent_expectedCallCount,
+                                      stubDelegate_didReceivedError_expectedCallCount: stubDelegate_didReceivedError_expectedCallCount,
+                                      stubResumableSubscription_end_expected: stubResumableSubscription_end_expected,
+                                      file: file, line: line)
+
+            let expectation = XCTestExpectation.Subscription.subscribe
             
             sut.subscribe(completion: expectation.handler)
             
@@ -105,10 +94,6 @@ extension XCTestCase {
             XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0, file: file, line: line)
             XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1, file: file, line: line)
             XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1, file: file, line: line)
-            
-            // Current state
-            // `ConcreteSubscription.state` is `.subscribingStageTwo`
-            // `completion` handler has NOT been invoked
             
             return (sut, stubInstance, stubInstanceFactory, stubDelegate, expectation)
     }
@@ -154,6 +139,8 @@ extension XCTestCase {
                 = setUp_subscribingStageTwo(forType: subscriptionType,
                                             stubDelegate_didReceivedEvent_expectedCallCount: stubDelegate_didReceivedEvent_expectedCallCount,
                                             stubDelegate_didReceivedError_expectedCallCount: stubDelegate_didReceivedError_expectedCallCount,
+                                            stubResumableSubscription_end_expected:
+                                                stubResumableSubscription_end_expected,
                                             file: file, line: line)
             
             let jsonData = "{}".toJsonData()
@@ -167,10 +154,6 @@ extension XCTestCase {
             XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0, file: file, line: line)
             XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1, file: file, line: line)
             XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1, file: file, line: line)
-            
-            // Current state
-            // `ConcreteSubscription.state` is `.subscribed`
-            // `completion` handler HAS been invoked
             
             return (sut, stubInstance, stubInstanceFactory, stubDelegate)
     }
@@ -189,20 +172,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
 
-        let instanceType: InstanceType = .subscription(subscriptionType)
-        
-        let stubInstance = StubInstance(subscribeWithResume_expectedCallCount: 1)
-        
-        let stubInstanceFactory = StubInstanceFactory(makeInstance_expectedTypesAndInstancesToReturn:
-            [(instanceType: instanceType, instance: stubInstance)])
-        
-        let dependencies = DependenciesDoubles(instanceFactory: stubInstanceFactory)
-        
-        let stubDelegate = StubSubscriptionDelegate(didReceiveEvent_expectedCallCount: 1)
-        
-        let sut = ConcreteSubscription(subscriptionType: subscriptionType,
-                                       dependencies: dependencies,
-                                       delegate: stubDelegate)
+        let (sut, stubInstance, stubInstanceFactory, stubDelegate) = setUp_notSubscribed(forType: subscriptionType)
         
         let expectation = XCTestExpectation.Subscription.subscribe
         
@@ -217,7 +187,12 @@ class ConcreteSubscriptionTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        // Call `subscribe` to progress `ConcreteSubscription.state` from `.notSubscribed` -> `.subscribingStageTwo`
+        // If `subscribe` is called when the `ConcreteSubscription.state` is `.notSubscribed` this should:
+        //      invoke the instanceFactory to make an `Instance`
+        //      call `subscribeWithResume` on the new `Instance`
+        //      move `ConcreteSubscription.state` from `.notSubscribed` -> `.subscribingStageTwo`
+        //      queue the `completion` handler to be called later (when the susbcription event returns)
+        
         sut.subscribe(completion: expectation.handler)
         
         /******************/
@@ -648,6 +623,183 @@ class ConcreteSubscriptionTests: XCTestCase {
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
         XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
         
+    }
+    
+    // MARK: unsubscribe
+    
+    func test_unsubscribe_whenNotSubscribed_() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let subscriptionType: SubscriptionType = .user
+
+        let (sut, stubInstance, stubInstanceFactory, stubDelegate) = setUp_notSubscribed(forType: subscriptionType)
+        
+        XCTAssertEqualState(sut.state, .notSubscribed)
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 0)
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 0)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        // If `unsubscribe` is called when the `ConcreteSubscription.state` is `.notSubscribed` this should:
+        //      leave everything else unchanged (since we're already unsubscribed)
+        
+        sut.unsubscribe()
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertEqualState(sut.state, .notSubscribed)
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 0)
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 0)
+    }
+    
+    func test_unsubscribe_whenSubscribingStageTwo_() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let subscriptionType: SubscriptionType = .user
+        
+        let (sut, stubInstance, stubInstanceFactory, stubDelegate, expectation)
+            = setUp_subscribingStageTwo(forType: subscriptionType,
+                                        stubDelegate_didReceivedError_expectedCallCount: 1,
+                                        stubResumableSubscription_end_expected: true)
+        
+        XCTAssertEqualState(sut.state, .subscribingStageTwo)
+        XCTAssertExpectationUnfulfilled(expectation)
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        // If `unsubscribe` is called when the `ConcreteSubscription.state` is `.subscribingStageTwo` this should:
+        //      move `ConcreteSubscription.state` from `.subscribingStageTwo` -> `.notSubscribed`
+        //      invoked the delegates `didReceiveError` method
+        //      invoke the waiting `completion` handler with `.failure`
+        
+        sut.unsubscribe()
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        let expectedError = "ERROR: `unsubscribe` called whilst still in the process of subscribing"
+        
+        XCTAssertEqualState(sut.state, .notSubscribed)
+        XCTAssertExpectationFulfilledWithResult(expectation, .failure(expectedError))
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Inceased by one
+        XCTAssertEqualError(stubDelegate.didReceiveError_errorLastReceived, expectedError)
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
+    }
+    
+    func test_unsubscribe_whenSubscribingStageTwoWithMultipleWaitingCompletions_() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let subscriptionType: SubscriptionType = .user
+        
+        let (sut, stubInstance, stubInstanceFactory, stubDelegate, firstExpectation, secondExpectation)
+            = setUp_subscribingStageTwoWithMultipleWaitingCompletions(
+                forType: subscriptionType,
+                stubDelegate_didReceivedError_expectedCallCount: 1,
+                stubResumableSubscription_end_expected: true)
+        
+        // Confirm setUp
+        XCTAssertExpectationUnfulfilled(firstExpectation)
+        XCTAssertExpectationUnfulfilled(secondExpectation)
+        XCTAssertEqualState(sut.state, .subscribingStageTwo)
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        // If `unsubscribe` is called when the `ConcreteSubscription.state` is `.subscribingStageTwo` this should:
+        //      move `ConcreteSubscription.state` from `.subscribingStageTwo` -> `.notSubscribed`
+        //      invoked the delegates `didReceiveError` method
+        //      invoke BOTH waiting `completion` handlers with `.failure`
+        
+        sut.unsubscribe()
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        let expectedError = "ERROR: `unsubscribe` called whilst still in the process of subscribing"
+        
+        XCTAssertEqualState(sut.state, .notSubscribed)
+        XCTAssertExpectationFulfilledWithResult(firstExpectation, .failure(expectedError))
+        XCTAssertExpectationFulfilledWithResult(secondExpectation, .failure(expectedError))
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Inceased by one
+        XCTAssertEqualError(stubDelegate.didReceiveError_errorLastReceived, expectedError)
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
+    }
+    
+    func test_unsubscribe_whenSubscribed_() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let subscriptionType: SubscriptionType = .user
+        
+        let (sut, stubInstance, stubInstanceFactory, stubDelegate)
+            = setUp_subscribed(forType: subscriptionType,
+                               stubDelegate_didReceivedError_expectedCallCount: 1,
+                               stubResumableSubscription_end_expected: true)
+        
+        // Confirm setUp
+        XCTAssertEqualState(sut.state, .subscribed)
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        // Emulate the firing of a subscription *Error*, which should:
+        
+        // If `unsubscribe` is called when the `ConcreteSubscription.state` is `.subscribed` this should:
+        //      move `ConcreteSubscription.state` from `.subscribed` -> `.notSubscribed`
+        //      leave everything else unchanged
+        
+        sut.unsubscribe()
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertEqualState(sut.state, .notSubscribed)
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
     }
     
 }

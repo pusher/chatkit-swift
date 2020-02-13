@@ -71,8 +71,13 @@ class ConcreteSubscription: Subscription {
             ()
             
         case let .subscribingStageOne(_, completions):
+            
             state = .notSubscribed
+            
             let error = Self.unsubscribeCalledWhileSubscribingError
+            
+            delegate?.subscription(self, didReceiveError: error)
+            
             for completion in completions {
                 completion(.failure(error))
             }
@@ -86,6 +91,9 @@ class ConcreteSubscription: Subscription {
             state = .notSubscribed
             
             let error = Self.unsubscribeCalledWhileSubscribingError
+            
+            delegate?.subscription(self, didReceiveError: error)
+            
             for completion in completions {
                 completion(.failure(error))
             }
@@ -300,6 +308,6 @@ class ConcreteSubscription: Subscription {
     }
     
     private static var unsubscribeCalledWhileSubscribingError: Error
-        = "ERROR: `Unsubscribe` called whilst still in the process of subscribing"
+        = "ERROR: `unsubscribe` called whilst still in the process of subscribing"
     
 }
