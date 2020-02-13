@@ -137,7 +137,6 @@
 		7347D84723ED854D0082B9D6 /* Functional.ChatkitInitialised.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737E3F7023E9C07F00B50837 /* Functional.ChatkitInitialised.Tests.swift */; };
 		7347D84823ED854D0082B9D6 /* Functional.ChatkitConnected.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737E3F7223E9C2DF00B50837 /* Functional.ChatkitConnected.Tests.swift */; };
 		7347D84923ED854D0082B9D6 /* Functional.JoinedRoomsProviderInitialised.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737E3F7423E9C2FC00B50837 /* Functional.JoinedRoomsProviderInitialised.Tests.swift */; };
-		7347D84A23ED854D0082B9D6 /* Functional.Sandbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737E3F7623E9C65300B50837 /* Functional.Sandbox.swift */; };
 		734A28B723D9A7B5003E2BC9 /* JoinedRoomsTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734A28B623D9A7B5003E2BC9 /* JoinedRoomsTransformer.swift */; };
 		734C16FD23A3D51600330245 /* JSONDecoder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734C16FC23A3D51600330245 /* JSONDecoder+Extensions.swift */; };
 		734C170323A3E17F00330245 /* JSONEncoder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734C170223A3E17F00330245 /* JSONEncoder+Extensions.swift */; };
@@ -438,7 +437,6 @@
 		737E3F7023E9C07F00B50837 /* Functional.ChatkitInitialised.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functional.ChatkitInitialised.Tests.swift; sourceTree = "<group>"; };
 		737E3F7223E9C2DF00B50837 /* Functional.ChatkitConnected.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functional.ChatkitConnected.Tests.swift; sourceTree = "<group>"; };
 		737E3F7423E9C2FC00B50837 /* Functional.JoinedRoomsProviderInitialised.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functional.JoinedRoomsProviderInitialised.Tests.swift; sourceTree = "<group>"; };
-		737E3F7623E9C65300B50837 /* Functional.Sandbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functional.Sandbox.swift; sourceTree = "<group>"; };
 		737E3F7923EABE2300B50837 /* ConcreteInstanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteInstanceTests.swift; sourceTree = "<group>"; };
 		737E3F7C23EAC31200B50837 /* DoubleBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoubleBase.swift; sourceTree = "<group>"; };
 		737E3F8323EAC9E000B50837 /* Functional Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Functional Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1201,7 +1199,6 @@
 				737E3F7023E9C07F00B50837 /* Functional.ChatkitInitialised.Tests.swift */,
 				737E3F7223E9C2DF00B50837 /* Functional.ChatkitConnected.Tests.swift */,
 				737E3F7423E9C2FC00B50837 /* Functional.JoinedRoomsProviderInitialised.Tests.swift */,
-				737E3F7623E9C65300B50837 /* Functional.Sandbox.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -1890,7 +1887,6 @@
 				7347D84923ED854D0082B9D6 /* Functional.JoinedRoomsProviderInitialised.Tests.swift in Sources */,
 				7347D84623ED854D0082B9D6 /* Contexts.swift in Sources */,
 				7347D84723ED854D0082B9D6 /* Functional.ChatkitInitialised.Tests.swift in Sources */,
-				7347D84A23ED854D0082B9D6 /* Functional.Sandbox.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
