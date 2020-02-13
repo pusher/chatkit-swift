@@ -2,19 +2,18 @@ import TestUtilities
 import XCTest
 @testable import PusherChatkit
 
-
-extension XCTestCase {
-
-    fileprivate enum ConcreteSubscriptionAssertableState {
+class ConcreteSubscriptionTests: XCTestCase {
+    
+    private enum ConcreteSubscriptionAssertableState {
         case notSubscribed
         case subscribingStageOne
         case subscribingStageTwo
         case subscribed
     }
     
-    fileprivate func XCTAssertEqualState(_ actualState: ConcreteSubscription.State,
-                                         _ expectedAssertableState: ConcreteSubscriptionAssertableState,
-                                         file: StaticString = #file, line: UInt = #line) {
+    private func XCTAssertEqualState(_ actualState: ConcreteSubscription.State,
+                                     _ expectedAssertableState: ConcreteSubscriptionAssertableState,
+                                     file: StaticString = #file, line: UInt = #line) {
         switch actualState {
         case .notSubscribed:
             if case .notSubscribed = expectedAssertableState { return }
@@ -29,11 +28,11 @@ extension XCTestCase {
         XCTFail("Expected state of `\(expectedAssertableState)` but got `\(actualState) instead", file: file, line: line)
     }
 
-    func setUp_notSubscribed(forType subscriptionType: SubscriptionType,
-                             stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
-                             stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
-                             stubResumableSubscription_end_expected: Bool? = nil,
-                             file: StaticString = #file, line: UInt = #line)
+    private func setUp_notSubscribed(forType subscriptionType: SubscriptionType,
+                                     stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
+                                     stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
+                                     stubResumableSubscription_end_expected: Bool? = nil,
+                                     file: StaticString = #file, line: UInt = #line)
         -> (ConcreteSubscription, StubInstance, StubInstanceFactory, StubSubscriptionDelegate) {
             
             let instanceType: InstanceType = .subscription(subscriptionType)
@@ -70,11 +69,11 @@ extension XCTestCase {
             return (sut, stubInstance, stubInstanceFactory, stubDelegate)
     }
     
-    func setUp_subscribingStageTwo(forType subscriptionType: SubscriptionType,
-                                   stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
-                                   stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
-                                   stubResumableSubscription_end_expected: Bool? = nil,
-                                   file: StaticString = #file, line: UInt = #line)
+    private func setUp_subscribingStageTwo(forType subscriptionType: SubscriptionType,
+                                           stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
+                                           stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
+                                           stubResumableSubscription_end_expected: Bool? = nil,
+                                           file: StaticString = #file, line: UInt = #line)
         -> (ConcreteSubscription, StubInstance, StubInstanceFactory, StubSubscriptionDelegate, XCTestExpectation.Expectation<VoidResult>) {
             
             let (sut, stubInstance, stubInstanceFactory, stubDelegate)
@@ -98,7 +97,7 @@ extension XCTestCase {
             return (sut, stubInstance, stubInstanceFactory, stubDelegate, expectation)
     }
     
-    func setUp_subscribingStageTwoWithMultipleWaitingCompletions(
+    private func setUp_subscribingStageTwoWithMultipleWaitingCompletions(
         forType subscriptionType: SubscriptionType,
         stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
         stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
@@ -128,11 +127,11 @@ extension XCTestCase {
         return (sut, stubInstance, stubInstanceFactory, stubDelegate, firstExpectation, secondExpectation)
     }
             
-    func setUp_subscribed(forType subscriptionType: SubscriptionType,
-                          stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
-                          stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
-                          stubResumableSubscription_end_expected: Bool? = nil,
-                          file: StaticString = #file, line: UInt = #line)
+    private func setUp_subscribed(forType subscriptionType: SubscriptionType,
+                                  stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
+                                  stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
+                                  stubResumableSubscription_end_expected: Bool? = nil,
+                                  file: StaticString = #file, line: UInt = #line)
         -> (ConcreteSubscription, StubInstance, StubInstanceFactory, StubSubscriptionDelegate) {
             
             let (sut, stubInstance, stubInstanceFactory, stubDelegate, expectation)
@@ -157,10 +156,6 @@ extension XCTestCase {
             
             return (sut, stubInstance, stubInstanceFactory, stubDelegate)
     }
-}
-
-
-class ConcreteSubscriptionTests: XCTestCase {
     
     // MARK: subscribe(completion:)
     
@@ -203,8 +198,8 @@ class ConcreteSubscriptionTests: XCTestCase {
         XCTAssertExpectationUnfulfilled(expectation)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
-        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1) // <- Inceased by one
-        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1) // <- Inceased by one
+        XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1) // <- Increased by one
+        XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1) // <- Increased by one
     }
     
     func test_subscribe_whenSubscribingStageTwo_staysSubscribingStageTwoAndCompletionNotInvoked() {
@@ -385,7 +380,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         XCTAssertExpectationFulfilledWithResult(expectation, .success)
         XCTAssertEqualState(sut.state, .subscribed)
-        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1) // <- Inceased by one
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1) // <- Increased by one
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
         XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
@@ -474,7 +469,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         /******************/
         
         XCTAssertEqualState(sut.state, .subscribed)
-        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 2) // <- Inceased by one
+        XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 2) // <- Increased by one
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
         XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
@@ -524,7 +519,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         XCTAssertExpectationFulfilledWithResult(expectation, .failure("Dummy Error Message"))
         XCTAssertEqualState(sut.state, .notSubscribed)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
-        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Inceased by one
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
         XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
         
@@ -619,7 +614,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         XCTAssertEqualState(sut.state, .subscribed)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
-        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Inceased by one
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
         XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
         
@@ -703,7 +698,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         XCTAssertEqualState(sut.state, .notSubscribed)
         XCTAssertExpectationFulfilledWithResult(expectation, .failure(expectedError))
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
-        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Inceased by one
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
         XCTAssertEqualError(stubDelegate.didReceiveError_errorLastReceived, expectedError)
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
         XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
@@ -753,7 +748,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         XCTAssertExpectationFulfilledWithResult(firstExpectation, .failure(expectedError))
         XCTAssertExpectationFulfilledWithResult(secondExpectation, .failure(expectedError))
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
-        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Inceased by one
+        XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
         XCTAssertEqualError(stubDelegate.didReceiveError_errorLastReceived, expectedError)
         XCTAssertEqual(stubInstanceFactory.makeInstance_actualCallCount, 1)
         XCTAssertEqual(stubInstance.subscribeWithResume_actualCallCount, 1)
