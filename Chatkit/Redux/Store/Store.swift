@@ -19,6 +19,7 @@ class ConcreteStore: Store {
         & HasUserReducer
         & HasRoomListReducer
         & HasUserSubscriptionInitialStateReducer
+        & HasUserSubscriptionAddedToRoomReducer
         & HasUserSubscriptionRemovedFromRoomReducer
         & HasUserSubscriptionRoomUpdatedReducer
         & HasUserSubscriptionRoomDeletedReducer

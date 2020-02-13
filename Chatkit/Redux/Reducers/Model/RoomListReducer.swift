@@ -15,6 +15,9 @@ extension Reducer.Model {
             if let action = action as? InitialStateAction {
                 return self.reduce(action: action, state: state, dependencies: dependencies)
             }
+            else if let action = action as? AddedToRoomAction {
+                return self.reduce(action: action, state: state, dependencies: dependencies)
+            }
             else if let action = action as? RemovedFromRoomAction {
                 return self.reduce(action: action, state: state, dependencies: dependencies)
             }
@@ -57,6 +60,23 @@ extension Reducer.Model {
         
         private static func reduce(action: RemovedFromRoomAction, state: StateType, dependencies: DependenciesType) -> StateType {
             return self.deleteRoom(identifier: action.event.roomIdentifier, from: state)
+        }
+        
+        private static func reduce(action: AddedToRoomAction, state: StateType, dependencies: DependenciesType) -> StateType {
+            let room = RoomState(identifier: action.event.room.identifier,
+                                 name: action.event.room.name,
+                                 isPrivate: action.event.room.isPrivate,
+                                 pushNotificationTitle: action.event.room.pushNotificationTitleOverride,
+                                 customData: action.event.room.customData,
+                                 lastMessageAt: action.event.room.lastMessageAt,
+                                 readSummary: ReadSummaryState(unreadCount: action.event.readState.unreadCount),
+                                 createdAt: action.event.room.createdAt,
+                                 updatedAt: action.event.room.updatedAt)
+            
+            var rooms = state.rooms
+            rooms[room.identifier] = room
+            
+            return RoomListState(rooms: rooms)
         }
         
         private static func reduce(action: RoomDeletedAction, state: StateType, dependencies: DependenciesType) -> StateType {
