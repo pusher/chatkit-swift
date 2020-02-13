@@ -5,31 +5,35 @@ import XCTest
 class ConcreteStoreBroadcasterTests: XCTestCase {
     
     let stateA = MasterState(
-        users: [
-            UserState.populated(
-                identifier: "alice",
-                name: "Alice A"
-            )
-        ],
         currentUser: UserState.populated(
             identifier: "alice",
             name: "Alice A"
         ),
-        joinedRooms: .empty
+        joinedRooms: .empty,
+        users: UserListState(
+            users: [
+                "alice" : UserState.populated(
+                    identifier: "alice",
+                    name: "Alice A"
+                )
+            ]
+        )
     )
     
     let stateB = MasterState(
-        users: [
-            UserState.populated(
-                identifier: "bob",
-                name: "Bob B"
-            )
-        ],
         currentUser: UserState.populated(
             identifier: "bob",
             name: "Bob B"
         ),
-        joinedRooms: .empty
+        joinedRooms: .empty,
+        users: UserListState(
+            users: [
+                "bob" : UserState.populated(
+                    identifier: "bob",
+                    name: "Bob B"
+                )
+            ]
+        )
     )
     
     func test_register_withListenerThatIsNotCurrentlyRegistered_returnsStateFromStore() {

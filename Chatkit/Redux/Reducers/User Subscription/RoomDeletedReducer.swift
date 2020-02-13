@@ -14,7 +14,7 @@ extension Reducer.UserSubscription {
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
             let joinedRooms = dependencies.roomListReducer(action, state.joinedRooms, dependencies)
             
-            return MasterState(users: state.users, currentUser: state.currentUser, joinedRooms: joinedRooms)
+            return MasterState(currentUser: state.currentUser, joinedRooms: joinedRooms, users: state.users)
         }
         
     }

@@ -4,13 +4,6 @@ import TestUtilities
 
 class RoomDeletedReducerTests: XCTestCase {
     
-    // MARK: - Properties
-    
-    let testUser = UserState.populated(
-        identifier: "alice",
-        name: "Alice A"
-    )
-    
     // MARK: - Tests
     
     func test_reduce_withCurrentStateAndRoomDeletedActionForExistingRoom_returnsStateFromDedicatedReducer() {
@@ -20,8 +13,7 @@ class RoomDeletedReducerTests: XCTestCase {
         /******************/
         
         let inputState = MasterState(
-            users: [self.testUser],
-            currentUser: self.testUser,
+            currentUser: TestState.user,
             joinedRooms: RoomListState(
                 rooms: [
                     "first-room" : RoomState(
@@ -47,7 +39,8 @@ class RoomDeletedReducerTests: XCTestCase {
                         updatedAt: .distantPast
                     )
                 ]
-            )
+            ),
+            users: TestState.userList
         )
         
         let action = RoomDeletedAction(
@@ -87,8 +80,7 @@ class RoomDeletedReducerTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            users: [self.testUser],
-            currentUser: self.testUser,
+            currentUser: TestState.user,
             joinedRooms: RoomListState(
                 rooms: [
                     "first-room" : RoomState(
@@ -103,7 +95,8 @@ class RoomDeletedReducerTests: XCTestCase {
                         updatedAt: .distantPast
                     )
                 ]
-            )
+            ),
+            users: TestState.userList
         )
         
         XCTAssertEqual(outputState, expectedState)

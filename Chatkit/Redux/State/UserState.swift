@@ -10,6 +10,22 @@ enum UserState: State {
     
 }
 
+// MARK: - Accessors
+
+extension UserState {
+    
+    var identifier: String? {
+        switch self {
+        case .empty:
+            return nil
+            
+        case let .populated(identifier, _):
+            return identifier
+        }
+    }
+    
+}
+
 // MARK: - Equatable
 
 extension UserState: Equatable {}

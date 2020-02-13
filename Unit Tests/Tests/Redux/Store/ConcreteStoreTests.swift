@@ -4,13 +4,6 @@ import XCTest
 
 class ConcreteStoreTests: XCTestCase {
     
-    // MARK: - Properties
-    
-    let testUser = UserState.populated(
-        identifier: "alice",
-        name: "Alice A"
-    )
-    
     // MARK: - Tests
     
     func test_init_stateStartsAsEmpty() {
@@ -41,9 +34,9 @@ class ConcreteStoreTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            users: [self.testUser],
-            currentUser: self.testUser,
-            joinedRooms: .empty
+            currentUser: TestState.user,
+            joinedRooms: .empty,
+            users: TestState.userList
         )
         
         let stubMasterReducer: StubReducer<Reducer.Master> =
@@ -92,9 +85,9 @@ class ConcreteStoreTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            users: [self.testUser],
-            currentUser: self.testUser,
-            joinedRooms: .empty
+            currentUser: TestState.user,
+            joinedRooms: .empty,
+            users: TestState.userList
         )
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
@@ -219,9 +212,9 @@ class ConcreteStoreTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            users: [self.testUser],
-            currentUser: self.testUser,
-            joinedRooms: .empty
+            currentUser: TestState.user,
+            joinedRooms: .empty,
+            users: TestState.userList
         )
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)

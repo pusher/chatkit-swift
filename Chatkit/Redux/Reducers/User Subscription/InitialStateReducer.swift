@@ -16,9 +16,15 @@ extension Reducer.UserSubscription {
             let currentUser = dependencies.userReducer(action, state.currentUser, dependencies)
             let joinedRooms = dependencies.roomListReducer(action, state.joinedRooms, dependencies)
             
-            let users: [UserState] = currentUser == .empty ? [] : [currentUser]
+            var users: UserListState
+            if let identifier = currentUser.identifier {
+                users = UserListState(users: [identifier : currentUser])
+            }
+            else {
+                users = .empty
+            }
             
-            return MasterState(users: users, currentUser: currentUser, joinedRooms: joinedRooms)
+            return MasterState(currentUser: currentUser, joinedRooms: joinedRooms, users: users)
         }
         
     }

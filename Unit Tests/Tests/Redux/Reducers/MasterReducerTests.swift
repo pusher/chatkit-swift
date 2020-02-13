@@ -4,13 +4,6 @@ import TestUtilities
 
 class MasterReducerTests: XCTestCase {
     
-    // MARK: - Properties
-    
-    let testUser = UserState.populated(
-        identifier: "alice",
-        name: "Alice A"
-    )
-    
     // MARK: - Tests
     
     func test_reduce_withInitialStateAction_returnsStateFromDedicatedReducer() {
@@ -20,9 +13,9 @@ class MasterReducerTests: XCTestCase {
         /******************/
         
         let reducer_stateToReturn = MasterState(
-            users: [self.testUser],
-            currentUser: self.testUser,
-            joinedRooms: .empty
+            currentUser: TestState.user,
+            joinedRooms: .empty,
+            users: TestState.userList
         )
         
         let userSubscriptionInitialStateReducer = StubReducer<Reducer.UserSubscription.InitialState>(reduce_stateToReturn: reducer_stateToReturn,
@@ -74,7 +67,6 @@ class MasterReducerTests: XCTestCase {
         /******************/
         
         let reducer_stateToReturn = MasterState(
-            users: [],
             currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
@@ -90,7 +82,8 @@ class MasterReducerTests: XCTestCase {
                         updatedAt: .distantPast
                     )
                 ]
-            )
+            ),
+            users: .empty
         )
         
         let userSubscriptionRemovedFromRoomReducer = StubReducer<Reducer.UserSubscription.RemovedFromRoom>(reduce_stateToReturn: reducer_stateToReturn,
@@ -99,7 +92,6 @@ class MasterReducerTests: XCTestCase {
         let dependencies = DependenciesDoubles(userSubscriptionRemovedFromRoomReducer: userSubscriptionRemovedFromRoomReducer.reduce)
         
         let inputState = MasterState(
-            users: [],
             currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
@@ -126,7 +118,8 @@ class MasterReducerTests: XCTestCase {
                         updatedAt: .distantPast
                     )
                 ]
-            )
+            ),
+            users: .empty
         )
         
         let action = RemovedFromRoomAction(
@@ -160,7 +153,6 @@ class MasterReducerTests: XCTestCase {
         /******************/
         
         let reducer_stateToReturn = MasterState(
-            users: [],
             currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
@@ -176,7 +168,8 @@ class MasterReducerTests: XCTestCase {
                         updatedAt: .distantPast
                     )
                 ]
-            )
+            ),
+            users: .empty
         )
         
         let userSubscriptionRoomDeletedReducer = StubReducer<Reducer.UserSubscription.RoomDeleted>(reduce_stateToReturn: reducer_stateToReturn,
@@ -185,7 +178,6 @@ class MasterReducerTests: XCTestCase {
         let dependencies = DependenciesDoubles(userSubscriptionRoomDeletedReducer: userSubscriptionRoomDeletedReducer.reduce)
         
         let inputState = MasterState(
-            users: [],
             currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
@@ -212,7 +204,8 @@ class MasterReducerTests: XCTestCase {
                         updatedAt: .distantPast
                     )
                 ]
-            )
+            ),
+            users: .empty
         )
         
         let action = RoomDeletedAction(
@@ -246,7 +239,6 @@ class MasterReducerTests: XCTestCase {
         /******************/
         
         let reducer_stateToReturn = MasterState(
-            users: [],
             currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
@@ -264,7 +256,8 @@ class MasterReducerTests: XCTestCase {
                         updatedAt: .distantPast
                     )
                 ]
-            )
+            ),
+            users: .empty
         )
         
         let userSubscriptionReadStateUpdatedReducer = StubReducer<Reducer.UserSubscription.ReadStateUpdated>(reduce_stateToReturn: reducer_stateToReturn,
@@ -273,8 +266,7 @@ class MasterReducerTests: XCTestCase {
         let dependencies = DependenciesDoubles(userSubscriptionReadStateUpdatedReducer: userSubscriptionReadStateUpdatedReducer.reduce)
         
         let inputState = MasterState(
-            users: [self.testUser],
-            currentUser: self.testUser,
+            currentUser: TestState.user,
             joinedRooms: RoomListState(
                 rooms: [
                     "first-room" : RoomState(
@@ -291,7 +283,8 @@ class MasterReducerTests: XCTestCase {
                         updatedAt: .distantPast
                     )
                 ]
-            )
+            ),
+            users: TestState.userList
         )
         
         let action = ReadStateUpdatedAction(
@@ -330,7 +323,6 @@ class MasterReducerTests: XCTestCase {
         let dependencies = DependenciesDoubles()
         
         let inputState = MasterState(
-            users: [],
             currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
@@ -346,7 +338,8 @@ class MasterReducerTests: XCTestCase {
                         updatedAt: .distantPast
                     )
                 ]
-            )
+            ),
+            users: .empty
         )
         
         let action = DummyAction()
@@ -362,7 +355,6 @@ class MasterReducerTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            users: [],
             currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
@@ -378,7 +370,8 @@ class MasterReducerTests: XCTestCase {
                         updatedAt: .distantPast
                     )
                 ]
-            )
+            ),
+            users: .empty
         )
         
         XCTAssertEqual(outputState, expectedState)

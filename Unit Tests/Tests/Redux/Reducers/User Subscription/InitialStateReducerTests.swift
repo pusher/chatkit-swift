@@ -4,13 +4,6 @@ import TestUtilities
 
 class InitialStateReducerTests: XCTestCase {
     
-    // MARK: - Properties
-    
-    let testUser = UserState.populated(
-        identifier: "alice",
-        name: "Alice A"
-    )
-    
     // MARK: - Tests
     
     func test_reduce_withCurrentStateAndInitialStateAction_returnsModifiedState() {
@@ -74,7 +67,10 @@ class InitialStateReducerTests: XCTestCase {
             )
         )
         
-        let userReducer_stateToReturn = self.testUser
+        let userReducer_stateToReturn: UserState = .populated(
+            identifier: "alice",
+            name: "Alice A"
+        )
         
         let roomListReducer_stateToReturn = RoomListState(
             rooms: [
@@ -125,9 +121,11 @@ class InitialStateReducerTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            users: [userReducer_stateToReturn],
             currentUser: userReducer_stateToReturn,
-            joinedRooms: roomListReducer_stateToReturn
+            joinedRooms: roomListReducer_stateToReturn,
+            users: UserListState(
+                users: [TestState.userIdentifier : userReducer_stateToReturn]
+            )
         )
         
         XCTAssertEqual(outputState, expectedState)
@@ -245,9 +243,9 @@ class InitialStateReducerTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            users: [],
             currentUser: userReducer_stateToReturn,
-            joinedRooms: roomListReducer_stateToReturn
+            joinedRooms: roomListReducer_stateToReturn,
+            users: .empty
         )
         
         XCTAssertEqual(outputState, expectedState)
