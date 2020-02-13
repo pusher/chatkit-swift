@@ -16,7 +16,7 @@ extension XCTestCase {
             `Chatkit` instance has been initialised
             `chatkit.connect()` HAS been invoked and handler called with `success`
             (i.e. the user subscription IS active)
-                under the hood the *user* subscritpion has been successfully registered
+                under the hood the *user* subscription has been successfully registered
                 AND its `initial_state` event has been returned (`connect()` does not complete without this)
      
         ChatkitConnectFailure
