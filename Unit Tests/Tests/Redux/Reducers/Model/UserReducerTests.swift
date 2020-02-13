@@ -6,7 +6,7 @@ class UserReducerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_reduce_withCurrentStateAndInitialStateAction_returnsModifiedState() {
+    func test_reduce_withgInitialStateAction_returnsModifiedState() {
         
         /******************/
         /*---- GIVEN -----*/

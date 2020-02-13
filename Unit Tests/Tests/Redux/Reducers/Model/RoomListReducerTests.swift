@@ -6,7 +6,7 @@ class RoomsReducerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_reduce_withCurrentStateAndInitialStateAction_returnsModifiedState() {
+    func test_reduce_withInitialStateAction_returnsModifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -115,7 +115,7 @@ class RoomsReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withCurrentStateAndInitialStateActionWithMissingReadState_returnsModifiedStateWithoutReadSummary() {
+    func test_reduce_withInitialStateActionWithMissingReadState_returnsModifiedStateWithoutReadSummary() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -217,7 +217,7 @@ class RoomsReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withCurrentStateAndAddedToRoomActionForNonExistingRoom_returnsModifiedState() {
+    func test_reduce_withAddedToRoomActionForNonExistingRoom_returnsModifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -271,7 +271,7 @@ class RoomsReducerTests: XCTestCase {
                     roomIdentifier: "third-room",
                     userIdentifiers: [
                         "random-user",
-                        TestState.userIdentifier
+                        "alice"
                     ]
                 ),
                 readState: Wire.ReadState(
@@ -341,7 +341,7 @@ class RoomsReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withCurrentStateAndAddedToRoomActionForExistingRoom_returnsOverriddenState() {
+    func test_reduce_withAddedToRoomActionForExistingRoom_returnsOverriddenState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -395,7 +395,7 @@ class RoomsReducerTests: XCTestCase {
                     roomIdentifier: "second-room",
                     userIdentifiers: [
                         "random-user",
-                        TestState.userIdentifier
+                        "alice"
                     ]
                 ),
                 readState: Wire.ReadState(
@@ -452,7 +452,7 @@ class RoomsReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withCurrentStateAndRemovedFromRoomActionForExistingRoom_returnsModifiedState() {
+    func test_reduce_withRemovedFromRoomActionForExistingRoom_returnsModifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -528,7 +528,7 @@ class RoomsReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withCurrentStateAndRemovedFromRoomActionForNonExistingRoom_returnsUnmodifiedState() {
+    func test_reduce_withRemovedFromRoomActionForNonExistingRoom_returnsUnmodifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -617,7 +617,7 @@ class RoomsReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withCurrentStateAndRoomUpdatedActionForExistingRoom_returnsModifiedState() {
+    func test_reduce_withRoomUpdatedActionForExistingRoom_returnsModifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -659,7 +659,7 @@ class RoomsReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "second-room",
                     name: "Second Room",
-                    createdById: TestState.userIdentifier,
+                    createdById: "alice",
                     isPrivate: true,
                     pushNotificationTitleOverride: nil,
                     customData: nil,
@@ -717,7 +717,7 @@ class RoomsReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withCurrentStateAndRoomUpdatedActionForNonExistingRoom_returnsUnmodifiedState() {
+    func test_reduce_withRoomUpdatedActionForNonExistingRoom_returnsUnmodifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -759,7 +759,7 @@ class RoomsReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "third-room",
                     name: "Third",
-                    createdById: TestState.userIdentifier,
+                    createdById: "alice",
                     isPrivate: true,
                     pushNotificationTitleOverride: nil,
                     customData: nil,
@@ -817,7 +817,7 @@ class RoomsReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withCurrentStateAndRoomDeletedActionForExistingRoom_returnsModifiedState() {
+    func test_reduce_withRoomDeletedActionForExistingRoom_returnsModifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -893,7 +893,7 @@ class RoomsReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withCurrentStateAndRoomDeletedActionForNonExistingRoom_returnsUnmodifiedState() {
+    func test_reduce_withRoomDeletedActionForNonExistingRoom_returnsUnmodifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -982,7 +982,7 @@ class RoomsReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withCurrentStateAndReadStateUpdatedActionForExistingRoom_returnsModifiedState() {
+    func test_reduce_withReadStateUpdatedActionForExistingRoom_returnsModifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -1074,7 +1074,7 @@ class RoomsReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withCurrentStateAndReadStateUpdatedActionForNonExistingRoom_returnsModifiedState() {
+    func test_reduce_withReadStateUpdatedActionForNonExistingRoom_returnsModifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -1166,7 +1166,7 @@ class RoomsReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withCurrentStateAndUnsupportedAction_returnsUnmodifiedState() {
+    func test_reduce_withUnsupportedAction_returnsUnmodifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -1203,7 +1203,7 @@ class RoomsReducerTests: XCTestCase {
             ]
         )
         
-        let action = DummyAction()
+        let action = FakeAction()
         
         let dependencies = DependenciesDoubles()
         

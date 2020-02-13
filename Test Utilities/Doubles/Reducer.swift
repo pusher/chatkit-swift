@@ -24,7 +24,7 @@ extension XCTest {
 
 public class StubReducer<T: Reducing>: StubBase {
     
-    private var reduce_expectedCallCount: UInt
+    private let reduce_expectedCallCount: UInt
     private var reduce_stateToReturn: T.StateType
     public private(set) var reduce_actionLastReceived: T.ActionType?
     public private(set) var reduce_stateLastReceived: T.StateType?
@@ -45,11 +45,10 @@ public class StubReducer<T: Reducing>: StubBase {
         reduce_stateLastReceived = state
         reduce_actualCallCount += 1
         
-        guard reduce_expectedCallCount > 0 else {
+        guard reduce_actualCallCount <= reduce_expectedCallCount else {
             XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: file, line: line)
             return state
         }
-        reduce_expectedCallCount -= 1
         
         return reduce_stateToReturn
     }

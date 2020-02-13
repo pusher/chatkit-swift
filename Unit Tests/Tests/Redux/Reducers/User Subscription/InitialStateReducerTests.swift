@@ -6,7 +6,7 @@ class InitialStateReducerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_reduce_withCurrentStateAndInitialStateAction_returnsModifiedState() {
+    func test_reduce_withInitialStateAction_returnsModifiedState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -124,14 +124,16 @@ class InitialStateReducerTests: XCTestCase {
             currentUser: userReducer_stateToReturn,
             joinedRooms: roomListReducer_stateToReturn,
             users: UserListState(
-                users: [TestState.userIdentifier : userReducer_stateToReturn]
+                users: [
+                    "alice" : userReducer_stateToReturn
+                ]
             )
         )
         
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withCurrentStateAndInitialStateActionWithEmptyUserState_returnsEmptyListOfUsers() {
+    func test_reduce_withInitialStateActionWithEmptyUserState_returnsEmptyListOfUsers() {
         
         /******************/
         /*---- GIVEN -----*/

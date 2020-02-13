@@ -1,6 +1,6 @@
 @testable import PusherChatkit
 
-public class DummyAction: Action {
+public class FakeAction: Action {
     
     // MARK: - Initializers
     

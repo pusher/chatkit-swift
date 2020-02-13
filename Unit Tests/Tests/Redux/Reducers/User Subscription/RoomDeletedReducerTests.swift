@@ -6,14 +6,14 @@ class RoomDeletedReducerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_reduce_withCurrentStateAndRoomDeletedAction_returnsStateFromDedicatedReducer() {
+    func test_reduce_withRoomDeletedAction_returnsStateFromDedicatedReducer() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
         let inputState = MasterState(
-            currentUser: TestState.user,
+            currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
                     "first-room" : RoomState(
@@ -40,7 +40,7 @@ class RoomDeletedReducerTests: XCTestCase {
                     )
                 ]
             ),
-            users: TestState.userList
+            users: .empty
         )
         
         let action = RoomDeletedAction(
@@ -80,23 +80,9 @@ class RoomDeletedReducerTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            currentUser: TestState.user,
-            joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
-                        identifier: "first-room",
-                        name: "First",
-                        isPrivate: false,
-                        pushNotificationTitle: nil,
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        readSummary: .empty,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    )
-                ]
-            ),
-            users: TestState.userList
+            currentUser: .empty,
+            joinedRooms: reducer_stateToReturn,
+            users: .empty
         )
         
         XCTAssertEqual(outputState, expectedState)

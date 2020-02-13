@@ -6,41 +6,16 @@ class AddedToRoomReducerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_reduce_withCurrentStateAndAddedToRoomAction_returnsStateFromDedicatedReducer() {
+    func test_reduce_withAddedToRoomAction_returnsStateFromDedicatedReducer() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
         let inputState = MasterState(
-            currentUser: TestState.user,
-            joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
-                        identifier: "first-room",
-                        name: "First",
-                        isPrivate: false,
-                        pushNotificationTitle: nil,
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        readSummary: .empty,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    ),
-                    "second-room" : RoomState(
-                        identifier: "second-room",
-                        name: "Second",
-                        isPrivate: false,
-                        pushNotificationTitle: nil,
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        readSummary: .empty,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    )
-                ]
-            ),
-            users: TestState.userList
+            currentUser: .empty,
+            joinedRooms: .empty,
+            users: .empty
         )
         
         let action = AddedToRoomAction(
@@ -60,7 +35,7 @@ class AddedToRoomReducerTests: XCTestCase {
                     roomIdentifier: "third-room",
                     userIdentifiers: [
                         "random-user",
-                        TestState.userIdentifier
+                        "alice"
                     ]
                 ),
                 readState: Wire.ReadState(
@@ -73,28 +48,6 @@ class AddedToRoomReducerTests: XCTestCase {
         
         let reducer_stateToReturn = RoomListState(
             rooms: [
-                "first-room" : RoomState(
-                    identifier: "first-room",
-                    name: "First",
-                    isPrivate: false,
-                    pushNotificationTitle: nil,
-                    customData: nil,
-                    lastMessageAt: .distantPast,
-                    readSummary: .empty,
-                    createdAt: .distantPast,
-                    updatedAt: .distantPast
-                ),
-                "second-room" : RoomState(
-                    identifier: "second-room",
-                    name: "Second",
-                    isPrivate: false,
-                    pushNotificationTitle: nil,
-                    customData: nil,
-                    lastMessageAt: .distantPast,
-                    readSummary: .empty,
-                    createdAt: .distantPast,
-                    updatedAt: .distantPast
-                ),
                 "third-room" : RoomState(
                     identifier: "third-room",
                     name: "Third",
@@ -126,47 +79,9 @@ class AddedToRoomReducerTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            currentUser: TestState.user,
-            joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
-                        identifier: "first-room",
-                        name: "First",
-                        isPrivate: false,
-                        pushNotificationTitle: nil,
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        readSummary: .empty,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    ),
-                    "second-room" : RoomState(
-                        identifier: "second-room",
-                        name: "Second",
-                        isPrivate: false,
-                        pushNotificationTitle: nil,
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        readSummary: .empty,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    ),
-                    "third-room" : RoomState(
-                        identifier: "third-room",
-                        name: "Third",
-                        isPrivate: false,
-                        pushNotificationTitle: nil,
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        readSummary: ReadSummaryState(
-                            unreadCount: 30
-                        ),
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    )
-                ]
-            ),
-            users: TestState.userList
+            currentUser: .empty,
+            joinedRooms: reducer_stateToReturn,
+            users: .empty
         )
         
         XCTAssertEqual(outputState, expectedState)

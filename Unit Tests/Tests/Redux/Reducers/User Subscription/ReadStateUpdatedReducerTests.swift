@@ -6,14 +6,14 @@ class ReadStateUpdatedReducerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_reduce_withCurrentStateAndReadStateUpdatedAction_returnsStateFromDedicatedReducer() {
+    func test_reduce_withReadStateUpdatedAction_returnsStateFromDedicatedReducer() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
         let inputState = MasterState(
-            currentUser: TestState.user,
+            currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
                     "first-room" : RoomState(
@@ -44,7 +44,7 @@ class ReadStateUpdatedReducerTests: XCTestCase {
                     )
                 ]
             ),
-            users: TestState.userList
+            users: .empty
         )
         
         let action = ReadStateUpdatedAction(
@@ -102,38 +102,9 @@ class ReadStateUpdatedReducerTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            currentUser: TestState.user,
-            joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
-                        identifier: "first-room",
-                        name: "First",
-                        isPrivate: false,
-                        pushNotificationTitle: nil,
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        readSummary: ReadSummaryState(
-                            unreadCount: 10
-                        ),
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    ),
-                    "second-room" : RoomState(
-                        identifier: "second-room",
-                        name: "Second",
-                        isPrivate: false,
-                        pushNotificationTitle: nil,
-                        customData: nil,
-                        lastMessageAt: .distantPast,
-                        readSummary: ReadSummaryState(
-                            unreadCount: 20
-                        ),
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast
-                    )
-                ]
-            ),
-            users: TestState.userList
+            currentUser: .empty,
+            joinedRooms: reducer_stateToReturn,
+            users: .empty
         )
         
         XCTAssertEqual(outputState, expectedState)
