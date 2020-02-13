@@ -13,7 +13,7 @@ class RoomUpdatedReducerTests: XCTestCase {
         /******************/
         
         let inputState = MasterState(
-            currentUser: TestState.user,
+            currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
                     "first-room" : RoomState(
@@ -40,7 +40,7 @@ class RoomUpdatedReducerTests: XCTestCase {
                     )
                 ]
             ),
-            users: TestState.userList
+            users: .empty
         )
         
         let action = RoomUpdatedAction(
@@ -48,7 +48,7 @@ class RoomUpdatedReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "second-room",
                     name: "Second Room",
-                    createdById: TestState.userIdentifier,
+                    createdById: "alice",
                     isPrivate: true,
                     pushNotificationTitleOverride: nil,
                     customData: nil,
@@ -102,7 +102,7 @@ class RoomUpdatedReducerTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            currentUser: TestState.user,
+            currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
                     "first-room" : RoomState(
@@ -129,7 +129,7 @@ class RoomUpdatedReducerTests: XCTestCase {
                     )
                 ]
             ),
-            users: TestState.userList
+            users: .empty
         )
         
         XCTAssertEqual(outputState, expectedState)

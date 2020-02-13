@@ -124,7 +124,7 @@ class InitialStateReducerTests: XCTestCase {
             currentUser: userReducer_stateToReturn,
             joinedRooms: roomListReducer_stateToReturn,
             users: UserListState(
-                users: [TestState.userIdentifier : userReducer_stateToReturn]
+                users: ["alice" : userReducer_stateToReturn]
             )
         )
         

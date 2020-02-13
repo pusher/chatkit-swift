@@ -13,9 +13,9 @@ class MasterReducerTests: XCTestCase {
         /******************/
         
         let reducer_stateToReturn = MasterState(
-            currentUser: TestState.user,
+            currentUser: .empty,
             joinedRooms: .empty,
-            users: TestState.userList
+            users: .empty
         )
         
         let userSubscriptionInitialStateReducer = StubReducer<Reducer.UserSubscription.InitialState>(reduce_stateToReturn: reducer_stateToReturn,
@@ -163,7 +163,7 @@ class MasterReducerTests: XCTestCase {
                     roomIdentifier: "third-room",
                     userIdentifiers: [
                         "random-user",
-                        TestState.userIdentifier
+                        "alice"
                     ]
                 ),
                 readState: Wire.ReadState(
@@ -356,7 +356,7 @@ class MasterReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "second-room",
                     name: "Second Room",
-                    createdById: TestState.userIdentifier,
+                    createdById: "alice",
                     isPrivate: true,
                     pushNotificationTitleOverride: nil,
                     customData: nil,
@@ -506,7 +506,7 @@ class MasterReducerTests: XCTestCase {
         let dependencies = DependenciesDoubles(userSubscriptionReadStateUpdatedReducer: userSubscriptionReadStateUpdatedReducer.reduce)
         
         let inputState = MasterState(
-            currentUser: TestState.user,
+            currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
                     "first-room" : RoomState(
@@ -524,7 +524,7 @@ class MasterReducerTests: XCTestCase {
                     )
                 ]
             ),
-            users: TestState.userList
+            users: .empty
         )
         
         let action = ReadStateUpdatedAction(

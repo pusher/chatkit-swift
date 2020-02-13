@@ -13,7 +13,7 @@ class RoomDeletedReducerTests: XCTestCase {
         /******************/
         
         let inputState = MasterState(
-            currentUser: TestState.user,
+            currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
                     "first-room" : RoomState(
@@ -40,7 +40,7 @@ class RoomDeletedReducerTests: XCTestCase {
                     )
                 ]
             ),
-            users: TestState.userList
+            users: .empty
         )
         
         let action = RoomDeletedAction(
@@ -80,7 +80,7 @@ class RoomDeletedReducerTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            currentUser: TestState.user,
+            currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
                     "first-room" : RoomState(
@@ -96,7 +96,7 @@ class RoomDeletedReducerTests: XCTestCase {
                     )
                 ]
             ),
-            users: TestState.userList
+            users: .empty
         )
         
         XCTAssertEqual(outputState, expectedState)

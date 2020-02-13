@@ -34,9 +34,9 @@ class ConcreteStoreTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            currentUser: TestState.user,
+            currentUser: .empty,
             joinedRooms: .empty,
-            users: TestState.userList
+            users: .empty
         )
         
         let stubMasterReducer: StubReducer<Reducer.Master> =
@@ -85,9 +85,16 @@ class ConcreteStoreTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            currentUser: TestState.user,
+            currentUser: .empty,
             joinedRooms: .empty,
-            users: TestState.userList
+            users: UserListState(
+                users:[
+                    "alice": UserState.populated(
+                        identifier: "alice",
+                        name: "Alice A"
+                    )
+                ]
+            )
         )
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
@@ -212,9 +219,9 @@ class ConcreteStoreTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            currentUser: TestState.user,
+            currentUser: .empty,
             joinedRooms: .empty,
-            users: TestState.userList
+            users: .empty
         )
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)

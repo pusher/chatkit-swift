@@ -271,7 +271,7 @@ class RoomsReducerTests: XCTestCase {
                     roomIdentifier: "third-room",
                     userIdentifiers: [
                         "random-user",
-                        TestState.userIdentifier
+                        "alice"
                     ]
                 ),
                 readState: Wire.ReadState(
@@ -395,7 +395,7 @@ class RoomsReducerTests: XCTestCase {
                     roomIdentifier: "second-room",
                     userIdentifiers: [
                         "random-user",
-                        TestState.userIdentifier
+                        "alice"
                     ]
                 ),
                 readState: Wire.ReadState(
@@ -659,7 +659,7 @@ class RoomsReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "second-room",
                     name: "Second Room",
-                    createdById: TestState.userIdentifier,
+                    createdById: "alice",
                     isPrivate: true,
                     pushNotificationTitleOverride: nil,
                     customData: nil,
@@ -759,7 +759,7 @@ class RoomsReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "third-room",
                     name: "Third",
-                    createdById: TestState.userIdentifier,
+                    createdById: "alice",
                     isPrivate: true,
                     pushNotificationTitleOverride: nil,
                     customData: nil,

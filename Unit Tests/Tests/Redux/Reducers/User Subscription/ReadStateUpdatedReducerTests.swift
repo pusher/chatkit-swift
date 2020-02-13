@@ -13,7 +13,7 @@ class ReadStateUpdatedReducerTests: XCTestCase {
         /******************/
         
         let inputState = MasterState(
-            currentUser: TestState.user,
+            currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
                     "first-room" : RoomState(
@@ -44,7 +44,7 @@ class ReadStateUpdatedReducerTests: XCTestCase {
                     )
                 ]
             ),
-            users: TestState.userList
+            users: .empty
         )
         
         let action = ReadStateUpdatedAction(
@@ -102,7 +102,7 @@ class ReadStateUpdatedReducerTests: XCTestCase {
         /******************/
         
         let expectedState = MasterState(
-            currentUser: TestState.user,
+            currentUser: .empty,
             joinedRooms: RoomListState(
                 rooms: [
                     "first-room" : RoomState(
@@ -133,7 +133,7 @@ class ReadStateUpdatedReducerTests: XCTestCase {
                     )
                 ]
             ),
-            users: TestState.userList
+            users: .empty
         )
         
         XCTAssertEqual(outputState, expectedState)
