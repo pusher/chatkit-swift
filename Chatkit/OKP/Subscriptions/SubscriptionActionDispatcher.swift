@@ -1,12 +1,12 @@
 import Foundation
 
-protocol HasSubscriptionResponder {
-    var subscriptionResponder: SubscriptionResponder { get }
+protocol HasSubscriptionActionDispatcher {
+    var subscriptionActionDispatcher: SubscriptionActionDispatcher { get }
 }
 
-protocol SubscriptionResponder: SubscriptionDelegate {}
+protocol SubscriptionActionDispatcher: SubscriptionDelegate {}
 
-class ConcreteSubscriptionResponder: SubscriptionResponder {
+class ConcreteSubscriptionActionDispatcher: SubscriptionActionDispatcher {
     
     typealias Dependencies = HasStore
     

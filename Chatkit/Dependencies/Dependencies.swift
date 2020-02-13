@@ -9,7 +9,7 @@ protocol Dependencies:
     HasStoreBroadcaster &
     HasStore &
     HasInstanceFactory &
-    HasSubscriptionResponder &
+    HasSubscriptionActionDispatcher &
     HasSubscriptionFactory &
     HasSubscriptionManager
 {}
@@ -98,8 +98,8 @@ class ConcreteDependencies: Dependencies {
             ConcreteInstanceFactory(dependencies: dependencies)
         })
         
-        dependencyFactory.register(SubscriptionResponder.self, factory: { dependencies in
-            ConcreteSubscriptionResponder(dependencies: dependencies)
+        dependencyFactory.register(SubscriptionActionDispatcher.self, factory: { dependencies in
+            ConcreteSubscriptionActionDispatcher(dependencies: dependencies)
         })
         
         dependencyFactory.register(SubscriptionFactory.self, factory: { dependencies in
@@ -129,8 +129,8 @@ class ConcreteDependencies: Dependencies {
         return dependencyFactory.resolve(InstanceFactory.self, dependencies: self)
     }
     
-    var subscriptionResponder: SubscriptionResponder {
-        return dependencyFactory.resolve(SubscriptionResponder.self, dependencies: self)
+    var subscriptionActionDispatcher: SubscriptionActionDispatcher {
+        return dependencyFactory.resolve(SubscriptionActionDispatcher.self, dependencies: self)
     }
     
     var subscriptionFactory: SubscriptionFactory {

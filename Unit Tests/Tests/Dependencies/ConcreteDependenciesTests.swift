@@ -35,7 +35,7 @@ class ConcreteDependenciesTests: XCTestCase {
         XCTAssertTrue(dependencies.storeBroadcaster is ConcreteStoreBroadcaster)
         XCTAssertTrue(dependencies.store is ConcreteStore)
         XCTAssertTrue(dependencies.instanceFactory is ConcreteInstanceFactory)
-        XCTAssertTrue(dependencies.subscriptionResponder is ConcreteSubscriptionResponder)
+        XCTAssertTrue(dependencies.subscriptionActionDispatcher is ConcreteSubscriptionActionDispatcher)
         XCTAssertTrue(dependencies.subscriptionFactory is ConcreteSubscriptionFactory)
         XCTAssertTrue(dependencies.subscriptionManager is ConcreteSubscriptionManager)
     }
@@ -78,7 +78,7 @@ class ConcreteDependenciesTests: XCTestCase {
         XCTAssertTrue(dependencies.storeBroadcaster is ConcreteStoreBroadcaster)
         XCTAssertTrue(dependencies.store is StubStore) // <------ Not a `ConcreteStore`!
         XCTAssertTrue(dependencies.instanceFactory is ConcreteInstanceFactory)
-        XCTAssertTrue(dependencies.subscriptionResponder is ConcreteSubscriptionResponder)
+        XCTAssertTrue(dependencies.subscriptionActionDispatcher is ConcreteSubscriptionActionDispatcher)
         XCTAssertTrue(dependencies.subscriptionFactory is ConcreteSubscriptionFactory)
         XCTAssertTrue(dependencies.subscriptionManager is ConcreteSubscriptionManager)
     }

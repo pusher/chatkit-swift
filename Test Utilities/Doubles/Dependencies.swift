@@ -16,7 +16,7 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
     public let storeBroadcaster: StoreBroadcaster
     public let store: Store
     public let instanceFactory: InstanceFactory
-    public let subscriptionResponder: SubscriptionResponder
+    public let subscriptionActionDispatcher: SubscriptionActionDispatcher
     public let subscriptionFactory: SubscriptionFactory
     public let subscriptionManager: SubscriptionManager
     
@@ -26,7 +26,7 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
                 storeBroadcaster: StoreBroadcaster? = nil,
                 store: Store? = nil,
                 instanceFactory: InstanceFactory? = nil,
-                subscriptionResponder: SubscriptionResponder? = nil,
+                subscriptionActionDispatcher: SubscriptionActionDispatcher? = nil,
                 subscriptionFactory: SubscriptionFactory? = nil,
                 subscriptionManager: SubscriptionManager? = nil,
                 
@@ -38,7 +38,7 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
         self.storeBroadcaster = storeBroadcaster ?? DummyStoreBroadcaster(file: file, line: line)
         self.store = store ?? DummyStore(file: file, line: line)
         self.instanceFactory = instanceFactory ?? DummyInstanceFactory(file: file, line: line)
-        self.subscriptionResponder = subscriptionResponder ?? DummySubscriptionResponder(file: file, line: line)
+        self.subscriptionActionDispatcher = subscriptionActionDispatcher ?? DummySubscriptionActionDispatcher(file: file, line: line)
         self.subscriptionFactory = subscriptionFactory ?? DummySubscriptionFactory(file: file, line: line)
         self.subscriptionManager = subscriptionManager ?? DummySubscriptionManager(file: file, line: line)
         

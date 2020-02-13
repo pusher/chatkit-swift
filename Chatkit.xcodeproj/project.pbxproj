@@ -110,11 +110,11 @@
 		73233AC123CE19DC001909B7 /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233AC023CE19DC001909B7 /* SubscriptionManager.swift */; };
 		73233AC323CE1A0D001909B7 /* SubscriptionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233AC223CE1A0D001909B7 /* SubscriptionFactory.swift */; };
 		73233AC523CE1A9C001909B7 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233AC423CE1A9C001909B7 /* Subscription.swift */; };
-		73233AC723CE1AD3001909B7 /* SubscriptionResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233AC623CE1AD3001909B7 /* SubscriptionResponder.swift */; };
+		73233AC723CE1AD3001909B7 /* SubscriptionActionDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233AC623CE1AD3001909B7 /* SubscriptionActionDispatcher.swift */; };
 		73233AD123CE4605001909B7 /* ConcreteDependenciesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233AD023CE4605001909B7 /* ConcreteDependenciesTests.swift */; };
 		73233B1623CF2DAD001909B7 /* StubInstanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B1523CF2DAD001909B7 /* StubInstanceTests.swift */; };
 		73233B2823CF694C001909B7 /* ConcreteSubscriptionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B2723CF694C001909B7 /* ConcreteSubscriptionManagerTests.swift */; };
-		73233B2A23CF69A7001909B7 /* ConcreteSubscriptionResponderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B2923CF69A7001909B7 /* ConcreteSubscriptionResponderTests.swift */; };
+		73233B2A23CF69A7001909B7 /* ConcreteSubscriptionActionDispatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B2923CF69A7001909B7 /* ConcreteSubscriptionActionDispatcherTests.swift */; };
 		7326360723ACDF56009E44E2 /* Wire.Event.Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7326360623ACDF55009E44E2 /* Wire.Event.Subscription.swift */; };
 		732C8BC823F308BC006E7537 /* XCTestExpectation+ChatkitExpectations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732C8BC723F308BC006E7537 /* XCTestExpectation+ChatkitExpectations.swift */; };
 		732C8BCE23F3FEFD006E7537 /* InstanceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732C8BCD23F3FEFD006E7537 /* InstanceType.swift */; };
@@ -168,7 +168,7 @@
 		738A3EC623E2E69A00B6A614 /* StubNetworking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F85D0A23D0D8A60008D0D6 /* StubNetworking.swift */; };
 		738A3EC723E2E69A00B6A614 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B0523CF18DA001909B7 /* Subscription.swift */; };
 		738A3EC823E2E69A00B6A614 /* SubscriptionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B0D23CF1ECD001909B7 /* SubscriptionDelegate.swift */; };
-		738A3EC923E2E69A00B6A614 /* SubscriptionResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B2423CF437C001909B7 /* SubscriptionResponder.swift */; };
+		738A3EC923E2E69A00B6A614 /* SubscriptionActionDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B2423CF437C001909B7 /* SubscriptionActionDispatcher.swift */; };
 		738A3ECA23E2E69A00B6A614 /* SubscriptionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B0323CF1724001909B7 /* SubscriptionFactory.swift */; };
 		738A3ECB23E2E69A00B6A614 /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233B2223CF431B001909B7 /* SubscriptionManager.swift */; };
 		738A3ED423E3046300B6A614 /* XCTest+Doubles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738A3ED323E3046300B6A614 /* XCTest+Doubles.swift */; };
@@ -385,7 +385,7 @@
 		73233AC023CE19DC001909B7 /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
 		73233AC223CE1A0D001909B7 /* SubscriptionFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionFactory.swift; sourceTree = "<group>"; };
 		73233AC423CE1A9C001909B7 /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
-		73233AC623CE1AD3001909B7 /* SubscriptionResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionResponder.swift; sourceTree = "<group>"; };
+		73233AC623CE1AD3001909B7 /* SubscriptionActionDispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionActionDispatcher.swift; sourceTree = "<group>"; };
 		73233AD023CE4605001909B7 /* ConcreteDependenciesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteDependenciesTests.swift; sourceTree = "<group>"; };
 		73233B0323CF1724001909B7 /* SubscriptionFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionFactory.swift; sourceTree = "<group>"; };
 		73233B0523CF18DA001909B7 /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
@@ -396,9 +396,9 @@
 		73233B1523CF2DAD001909B7 /* StubInstanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubInstanceTests.swift; sourceTree = "<group>"; };
 		73233B1F23CF41ED001909B7 /* SDKInfoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKInfoProvider.swift; sourceTree = "<group>"; };
 		73233B2223CF431B001909B7 /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
-		73233B2423CF437C001909B7 /* SubscriptionResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionResponder.swift; sourceTree = "<group>"; };
+		73233B2423CF437C001909B7 /* SubscriptionActionDispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionActionDispatcher.swift; sourceTree = "<group>"; };
 		73233B2723CF694C001909B7 /* ConcreteSubscriptionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteSubscriptionManagerTests.swift; sourceTree = "<group>"; };
-		73233B2923CF69A7001909B7 /* ConcreteSubscriptionResponderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteSubscriptionResponderTests.swift; sourceTree = "<group>"; };
+		73233B2923CF69A7001909B7 /* ConcreteSubscriptionActionDispatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteSubscriptionActionDispatcherTests.swift; sourceTree = "<group>"; };
 		7326360623ACDF55009E44E2 /* Wire.Event.Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.Event.Subscription.swift; sourceTree = "<group>"; };
 		732C8BC723F308BC006E7537 /* XCTestExpectation+ChatkitExpectations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestExpectation+ChatkitExpectations.swift"; sourceTree = "<group>"; };
 		732C8BCD23F3FEFD006E7537 /* InstanceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstanceType.swift; sourceTree = "<group>"; };
@@ -1146,9 +1146,9 @@
 			children = (
 				732C8BD823F41572006E7537 /* Instance */,
 				73233AC423CE1A9C001909B7 /* Subscription.swift */,
+				73233AC623CE1AD3001909B7 /* SubscriptionActionDispatcher.swift */,
 				73233AC223CE1A0D001909B7 /* SubscriptionFactory.swift */,
 				73233AC023CE19DC001909B7 /* SubscriptionManager.swift */,
-				73233AC623CE1AD3001909B7 /* SubscriptionResponder.swift */,
 				732C8BCF23F3FF26006E7537 /* SubscriptionType.swift */,
 			);
 			path = Subscriptions;
@@ -1161,7 +1161,7 @@
 				732C8BD323F40750006E7537 /* ConcreteSubscriptionTests.swift */,
 				73EDEE5323D8ADD500DE566D /* ConcreteSubscriptionFactoryTests.swift */,
 				73233B2723CF694C001909B7 /* ConcreteSubscriptionManagerTests.swift */,
-				73233B2923CF69A7001909B7 /* ConcreteSubscriptionResponderTests.swift */,
+				73233B2923CF69A7001909B7 /* ConcreteSubscriptionActionDispatcherTests.swift */,
 			);
 			path = Subscriptions;
 			sourceTree = "<group>";
@@ -1346,10 +1346,10 @@
 				730E453C23DB4DD800A3AF94 /* StoreDelegate.swift */,
 				730E453E23DB4DD800A3AF94 /* StoreListener.swift */,
 				73233B0523CF18DA001909B7 /* Subscription.swift */,
+				73233B2423CF437C001909B7 /* SubscriptionActionDispatcher.swift */,
 				73233B0D23CF1ECD001909B7 /* SubscriptionDelegate.swift */,
 				73233B0323CF1724001909B7 /* SubscriptionFactory.swift */,
 				73233B2223CF431B001909B7 /* SubscriptionManager.swift */,
-				73233B2423CF437C001909B7 /* SubscriptionResponder.swift */,
 				2200BB96231EA5C200BF9545 /* TestLogger.swift */,
 				730E454623DB4DD800A3AF94 /* TokenProvider.swift */,
 			);
@@ -1738,7 +1738,7 @@
 				73A9392323E192FC0025AF90 /* String+ExtensionTests.swift in Sources */,
 				73CF01BC23AB823F006FB43E /* Wire.ReadState+Decodable.Tests.swift in Sources */,
 				7335D27523D7330900E51909 /* CodableJSONCollections+ArrayEncodingTests.swift in Sources */,
-				73233B2A23CF69A7001909B7 /* ConcreteSubscriptionResponderTests.swift in Sources */,
+				73233B2A23CF69A7001909B7 /* ConcreteSubscriptionActionDispatcherTests.swift in Sources */,
 				73E7312823AD3E5300FD5DF3 /* Wire.Event.Subscription+Decodable.Tests.swift in Sources */,
 				227498492321040100D10C76 /* BundleExtensionsTests.swift in Sources */,
 				227B8405230ECA7400921E0D /* RoomTests.swift in Sources */,
@@ -1840,7 +1840,7 @@
 				734A28B723D9A7B5003E2BC9 /* JoinedRoomsTransformer.swift in Sources */,
 				734D6A3823AA91FB00105479 /* Wire.User.swift in Sources */,
 				73EDEE5623D8C2D400DE566D /* EquatableResult.swift in Sources */,
-				73233AC723CE1AD3001909B7 /* SubscriptionResponder.swift in Sources */,
+				73233AC723CE1AD3001909B7 /* SubscriptionActionDispatcher.swift in Sources */,
 				73CF01BE23AB8AF9006FB43E /* Wire.Membership.swift in Sources */,
 				22437C8D23D86ACF0013E4A8 /* TestTokenProvider.swift in Sources */,
 				227177FE236894AA00B89376 /* MessagesViewModel.swift in Sources */,
@@ -1917,7 +1917,7 @@
 				73E585D923E08EF90047C6FA /* TestLogger.swift in Sources */,
 				73A9391D23E0A8E60025AF90 /* Array+Extensions.swift in Sources */,
 				738A3ED423E3046300B6A614 /* XCTest+Doubles.swift in Sources */,
-				738A3EC923E2E69A00B6A614 /* SubscriptionResponder.swift in Sources */,
+				738A3EC923E2E69A00B6A614 /* SubscriptionActionDispatcher.swift in Sources */,
 				73507D8B23EC59A90068C979 /* XCTestExpectation+Extensions.swift in Sources */,
 				73E585D823E08EF10047C6FA /* DummyBase.swift in Sources */,
 				73A9391C23E0A8BA0025AF90 /* XCTest+Assertions.swift in Sources */,

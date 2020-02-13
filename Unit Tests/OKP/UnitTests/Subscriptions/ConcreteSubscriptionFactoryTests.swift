@@ -29,7 +29,7 @@ class ConcreteSubscriptionFactoryTests: XCTestCase {
         
         XCTAssertType(subscription) { (concreteSubscription: ConcreteSubscription) in
             XCTAssertEqual(concreteSubscription.subscriptionType, subscriptionType)
-            XCTAssertTrue(concreteSubscription.delegate === dependencies.subscriptionResponder)
+            XCTAssertTrue(concreteSubscription.delegate === dependencies.subscriptionActionDispatcher)
         }
         
     }
@@ -57,7 +57,7 @@ class ConcreteSubscriptionFactoryTests: XCTestCase {
         
         XCTAssertType(subscription) { (concreteSubscription: ConcreteSubscription) in
             XCTAssertEqual(concreteSubscription.subscriptionType, subscriptionType)
-            XCTAssertTrue(concreteSubscription.delegate === dependencies.subscriptionResponder)
+            XCTAssertTrue(concreteSubscription.delegate === dependencies.subscriptionActionDispatcher)
         }
         
     }

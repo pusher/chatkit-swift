@@ -2,7 +2,7 @@ import TestUtilities
 import XCTest
 @testable import PusherChatkit
 
-class ConcreteSubscriptionResponderTests: XCTestCase {
+class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
     
     func test_stuff() {
 
@@ -17,7 +17,7 @@ class ConcreteSubscriptionResponderTests: XCTestCase {
             store: stubStore
         )
         
-        let sut = ConcreteSubscriptionResponder(dependencies: dependencies)
+        let sut = ConcreteSubscriptionActionDispatcher(dependencies: dependencies)
         
         /******************/
         /*----- WHEN -----*/

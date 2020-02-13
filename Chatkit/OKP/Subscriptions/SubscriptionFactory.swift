@@ -9,14 +9,14 @@ protocol SubscriptionFactory {
 
 class ConcreteSubscriptionFactory: SubscriptionFactory {
     
-    typealias Dependencies = HasInstanceFactory & HasSubscriptionResponder
+    typealias Dependencies = HasInstanceFactory & HasSubscriptionActionDispatcher
     
     private let dependencies: Dependencies
-    private let subscriptionResponder: SubscriptionResponder
+    private let subscriptionActionDispatcher: SubscriptionActionDispatcher
     
     init(dependencies: Dependencies) {
         self.dependencies = dependencies
-        self.subscriptionResponder = dependencies.subscriptionResponder
+        self.subscriptionActionDispatcher = dependencies.subscriptionActionDispatcher
     }
     
     // MARK: SubscriptionFactory
@@ -24,6 +24,6 @@ class ConcreteSubscriptionFactory: SubscriptionFactory {
     func makeSubscription(subscriptionType: SubscriptionType) -> Subscription {
         return ConcreteSubscription(subscriptionType: subscriptionType,
                                     dependencies: dependencies,
-                                    delegate: subscriptionResponder)
+                                    delegate: subscriptionActionDispatcher)
     }
 }
