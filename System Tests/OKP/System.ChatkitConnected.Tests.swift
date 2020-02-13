@@ -26,10 +26,8 @@ class System_ChatkitConnected_Tests: XCTestCase {
             /*****************/
             
             wait(for: [expectation], timeout: expectation.timeout)
-                  
-            XCTAssertExpectationFulfilled(expectation) { error in
-                XCTAssertNil(error)
-            }
+            
+            XCTAssertExpectationFulfilledWithResult(expectation, nil)
             XCTAssertEqual(chatkit.connectionStatus, .connected)
             
         }())
@@ -85,7 +83,6 @@ class System_ChatkitConnected_Tests: XCTestCase {
             
             XCTAssertExpectationFulfilled(expectation) { joinedRoomsProvider, error in
                 XCTAssertNotNil(joinedRoomsProvider) { joinedRoomsProvider in
-                    print(joinedRoomsProvider.rooms)
                     XCTAssertGreaterThan(joinedRoomsProvider.rooms.count, 0)
                 }
                 XCTAssertNil(error)

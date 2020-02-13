@@ -27,10 +27,7 @@ class System_ChatKitInitialised_Tests: XCTestCase {
             
             wait(for: [expectation], timeout: expectation.timeout)
             
-            XCTAssertExpectationFulfilled(expectation) { error in
-                XCTAssertNil(error)
-            }
-            
+            XCTAssertExpectationFulfilledWithResult(expectation, nil)
             XCTAssertEqual(chatkit.connectionStatus, .connected)
             
         }())

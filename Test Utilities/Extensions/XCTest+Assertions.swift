@@ -138,3 +138,10 @@ public func XCTAssertExpectationFulfilled<ResultTypeA, ResultTypeB>(_ expectatio
         XCTFail(message, file: file, line: line)
     }
 }
+
+public func XCTAssertExpectationFulfilledWithResult<ResultType>(_ expectation: XCTestExpectation.Expectation<ResultType>, _ expectedResult: ResultType, _ message: String = "", file: StaticString = #file, line: UInt = #line) where ResultType : Equatable {
+    
+    XCTAssertExpectationFulfilled(expectation, message, file: file, line: line) { result in
+        XCTAssertEqual(result, expectedResult)
+    }
+}

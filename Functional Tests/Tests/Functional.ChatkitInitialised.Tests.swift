@@ -50,9 +50,7 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             
             wait(for: [expectation], timeout: 1)
             
-            XCTAssertExpectationFulfilled(expectation) { error in
-                XCTAssertNil(error)
-            }
+            XCTAssertExpectationFulfilledWithResult(expectation, nil)
             XCTAssertEqual(chatkit.connectionStatus, .connected)
             
         }())
@@ -84,9 +82,7 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             
             wait(for: [expectation], timeout: 1)
             
-            XCTAssertExpectationFulfilled(expectation) { error in
-                XCTAssertEqual(error as? String, "Failure")
-            }
+            XCTAssertExpectationFulfilledWithResult(expectation, "Failure")
             XCTAssertEqual(chatkit.connectionStatus, .disconnected)
             
         }())
@@ -144,8 +140,9 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
                 XCTAssertNil(joinedRoomsProvider)
                 // TODO: improved assertion to better check content of error
                 XCTAssertNotNil(error)
-                XCTAssertEqual(chatkit.connectionStatus, .disconnected)
             }
+            
+            XCTAssertEqual(chatkit.connectionStatus, .disconnected)
             
         }())
     }

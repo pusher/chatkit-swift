@@ -69,9 +69,7 @@ extension XCTestCase {
         
         wait(for: [expectation], timeout: expectation.timeout)
 
-        XCTAssertExpectationFulfilled(expectation) { error in
-            XCTAssertNil(error)
-        }
+        XCTAssertExpectationFulfilledWithResult(expectation, nil)
         XCTAssertEqual(chatkit.connectionStatus, .connected, file: file, line: line)
         
         return (stubNetworking, chatkit, dependencies.storeBroadcaster)

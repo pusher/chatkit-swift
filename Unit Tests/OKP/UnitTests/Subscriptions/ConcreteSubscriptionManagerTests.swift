@@ -45,10 +45,7 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         
         wait(for: [expectation], timeout: expectation.timeout)
         
-        XCTAssertExpectationFulfilled(expectation) { result in
-            XCTAssertEqual(result, .success)
-        }
-        
+        XCTAssertExpectationFulfilledWithResult(expectation, .success)        
         XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 1) // <-- has increased by one
         XCTAssertEqual(stubSubscription.subscribe_actualCallCount, 1) // <-- has increased by one
     }
@@ -94,10 +91,7 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         
         wait(for: [expectation], timeout: expectation.timeout)
         
-        XCTAssertExpectationFulfilled(expectation) { result in
-            XCTAssertEqual(result, .success)
-        }
-        
+        XCTAssertExpectationFulfilledWithResult(expectation, .success)
         XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 1) // <-- has increased by one
         XCTAssertEqual(stubSubscription.subscribe_actualCallCount, 1) // <-- has increased by one
     }
@@ -153,10 +147,7 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         
         wait(for: [secondExpectation], timeout: secondExpectation.timeout)
         
-        XCTAssertExpectationFulfilled(secondExpectation) { result in
-            XCTAssertEqual(result, .success)
-        }
-        
+        XCTAssertExpectationFulfilledWithResult(secondExpectation, .success)
         XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 1) // <-- unchanged (the subscription already existed)
         XCTAssertEqual(stubUserSubscription.subscribe_actualCallCount, 2) // <-- has increased by one
     }
@@ -215,10 +206,7 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         
         wait(for: [secondExpectation], timeout: secondExpectation.timeout)
         
-        XCTAssertExpectationFulfilled(secondExpectation) { result in
-            XCTAssertEqual(result, .success)
-        }
-        
+        XCTAssertExpectationFulfilledWithResult(secondExpectation, .success)
         XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 2) // <-- has increased by one
         XCTAssertEqual(firstStubSubscription.subscribe_actualCallCount, 1)// <-- unchanged
         XCTAssertEqual(secondStubSubscription.subscribe_actualCallCount, 1) // <-- has increased by one
@@ -275,10 +263,7 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         
         wait(for: [secondExpectation], timeout: secondExpectation.timeout)
         
-        XCTAssertExpectationFulfilled(secondExpectation) { result in
-            XCTAssertEqual(result, .success)
-        }
-        
+        XCTAssertExpectationFulfilledWithResult(secondExpectation, .success)
         XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 1) // <-- unchanged (the subscription already existed)
         XCTAssertEqual(roomStubSubscription.subscribe_actualCallCount, 2) // <-- has increased by one
     }
@@ -337,9 +322,7 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
 
-        XCTAssertExpectationFulfilled(expectation) { result in
-            XCTAssertEqual(result, .success)
-        }
+        XCTAssertExpectationFulfilledWithResult(expectation, .success)
         XCTAssertEqual(stubSubscriptionDelegate.didReceiveEvent_jsonDataLastReceived, jsonData)
         XCTAssertEqual(stubSubscriptionDelegate.didReceiveEvent_actualCallCount, 1)
         XCTAssertEqual(stubSubscriptionDelegate.didReceiveError_actualCallCount, 0)
@@ -384,9 +367,7 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         
         wait(for: [expectation], timeout: 1)
         
-        XCTAssertExpectationFulfilled(expectation) { result in
-            XCTAssertEqual(result, .failure(error))
-        }
+        XCTAssertExpectationFulfilledWithResult(expectation, .failure(error))
         XCTAssertEqual(stubSubscriptionDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubSubscriptionDelegate.didReceiveError_actualCallCount, 0)
     }

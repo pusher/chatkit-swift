@@ -50,9 +50,7 @@ extension XCTestCase {
         
         wait(for: [expectation], timeout: expectation.timeout)
         
-        XCTAssertExpectationFulfilled(expectation) { error in
-            XCTAssertNil(error)
-        }
+        XCTAssertExpectationFulfilledWithResult(expectation, nil)
         
         return chatkit
     }
