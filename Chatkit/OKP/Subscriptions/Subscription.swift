@@ -153,7 +153,6 @@ class ConcreteSubscription: Subscription {
                 // TODO: This should be removed once we've updated the PusherPlatform to return data rather than a jsonDict.
                 guard let jsonDict = any as? [String: Any],
                     let jsonData = try? JSONSerialization.data(withJSONObject: jsonDict, options: .prettyPrinted) else {
-                        // TODO: probably create a Json falvoured Error here and call `self.delegate?.subscription(self, didReceiveError: error)`
                         fatalError()
                 }
                 
