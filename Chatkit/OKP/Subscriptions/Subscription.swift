@@ -125,19 +125,17 @@ class ConcreteSubscription: Subscription {
             switch self.state {
                 
             case .notSubscribed, .subscribingStageOne:
-                // TODO we shouldn't ever be able to get here in theory?
-                preconditionFailure("This shouldn't be possible")
+                // We shouldn't ever be able to get here
+                preconditionFailure("`performSubscribe` should never be called whilst in state `\(self.state)`")
                 
             case let .subscribingStageTwo(instance, resumableSubscription, completions):
                 
-                // TODO: Implement properly
+                // TODO: This should be removed once we've updated the PusherPlatform to return data rather than a jsonDict.
                 guard let jsonDict = any as? [String: Any],
                     let jsonData = try? JSONSerialization.data(withJSONObject: jsonDict, options: .prettyPrinted) else {
-                        // TODO: probably create a Json falvoured Error here and call `self.delegate?.subscription(self, didReceiveError: error)`
                         fatalError()
                 }
                 
-                // TODO is ordering correct?
                 // The ORDER of the code here is VITAL:
                 //   We MUST set the state before we call the delegate/completions
                 //   We MUST invoke the delegate method before the completions
@@ -152,7 +150,7 @@ class ConcreteSubscription: Subscription {
                 
             case .subscribed(_, _):
                 
-                // TODO: Implement properly
+                // TODO: This should be removed once we've updated the PusherPlatform to return data rather than a jsonDict.
                 guard let jsonDict = any as? [String: Any],
                     let jsonData = try? JSONSerialization.data(withJSONObject: jsonDict, options: .prettyPrinted) else {
                         // TODO: probably create a Json falvoured Error here and call `self.delegate?.subscription(self, didReceiveError: error)`
@@ -169,14 +167,11 @@ class ConcreteSubscription: Subscription {
                 return
             }
             
-            //self.logger.log("Chat service subscription failed with error: \(error.localizedDescription)", logLevel: .warning)
-            print(error)
-            
             switch self.state {
                 
             case .notSubscribed:
-                // TODO we shouldn't ever be able to get here in theory?
-                preconditionFailure("This shouldn't be possible")
+                // We shouldn't ever be able to get here
+                preconditionFailure("`onError` should never be called whilst in state `\(self.state)`")
                 
             case let .subscribingStageOne(_, completions):
                 
