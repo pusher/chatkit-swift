@@ -139,6 +139,16 @@ public func XCTAssertExpectationFulfilled<ResultTypeA, ResultTypeB>(_ expectatio
     }
 }
 
+public func XCTAssertExpectationFulfilled<ResultTypeA, ResultTypeB, ResultTypeC>(_ expectation: XCTestExpectation.ThreeArgExpectation<ResultTypeA, ResultTypeB, ResultTypeC>, _ message: String = "", file: StaticString = #file, line: UInt = #line, also validateResult: ((ResultTypeA, ResultTypeB, ResultTypeC)) -> Void) {
+    
+    switch expectation.state {
+    case let .fulfilled(result):
+        validateResult(result)
+    case .unfulfilled:
+        XCTFail(message, file: file, line: line)
+    }
+}
+
 public func XCTAssertExpectationFulfilledWithResult<ResultType>(_ expectation: XCTestExpectation.Expectation<ResultType>, _ expectedResult: ResultType, _ message: String = "", file: StaticString = #file, line: UInt = #line) where ResultType : Equatable {
     
     XCTAssertExpectationFulfilled(expectation, message, file: file, line: line) { result in

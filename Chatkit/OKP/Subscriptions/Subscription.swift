@@ -117,24 +117,22 @@ class ConcreteSubscription: Subscription {
         let requestPath = makeRequestPath(for: subscriptionType)
         let requestOptions = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: requestPath)
         
-        let onEvent: Instance.OnEvent = { [weak self] _, _, any in
+        let onEvent: Instance.OnEvent = { [weak self] _, _, jsonDataAsAny in
             guard let self = self else {
                 return
+            }
+            
+            guard let jsonData = jsonDataAsAny as? Data else {
+                preconditionFailure("`onEvent` called with non-`Data` typed data")
             }
             
             switch self.state {
                 
             case .notSubscribed, .subscribingStageOne:
                 // We shouldn't ever be able to get here
-                preconditionFailure("`performSubscribe` should never be called whilst in state `\(self.state)`")
+                preconditionFailure("`onEvent` should never be called whilst in state `\(self.state)`")
                 
             case let .subscribingStageTwo(instance, resumableSubscription, completions):
-                
-                // TODO: This should be removed once we've updated the PusherPlatform to return data rather than a jsonDict.
-                guard let jsonDict = any as? [String: Any],
-                    let jsonData = try? JSONSerialization.data(withJSONObject: jsonDict, options: .prettyPrinted) else {
-                        fatalError()
-                }
                 
                 // The ORDER of the code here is VITAL:
                 //   We MUST set the state before we call the delegate/completions
@@ -149,12 +147,6 @@ class ConcreteSubscription: Subscription {
                 }
                 
             case .subscribed(_, _):
-                
-                // TODO: This should be removed once we've updated the PusherPlatform to return data rather than a jsonDict.
-                guard let jsonDict = any as? [String: Any],
-                    let jsonData = try? JSONSerialization.data(withJSONObject: jsonDict, options: .prettyPrinted) else {
-                        fatalError()
-                }
                 
                 self.delegate?.subscription(self, didReceiveEventWithJsonData: jsonData)
                 

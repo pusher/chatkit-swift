@@ -7,9 +7,9 @@ import enum PusherPlatform.HTTPMethod
 
 class StubInstanceTests: XCTestCase {
     
-    func test_stuff() {
+    func test_subscribeAndfireOnEvent_regardless_invokesOnEvent() {
         
-        let expectedJsonData = """
+        let jsonData = """
         {
             "bob": "fred"
         }
@@ -21,33 +21,26 @@ class StubInstanceTests: XCTestCase {
         
         let requestOptions = PusherPlatform.PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: "/user")
         
-        let expectation = self.expectation(description: #function)
-        
-        let onEvent: Instance.OnEvent = { _, _, any in
-            expectation.fulfill()
-            guard let jsonDict = any as? [String: Any] else {
-                XCTFail()
-                return
-            }
-            guard let expectedJson = try? JSONSerialization.jsonObject(with: expectedJsonData, options: []),
-                let expectedJsonDict = expectedJson as? [String: Any] else {
-                XCTFail()
-                return
-            }
-            XCTAssertEqual(jsonDict.description, expectedJsonDict.description)
-        }
+        let expectation: XCTestExpectation.ThreeArgExpectation<String, [String: String], Any>
+            = XCTestExpectation.ThreeArgExpectation(functionName: "onEvent")
         
         _ = stubInstance.subscribeWithResume(using: requestOptions,
                                              onOpening: nil,
                                              onOpen: nil,
                                              onResuming: nil,
-                                             onEvent: onEvent,
+                                             onEvent: expectation.handler,
                                              onEnd: nil,
                                              onError: nil)
         
-        stubInstance.fireOnEvent(jsonData: expectedJsonData)
+        stubInstance.fireOnEvent(jsonData: jsonData)
         
         wait(for: [expectation], timeout: 1)
+        
+        XCTAssertExpectationFulfilled(expectation) { (_: String, _: [String: String], jsonDataAsAny: Any) in
+            XCTAssertType(jsonDataAsAny) { actualJsonData in
+                XCTAssertEqual(actualJsonData, jsonData)
+            }
+        }
     }
     
 }

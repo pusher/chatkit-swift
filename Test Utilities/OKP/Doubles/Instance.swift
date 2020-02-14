@@ -80,15 +80,9 @@ public class StubInstance: DoubleBase, Instance {
     }
     
     public func fireOnEvent(jsonData: Data) {
-        // TODO: This should be removed once we've updated the PusherPlatform to return data rather than a jsonDict.
-        guard let jsonDict = try? JSONSerialization.jsonObject(with: jsonData, options: []) else {
-            XCTFail("`\(#function)` was called but the jsonData passed was NOT JSON parsable", file: file, line: line)
-            return
-        }
-        
         let eventId = ""
         let headers: [String: String] = [:]
-        onEvent?(eventId, headers, jsonDict)
+        onEvent?(eventId, headers, jsonData)
     }
     
     public func fireOnEnd() {

@@ -3,7 +3,7 @@ import class PusherPlatform.Instance
 import class PusherPlatform.PPGeneralRequest
 import class PusherPlatform.PPRequestOptions
 
-// Its nots possible to stub a PusherPlatform.Instance because it has no protocol so this
+// Its not possible to stub a PusherPlatform.Instance because it has no protocol so this
 // protocol exists to resolve that problem.
 protocol Instance {
     
@@ -63,9 +63,26 @@ class ConcreteInstance: Instance {
                                                       onOpening: onOpening,
                                                       onOpen: onOpen,
                                                       onResuming: onResuming,
-                                                      onEvent: onEvent,
+                                                      onEvent: jsonDataOnEvent(onEvent: onEvent),
                                                       onEnd: onEnd,
                                                       onError: onError)
+    }
+    
+    // TODO: This should be removed once we've updated the PusherPlatform to return jsonData rather than a jsonDict.
+    private func jsonDataOnEvent(onEvent: OnEvent?) -> OnEvent? {
+        
+        guard let onEvent = onEvent else {
+            return nil
+        }
+        return { (eventId: String, headers: [String: String], jsonDictAsAny: Any) in
+            
+            guard let jsonDict = jsonDictAsAny as? [String: Any],
+                let jsonData = try? JSONSerialization.data(withJSONObject: jsonDict, options: .prettyPrinted) else {
+                    fatalError()
+            }
+            onEvent(eventId, headers, jsonData)
+        }
+
     }
     
 }
