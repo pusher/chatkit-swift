@@ -17,7 +17,7 @@ class StubInstanceWrapperTests: XCTestCase {
         
         let stubInstanceWrapper = StubInstanceWrapper()
         
-        stubInstanceWrapper.stubSubscribe(result: .success)
+        stubInstanceWrapper.stubSubscribe(outcome: .opensSuccessfully)
         
         let requestOptions = PusherPlatform.PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: "/user")
         

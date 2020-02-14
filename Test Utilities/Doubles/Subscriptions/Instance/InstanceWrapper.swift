@@ -17,6 +17,12 @@ public class DummyInstanceWrapper: DummyBase, InstanceWrapper {
     }
 }
 
+public enum SubscribeOutcome {
+    case waits
+    case opensSuccessfully
+    case failsWithError(Error)
+}
+
 public class StubInstanceWrapper: DoubleBase, InstanceWrapper {
     
     struct Expectation {
@@ -38,10 +44,10 @@ public class StubInstanceWrapper: DoubleBase, InstanceWrapper {
     // Property is `weak` to emulate its real world equivalent
     private weak var internalStubResumableSubscription: StubResumableSubscription?
 
-    public init(subscribeWithResume_expectedCallCount: UInt = 0,
+    public init(subscribeWithResume_outcomes: [SubscribeOutcome] = [],
                 resumableSubscription_end_expected: Bool = false,
                 file: StaticString = #file, line: UInt = #line) {
-        self.subscribeWithResume_expectedCallCount = subscribeWithResume_expectedCallCount
+        self.subscribeWithResume_outcomes = subscribeWithResume_outcomes
         self.resumableSubscription_end_expected = resumableSubscription_end_expected
         super.init(file: file, line: line)
     }
@@ -49,11 +55,9 @@ public class StubInstanceWrapper: DoubleBase, InstanceWrapper {
     public func stub(_ urlString: String, _ jsonData: Data) {}
     
     // Preparing for registration to a subscription
-    private var subscribeWithResume_expectedCallCount: UInt
-    private var stubbedSubscribeResult: VoidResult?
-    public func stubSubscribe(result: VoidResult) {
-        subscribeWithResume_expectedCallCount += 1
-        stubbedSubscribeResult = result
+    private var subscribeWithResume_outcomes: [SubscribeOutcome] = []
+    public func stubSubscribe(outcome: SubscribeOutcome) {
+        subscribeWithResume_outcomes.append(outcome)
     }
     
     private var resumableSubscription_end_expected = false
@@ -144,7 +148,7 @@ public class StubInstanceWrapper: DoubleBase, InstanceWrapper {
         
         subscribeWithResume_actualCallCount += 1
         
-        guard subscribeWithResume_actualCallCount <= subscribeWithResume_expectedCallCount else {
+        guard let subscribeWithResume_outcome = subscribeWithResume_outcomes.removeOptionalFirst() else {
             XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))`", file: file, line: line)
             return DummyResumableSubscription(file: file, line: line)
         }
@@ -158,15 +162,18 @@ public class StubInstanceWrapper: DoubleBase, InstanceWrapper {
         
         fireOnOpening()
         
-        if let stubbedSubscribeResult = stubbedSubscribeResult {
-            // TODO: no idea if this is correct
-            switch stubbedSubscribeResult {
-            case .success:
-                fireOnOpen()
-            case let .failure(error):
-                fireOnError(error: error)
-                fireOnEnd()
-            }
+        // TODO: Check how PusherPlatform.Instance behaves in real life
+        // Should these be delayed async calls so they don't happen till the next run loop?
+        // Are we invoked the correct events in the right order?
+        // To be determined in future when more work is putting into failure paths
+        switch subscribeWithResume_outcome {
+        case .waits:
+            () // Do nothing, the test should manually invoke events
+        case .opensSuccessfully:
+            fireOnOpen()
+        case let .failsWithError(error):
+            fireOnError(error: error)
+            fireOnEnd()
         }
         
         let end_expectedCallCount: UInt = resumableSubscription_end_expected ? 1 : 0

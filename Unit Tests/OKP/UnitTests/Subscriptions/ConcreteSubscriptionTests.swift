@@ -38,7 +38,7 @@ class ConcreteSubscriptionTests: XCTestCase {
             let instanceType: InstanceType = .subscription(subscriptionType)
             
             let stubInstanceWrapper = StubInstanceWrapper(
-                subscribeWithResume_expectedCallCount: 1,
+                subscribeWithResume_outcomes: [.waits],
                 resumableSubscription_end_expected: stubResumableSubscription_end_expected ?? false,
                 file: file, line: line
             )

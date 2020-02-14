@@ -3,7 +3,7 @@ import XCTest
 
 public class StubNetworking: DoubleBase, InstanceWrapperFactory {
     
-    private var expectedSubscribeCalls: [SubscriptionType: VoidResult] = .init()
+    private var expectedSubscribeOutcomes: [SubscriptionType: SubscribeOutcome] = .init()
     private var expectedSubscriptionEndCalls: Set<SubscriptionType> = .init()
     private var registeredStubInstanceWrappers: [InstanceType: StubInstanceWrapper] = .init()
     
@@ -17,17 +17,18 @@ public class StubNetworking: DoubleBase, InstanceWrapperFactory {
     public func stub(_ urlString: String, _ jsonData: Data) {}
     
     // Preparing for registration to a subscription
-    public func stubSubscribe(_ subscriptionType: SubscriptionType, _ result: VoidResult,
+    public func stubSubscribe(_ subscriptionType: SubscriptionType,
+                              _ outcome: SubscribeOutcome,
                               file: StaticString = #file, line: UInt = #line) {
-        guard expectedSubscribeCalls[subscriptionType] == nil else {
+        guard expectedSubscribeOutcomes[subscriptionType] == nil else {
             XCTFail("Call to `\(#function)` on `\(String(describing: self))` with subscriptionType: `\(subscriptionType)` made but we are *already* anticipating a call to `subscribe` that has not yet been fulfilled", file: file, line: line)
             return
         }
         
         if let stubInstanceWrapper = registeredStubInstanceWrappers[.subscription(subscriptionType)] {
-            stubInstanceWrapper.stubSubscribe(result: result)
+            stubInstanceWrapper.stubSubscribe(outcome: outcome)
         } else {
-            expectedSubscribeCalls[subscriptionType] = result
+            expectedSubscribeOutcomes[subscriptionType] = outcome
         }
     }
     
@@ -89,15 +90,15 @@ public class StubNetworking: DoubleBase, InstanceWrapperFactory {
             
         case let .subscription(subscriptionType):
         
-            guard let expectedVoidResult = expectedSubscribeCalls[subscriptionType] else {
+            guard let expectedOutcome = expectedSubscribeOutcomes[subscriptionType] else {
                 XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))` with instanceType: `\(instanceType)`", file: file, line: line)
                 return dummyInstanceWrapper
             }
             
-            expectedSubscribeCalls[subscriptionType] = nil
+            expectedSubscribeOutcomes[subscriptionType] = nil
             
             let stubInstanceWrapper = StubInstanceWrapper(file: file, line: line)
-            stubInstanceWrapper.stubSubscribe(result: expectedVoidResult)
+            stubInstanceWrapper.stubSubscribe(outcome: expectedOutcome)
             
             if expectedSubscriptionEndCalls.contains(subscriptionType) {
                 stubInstanceWrapper.stubResumableSubscriptionEnd()
