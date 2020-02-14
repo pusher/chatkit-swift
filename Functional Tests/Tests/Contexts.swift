@@ -2,7 +2,6 @@ import TestUtilities
 import XCTest
 @testable import PusherChatkit
 
-
 extension XCTestCase {
 
     /*
@@ -34,7 +33,7 @@ extension XCTestCase {
     func setUp_ChatKitInitialised_withDependencies(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, Dependencies) {
         
         let stubNetworking = StubNetworking(file: file, line: line)
-        let dependencies = ConcreteDependencies(instanceFactory: stubNetworking)
+        let dependencies = ConcreteDependencies(instanceWrapperFactory: stubNetworking)
         
         let chatkit = try Chatkit(dependencies: dependencies)
         

@@ -5,7 +5,7 @@ import XCTest
 import class PusherPlatform.PPRequestOptions
 import enum PusherPlatform.HTTPMethod
 
-class StubInstanceTests: XCTestCase {
+class StubInstanceWrapperTests: XCTestCase {
     
     func test_subscribeAndfireOnEvent_regardless_invokesOnEvent() {
         
@@ -15,24 +15,24 @@ class StubInstanceTests: XCTestCase {
         }
         """.toJsonData()
         
-        let stubInstance = StubInstance()
+        let stubInstanceWrapper = StubInstanceWrapper()
         
-        stubInstance.stubSubscribe(result: .success)
+        stubInstanceWrapper.stubSubscribe(result: .success)
         
         let requestOptions = PusherPlatform.PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: "/user")
         
         let expectation: XCTestExpectation.ThreeArgExpectation<String, [String: String], Any>
             = XCTestExpectation.ThreeArgExpectation(functionName: "onEvent")
         
-        _ = stubInstance.subscribeWithResume(using: requestOptions,
-                                             onOpening: nil,
-                                             onOpen: nil,
-                                             onResuming: nil,
-                                             onEvent: expectation.handler,
-                                             onEnd: nil,
-                                             onError: nil)
+        _ = stubInstanceWrapper.subscribeWithResume(using: requestOptions,
+                                                    onOpening: nil,
+                                                    onOpen: nil,
+                                                    onResuming: nil,
+                                                    onEvent: expectation.handler,
+                                                    onEnd: nil,
+                                                    onError: nil)
         
-        stubInstance.fireOnEvent(jsonData: jsonData)
+        stubInstanceWrapper.fireOnEvent(jsonData: jsonData)
         
         wait(for: [expectation], timeout: 1)
         

@@ -4,7 +4,6 @@ import XCTest
 import struct PusherPlatform.InstanceLocator
 @testable import PusherChatkit
 
-
 class System_UnInitialised_Tests: XCTestCase {
     
     func test_chatkitInit_withValidArguments_returnsNotNil() {

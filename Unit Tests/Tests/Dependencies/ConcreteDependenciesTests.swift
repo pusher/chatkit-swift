@@ -34,7 +34,7 @@ class ConcreteDependenciesTests: XCTestCase {
         XCTAssertTrue(dependencies.sdkInfoProvider is ConcreteSDKInfoProvider)
         XCTAssertTrue(dependencies.storeBroadcaster is ConcreteStoreBroadcaster)
         XCTAssertTrue(dependencies.store is ConcreteStore)
-        XCTAssertTrue(dependencies.instanceFactory is ConcreteInstanceFactory)
+        XCTAssertTrue(dependencies.instanceWrapperFactory is ConcreteInstanceWrapperFactory)
         XCTAssertTrue(dependencies.subscriptionActionDispatcher is ConcreteSubscriptionActionDispatcher)
         XCTAssertTrue(dependencies.subscriptionFactory is ConcreteSubscriptionFactory)
         XCTAssertTrue(dependencies.subscriptionManager is ConcreteSubscriptionManager)
@@ -51,7 +51,7 @@ class ConcreteDependenciesTests: XCTestCase {
         
         let expectation = self.expectation(description: "`override` closure should be called on `ConcreteDependencies`")
         let override: (DependencyFactory) -> Void = { dependencyFactory in
-            dependencyFactory.register(Store.self) { dependencies in
+            dependencyFactory.register(Store.self) { _ in
                 StubStore()
             }
             expectation.fulfill()
@@ -77,14 +77,14 @@ class ConcreteDependenciesTests: XCTestCase {
         XCTAssertTrue(dependencies.sdkInfoProvider is ConcreteSDKInfoProvider)
         XCTAssertTrue(dependencies.storeBroadcaster is ConcreteStoreBroadcaster)
         XCTAssertTrue(dependencies.store is StubStore) // <------ Not a `ConcreteStore`!
-        XCTAssertTrue(dependencies.instanceFactory is ConcreteInstanceFactory)
+        XCTAssertTrue(dependencies.instanceWrapperFactory is ConcreteInstanceWrapperFactory)
         XCTAssertTrue(dependencies.subscriptionActionDispatcher is ConcreteSubscriptionActionDispatcher)
         XCTAssertTrue(dependencies.subscriptionFactory is ConcreteSubscriptionFactory)
         XCTAssertTrue(dependencies.subscriptionManager is ConcreteSubscriptionManager)
     }
     
     // This tests the extension methods in `TestUtilities`
-    func test_initWithInstanceFactory_success() {
+    func test_initWithInstanceWrapperFactory_success() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -96,16 +96,16 @@ class ConcreteDependenciesTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let dependencies = ConcreteDependencies(instanceFactory: stubNetworking)
+        let dependencies = ConcreteDependencies(instanceWrapperFactory: stubNetworking)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertTrue(dependencies.instanceFactory is StubNetworking)
+        XCTAssertTrue(dependencies.instanceWrapperFactory is StubNetworking)
     }
     
-    func test_initWithInstanceLocatorAndInstanceFactory_success() {
+    func test_initWithInstanceLocatorAndInstanceWrapperFactory_success() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -118,13 +118,13 @@ class ConcreteDependenciesTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let dependencies = ConcreteDependencies(instanceLocator: instanceLocator, instanceFactory: stubNetworking)
+        let dependencies = ConcreteDependencies(instanceLocator: instanceLocator, instanceWrapperFactory: stubNetworking)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertTrue(dependencies.instanceFactory is StubNetworking)
+        XCTAssertTrue(dependencies.instanceWrapperFactory is StubNetworking)
     }
     
 }

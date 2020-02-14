@@ -86,7 +86,6 @@ class System_ChatKitInitialised_Tests: XCTestCase {
                 XCTAssertNotNil(error)
             }
             
-
         }())
     }
     

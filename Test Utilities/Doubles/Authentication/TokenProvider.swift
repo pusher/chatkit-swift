@@ -16,11 +16,11 @@ public class DummyTokenProvider: DummyBase, TokenProvider {
 
 public class StubTokenProvider: DoubleBase, TokenProvider {
     
-    private var fetchToken_authenticationResultToReturn: AuthenticationResult? = nil
+    private var fetchToken_authenticationResultToReturn: AuthenticationResult?
     public private(set) var fetchToken_actualCountCount: UInt = 0
     
     public init(fetchToken_authenticationResultToReturn: AuthenticationResult,
-         file: StaticString = #file, line: UInt = #line) {
+                file: StaticString = #file, line: UInt = #line) {
         
         self.fetchToken_authenticationResultToReturn = fetchToken_authenticationResultToReturn
         
@@ -36,18 +36,3 @@ public class StubTokenProvider: DoubleBase, TokenProvider {
         completionHandler(fetchToken_authenticationResultToReturn)
     }
 }
-
-//// MARK: - Token
-//
-//public class DummyToken: DummyBase, Token {
-//    
-//    public var value: String  {
-//        DummyFail(sender: self, function: #function)
-//        return ""
-//    }
-//    
-//    public var expiryDate: Date {
-//        DummyFail(sender: self, function: #function)
-//        return Date()
-//    }
-//}

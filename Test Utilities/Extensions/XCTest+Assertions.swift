@@ -23,7 +23,6 @@ public func XCTAssertThrowsError<T>(_ expression: @autoclosure () throws -> T, c
     }
 }
 
-
 public func XCTAssertString(_ str: String?, contains search: String, file: StaticString = #file, line: UInt = #line) {
     
     guard let str = str else {
@@ -35,12 +34,11 @@ public func XCTAssertString(_ str: String?, contains search: String, file: Stati
     XCTAssertTrue(found, "Expected sub-string \"\(search)\"' not contained in string \"\(str)\"", file: file, line: line)
 }
 
-
-fileprivate func executeAndAssignResult<T>(_ expression: @autoclosure () throws -> T?, to: inout T?) rethrows {
+private func executeAndAssignResult<T>(_ expression: @autoclosure () throws -> T?, to: inout T?) rethrows {
     to = try expression()
 }
 
-fileprivate func executeAndAssignEquatableResult<T>(_ expression: @autoclosure () throws -> T?, to: inout T?) rethrows where T : Equatable {
+private func executeAndAssignEquatableResult<T>(_ expression: @autoclosure () throws -> T?, to: inout T?) rethrows where T: Equatable {
     to = try expression()
 }
 
@@ -67,7 +65,7 @@ public func XCTAssertNotNil<T>(_ expression: @autoclosure () throws -> T?, _ mes
     }
 }
 
-public func XCTAssertEqual<T>(_ expression1: @autoclosure () throws -> T, _ expression2: @autoclosure () throws -> T, _ message: String = "", file: StaticString = #file, line: UInt = #line, also validateResult: () -> Void) where T : Equatable {
+public func XCTAssertEqual<T>(_ expression1: @autoclosure () throws -> T, _ expression2: @autoclosure () throws -> T, _ message: String = "", file: StaticString = #file, line: UInt = #line, also validateResult: () -> Void) where T: Equatable {
 
 //    XCTAssertEqual(try executeAndAssignEquatableResult(expression1, to: &result),
     
@@ -82,7 +80,7 @@ public func XCTAssertEqual<T>(_ expression1: @autoclosure () throws -> T, _ expr
     }
 }
 
-public func XCTAssertType<ExpectedType>(_ expression: @autoclosure () throws -> Any?,  _ message: String = "", file: StaticString = #file, line: UInt = #line, also validateResult: (ExpectedType) -> Void) {
+public func XCTAssertType<ExpectedType>(_ expression: @autoclosure () throws -> Any?, _ message: String = "", file: StaticString = #file, line: UInt = #line, also validateResult: (ExpectedType) -> Void) {
     
     var result: Any?
     XCTAssertNoThrow(try executeAndAssignResult(expression, to: &result), message, file: file, line: line)
@@ -118,7 +116,6 @@ public func XCTAssertExpectationUnfulfilled<ResultTypeA, ResultTypeB>(_ expectat
     }
 }
 
-
 public func XCTAssertExpectationFulfilled<ResultType>(_ expectation: XCTestExpectation.Expectation<ResultType>, _ message: String = "", file: StaticString = #file, line: UInt = #line, also validateResult: (ResultType) -> Void) {
     
     switch expectation.state {
@@ -149,7 +146,7 @@ public func XCTAssertExpectationFulfilled<ResultTypeA, ResultTypeB, ResultTypeC>
     }
 }
 
-public func XCTAssertExpectationFulfilledWithResult<ResultType>(_ expectation: XCTestExpectation.Expectation<ResultType>, _ expectedResult: ResultType, _ message: String = "", file: StaticString = #file, line: UInt = #line) where ResultType : Equatable {
+public func XCTAssertExpectationFulfilledWithResult<ResultType>(_ expectation: XCTestExpectation.Expectation<ResultType>, _ expectedResult: ResultType, _ message: String = "", file: StaticString = #file, line: UInt = #line) where ResultType: Equatable {
     
     XCTAssertExpectationFulfilled(expectation, message, file: file, line: line) { result in
         XCTAssertEqual(result, expectedResult, file: file, line: line)

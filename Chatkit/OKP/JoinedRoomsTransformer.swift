@@ -10,15 +10,15 @@ extension JoinedRoomsProvider: StoreListener {
         for joinedRoom in state.joinedRooms {
             if rooms.contains(where: { $0.identifier != joinedRoom.identifier }) {
                 let room = EntityParser.room(fromJoinedRoom: joinedRoom)
-                self.rooms.insert(room)
-                self.delegate?.joinedRoomsProvider(self, didJoinRoom: room)
+                rooms.insert(room)
+                delegate?.joinedRoomsProvider(self, didJoinRoom: room)
             }
         }
         
         for currentRoom in rooms {
             if !state.joinedRooms.contains(where: { $0.identifier == currentRoom.identifier }) {
-                self.rooms.remove(currentRoom)
-                self.delegate?.joinedRoomsProvider(self, didLeaveRoom: currentRoom)
+                rooms.remove(currentRoom)
+                delegate?.joinedRoomsProvider(self, didLeaveRoom: currentRoom)
             }
         }
         

@@ -23,8 +23,8 @@ public class StubSubscriptionDelegate: DoubleBase, SubscriptionDelegate {
     public private(set) var didReceiveError_actualCallCount: UInt = 0
 
     public init(didReceiveEvent_expectedCallCount: UInt = 0,
-         didReceiveError_expectedCallCount: UInt = 0,
-         file: StaticString = #file, line: UInt = #line) {
+                didReceiveError_expectedCallCount: UInt = 0,
+                file: StaticString = #file, line: UInt = #line) {
         
         self.didReceiveEvent_expectedCallCount = didReceiveEvent_expectedCallCount
         self.didReceiveError_expectedCallCount = didReceiveError_expectedCallCount

@@ -15,7 +15,7 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
     public let sdkInfoProvider: SDKInfoProvider
     public let storeBroadcaster: StoreBroadcaster
     public let store: Store
-    public let instanceFactory: InstanceFactory
+    public let instanceWrapperFactory: InstanceWrapperFactory
     public let subscriptionActionDispatcher: SubscriptionActionDispatcher
     public let subscriptionFactory: SubscriptionFactory
     public let subscriptionManager: SubscriptionManager
@@ -25,7 +25,7 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
                 sdkInfoProvider: SDKInfoProvider? = nil,
                 storeBroadcaster: StoreBroadcaster? = nil,
                 store: Store? = nil,
-                instanceFactory: InstanceFactory? = nil,
+                instanceWrapperFactory: InstanceWrapperFactory? = nil,
                 subscriptionActionDispatcher: SubscriptionActionDispatcher? = nil,
                 subscriptionFactory: SubscriptionFactory? = nil,
                 subscriptionManager: SubscriptionManager? = nil,
@@ -37,7 +37,7 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
         self.sdkInfoProvider = sdkInfoProvider ?? DummySDKInfoProvider(file: file, line: line)
         self.storeBroadcaster = storeBroadcaster ?? DummyStoreBroadcaster(file: file, line: line)
         self.store = store ?? DummyStore(file: file, line: line)
-        self.instanceFactory = instanceFactory ?? DummyInstanceFactory(file: file, line: line)
+        self.instanceWrapperFactory = instanceWrapperFactory ?? DummyInstanceWrapperFactory(file: file, line: line)
         self.subscriptionActionDispatcher = subscriptionActionDispatcher ?? DummySubscriptionActionDispatcher(file: file, line: line)
         self.subscriptionFactory = subscriptionFactory ?? DummySubscriptionFactory(file: file, line: line)
         self.subscriptionManager = subscriptionManager ?? DummySubscriptionManager(file: file, line: line)
@@ -47,21 +47,21 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
     
 }
 
-// Allows us to test with ALL the Concrete dependencies except the InstanceFactory
+// Allows us to test with ALL the Concrete dependencies except the InstanceWrapperFactory
 // which is exactly what we want for Functional tests
 extension ConcreteDependencies {
     
     public convenience init(instanceLocator: InstanceLocator? = nil,
                             tokenProvider: TokenProvider? = nil,
-                            instanceFactory: InstanceFactory,
+                            instanceWrapperFactory: InstanceWrapperFactory,
                             file: StaticString = #file, line: UInt = #line) {
         
         let instanceLocator = instanceLocator ?? defaultInstanceLocator
         let tokenProvider = tokenProvider ?? DummyTokenProvider(file: file, line: line)
         
         self.init(instanceLocator: instanceLocator, tokenProvider: tokenProvider) { dependencyFactory in
-            dependencyFactory.register(InstanceFactory.self) { dependencies in
-                instanceFactory
+            dependencyFactory.register(InstanceWrapperFactory.self) { _ in
+                instanceWrapperFactory
             }
         }
     }

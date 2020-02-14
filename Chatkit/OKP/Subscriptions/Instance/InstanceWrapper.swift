@@ -5,7 +5,7 @@ import class PusherPlatform.PPRequestOptions
 
 // Its not possible to stub a PusherPlatform.Instance because it has no protocol so this
 // protocol exists to resolve that problem.
-protocol Instance {
+protocol InstanceWrapper {
     
     typealias OnOpening = () -> Void
     typealias OnOpen = () -> Void
@@ -29,14 +29,14 @@ protocol Instance {
 }
 
 // This class simply proxies an internal PusherPlatform.Instance.
-class ConcreteInstance: Instance {
+class ConcreteInstanceWrapper: InstanceWrapper {
     
     typealias Dependencies = HasInstanceLocator & HasSDKInfoProvider & HasTokenProvider
     
-    let internalPPInstance: PusherPlatform.Instance
+    let internalPPInstanceWrapper: PusherPlatform.Instance
     
     init(dependencies: Dependencies) {
-        internalPPInstance = PusherPlatform.Instance(
+        internalPPInstanceWrapper = PusherPlatform.Instance(
             instanceLocator: dependencies.instanceLocator,
             serviceName: dependencies.sdkInfoProvider.serviceName,
             serviceVersion: dependencies.sdkInfoProvider.serviceVersion,
@@ -48,7 +48,7 @@ class ConcreteInstance: Instance {
     func request(using requestOptions: PPRequestOptions,
                  onSuccess: OnSuccess?,
                  onError: OnError?) -> PPGeneralRequest {
-        return internalPPInstance.request(using: requestOptions, onSuccess: onSuccess, onError: onError)
+        return internalPPInstanceWrapper.request(using: requestOptions, onSuccess: onSuccess, onError: onError)
     }
     
     func subscribeWithResume(using requestOptions: PPRequestOptions,
@@ -59,13 +59,13 @@ class ConcreteInstance: Instance {
                              onEnd: OnEnd?,
                              onError: OnError?) -> ResumableSubscription {
         
-        return internalPPInstance.subscribeWithResume(using: requestOptions,
-                                                      onOpening: onOpening,
-                                                      onOpen: onOpen,
-                                                      onResuming: onResuming,
-                                                      onEvent: jsonDataOnEvent(onEvent: onEvent),
-                                                      onEnd: onEnd,
-                                                      onError: onError)
+        return internalPPInstanceWrapper.subscribeWithResume(using: requestOptions,
+                                                             onOpening: onOpening,
+                                                             onOpen: onOpen,
+                                                             onResuming: onResuming,
+                                                             onEvent: jsonDataOnEvent(onEvent: onEvent),
+                                                             onEnd: onEnd,
+                                                             onError: onError)
     }
     
     // TODO: This should be removed once we've updated the PusherPlatform to return jsonData rather than a jsonDict.
@@ -86,4 +86,3 @@ class ConcreteInstance: Instance {
     }
     
 }
-

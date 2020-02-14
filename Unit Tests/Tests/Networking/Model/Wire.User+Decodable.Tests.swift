@@ -276,7 +276,6 @@ class WireUserDecodableTests: XCTestCase {
         }
         """.toJsonData()
         
-        
         XCTAssertNoThrow(try Wire.User(from: jsonData.jsonDecoder())) { room in
             XCTAssertNil(room.customData)
         }

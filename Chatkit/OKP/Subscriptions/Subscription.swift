@@ -18,12 +18,12 @@ class ConcreteSubscription: Subscription {
     
     enum State {
         case notSubscribed
-        case subscribingStageOne(instance: Instance, completions: [SubscribeHandler])
-        case subscribingStageTwo(instance: Instance, resumableSubscription: ResumableSubscription, completions: [SubscribeHandler])
-        case subscribed(instance: Instance, resumableSubscription: ResumableSubscription)
+        case subscribingStageOne(instanceWrapper: InstanceWrapper, completions: [SubscribeHandler])
+        case subscribingStageTwo(instanceWrapper: InstanceWrapper, resumableSubscription: ResumableSubscription, completions: [SubscribeHandler])
+        case subscribed(instanceWrapper: InstanceWrapper, resumableSubscription: ResumableSubscription)
     }
     
-    typealias Dependencies = HasInstanceFactory
+    typealias Dependencies = HasInstanceWrapperFactory
     
     let subscriptionType: SubscriptionType // Internal `get` aids testing
     private let dependencies: Dependencies
@@ -39,19 +39,19 @@ class ConcreteSubscription: Subscription {
     
     func subscribe(completion: @escaping SubscribeHandler) {
         
-        switch (state) {
+        switch state {
             
         case .notSubscribed:
             performSubscribe(completion: completion)
             
-        case let .subscribingStageOne(instance, completions):
+        case let .subscribingStageOne(instanceWrapper, completions):
             // Add the new completion handler to the `completions` of the .subscribing state
-            state = .subscribingStageOne(instance: instance,
+            state = .subscribingStageOne(instanceWrapper: instanceWrapper,
                                          completions: completions.appending(completion))
             
-        case let .subscribingStageTwo(instance, resumableSubscription, completions):
+        case let .subscribingStageTwo(instanceWrapper, resumableSubscription, completions):
             // Add the new completion handler to the `completions` of the .subscribing state
-            state = .subscribingStageTwo(instance: instance,
+            state = .subscribingStageTwo(instanceWrapper: instanceWrapper,
                                          resumableSubscription: resumableSubscription,
                                          completions: completions.appending(completion))
             
@@ -64,7 +64,7 @@ class ConcreteSubscription: Subscription {
     
     func unsubscribe() {
         
-        switch (state) {
+        switch state {
             
         case .notSubscribed:
             // Nothing to do
@@ -112,12 +112,12 @@ class ConcreteSubscription: Subscription {
     
     private func performSubscribe(completion: @escaping SubscribeHandler) {
         
-        let instance = dependencies.instanceFactory.makeInstance(forType: .subscription(subscriptionType))
+        let instanceWrapper = dependencies.instanceWrapperFactory.makeInstanceWrapper(forType: .subscription(subscriptionType))
         
         let requestPath = makeRequestPath(for: subscriptionType)
         let requestOptions = PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: requestPath)
         
-        let onEvent: Instance.OnEvent = { [weak self] _, _, jsonDataAsAny in
+        let onEvent: InstanceWrapper.OnEvent = { [weak self] _, _, jsonDataAsAny in
             guard let self = self else {
                 return
             }
@@ -132,13 +132,13 @@ class ConcreteSubscription: Subscription {
                 // We shouldn't ever be able to get here
                 preconditionFailure("`onEvent` should never be called whilst in state `\(self.state)`")
                 
-            case let .subscribingStageTwo(instance, resumableSubscription, completions):
+            case let .subscribingStageTwo(instanceWrapper, resumableSubscription, completions):
                 
                 // The ORDER of the code here is VITAL:
                 //   We MUST set the state before we call the delegate/completions
                 //   We MUST invoke the delegate method before the completions
                 
-                self.state = .subscribed(instance: instance, resumableSubscription: resumableSubscription)
+                self.state = .subscribed(instanceWrapper: instanceWrapper, resumableSubscription: resumableSubscription)
                 
                 self.delegate?.subscription(self, didReceiveEventWithJsonData: jsonData)
                 
@@ -146,14 +146,14 @@ class ConcreteSubscription: Subscription {
                     completion(.success)
                 }
                 
-            case .subscribed(_, _):
+            case .subscribed:
                 
                 self.delegate?.subscription(self, didReceiveEventWithJsonData: jsonData)
                 
             }
         }
         
-        let onError: Instance.OnError = { [weak self] error in
+        let onError: InstanceWrapper.OnError = { [weak self] error in
             guard let self = self else {
                 return
             }
@@ -180,7 +180,7 @@ class ConcreteSubscription: Subscription {
                 resumableSubscription.onError = nil
                 resumableSubscription.end()
                 
-                // TODO is ordering correct?
+                // TODO: is ordering correct?
                 // The ORDER of the code here is VITAL:
                 //   We MUST set the state before we call the delegate/completions
                 //   We MUST invoke the delegate method before the completions
@@ -193,14 +193,14 @@ class ConcreteSubscription: Subscription {
                     completion(.failure(error))
                 }
                 
-            case .subscribed(_, _):
+            case .subscribed:
                 
                 self.delegate?.subscription(self, didReceiveError: error)
                 
             }
         }
         
-        let onEnd: Instance.OnEnd = { [weak self] statusCode, headers, info in
+        let onEnd: InstanceWrapper.OnEnd = { [weak self] _, _, _ in
             guard let self = self else {
                 return
             }
@@ -248,7 +248,7 @@ class ConcreteSubscription: Subscription {
                     completion(.failure(error))
                 }
                 
-            case .subscribed(_, _):
+            case .subscribed:
                 
                 self.state = .notSubscribed
                 
@@ -262,17 +262,17 @@ class ConcreteSubscription: Subscription {
         
         // The ORDER of the code here is VITAL:
         
-        state = .subscribingStageOne(instance: instance, completions: [completion])
+        state = .subscribingStageOne(instanceWrapper: instanceWrapper, completions: [completion])
         
-        let resumableSubscription = instance.subscribeWithResume(using: requestOptions,
-                                                                 onOpening: nil,
-                                                                 onOpen: nil,
-                                                                 onResuming: nil,
-                                                                 onEvent: onEvent,
-                                                                 onEnd: onEnd,
-                                                                 onError: onError)
+        let resumableSubscription = instanceWrapper.subscribeWithResume(using: requestOptions,
+                                                                        onOpening: nil,
+                                                                        onOpen: nil,
+                                                                        onResuming: nil,
+                                                                        onEvent: onEvent,
+                                                                        onEnd: onEnd,
+                                                                        onError: onError)
         
-        state = .subscribingStageTwo(instance: instance,
+        state = .subscribingStageTwo(instanceWrapper: instanceWrapper,
                                      resumableSubscription: resumableSubscription,
                                      completions: [completion])
         

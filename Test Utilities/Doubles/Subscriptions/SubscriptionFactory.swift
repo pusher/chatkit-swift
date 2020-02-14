@@ -14,7 +14,7 @@ public class StubSubscriptionFactory: DoubleBase, SubscriptionFactory {
     public private(set) var makeSubscription_actualCallCount: UInt = 0
     
     public init(makeSubscription_expectedTypesAndSubscriptionsToReturn: [(subscriptionType: SubscriptionType, subscription: Subscription)] = [],
-         file: StaticString = #file, line: UInt = #line) {
+                file: StaticString = #file, line: UInt = #line) {
         
         self.makeSubscription_expectedTypesAndSubscriptionsToReturn = makeSubscription_expectedTypesAndSubscriptionsToReturn
         

@@ -5,11 +5,11 @@ import struct PusherPlatform.InstanceLocator
 import struct PusherPlatform.PPSDKInfo
 @testable import PusherChatkit
 
-class ConcreteInstanceFactoryTests: XCTestCase {
+class ConcreteInstanceWrapperFactoryTests: XCTestCase {
     
     let instanceLocator = PusherPlatform.InstanceLocator(string: "version:region:identifier")!
     
-    func test_makeInstance_forUserSubscription_returnsConcreteInstance() {
+    func test_makeInstanceWrapper_forUserSubscription_returnsConcreteInstanceWrapper() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -22,19 +22,19 @@ class ConcreteInstanceFactoryTests: XCTestCase {
         let dependencies = DependenciesDoubles(instanceLocator: instanceLocator,
                                                sdkInfoProvider: sdkInfoProvider)
         
-        let sut = ConcreteInstanceFactory(dependencies: dependencies)
+        let sut = ConcreteInstanceWrapperFactory(dependencies: dependencies)
         
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let instance = sut.makeInstance(forType: .subscription(.user))
+        let instanceWrapper = sut.makeInstanceWrapper(forType: .subscription(.user))
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertTrue(instance is ConcreteInstance)
+        XCTAssertTrue(instanceWrapper is ConcreteInstanceWrapper)
     }
     
 }

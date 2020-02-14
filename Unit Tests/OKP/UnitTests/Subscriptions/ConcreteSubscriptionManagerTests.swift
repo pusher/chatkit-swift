@@ -208,7 +208,7 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         
         XCTAssertExpectationFulfilledWithResult(secondExpectation, .success)
         XCTAssertEqual(stubSubscriptionFactory.makeSubscription_actualCallCount, 2) // <-- has increased by one
-        XCTAssertEqual(firstStubSubscription.subscribe_actualCallCount, 1)// <-- unchanged
+        XCTAssertEqual(firstStubSubscription.subscribe_actualCallCount, 1) // <-- unchanged
         XCTAssertEqual(secondStubSubscription.subscribe_actualCallCount, 1) // <-- has increased by one
     }
     
@@ -227,7 +227,7 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         let dummySubscriptionDelegate = DummySubscriptionDelegate()
         
         let roomStubSubscription = StubSubscription(subscribe_completionResults: [firstSubscriptionResult, secondSubscriptionResult],
-                                                     delegate: dummySubscriptionDelegate)
+                                                    delegate: dummySubscriptionDelegate)
         
         let firstSubscriptionTypeAndSubscriptionToReturn = (subscriptionType: firstSubscriptionType, subscription: roomStubSubscription)
         let secondSubscriptionTypeAndSubscriptionToReturn = (subscriptionType: secondSubscriptionType, subscription: roomStubSubscription)

@@ -4,7 +4,7 @@ import class PusherPlatform.PPRequestOptions
 import struct PusherPlatform.PPSDKInfo
 @testable import PusherChatkit
 
-public class DummyInstance: DummyBase, Instance {
+public class DummyInstanceWrapper: DummyBase, InstanceWrapper {
     
     public func request(using requestOptions: PPRequestOptions, onSuccess: ((Data) -> Void)?, onError: ((Error) -> Void)?) -> PPGeneralRequest {
         DummyFail(sender: self, function: #function)
@@ -17,7 +17,7 @@ public class DummyInstance: DummyBase, Instance {
     }
 }
 
-public class StubInstance: DoubleBase, Instance {
+public class StubInstanceWrapper: DoubleBase, InstanceWrapper {
     
     struct Expectation {
         let url: String
@@ -40,7 +40,7 @@ public class StubInstance: DoubleBase, Instance {
 
     public init(subscribeWithResume_expectedCallCount: UInt = 0,
                 resumableSubscription_end_expected: Bool = false,
-        file: StaticString = #file, line: UInt = #line) {
+                file: StaticString = #file, line: UInt = #line) {
         self.subscribeWithResume_expectedCallCount = subscribeWithResume_expectedCallCount
         self.resumableSubscription_end_expected = resumableSubscription_end_expected
         super.init(file: file, line: line)
@@ -98,7 +98,7 @@ public class StubInstance: DoubleBase, Instance {
         onError?(error)
     }
     
-    // MARK: Instance implementation
+    // MARK: InstanceWrapper implementation
     
     public private(set) var request_actualCallCount: UInt = 0
     
@@ -121,26 +121,26 @@ public class StubInstance: DoubleBase, Instance {
         return generalRequest
     }
     
-    private var onOpening: Instance.OnOpening?
-    private var onOpen: Instance.OnOpen?
-    private var onResuming: Instance.OnResuming?
-    private var onEvent: Instance.OnEvent?
-    private var onEnd: Instance.OnEnd?
-    private var onError: Instance.OnError?
+    private var onOpening: InstanceWrapper.OnOpening?
+    private var onOpen: InstanceWrapper.OnOpen?
+    private var onResuming: InstanceWrapper.OnResuming?
+    private var onEvent: InstanceWrapper.OnEvent?
+    private var onEnd: InstanceWrapper.OnEnd?
+    private var onError: InstanceWrapper.OnError?
     
     // We have to hold a reference to these otherwise they get deallocated and cause issues
-//    private var instance: Instance?
+//    private var instanceWrapper: InstanceWrapper?
 //    private var resumableSubscription: PusherPlatform.PPResumableSubscription?
     
     public private(set) var subscribeWithResume_actualCallCount: UInt = 0
     
-    public func subscribeWithResume(using requestOptions: PPRequestOptions,
-                             onOpening: Instance.OnOpening?,
-                             onOpen: Instance.OnOpen?,
-                             onResuming: Instance.OnResuming?,
-                             onEvent: Instance.OnEvent?,
-                             onEnd: Instance.OnEnd?,
-                             onError: Instance.OnError?) -> ResumableSubscription {
+    public func subscribeWithResume(using _: PPRequestOptions,
+                                    onOpening: InstanceWrapper.OnOpening?,
+                                    onOpen: InstanceWrapper.OnOpen?,
+                                    onResuming: InstanceWrapper.OnResuming?,
+                                    onEvent: InstanceWrapper.OnEvent?,
+                                    onEnd: InstanceWrapper.OnEnd?,
+                                    onError: InstanceWrapper.OnError?) -> ResumableSubscription {
         
         subscribeWithResume_actualCallCount += 1
         

@@ -8,7 +8,7 @@ protocol Dependencies:
     HasSDKInfoProvider &
     HasStoreBroadcaster &
     HasStore &
-    HasInstanceFactory &
+    HasInstanceWrapperFactory &
     HasSubscriptionActionDispatcher &
     HasSubscriptionFactory &
     HasSubscriptionManager
@@ -79,7 +79,7 @@ class ConcreteDependencies: Dependencies {
         self.instanceLocator = instanceLocator
         self.tokenProvider = tokenProvider
         
-        dependencyFactory.register(SDKInfoProvider.self, factory: { dependencies in
+        dependencyFactory.register(SDKInfoProvider.self, factory: { _ in
             ConcreteSDKInfoProvider(serviceName: ServiceName.chat.rawValue,
                                     serviceVersion: ServiceVersion.version7.rawValue,
                                     sdkInfo: PPSDKInfo.current)
@@ -94,8 +94,8 @@ class ConcreteDependencies: Dependencies {
                           delegate: self.storeBroadcaster)
         })
         
-        dependencyFactory.register(InstanceFactory.self, factory: { dependencies in
-            ConcreteInstanceFactory(dependencies: dependencies)
+        dependencyFactory.register(InstanceWrapperFactory.self, factory: { dependencies in
+            ConcreteInstanceWrapperFactory(dependencies: dependencies)
         })
         
         dependencyFactory.register(SubscriptionActionDispatcher.self, factory: { dependencies in
@@ -125,8 +125,8 @@ class ConcreteDependencies: Dependencies {
         return dependencyFactory.resolve(Store.self, dependencies: self)
     }
     
-    var instanceFactory: InstanceFactory {
-        return dependencyFactory.resolve(InstanceFactory.self, dependencies: self)
+    var instanceWrapperFactory: InstanceWrapperFactory {
+        return dependencyFactory.resolve(InstanceWrapperFactory.self, dependencies: self)
     }
     
     var subscriptionActionDispatcher: SubscriptionActionDispatcher {

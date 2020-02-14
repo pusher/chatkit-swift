@@ -14,9 +14,9 @@ public class StubJoinedRoomsProviderDelegate: JoinedRoomsProviderDelegate {
     private let line: UInt
     
     public init(onDidJoinRoom: DidJoinRoom? = nil,
-         onDidUpdateRoom: DidUpdateRoom? = nil,
-         onDidLeaveRoom: DidLeaveRoom? = nil,
-         file: StaticString = #file, line: UInt = #line) {
+                onDidUpdateRoom: DidUpdateRoom? = nil,
+                onDidLeaveRoom: DidLeaveRoom? = nil,
+                file: StaticString = #file, line: UInt = #line) {
         self.onDidJoinRoom = onDidJoinRoom
         self.onDidUpdateRoom = onDidUpdateRoom
         self.onDidLeaveRoom = onDidLeaveRoom

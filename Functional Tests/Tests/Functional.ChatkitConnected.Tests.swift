@@ -123,7 +123,6 @@ class Functional_ChatkitConnected_Tests: XCTestCase {
             
             let (_, chatkit) = try setUp_ChatKitConnected(initialState: initialStateJsonData)
             
-            
             /*****************/
             /*---- WHEN -----*/
             /*****************/

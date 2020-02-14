@@ -5,7 +5,7 @@ import struct PusherPlatform.InstanceLocator
 import struct PusherPlatform.PPSDKInfo
 @testable import PusherChatkit
 
-class ConcreteInstanceTests: XCTestCase {
+class ConcreteInstanceWrapperTests: XCTestCase {
     
     let instanceLocator = PusherPlatform.InstanceLocator(string: "version:region:identifier")!
     let sdkInfoProvider = ConcreteSDKInfoProvider(serviceName: "Chatkit", serviceVersion: "v7", sdkInfo: PPSDKInfo.current)
@@ -22,7 +22,7 @@ class ConcreteInstanceTests: XCTestCase {
                                                tokenProvider: stubTokenProvider,
                                                sdkInfoProvider: self.sdkInfoProvider)
         
-        let sut = ConcreteInstance(dependencies: dependencies)
+        let sut = ConcreteInstanceWrapper(dependencies: dependencies)
         
         let requestOptions = PusherPlatform.PPRequestOptions(method: "", path: "")
         
@@ -53,7 +53,7 @@ class ConcreteInstanceTests: XCTestCase {
                                                tokenProvider: stubTokenProvider,
                                                sdkInfoProvider: self.sdkInfoProvider)
         
-        let sut = ConcreteInstance(dependencies: dependencies)
+        let sut = ConcreteInstanceWrapper(dependencies: dependencies)
         
         let requestOptions = PusherPlatform.PPRequestOptions(method: "", path: "")
         
@@ -62,11 +62,11 @@ class ConcreteInstanceTests: XCTestCase {
         /******************/
         
         let resumableSubscription = sut.subscribeWithResume(using: requestOptions,
-                                                           onOpening: nil,
-                                                           onOpen: nil, onResuming: nil,
-                                                           onEvent: nil,
-                                                           onEnd: nil,
-                                                           onError: nil)
+                                                            onOpening: nil,
+                                                            onOpen: nil, onResuming: nil,
+                                                            onEvent: nil,
+                                                            onEnd: nil,
+                                                            onError: nil)
         
         /******************/
         /*----- THEN -----*/

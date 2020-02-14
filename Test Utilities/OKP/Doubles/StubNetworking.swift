@@ -1,11 +1,11 @@
 import XCTest
 @testable import PusherChatkit
 
-public class StubNetworking: DoubleBase, InstanceFactory {
+public class StubNetworking: DoubleBase, InstanceWrapperFactory {
     
     private var expectedSubscribeCalls: [SubscriptionType: VoidResult] = .init()
     private var expectedSubscriptionEndCalls: Set<SubscriptionType> = .init()
-    private var registeredStubInstances: [InstanceType: StubInstance] = .init()
+    private var registeredStubInstanceWrappers: [InstanceType: StubInstanceWrapper] = .init()
     
     public override init(file: StaticString = #file, line: UInt = #line) {
         super.init(file: file, line: line)
@@ -13,7 +13,7 @@ public class StubNetworking: DoubleBase, InstanceFactory {
     
     // MARK: Faux Networking
     
-    // TODO Preparing for CRUD requests.  Needs to be implemented in future.
+    // TODO: Preparing for CRUD requests.  Needs to be implemented in future.
     public func stub(_ urlString: String, _ jsonData: Data) {}
     
     // Preparing for registration to a subscription
@@ -24,8 +24,8 @@ public class StubNetworking: DoubleBase, InstanceFactory {
             return
         }
         
-        if let stubInstance = registeredStubInstances[.subscription(subscriptionType)] {
-            stubInstance.stubSubscribe(result: result)
+        if let stubInstanceWrapper = registeredStubInstanceWrappers[.subscription(subscriptionType)] {
+            stubInstanceWrapper.stubSubscribe(result: result)
         } else {
             expectedSubscribeCalls[subscriptionType] = result
         }
@@ -37,8 +37,8 @@ public class StubNetworking: DoubleBase, InstanceFactory {
             return
         }
         
-        if let stubInstance = registeredStubInstances[.subscription(subscriptionType)] {
-            stubInstance.stubResumableSubscriptionEnd()
+        if let stubInstanceWrapper = registeredStubInstanceWrappers[.subscription(subscriptionType)] {
+            stubInstanceWrapper.stubResumableSubscriptionEnd()
         } else {
             expectedSubscriptionEndCalls.insert(subscriptionType)
         }
@@ -48,41 +48,41 @@ public class StubNetworking: DoubleBase, InstanceFactory {
     
     public func fireSubscriptionEvent(_ subscriptionType: SubscriptionType, _ jsonData: Data,
                                       file: StaticString = #file, line: UInt = #line) {
-        guard let stubInstance = registeredStubInstances[.subscription(subscriptionType)] else {
+        guard let stubInstanceWrapper = registeredStubInstanceWrappers[.subscription(subscriptionType)] else {
             XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))` with subscriptionType: `\(subscriptionType)`", file: file, line: line)
             return
         }
-        stubInstance.fireOnEvent(jsonData: jsonData)
+        stubInstanceWrapper.fireOnEvent(jsonData: jsonData)
     }
     
     // Live firing of subscription error
     public func fireSubscriptionError(_ subscriptionType: SubscriptionType, error: Error,
                                       file: StaticString = #file, line: UInt = #line) {
-        guard let stubInstance = registeredStubInstances[.subscription(subscriptionType)] else {
+        guard let stubInstanceWrapper = registeredStubInstanceWrappers[.subscription(subscriptionType)] else {
             XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))` with subscriptionType: `\(subscriptionType)`", file: file, line: line)
             return
         }
-        stubInstance.fireOnError(error: error)
+        stubInstanceWrapper.fireOnError(error: error)
     }
     
     public func fireSubscriptiOnEnd(_ subscriptionType: SubscriptionType,
-                                   file: StaticString = #file, line: UInt = #line) {
-            guard let stubInstance = registeredStubInstances[.subscription(subscriptionType)] else {
+                                    file: StaticString = #file, line: UInt = #line) {
+            guard let stubInstanceWrapper = registeredStubInstanceWrappers[.subscription(subscriptionType)] else {
                 XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))` with subscriptionType: `\(subscriptionType)`", file: file, line: line)
                 return
             }
-            stubInstance.fireOnEnd()
+            stubInstanceWrapper.fireOnEnd()
         }
     
-    // MARK: InstanceFactory
+    // MARK: InstanceWrapperFactory
     
-    public func makeInstance(forType instanceType: InstanceType) -> Instance {
+    public func makeInstanceWrapper(forType instanceType: InstanceType) -> InstanceWrapper {
         
-        let dummyInstance = DummyInstance(file: file, line: line)
+        let dummyInstanceWrapper = DummyInstanceWrapper(file: file, line: line)
         
-        guard registeredStubInstances[instanceType] == nil else {
-            XCTFail("Call to `\(#function)` on `\(String(describing: self))` made but an instance already exists for the specified instanceType: `\(instanceType)`", file: file, line: line)
-            return dummyInstance
+        guard registeredStubInstanceWrappers[instanceType] == nil else {
+            XCTFail("Call to `\(#function)` on `\(String(describing: self))` made but an instanceWrapper already exists for the specified instanceType: `\(instanceType)`", file: file, line: line)
+            return dummyInstanceWrapper
         }
         
         switch instanceType {
@@ -91,21 +91,21 @@ public class StubNetworking: DoubleBase, InstanceFactory {
         
             guard let expectedVoidResult = expectedSubscribeCalls[subscriptionType] else {
                 XCTFail("Unexpected call to `\(#function)` on `\(String(describing: self))` with instanceType: `\(instanceType)`", file: file, line: line)
-                return dummyInstance
+                return dummyInstanceWrapper
             }
             
             expectedSubscribeCalls[subscriptionType] = nil
             
-            let stubInstance = StubInstance(file: file, line: line)
-            stubInstance.stubSubscribe(result: expectedVoidResult)
+            let stubInstanceWrapper = StubInstanceWrapper(file: file, line: line)
+            stubInstanceWrapper.stubSubscribe(result: expectedVoidResult)
             
             if expectedSubscriptionEndCalls.contains(subscriptionType) {
-                stubInstance.stubResumableSubscriptionEnd()
+                stubInstanceWrapper.stubResumableSubscriptionEnd()
             }
             
-            registeredStubInstances[instanceType] = stubInstance
+            registeredStubInstanceWrappers[instanceType] = stubInstanceWrapper
             
-            return stubInstance
+            return stubInstanceWrapper
         }
     }
 }
