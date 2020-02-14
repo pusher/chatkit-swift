@@ -3,8 +3,19 @@ import struct PusherPlatform.PPSDKInfo
 protocol Dependencies:
     HasInstanceLocator &
     HasStoreBroadcaster &
-    HasStore
+    HasStore &
+    HasMasterReducer &
+    HasUserReducer &
+    HasRoomListReducer &
+    HasUserSubscriptionInitialStateReducer &
+    HasUserSubscriptionAddedToRoomReducer &
+    HasUserSubscriptionRemovedFromRoomReducer &
+    HasUserSubscriptionRoomUpdatedReducer &
+    HasUserSubscriptionRoomDeletedReducer &
+    HasUserSubscriptionReadStateUpdatedReducer
 {}
+
+typealias NoDependencies = Any
 
 class DependencyFactory {
     
@@ -62,6 +73,16 @@ class ConcreteDependencies: Dependencies {
     
     let instanceLocator: InstanceLocator
     
+    let masterReducer = Reducer.Master.reduce
+    let userReducer = Reducer.Model.User.reduce
+    let roomListReducer = Reducer.Model.RoomList.reduce
+    let initialStateUserSubscriptionReducer = Reducer.UserSubscription.InitialState.reduce
+    let userSubscriptionAddedToRoomReducer = Reducer.UserSubscription.AddedToRoom.reduce
+    let userSubscriptionRemovedFromRoomReducer = Reducer.UserSubscription.RemovedFromRoom.reduce
+    let userSubscriptionRoomUpdatedReducer = Reducer.UserSubscription.RoomUpdated.reduce
+    let userSubscriptionRoomDeletedReducer = Reducer.UserSubscription.RoomDeleted.reduce
+    let userSubscriptionReadStateUpdatedReducer = Reducer.UserSubscription.ReadStateUpdated.reduce
+    
     // `override` gives tests an opportunity to override any concrete dependencies with test doubles.
     init(instanceLocator: InstanceLocator, override: ((DependencyFactory) -> Void)? = nil) {
         
@@ -86,4 +107,5 @@ class ConcreteDependencies: Dependencies {
     var store: Store {
         return dependencyFactory.resolve(Store.self, dependencies: self)
     }
+    
 }

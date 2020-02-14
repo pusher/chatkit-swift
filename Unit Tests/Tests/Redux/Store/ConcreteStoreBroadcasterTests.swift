@@ -3,21 +3,37 @@ import XCTest
 @testable import PusherChatkit
 
 class ConcreteStoreBroadcasterTests: XCTestCase {
-
-    let stateA = State(
-        currentUser: Internal.User(
+    
+    let stateA = MasterState(
+        currentUser: UserState.populated(
             identifier: "alice",
             name: "Alice A"
         ),
-        joinedRooms: []
+        joinedRooms: .empty,
+        users: UserListState(
+            users: [
+                "alice" : UserState.populated(
+                    identifier: "alice",
+                    name: "Alice A"
+                )
+            ]
+        )
     )
-
-    let stateB = State(
-        currentUser: Internal.User(
+    
+    let stateB = MasterState(
+        currentUser: UserState.populated(
             identifier: "bob",
             name: "Bob B"
         ),
-        joinedRooms: []
+        joinedRooms: .empty,
+        users: UserListState(
+            users: [
+                "bob" : UserState.populated(
+                    identifier: "bob",
+                    name: "Bob B"
+                )
+            ]
+        )
     )
     
     func test_register_withListenerThatIsNotCurrentlyRegistered_returnsStateFromStore() {
@@ -31,7 +47,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         let dependencies = DependenciesDoubles(store: stubStore)
         
         let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
-
+        
         /******************/
         /*----- WHEN -----*/
         /******************/
@@ -78,7 +94,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         XCTAssertEqual(stubStore.state_actualCallCount, 2)
         XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
     }
-        
+    
     func test_unregister_withListenerThatIsNotCurrentlyRegistered_success() {
         
         /******************/
@@ -149,12 +165,12 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: State.empty)
+        let stubStore = StubStore(state_toReturn: MasterState.empty)
         let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
         let dependencies = DependenciesDoubles(store: stubStore)
         
         let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
-
+        
         _ = sut.register(stubStoreListener)
         
         XCTAssertEqual(stubStore.state_actualCallCount, 1)
@@ -182,7 +198,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: State.empty)
+        let stubStore = StubStore(state_toReturn: MasterState.empty)
         let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -194,7 +210,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         XCTAssertEqual(stubStore.state_actualCallCount, 1)
         XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
         XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
-
+        
         /******************/
         /*----- WHEN -----*/
         /******************/
@@ -216,12 +232,12 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: State.empty)
+        let stubStore = StubStore(state_toReturn: MasterState.empty)
         let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
         let dependencies = DependenciesDoubles(store: stubStore)
         
         let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
-
+        
         _ = sut.register(stubStoreListener)
         _ = sut.register(stubStoreListener)
         
@@ -250,7 +266,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: State.empty)
+        let stubStore = StubStore(state_toReturn: MasterState.empty)
         let stubStoreListener1 = StubStoreListener(didUpdateState_expectedCallCount: 2)
         let stubStoreListener2 = StubStoreListener(didUpdateState_expectedCallCount: 1)
         let dependencies = DependenciesDoubles(store: stubStore)

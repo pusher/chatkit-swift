@@ -4,6 +4,8 @@ import XCTest
 
 class ConcreteStoreTests: XCTestCase {
     
+    // MARK: - Tests
+    
     func test_init_stateStartsAsEmpty() {
         
         /******************/
@@ -22,70 +24,88 @@ class ConcreteStoreTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertEqual(sut.state, State.empty)
+        XCTAssertEqual(sut.state, MasterState.empty)
     }
     
-    func test_action_withActionThatDoesChangeInternalState_stateIsUpdated() {
+    func test_dispatch_withActionThatDoesChangeInternalState_stateIsUpdated() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
-        let dependencies = DependenciesDoubles()
+        let expectedState = MasterState(
+            currentUser: .empty,
+            joinedRooms: .empty,
+            users: .empty
+        )
+        
+        let stubMasterReducer: StubReducer<Reducer.Master> =
+            .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
+        
+        let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
         
-        XCTAssertEqual(sut.state, State.empty)
+        XCTAssertEqual(sut.state, MasterState.empty)
         
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let action = Action.subscriptionEvent(
-            Wire.Event.EventType.initialState(
-                event: Wire.Event.InitialState(
-                    currentUser: Wire.User(
-                        identifier: "alice",
-                        name: "Alice A",
-                        avatarURL: nil,
-                        customData: nil,
-                        createdAt: Date.distantPast,
-                        updatedAt: Date.distantFuture,
-                        deletedAt: nil
-                    ),
-                    rooms: [],
-                    readStates: [],
-                    memberships: []
-                )
+        let action = InitialStateAction(
+            event: Wire.Event.InitialState(
+                currentUser: Wire.User(
+                    identifier: "alice",
+                    name: "Alice A",
+                    avatarURL: nil,
+                    customData: nil,
+                    createdAt: Date.distantPast,
+                    updatedAt: Date.distantFuture,
+                    deletedAt: nil
+                ),
+                rooms: [],
+                readStates: [],
+                memberships: []
             )
         )
         
-        sut.action(action)
+        sut.dispatch(action: action)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedState = State(
-            currentUser: Internal.User(
-                identifier: "alice",
-                name: "Alice A"
-            ),
-            joinedRooms: []
-        )
-        
         XCTAssertEqual(sut.state, expectedState)
     }
     
-    func test_action_withActionThatDoesChangeInternalState_delegateTriggered() {
+    func test_dispatch_withActionThatDoesChangeInternalState_delegateTriggered() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
+        let expectedState = MasterState(
+            currentUser: .populated(
+                identifier: "alice",
+                name: "Alice A"
+            ),
+            joinedRooms: .empty,
+            users: UserListState(
+                users: [
+                    "alice" : .populated(
+                        identifier: "alice",
+                        name: "Alice A"
+                    )
+                ]
+            )
+        )
+        
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
         
-        let dependencies = DependenciesDoubles()
+        let stubMasterReducer: StubReducer<Reducer.Master> =
+            .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
+        
+        let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: stubStoreDelegate)
         
@@ -95,77 +115,70 @@ class ConcreteStoreTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let action = Action.subscriptionEvent(
-            Wire.Event.EventType.initialState(
-                event: Wire.Event.InitialState(
-                    currentUser: Wire.User(
-                        identifier: "alice",
-                        name: "Alice A",
-                        avatarURL: nil,
-                        customData: nil,
-                        createdAt: Date.distantPast,
-                        updatedAt: Date.distantFuture,
-                        deletedAt: nil
-                    ),
-                    rooms: [],
-                    readStates: [],
-                    memberships: []
-                )
+        let action = InitialStateAction(
+            event: Wire.Event.InitialState(
+                currentUser: Wire.User(
+                    identifier: "alice",
+                    name: "Alice A",
+                    avatarURL: nil,
+                    customData: nil,
+                    createdAt: Date.distantPast,
+                    updatedAt: Date.distantFuture,
+                    deletedAt: nil
+                ),
+                rooms: [],
+                readStates: [],
+                memberships: []
             )
         )
         
-        sut.action(action)
+        sut.dispatch(action: action)
         
         /******************/
         /*----- THEN -----*/
         /******************/
-        
-        let expectedState = State(
-            currentUser: Internal.User(
-                identifier: "alice",
-                name: "Alice A"
-            ),
-            joinedRooms: []
-        )
         
         XCTAssertEqual(stubStoreDelegate.didUpdateState_actualCallCount, 1)
         XCTAssertEqual(stubStoreDelegate.didUpdateState_stateLastReceived, expectedState)
     }
     
-    func test_action_withActionThatDoesNotChangeInternalState_stateIsUnchanged() {
+    func test_dispatch_withActionThatDoesNotChangeInternalState_stateIsUnchanged() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
-        let dependencies = DependenciesDoubles()
+        let expectedState = MasterState.empty
+        
+        let stubMasterReducer: StubReducer<Reducer.Master> =
+            .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
+        
+        let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
         
-        XCTAssertEqual(sut.state, State.empty)
+        XCTAssertEqual(sut.state, MasterState.empty)
         
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let action = Action.subscriptionEvent(
-            Wire.Event.EventType.removedFromRoom(
-                event: Wire.Event.RemovedFromRoom(
-                    roomIdentifier: "not-a-known-room"
-                )
+        let action = RemovedFromRoomAction(
+            event: Wire.Event.RemovedFromRoom(
+                roomIdentifier: "not-a-known-room"
             )
         )
         
-        sut.action(action)
+        sut.dispatch(action: action)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertEqual(sut.state, State.empty)
+        XCTAssertEqual(sut.state, expectedState)
     }
     
-    func test_action_withActionThatDoesNotChangeInternalState_delegateNotTriggered() {
+    func test_dispatch_withActionThatDoesNotChangeInternalState_delegateNotTriggered() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -173,7 +186,10 @@ class ConcreteStoreTests: XCTestCase {
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 2)
         
-        let dependencies = DependenciesDoubles()
+        let stubMasterReducer: StubReducer<Reducer.Master> =
+            .init(reduce_stateToReturn: .empty, reduce_expectedCallCount: 1)
+        
+        let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: stubStoreDelegate)
         
@@ -183,15 +199,13 @@ class ConcreteStoreTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let action = Action.subscriptionEvent(
-            Wire.Event.EventType.removedFromRoom(
-                event: Wire.Event.RemovedFromRoom(
-                    roomIdentifier: "not-a-known-room"
-                )
+        let action = RemovedFromRoomAction(
+            event: Wire.Event.RemovedFromRoom(
+                roomIdentifier: "not-a-known-room"
             )
         )
         
-        sut.action(action)
+        sut.dispatch(action: action)
         
         /******************/
         /*----- THEN -----*/
@@ -200,4 +214,60 @@ class ConcreteStoreTests: XCTestCase {
         XCTAssertEqual(stubStoreDelegate.didUpdateState_stateLastReceived, nil)
         XCTAssertEqual(stubStoreDelegate.didUpdateState_actualCallCount, 0) // <--- Call count has NOT increased!
     }
+    
+    func test_dispatch_usesReductionManager_reduceTriggered() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let expectedState = MasterState(
+            currentUser: .empty,
+            joinedRooms: .empty,
+            users: .empty
+        )
+        
+        let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
+        
+        let stubMasterReducer: StubReducer<Reducer.Master> =
+            .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
+        
+        let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
+        
+        let sut = ConcreteStore(dependencies: dependencies, delegate: stubStoreDelegate)
+        
+        XCTAssertEqual(stubStoreDelegate.didUpdateState_actualCallCount, 0)
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let action = InitialStateAction(
+            event: Wire.Event.InitialState(
+                currentUser: Wire.User(
+                    identifier: "alice",
+                    name: "Alice A",
+                    avatarURL: nil,
+                    customData: nil,
+                    createdAt: Date.distantPast,
+                    updatedAt: Date.distantFuture,
+                    deletedAt: nil
+                ),
+                rooms: [],
+                readStates: [],
+                memberships: []
+            )
+        )
+        
+        sut.dispatch(action: action)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertEqual(stubMasterReducer.reduce_actualCallCount, 1)
+        XCTAssertEqual(stubMasterReducer.reduce_actionLastReceived as? InitialStateAction, action)
+        XCTAssertEqual(stubMasterReducer.reduce_stateLastReceived, MasterState.empty)
+    }
+    
 }
