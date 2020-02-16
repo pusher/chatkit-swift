@@ -68,7 +68,8 @@ class ConcreteInstanceWrapper: InstanceWrapper {
                                                              onError: onError)
     }
     
-    // TODO: This should be removed once we've updated the PusherPlatform to return jsonData rather than a jsonDict.
+    // TODO: `PusherPlatform.Instance` to return (JSON) `Data`
+    // This should be removed once we've updated the PusherPlatform to return jsonData rather than a jsonDict.
     private func jsonDataOnEvent(onEvent: OnEvent?) -> OnEvent? {
         
         guard let onEvent = onEvent else {

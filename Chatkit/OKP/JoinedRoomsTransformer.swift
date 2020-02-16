@@ -1,7 +1,7 @@
 import Foundation
 
 // TODO: The `JoinedRoomsTransformer` code should be implemented here
-// Until that time we temporary have this code to pass messages to the JoinedRoomsProvider
+// Until that time we temporarily have this code to pass messages to the JoinedRoomsProvider
 
 extension JoinedRoomsProvider: StoreListener {
     

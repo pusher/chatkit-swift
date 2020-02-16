@@ -32,7 +32,10 @@ class ConcreteSubscriptionManager: SubscriptionManager {
         // Immediately hold a reference to the subscription so we don't attempt to factory it again
         subscriptionsByType[subscriptionType] = subscription
         
-        // TODO: do we need to remove the subscription from subscriptionsByType if the subscribe call fails?
+        // TODO: Subscription unhappy paths
+        // It was decided to defer work on handling Subscription *un*happy paths in favour
+        // of shipping the happy paths on the SDK
+        // Do we need to remove the subscription from subscriptionsByType if the subscribe call fails?
         // At the moment I am thinking no because if someone calls subscribe again it should cause the dead
         // subscription to come back to life and reattempt connection
         
@@ -45,7 +48,10 @@ class ConcreteSubscriptionManager: SubscriptionManager {
     
     func unsubscribeFromAll() {
         for (subscriptionType, subscription) in subscriptionsByType {
-            // TODO: work out what happens if unsubscribe fails, should we remove from subscriptionsByType or not
+            // TODO: Subscription unhappy paths
+            // It was decided to defer work on handling Subscription *un*happy paths in favour
+            // of shipping the happy paths on the SDK
+            // We need to work out what happens if unsubscribe fails, should we remove it from subscriptionsByType or not
             subscription.unsubscribe()
             subscriptionsByType.removeValue(forKey: subscriptionType)
         }

@@ -27,14 +27,18 @@ class ConcreteSubscriptionActionDispatcher: SubscriptionActionDispatcher {
             let action = Action.subscriptionEvent(subscriptionEvent.data)
             dependencies.store.action(action)
         } catch {
-            // TODO: work needs to be done on handling errors in future
+            // TODO: Subscription unhappy paths
+            // It was decided to defer work on handling Subscription *un*happy paths in favour
+            // of shipping the happy paths on the SDK
             print(error)
         }
     }
     
     func subscription(_ subscription: Subscription, didReceiveError error: Error) {
-        // TODO: work needs to be done on handling errors in future
-        // Ideally we need to know if its a recoverable error or not
+        // TODO: Subscription unhappy paths
+        // It was decided to defer work on handling Subscription *un*happy paths in favour
+        // of shipping the happy paths on the SDK
+        // Ideally here we need to know if its a recoverable error or not
         print(error)
     }
 }

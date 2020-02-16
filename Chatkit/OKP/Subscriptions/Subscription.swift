@@ -180,7 +180,6 @@ class ConcreteSubscription: Subscription {
                 resumableSubscription.onError = nil
                 resumableSubscription.end()
                 
-                // TODO: is ordering correct?
                 // The ORDER of the code here is VITAL:
                 //   We MUST set the state before we call the delegate/completions
                 //   We MUST invoke the delegate method before the completions

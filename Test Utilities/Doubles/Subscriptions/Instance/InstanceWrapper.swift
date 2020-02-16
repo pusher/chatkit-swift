@@ -90,9 +90,11 @@ public class StubInstanceWrapper: DoubleBase, InstanceWrapper {
     }
     
     public func fireOnEnd() {
-        // TODO: no idea if this correctly maps to what a PusherPlatform.Instance does in real life
-        // We have decided to sort the error handling at a later state
-        let statusCode = 404
+        // TODO: Subscription unhappy paths
+        // It was decided to defer work on handling Subscription *un*happy paths in favour
+        // of shipping the happy paths on the SDK
+        // Need to work out the values a PusherPlatform.Instance sends in real life
+        let statusCode = -1
         let headers: [String: String]? = nil
         let info: Any? = nil
         onEnd?(statusCode, headers, info)
@@ -160,18 +162,20 @@ public class StubInstanceWrapper: DoubleBase, InstanceWrapper {
         self.onEnd = onEnd
         self.onError = onError
         
-        fireOnOpening()
-        
-        // TODO: Check how PusherPlatform.Instance behaves in real life
-        // Should these be delayed async calls so they don't happen till the next run loop?
-        // Are we invoked the correct events in the right order?
-        // To be determined in future when more work is putting into failure paths
+        // TODO: Subscription unhappy paths
+        // It was decided to defer work on handling Subscription *un*happy paths in favour
+        // of shipping the happy paths on the SDK
+        // We need to check how PusherPlatform.Instance behaves in real life
+        //      Should these be delayed async calls so they don't happen till the next run loop?
+        //      Are we invoked the correct events in the right order?
         switch subscribeWithResume_outcome {
         case .waits:
-            () // Do nothing, the test should manually invoke events
+            () // Do nothing, the test should manually invoke its own events
         case .opensSuccessfully:
+            fireOnOpening()
             fireOnOpen()
         case let .failsWithError(error):
+            fireOnOpening()
             fireOnError(error: error)
             fireOnEnd()
         }
