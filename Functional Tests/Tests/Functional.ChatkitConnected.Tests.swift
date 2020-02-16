@@ -43,7 +43,7 @@ class Functional_ChatkitConnected_Tests: XCTestCase {
             /*---- THEN -----*/
             /*****************/
             
-            wait(for: [expectation], timeout: 1)
+            wait(for: [expectation], timeout: expectation.timeout)
             
             // `connect` is idempotent - chatkit remains connected, no reconnection is attempted and no error is returned,
             XCTAssertExpectationFulfilledWithResult(expectation, nil)
@@ -134,7 +134,7 @@ class Functional_ChatkitConnected_Tests: XCTestCase {
             /*---- THEN -----*/
             /*****************/
             
-            wait(for: [expectation], timeout: 1)
+            wait(for: [expectation], timeout: expectation.timeout)
             
             XCTAssertExpectationFulfilled(expectation) { joinedRoomsProvider, error in
                 XCTAssertNotNil(joinedRoomsProvider)

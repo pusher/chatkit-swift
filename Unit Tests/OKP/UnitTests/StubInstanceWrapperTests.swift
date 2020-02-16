@@ -17,7 +17,7 @@ class StubInstanceWrapperTests: XCTestCase {
         
         let stubInstanceWrapper = StubInstanceWrapper()
         
-        stubInstanceWrapper.stubSubscribe(outcome: .opensSuccessfully)
+        stubInstanceWrapper.stubSubscribe(outcome: .openAndWait)
         
         let requestOptions = PusherPlatform.PPRequestOptions(method: HTTPMethod.SUBSCRIBE.rawValue, path: "/user")
         
@@ -34,7 +34,7 @@ class StubInstanceWrapperTests: XCTestCase {
         
         stubInstanceWrapper.fireOnEvent(jsonData: jsonData)
         
-        wait(for: [expectation], timeout: 1)
+        wait(for: [expectation], timeout: expectation.timeout)
         
         XCTAssertExpectationFulfilled(expectation) { (_: String, _: [String: String], jsonDataAsAny: Any) in
             XCTAssertType(jsonDataAsAny) { actualJsonData in

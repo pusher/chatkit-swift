@@ -18,9 +18,10 @@ public class DummyInstanceWrapper: DummyBase, InstanceWrapper {
 }
 
 public enum SubscribeOutcome {
-    case waits
-    case opensSuccessfully
-    case failsWithError(Error)
+    case wait
+    case openAndWait
+    case open(initialStateJsonData: Data)
+    case fail(error: Error)
 }
 
 public class StubInstanceWrapper: DoubleBase, InstanceWrapper {
@@ -162,25 +163,41 @@ public class StubInstanceWrapper: DoubleBase, InstanceWrapper {
         self.onEnd = onEnd
         self.onError = onError
         
-        // TODO: Subscription unhappy paths
-        // It was decided to defer work on handling Subscription *un*happy paths in favour
-        // of shipping the happy paths on the SDK
-        // We need to check how PusherPlatform.Instance behaves in real life
-        //      Should these be delayed async calls so they don't happen till the next run loop?
-        //      Are we invoked the correct events in the right order?
-        switch subscribeWithResume_outcome {
-        case .waits:
-            () // Do nothing, the test should manually invoke its own events
-        case .opensSuccessfully:
-            fireOnOpening()
-            fireOnOpen()
-        case let .failsWithError(error):
-            fireOnOpening()
-            fireOnError(error: error)
-            fireOnEnd()
+        DispatchQueue.main.async {
+
+            // TODO: Subscription unhappy paths
+            // It was decided to defer work on handling Subscription *un*happy paths in favour
+            // of shipping the happy paths on the SDK
+            // We need to check how PusherPlatform.Instance behaves in real life
+            //      Should these be delayed async calls so they don't happen till the next run loop?
+            //      Are we invoked the correct events in the right order?
+            
+            switch subscribeWithResume_outcome {
+            case .wait:
+                // Do nothing, the test should manually invoke its own events
+                ()
+            case .openAndWait:
+                // Simulate the opening of the connection but DO NOT fire the first event
+                self.fireOnOpening()
+                self.fireOnOpen()
+            case let .open(initialStateJsonData):
+                self.fireOnOpening()
+                self.fireOnOpen()
+                self.fireOnEvent(jsonData: initialStateJsonData)
+            case let .fail(error):
+                self.fireOnOpening()
+                self.fireOnError(error: error)
+                self.fireOnEnd()
+            }
         }
         
-        let end_expectedCallCount: UInt = resumableSubscription_end_expected ? 1 : 0
+        let end_expectedCallCount: UInt
+        if case .fail = subscribeWithResume_outcome {
+            end_expectedCallCount = 1
+        } else {
+            end_expectedCallCount = resumableSubscription_end_expected ? 1 : 0
+        }
+        
         let stubResumableSubscription = StubResumableSubscription(end_expectedCallCount: end_expectedCallCount, file: file, line: line)
         internalStubResumableSubscription = stubResumableSubscription
         return stubResumableSubscription

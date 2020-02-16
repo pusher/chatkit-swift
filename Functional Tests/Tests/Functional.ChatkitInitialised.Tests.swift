@@ -18,12 +18,6 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             /*---- WHEN -----*/
             /*****************/
             
-            // Prepare user subscription to return success when the client attempts to register
-            stubNetworking.stubSubscribe(.user, .success)
-            
-            let expectation = XCTestExpectation.Chatkit.connect
-            chatkit.connect(completionHandler: expectation.handler)
-            
             let initialStateJsonData = """
             {
                 "event_name": "initial_state",
@@ -42,7 +36,11 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             }
             """.toJsonData()
             
-            stubNetworking.fireSubscriptionEvent(.user, initialStateJsonData)
+            // Prepare user subscription to open and fire event when the client attempts to subscribe
+            stubNetworking.stubSubscribe(.user, .open(initialStateJsonData: initialStateJsonData))
+            
+            let expectation = XCTestExpectation.Chatkit.connect
+            chatkit.connect(completionHandler: expectation.handler)
             
             /*****************/
             /*---- THEN -----*/
@@ -71,7 +69,7 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             /*****************/
             
             // Prepare user subscription to return failure when the client attempts to register
-            stubNetworking.stubSubscribe(.user, .failure("Failure"))
+            stubNetworking.stubSubscribe(.user, .fail(error: "Failure"))
             
             let expectation = XCTestExpectation.Chatkit.connect
             chatkit.connect(completionHandler: expectation.handler)

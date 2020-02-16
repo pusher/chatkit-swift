@@ -59,12 +59,10 @@ extension XCTestCase {
         
         // Prepare for the client to register for a user subscription
         // Fire the "initial_state" User subscription event which will cause `Chatkit` to become successfully `connected`
-        stubNetworking.stubSubscribe(.user, .success)
+        stubNetworking.stubSubscribe(.user, .open(initialStateJsonData: initialStateJsonData))
         
         let expectation = XCTestExpectation.Chatkit.connect
         chatkit.connect(completionHandler: expectation.handler)
-        
-        stubNetworking.fireSubscriptionEvent(.user, initialStateJsonData)
         
         wait(for: [expectation], timeout: expectation.timeout)
 
