@@ -152,7 +152,6 @@
 		737E3F6923E9BBA700B50837 /* System.ChatkitConnected.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737E3F6823E9BBA700B50837 /* System.ChatkitConnected.Tests.swift */; };
 		737E3F6B23E9BBB800B50837 /* System.Uninitialised.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737E3F6A23E9BBB800B50837 /* System.Uninitialised.Tests.swift */; };
 		737E3F6D23E9BD1400B50837 /* System.ChatkitInitialised.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737E3F6C23E9BD1400B50837 /* System.ChatkitInitialised.Tests.swift */; };
-		737E3F6F23E9BD4D00B50837 /* System.StoreBroadcaster.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737E3F6E23E9BD4D00B50837 /* System.StoreBroadcaster.Tests.swift */; };
 		737E3F7A23EABE2300B50837 /* ConcreteInstanceWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737E3F7923EABE2300B50837 /* ConcreteInstanceWrapperTests.swift */; };
 		737E3F7D23EAC31200B50837 /* DoubleBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737E3F7C23EAC31200B50837 /* DoubleBase.swift */; };
 		737E3F9523EACACB00B50837 /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229093D522F1DDB4003DDE2C /* PusherChatkit.framework */; };
@@ -431,7 +430,6 @@
 		737E3F6823E9BBA700B50837 /* System.ChatkitConnected.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.ChatkitConnected.Tests.swift; sourceTree = "<group>"; };
 		737E3F6A23E9BBB800B50837 /* System.Uninitialised.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.Uninitialised.Tests.swift; sourceTree = "<group>"; };
 		737E3F6C23E9BD1400B50837 /* System.ChatkitInitialised.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.ChatkitInitialised.Tests.swift; sourceTree = "<group>"; };
-		737E3F6E23E9BD4D00B50837 /* System.StoreBroadcaster.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.StoreBroadcaster.Tests.swift; sourceTree = "<group>"; };
 		737E3F7023E9C07F00B50837 /* Functional.ChatkitInitialised.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functional.ChatkitInitialised.Tests.swift; sourceTree = "<group>"; };
 		737E3F7223E9C2DF00B50837 /* Functional.ChatkitConnected.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functional.ChatkitConnected.Tests.swift; sourceTree = "<group>"; };
 		737E3F7423E9C2FC00B50837 /* Functional.JoinedRoomsProviderInitialised.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functional.JoinedRoomsProviderInitialised.Tests.swift; sourceTree = "<group>"; };
@@ -555,6 +553,10 @@
 			isa = PBXGroup;
 			children = (
 				222910E723D8A6A700A3ACDF /* Authentication */,
+				738A3EE223E33C2A00B6A614 /* Contexts.swift */,
+				737E3F6A23E9BBB800B50837 /* System.Uninitialised.Tests.swift */,
+				737E3F6C23E9BD1400B50837 /* System.ChatkitInitialised.Tests.swift */,
+				737E3F6823E9BBA700B50837 /* System.ChatkitConnected.Tests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -1237,11 +1239,6 @@
 		738A3EE123E33C1200B6A614 /* OKP */ = {
 			isa = PBXGroup;
 			children = (
-				738A3EE223E33C2A00B6A614 /* Contexts.swift */,
-				737E3F6A23E9BBB800B50837 /* System.Uninitialised.Tests.swift */,
-				737E3F6C23E9BD1400B50837 /* System.ChatkitInitialised.Tests.swift */,
-				737E3F6823E9BBA700B50837 /* System.ChatkitConnected.Tests.swift */,
-				737E3F6E23E9BD4D00B50837 /* System.StoreBroadcaster.Tests.swift */,
 			);
 			path = OKP;
 			sourceTree = "<group>";
@@ -1728,7 +1725,6 @@
 				222910EA23D8A6C300A3ACDF /* TestTokenProviderTests.swift in Sources */,
 				737E3F6923E9BBA700B50837 /* System.ChatkitConnected.Tests.swift in Sources */,
 				226DD52223DB36DA0024A27D /* XCTest+TestData.swift in Sources */,
-				737E3F6F23E9BD4D00B50837 /* System.StoreBroadcaster.Tests.swift in Sources */,
 				737E3F6B23E9BBB800B50837 /* System.Uninitialised.Tests.swift in Sources */,
 				738A3EE323E33C2A00B6A614 /* Contexts.swift in Sources */,
 				737E3F6D23E9BD1400B50837 /* System.ChatkitInitialised.Tests.swift in Sources */,

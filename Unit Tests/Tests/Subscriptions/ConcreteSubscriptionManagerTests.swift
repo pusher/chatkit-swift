@@ -378,7 +378,7 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
     
     // TODO: There's a whole host of `unsubscribe` tests to implement here.
     
-    func test_unsubscribe_XXXX() {
+    func test_unsubscribe_multipleSenders_subscriptionSubscribeOnyCalledWhenLastSubscriberUnsubscribes() {
         
         /******************/
         /*---- GIVEN -----*/
