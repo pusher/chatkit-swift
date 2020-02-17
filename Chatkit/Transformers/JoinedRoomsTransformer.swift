@@ -1,6 +1,7 @@
 import Foundation
 
-// TODO: The `JoinedRoomsTransformer` code should be implemented here
+// TODO: `JoinedRoomsTransformer` 
+// The `JoinedRoomsTransformer` code should be implemented here
 // Until that time we temporarily have this code to pass messages to the JoinedRoomsProvider
 
 extension JoinedRoomsProvider: StoreListener {
@@ -25,6 +26,7 @@ extension JoinedRoomsProvider: StoreListener {
     }
 }
 
+// TODO: `JoinedRoomsTransformer` 
 // TODO: this needs to be completely replaced/rewritten as part of the `JoinedRoomsTransformer` work.
 class EntityParser {
     

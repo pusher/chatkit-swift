@@ -28,8 +28,9 @@ extension XCTestCase {
             `JoinedRoomsProvider` instance has been initialised (via `chatKit.makeJoinedRoomsProvider()`)
      
     */
-    
-    // TODO: remove this method & returning of `dependencies` once we've properly implemented JoinedRoomProvider & Transformers
+
+    // TODO: `JoinedRoomsTransformer`
+    // Remove this method & returning of `dependencies` once we've properly implemented JoinedRoomProvider & Transformers
     func setUp_ChatKitInitialised_withDependencies(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, Dependencies) {
         
         let stubNetworking = StubNetworking(file: file, line: line)
@@ -52,7 +53,8 @@ extension XCTestCase {
         return (stubNetworking, chatkit)
     }
     
-    // TODO: remove this method & returning of `storeBroadcaster` once we've properly implemented JoinedRoomProvider & Transformers
+    // TODO: `JoinedRoomsTransformer`
+    // Remove this method & returning of `storeBroadcaster` once we've properly implemented JoinedRoomProvider & Transformers
     func setUp_ChatKitConnected_withStoreBroadcaster(initialState initialStateJsonData: Data, file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, StoreBroadcaster) {
 
         let (stubNetworking, chatkit, dependencies) = try setUp_ChatKitInitialised_withDependencies(file: file, line: line)
