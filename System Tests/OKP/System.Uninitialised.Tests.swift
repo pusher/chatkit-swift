@@ -60,7 +60,7 @@ class System_UnInitialised_Tests: XCTestCase {
             /*****************/
             
             let expectation = XCTestExpectation.SubscriptionManager.subscribe
-            dependencies.subscriptionManager.subscribe(.user, completion: expectation.handler)
+            dependencies.subscriptionManager.subscribe(toType: .user, sender: self, completion: expectation.handler)
             
             /*****************/
             /*---- THEN -----*/

@@ -3,11 +3,11 @@ import XCTest
 
 public class DummySubscriptionManager: DummyBase, SubscriptionManager {
     
-    public func subscribe(_ subscriptionType: SubscriptionType, completion: @escaping SubscribeHandler) {
+    public func subscribe(toType subscriptionType: SubscriptionType, sender: AnyObject, completion: @escaping SubscribeHandler) {
         DummyFail(sender: self, function: #function)
     }
     
-    public func unsubscribe(_ subscriptionType: SubscriptionType) {
+    public func unsubscribe(fromType subscriptionType: SubscriptionType, sender: AnyObject) {
         DummyFail(sender: self, function: #function)
     }
     

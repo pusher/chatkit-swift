@@ -65,7 +65,7 @@ public class StubSubscription: DoubleBase, Subscription {
     
     public func unsubscribe() {
         unsubscribe_actualCallCount += 1
-        guard unsubscribe_actualCallCount < unsubscribe_expectedCallCount else {
+        guard unsubscribe_actualCallCount <= unsubscribe_expectedCallCount else {
             XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: file, line: line)
             return
         }

@@ -76,7 +76,7 @@ public class Chatkit {
 
         case .disconnected:
             
-            dependencies.subscriptionManager.subscribe(.user) { result in
+            dependencies.subscriptionManager.subscribe(toType: .user, sender: self) { result in
                 switch result {
                 case .success:
                     self.connectionStatus = .connected
