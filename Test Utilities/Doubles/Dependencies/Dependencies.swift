@@ -9,7 +9,7 @@ private let defaultInstanceLocator = PusherPlatform.InstanceLocator(string: "dum
 // If a dependency is not explicitly defined a "Dummy" version is used so that if it is interacted
 // with in any way the test should fail.
 public class DependenciesDoubles: DoubleBase, Dependencies {
-
+    
     public let instanceLocator: PusherPlatform.InstanceLocator
     public let tokenProvider: PusherPlatform.TokenProvider
     public let sdkInfoProvider: SDKInfoProvider
@@ -20,6 +20,16 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
     public let subscriptionFactory: SubscriptionFactory
     public let subscriptionManager: SubscriptionManager
     
+    public let masterReducer: Reducer.Master.ExpressionType
+    public let userReducer: Reducer.Model.User.ExpressionType
+    public let roomListReducer: Reducer.Model.RoomList.ExpressionType
+    public let initialStateUserSubscriptionReducer: Reducer.UserSubscription.InitialState.ExpressionType
+    public let userSubscriptionAddedToRoomReducer: Reducer.UserSubscription.AddedToRoom.ExpressionType
+    public let userSubscriptionRemovedFromRoomReducer: Reducer.UserSubscription.RemovedFromRoom.ExpressionType
+    public let userSubscriptionRoomUpdatedReducer: Reducer.UserSubscription.RoomUpdated.ExpressionType
+    public let userSubscriptionRoomDeletedReducer: Reducer.UserSubscription.RoomDeleted.ExpressionType
+    public let userSubscriptionReadStateUpdatedReducer: Reducer.UserSubscription.ReadStateUpdated.ExpressionType
+    
     public init(instanceLocator: PusherPlatform.InstanceLocator? = nil,
                 tokenProvider: PusherPlatform.TokenProvider? = nil,
                 sdkInfoProvider: SDKInfoProvider? = nil,
@@ -29,6 +39,15 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
                 subscriptionActionDispatcher: SubscriptionActionDispatcher? = nil,
                 subscriptionFactory: SubscriptionFactory? = nil,
                 subscriptionManager: SubscriptionManager? = nil,
+                masterReducer: Reducer.Master.ExpressionType? = nil,
+                userReducer: Reducer.Model.User.ExpressionType? = nil,
+                roomListReducer: Reducer.Model.RoomList.ExpressionType? = nil,
+                initialStateUserSubscriptionReducer: Reducer.UserSubscription.InitialState.ExpressionType? = nil,
+                userSubscriptionAddedToRoomReducer: Reducer.UserSubscription.AddedToRoom.ExpressionType? = nil,
+                userSubscriptionRemovedFromRoomReducer: Reducer.UserSubscription.RemovedFromRoom.ExpressionType? = nil,
+                userSubscriptionRoomUpdatedReducer: Reducer.UserSubscription.RoomUpdated.ExpressionType? = nil,
+                userSubscriptionRoomDeletedReducer: Reducer.UserSubscription.RoomDeleted.ExpressionType? = nil,
+                userSubscriptionReadStateUpdatedReducer: Reducer.UserSubscription.ReadStateUpdated.ExpressionType? = nil,
                 
                 file: StaticString = #file, line: UInt = #line) {
         
@@ -41,6 +60,25 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
         self.subscriptionActionDispatcher = subscriptionActionDispatcher ?? DummySubscriptionActionDispatcher(file: file, line: line)
         self.subscriptionFactory = subscriptionFactory ?? DummySubscriptionFactory(file: file, line: line)
         self.subscriptionManager = subscriptionManager ?? DummySubscriptionManager(file: file, line: line)
+        
+        self.masterReducer = masterReducer ??
+            DummyReducer<Reducer.Master>(file: file, line: line).reduce
+        self.userReducer = userReducer ??
+            DummyReducer<Reducer.Model.User>(file: file, line: line).reduce
+        self.roomListReducer = roomListReducer ??
+            DummyReducer<Reducer.Model.RoomList>(file: file, line: line).reduce
+        self.initialStateUserSubscriptionReducer = initialStateUserSubscriptionReducer ??
+            DummyReducer<Reducer.UserSubscription.InitialState>(file: file, line: line).reduce
+        self.userSubscriptionAddedToRoomReducer = userSubscriptionAddedToRoomReducer ??
+            DummyReducer<Reducer.UserSubscription.AddedToRoom>(file: file, line: line).reduce
+        self.userSubscriptionRemovedFromRoomReducer = userSubscriptionRemovedFromRoomReducer ??
+            DummyReducer<Reducer.UserSubscription.RemovedFromRoom>(file: file, line: line).reduce
+        self.userSubscriptionRoomUpdatedReducer = userSubscriptionRoomUpdatedReducer ??
+            DummyReducer<Reducer.UserSubscription.RoomUpdated>(file: file, line: line).reduce
+        self.userSubscriptionRoomDeletedReducer = userSubscriptionRoomDeletedReducer ??
+            DummyReducer<Reducer.UserSubscription.RoomDeleted>(file: file, line: line).reduce
+        self.userSubscriptionReadStateUpdatedReducer = userSubscriptionReadStateUpdatedReducer ??
+            DummyReducer<Reducer.UserSubscription.ReadStateUpdated>(file: file, line: line).reduce
         
         super.init(file: file, line: line)
     }

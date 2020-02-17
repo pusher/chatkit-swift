@@ -6,18 +6,18 @@ import Foundation
 
 extension JoinedRoomsProvider: StoreListener {
     
-    func store(_ store: Store, didUpdateState state: State) {
+    func store(_ store: Store, didUpdateState state: MasterState) {
         
-        for joinedRoom in state.joinedRooms {
-            if rooms.contains(where: { $0.identifier != joinedRoom.identifier }) {
-                let room = EntityParser.room(fromJoinedRoom: joinedRoom)
+        for roomState in state.joinedRooms.rooms.values {
+            if rooms.contains(where: { $0.identifier != roomState.identifier }) {
+                let room = EntityParser.room(fromRoomState: roomState)
                 rooms.insert(room)
                 delegate?.joinedRoomsProvider(self, didJoinRoom: room)
             }
         }
         
         for currentRoom in rooms {
-            if !state.joinedRooms.contains(where: { $0.identifier == currentRoom.identifier }) {
+            if !state.joinedRooms.rooms.contains(where: { $0.value.identifier == currentRoom.identifier }) {
                 rooms.remove(currentRoom)
                 delegate?.joinedRoomsProvider(self, didLeaveRoom: currentRoom)
             }
@@ -30,10 +30,10 @@ extension JoinedRoomsProvider: StoreListener {
 // TODO: this needs to be completely replaced/rewritten as part of the `JoinedRoomsTransformer` work.
 class EntityParser {
     
-    static func room(fromJoinedRoom joinedRoom: Internal.Room) -> Room {
+    static func room(fromRoomState roomState: RoomState) -> Room {
         // TODO: fill in the blanks
-        return Room(identifier: joinedRoom.identifier,
-                    name: joinedRoom.name,
+        return Room(identifier: roomState.identifier,
+                    name: roomState.name,
                     isPrivate: false,
                     unreadCount: 0,
                     lastMessage: nil,

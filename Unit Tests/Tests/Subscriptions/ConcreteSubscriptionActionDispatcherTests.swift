@@ -47,23 +47,21 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedAction = Action.subscriptionEvent(
-            Wire.Event.EventType.initialState(
-                event: Wire.Event.InitialState(currentUser: Wire.User(identifier: "viv",
-                                                                      name: "Vivan",
-                                                                      avatarURL: nil,
-                                                                      customData: nil,
-                                                                      createdAt: Date.distantPast,
-                                                                      updatedAt: Date.distantFuture,
-                                                                      deletedAt: nil),
-                                               rooms: [],
-                                               readStates: [],
-                                               memberships: [])
-            )
+        let expectedAction = InitialStateAction(
+            event: Wire.Event.InitialState(currentUser: Wire.User(identifier: "viv",
+                                                                  name: "Vivan",
+                                                                  avatarURL: nil,
+                                                                  customData: nil,
+                                                                  createdAt: Date.distantPast,
+                                                                  updatedAt: Date.distantFuture,
+                                                                  deletedAt: nil),
+                                           rooms: [],
+                                           readStates: [],
+                                           memberships: [])
         )
         
         XCTAssertEqual(stubStore.action_actualCallCount, 1)
-        XCTAssertEqual(stubStore.action_lastReceived, expectedAction)
+        XCTAssertEqual(stubStore.action_lastReceived as? InitialStateAction, expectedAction)
     }
     
     func test_didReceiveEvent_withInvalidJson_doesNotNotifyStore() {
@@ -98,7 +96,7 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
         /******************/
 
         XCTAssertEqual(stubStore.action_actualCallCount, 0)
-        XCTAssertEqual(stubStore.action_lastReceived, nil)
+        XCTAssertNil(stubStore.action_lastReceived)
     }
     
     func test_didReceiveError_regardless_doesNotNotifyStore() {
@@ -129,6 +127,6 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
         /******************/
 
         XCTAssertEqual(stubStore.action_actualCallCount, 0)
-        XCTAssertEqual(stubStore.action_lastReceived, nil)
+        XCTAssertNil(stubStore.action_lastReceived)
     }
 }

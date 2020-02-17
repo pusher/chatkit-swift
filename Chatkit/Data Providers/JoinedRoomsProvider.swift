@@ -48,8 +48,8 @@ public class JoinedRoomsProvider {
         let state = dependencies.storeBroadcaster.register(self)
         
         var rooms: Set<Room> = []
-        for joinedRoom in state.joinedRooms {
-            let room = EntityParser.room(fromJoinedRoom: joinedRoom)
+        for roomState in state.joinedRooms.rooms.values {
+            let room = EntityParser.room(fromRoomState: roomState)
             rooms.insert(room)
         }
         self.rooms = rooms

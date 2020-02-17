@@ -179,7 +179,7 @@ class Functional_ChatkitConnected_Tests: XCTestCase {
             XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
             XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
             
-            var latestState: State?
+            var latestState: MasterState?
             
             /******************/
             /*----- WHEN -----*/
@@ -191,7 +191,7 @@ class Functional_ChatkitConnected_Tests: XCTestCase {
             /*----- THEN -----*/
             /******************/
             
-            XCTAssertEqual(latestState?.joinedRooms.count, 0)
+            XCTAssertEqual(latestState?.joinedRooms.rooms.count, 0)
             XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
             
             /******************/
@@ -231,8 +231,8 @@ class Functional_ChatkitConnected_Tests: XCTestCase {
             /******************/
             
             latestState = stubStoreListener.didUpdateState_stateLastReceived
-            XCTAssertEqual(latestState?.joinedRooms.count, 1)
-            XCTAssertEqual(latestState?.joinedRooms[0].identifier, "ac43dfef")
+            XCTAssertEqual(latestState?.joinedRooms.rooms.count, 1)
+            XCTAssertNotNil(latestState?.joinedRooms.rooms["ac43dfef"])
             XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 1)
             
             /******************/
@@ -256,7 +256,7 @@ class Functional_ChatkitConnected_Tests: XCTestCase {
             /******************/
             
             latestState = stubStoreListener.didUpdateState_stateLastReceived
-            XCTAssertEqual(latestState?.joinedRooms.count, 0)
+            XCTAssertEqual(latestState?.joinedRooms.rooms.count, 0)
             XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 2)
 
         }())

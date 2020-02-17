@@ -1,18 +1,18 @@
 import XCTest
 @testable import PusherChatkit
 
-public class DummyStoreDelegate: DummyBase, StoreDelegate {
+public class DummyStoreListener: DummyBase, StoreListener {
     
-    public func store(_ store: Store, didUpdateState state: State) {
+    public func store(_ store: Store, didUpdateState state: MasterState) {
         DummyFail(sender: self, function: #function)
     }
 }
 
-public class StubStoreDelegate: DoubleBase, StoreDelegate {
+public class StubStoreListener: DoubleBase, StoreListener {
 
     private var didUpdateState_expectedCallCount: UInt
-    public private(set) var didUpdateState_stateLastReceived: State?
-    public private(set) var didUpdateState_actualCallCount: Int = 0
+    public private(set) var didUpdateState_stateLastReceived: MasterState?
+    public private(set) var didUpdateState_actualCallCount: UInt = 0
 
     public init(didUpdateState_expectedCallCount: UInt = 0,
                 file: StaticString = #file, line: UInt = #line) {
@@ -22,11 +22,12 @@ public class StubStoreDelegate: DoubleBase, StoreDelegate {
         super.init(file: file, line: line)
     }
 
-    // MARK: StoreDelegate
+    // MARK: StoreListener
     
-    public func store(_ store: Store, didUpdateState state: State) {
+    public func store(_ store: Store, didUpdateState state: MasterState) {
         didUpdateState_stateLastReceived = state
         didUpdateState_actualCallCount += 1
+        
         guard didUpdateState_actualCallCount <= didUpdateState_expectedCallCount else {
             XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: file, line: line)
             return

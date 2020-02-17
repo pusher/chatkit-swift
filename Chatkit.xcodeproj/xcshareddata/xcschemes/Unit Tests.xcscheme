@@ -23,29 +23,6 @@
                BlueprintName = "Unit Tests"
                ReferencedContainer = "container:Chatkit.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "ChatServiceTests/testShouldBeHaveConnectionStatusSetToDisconnectedAfterUnsuccessfulConnection()">
-               </Test>
-               <Test
-                  Identifier = "ChatServiceTests/testShouldReturnErrorAfterUnsuccessfulConnection()">
-               </Test>
-               <Test
-                  Identifier = "ChatkitTests/testShouldBeHaveConnectionStatusSetToDisconnectedAfterUnsuccessfulConnection()">
-               </Test>
-               <Test
-                  Identifier = "ChatkitTests/testShouldHaveConnectionStatusSetToDisconnectedAfterUnsuccessfulConnection()">
-               </Test>
-               <Test
-                  Identifier = "ChatkitTests/testShouldReturnErrorAfterUnsuccessfulConnection()">
-               </Test>
-               <Test
-                  Identifier = "NetworkingControllerTests/testShouldHaveConnectionStatusSetToDisconnectedAfterUnsuccessfulConnection()">
-               </Test>
-               <Test
-                  Identifier = "NetworkingControllerTests/testShouldReturnErrorAfterUnsuccessfulConnection()">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>
