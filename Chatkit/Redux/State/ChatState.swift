@@ -1,5 +1,5 @@
 
-struct MasterState: State {
+struct ChatState: State {
     
     // MARK: - Properties
     
@@ -8,14 +8,14 @@ struct MasterState: State {
     
     let users: UserListState
     
-    // TODO: Add readStates.
+    // TODO: Add cursors.
     // TODO: Add memberships.
     
-    static let empty: MasterState = MasterState(currentUser: .empty, joinedRooms: .empty, users: .empty)
+    static let empty: ChatState = ChatState(currentUser: .empty, joinedRooms: .empty, users: .empty)
     
 }
 
 // MARK: - Equatable
 
-extension MasterState: Equatable {}
+extension ChatState: Equatable {}
 

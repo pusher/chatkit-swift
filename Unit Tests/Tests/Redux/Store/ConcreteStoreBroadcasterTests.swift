@@ -4,36 +4,44 @@ import XCTest
 
 class ConcreteStoreBroadcasterTests: XCTestCase {
     
-    let stateA = MasterState(
-        currentUser: UserState.populated(
-            identifier: "alice",
-            name: "Alice A"
+    let stateA = VersionedState(
+        chatState: ChatState(
+            currentUser: .populated(
+                identifier: "alice",
+                name: "Alice A"
+            ),
+            joinedRooms: .empty,
+            users: UserListState(
+                users: [
+                    "alice" : .populated(
+                        identifier: "alice",
+                        name: "Alice A"
+                    )
+                ]
+            )
         ),
-        joinedRooms: .empty,
-        users: UserListState(
-            users: [
-                "alice" : UserState.populated(
-                    identifier: "alice",
-                    name: "Alice A"
-                )
-            ]
-        )
+        version: 1,
+        signature: .initialState
     )
     
-    let stateB = MasterState(
-        currentUser: UserState.populated(
-            identifier: "bob",
-            name: "Bob B"
+    let stateB = VersionedState(
+        chatState: ChatState(
+            currentUser: .populated(
+                identifier: "bob",
+                name: "Bob B"
+            ),
+            joinedRooms: .empty,
+            users: UserListState(
+                users: [
+                    "bob" : .populated(
+                        identifier: "bob",
+                        name: "Bob B"
+                    )
+                ]
+            )
         ),
-        joinedRooms: .empty,
-        users: UserListState(
-            users: [
-                "bob" : UserState.populated(
-                    identifier: "bob",
-                    name: "Bob B"
-                )
-            ]
-        )
+        version: 1,
+        signature: .initialState
     )
     
     func test_register_withListenerThatIsNotCurrentlyRegistered_returnsStateFromStore() {
@@ -165,7 +173,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: MasterState.empty)
+        let stubStore = StubStore(state_toReturn: .initial)
         let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -198,7 +206,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: MasterState.empty)
+        let stubStore = StubStore(state_toReturn: .initial)
         let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -232,7 +240,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: MasterState.empty)
+        let stubStore = StubStore(state_toReturn: .initial)
         let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -266,7 +274,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: MasterState.empty)
+        let stubStore = StubStore(state_toReturn: .initial)
         let stubStoreListener1 = StubStoreListener(didUpdateState_expectedCallCount: 2)
         let stubStoreListener2 = StubStoreListener(didUpdateState_expectedCallCount: 1)
         let dependencies = DependenciesDoubles(store: stubStore)

@@ -6,7 +6,7 @@ extension Reducer {
         // MARK: - Types
         
         typealias ActionType = Action
-        typealias StateType = MasterState
+        typealias StateType = VersionedState
         typealias DependenciesType =
             HasUserReducer
             & HasRoomListReducer
@@ -20,24 +20,41 @@ extension Reducer {
         // MARK: - Reducer
         
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
+            let reducedState: ChatState
+            let signature: VersionSignature
             
             if let action = action as? InitialStateAction {
-                return dependencies.initialStateUserSubscriptionReducer(action, state, dependencies)
+                reducedState = dependencies.initialStateUserSubscriptionReducer(action, state.chatState, dependencies)
+                signature = .initialState
             }
             else if let action = action as? AddedToRoomAction {
-                return dependencies.userSubscriptionAddedToRoomReducer(action, state, dependencies)
+                reducedState = dependencies.userSubscriptionAddedToRoomReducer(action, state.chatState, dependencies)
+                signature = .addedToRoom
             }
             else if let action = action as? RemovedFromRoomAction {
-                return dependencies.userSubscriptionRemovedFromRoomReducer(action, state, dependencies)
+                reducedState = dependencies.userSubscriptionRemovedFromRoomReducer(action, state.chatState, dependencies)
+                signature = .removedFromRoom
             }
             else if let action = action as? RoomUpdatedAction {
-                return dependencies.userSubscriptionRoomUpdatedReducer(action, state, dependencies)
+                reducedState = dependencies.userSubscriptionRoomUpdatedReducer(action, state.chatState, dependencies)
+                signature = .roomUpdated
             }
             else if let action = action as? RoomDeletedAction {
-                return dependencies.userSubscriptionRoomDeletedReducer(action, state, dependencies)
+                reducedState = dependencies.userSubscriptionRoomDeletedReducer(action, state.chatState, dependencies)
+                signature = .roomDeleted
             }
             else if let action = action as? ReadStateUpdatedAction {
-                return dependencies.userSubscriptionReadStateUpdatedReducer(action, state, dependencies)
+                reducedState = dependencies.userSubscriptionReadStateUpdatedReducer(action, state.chatState, dependencies)
+                signature = .readStateUpdated
+            }
+            else {
+                return state
+            }
+            
+            if reducedState != state.chatState {
+                let version = state.version + 1
+                
+                return VersionedState(chatState: reducedState, version: version, signature: signature)
             }
             
             return state

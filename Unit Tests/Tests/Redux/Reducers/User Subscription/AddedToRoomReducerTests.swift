@@ -12,7 +12,7 @@ class AddedToRoomReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let inputState = MasterState(
+        let inputState = ChatState(
             currentUser: .empty,
             joinedRooms: .empty,
             users: .empty
@@ -78,7 +78,7 @@ class AddedToRoomReducerTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState = MasterState(
+        let expectedState = ChatState(
             currentUser: .empty,
             joinedRooms: reducer_stateToReturn,
             users: .empty

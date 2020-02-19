@@ -6,7 +6,7 @@ extension Reducer.UserSubscription {
         // MARK: - Types
         
         typealias ActionType = InitialStateAction
-        typealias StateType = MasterState
+        typealias StateType = ChatState
         typealias DependenciesType = HasUserReducer
             & HasRoomListReducer
         
@@ -24,7 +24,7 @@ extension Reducer.UserSubscription {
                 users = .empty
             }
             
-            return MasterState(currentUser: currentUser, joinedRooms: joinedRooms, users: users)
+            return ChatState(currentUser: currentUser, joinedRooms: joinedRooms, users: users)
         }
         
     }

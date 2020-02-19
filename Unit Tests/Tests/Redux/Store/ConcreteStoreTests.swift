@@ -6,7 +6,7 @@ class ConcreteStoreTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_init_stateStartsAsEmpty() {
+    func test_init_stateStartsWithInitialState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -24,7 +24,7 @@ class ConcreteStoreTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertEqual(sut.state, MasterState.empty)
+        XCTAssertEqual(sut.state, .initial)
     }
     
     func test_dispatch_withActionThatDoesChangeInternalState_stateIsUpdated() {
@@ -33,20 +33,15 @@ class ConcreteStoreTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let expectedState = MasterState(
-            currentUser: .empty,
-            joinedRooms: .empty,
-            users: .empty
-        )
+        let expectedState: VersionedState = .initial
         
-        let stubMasterReducer: StubReducer<Reducer.Master> =
-            .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
+        let stubMasterReducer = StubReducer<Reducer.Master>(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
         
-        XCTAssertEqual(sut.state, MasterState.empty)
+        XCTAssertEqual(sut.state, .initial)
         
         /******************/
         /*----- WHEN -----*/
@@ -84,26 +79,28 @@ class ConcreteStoreTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let expectedState = MasterState(
-            currentUser: .populated(
-                identifier: "alice",
-                name: "Alice A"
+        let expectedState = VersionedState(
+            chatState: ChatState(
+                currentUser: .populated(
+                    identifier: "alice",
+                    name: "Alice A"
+                ),
+                joinedRooms: .empty,
+                users: UserListState(
+                    users: [
+                        "alice" : .populated(
+                            identifier: "alice",
+                            name: "Alice A"
+                        )
+                    ]
+                )
             ),
-            joinedRooms: .empty,
-            users: UserListState(
-                users: [
-                    "alice" : .populated(
-                        identifier: "alice",
-                        name: "Alice A"
-                    )
-                ]
-            )
-        )
+            version: 1,
+            signature: .initialState)
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
         
-        let stubMasterReducer: StubReducer<Reducer.Master> =
-            .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
+        let stubMasterReducer = StubReducer<Reducer.Master>(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
         
@@ -148,16 +145,15 @@ class ConcreteStoreTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let expectedState = MasterState.empty
+        let expectedState: VersionedState = .initial
         
-        let stubMasterReducer: StubReducer<Reducer.Master> =
-            .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
+        let stubMasterReducer = StubReducer<Reducer.Master>(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
         
         let sut = ConcreteStore(dependencies: dependencies, delegate: nil)
         
-        XCTAssertEqual(sut.state, MasterState.empty)
+        XCTAssertEqual(sut.state, .initial)
         
         /******************/
         /*----- WHEN -----*/
@@ -186,8 +182,7 @@ class ConcreteStoreTests: XCTestCase {
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 2)
         
-        let stubMasterReducer: StubReducer<Reducer.Master> =
-            .init(reduce_stateToReturn: .empty, reduce_expectedCallCount: 1)
+        let stubMasterReducer = StubReducer<Reducer.Master>(reduce_stateToReturn: .initial, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
         
@@ -221,16 +216,11 @@ class ConcreteStoreTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let expectedState = MasterState(
-            currentUser: .empty,
-            joinedRooms: .empty,
-            users: .empty
-        )
+        let expectedState: VersionedState = .initial
         
         let stubStoreDelegate = StubStoreDelegate(didUpdateState_expectedCallCount: 1)
         
-        let stubMasterReducer: StubReducer<Reducer.Master> =
-            .init(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
+        let stubMasterReducer = StubReducer<Reducer.Master>(reduce_stateToReturn: expectedState, reduce_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(masterReducer: stubMasterReducer.reduce)
         
@@ -267,7 +257,7 @@ class ConcreteStoreTests: XCTestCase {
         
         XCTAssertEqual(stubMasterReducer.reduce_actualCallCount, 1)
         XCTAssertEqual(stubMasterReducer.reduce_actionLastReceived as? InitialStateAction, action)
-        XCTAssertEqual(stubMasterReducer.reduce_stateLastReceived, MasterState.empty)
+        XCTAssertEqual(stubMasterReducer.reduce_stateLastReceived, .initial)
     }
     
 }

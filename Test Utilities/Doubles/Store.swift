@@ -3,9 +3,9 @@ import XCTest
 
 public class DummyStore: DummyBase, Store {
     
-    public var state: MasterState {
+    public var state: VersionedState {
         DummyFail(sender: self, function: #function)
-        return MasterState.empty
+        return .initial
     }
     
     public func dispatch(action: Action) {
@@ -26,14 +26,14 @@ public extension XCTest {
 
 public class StubStore: StubBase, Store {
 
-    private var state_toReturn: MasterState?
+    private var state_toReturn: VersionedState?
     public private(set) var state_actualCallCount: UInt = 0
     
     private var action_expectedCallCount: UInt
     public private(set) var action_lastReceived: Action?
     public private(set) var action_actualCallCount: UInt = 0
     
-    public init(state_toReturn: MasterState? = nil,
+    public init(state_toReturn: VersionedState? = nil,
          action_expectedCallCount: UInt = 0,
          file: StaticString = #file, line: UInt = #line) {
         
@@ -45,11 +45,11 @@ public class StubStore: StubBase, Store {
     
     // MARK: Store
     
-    public var state: MasterState {
+    public var state: VersionedState {
         state_actualCallCount += 1
         guard let state_toReturn = state_toReturn else {
             XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: file, line: line)
-            return MasterState.empty
+            return .initial
         }
         return state_toReturn
     }

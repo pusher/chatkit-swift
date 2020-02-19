@@ -12,7 +12,7 @@ class InitialStateReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let inputState: MasterState = .empty
+        let inputState: ChatState = .empty
         
         let action = InitialStateAction(
             event: Wire.Event.InitialState(
@@ -120,7 +120,7 @@ class InitialStateReducerTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState = MasterState(
+        let expectedState = ChatState(
             currentUser: userReducer_stateToReturn,
             joinedRooms: roomListReducer_stateToReturn,
             users: UserListState(
@@ -139,7 +139,7 @@ class InitialStateReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let inputState: MasterState = .empty
+        let inputState: ChatState = .empty
         
         let action = InitialStateAction(
             event: Wire.Event.InitialState(
@@ -244,7 +244,7 @@ class InitialStateReducerTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState = MasterState(
+        let expectedState = ChatState(
             currentUser: userReducer_stateToReturn,
             joinedRooms: roomListReducer_stateToReturn,
             users: .empty

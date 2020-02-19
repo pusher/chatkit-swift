@@ -1,6 +1,6 @@
 
 protocol StoreDelegate: AnyObject {
-    func store(_ store: Store, didUpdateState state: MasterState)
+    func store(_ store: Store, didUpdateState state: VersionedState)
 }
 
 protocol HasStore {
@@ -8,7 +8,7 @@ protocol HasStore {
 }
 
 protocol Store {
-    var state: MasterState { get }
+    var state: VersionedState { get }
     func dispatch(action: Action)
 }
 
@@ -28,7 +28,7 @@ class ConcreteStore: Store {
     private let dependencies: Dependencies
     private weak var delegate: StoreDelegate?
     
-    private(set) var state: MasterState {
+    private(set) var state: VersionedState {
         didSet {
             if state != oldValue {
                 self.delegate?.store(self, didUpdateState: state)
@@ -40,10 +40,10 @@ class ConcreteStore: Store {
         self.dependencies = dependencies
         self.delegate = delegate
         // Ensure the state is set *AFTER* the delegate so its `didSet` triggers a call to the delegate and its notified of the initial state
-        self.state = .empty
+        self.state = .initial
     }
     
     func dispatch(action: Action) {
-        state = self.dependencies.masterReducer(action, state, dependencies)
+        self.state = self.dependencies.masterReducer(action, self.state, self.dependencies)
     }
 }
