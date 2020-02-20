@@ -61,14 +61,14 @@ public class JoinedRoomsViewModel {
     }
     
     private func sort() {
-        self.rooms.sort { lhs, rhs -> Bool in
-            if let lhsLastMessage = lhs.lastMessage, let rhsLastMessage = rhs.lastMessage {
-                return lhsLastMessage.createdAt > rhsLastMessage.createdAt
-            }
-            else {
-                return lhs.createdAt > rhs.createdAt
-            }
-        }
+//        self.rooms.sort { lhs, rhs -> Bool in
+//            if let lhsLastMessage = lhs.lastMessage, let rhsLastMessage = rhs.lastMessage {
+//                return lhsLastMessage.createdAt > rhsLastMessage.createdAt
+//            }
+//            else {
+//                return lhs.createdAt > rhs.createdAt
+//            }
+//        }
     }
     
     private func index(of room: Room) -> Int? {
@@ -100,27 +100,27 @@ extension JoinedRoomsViewModel: JoinedRoomsRepositoryDelegate {
     public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateRoom room: Room, previousValue: Room) {
         // TODO: Optimize if necessary
         
-        guard let previousIndex = self.index(of: previousValue) else {
-            return
-        }
-        
-        self.rooms[previousIndex] = room
-        self.sort()
-        
-        guard let currentIndex = self.index(of: room) else {
-            return
-        }
-        
-        let currentMessage = room.lastMessage
-        let previousMessage = previousValue.lastMessage
-        let changeReason: JoinedRoomsViewModel.ChangeReason = currentMessage != nil && currentMessage?.identifier != previousMessage?.identifier ? .messageReceived : .dataUpdated
-        
-        if currentIndex != previousIndex {
-            self.delegate?.joinedRoomsViewModel(self, didMoveRoomFrom: previousIndex, to: currentIndex, changeReason: changeReason)
-        }
-        else {
-            self.delegate?.joinedRoomsViewModel(self, didUpdateRoomAt: currentIndex, changeReason: changeReason)
-        }
+//        guard let previousIndex = self.index(of: previousValue) else {
+//            return
+//        }
+//        
+//        self.rooms[previousIndex] = room
+//        self.sort()
+//        
+//        guard let currentIndex = self.index(of: room) else {
+//            return
+//        }
+//        
+//        let currentMessage = room.lastMessage
+//        let previousMessage = previousValue.lastMessage
+//        let changeReason: JoinedRoomsViewModel.ChangeReason = currentMessage != nil && currentMessage?.identifier != previousMessage?.identifier ? .messageReceived : .dataUpdated
+//        
+//        if currentIndex != previousIndex {
+//            self.delegate?.joinedRoomsViewModel(self, didMoveRoomFrom: previousIndex, to: currentIndex, changeReason: changeReason)
+//        }
+//        else {
+//            self.delegate?.joinedRoomsViewModel(self, didUpdateRoomAt: currentIndex, changeReason: changeReason)
+//        }
     }
     
     public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didLeaveRoom room: Room) {

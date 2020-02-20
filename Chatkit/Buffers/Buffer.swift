@@ -1,7 +1,7 @@
 
 protocol Buffer: StoreListener {
     
-    var delegate: BufferDelegate? { get }
+    var delegate: BufferDelegate? { get set }
     
 }
 
