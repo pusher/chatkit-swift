@@ -18,30 +18,31 @@ class ConcreteStoreBroadcaster: StoreBroadcaster {
     
     private let dependencies: Dependencies
     
-    private var listeners = [StoreListener]()
+    private var listeners: NSHashTable<AnyObject>
     
     init(dependencies: Dependencies) {
         self.dependencies = dependencies
+        self.listeners = NSHashTable.weakObjects()
     }
     
     // MARK: StoreBroadcaster
     
     func register(_ listener: StoreListener) -> VersionedState {
-        if !listeners.contains(where: { $0 === listener }) {
-            listeners.append(listener)
-        }
+        self.listeners.add(listener)
         return self.dependencies.store.state
     }
     
     func unregister(_ listener: StoreListener) {
-        listeners.removeAll(where: { $0 === listener })
+        self.listeners.remove(listener)
     }
 
     // MARK: StoreDelegate
     
     func store(_ store: Store, didUpdateState state: VersionedState) {
-        for listener in listeners {
-            listener.store(store, didUpdateState: state)
+        for listener in self.listeners.allObjects {
+            if let listener = listener as? StoreListener {
+                listener.store(store, didUpdateState: state)
+            }
         }
     }
     

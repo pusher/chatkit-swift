@@ -8,6 +8,16 @@ struct ReadSummaryState: State {
     
     static let empty: ReadSummaryState = ReadSummaryState(unreadCount: nil)
     
+    // MARK: - Accessors
+    
+    let isComplete = true
+    
+    // MARK: - Supplementation
+    
+    func supplement(withState supplementalState: ReadSummaryState) -> ReadSummaryState {
+        return self
+    }
+    
 }
 
 // MARK: - Equatable

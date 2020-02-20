@@ -2,26 +2,45 @@
 enum UserState: State {
     
     case empty
-    // TODO: Consider in future for DependencyFetcher
-//    case partial(identifier: String)
+    case partial(identifier: String)
     case populated(identifier: String, name: String)
     // TODO: Consider in future for deleted users
 //    case redacted
     
-}
-
-// MARK: - Accessors
-
-extension UserState {
+    // MARK: - Accessors
+    
+    var isComplete: Bool {
+        switch self {
+        case .empty,
+             .populated(_, _):
+            return true
+            
+        case .partial(_):
+            return false
+        }
+    }
     
     var identifier: String? {
         switch self {
         case .empty:
             return nil
             
-        case let .populated(identifier, _):
+        case let .populated(identifier, _),
+             let .partial(identifier):
             return identifier
         }
+    }
+    
+    // MARK: - Supplementation
+    
+    func supplement(withState supplementalState: UserState) -> UserState {
+        guard let identifier = self.identifier,
+            let supplementalIdentifier = supplementalState.identifier,
+            supplementalIdentifier == identifier else {
+                return self
+        }
+        
+        return supplementalState
     }
     
 }
