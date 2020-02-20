@@ -69,71 +69,71 @@ public class Chatkit {
         self.connectionStatus = .disconnected
     }
     
-    // MARK: - Constructing paged data providers
+    // MARK: - Constructing paged data repositories
     
-    /// Creates an instance of `UsersProvider`.
+    /// Creates an instance of `UsersRepository`.
     ///
     /// - Parameters:
-    ///     - completionHandler: A completion handler which will be called when the `UsersProvider` is ready, or an `Error` occurs creating it.
-    public func createUsersProvider(completionHandler: @escaping (UsersProvider?, Error?) -> Void) {
+    ///     - completionHandler: A completion handler which will be called when the `UsersRepository` is ready, or an `Error` occurs creating it.
+    public func createUsersRepository(completionHandler: @escaping (UsersRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
     
-    /// Creates an instance of `AvailableRoomsProvider`.
+    /// Creates an instance of `AvailableRoomsRepository`.
     ///
     /// - Parameters:
-    ///     - completionHandler: A completion handler which will be called when the `AvailableRoomsProvider` is ready, or an `Error` occurs creating it.
-    public func createAvailableRoomsProvider(completionHandler: @escaping (AvailableRoomsProvider?, Error?) -> Void) {
+    ///     - completionHandler: A completion handler which will be called when the `AvailableRoomsRepository` is ready, or an `Error` occurs creating it.
+    public func createAvailableRoomsRepository(completionHandler: @escaping (AvailableRoomsRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
     
-    // MARK: - Constructing real time data providers
+    // MARK: - Constructing real time data repositories
     
-    /// Creates an instance of `JoinedRoomsProvider`.
+    /// Creates an instance of `JoinedRoomsRepository`.
     ///
     /// This will provide access to a real time set of `Room`s that the current user is a member of.
     ///
     /// - Parameters:
-    ///     - completionHandler: A completion handler which will be called when the `JoinedRoomsProvider` is ready, or an `Error` occurs creating it.
-    public func createJoinedRoomsProvider(completionHandler: @escaping (JoinedRoomsProvider?, Error?) -> Void) {
+    ///     - completionHandler: A completion handler which will be called when the `JoinedRoomsRepository` is ready, or an `Error` occurs creating it.
+    public func createJoinedRoomsRepository(completionHandler: @escaping (JoinedRoomsRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
     
-    /// Creates an instance of `MessagesProvider`.
+    /// Creates an instance of `MessagesRepository`.
     ///
     /// This will provide access to a real time list of the `Message`s in a given `Room`.
     ///
     /// - Parameters:
-    ///     - room: The `Room` for which the provider will provide messages.
-    ///     - completionHandler: A completion handler which will be called when the `MessagesProvider` is ready, or an `Error` occurs creating it.
-    public func createMessagesProvider(for room: Room, completionHandler: @escaping (MessagesProvider?, Error?) -> Void) {
+    ///     - room: The `Room` for which the repository will provide messages.
+    ///     - completionHandler: A completion handler which will be called when the `MessagesRepository` is ready, or an `Error` occurs creating it.
+    public func createMessagesRepository(for room: Room, completionHandler: @escaping (MessagesRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
     
-    /// Creates an instance of `RoomMembersProvider`.
+    /// Creates an instance of `RoomMembersRepository`.
     ///
     /// This will give access to a real time set of the `User`s who are members of a given `Room`
     ///
     /// - Parameters:
-    ///     - room: The `Room` for which the provider will provide member information.
-    ///     - completionHandler: A completion handler which will be called when the `RoomMembersProvider` is ready, or an `Error` occurs creating it.
-    public func createRoomMembersProvider(for room: Room, completionHandler: @escaping (RoomMembersProvider?, Error?) -> Void) {
+    ///     - room: The `Room` for which the repository will provide member information.
+    ///     - completionHandler: A completion handler which will be called when the `RoomMembersRepository` is ready, or an `Error` occurs creating it.
+    public func createRoomMembersRepository(for room: Room, completionHandler: @escaping (RoomMembersRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
     
-    /// Creates an instance of `TypingUsersProvider`.
+    /// Creates an instance of `TypingUsersRepository`.
     ///
     /// This will give access to a real time set of the `User`s who are typing in a given `Room`.
     ///
     /// - Parameters:
-    ///     - room: The `Room` for which this provider will provide information on users who are typing.
-    ///     - completionHandler: A completion handler which will be called when the `TypingUsersProvider` is ready, or an `Error` occurs creating it.
-    public func createTypingUsersProvider(for room: Room, completionHandler: @escaping (TypingUsersProvider?, Error?) -> Void) {
+    ///     - room: The `Room` for which this repository will provide information on users who are typing.
+    ///     - completionHandler: A completion handler which will be called when the `TypingUsersRepository` is ready, or an `Error` occurs creating it.
+    public func createTypingUsersRepository(for room: Room, completionHandler: @escaping (TypingUsersRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }

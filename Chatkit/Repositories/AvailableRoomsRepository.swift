@@ -1,13 +1,13 @@
 import Foundation
 
-/// A provider which maintains a collection of all rooms available to the user which have been retrieved from
+/// A repository which maintains a collection of all rooms available to the user which have been retrieved from
 /// the web service.
-public class AvailableRoomsProvider {
+public class AvailableRoomsRepository {
     
     // MARK: - Properties
     
-    /// The current state of the provider.
-    public private(set) var state: PagedProviderState
+    /// The current state of the repository.
+    public private(set) var state: PagedRepositoryState
     
     /// The set of all rooms available to the user.
     ///
@@ -18,7 +18,7 @@ public class AvailableRoomsProvider {
     public private(set) var rooms: Set<Room>
     
     /// The object that is notified when the content of the maintained collection of rooms changed.
-    public weak var delegate: AvailableRoomsProviderDelegate?
+    public weak var delegate: AvailableRoomsRepositoryDelegate?
     
     // MARK: - Initializers
     
@@ -67,15 +67,15 @@ public class AvailableRoomsProvider {
 // MARK: - Delegate
 
 /// A delegate protocol that describes methods that will be called by the associated
-/// `AvailableRoomsProvider` when the maintainted collection of rooms have changed.
-public protocol AvailableRoomsProviderDelegate: class {
+/// `AvailableRoomsRepository` when the maintainted collection of rooms have changed.
+public protocol AvailableRoomsRepositoryDelegate: class {
     
     /// Notifies the receiver that new rooms have been added to the maintened collection of rooms.
     ///
     /// - Parameters:
-    ///     - availableRoomsProvider: The `AvailableRoomsProvider` that called
+    ///     - availableRoomsRepository: The `AvailableRoomsRepository` that called
     ///     the method.
     ///     - rooms: The set of rooms added to the maintened collection of rooms.
-    func availableRoomsProvider(_ availableRoomsProvider: AvailableRoomsProvider, didReceiveRooms rooms: Set<Room>)
+    func availableRoomsRepository(_ availableRoomsRepository: AvailableRoomsRepository, didReceiveRooms rooms: Set<Room>)
     
 }

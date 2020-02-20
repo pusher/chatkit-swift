@@ -1,55 +1,55 @@
 import Foundation
 
-/// A provider which exposes a collection of messages for a given room.
+/// A repository which exposes a collection of messages for a given room.
 ///
-/// Construct an instance of this class using `Chatkit.createMessagesProvider(...)`
+/// Construct an instance of this class using `Chatkit.createMessagesRepository(...)`
 ///
 /// ## What is provided
 ///
-/// The provider exposes an array, `messages: [Message]` which contains a subset of the messages for a given `Room`.
+/// The repository exposes an array, `messages: [Message]` which contains a subset of the messages for a given `Room`.
 ///
 /// Initially, the `messages` array contains the most recent messages from the room.
 ///
 /// New messages arriving in the room are added in real time.
 ///
-/// Older messages can be requested using `MessagesProvider.fetchOlderMessages(...)`.
+/// Older messages can be requested using `MessagesRepository.fetchOlderMessages(...)`.
 ///
 /// ## Receiving live updates
 ///
-/// In order to be notified when the contents of the `messages` changes, implement the `MessagesProviderDelegate` protocol and assign the `MessagesProvider.delegate` property.
+/// In order to be notified when the contents of the `messages` changes, implement the `MessagesRepositoryDelegate` protocol and assign the `MessagesRepository.delegate` property.
 ///
-/// Note that when the provider is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.
+/// Note that when the repository is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.
 ///
-/// ## Understanding the `state` of the Provider
+/// ## Understanding the `state` of the repository
 ///
-/// The provider provides both live updates to current data, and paged access to older data.
+/// The repository provides both live updates to current data, and paged access to older data.
 ///
-/// The `MessagesProvider.state` tuple allows you to understand the current state of both:
+/// The `MessagesRepository.state` tuple allows you to understand the current state of both:
 ///
-/// - the `realTime` component (an instance of `RealTimeProviderState`) describes the state of the live update connection, either
+/// - the `realTime` component (an instance of `RealTimeRepositoryState`) describes the state of the live update connection, either
 ///   - `.connected`: updates are flowing live, or
 ///   - `.degraded`: updates may be delayed due to network problems.
-/// - the `paged` component (an instance of `PagedProviderState`) describes whether the fill set of data has been fetched or not, either
+/// - the `paged` component (an instance of `PagedRepositoryState`) describes whether the fill set of data has been fetched or not, either
 ///   - `.fullyPopulated`: all data has been retrieved,
 ///   - `.partiallyPopulated`: more data can be fetched from the Chatkit service, or
 ///   - `.fetching`: more data is currently being requested from the Chatkit service.
 ///
-public class MessagesProvider {
+public class MessagesRepository {
     
     // MARK: - Properties
     
-    /// The identifier of the room for which the provider manages a collection of messages.
+    /// The identifier of the room for which the repository manages a collection of messages.
     public let roomIdentifier: String
     
-    /// The current state of the provider.
+    /// The current state of the repository.
     ///
     /// - Parameters:
-    ///     - realTime: The current state of the provider related to the real time web service.
-    ///     - paged: The current state of the provider related to the non-real time web service.
-    public private(set) var state: (realTime: RealTimeProviderState, paged: PagedProviderState)
+    ///     - realTime: The current state of the repository related to the real time web service.
+    ///     - paged: The current state of the repository related to the non-real time web service.
+    public private(set) var state: (realTime: RealTimeRepositoryState, paged: PagedRepositoryState)
     
     /// The object that is notified when the list `messages` has changed.
-    public weak var delegate: MessagesProviderDelegate?
+    public weak var delegate: MessagesRepositoryDelegate?
     
     /// The array of available messages for the given room.
     ///
@@ -118,36 +118,36 @@ public class MessagesProvider {
 
 // MARK: - Delegate
 
-/// A delegate protocol for being notified when the `messages` array of a `MessagesProvider` has changed.
-public protocol MessagesProviderDelegate: class {
+/// A delegate protocol for being notified when the `messages` array of a `MessagesRepository` has changed.
+public protocol MessagesRepositoryDelegate: class {
     
-    /// Called when old messages requested with `MessagesProvider.fetchOlderMessages(...)` have been added to the collection.
+    /// Called when old messages requested with `MessagesRepository.fetchOlderMessages(...)` have been added to the collection.
     ///
     /// - Parameters:
-    ///     - messagesProvider: The `MessagesProvider` that called the method.
+    ///     - messagesRepository: The `MessagesRepository` that called the method.
     ///     - messages: The array of older messages received from the web service.
-    func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveOlderMessages messages: [Message])
+    func messagesRepository(_ messagesRepository: MessagesRepository, didReceiveOlderMessages messages: [Message])
     
     /// Called when new messages have been added to the collection.
     ///
     /// - Parameters:
-    ///     - messagesProvider: The `MessagesProvider` that called the method.
+    ///     - messagesRepository: The `MessagesRepository` that called the method.
     ///     - messages: The new message received from the web service.
-    func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveNewMessage message: Message)
+    func messagesRepository(_ messagesRepository: MessagesRepository, didReceiveNewMessage message: Message)
     
     /// Called when a message in the collection has been updated.
     ///
     /// - Parameters:
-    ///     - messagesProvider: The `MessagesProvider` that called the method.
+    ///     - messagesRepository: The `MessagesRepository` that called the method.
     ///     - message: The updated value of the message.
     ///     - previousValue: The value of the message prior to the update.
-    func messagesProvider(_ messagesProvider: MessagesProvider, didUpdateMessage message: Message, previousValue: Message)
+    func messagesRepository(_ messagesRepository: MessagesRepository, didUpdateMessage message: Message, previousValue: Message)
     
     /// Called when a message in the collection has been deleted.
     ///
     /// - Parameters:
-    ///     - messagesProvider: The `MessagesProvider` that called the method.
+    ///     - messagesRepository: The `MessagesRepository` that called the method.
     ///     - message: The message removed from the maintened collection of messages.
-    func messagesProvider(_ messagesProvider: MessagesProvider, didRemoveMessage message: Message)
+    func messagesRepository(_ messagesRepository: MessagesRepository, didRemoveMessage message: Message)
     
 }

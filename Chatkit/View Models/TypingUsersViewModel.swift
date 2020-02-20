@@ -32,16 +32,16 @@ public class TypingUsersViewModel {
     
     // MARK: - Properties
     
-    private let provider: TypingUsersProvider
+    private let repository: TypingUsersRepository
     private let currentUserIdentifier: String
     private let userNamePlaceholder: String
     
     /// The textual description of the set of currently typing users, or `nil` of no users are typing.
     public private(set) var value: String?
     
-    /// The current state of the provider used by the view model as the data source.
-    public var state: RealTimeProviderState {
-        return self.provider.state
+    /// The current state of the repository used by the view model as the data source.
+    public var state: RealTimeRepositoryState {
+        return self.repository.state
     }
     
     /// The object that is notified when the content of the `value` property has changed.
@@ -49,12 +49,12 @@ public class TypingUsersViewModel {
     
     // MARK: - Initializers
     
-    init(provider: TypingUsersProvider, currentUserIdentifier: String, userNamePlaceholder: String) {
+    init(repository: TypingUsersRepository, currentUserIdentifier: String, userNamePlaceholder: String) {
         self.currentUserIdentifier = currentUserIdentifier
         self.userNamePlaceholder = userNamePlaceholder
         
-        self.provider = provider
-        self.provider.delegate = self
+        self.repository = repository
+        self.repository.delegate = self
         
         self.reload()
     }
@@ -62,7 +62,7 @@ public class TypingUsersViewModel {
     // MARK: - Private methods
     
     private func reload() {
-        var sortedNames = self.provider.typingUsers.filter { $0.identifier != self.currentUserIdentifier }.map { $0.name ?? self.userNamePlaceholder }.sorted()
+        var sortedNames = self.repository.typingUsers.filter { $0.identifier != self.currentUserIdentifier }.map { $0.name ?? self.userNamePlaceholder }.sorted()
         
         guard sortedNames.count > 0 else {
             self.value = nil
@@ -77,7 +77,7 @@ public class TypingUsersViewModel {
         }
         
         let names = sortedNames.joined(separator: ", ")
-        let verb = self.provider.typingUsers.count == 1 ? "is" : "are"
+        let verb = self.repository.typingUsers.count == 1 ? "is" : "are"
         
         // TODO: Provide localization for all languages supported by Pusher.
         self.value = "\(names) \(verb) typing."
@@ -85,17 +85,17 @@ public class TypingUsersViewModel {
     
 }
 
-// MARK: - TypingUsersProviderDelegate
+// MARK: - TypingUsersRepositoryDelegate
 
 /// :nodoc:
-extension TypingUsersViewModel: TypingUsersProviderDelegate {
+extension TypingUsersViewModel: TypingUsersRepositoryDelegate {
     
-    public func typingUsersProvider(_ typingUsersProvider: TypingUsersProvider, userDidStartTyping user: User) {
+    public func typingUsersRepository(_ typingUsersRepository: TypingUsersRepository, userDidStartTyping user: User) {
         self.reload()
         self.delegate?.typingUsersViewModelDidUpdateValue(self)
     }
     
-    public func typingUsersProvider(_ typingUsersProvider: TypingUsersProvider, userDidStopTyping user: User) {
+    public func typingUsersRepository(_ typingUsersRepository: TypingUsersRepository, userDidStopTyping user: User) {
         self.reload()
         self.delegate?.typingUsersViewModelDidUpdateValue(self)
     }

@@ -29,14 +29,14 @@ public class JoinedRoomsViewModel {
     
     // MARK: - Properties
     
-    private let provider: JoinedRoomsProvider
+    private let repository: JoinedRoomsRepository
     
     /// The array of all rooms joined by the user.
     public private(set) var rooms: [Room]
     
-    /// The current state of the provider used by the view model as the data source.
-    public var state: RealTimeProviderState {
-        return self.provider.state
+    /// The current state of the repository used by the view model as the data source.
+    public var state: RealTimeRepositoryState {
+        return self.repository.state
     }
     
     /// The object that is notified when the content of the maintained collection of rooms changed.
@@ -44,11 +44,11 @@ public class JoinedRoomsViewModel {
     
     // MARK: - Initializers
     
-    init(provider: JoinedRoomsProvider) {
+    init(repository: JoinedRoomsRepository) {
         self.rooms = []
         
-        self.provider = provider
-        self.provider.delegate = self
+        self.repository = repository
+        self.repository.delegate = self
         
         self.reload()
     }
@@ -56,7 +56,7 @@ public class JoinedRoomsViewModel {
     // MARK: - Private methods
     
     private func reload() {
-        self.rooms = Array(self.provider.rooms)
+        self.rooms = Array(self.repository.rooms)
         self.sort()
     }
     
@@ -79,12 +79,12 @@ public class JoinedRoomsViewModel {
     
 }
 
-// MARK: - JoinedRoomsProviderDelegate
+// MARK: - JoinedRoomsRepositoryDelegate
 
 /// :nodoc:
-extension JoinedRoomsViewModel: JoinedRoomsProviderDelegate {
+extension JoinedRoomsViewModel: JoinedRoomsRepositoryDelegate {
     
-    public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didJoinRoom room: Room) {
+    public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didJoinRoom room: Room) {
         // TODO: Optimize if necessary
         
         self.rooms.append(room)
@@ -97,7 +97,7 @@ extension JoinedRoomsViewModel: JoinedRoomsProviderDelegate {
         self.delegate?.joinedRoomsViewModel(self, didAddRoomAt: index, changeReason: .userJoined)
     }
     
-    public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didUpdateRoom room: Room, previousValue: Room) {
+    public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateRoom room: Room, previousValue: Room) {
         // TODO: Optimize if necessary
         
         guard let previousIndex = self.index(of: previousValue) else {
@@ -123,7 +123,7 @@ extension JoinedRoomsViewModel: JoinedRoomsProviderDelegate {
         }
     }
     
-    public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didLeaveRoom room: Room) {
+    public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didLeaveRoom room: Room) {
         guard let index = self.index(of: room) else {
             return
         }

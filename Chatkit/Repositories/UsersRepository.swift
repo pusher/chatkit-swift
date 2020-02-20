@@ -1,12 +1,12 @@
 import Foundation
 
-/// A provider which maintains a collection of users retrieved from the web service.
-public class UsersProvider {
+/// A repository which maintains a collection of users retrieved from the web service.
+public class UsersRepository {
     
     // MARK: - Properties
     
-    /// The current state of the provider.
-    public private(set) var state: PagedProviderState
+    /// The current state of the repository.
+    public private(set) var state: PagedRepositoryState
     
     /// The set of all users stored locally.
     ///
@@ -16,7 +16,7 @@ public class UsersProvider {
     public private(set) var users: Set<User>
     
     /// The object that is notified when the content of the maintained collection of users changed.
-    public weak var delegate: UsersProviderDelegate?
+    public weak var delegate: UsersRepositoryDelegate?
     
     // MARK: - Initializers
     
@@ -64,15 +64,15 @@ public class UsersProvider {
 
 // MARK: - Delegate
 
-/// A delegate protocol that describes methods that will be called by the associated `UsersProvider`
+/// A delegate protocol that describes methods that will be called by the associated `UsersRepository`
 /// when the maintainted collection of users have changed.
-public protocol UsersProviderDelegate: class {
+public protocol UsersRepositoryDelegate: class {
     
     /// Notifies the receiver that new users have been added to the maintened collection of users.
     ///
     /// - Parameters:
-    ///     - usersProvider: The `UsersProvider` that called the method.
+    ///     - usersRepository: The `UsersRepository` that called the method.
     ///     - users: The set of users added to the maintened collection of users.
-    func usersProvider(_ usersProvider: UsersProvider, didReceiveUsers users: Set<User>)
+    func usersRepository(_ usersRepository: UsersRepository, didReceiveUsers users: Set<User>)
     
 }

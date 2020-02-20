@@ -37,10 +37,10 @@ import Foundation
 ///
 /// The `MessagesViewModel.state` tuple allows you to understand the current state of both:
 ///
-/// - the `realTime` component (an instance of `RealTimeProviderState`) describes the state of the live update connection, either
+/// - the `realTime` component (an instance of `RealTimeRepositoryState`) describes the state of the live update connection, either
 ///   - `.connected`: updates are flowing live, or
 ///   - `.degraded`: updates may be delayed due to network problems.
-/// - the `paged` component (an instance of `PagedProviderState`) describes whether the fill set of data has been fetched or not, either
+/// - the `paged` component (an instance of `PagedRepositoryState`) describes whether the fill set of data has been fetched or not, either
 ///   - `.fullyPopulated`: all data has been retrieved,
 ///   - `.partiallyPopulated`: more data can be fetched from the Chatkit service, or
 ///   - `.fetching`: more data is currently being requested from the Chatkit service.
@@ -84,7 +84,7 @@ public class MessagesViewModel {
     
     // MARK: - Properties
     
-    private let provider: MessagesProvider
+    private let repository: MessagesRepository
     
     /// The array of entires representig different elements that might appear on a message feed.
     ///
@@ -92,13 +92,13 @@ public class MessagesViewModel {
     /// by the array.
     public private(set) var rows: [MessageRow]
     
-    /// The current state of the provider used by the view model as the data source.
+    /// The current state of the repository used by the view model as the data source.
     ///
     /// - Parameters:
-    ///     - realTime: The current state of the provider related to the real time web service.
-    ///     - paged: The current state of the provider related to the non-real time web service.
-    public var state: (realTime: RealTimeProviderState, paged: PagedProviderState) {
-        return self.provider.state
+    ///     - realTime: The current state of the repository related to the real time web service.
+    ///     - paged: The current state of the repository related to the non-real time web service.
+    public var state: (realTime: RealTimeRepositoryState, paged: PagedRepositoryState) {
+        return self.repository.state
     }
     
     /// The object that is notified when the content of the maintained collection of message rows changed.
@@ -106,11 +106,11 @@ public class MessagesViewModel {
     
     // MARK: - Initializers
     
-    init(provider: MessagesProvider) {
+    init(repository: MessagesRepository) {
         self.rows = []
         
-        self.provider = provider
-        self.provider.delegate = self
+        self.repository = repository
+        self.repository.delegate = self
         
         self.reload()
     }
@@ -131,7 +131,7 @@ public class MessagesViewModel {
     ///     - completionHandler: An optional completion handler invoked when the operation is complete.
     ///     The completion handler receives an Error, or nil on success.
     public func fetchOlderMessages(numberOfMessages: UInt = 10, completionHandler: CompletionHandler? = nil) {
-        guard self.provider.state.paged == .partiallyPopulated else {
+        guard self.repository.state.paged == .partiallyPopulated else {
             if let completionHandler = completionHandler {
                 completionHandler(nil)
             }
@@ -143,7 +143,7 @@ public class MessagesViewModel {
             self.addLoadingIndicator()
         }
         
-        self.provider.fetchOlderMessages(numberOfMessages: numberOfMessages) { error in
+        self.repository.fetchOlderMessages(numberOfMessages: numberOfMessages) { error in
             if error != nil {
                 self.batchViewUpdate {
                     self.removeLoadingIndicator()
@@ -155,7 +155,7 @@ public class MessagesViewModel {
             }
         }
         
-        self.provider.fetchOlderMessages(numberOfMessages: numberOfMessages, completionHandler: completionHandler)
+        self.repository.fetchOlderMessages(numberOfMessages: numberOfMessages, completionHandler: completionHandler)
     }
     
     /// Marks the `lastReadMessage` and all messages preceding that message as read.
@@ -163,7 +163,7 @@ public class MessagesViewModel {
     /// - Parameters:
     ///     - lastReadMessage: The last message read by the user.
     public func markMessagesAsRead(lastReadMessage: Message) {
-        self.provider.markMessagesAsRead(lastReadMessage: lastReadMessage)
+        self.repository.markMessagesAsRead(lastReadMessage: lastReadMessage)
     }
     
     /// Marks the message at `index` and all messages preceding that message as read.
@@ -185,7 +185,7 @@ public class MessagesViewModel {
             return
         }
         
-        self.provider.markMessagesAsRead(lastReadMessage: lastReadMessage)
+        self.repository.markMessagesAsRead(lastReadMessage: lastReadMessage)
     }
     
     /// Marks all messages as read.
@@ -196,7 +196,7 @@ public class MessagesViewModel {
     // MARK: - Private methods
     
     private func reload() {
-        self.rows = self.rows(for: self.provider.messages)
+        self.rows = self.rows(for: self.repository.messages)
     }
     
     private func rows(for messages: [Message]) -> [MessageRow] {
@@ -373,12 +373,12 @@ public class MessagesViewModel {
     }
 }
 
-// MARK: - JoinedRoomsProviderDelegate
+// MARK: - JoinedRoomsRepositoryDelegate
 
 /// :nodoc:
-extension MessagesViewModel: MessagesProviderDelegate {
+extension MessagesViewModel: MessagesRepositoryDelegate {
     
-    public func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveOlderMessages messages: [Message]) {
+    public func messagesRepository(_ messagesRepository: MessagesRepository, didReceiveOlderMessages messages: [Message]) {
         let rows = self.rows(for: messages)
         
         guard rows.count > 0 else {
@@ -407,7 +407,7 @@ extension MessagesViewModel: MessagesProviderDelegate {
         }
     }
     
-    public func messagesProvider(_ messagesProvider: MessagesProvider, didReceiveNewMessage message: Message) {
+    public func messagesRepository(_ messagesRepository: MessagesRepository, didReceiveNewMessage message: Message) {
         self.batchViewUpdate {
             let precedingIndex = self.rows.endIndex - 1
             var precedingMessage = self.message(at: precedingIndex)
@@ -435,7 +435,7 @@ extension MessagesViewModel: MessagesProviderDelegate {
         }
     }
     
-    public func messagesProvider(_ messagesProvider: MessagesProvider, didUpdateMessage message: Message, previousValue: Message) {
+    public func messagesRepository(_ messagesRepository: MessagesRepository, didUpdateMessage message: Message, previousValue: Message) {
         guard let index = self.index(of: previousValue) else {
             return
         }
@@ -448,7 +448,7 @@ extension MessagesViewModel: MessagesProviderDelegate {
         }
     }
     
-    public func messagesProvider(_ messagesProvider: MessagesProvider, didRemoveMessage message: Message) {
+    public func messagesRepository(_ messagesRepository: MessagesRepository, didRemoveMessage message: Message) {
         guard let index = self.index(of: message) else {
             return
         }
