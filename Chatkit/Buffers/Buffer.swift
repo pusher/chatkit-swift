@@ -11,7 +11,7 @@ class ConcreteBuffer: Buffer {
     
     // MARK: - Types
     
-    typealias Dependencies = HasFilter & HasStoreBroadcaster
+    typealias Dependencies = HasStateFilter & HasStoreBroadcaster
     
     // MARK: - Properties
     
@@ -44,7 +44,7 @@ class ConcreteBuffer: Buffer {
     private func registerListener() {
         let state = self.dependencies.storeBroadcaster.register(self)
         
-        if self.dependencies.filter.hasCompleteSubstate(state) {
+        if self.dependencies.stateFilter.hasCompleteSubstate(state) {
             self.currentState = state
         }
         else {
@@ -62,12 +62,12 @@ class ConcreteBuffer: Buffer {
         if let currentState = self.currentState {
             let lastState = self.queue.last ?? currentState
             
-            if self.dependencies.filter.hasSupportedSignature(state.signature)
-                && self.dependencies.filter.hasModifiedSubstate(oldState: lastState, newState: state) {
+            if self.dependencies.stateFilter.hasSupportedSignature(state.signature)
+                && self.dependencies.stateFilter.hasModifiedSubstate(oldState: lastState, newState: state) {
                 self.enqueue(state: state)
             }
         }
-        else if self.dependencies.filter.hasSupportedSignature(state.signature) {
+        else if self.dependencies.stateFilter.hasSupportedSignature(state.signature) {
             self.enqueue(state: state)
         }
     }
@@ -80,14 +80,14 @@ class ConcreteBuffer: Buffer {
         var flushedQueue = self.queue
         
         for (index, state) in flushedQueue.enumerated() {
-            if self.dependencies.filter.hasCompleteSubstate(state) {
+            if self.dependencies.stateFilter.hasCompleteSubstate(state) {
                 self.delegate?.buffer(self, didUpdateState: state)
                 flushedQueue.remove(at: index)
             }
             else {
                 let supplementedState = state.supplement(withState: supplementalState)
                 
-                if self.dependencies.filter.hasCompleteSubstate(supplementedState) {
+                if self.dependencies.stateFilter.hasCompleteSubstate(supplementedState) {
                     self.delegate?.buffer(self, didUpdateState: supplementedState)
                     flushedQueue.remove(at: index)
                 }

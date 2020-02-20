@@ -22,6 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		2200BB93231E727000BF9545 /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2200BB92231E727000BF9545 /* DateFormatter+Extensions.swift */; };
+		22090F0923FEECAC00E82C93 /* JoinedRoomsFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22090F0823FEECAC00E82C93 /* JoinedRoomsFilter.swift */; };
 		220911D523ED6F97001A2D9A /* InitialStateReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220911D423ED6F97001A2D9A /* InitialStateReducerTests.swift */; };
 		2212EC55235725B8002212A4 /* MessagesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC54235725B8002212A4 /* MessagesRepository.swift */; };
 		2212EC5723572A3F002212A4 /* RoomMembersRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC5623572A3F002212A4 /* RoomMembersRepository.swift */; };
@@ -73,7 +74,7 @@
 		227B8403230EAC7900921E0D /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8402230EAC7900921E0D /* UserTests.swift */; };
 		227B8405230ECA7400921E0D /* RoomTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227B8404230ECA7400921E0D /* RoomTests.swift */; };
 		227C7C1A23FD7199001DE4E5 /* Buffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227C7C1923FD7199001DE4E5 /* Buffer.swift */; };
-		227C7C1D23FD82A9001DE4E5 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227C7C1C23FD82A9001DE4E5 /* Filter.swift */; };
+		227C7C1D23FD82A9001DE4E5 /* StateFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227C7C1C23FD82A9001DE4E5 /* StateFilter.swift */; };
 		227E946D231FBDAB0025B691 /* chat-initial_state.json in Resources */ = {isa = PBXBuildFile; fileRef = 227E946C231FBDAB0025B691 /* chat-initial_state.json */; };
 		227E946F231FC5950025B691 /* XCTest+Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227E946E231FC5950025B691 /* XCTest+Networking.swift */; };
 		227EC51823E44062002D46B9 /* Environment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7EA23DF205E0073E6D4 /* Environment.framework */; };
@@ -283,6 +284,7 @@
 /* Begin PBXFileReference section */
 		2200BB92231E727000BF9545 /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
 		2200BB96231EA5C200BF9545 /* TestLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestLogger.swift; sourceTree = "<group>"; };
+		22090F0823FEECAC00E82C93 /* JoinedRoomsFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsFilter.swift; sourceTree = "<group>"; };
 		220911D423ED6F97001A2D9A /* InitialStateReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialStateReducerTests.swift; sourceTree = "<group>"; };
 		2212EC54235725B8002212A4 /* MessagesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesRepository.swift; sourceTree = "<group>"; };
 		2212EC5623572A3F002212A4 /* RoomMembersRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMembersRepository.swift; sourceTree = "<group>"; };
@@ -340,7 +342,7 @@
 		227B8402230EAC7900921E0D /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
 		227B8404230ECA7400921E0D /* RoomTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTests.swift; sourceTree = "<group>"; };
 		227C7C1923FD7199001DE4E5 /* Buffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buffer.swift; sourceTree = "<group>"; };
-		227C7C1C23FD82A9001DE4E5 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		227C7C1C23FD82A9001DE4E5 /* StateFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateFilter.swift; sourceTree = "<group>"; };
 		227E946C231FBDAB0025B691 /* chat-initial_state.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "chat-initial_state.json"; sourceTree = "<group>"; };
 		227E946E231FC5950025B691 /* XCTest+Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+Networking.swift"; sourceTree = "<group>"; };
 		228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
@@ -837,7 +839,8 @@
 		227C7C1B23FD8212001DE4E5 /* Filters */ = {
 			isa = PBXGroup;
 			children = (
-				227C7C1C23FD82A9001DE4E5 /* Filter.swift */,
+				227C7C1C23FD82A9001DE4E5 /* StateFilter.swift */,
+				22090F0823FEECAC00E82C93 /* JoinedRoomsFilter.swift */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -1785,6 +1788,7 @@
 				22CEBB5522FC6F37005CB021 /* Types.swift in Sources */,
 				73CF01C623AB9DAC006FB43E /* Date+Extensions.swift in Sources */,
 				22D2A2EA23197E7F0095757C /* ConnectionStatus.swift in Sources */,
+				22090F0923FEECAC00E82C93 /* JoinedRoomsFilter.swift in Sources */,
 				222C964B23F55BA500321C94 /* AddedToRoomReducer.swift in Sources */,
 				734D6A3E23AAA2C900105479 /* Wire.Cursor.swift in Sources */,
 				222EA2AF23424A7D004EE90F /* AvailableRoomsRepository.swift in Sources */,
@@ -1819,7 +1823,7 @@
 				224B805922F2DADC003CB8DC /* Chatkit.swift in Sources */,
 				224FF0D023EB341D004B5CE6 /* RemovedFromRoomReducer.swift in Sources */,
 				734D6A3823AA91FB00105479 /* Wire.User.swift in Sources */,
-				227C7C1D23FD82A9001DE4E5 /* Filter.swift in Sources */,
+				227C7C1D23FD82A9001DE4E5 /* StateFilter.swift in Sources */,
 				73CF01BE23AB8AF9006FB43E /* Wire.Membership.swift in Sources */,
 				2217A7FE23E9B8C0002FE365 /* UserState.swift in Sources */,
 				22437C8D23D86ACF0013E4A8 /* TestTokenProvider.swift in Sources */,

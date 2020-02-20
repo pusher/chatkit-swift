@@ -1,5 +1,5 @@
 
-protocol Filter {
+protocol StateFilter {
     
     func hasModifiedSubstate(oldState: VersionedState, newState: VersionedState) -> Bool
     func hasCompleteSubstate(_ state: VersionedState) -> Bool
@@ -9,8 +9,8 @@ protocol Filter {
 
 // MARK: - Dependencies
 
-protocol HasFilter {
+protocol HasStateFilter {
     
-    var filter: Filter { get }
+    var stateFilter: StateFilter { get }
     
 }
