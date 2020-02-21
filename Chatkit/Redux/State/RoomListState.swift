@@ -18,9 +18,8 @@ struct RoomListState: State {
             if let supplementalRoom = supplementalState.rooms[room.identifier] {
                 return room.supplement(withState: supplementalRoom)
             }
-            else {
-                return room
-            }
+            
+            return room
         }
         
         return RoomListState(rooms: rooms)

@@ -34,6 +34,10 @@ enum UserState: State {
     // MARK: - Supplementation
     
     func supplement(withState supplementalState: UserState) -> UserState {
+        if case .populated(_, _) = self {
+            return self
+        }
+        
         guard let identifier = self.identifier,
             let supplementalIdentifier = supplementalState.identifier,
             supplementalIdentifier == identifier else {

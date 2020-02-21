@@ -21,9 +21,8 @@ struct UserListState: State {
                 let supplementalUser = supplementalState.users[identifier] {
                 return user.supplement(withState: supplementalUser)
             }
-            else {
-                return user
-            }
+            
+            return user
         }
         
         return UserListState(users: users)

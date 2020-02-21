@@ -18,7 +18,9 @@ struct VersionedState: State, Versionable {
     // MARK: - Supplementation
     
     func supplement(withState supplementalState: VersionedState) -> VersionedState {
-        return VersionedState(chatState: self.chatState.supplement(withState: supplementalState.chatState),
+        let chatState = self.chatState.supplement(withState: supplementalState.chatState)
+        
+        return VersionedState(chatState: chatState,
                               version: self.version,
                               signature: self.signature)
     }
