@@ -16,7 +16,7 @@ struct RoomTransformer: Transformer {
                     lastMessageAt: state.lastMessageAt,
                     customData: state.customData,
                     createdAt: state.createdAt,
-                    updatedAt: state.createdAt)
+                    updatedAt: state.updatedAt)
     }
     
 }
