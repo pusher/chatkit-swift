@@ -81,6 +81,7 @@
 		227E946F231FC5950025B691 /* XCTest+Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227E946E231FC5950025B691 /* XCTest+Networking.swift */; };
 		227EC51823E44062002D46B9 /* Environment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7EA23DF205E0073E6D4 /* Environment.framework */; };
 		228C2D6A2400131600FC0326 /* RoomTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D692400131600FC0326 /* RoomTransformerTests.swift */; };
+		228C2D6E240016C300FC0326 /* JoinedRoomsFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D6D240016C300FC0326 /* JoinedRoomsFilterTests.swift */; };
 		228E1D6D230D9FDC0014B1A9 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */; };
 		229018312358AE99008FAB07 /* TypingUsersRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229018302358AE99008FAB07 /* TypingUsersRepository.swift */; };
 		229093DA22F1DDB4003DDE2C /* PusherChatkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 229093D822F1DDB4003DDE2C /* PusherChatkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -351,6 +352,7 @@
 		227E946C231FBDAB0025B691 /* chat-initial_state.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "chat-initial_state.json"; sourceTree = "<group>"; };
 		227E946E231FC5950025B691 /* XCTest+Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+Networking.swift"; sourceTree = "<group>"; };
 		228C2D692400131600FC0326 /* RoomTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTransformerTests.swift; sourceTree = "<group>"; };
+		228C2D6D240016C300FC0326 /* JoinedRoomsFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsFilterTests.swift; sourceTree = "<group>"; };
 		228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
 		229018302358AE99008FAB07 /* TypingUsersRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingUsersRepository.swift; sourceTree = "<group>"; };
 		229093D522F1DDB4003DDE2C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -726,6 +728,7 @@
 				227B83FF230EAC2A00921E0D /* Model */,
 				2274984A232107F700D10C76 /* Networking */,
 				73E585CF23E08D6D0047C6FA /* Redux */,
+				228C2D6B240016AB00FC0326 /* Repositories */,
 				228C2D682400130500FC0326 /* Transformers */,
 				227498452321010300D10C76 /* Utilities */,
 			);
@@ -884,6 +887,22 @@
 				228C2D692400131600FC0326 /* RoomTransformerTests.swift */,
 			);
 			path = Transformers;
+			sourceTree = "<group>";
+		};
+		228C2D6B240016AB00FC0326 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				228C2D6C240016BA00FC0326 /* Filters */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		228C2D6C240016BA00FC0326 /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+				228C2D6D240016C300FC0326 /* JoinedRoomsFilterTests.swift */,
+			);
+			path = Filters;
 			sourceTree = "<group>";
 		};
 		229093CB22F1DDB4003DDE2C = {
@@ -1766,6 +1785,7 @@
 				7335D26F23D705F300E51909 /* CodableJSONCollections+DictionaryDecodingTests.swift in Sources */,
 				734D6A4423AAA7D300105479 /* Wire.CursorType+Decodable.Tests.swift in Sources */,
 				734D6A4023AAA3CE00105479 /* Wire.Cursor+Decodable.Tests.swift in Sources */,
+				228C2D6E240016C300FC0326 /* JoinedRoomsFilterTests.swift in Sources */,
 				7301BC6E23B0FCCE00F162C7 /* Wire.Event.InitialState+Decodable.Tests.swift in Sources */,
 				7301BC7523B1149D00F162C7 /* Wire.Event.IsTyping+Decodable.Tests.swift in Sources */,
 				220911D523ED6F97001A2D9A /* InitialStateReducerTests.swift in Sources */,
