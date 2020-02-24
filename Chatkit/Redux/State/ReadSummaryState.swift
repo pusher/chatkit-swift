@@ -23,3 +23,13 @@ struct ReadSummaryState: State {
 // MARK: - Equatable
 
 extension ReadSummaryState: Equatable {}
+
+// MARK: - Hashable
+
+extension ReadSummaryState: Hashable {
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.unreadCount)
+    }
+    
+}

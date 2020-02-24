@@ -52,3 +52,25 @@ enum UserState: State {
 // MARK: - Equatable
 
 extension UserState: Equatable {}
+
+// MARK: - Hashable
+
+extension UserState: Hashable {
+    
+    public func hash(into hasher: inout Hasher) {
+        switch self {
+        case .empty:
+            hasher.combine(0) // Discriminator
+            
+        case let .partial(identifier):
+            hasher.combine(1) // Discriminator
+            hasher.combine(identifier)
+            
+        case let .populated(identifier, name):
+            hasher.combine(1) // Discriminator
+            hasher.combine(identifier)
+            hasher.combine(name)
+        }
+    }
+    
+}

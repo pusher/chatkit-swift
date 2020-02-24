@@ -6,11 +6,3 @@ protocol StateFilter {
     func hasSupportedSignature(_ signature: VersionSignature) -> Bool
     
 }
-
-// MARK: - Dependencies
-
-protocol HasStateFilter {
-    
-    var stateFilter: StateFilter { get }
-    
-}

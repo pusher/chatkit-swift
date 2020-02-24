@@ -89,6 +89,7 @@
 		228C2D7924002FD500FC0326 /* UserListStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D7824002FD500FC0326 /* UserListStateTests.swift */; };
 		228C2D7B2400325F00FC0326 /* ChatStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D7A2400325F00FC0326 /* ChatStateTests.swift */; };
 		228C2D7D240034A600FC0326 /* VersionedStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D7C240034A600FC0326 /* VersionedStateTests.swift */; };
+		228C2D80240035CF00FC0326 /* ConcreteBufferTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D7F240035CF00FC0326 /* ConcreteBufferTests.swift */; };
 		228E1D6D230D9FDC0014B1A9 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */; };
 		229018312358AE99008FAB07 /* TypingUsersRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229018302358AE99008FAB07 /* TypingUsersRepository.swift */; };
 		229093DA22F1DDB4003DDE2C /* PusherChatkit.h in Headers */ = {isa = PBXBuildFile; fileRef = 229093D822F1DDB4003DDE2C /* PusherChatkit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -108,6 +109,8 @@
 		22BFE7F923DF22C80073E6D4 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226DD52323DB3F670024A27D /* String+Extensions.swift */; };
 		22C5F3EF2306B08C009A7383 /* MessagePart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3EE2306B08C009A7383 /* MessagePart.swift */; };
 		22C5F3FF2306C7AB009A7383 /* PresenceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C5F3FE2306C7AB009A7383 /* PresenceState.swift */; };
+		22CD794D2403E26200F1E0C9 /* StateFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD794C2403E26200F1E0C9 /* StateFilter.swift */; };
+		22CD794F240463F900F1E0C9 /* BufferDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CD794E240463F900F1E0C9 /* BufferDelegate.swift */; };
 		22CEBB5522FC6F37005CB021 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CEBB5422FC6F37005CB021 /* Types.swift */; };
 		22D2A2D2231961060095757C /* PPSDKInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2D1231961060095757C /* PPSDKInfo+Extensions.swift */; };
 		22D2A2D5231963C70095757C /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2D4231963C70095757C /* Bundle+Extensions.swift */; };
@@ -367,6 +370,7 @@
 		228C2D7824002FD500FC0326 /* UserListStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListStateTests.swift; sourceTree = "<group>"; };
 		228C2D7A2400325F00FC0326 /* ChatStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStateTests.swift; sourceTree = "<group>"; };
 		228C2D7C240034A600FC0326 /* VersionedStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionedStateTests.swift; sourceTree = "<group>"; };
+		228C2D7F240035CF00FC0326 /* ConcreteBufferTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteBufferTests.swift; sourceTree = "<group>"; };
 		228E1D6C230D9FDC0014B1A9 /* MessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTests.swift; sourceTree = "<group>"; };
 		229018302358AE99008FAB07 /* TypingUsersRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingUsersRepository.swift; sourceTree = "<group>"; };
 		229093D522F1DDB4003DDE2C /* PusherChatkit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PusherChatkit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -382,6 +386,8 @@
 		22BFE7ED23DF205E0073E6D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		22C5F3EE2306B08C009A7383 /* MessagePart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePart.swift; sourceTree = "<group>"; };
 		22C5F3FE2306C7AB009A7383 /* PresenceState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresenceState.swift; sourceTree = "<group>"; };
+		22CD794C2403E26200F1E0C9 /* StateFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateFilter.swift; sourceTree = "<group>"; };
+		22CD794E240463F900F1E0C9 /* BufferDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferDelegate.swift; sourceTree = "<group>"; };
 		22CEBB5422FC6F37005CB021 /* Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		22D2A2D1231961060095757C /* PPSDKInfo+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PPSDKInfo+Extensions.swift"; sourceTree = "<group>"; };
 		22D2A2D4231963C70095757C /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
@@ -736,6 +742,7 @@
 			isa = PBXGroup;
 			children = (
 				22437C9723D86B750013E4A8 /* Authentication */,
+				228C2D7E240035C300FC0326 /* Buffer */,
 				227B8400230EAC3200921E0D /* Chatkit */,
 				224B90DE23F1584A00ECC9FD /* Dependencies */,
 				73A9392123E192DE0025AF90 /* Environment */,
@@ -861,12 +868,12 @@
 			path = Chatkit;
 			sourceTree = "<group>";
 		};
-		227C7C1823FD5ACA001DE4E5 /* Buffers */ = {
+		227C7C1823FD5ACA001DE4E5 /* Buffer */ = {
 			isa = PBXGroup;
 			children = (
 				227C7C1923FD7199001DE4E5 /* Buffer.swift */,
 			);
-			path = Buffers;
+			path = Buffer;
 			sourceTree = "<group>";
 		};
 		227C7C1B23FD8212001DE4E5 /* Filters */ = {
@@ -933,6 +940,14 @@
 			path = State;
 			sourceTree = "<group>";
 		};
+		228C2D7E240035C300FC0326 /* Buffer */ = {
+			isa = PBXGroup;
+			children = (
+				228C2D7F240035CF00FC0326 /* ConcreteBufferTests.swift */,
+			);
+			path = Buffer;
+			sourceTree = "<group>";
+		};
 		229093CB22F1DDB4003DDE2C = {
 			isa = PBXGroup;
 			children = (
@@ -963,7 +978,7 @@
 			isa = PBXGroup;
 			children = (
 				ED2919D7239A73150095B344 /* Authentication */,
-				227C7C1823FD5ACA001DE4E5 /* Buffers */,
+				227C7C1823FD5ACA001DE4E5 /* Buffer */,
 				224B805722F2DAD3003CB8DC /* Chatkit */,
 				73E585D323E08DE60047C6FA /* Dependencies */,
 				22D537D22302D24200A92341 /* Model */,
@@ -1422,9 +1437,11 @@
 			children = (
 				73E585D523E08E130047C6FA /* Types */,
 				22A7425623ED813600F2F26D /* Action.swift */,
+				22CD794E240463F900F1E0C9 /* BufferDelegate.swift */,
 				730E453D23DB4DD800A3AF94 /* Dependencies.swift */,
 				73A9392A23E1AA210025AF90 /* InstanceLocator.swift */,
 				22F670FB23EC5A01001D3BF2 /* Reducer.swift */,
+				22CD794C2403E26200F1E0C9 /* StateFilter.swift */,
 				730E454323DB4DD800A3AF94 /* Store.swift */,
 				730E453A23DB4DD800A3AF94 /* StoreBroadcaster.swift */,
 				730E453C23DB4DD800A3AF94 /* StoreDelegate.swift */,
@@ -1798,6 +1815,7 @@
 				227B8405230ECA7400921E0D /* RoomTests.swift in Sources */,
 				7301BC7B23B11F6F00F162C7 /* Wire.Message+Decodable.Tests.swift in Sources */,
 				228E1D6D230D9FDC0014B1A9 /* MessageTests.swift in Sources */,
+				228C2D80240035CF00FC0326 /* ConcreteBufferTests.swift in Sources */,
 				7335D27323D715E800E51909 /* CodableJSONCollections+DictionaryEncodingTests.swift in Sources */,
 				22406A8323F4263E00EE24BE /* RemovedFromRoomReducerTests.swift in Sources */,
 				7301BC7023B0FCCE00F162C7 /* Wire.Event.RoomUpdated+Decodable.Tests.swift in Sources */,
@@ -1963,6 +1981,7 @@
 			files = (
 				73E585DC23E08EFF0047C6FA /* Dependencies.swift in Sources */,
 				73A9391E23E0A8E60025AF90 /* Data+Extensions.swift in Sources */,
+				22CD794F240463F900F1E0C9 /* BufferDelegate.swift in Sources */,
 				22F670FC23EC5A01001D3BF2 /* Reducer.swift in Sources */,
 				73A9391A23E0A7A90025AF90 /* String+Extensions.swift in Sources */,
 				73E585E023E08EFF0047C6FA /* TokenProvider.swift in Sources */,
@@ -1970,6 +1989,7 @@
 				73E585DF23E08EFF0047C6FA /* Store.swift in Sources */,
 				73E585DD23E08EFF0047C6FA /* StoreListener.swift in Sources */,
 				73E585DA23E08EFF0047C6FA /* StoreBroadcaster.swift in Sources */,
+				22CD794D2403E26200F1E0C9 /* StateFilter.swift in Sources */,
 				22A7425723ED813600F2F26D /* Action.swift in Sources */,
 				73E585D923E08EF90047C6FA /* TestLogger.swift in Sources */,
 				73A9391D23E0A8E60025AF90 /* Array+Extensions.swift in Sources */,

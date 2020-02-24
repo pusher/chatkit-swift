@@ -1,7 +1,8 @@
 
 protocol Buffer: StoreListener {
     
-    var delegate: BufferDelegate? { get set }
+    var filter: StateFilter { get }
+    var delegate: BufferDelegate? { get }
     
 }
 
@@ -11,7 +12,7 @@ class ConcreteBuffer: Buffer {
     
     // MARK: - Types
     
-    typealias Dependencies = HasStateFilter & HasStoreBroadcaster
+    typealias Dependencies = HasStoreBroadcaster
     
     // MARK: - Properties
     
@@ -19,16 +20,18 @@ class ConcreteBuffer: Buffer {
     private var queue: [VersionedState]
     
     private let dependencies: Dependencies
+    let filter: StateFilter
     
     weak var delegate: BufferDelegate?
     
     // MARK: - Initializers
     
-    init(dependencies: Dependencies, delegate: BufferDelegate?) {
+    init(dependencies: Dependencies, filter: StateFilter, delegate: BufferDelegate?) {
         self.currentState = nil
         self.queue = []
         self.delegate = delegate
         self.dependencies = dependencies
+        self.filter = filter
         
         self.registerListener()
     }
@@ -42,9 +45,10 @@ class ConcreteBuffer: Buffer {
     // MARK: - Private methods
     
     private func registerListener() {
+        // It really feels like this should be done by a different object, but such approach is forced on this class by the DI mechanism.
         let state = self.dependencies.storeBroadcaster.register(self)
         
-        if self.dependencies.stateFilter.hasCompleteSubstate(state) {
+        if self.filter.hasCompleteSubstate(state) {
             self.currentState = state
         }
         else {
@@ -62,12 +66,12 @@ class ConcreteBuffer: Buffer {
         if let currentState = self.currentState {
             let lastState = self.queue.last ?? currentState
             
-            if self.dependencies.stateFilter.hasSupportedSignature(state.signature)
-                && self.dependencies.stateFilter.hasModifiedSubstate(oldState: lastState, newState: state) {
+            if self.filter.hasSupportedSignature(state.signature)
+                && self.filter.hasModifiedSubstate(oldState: lastState, newState: state) {
                 self.enqueue(state: state)
             }
         }
-        else if self.dependencies.stateFilter.hasSupportedSignature(state.signature) {
+        else if self.filter.hasSupportedSignature(state.signature) {
             self.enqueue(state: state)
         }
     }
@@ -77,24 +81,32 @@ class ConcreteBuffer: Buffer {
     }
     
     private func flush(withSupplementalState supplementalState: VersionedState) {
-        var flushedQueue = self.queue
+        var removedIndexes: [Int] = []
         
-        for (index, state) in flushedQueue.enumerated() {
-            if self.dependencies.stateFilter.hasCompleteSubstate(state) {
+        for (index, state) in self.queue.enumerated() {
+            if self.filter.hasCompleteSubstate(state) {
+                self.currentState = state
                 self.delegate?.buffer(self, didUpdateState: state)
-                flushedQueue.remove(at: index)
+                removedIndexes.append(index)
             }
             else {
                 let supplementedState = state.supplement(withState: supplementalState)
                 
-                if self.dependencies.stateFilter.hasCompleteSubstate(supplementedState) {
+                if self.filter.hasCompleteSubstate(supplementedState) {
+                    self.currentState = supplementedState
                     self.delegate?.buffer(self, didUpdateState: supplementedState)
-                    flushedQueue.remove(at: index)
+                    removedIndexes.append(index)
                 }
                 else {
                     break
                 }
             }
+        }
+        
+        var flushedQueue = self.queue
+        
+        for index in removedIndexes.reversed() {
+            flushedQueue.remove(at: index)
         }
         
         self.queue = flushedQueue

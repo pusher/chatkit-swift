@@ -33,3 +33,13 @@ struct UserListState: State {
 // MARK: - Equatable
 
 extension UserListState: Equatable {}
+
+// MARK: - Hashable
+
+extension UserListState: Hashable {
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.users)
+    }
+    
+}

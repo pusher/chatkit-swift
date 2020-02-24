@@ -30,3 +30,13 @@ struct RoomListState: State {
 // MARK: - Equatable
 
 extension RoomListState: Equatable {}
+
+// MARK: - Hashable
+
+extension RoomListState: Hashable {
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.rooms)
+    }
+    
+}
