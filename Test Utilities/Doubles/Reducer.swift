@@ -25,7 +25,7 @@ extension XCTest {
 public class StubReducer<T: Reducing>: StubBase {
     
     private let reduce_expectedCallCount: UInt
-    private var reduce_stateToReturn: T.StateType
+    public var reduce_stateToReturn: T.StateType
     public private(set) var reduce_actionLastReceived: T.ActionType?
     public private(set) var reduce_stateLastReceived: T.StateType?
     public private(set) var reduce_actualCallCount: UInt = 0

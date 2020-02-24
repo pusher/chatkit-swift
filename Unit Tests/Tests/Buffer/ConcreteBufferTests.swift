@@ -14,10 +14,10 @@ class ConcreteBufferTests: XCTestCase {
         
         let initialState: VersionedState = .initial
         
-        let stubStoreBroadcaster = StubStoreBroadcaster(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasCompleteSubstate_defaultValueToReturn: false)
         
-        let dependencies = DependenciesDoubles(storeBroadcaster: stubStoreBroadcaster)
+        let dependencies = DependenciesDoubles(store: stubStore)
         
         /******************/
         /*----- WHEN -----*/
@@ -40,10 +40,10 @@ class ConcreteBufferTests: XCTestCase {
         
         let initialState: VersionedState = .initial
         
-        let stubStoreBroadcaster = StubStoreBroadcaster(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasCompleteSubstate_defaultValueToReturn: true)
         
-        let dependencies = DependenciesDoubles(storeBroadcaster: stubStoreBroadcaster)
+        let dependencies = DependenciesDoubles(store: stubStore)
         
         /******************/
         /*----- WHEN -----*/
@@ -68,10 +68,10 @@ class ConcreteBufferTests: XCTestCase {
         
         let initialState: VersionedState = .initial
         
-        let stubStoreBroadcaster = StubStoreBroadcaster(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasCompleteSubstate_defaultValueToReturn: true)
         
-        let dependencies = DependenciesDoubles(storeBroadcaster: stubStoreBroadcaster)
+        let dependencies = DependenciesDoubles(store: stubStore)
         
         /******************/
         /*----- WHEN -----*/
@@ -83,8 +83,8 @@ class ConcreteBufferTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertEqual(stubStoreBroadcaster.register_actualCallCount, 1)
-        XCTAssertTrue(stubStoreBroadcaster.register_listenerLastReceived === sut)
+        XCTAssertEqual(stubStore.register_actualCallCount, 1)
+        XCTAssertTrue(stubStore.register_listenerLastReceived === sut)
     }
     
     func test_deinit_unregistersAsStoreListener() {
@@ -95,10 +95,10 @@ class ConcreteBufferTests: XCTestCase {
         
         let initialState: VersionedState = .initial
         
-        let stubStoreBroadcaster = StubStoreBroadcaster(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasCompleteSubstate_defaultValueToReturn: true)
         
-        let dependencies = DependenciesDoubles(storeBroadcaster: stubStoreBroadcaster)
+        let dependencies = DependenciesDoubles(store: stubStore)
         
         /******************/
         /*----- WHEN -----*/
@@ -110,7 +110,7 @@ class ConcreteBufferTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertEqual(stubStoreBroadcaster.unregister_actualCallCount, 1)
+        XCTAssertEqual(stubStore.unregister_actualCallCount, 1)
     }
     
     func test_didUpdateState_withIncompleteInitialState_shouldReportStateAfterSupplementation() {
@@ -156,7 +156,7 @@ class ConcreteBufferTests: XCTestCase {
             signature: .unsigned
         )
         
-        let stubStoreBroadcaster = StubStoreBroadcaster(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_valuesToReturn: [initialState : false,
                                                                               supplementingState : true,
                                                                               supplementedInitialState : false],
@@ -166,7 +166,7 @@ class ConcreteBufferTests: XCTestCase {
                                          hasSupportedSignature_defaultValueToReturn: true)
         let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 2)
         
-        let dependencies = DependenciesDoubles(storeBroadcaster: stubStoreBroadcaster)
+        let dependencies = DependenciesDoubles(store: stubStore)
         
         let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: stubDelegate)
         
@@ -177,7 +177,7 @@ class ConcreteBufferTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        stubStoreBroadcaster.report(supplementingState)
+        stubStore.report(supplementingState)
         
         /******************/
         /*----- THEN -----*/
@@ -221,14 +221,14 @@ class ConcreteBufferTests: XCTestCase {
             signature: .unsigned
         )
         
-        let stubStoreBroadcaster = StubStoreBroadcaster(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_valuesToReturn: [initialState : false,
                                                                               subsequentState : true],
                                          hasCompleteSubstate_defaultValueToReturn: true,
                                          hasSupportedSignature_defaultValueToReturn: true)
         let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 1)
         
-        let dependencies = DependenciesDoubles(storeBroadcaster: stubStoreBroadcaster)
+        let dependencies = DependenciesDoubles(store: stubStore)
         
         let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: stubDelegate)
         
@@ -239,7 +239,7 @@ class ConcreteBufferTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        stubStoreBroadcaster.report(subsequentState)
+        stubStore.report(subsequentState)
         
         /******************/
         /*----- THEN -----*/
@@ -304,7 +304,7 @@ class ConcreteBufferTests: XCTestCase {
             signature: .unsigned
         )
         
-        let stubStoreBroadcaster = StubStoreBroadcaster(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_valuesToReturn: [initialState : false,
                                                                               subsequentState : true],
                                          hasCompleteSubstate_valuesToReturn: [initialState : false,
@@ -312,7 +312,7 @@ class ConcreteBufferTests: XCTestCase {
                                          hasSupportedSignature_defaultValueToReturn: true)
         let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 0)
         
-        let dependencies = DependenciesDoubles(storeBroadcaster: stubStoreBroadcaster)
+        let dependencies = DependenciesDoubles(store: stubStore)
         
         let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: stubDelegate)
         
@@ -323,7 +323,7 @@ class ConcreteBufferTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        stubStoreBroadcaster.report(subsequentState)
+        stubStore.report(subsequentState)
         
         /******************/
         /*----- THEN -----*/
@@ -365,13 +365,13 @@ class ConcreteBufferTests: XCTestCase {
             signature: .unsigned
         )
         
-        let stubStoreBroadcaster = StubStoreBroadcaster(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: false,
                                          hasCompleteSubstate_defaultValueToReturn: true,
                                          hasSupportedSignature_defaultValueToReturn: true)
         let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 0)
         
-        let dependencies = DependenciesDoubles(storeBroadcaster: stubStoreBroadcaster)
+        let dependencies = DependenciesDoubles(store: stubStore)
         
         let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: stubDelegate)
         
@@ -382,7 +382,7 @@ class ConcreteBufferTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        stubStoreBroadcaster.report(subsequentState)
+        stubStore.report(subsequentState)
         
         /******************/
         /*----- THEN -----*/
@@ -412,14 +412,14 @@ class ConcreteBufferTests: XCTestCase {
             signature: .addedToRoom
         )
         
-        let stubStoreBroadcaster = StubStoreBroadcaster(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: true,
                                          hasCompleteSubstate_defaultValueToReturn: true,
                                          hasSupportedSignature_valuesToReturn: [.initialState : true,
                                                                                 .addedToRoom : false])
         let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 0)
         
-        let dependencies = DependenciesDoubles(storeBroadcaster: stubStoreBroadcaster)
+        let dependencies = DependenciesDoubles(store: stubStore)
         
         let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: stubDelegate)
         
@@ -430,7 +430,7 @@ class ConcreteBufferTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        stubStoreBroadcaster.report(subsequentState)
+        stubStore.report(subsequentState)
         
         /******************/
         /*----- THEN -----*/
@@ -454,13 +454,13 @@ class ConcreteBufferTests: XCTestCase {
             signature: .initialState
         )
         
-        let stubStoreBroadcaster = StubStoreBroadcaster(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: true,
                                          hasCompleteSubstate_defaultValueToReturn: true,
                                          hasSupportedSignature_defaultValueToReturn: false)
         let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 0)
         
-        let dependencies = DependenciesDoubles(storeBroadcaster: stubStoreBroadcaster)
+        let dependencies = DependenciesDoubles(store: stubStore)
         
         let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: stubDelegate)
         

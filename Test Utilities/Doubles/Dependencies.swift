@@ -7,7 +7,6 @@ import XCTest
 public class DependenciesDoubles: StubBase, Dependencies {
     
     public let instanceLocator: InstanceLocator
-    public let storeBroadcaster: StoreBroadcaster
     public let store: Store
     
     public let masterReducer: Reducer.Master.ExpressionType
@@ -21,7 +20,6 @@ public class DependenciesDoubles: StubBase, Dependencies {
     public let userSubscriptionReadStateUpdatedReducer: Reducer.UserSubscription.ReadStateUpdated.ExpressionType
     
     public init(instanceLocator: InstanceLocator? = nil,
-                storeBroadcaster: StoreBroadcaster? = nil,
                 store: Store? = nil,
                 masterReducer: Reducer.Master.ExpressionType? = nil,
                 userReducer: Reducer.Model.User.ExpressionType? = nil,
@@ -36,7 +34,6 @@ public class DependenciesDoubles: StubBase, Dependencies {
                 file: StaticString = #file, line: UInt = #line) {
         
         self.instanceLocator = instanceLocator ?? DummyInstanceLocator(file: file, line: line)
-        self.storeBroadcaster = storeBroadcaster ?? DummyStoreBroadcaster(file: file, line: line)
         self.store = store ?? DummyStore(file: file, line: line)
         
         self.masterReducer = masterReducer ??

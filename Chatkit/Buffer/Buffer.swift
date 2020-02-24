@@ -12,7 +12,7 @@ class ConcreteBuffer: Buffer {
     
     // MARK: - Types
     
-    typealias Dependencies = HasStoreBroadcaster
+    typealias Dependencies = HasStore
     
     // MARK: - Properties
     
@@ -46,7 +46,7 @@ class ConcreteBuffer: Buffer {
     
     private func registerListener() {
         // It really feels like this should be done by a different object, but such approach is forced on this class by the DI mechanism.
-        let state = self.dependencies.storeBroadcaster.register(self)
+        let state = self.dependencies.store.register(self)
         
         if self.filter.hasCompleteSubstate(state) {
             self.currentState = state
@@ -115,7 +115,7 @@ class ConcreteBuffer: Buffer {
     // MARK: - Memory management
     
     deinit {
-        self.dependencies.storeBroadcaster.unregister(self)
+        self.dependencies.store.unregister(self)
     }
     
 }

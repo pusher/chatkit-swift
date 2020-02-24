@@ -155,9 +155,7 @@
 		730E44DC23DB47F200A3AF94 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E44DB23DB47F200A3AF94 /* Dependencies.swift */; };
 		730E44DE23DB482500A3AF94 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E44DD23DB482500A3AF94 /* Store.swift */; };
 		730E44E023DB482C00A3AF94 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E44DF23DB482C00A3AF94 /* State.swift */; };
-		730E44E223DB486C00A3AF94 /* StoreBroadcaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E44E123DB486C00A3AF94 /* StoreBroadcaster.swift */; };
 		730E454F23DB4DD800A3AF94 /* ConcreteStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E452F23DB4DD700A3AF94 /* ConcreteStoreTests.swift */; };
-		730E455023DB4DD800A3AF94 /* ConcreteStoreBroadcasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E453023DB4DD700A3AF94 /* ConcreteStoreBroadcasterTests.swift */; };
 		730E455223DB4DD800A3AF94 /* ConcreteDependenciesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E453223DB4DD700A3AF94 /* ConcreteDependenciesTests.swift */; };
 		7326360723ACDF56009E44E2 /* Wire.Event.Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7326360623ACDF55009E44E2 /* Wire.Event.Subscription.swift */; };
 		7335D26623D60CA700E51909 /* Wire.Event.NewMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7335D26523D60CA700E51909 /* Wire.Event.NewMessage.swift */; };
@@ -212,8 +210,6 @@
 		73E585D723E08E270047C6FA /* StubBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73E585D623E08E270047C6FA /* StubBase.swift */; };
 		73E585D823E08EF10047C6FA /* DummyBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E454223DB4DD800A3AF94 /* DummyBase.swift */; };
 		73E585D923E08EF90047C6FA /* TestLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2200BB96231EA5C200BF9545 /* TestLogger.swift */; };
-		73E585DA23E08EFF0047C6FA /* StoreBroadcaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E453A23DB4DD800A3AF94 /* StoreBroadcaster.swift */; };
-		73E585DB23E08EFF0047C6FA /* StoreDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E453C23DB4DD800A3AF94 /* StoreDelegate.swift */; };
 		73E585DC23E08EFF0047C6FA /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E453D23DB4DD800A3AF94 /* Dependencies.swift */; };
 		73E585DD23E08EFF0047C6FA /* StoreListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E453E23DB4DD800A3AF94 /* StoreListener.swift */; };
 		73E585DF23E08EFF0047C6FA /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E454323DB4DD800A3AF94 /* Store.swift */; };
@@ -432,12 +428,8 @@
 		730E44DB23DB47F200A3AF94 /* Dependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		730E44DD23DB482500A3AF94 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		730E44DF23DB482C00A3AF94 /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
-		730E44E123DB486C00A3AF94 /* StoreBroadcaster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreBroadcaster.swift; sourceTree = "<group>"; };
 		730E452F23DB4DD700A3AF94 /* ConcreteStoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConcreteStoreTests.swift; sourceTree = "<group>"; };
-		730E453023DB4DD700A3AF94 /* ConcreteStoreBroadcasterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConcreteStoreBroadcasterTests.swift; sourceTree = "<group>"; };
 		730E453223DB4DD700A3AF94 /* ConcreteDependenciesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConcreteDependenciesTests.swift; sourceTree = "<group>"; };
-		730E453A23DB4DD800A3AF94 /* StoreBroadcaster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreBroadcaster.swift; sourceTree = "<group>"; };
-		730E453C23DB4DD800A3AF94 /* StoreDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreDelegate.swift; sourceTree = "<group>"; };
 		730E453D23DB4DD800A3AF94 /* Dependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		730E453E23DB4DD800A3AF94 /* StoreListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreListener.swift; sourceTree = "<group>"; };
 		730E454223DB4DD800A3AF94 /* DummyBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyBase.swift; sourceTree = "<group>"; };
@@ -1293,7 +1285,6 @@
 			isa = PBXGroup;
 			children = (
 				730E44DD23DB482500A3AF94 /* Store.swift */,
-				730E44E123DB486C00A3AF94 /* StoreBroadcaster.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -1427,7 +1418,6 @@
 			isa = PBXGroup;
 			children = (
 				730E452F23DB4DD700A3AF94 /* ConcreteStoreTests.swift */,
-				730E453023DB4DD700A3AF94 /* ConcreteStoreBroadcasterTests.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -1443,8 +1433,6 @@
 				22F670FB23EC5A01001D3BF2 /* Reducer.swift */,
 				22CD794C2403E26200F1E0C9 /* StateFilter.swift */,
 				730E454323DB4DD800A3AF94 /* Store.swift */,
-				730E453A23DB4DD800A3AF94 /* StoreBroadcaster.swift */,
-				730E453C23DB4DD800A3AF94 /* StoreDelegate.swift */,
 				730E453E23DB4DD800A3AF94 /* StoreListener.swift */,
 				2200BB96231EA5C200BF9545 /* TestLogger.swift */,
 				730E454623DB4DD800A3AF94 /* TokenProvider.swift */,
@@ -1803,7 +1791,6 @@
 				227B83FC230E9D7C00921E0D /* MessagePartTests.swift in Sources */,
 				22437C9A23D86B940013E4A8 /* TestTokenProviderTests.swift in Sources */,
 				222C964D23F55EC400321C94 /* AddedToRoomReducerTests.swift in Sources */,
-				730E455023DB4DD800A3AF94 /* ConcreteStoreBroadcasterTests.swift in Sources */,
 				73A9392323E192FC0025AF90 /* String+ExtensionTests.swift in Sources */,
 				73CF01BC23AB823F006FB43E /* Wire.ReadState+Decodable.Tests.swift in Sources */,
 				7335D27523D7330900E51909 /* CodableJSONCollections+ArrayEncodingTests.swift in Sources */,
@@ -1913,7 +1900,6 @@
 				7301BC7323B1143D00F162C7 /* Wire.Event.IsTyping.swift in Sources */,
 				73A5169223B0BBE000CF8B77 /* Wire.Event.PresenceState.swift in Sources */,
 				7301BC4F23B0E5ED00F162C7 /* Wire.Event.RemovedFromRoom.swift in Sources */,
-				730E44E223DB486C00A3AF94 /* StoreBroadcaster.swift in Sources */,
 				739860BF23AA83EF0098191E /* Wire.Room.swift in Sources */,
 				730E44E023DB482C00A3AF94 /* State.swift in Sources */,
 				22D2A2E32319780F0095757C /* ServiceVersion.swift in Sources */,
@@ -1985,10 +1971,8 @@
 				22F670FC23EC5A01001D3BF2 /* Reducer.swift in Sources */,
 				73A9391A23E0A7A90025AF90 /* String+Extensions.swift in Sources */,
 				73E585E023E08EFF0047C6FA /* TokenProvider.swift in Sources */,
-				73E585DB23E08EFF0047C6FA /* StoreDelegate.swift in Sources */,
 				73E585DF23E08EFF0047C6FA /* Store.swift in Sources */,
 				73E585DD23E08EFF0047C6FA /* StoreListener.swift in Sources */,
-				73E585DA23E08EFF0047C6FA /* StoreBroadcaster.swift in Sources */,
 				22CD794D2403E26200F1E0C9 /* StateFilter.swift in Sources */,
 				22A7425723ED813600F2F26D /* Action.swift in Sources */,
 				73E585D923E08EF90047C6FA /* TestLogger.swift in Sources */,

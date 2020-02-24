@@ -2,7 +2,6 @@ import struct PusherPlatform.PPSDKInfo
 
 protocol Dependencies:
     HasInstanceLocator &
-    HasStoreBroadcaster &
     HasStore &
     HasMasterReducer &
     HasUserReducer &
@@ -88,20 +87,11 @@ class ConcreteDependencies: Dependencies {
         
         self.instanceLocator = instanceLocator
         
-        dependencyFactory.register(StoreBroadcaster.self, factory: { dependencies in
-            ConcreteStoreBroadcaster(dependencies: dependencies)
-        })
-        
         dependencyFactory.register(Store.self, factory: { dependencies in
-            ConcreteStore(dependencies: dependencies,
-                          delegate: self.storeBroadcaster)
+            ConcreteStore(dependencies: dependencies)
         })
         
         override?(dependencyFactory)
-    }
-    
-    var storeBroadcaster: StoreBroadcaster {
-        return dependencyFactory.resolve(StoreBroadcaster.self, dependencies: self)
     }
     
     var store: Store {

@@ -22,7 +22,6 @@ class ConcreteDependenciesTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        XCTAssertNotNil(dependencies.storeBroadcaster as? ConcreteStoreBroadcaster)
         XCTAssertNotNil(dependencies.store as? ConcreteStore)
 
         // TODO work out how to test this, not sure its possible?
@@ -45,7 +44,7 @@ class ConcreteDependenciesTests: XCTestCase {
         let expectation = self.expectation(description: "`override` closure should be called on `ConcreteDependencies`")
         let override: (DependencyFactory) -> Void = { dependencyFactory in
             dependencyFactory.register(Store.self) { dependencies in
-                StubStore()
+                StubStore(state_toReturn: .initial)
             }
             
             expectation.fulfill()
@@ -64,7 +63,6 @@ class ConcreteDependenciesTests: XCTestCase {
         
         waitForExpectations(timeout: 1)
         
-        XCTAssertNotNil(dependencies.storeBroadcaster as? ConcreteStoreBroadcaster)
         XCTAssertNotNil(dependencies.store as? StubStore)
     }
     
