@@ -27,11 +27,13 @@ class RoomTransformerTests: XCTestCase {
             updatedAt: .distantFuture
         )
         
+        let sut = RoomTransformer()
+        
         /******************/
         /*----- WHEN -----*/
         /******************/
         
-        let room = RoomTransformer.transform(state: state)
+        let room = sut.transform(state: state)
         
         /******************/
         /*----- THEN -----*/

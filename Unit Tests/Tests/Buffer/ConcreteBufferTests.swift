@@ -23,7 +23,7 @@ class ConcreteBufferTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: DummyBufferDelegate())
+        let sut = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -49,7 +49,7 @@ class ConcreteBufferTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: DummyBufferDelegate())
+        let sut = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -77,7 +77,7 @@ class ConcreteBufferTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: DummyBufferDelegate())
+        let sut = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -104,7 +104,7 @@ class ConcreteBufferTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        _ = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: DummyBufferDelegate())
+        _ = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -168,7 +168,8 @@ class ConcreteBufferTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
-        let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: stubDelegate)
+        let sut = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
+        sut.delegate = stubDelegate
         
         XCTAssertNil(sut.currentState)
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
@@ -230,7 +231,8 @@ class ConcreteBufferTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
-        let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: stubDelegate)
+        let sut = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
+        sut.delegate = stubDelegate
         
         XCTAssertEqual(sut.currentState, initialState)
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
@@ -314,7 +316,8 @@ class ConcreteBufferTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
-        let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: stubDelegate)
+        let sut = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
+        sut.delegate = stubDelegate
         
         XCTAssertNil(sut.currentState)
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
@@ -373,7 +376,8 @@ class ConcreteBufferTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
-        let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: stubDelegate)
+        let sut = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
+        sut.delegate = stubDelegate
         
         XCTAssertEqual(sut.currentState, initialState)
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
@@ -421,7 +425,8 @@ class ConcreteBufferTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
-        let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: stubDelegate)
+        let sut = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
+        sut.delegate = stubDelegate
         
         XCTAssertEqual(sut.currentState, initialState)
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
@@ -462,7 +467,8 @@ class ConcreteBufferTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
-        let sut = ConcreteBuffer(dependencies: dependencies, filter: stubFilter, delegate: stubDelegate)
+        let sut = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
+        sut.delegate = stubDelegate
         
         XCTAssertEqual(sut.currentState, initialState)
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)

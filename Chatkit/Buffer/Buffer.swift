@@ -2,7 +2,7 @@
 protocol Buffer: StoreListener {
     
     var filter: StateFilter { get }
-    var delegate: BufferDelegate? { get }
+    var delegate: BufferDelegate? { get set }
     
 }
 
@@ -20,18 +20,18 @@ class ConcreteBuffer: Buffer {
     private var queue: [VersionedState]
     
     private let dependencies: Dependencies
+    
     let filter: StateFilter
     
     weak var delegate: BufferDelegate?
     
     // MARK: - Initializers
     
-    init(dependencies: Dependencies, filter: StateFilter, delegate: BufferDelegate?) {
+    init(filter: StateFilter, dependencies: Dependencies) {
         self.currentState = nil
         self.queue = []
-        self.delegate = delegate
-        self.dependencies = dependencies
         self.filter = filter
+        self.dependencies = dependencies
         
         self.registerListener()
     }
@@ -125,13 +125,5 @@ class ConcreteBuffer: Buffer {
 protocol BufferDelegate: AnyObject {
     
     func buffer(_ buffer: Buffer, didUpdateState state: VersionedState)
-    
-}
-
-// MARK: - Dependencies
-
-protocol HasBuffer {
-    
-    var buffer: Buffer { get }
     
 }
