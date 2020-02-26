@@ -266,13 +266,13 @@ class ConcreteBufferTests: XCTestCase {
                     name: "test-user-name-1"
                 ),
                 joinedRooms: .empty,
-                users: UserListState(users:
-                    [
-                        "test-user-identifier-1" : .populated(
+                users: UserListState(
+                    elements: [
+                        .populated(
                             identifier: "test-user-identifier-1",
                             name: "test-user-name-1"
                         ),
-                        "test-user-identifier-2" : .partial(
+                        .partial(
                             identifier: "test-user-identifier-2"
                         )
                     ]
@@ -289,13 +289,13 @@ class ConcreteBufferTests: XCTestCase {
                     name: "test-user-name-1"
                 ),
                 joinedRooms: .empty,
-                users: UserListState(users:
-                    [
-                        "test-user-identifier-1" : .populated(
+                users: UserListState(
+                    elements: [
+                        .populated(
                             identifier: "test-user-identifier-1",
                             name: "test-user-name-1"
                         ),
-                        "test-user-identifier-3" : .populated(
+                        .populated(
                             identifier: "test-user-identifier-3",
                             name: "test-user-name-3"
                         )

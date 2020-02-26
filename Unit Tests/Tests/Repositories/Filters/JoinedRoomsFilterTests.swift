@@ -15,8 +15,8 @@ class JoinedRoomsFilterTests: XCTestCase {
             chatState: ChatState(
                 currentUser: .empty,
                 joinedRooms: RoomListState(
-                    rooms: [
-                        "test-identifier" : RoomState(
+                    elements: [
+                        RoomState(
                             identifier: "test-identifier",
                             name: "test-name",
                             isPrivate: true,
@@ -66,8 +66,8 @@ class JoinedRoomsFilterTests: XCTestCase {
             chatState: ChatState(
                 currentUser: .empty,
                 joinedRooms: RoomListState(
-                    rooms: [
-                        "test-identifier" : RoomState(
+                    elements: [
+                        RoomState(
                             identifier: "test-identifier",
                             name: "test-name",
                             isPrivate: true,
@@ -94,8 +94,8 @@ class JoinedRoomsFilterTests: XCTestCase {
             chatState: ChatState(
                 currentUser: .empty,
                 joinedRooms: RoomListState(
-                    rooms: [
-                        "test-identifier" : RoomState(
+                    elements: [
+                        RoomState(
                             identifier: "test-identifier",
                             name: "test-name",
                             isPrivate: true,
@@ -113,8 +113,8 @@ class JoinedRoomsFilterTests: XCTestCase {
                     ]
                 ),
                 users: UserListState(
-                    users: [
-                        "test-user" : .partial(identifier: "test-user")
+                    elements: [
+                        .partial(identifier: "test-user")
                     ]
                 )
             ),
@@ -147,8 +147,8 @@ class JoinedRoomsFilterTests: XCTestCase {
             chatState: ChatState(
                 currentUser: .empty,
                 joinedRooms: RoomListState(
-                    rooms: [
-                        "test-identifier" : RoomState(
+                    elements: [
+                        RoomState(
                             identifier: "test-identifier",
                             name: "test-name",
                             isPrivate: true,
@@ -206,8 +206,8 @@ class JoinedRoomsFilterTests: XCTestCase {
             chatState: ChatState(
                 currentUser: .empty,
                 joinedRooms: RoomListState(
-                    rooms: [
-                        "test-identifier" : RoomState(
+                    elements: [
+                        RoomState(
                             identifier: "test-identifier",
                             name: "test-name",
                             isPrivate: true,
@@ -255,8 +255,8 @@ class JoinedRoomsFilterTests: XCTestCase {
             chatState: ChatState(
                 currentUser: .empty,
                 joinedRooms: RoomListState(
-                    rooms: [
-                        "test-identifier" : RoomState(
+                    elements: [
+                        RoomState(
                             identifier: "test-identifier",
                             name: "test-name",
                             isPrivate: true,
@@ -274,8 +274,8 @@ class JoinedRoomsFilterTests: XCTestCase {
                     ]
                 ),
                 users: UserListState(
-                    users: [
-                        "user-identifier" : .partial(identifier: "user-identifier")
+                    elements: [
+                        .partial(identifier: "user-identifier")
                     ]
                 )
             ),

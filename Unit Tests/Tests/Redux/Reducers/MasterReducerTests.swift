@@ -76,8 +76,8 @@ class MasterReducerTests: XCTestCase {
         let reducer_stateToReturn = ChatState(
             currentUser: .empty,
             joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
+                elements: [
+                    RoomState(
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
@@ -88,7 +88,7 @@ class MasterReducerTests: XCTestCase {
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     ),
-                    "second-room" : RoomState(
+                    RoomState(
                         identifier: "second-room",
                         name: "Second",
                         isPrivate: false,
@@ -99,7 +99,7 @@ class MasterReducerTests: XCTestCase {
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     ),
-                    "third-room" : RoomState(
+                    RoomState(
                         identifier: "third-room",
                         name: "Third",
                         isPrivate: false,
@@ -125,8 +125,8 @@ class MasterReducerTests: XCTestCase {
         let inputChatState = ChatState(
             currentUser: .empty,
             joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
+                elements: [
+                    RoomState(
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
@@ -137,7 +137,7 @@ class MasterReducerTests: XCTestCase {
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     ),
-                    "second-room" : RoomState(
+                    RoomState(
                         identifier: "second-room",
                         name: "Second",
                         isPrivate: false,
@@ -219,8 +219,8 @@ class MasterReducerTests: XCTestCase {
         let reducer_stateToReturn = ChatState(
             currentUser: .empty,
             joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
+                elements: [
+                    RoomState(
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
@@ -244,8 +244,8 @@ class MasterReducerTests: XCTestCase {
         let inputChatState = ChatState(
             currentUser: .empty,
             joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
+                elements: [
+                    RoomState(
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
@@ -256,7 +256,7 @@ class MasterReducerTests: XCTestCase {
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     ),
-                    "second-room" : RoomState(
+                    RoomState(
                         identifier: "second-room",
                         name: "Second",
                         isPrivate: false,
@@ -315,8 +315,8 @@ class MasterReducerTests: XCTestCase {
         let reducer_stateToReturn = ChatState(
             currentUser: .empty,
             joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
+                elements: [
+                    RoomState(
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
@@ -327,7 +327,7 @@ class MasterReducerTests: XCTestCase {
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     ),
-                    "second-room" : RoomState(
+                    RoomState(
                         identifier: "second-room",
                         name: "Second Room",
                         isPrivate: true,
@@ -351,8 +351,8 @@ class MasterReducerTests: XCTestCase {
         let inputChatState = ChatState(
             currentUser: .empty,
             joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
+                elements: [
+                    RoomState(
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
@@ -363,7 +363,7 @@ class MasterReducerTests: XCTestCase {
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     ),
-                    "second-room" : RoomState(
+                    RoomState(
                         identifier: "second-room",
                         name: "Second",
                         isPrivate: false,
@@ -433,8 +433,8 @@ class MasterReducerTests: XCTestCase {
         let reducer_stateToReturn = ChatState(
             currentUser: .empty,
             joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
+                elements: [
+                    RoomState(
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
@@ -458,8 +458,8 @@ class MasterReducerTests: XCTestCase {
         let inputChatState = ChatState(
             currentUser: .empty,
             joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
+                elements: [
+                    RoomState(
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
@@ -470,7 +470,7 @@ class MasterReducerTests: XCTestCase {
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     ),
-                    "second-room" : RoomState(
+                    RoomState(
                         identifier: "second-room",
                         name: "Second",
                         isPrivate: false,
@@ -529,8 +529,8 @@ class MasterReducerTests: XCTestCase {
         let reducer_stateToReturn = ChatState(
             currentUser: .empty,
             joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
+                elements: [
+                    RoomState(
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
@@ -556,8 +556,8 @@ class MasterReducerTests: XCTestCase {
         let inputChatState = ChatState(
             currentUser: .empty,
             joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
+                elements: [
+                    RoomState(
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
@@ -623,8 +623,8 @@ class MasterReducerTests: XCTestCase {
         let inputChatState = ChatState(
             currentUser: .empty,
             joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
+                elements: [
+                    RoomState(
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
@@ -672,8 +672,8 @@ class MasterReducerTests: XCTestCase {
         let inputChatState = ChatState(
             currentUser: .empty,
             joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
+                elements: [
+                    RoomState(
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
@@ -684,7 +684,7 @@ class MasterReducerTests: XCTestCase {
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     ),
-                    "second-room" : RoomState(
+                    RoomState(
                         identifier: "second-room",
                         name: "Second",
                         isPrivate: false,
@@ -754,8 +754,8 @@ class MasterReducerTests: XCTestCase {
         let reducer_stateToReturn = ChatState(
             currentUser: .empty,
             joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
+                elements: [
+                    RoomState(
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
@@ -766,7 +766,7 @@ class MasterReducerTests: XCTestCase {
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     ),
-                    "second-room" : RoomState(
+                    RoomState(
                         identifier: "second-room",
                         name: "Second Room",
                         isPrivate: true,
@@ -790,8 +790,8 @@ class MasterReducerTests: XCTestCase {
         let inputChatState = ChatState(
             currentUser: .empty,
             joinedRooms: RoomListState(
-                rooms: [
-                    "first-room" : RoomState(
+                elements: [
+                    RoomState(
                         identifier: "first-room",
                         name: "First",
                         isPrivate: false,
@@ -802,7 +802,7 @@ class MasterReducerTests: XCTestCase {
                         createdAt: .distantPast,
                         updatedAt: .distantPast
                     ),
-                    "second-room" : RoomState(
+                    RoomState(
                         identifier: "second-room",
                         name: "Second",
                         isPrivate: false,

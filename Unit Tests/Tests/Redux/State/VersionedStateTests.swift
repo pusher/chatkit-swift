@@ -40,12 +40,12 @@ class VersionedStateTests: XCTestCase {
                 ),
                 joinedRooms: .empty,
                 users: UserListState(
-                    users: [
-                        "test-identifier-1" : .populated(
+                    elements: [
+                        .populated(
                             identifier: "test-identifier-1",
                             name: "test-name-1"
                         ),
-                        "test-identifier-2" : .populated(
+                        .populated(
                             identifier: "test-identifier-2",
                             name: "test-name-2"
                         )
@@ -83,12 +83,12 @@ class VersionedStateTests: XCTestCase {
                 ),
                 joinedRooms: .empty,
                 users: UserListState(
-                    users: [
-                        "test-identifier-1" : .populated(
+                    elements: [
+                        .populated(
                             identifier: "test-identifier-1",
                             name: "test-name-1"
                         ),
-                        "test-identifier-2" : .partial(
+                        .partial(
                             identifier: "test-identifier-2"
                         )
                     ]
@@ -125,12 +125,12 @@ class VersionedStateTests: XCTestCase {
                 ),
                 joinedRooms: .empty,
                 users: UserListState(
-                    users: [
-                        "test-identifier-1" : .populated(
+                    elements: [
+                        .populated(
                             identifier: "test-identifier-1",
                             name: "test-name-1"
                         ),
-                        "test-identifier-2" : .partial(
+                        .partial(
                             identifier: "test-identifier-2"
                         )
                     ]
@@ -148,16 +148,16 @@ class VersionedStateTests: XCTestCase {
                 ),
                 joinedRooms: .empty,
                 users: UserListState(
-                    users: [
-                        "test-identifier-1" : .populated(
+                    elements: [
+                        .populated(
                             identifier: "test-identifier-1",
                             name: "test-name-1"
                         ),
-                        "test-identifier-2" : .populated(
+                        .populated(
                             identifier: "test-identifier-2",
                             name: "test-name-2"
                         ),
-                        "test-identifier-3" : .populated(
+                        .populated(
                             identifier: "test-identifier-3",
                             name: "test-name-3"
                         )
@@ -182,12 +182,12 @@ class VersionedStateTests: XCTestCase {
                 ),
                 joinedRooms: .empty,
                 users: UserListState(
-                    users: [
-                        "test-identifier-1" : .populated(
+                    elements: [
+                        .populated(
                             identifier: "test-identifier-1",
                             name: "test-name-1"
                         ),
-                        "test-identifier-2" : .populated(
+                        .populated(
                             identifier: "test-identifier-2",
                             name: "test-name-2"
                         )

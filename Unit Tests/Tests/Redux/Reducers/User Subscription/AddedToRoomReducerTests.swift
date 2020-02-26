@@ -47,8 +47,8 @@ class AddedToRoomReducerTests: XCTestCase {
         )
         
         let reducer_stateToReturn = RoomListState(
-            rooms: [
-                "third-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "third-room",
                     name: "Third",
                     isPrivate: false,

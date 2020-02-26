@@ -33,12 +33,12 @@ class UserListStateTests: XCTestCase {
         /******************/
         
         let state = UserListState(
-            users: [
-                "test-identifier-1" : .populated(
+            elements: [
+                .populated(
                     identifier: "test-identifier-1",
                     name: "test-name-1"
                 ),
-                "test-identifier-2" : .populated(
+                .populated(
                     identifier: "test-identifier-2",
                     name: "test-name-2"
                 )
@@ -65,12 +65,12 @@ class UserListStateTests: XCTestCase {
         /******************/
         
         let state = UserListState(
-            users: [
-                "test-identifier-1" : .populated(
+            elements: [
+                .populated(
                     identifier: "test-identifier-1",
                     name: "test-name-1"
                 ),
-                "test-identifier-2" : .partial(
+                .partial(
                     identifier: "test-identifier-2"
                 )
             ]
@@ -96,23 +96,23 @@ class UserListStateTests: XCTestCase {
         /******************/
         
         let state = UserListState(
-            users: [
-                "test-identifier-1" : .populated(
+            elements: [
+                .populated(
                     identifier: "test-identifier-1",
                     name: "test-name-1"
                 ),
-                "test-identifier-2" : .partial(
+                .partial(
                     identifier: "test-identifier-2"
                 ),
-                "test-identifier-3" : .partial(
+                .partial(
                     identifier: "test-identifier-3"
                 )
             ]
         )
         
         let supplementalState = UserListState(
-            users: [
-                "test-identifier-2" : .populated(
+            elements: [
+                .populated(
                     identifier: "test-identifier-2",
                     name: "test-name-2"
                 )
@@ -126,16 +126,16 @@ class UserListStateTests: XCTestCase {
         let result = state.supplement(withState: supplementalState)
         
         let expectedState = UserListState(
-            users: [
-                "test-identifier-1" : .populated(
+            elements: [
+                .populated(
                     identifier: "test-identifier-1",
                     name: "test-name-1"
                 ),
-                "test-identifier-2" : .populated(
+                .populated(
                     identifier: "test-identifier-2",
                     name: "test-name-2"
                 ),
-                "test-identifier-3" : .partial(
+                .partial(
                     identifier: "test-identifier-3"
                 )
             ]

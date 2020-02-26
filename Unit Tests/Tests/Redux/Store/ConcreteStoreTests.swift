@@ -14,8 +14,8 @@ class ConcreteStoreTests: XCTestCase {
             ),
             joinedRooms: .empty,
             users: UserListState(
-                users: [
-                    "alice" : .populated(
+                elements: [
+                    .populated(
                         identifier: "alice",
                         name: "Alice A"
                     )
@@ -34,8 +34,8 @@ class ConcreteStoreTests: XCTestCase {
             ),
             joinedRooms: .empty,
             users: UserListState(
-                users: [
-                    "bob" : .populated(
+                elements: [
+                    .populated(
                         identifier: "bob",
                         name: "Bob B"
                     )
@@ -129,8 +129,8 @@ class ConcreteStoreTests: XCTestCase {
                 ),
                 joinedRooms: .empty,
                 users: UserListState(
-                    users: [
-                        "alice" : .populated(
+                    elements: [
+                        .populated(
                             identifier: "alice",
                             name: "Alice A"
                         )

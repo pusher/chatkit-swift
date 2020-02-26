@@ -15,14 +15,7 @@ extension Reducer.UserSubscription {
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
             let currentUser = dependencies.userReducer(action, state.currentUser, dependencies)
             let joinedRooms = dependencies.roomListReducer(action, state.joinedRooms, dependencies)
-            
-            var users: UserListState
-            if let identifier = currentUser.identifier {
-                users = UserListState(users: [identifier : currentUser])
-            }
-            else {
-                users = .empty
-            }
+            let users = UserListState(elements: [currentUser])
             
             return ChatState(currentUser: currentUser, joinedRooms: joinedRooms, users: users)
         }

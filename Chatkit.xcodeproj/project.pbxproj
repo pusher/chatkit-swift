@@ -26,6 +26,7 @@
 		22090F0C23FEF2AF00E82C93 /* Transformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22090F0B23FEF2AF00E82C93 /* Transformer.swift */; };
 		22090F0E23FEF33400E82C93 /* RoomTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22090F0D23FEF33400E82C93 /* RoomTransformer.swift */; };
 		220911D523ED6F97001A2D9A /* InitialStateReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220911D423ED6F97001A2D9A /* InitialStateReducerTests.swift */; };
+		220D99232406BA4600B0FD92 /* ListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220D99222406BA4600B0FD92 /* ListState.swift */; };
 		2212EC55235725B8002212A4 /* MessagesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC54235725B8002212A4 /* MessagesRepository.swift */; };
 		2212EC5723572A3F002212A4 /* RoomMembersRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC5623572A3F002212A4 /* RoomMembersRepository.swift */; };
 		2217A7FC23E9B886002FE365 /* RoomState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2217A7FB23E9B886002FE365 /* RoomState.swift */; };
@@ -298,6 +299,7 @@
 		22090F0B23FEF2AF00E82C93 /* Transformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transformer.swift; sourceTree = "<group>"; };
 		22090F0D23FEF33400E82C93 /* RoomTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTransformer.swift; sourceTree = "<group>"; };
 		220911D423ED6F97001A2D9A /* InitialStateReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialStateReducerTests.swift; sourceTree = "<group>"; };
+		220D99222406BA4600B0FD92 /* ListState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListState.swift; sourceTree = "<group>"; };
 		2212EC54235725B8002212A4 /* MessagesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesRepository.swift; sourceTree = "<group>"; };
 		2212EC5623572A3F002212A4 /* RoomMembersRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMembersRepository.swift; sourceTree = "<group>"; };
 		2217A7FB23E9B886002FE365 /* RoomState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomState.swift; sourceTree = "<group>"; };
@@ -626,6 +628,7 @@
 			isa = PBXGroup;
 			children = (
 				730E44DF23DB482C00A3AF94 /* State.swift */,
+				220D99222406BA4600B0FD92 /* ListState.swift */,
 				222D716F23FC441400EF051E /* Versionable.swift */,
 			);
 			path = Types;
@@ -1892,6 +1895,7 @@
 				73CF01CC23ACC8E6006FB43E /* Wire.swift in Sources */,
 				22406A9323F44C6800EE24BE /* ReadStateUpdatedReducer.swift in Sources */,
 				222D717023FC441400EF051E /* Versionable.swift in Sources */,
+				220D99232406BA4600B0FD92 /* ListState.swift in Sources */,
 				734D6A4223AAA77F00105479 /* Wire.CursorType.swift in Sources */,
 				22D2A2D823196B9F0095757C /* PCBaseClient+Extensions.swift in Sources */,
 				22DA90AC23E844FA0023A7DC /* Reducer.swift in Sources */,

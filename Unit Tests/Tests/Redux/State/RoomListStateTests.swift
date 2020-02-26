@@ -12,8 +12,8 @@ class RoomListStateTests: XCTestCase {
         /******************/
         
         let state = RoomListState(
-            rooms: [
-                "test-identifier" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "test-identifier",
                     name: "test-name",
                     isPrivate: true,
@@ -51,8 +51,8 @@ class RoomListStateTests: XCTestCase {
         /******************/
         
         let state = RoomListState(
-            rooms: [
-                "test-identifier" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "test-identifier",
                     name: "test-name-1",
                     isPrivate: true,
@@ -67,7 +67,7 @@ class RoomListStateTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "test-identifier-2" : RoomState(
+                RoomState(
                     identifier: "test-identifier-2",
                     name: "test-name-2",
                     isPrivate: false,
@@ -86,8 +86,8 @@ class RoomListStateTests: XCTestCase {
         )
         
         let supplementalState = RoomListState(
-            rooms: [
-                "test-identifier" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "test-identifier",
                     name: "test-name-3",
                     isPrivate: false,
@@ -102,7 +102,7 @@ class RoomListStateTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantFuture
                 ),
-                "test-identifier-4" : RoomState(
+                RoomState(
                     identifier: "test-identifier-4",
                     name: "test-name-4",
                     isPrivate: false,

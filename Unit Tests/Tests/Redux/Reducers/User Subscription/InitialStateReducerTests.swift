@@ -73,8 +73,8 @@ class InitialStateReducerTests: XCTestCase {
         )
         
         let roomListReducer_stateToReturn = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: true,
@@ -87,7 +87,7 @@ class InitialStateReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -124,8 +124,8 @@ class InitialStateReducerTests: XCTestCase {
             currentUser: userReducer_stateToReturn,
             joinedRooms: roomListReducer_stateToReturn,
             users: UserListState(
-                users: [
-                    "alice" : userReducer_stateToReturn
+                elements: [
+                    userReducer_stateToReturn
                 ]
             )
         )
@@ -197,8 +197,8 @@ class InitialStateReducerTests: XCTestCase {
         let userReducer_stateToReturn: UserState = .empty
         
         let roomListReducer_stateToReturn = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: true,
@@ -211,7 +211,7 @@ class InitialStateReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
