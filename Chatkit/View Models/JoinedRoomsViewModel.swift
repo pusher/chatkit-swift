@@ -35,9 +35,9 @@ public class JoinedRoomsViewModel {
     public private(set) var rooms: [Room]
     
     /// The current state of the repository used by the view model as the data source.
-    public var state: RealTimeRepositoryState {
-        return self.repository.state
-    }
+//    public var state: RealTimeRepositoryState {
+//        return self.repository.state
+//    }
     
     /// The object that is notified when the content of the maintained collection of rooms changed.
     public weak var delegate: JoinedRoomsViewModelDelegate?
@@ -48,7 +48,7 @@ public class JoinedRoomsViewModel {
         self.rooms = []
         
         self.repository = repository
-        self.repository.delegate = self
+//        self.repository.delegate = self
         
         self.reload()
     }
@@ -56,8 +56,8 @@ public class JoinedRoomsViewModel {
     // MARK: - Private methods
     
     private func reload() {
-        self.rooms = Array(self.repository.rooms)
-        self.sort()
+//        self.rooms = Array(self.repository.rooms)
+//        self.sort()
     }
     
     private func sort() {
@@ -82,22 +82,22 @@ public class JoinedRoomsViewModel {
 // MARK: - JoinedRoomsRepositoryDelegate
 
 /// :nodoc:
-extension JoinedRoomsViewModel: JoinedRoomsRepositoryDelegate {
-    
-    public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didJoinRoom room: Room) {
-        // TODO: Optimize if necessary
-        
-        self.rooms.append(room)
-        self.sort()
-        
-        guard let index = self.index(of: room) else {
-            return
-        }
-        
-        self.delegate?.joinedRoomsViewModel(self, didAddRoomAt: index, changeReason: .userJoined)
-    }
-    
-    public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateRoom room: Room, previousValue: Room) {
+//extension JoinedRoomsViewModel: JoinedRoomsRepositoryDelegate {
+//
+//    public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didJoinRoom room: Room) {
+//        // TODO: Optimize if necessary
+//
+//        self.rooms.append(room)
+//        self.sort()
+//
+//        guard let index = self.index(of: room) else {
+//            return
+//        }
+//
+//        self.delegate?.joinedRoomsViewModel(self, didAddRoomAt: index, changeReason: .userJoined)
+//    }
+//
+//    public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateRoom room: Room, previousValue: Room) {
         // TODO: Optimize if necessary
         
 //        guard let previousIndex = self.index(of: previousValue) else {
@@ -121,19 +121,19 @@ extension JoinedRoomsViewModel: JoinedRoomsRepositoryDelegate {
 //        else {
 //            self.delegate?.joinedRoomsViewModel(self, didUpdateRoomAt: currentIndex, changeReason: changeReason)
 //        }
-    }
-    
-    public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didLeaveRoom room: Room) {
-        guard let index = self.index(of: room) else {
-            return
-        }
-        
-        self.rooms.remove(at: index)
-        
-        self.delegate?.joinedRoomsViewModel(self, didRemoveRoomAt: index, changeReason: .userLeft)
-    }
-    
-}
+//    }
+//
+//    public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didLeaveRoom room: Room) {
+//        guard let index = self.index(of: room) else {
+//            return
+//        }
+//
+//        self.rooms.remove(at: index)
+//
+//        self.delegate?.joinedRoomsViewModel(self, didRemoveRoomAt: index, changeReason: .userLeft)
+//    }
+//
+//}
 
 // MARK: - Delegate
 

@@ -11,7 +11,13 @@ import PusherPlatform
 /// and running.
 public class Chatkit {
     
+    // MARK: - Types
+    
+    typealias Dependencies = HasStore
+    
     // MARK: - Properties
+
+    private let dependencies: Dependencies
     
     /// Returns the users who is currently logged in to the web service.
     /// - Returns: An instance of `User` when a connection to Chatkit web service has been
@@ -40,12 +46,13 @@ public class Chatkit {
     ///
     /// - Returns: An instance of `Chatkit` or throws an error when the initialization failed.
     public init(instanceLocator: String, tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
-        guard let _ = PusherPlatform.InstanceLocator(string: instanceLocator) else {
+        guard let instanceLocator = PusherPlatform.InstanceLocator(string: instanceLocator) else {
             throw NetworkingError.invalidInstanceLocator
         }
 
         self.logger = logger
         self.connectionStatus = .disconnected
+        self.dependencies = ConcreteDependencies(instanceLocator: instanceLocator)
     }
     
     // MARK: - Connecting
@@ -94,12 +101,12 @@ public class Chatkit {
     /// Creates an instance of `JoinedRoomsRepository`.
     ///
     /// This will provide access to a real time set of `Room`s that the current user is a member of.
-    ///
-    /// - Parameters:
-    ///     - completionHandler: A completion handler which will be called when the `JoinedRoomsRepository` is ready, or an `Error` occurs creating it.
-    public func createJoinedRoomsRepository(completionHandler: @escaping (JoinedRoomsRepository?, Error?) -> Void) {
-        // TODO: Implement
-        completionHandler(nil, nil)
+    public func createJoinedRoomsRepository() -> JoinedRoomsRepository {
+        let filter = JoinedRoomsRepository.Filter()
+        let transformer = RoomTransformer()
+        let buffer = ConcreteBuffer(filter: filter, dependencies: self.dependencies)
+        
+        return JoinedRoomsRepository(buffer: buffer, transformer: transformer)
     }
     
     /// Creates an instance of `MessagesRepository`.

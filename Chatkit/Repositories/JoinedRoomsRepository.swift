@@ -24,49 +24,66 @@ public class JoinedRoomsRepository {
     
     // MARK: - Properties
     
+    private let buffer: Buffer
+    private let transformer: RoomTransformer
+    
     /// The current state of the repository.
-    public private(set) var state: RealTimeRepositoryState
+    public private(set) var state: State {
+        didSet {
+            if state != oldValue {
+                self.delegate?.joinedRoomsRepository(self, didUpdateState: state)
+            }
+        }
+    }
     
     /// The object that is notified when the set `rooms` has changed.
     public weak var delegate: JoinedRoomsRepositoryDelegate?
     
-    /// The set of all rooms joined by the user.
-    public var rooms: Set<Room> {
-        return []
-    }
-    
     // MARK: - Initializers
     
-    init(currentUser: User) {
-        self.state = .connected
+    init(buffer: Buffer, transformer: RoomTransformer) {
+        self.state = .initializing(error: nil) // TODO: Determine what kind of error we might receive here from our auxiliary state.
+        self.transformer = transformer
+        
+        self.buffer = buffer
+        self.buffer.delegate = self
+    }
+    
+    // MARK: - Private methods
+    
+    private func update(rooms: Set<Room>, changeReason: ChangeReason?) {
+        switch self.state {
+        case .connected(_, _):
+            self.state = .connected(rooms: rooms, changeReason: changeReason)
+            
+        case let .degraded(_, error, _):
+            self.state = .degraded(rooms: rooms, error: error, changeReason: changeReason)
+            
+        case .initializing(_),
+             .closed(_):
+            break
+        }
+    }
+    
+}
+
+// MARK: - Buffer delegate
+
+extension JoinedRoomsRepository: BufferDelegate {
+    
+    func buffer(_ buffer: Buffer, didUpdateState state: VersionedState) {
+        let rooms = state.chatState.joinedRooms.map { self.transformer.transform(state: $0) }
+        let changeReason: ChangeReason? = nil // TODO: Implement
+        
+        self.update(rooms: Set(rooms), changeReason: changeReason)
     }
     
 }
 
 // MARK: - Delegate
 
-/// A delegate protocol for being notified when the `rooms` property of a `JoinedRoomsRepository` has changed.
-public protocol JoinedRoomsRepositoryDelegate: class {
+public protocol JoinedRoomsRepositoryDelegate: AnyObject {
     
-    /// Notifies the receiver that the current user has joined a room, and that it has been added to the set.
-    ///
-    /// - Parameters:
-    ///     - joinedRoomsRepository: The `JoinedRoomsRepository` that called the method.
-    ///     - room: The room joined by the user.
-    func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didJoinRoom room: Room)
+    func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepository.State)
     
-    /// Notifies the receiver that a room the current user is a member of has been updated.
-    ///
-    /// - Parameters:
-    ///     - joinedRoomsRepository: The `JoinedRoomsRepository` that called the method.
-    ///     - room: The new value of the room.
-    ///     - previousValue: The value of the room befrore it was updated.
-    func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateRoom room: Room, previousValue: Room)
-    
-    /// Notifies the receiver that the current user has left, or been removed from a room.
-    ///
-    /// - Parameters:
-    ///     - joinedRoomsRepository: The `JoinedRoomsRepository` that called the method.
-    ///     - room: The room which the user is no longer a member of.
-    func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didLeaveRoom room: Room)
 }

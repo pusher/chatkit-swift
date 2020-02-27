@@ -27,6 +27,8 @@
 		22090F0E23FEF33400E82C93 /* RoomTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22090F0D23FEF33400E82C93 /* RoomTransformer.swift */; };
 		220911D523ED6F97001A2D9A /* InitialStateReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220911D423ED6F97001A2D9A /* InitialStateReducerTests.swift */; };
 		220D99232406BA4600B0FD92 /* ListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220D99222406BA4600B0FD92 /* ListState.swift */; };
+		220D99272407073400B0FD92 /* JoinedRoomsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220D99262407073400B0FD92 /* JoinedRoomsState.swift */; };
+		220D99292407074300B0FD92 /* JoinedRoomsChangeReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220D99282407074300B0FD92 /* JoinedRoomsChangeReason.swift */; };
 		2212EC55235725B8002212A4 /* MessagesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC54235725B8002212A4 /* MessagesRepository.swift */; };
 		2212EC5723572A3F002212A4 /* RoomMembersRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2212EC5623572A3F002212A4 /* RoomMembersRepository.swift */; };
 		2217A7FC23E9B886002FE365 /* RoomState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2217A7FB23E9B886002FE365 /* RoomState.swift */; };
@@ -300,6 +302,8 @@
 		22090F0D23FEF33400E82C93 /* RoomTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTransformer.swift; sourceTree = "<group>"; };
 		220911D423ED6F97001A2D9A /* InitialStateReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialStateReducerTests.swift; sourceTree = "<group>"; };
 		220D99222406BA4600B0FD92 /* ListState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListState.swift; sourceTree = "<group>"; };
+		220D99262407073400B0FD92 /* JoinedRoomsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsState.swift; sourceTree = "<group>"; };
+		220D99282407074300B0FD92 /* JoinedRoomsChangeReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsChangeReason.swift; sourceTree = "<group>"; };
 		2212EC54235725B8002212A4 /* MessagesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesRepository.swift; sourceTree = "<group>"; };
 		2212EC5623572A3F002212A4 /* RoomMembersRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMembersRepository.swift; sourceTree = "<group>"; };
 		2217A7FB23E9B886002FE365 /* RoomState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomState.swift; sourceTree = "<group>"; };
@@ -556,6 +560,22 @@
 				22090F0B23FEF2AF00E82C93 /* Transformer.swift */,
 			);
 			path = Transformers;
+			sourceTree = "<group>";
+		};
+		220D99242407070400B0FD92 /* Change Reasons */ = {
+			isa = PBXGroup;
+			children = (
+				220D99282407074300B0FD92 /* JoinedRoomsChangeReason.swift */,
+			);
+			path = "Change Reasons";
+			sourceTree = "<group>";
+		};
+		220D99252407071A00B0FD92 /* States */ = {
+			isa = PBXGroup;
+			children = (
+				220D99262407073400B0FD92 /* JoinedRoomsState.swift */,
+			);
+			path = States;
 			sourceTree = "<group>";
 		};
 		2217A7F923E9B798002FE365 /* State */ = {
@@ -1129,7 +1149,9 @@
 		22D537C82302BCD600A92341 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
+				220D99242407070400B0FD92 /* Change Reasons */,
 				227C7C1B23FD8212001DE4E5 /* Filters */,
+				220D99252407071A00B0FD92 /* States */,
 				22D2A2ED2319BA450095757C /* Types */,
 				222EA2AE23424A7D004EE90F /* AvailableRoomsRepository.swift */,
 				222EA2AC23424A11004EE90F /* JoinedRoomsRepository.swift */,
@@ -1888,9 +1910,11 @@
 				73A5168E23B0B78400CF8B77 /* Wire.Event.swift in Sources */,
 				229018312358AE99008FAB07 /* TypingUsersRepository.swift in Sources */,
 				7301BC7D23B1261300F162C7 /* Wire.MessagePart.swift in Sources */,
+				220D99272407073400B0FD92 /* JoinedRoomsState.swift in Sources */,
 				22FD93C02361DD8A00AB841F /* TypingUsersViewModel.swift in Sources */,
 				73B705BB23EE075600D1E5C8 /* MasterReducer.swift in Sources */,
 				2217A7FC23E9B886002FE365 /* RoomState.swift in Sources */,
+				220D99292407074300B0FD92 /* JoinedRoomsChangeReason.swift in Sources */,
 				7335D26623D60CA700E51909 /* Wire.Event.NewMessage.swift in Sources */,
 				73CF01CC23ACC8E6006FB43E /* Wire.swift in Sources */,
 				22406A9323F44C6800EE24BE /* ReadStateUpdatedReducer.swift in Sources */,
