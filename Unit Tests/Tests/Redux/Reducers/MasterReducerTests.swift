@@ -203,7 +203,7 @@ class MasterReducerTests: XCTestCase {
             chatState: reducer_stateToReturn,
             auxiliaryState: .empty,
             version: 2,
-            signature: .addedToRoom
+            signature: .addedToRoom(roomIdentifier: "third-room")
         )
         
         
@@ -302,7 +302,7 @@ class MasterReducerTests: XCTestCase {
             chatState: reducer_stateToReturn,
             auxiliaryState: .empty,
             version: 2,
-            signature: .removedFromRoom
+            signature: .removedFromRoom(roomIdentifier: "second-room")
         )
         
         XCTAssertEqual(outputState, expectedState)
@@ -422,7 +422,7 @@ class MasterReducerTests: XCTestCase {
             chatState: reducer_stateToReturn,
             auxiliaryState: .empty,
             version: 2,
-            signature: .roomUpdated
+            signature: .roomUpdated(roomIdentifier: "second-room")
         )
         
         XCTAssertEqual(outputState, expectedState)
@@ -520,7 +520,7 @@ class MasterReducerTests: XCTestCase {
             chatState: reducer_stateToReturn,
             auxiliaryState: .empty,
             version: 2,
-            signature: .roomDeleted
+            signature: .roomDeleted(roomIdentifier: "second-room")
         )
         
         XCTAssertEqual(outputState, expectedState)
@@ -614,7 +614,7 @@ class MasterReducerTests: XCTestCase {
             chatState: reducer_stateToReturn,
             auxiliaryState: .empty,
             version: 2,
-            signature: .readStateUpdated
+            signature: .readStateUpdated(roomIdentifier: "first-room")
         )
         
         XCTAssertEqual(outputState, expectedState)
@@ -869,7 +869,7 @@ class MasterReducerTests: XCTestCase {
             chatState: reducer_stateToReturn,
             auxiliaryState: .empty,
             version: 2,
-            signature: .roomUpdated
+            signature: .roomUpdated(roomIdentifier: "second-room")
         )
         
         XCTAssertEqual(outputState, expectedState)

@@ -33,32 +33,32 @@ extension Reducer {
             else if let action = action as? AddedToRoomAction {
                 reducedChatState = dependencies.userSubscriptionAddedToRoomReducer(action, state.chatState, dependencies)
                 reducedAuxiliaryState = state.auxiliaryState
-                signature = .addedToRoom
+                signature = .addedToRoom(roomIdentifier: action.event.room.identifier)
             }
             else if let action = action as? RemovedFromRoomAction {
                 reducedChatState = dependencies.userSubscriptionRemovedFromRoomReducer(action, state.chatState, dependencies)
                 reducedAuxiliaryState = state.auxiliaryState
-                signature = .removedFromRoom
+                signature = .removedFromRoom(roomIdentifier: action.event.roomIdentifier)
             }
             else if let action = action as? RoomUpdatedAction {
                 reducedChatState = dependencies.userSubscriptionRoomUpdatedReducer(action, state.chatState, dependencies)
                 reducedAuxiliaryState = state.auxiliaryState
-                signature = .roomUpdated
+                signature = .roomUpdated(roomIdentifier: action.event.room.identifier)
             }
             else if let action = action as? RoomDeletedAction {
                 reducedChatState = dependencies.userSubscriptionRoomDeletedReducer(action, state.chatState, dependencies)
                 reducedAuxiliaryState = state.auxiliaryState
-                signature = .roomDeleted
+                signature = .roomDeleted(roomIdentifier: action.event.roomIdentifier)
             }
             else if let action = action as? ReadStateUpdatedAction {
                 reducedChatState = dependencies.userSubscriptionReadStateUpdatedReducer(action, state.chatState, dependencies)
                 reducedAuxiliaryState = state.auxiliaryState
-                signature = .readStateUpdated
+                signature = .readStateUpdated(roomIdentifier: action.event.readState.roomIdentifier)
             }
             else if let action = action as? SubscriptionStateUpdatedAction {
                 reducedChatState = state.chatState
                 reducedAuxiliaryState = dependencies.subscriptionStateUpdatedReducer(action, state.auxiliaryState, dependencies)
-                signature = .unsigned // TODO: Signature
+                signature = .subscriptionStateUpdated
             }
             else {
                 return state

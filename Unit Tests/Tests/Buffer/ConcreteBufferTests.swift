@@ -424,14 +424,14 @@ class ConcreteBufferTests: XCTestCase {
             chatState: .empty,
             auxiliaryState: .empty,
             version: 2,
-            signature: .addedToRoom
+            signature: .subscriptionStateUpdated
         )
         
         let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: true,
                                          hasCompleteSubstate_defaultValueToReturn: true,
                                          hasSupportedSignature_valuesToReturn: [.initialState : true,
-                                                                                .addedToRoom : false])
+                                                                                .subscriptionStateUpdated : false])
         let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 0)
         
         let dependencies = DependenciesDoubles(store: stubStore)

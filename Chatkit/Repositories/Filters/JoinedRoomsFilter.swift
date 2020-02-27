@@ -16,14 +16,15 @@ internal extension JoinedRoomsRepository {
         func hasSupportedSignature(_ signature: VersionSignature) -> Bool {
             switch signature {
             case .initialState,
-                 .addedToRoom,
-                 .removedFromRoom,
-                 .roomUpdated,
-                 .roomDeleted,
-                 .readStateUpdated:
+                 .addedToRoom(_),
+                 .removedFromRoom(_),
+                 .roomUpdated(_),
+                 .roomDeleted(_),
+                 .readStateUpdated(_):
                 return true
                 
-            case .unsigned:
+            case .unsigned,
+                 .subscriptionStateUpdated:
                 return false
             }
         }

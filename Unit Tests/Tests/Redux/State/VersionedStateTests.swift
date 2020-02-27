@@ -169,7 +169,7 @@ class VersionedStateTests: XCTestCase {
             ),
             auxiliaryState: .empty,
             version: 2,
-            signature: .addedToRoom
+            signature: .subscriptionStateUpdated
         )
         
         /******************/

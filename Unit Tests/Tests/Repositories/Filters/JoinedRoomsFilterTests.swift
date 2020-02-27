@@ -122,7 +122,7 @@ class JoinedRoomsFilterTests: XCTestCase {
             ),
             auxiliaryState: .empty,
             version: 2,
-            signature: .addedToRoom
+            signature: .subscriptionStateUpdated
         )
         
         let sut = JoinedRoomsRepository.Filter()
@@ -183,7 +183,7 @@ class JoinedRoomsFilterTests: XCTestCase {
             ),
             auxiliaryState: .empty,
             version: 2,
-            signature: .roomDeleted
+            signature: .roomDeleted(roomIdentifier: "test-identifier")
         )
         
         let sut = JoinedRoomsRepository.Filter()
@@ -334,7 +334,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let signature:  VersionSignature = .addedToRoom
+        let signature:  VersionSignature = .addedToRoom(roomIdentifier: "room-identifier")
         
         let sut = JoinedRoomsRepository.Filter()
         
@@ -357,7 +357,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let signature:  VersionSignature = .removedFromRoom
+        let signature:  VersionSignature = .removedFromRoom(roomIdentifier: "room-identifier")
         
         let sut = JoinedRoomsRepository.Filter()
         
@@ -380,7 +380,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let signature:  VersionSignature = .roomUpdated
+        let signature:  VersionSignature = .roomUpdated(roomIdentifier: "room-identifier")
         
         let sut = JoinedRoomsRepository.Filter()
         
@@ -403,7 +403,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let signature:  VersionSignature = .roomDeleted
+        let signature:  VersionSignature = .roomDeleted(roomIdentifier: "room-identifier")
         
         let sut = JoinedRoomsRepository.Filter()
         
@@ -426,7 +426,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let signature:  VersionSignature = .readStateUpdated
+        let signature:  VersionSignature = .readStateUpdated(roomIdentifier: "room-identifier")
         
         let sut = JoinedRoomsRepository.Filter()
         
