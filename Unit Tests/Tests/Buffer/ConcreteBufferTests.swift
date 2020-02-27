@@ -126,6 +126,7 @@ class ConcreteBufferTests: XCTestCase {
                 joinedRooms: .empty,
                 users: .empty
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .unsigned
         )
@@ -139,6 +140,7 @@ class ConcreteBufferTests: XCTestCase {
                 joinedRooms: .empty,
                 users: .empty
             ),
+            auxiliaryState: .empty,
             version: 2,
             signature: .unsigned
         )
@@ -152,6 +154,7 @@ class ConcreteBufferTests: XCTestCase {
                 joinedRooms: .empty,
                 users: .empty
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .unsigned
         )
@@ -205,6 +208,7 @@ class ConcreteBufferTests: XCTestCase {
                 joinedRooms: .empty,
                 users: .empty
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .unsigned
         )
@@ -218,6 +222,7 @@ class ConcreteBufferTests: XCTestCase {
                 joinedRooms: .empty,
                 users: .empty
             ),
+            auxiliaryState: .empty,
             version: 2,
             signature: .unsigned
         )
@@ -278,6 +283,7 @@ class ConcreteBufferTests: XCTestCase {
                     ]
                 )
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .unsigned
         )
@@ -302,6 +308,7 @@ class ConcreteBufferTests: XCTestCase {
                     ]
                 )
             ),
+            auxiliaryState: .empty,
             version: 2,
             signature: .unsigned
         )
@@ -351,6 +358,7 @@ class ConcreteBufferTests: XCTestCase {
                 joinedRooms: .empty,
                 users: .empty
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .unsigned
         )
@@ -364,6 +372,7 @@ class ConcreteBufferTests: XCTestCase {
                 joinedRooms: .empty,
                 users: .empty
             ),
+            auxiliaryState: .empty,
             version: 2,
             signature: .unsigned
         )
@@ -406,12 +415,14 @@ class ConcreteBufferTests: XCTestCase {
         
         let initialState = VersionedState(
             chatState: .empty,
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
         
         let subsequentState = VersionedState(
             chatState: .empty,
+            auxiliaryState: .empty,
             version: 2,
             signature: .addedToRoom
         )
@@ -455,6 +466,7 @@ class ConcreteBufferTests: XCTestCase {
         
         let initialState = VersionedState(
             chatState: .empty,
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )

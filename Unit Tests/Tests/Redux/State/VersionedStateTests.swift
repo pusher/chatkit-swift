@@ -52,6 +52,7 @@ class VersionedStateTests: XCTestCase {
                     ]
                 )
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -94,6 +95,7 @@ class VersionedStateTests: XCTestCase {
                     ]
                 )
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -136,6 +138,7 @@ class VersionedStateTests: XCTestCase {
                     ]
                 )
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -164,6 +167,7 @@ class VersionedStateTests: XCTestCase {
                     ]
                 )
             ),
+            auxiliaryState: .empty,
             version: 2,
             signature: .addedToRoom
         )
@@ -194,6 +198,7 @@ class VersionedStateTests: XCTestCase {
                     ]
                 )
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )

@@ -22,6 +22,7 @@ class ConcreteStoreTests: XCTestCase {
                 ]
             )
         ),
+        auxiliaryState: .empty,
         version: 1,
         signature: .initialState
     )
@@ -42,6 +43,7 @@ class ConcreteStoreTests: XCTestCase {
                 ]
             )
         ),
+        auxiliaryState: .empty,
         version: 1,
         signature: .initialState
     )
@@ -137,6 +139,7 @@ class ConcreteStoreTests: XCTestCase {
                     ]
                 )
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState)
         

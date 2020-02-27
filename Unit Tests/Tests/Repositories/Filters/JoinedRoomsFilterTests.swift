@@ -35,6 +35,7 @@ class JoinedRoomsFilterTests: XCTestCase {
                 ),
                 users: .empty
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -86,6 +87,7 @@ class JoinedRoomsFilterTests: XCTestCase {
                 ),
                 users: .empty
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -118,6 +120,7 @@ class JoinedRoomsFilterTests: XCTestCase {
                     ]
                 )
             ),
+            auxiliaryState: .empty,
             version: 2,
             signature: .addedToRoom
         )
@@ -167,6 +170,7 @@ class JoinedRoomsFilterTests: XCTestCase {
                 ),
                 users: .empty
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -177,6 +181,7 @@ class JoinedRoomsFilterTests: XCTestCase {
                 joinedRooms: .empty,
                 users: .empty
             ),
+            auxiliaryState: .empty,
             version: 2,
             signature: .roomDeleted
         )
@@ -226,6 +231,7 @@ class JoinedRoomsFilterTests: XCTestCase {
                 ),
                 users: .empty
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -279,6 +285,7 @@ class JoinedRoomsFilterTests: XCTestCase {
                     ]
                 )
             ),
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )

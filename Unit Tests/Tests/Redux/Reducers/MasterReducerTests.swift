@@ -57,6 +57,7 @@ class MasterReducerTests: XCTestCase {
         
         let expectedState = VersionedState(
             chatState: reducer_stateToReturn,
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -155,6 +156,7 @@ class MasterReducerTests: XCTestCase {
         
         let inputState = VersionedState(
             chatState: inputChatState,
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -199,6 +201,7 @@ class MasterReducerTests: XCTestCase {
         
         let expectedState = VersionedState(
             chatState: reducer_stateToReturn,
+            auxiliaryState: .empty,
             version: 2,
             signature: .addedToRoom
         )
@@ -274,6 +277,7 @@ class MasterReducerTests: XCTestCase {
         
         let inputState = VersionedState(
             chatState: inputChatState,
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -296,6 +300,7 @@ class MasterReducerTests: XCTestCase {
         
         let expectedState = VersionedState(
             chatState: reducer_stateToReturn,
+            auxiliaryState: .empty,
             version: 2,
             signature: .removedFromRoom
         )
@@ -381,6 +386,7 @@ class MasterReducerTests: XCTestCase {
         
         let inputState = VersionedState(
             chatState: inputChatState,
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -414,6 +420,7 @@ class MasterReducerTests: XCTestCase {
         
         let expectedState = VersionedState(
             chatState: reducer_stateToReturn,
+            auxiliaryState: .empty,
             version: 2,
             signature: .roomUpdated
         )
@@ -488,6 +495,7 @@ class MasterReducerTests: XCTestCase {
         
         let inputState = VersionedState(
             chatState: inputChatState,
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -510,6 +518,7 @@ class MasterReducerTests: XCTestCase {
         
         let expectedState = VersionedState(
             chatState: reducer_stateToReturn,
+            auxiliaryState: .empty,
             version: 2,
             signature: .roomDeleted
         )
@@ -577,6 +586,7 @@ class MasterReducerTests: XCTestCase {
         
         let inputState = VersionedState(
             chatState: inputChatState,
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -602,6 +612,7 @@ class MasterReducerTests: XCTestCase {
         
         let expectedState = VersionedState(
             chatState: reducer_stateToReturn,
+            auxiliaryState: .empty,
             version: 2,
             signature: .readStateUpdated
         )
@@ -642,6 +653,7 @@ class MasterReducerTests: XCTestCase {
         
         let inputState = VersionedState(
             chatState: inputChatState,
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -709,6 +721,7 @@ class MasterReducerTests: XCTestCase {
         
         let inputState = VersionedState(
             chatState: inputChatState,
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -820,6 +833,7 @@ class MasterReducerTests: XCTestCase {
         
         let inputState = VersionedState(
             chatState: inputChatState,
+            auxiliaryState: .empty,
             version: 1,
             signature: .initialState
         )
@@ -853,6 +867,7 @@ class MasterReducerTests: XCTestCase {
         
         let expectedState = VersionedState(
             chatState: reducer_stateToReturn,
+            auxiliaryState: .empty,
             version: 2,
             signature: .roomUpdated
         )

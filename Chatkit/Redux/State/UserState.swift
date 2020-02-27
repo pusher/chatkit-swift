@@ -67,7 +67,7 @@ extension UserState: Hashable {
             hasher.combine(identifier)
             
         case let .populated(identifier, name):
-            hasher.combine(1) // Discriminator
+            hasher.combine(2) // Discriminator
             hasher.combine(identifier)
             hasher.combine(name)
         }
