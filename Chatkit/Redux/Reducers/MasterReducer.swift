@@ -16,6 +16,7 @@ extension Reducer {
             & HasUserSubscriptionRoomUpdatedReducer
             & HasUserSubscriptionRoomDeletedReducer
             & HasUserSubscriptionReadStateUpdatedReducer
+            & HasSubscriptionStateUpdatedReducer
         
         // MARK: - Reducer
         
@@ -53,6 +54,11 @@ extension Reducer {
                 reducedChatState = dependencies.userSubscriptionReadStateUpdatedReducer(action, state.chatState, dependencies)
                 reducedAuxiliaryState = state.auxiliaryState
                 signature = .readStateUpdated
+            }
+            else if let action = action as? SubscriptionStateUpdatedAction {
+                reducedChatState = state.chatState
+                reducedAuxiliaryState = dependencies.subscriptionStateUpdatedReducer(action, state.auxiliaryState, dependencies)
+                signature = .unsigned // TODO: Signature
             }
             else {
                 return state

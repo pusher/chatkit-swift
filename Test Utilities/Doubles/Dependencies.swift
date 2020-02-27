@@ -18,6 +18,7 @@ public class DependenciesDoubles: StubBase, Dependencies {
     public let userSubscriptionRoomUpdatedReducer: Reducer.UserSubscription.RoomUpdated.ExpressionType
     public let userSubscriptionRoomDeletedReducer: Reducer.UserSubscription.RoomDeleted.ExpressionType
     public let userSubscriptionReadStateUpdatedReducer: Reducer.UserSubscription.ReadStateUpdated.ExpressionType
+    public let subscriptionStateUpdatedReducer: Reducer.Subscription.StateUpdated.ExpressionType
     
     public init(instanceLocator: InstanceLocator? = nil,
                 store: Store? = nil,
@@ -30,6 +31,7 @@ public class DependenciesDoubles: StubBase, Dependencies {
                 userSubscriptionRoomUpdatedReducer: Reducer.UserSubscription.RoomUpdated.ExpressionType? = nil,
                 userSubscriptionRoomDeletedReducer: Reducer.UserSubscription.RoomDeleted.ExpressionType? = nil,
                 userSubscriptionReadStateUpdatedReducer: Reducer.UserSubscription.ReadStateUpdated.ExpressionType? = nil,
+                subscriptionStateUpdatedReducer: Reducer.Subscription.StateUpdated.ExpressionType? = nil,
                 
                 file: StaticString = #file, line: UInt = #line) {
         
@@ -54,6 +56,8 @@ public class DependenciesDoubles: StubBase, Dependencies {
             DummyReducer<Reducer.UserSubscription.RoomDeleted>(file: file, line: line).reduce
         self.userSubscriptionReadStateUpdatedReducer = userSubscriptionReadStateUpdatedReducer ??
             DummyReducer<Reducer.UserSubscription.ReadStateUpdated>(file: file, line: line).reduce
+        self.subscriptionStateUpdatedReducer = subscriptionStateUpdatedReducer ??
+            DummyReducer<Reducer.Subscription.StateUpdated>(file: file, line: line).reduce
         
         super.init(file: file, line: line)
     }

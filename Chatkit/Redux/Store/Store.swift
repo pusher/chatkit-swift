@@ -24,6 +24,7 @@ class ConcreteStore: Store {
         & HasUserSubscriptionRoomUpdatedReducer
         & HasUserSubscriptionRoomDeletedReducer
         & HasUserSubscriptionReadStateUpdatedReducer
+        & HasSubscriptionStateUpdatedReducer
     
     // MARK: - Properties
     
