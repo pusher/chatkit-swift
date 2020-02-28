@@ -20,7 +20,7 @@ import Foundation
 ///   - `.connected`: updates are flowing live, or
 ///   - `.degraded`: updates may be delayed due to network problems.
 ///
-public class JoinedRoomsRepository {
+public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
     
     // MARK: - Types
     
@@ -125,5 +125,14 @@ extension JoinedRoomsRepository: ConnectivityMonitorDelegate {
 public protocol JoinedRoomsRepositoryDelegate: AnyObject {
     
     func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepository.State)
+    
+}
+
+// MARK: - Protocol
+
+protocol JoinedRoomsRepositoryProtocol: AnyObject {
+    
+    var state: JoinedRoomsRepository.State { get }
+    var delegate: JoinedRoomsRepositoryDelegate? { get set }
     
 }
