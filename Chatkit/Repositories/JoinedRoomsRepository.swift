@@ -33,6 +33,7 @@ public class JoinedRoomsRepository {
     private let dependencies: Dependencies
     
     private var versionedState: VersionedState?
+    private var connectionState: ConnectionState
     
     /// The current state of the repository.
     public private(set) var state: State {
@@ -51,9 +52,15 @@ public class JoinedRoomsRepository {
     init(buffer: Buffer, connectivityMonitor: ConnectivityMonitor, dependencies: Dependencies) {
         self.buffer = buffer
         self.connectivityMonitor = connectivityMonitor
-        self.versionedState = buffer.currentState
-        self.state = .initializing(error: nil) // TODO: Determine what kind of error we might receive here from our auxiliary state.
         self.dependencies = dependencies
+        
+        self.versionedState = buffer.currentState
+        self.connectionState = connectivityMonitor.connectionState
+        
+        self.state = JoinedRoomsRepository.state(forConnectionState: connectivityMonitor.connectionState,
+                                                 currentVersionedState: buffer.currentState,
+                                                 previousVersionedState: nil,
+                                                 usingTransformer: dependencies.transformer)
         
         self.buffer.delegate = self
         self.connectivityMonitor.delegate = self
@@ -61,20 +68,26 @@ public class JoinedRoomsRepository {
     
     // MARK: - Private methods
     
-    private func update(versionedState: VersionedState, rooms: Set<Room>, changeReason: ChangeReason?) {
-        switch self.state {
-        case .connected(_, _):
-            self.state = .connected(rooms: rooms, changeReason: changeReason)
+    private static func state(forConnectionState connectionState: ConnectionState, currentVersionedState: VersionedState?, previousVersionedState: VersionedState?, usingTransformer transformer: Transformer) -> State {
+        if case let .initializing(error) = connectionState {
+            return .initializing(error: error)
+        }
+        else if case let .closed(error) = connectionState {
+            return .closed(error: error)
+        }
+        else if let currentVersionedState = currentVersionedState {
+            let rooms = Set(currentVersionedState.chatState.joinedRooms.map { transformer.transform(state: $0) })
+            let changeReason = transformer.transform(currentState: currentVersionedState, previousState: previousVersionedState)
             
-        case let .degraded(_, error, _):
-            self.state = .degraded(rooms: rooms, error: error, changeReason: changeReason)
-            
-        case .initializing(_),
-             .closed(_):
-            break
+            if connectionState == .connected {
+                return .connected(rooms: rooms, changeReason: changeReason)
+            }
+            else if case let .degraded(error) = connectionState {
+                return .degraded(rooms: rooms, error: error, changeReason: changeReason)
+            }
         }
         
-        self.versionedState = versionedState
+        return .initializing(error: nil)
     }
     
 }
@@ -84,10 +97,11 @@ public class JoinedRoomsRepository {
 extension JoinedRoomsRepository: BufferDelegate {
     
     func buffer(_ buffer: Buffer, didUpdateState state: VersionedState) {
-        let rooms = state.chatState.joinedRooms.map { self.dependencies.transformer.transform(state: $0) }
-        let changeReason: ChangeReason? = self.dependencies.transformer.transform(currentState: state, previousState: self.versionedState)
-        
-        self.update(versionedState: state, rooms: Set(rooms), changeReason: changeReason)
+        self.state = JoinedRoomsRepository.state(forConnectionState: self.connectionState,
+                                                 currentVersionedState: state,
+                                                 previousVersionedState: self.versionedState,
+                                                 usingTransformer: self.dependencies.transformer)
+        self.versionedState = state
     }
     
 }
@@ -97,7 +111,13 @@ extension JoinedRoomsRepository: BufferDelegate {
 extension JoinedRoomsRepository: ConnectivityMonitorDelegate {
     
     func connectivityMonitor(_ connectivityMonitor: ConnectivityMonitor, didUpdateConnectionState connectionState: ConnectionState) {
+        self.state = JoinedRoomsRepository.state(forConnectionState: connectionState,
+                                                 currentVersionedState: self.versionedState,
+                                                 previousVersionedState: self.versionedState,
+                                                 usingTransformer: self.dependencies.transformer)
+        self.connectionState = connectionState
     }
+    
 }
 
 // MARK: - Delegate
