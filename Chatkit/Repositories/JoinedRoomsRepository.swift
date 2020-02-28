@@ -22,10 +22,16 @@ import Foundation
 ///
 public class JoinedRoomsRepository {
     
+    // MARK: - Types
+    
+    typealias Dependencies = HasTransformer
+    
     // MARK: - Properties
     
     private let buffer: Buffer
-    private let transformer: RoomTransformer
+    private let dependencies: Dependencies
+    
+    private var versionedState: VersionedState?
     
     /// The current state of the repository.
     public private(set) var state: State {
@@ -41,9 +47,10 @@ public class JoinedRoomsRepository {
     
     // MARK: - Initializers
     
-    init(buffer: Buffer, transformer: RoomTransformer) {
+    init(buffer: Buffer, dependencies: Dependencies) {
+        self.versionedState = buffer.currentState
         self.state = .initializing(error: nil) // TODO: Determine what kind of error we might receive here from our auxiliary state.
-        self.transformer = transformer
+        self.dependencies = dependencies
         
         self.buffer = buffer
         self.buffer.delegate = self
@@ -51,7 +58,7 @@ public class JoinedRoomsRepository {
     
     // MARK: - Private methods
     
-    private func update(rooms: Set<Room>, changeReason: ChangeReason?) {
+    private func update(versionedState: VersionedState, rooms: Set<Room>, changeReason: ChangeReason?) {
         switch self.state {
         case .connected(_, _):
             self.state = .connected(rooms: rooms, changeReason: changeReason)
@@ -63,6 +70,8 @@ public class JoinedRoomsRepository {
              .closed(_):
             break
         }
+        
+        self.versionedState = versionedState
     }
     
 }
@@ -72,10 +81,10 @@ public class JoinedRoomsRepository {
 extension JoinedRoomsRepository: BufferDelegate {
     
     func buffer(_ buffer: Buffer, didUpdateState state: VersionedState) {
-        let rooms = state.chatState.joinedRooms.map { self.transformer.transform(state: $0) }
-        let changeReason: ChangeReason? = nil // TODO: Implement
+        let rooms = state.chatState.joinedRooms.map { self.dependencies.transformer.transform(state: $0) }
+        let changeReason: ChangeReason? = self.dependencies.transformer.transform(currentState: state, previousState: self.versionedState)
         
-        self.update(rooms: Set(rooms), changeReason: changeReason)
+        self.update(versionedState: state, rooms: Set(rooms), changeReason: changeReason)
     }
     
 }

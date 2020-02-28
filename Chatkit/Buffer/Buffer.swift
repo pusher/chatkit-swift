@@ -1,6 +1,7 @@
 
 protocol Buffer: StoreListener {
     
+    var currentState: VersionedState? { get }
     var filter: StateFilter { get }
     var delegate: BufferDelegate? { get set }
     

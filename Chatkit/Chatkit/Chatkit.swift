@@ -13,7 +13,7 @@ public class Chatkit {
     
     // MARK: - Types
     
-    typealias Dependencies = HasStore
+    typealias Dependencies = HasStore & HasTransformer
     
     // MARK: - Properties
 
@@ -103,10 +103,9 @@ public class Chatkit {
     /// This will provide access to a real time set of `Room`s that the current user is a member of.
     public func createJoinedRoomsRepository() -> JoinedRoomsRepository {
         let filter = JoinedRoomsRepository.Filter()
-        let transformer = RoomTransformer()
         let buffer = ConcreteBuffer(filter: filter, dependencies: self.dependencies)
         
-        return JoinedRoomsRepository(buffer: buffer, transformer: transformer)
+        return JoinedRoomsRepository(buffer: buffer, dependencies: self.dependencies)
     }
     
     /// Creates an instance of `MessagesRepository`.

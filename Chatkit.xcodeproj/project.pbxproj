@@ -24,7 +24,6 @@
 		2200BB93231E727000BF9545 /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2200BB92231E727000BF9545 /* DateFormatter+Extensions.swift */; };
 		22090F0923FEECAC00E82C93 /* JoinedRoomsFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22090F0823FEECAC00E82C93 /* JoinedRoomsFilter.swift */; };
 		22090F0C23FEF2AF00E82C93 /* Transformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22090F0B23FEF2AF00E82C93 /* Transformer.swift */; };
-		22090F0E23FEF33400E82C93 /* RoomTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22090F0D23FEF33400E82C93 /* RoomTransformer.swift */; };
 		220911D523ED6F97001A2D9A /* InitialStateReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220911D423ED6F97001A2D9A /* InitialStateReducerTests.swift */; };
 		220D99232406BA4600B0FD92 /* ListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220D99222406BA4600B0FD92 /* ListState.swift */; };
 		220D99272407073400B0FD92 /* JoinedRoomsState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220D99262407073400B0FD92 /* JoinedRoomsState.swift */; };
@@ -43,6 +42,7 @@
 		222C964923F55B6D00321C94 /* AddedToRoomAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C964823F55B6D00321C94 /* AddedToRoomAction.swift */; };
 		222C964B23F55BA500321C94 /* AddedToRoomReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C964A23F55BA500321C94 /* AddedToRoomReducer.swift */; };
 		222C964D23F55EC400321C94 /* AddedToRoomReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C964C23F55EC400321C94 /* AddedToRoomReducerTests.swift */; };
+		222CBA1C24082A2D00ACFBFF /* Transformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222CBA1B24082A2D00ACFBFF /* Transformer.swift */; };
 		222D717023FC441400EF051E /* Versionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222D716F23FC441400EF051E /* Versionable.swift */; };
 		222EA2AD23424A11004EE90F /* JoinedRoomsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EA2AC23424A11004EE90F /* JoinedRoomsRepository.swift */; };
 		222EA2AF23424A7D004EE90F /* AvailableRoomsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EA2AE23424A7D004EE90F /* AvailableRoomsRepository.swift */; };
@@ -87,7 +87,7 @@
 		227E946D231FBDAB0025B691 /* chat-initial_state.json in Resources */ = {isa = PBXBuildFile; fileRef = 227E946C231FBDAB0025B691 /* chat-initial_state.json */; };
 		227E946F231FC5950025B691 /* XCTest+Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227E946E231FC5950025B691 /* XCTest+Networking.swift */; };
 		227EC51823E44062002D46B9 /* Environment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7EA23DF205E0073E6D4 /* Environment.framework */; };
-		228C2D6A2400131600FC0326 /* RoomTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D692400131600FC0326 /* RoomTransformerTests.swift */; };
+		228C2D6A2400131600FC0326 /* ConcreteTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D692400131600FC0326 /* ConcreteTransformerTests.swift */; };
 		228C2D6E240016C300FC0326 /* JoinedRoomsFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D6D240016C300FC0326 /* JoinedRoomsFilterTests.swift */; };
 		228C2D7124001FF200FC0326 /* ReadSummaryStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D7024001FF200FC0326 /* ReadSummaryStateTests.swift */; };
 		228C2D732400268200FC0326 /* RoomStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D722400268200FC0326 /* RoomStateTests.swift */; };
@@ -303,7 +303,6 @@
 		2200BB96231EA5C200BF9545 /* TestLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestLogger.swift; sourceTree = "<group>"; };
 		22090F0823FEECAC00E82C93 /* JoinedRoomsFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsFilter.swift; sourceTree = "<group>"; };
 		22090F0B23FEF2AF00E82C93 /* Transformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transformer.swift; sourceTree = "<group>"; };
-		22090F0D23FEF33400E82C93 /* RoomTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTransformer.swift; sourceTree = "<group>"; };
 		220911D423ED6F97001A2D9A /* InitialStateReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialStateReducerTests.swift; sourceTree = "<group>"; };
 		220D99222406BA4600B0FD92 /* ListState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListState.swift; sourceTree = "<group>"; };
 		220D99262407073400B0FD92 /* JoinedRoomsState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsState.swift; sourceTree = "<group>"; };
@@ -327,6 +326,7 @@
 		222C964823F55B6D00321C94 /* AddedToRoomAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddedToRoomAction.swift; sourceTree = "<group>"; };
 		222C964A23F55BA500321C94 /* AddedToRoomReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddedToRoomReducer.swift; sourceTree = "<group>"; };
 		222C964C23F55EC400321C94 /* AddedToRoomReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddedToRoomReducerTests.swift; sourceTree = "<group>"; };
+		222CBA1B24082A2D00ACFBFF /* Transformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transformer.swift; sourceTree = "<group>"; };
 		222D716F23FC441400EF051E /* Versionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Versionable.swift; sourceTree = "<group>"; };
 		222EA2AC23424A11004EE90F /* JoinedRoomsRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinedRoomsRepository.swift; sourceTree = "<group>"; };
 		222EA2AE23424A7D004EE90F /* AvailableRoomsRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvailableRoomsRepository.swift; sourceTree = "<group>"; };
@@ -371,7 +371,7 @@
 		227C7C1C23FD82A9001DE4E5 /* StateFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateFilter.swift; sourceTree = "<group>"; };
 		227E946C231FBDAB0025B691 /* chat-initial_state.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "chat-initial_state.json"; sourceTree = "<group>"; };
 		227E946E231FC5950025B691 /* XCTest+Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+Networking.swift"; sourceTree = "<group>"; };
-		228C2D692400131600FC0326 /* RoomTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTransformerTests.swift; sourceTree = "<group>"; };
+		228C2D692400131600FC0326 /* ConcreteTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteTransformerTests.swift; sourceTree = "<group>"; };
 		228C2D6D240016C300FC0326 /* JoinedRoomsFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsFilterTests.swift; sourceTree = "<group>"; };
 		228C2D7024001FF200FC0326 /* ReadSummaryStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadSummaryStateTests.swift; sourceTree = "<group>"; };
 		228C2D722400268200FC0326 /* RoomStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomStateTests.swift; sourceTree = "<group>"; };
@@ -561,13 +561,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		22090F0A23FEF27D00E82C93 /* Transformers */ = {
+		22090F0A23FEF27D00E82C93 /* Transformer */ = {
 			isa = PBXGroup;
 			children = (
-				22090F0D23FEF33400E82C93 /* RoomTransformer.swift */,
 				22090F0B23FEF2AF00E82C93 /* Transformer.swift */,
 			);
-			path = Transformers;
+			path = Transformer;
 			sourceTree = "<group>";
 		};
 		220D99242407070400B0FD92 /* Change Reasons */ = {
@@ -947,7 +946,7 @@
 		228C2D682400130500FC0326 /* Transformers */ = {
 			isa = PBXGroup;
 			children = (
-				228C2D692400131600FC0326 /* RoomTransformerTests.swift */,
+				228C2D692400131600FC0326 /* ConcreteTransformerTests.swift */,
 			);
 			path = Transformers;
 			sourceTree = "<group>";
@@ -1028,7 +1027,7 @@
 				73E585D223E08DBC0047C6FA /* Redux */,
 				22D537C82302BCD600A92341 /* Repositories */,
 				224B805222F1E154003CB8DC /* Supporting Files */,
-				22090F0A23FEF27D00E82C93 /* Transformers */,
+				22090F0A23FEF27D00E82C93 /* Transformer */,
 				22CEBB5322FC6F2B005CB021 /* Types */,
 				22D2A2D3231963BC0095757C /* Utilities */,
 				22FD93BE2361DC3200AB841F /* View Models */,
@@ -1489,6 +1488,7 @@
 				730E453E23DB4DD800A3AF94 /* StoreListener.swift */,
 				2200BB96231EA5C200BF9545 /* TestLogger.swift */,
 				730E454623DB4DD800A3AF94 /* TokenProvider.swift */,
+				222CBA1B24082A2D00ACFBFF /* Transformer.swift */,
 			);
 			path = Doubles;
 			sourceTree = "<group>";
@@ -1892,7 +1892,7 @@
 				7301BC6C23B0FCCE00F162C7 /* Wire.Event.RoomDeleted+Decodable.Tests.swift in Sources */,
 				739860C123AA86C20098191E /* Wire.Room+Decodable.Tests.swift in Sources */,
 				228C2D752400279900FC0326 /* RoomListStateTests.swift in Sources */,
-				228C2D6A2400131600FC0326 /* RoomTransformerTests.swift in Sources */,
+				228C2D6A2400131600FC0326 /* ConcreteTransformerTests.swift in Sources */,
 				2274984C2321098B00D10C76 /* PCBaseClientExtensionsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1912,7 +1912,6 @@
 				22623A7223F2E8B500B82808 /* Reducing.swift in Sources */,
 				734D6A3C23AAA1FA00105479 /* Wire.ReadState.swift in Sources */,
 				22406A8B23F43DDF00EE24BE /* ReadSummaryState.swift in Sources */,
-				22090F0E23FEF33400E82C93 /* RoomTransformer.swift in Sources */,
 				22FC112D233E50FB0013A9D7 /* UsersRepository.swift in Sources */,
 				22D2A2E523197AD50095757C /* Service.swift in Sources */,
 				2239901A2407D94500BA3321 /* SubscriptionState.swift in Sources */,
@@ -2032,6 +2031,7 @@
 				73A9391A23E0A7A90025AF90 /* String+Extensions.swift in Sources */,
 				73E585E023E08EFF0047C6FA /* TokenProvider.swift in Sources */,
 				73E585DF23E08EFF0047C6FA /* Store.swift in Sources */,
+				222CBA1C24082A2D00ACFBFF /* Transformer.swift in Sources */,
 				73E585DD23E08EFF0047C6FA /* StoreListener.swift in Sources */,
 				22CD794D2403E26200F1E0C9 /* StateFilter.swift in Sources */,
 				22A7425723ED813600F2F26D /* Action.swift in Sources */,

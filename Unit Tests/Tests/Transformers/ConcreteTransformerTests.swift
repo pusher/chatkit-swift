@@ -1,11 +1,11 @@
 import XCTest
 @testable import PusherChatkit
 
-class RoomTransformerTests: XCTestCase {
+class ConcreteTransformerTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_transform_mapsStateToPublicModel() {
+    func test_transform_withRoomState_mapsStateToRoom() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -27,7 +27,7 @@ class RoomTransformerTests: XCTestCase {
             updatedAt: .distantFuture
         )
         
-        let sut = RoomTransformer()
+        let sut = ConcreteTransformer()
         
         /******************/
         /*----- WHEN -----*/

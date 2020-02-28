@@ -3,6 +3,7 @@ import struct PusherPlatform.PPSDKInfo
 protocol Dependencies:
     HasInstanceLocator &
     HasStore &
+    HasTransformer &
     HasMasterReducer &
     HasUserReducer &
     HasRoomListReducer &
@@ -98,6 +99,10 @@ class ConcreteDependencies: Dependencies {
     
     var store: Store {
         return dependencyFactory.resolve(Store.self, dependencies: self)
+    }
+    
+    var transformer: Transformer {
+        return dependencyFactory.resolve(Transformer.self, dependencies: self)
     }
     
 }

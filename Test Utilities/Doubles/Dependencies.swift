@@ -8,6 +8,7 @@ public class DependenciesDoubles: StubBase, Dependencies {
     
     public let instanceLocator: InstanceLocator
     public let store: Store
+    public let transformer: Transformer
     
     public let masterReducer: Reducer.Master.ExpressionType
     public let userReducer: Reducer.Model.User.ExpressionType
@@ -22,6 +23,7 @@ public class DependenciesDoubles: StubBase, Dependencies {
     
     public init(instanceLocator: InstanceLocator? = nil,
                 store: Store? = nil,
+                transformer: Transformer? = nil,
                 masterReducer: Reducer.Master.ExpressionType? = nil,
                 userReducer: Reducer.Model.User.ExpressionType? = nil,
                 roomListReducer: Reducer.Model.RoomList.ExpressionType? = nil,
@@ -37,6 +39,7 @@ public class DependenciesDoubles: StubBase, Dependencies {
         
         self.instanceLocator = instanceLocator ?? DummyInstanceLocator(file: file, line: line)
         self.store = store ?? DummyStore(file: file, line: line)
+        self.transformer = transformer ?? DummyTransformer(file: file, line: line)
         
         self.masterReducer = masterReducer ??
             DummyReducer<Reducer.Master>(file: file, line: line).reduce
