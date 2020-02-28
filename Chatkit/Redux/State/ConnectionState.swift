@@ -1,5 +1,5 @@
 
-enum SubscriptionState: State {
+enum ConnectionState: State {
     
     case initializing(error: Error?)
     case connected
@@ -14,7 +14,7 @@ enum SubscriptionState: State {
     
     // MARK: - Supplementation
     
-    func supplement(withState supplementalState: SubscriptionState) -> SubscriptionState {
+    func supplement(withState supplementalState: ConnectionState) -> ConnectionState {
         return self
     }
     
@@ -22,9 +22,9 @@ enum SubscriptionState: State {
 
 // MARK: - Equatable
 
-extension SubscriptionState: Equatable {
+extension ConnectionState: Equatable {
     
-    static func == (lhs: SubscriptionState, rhs: SubscriptionState) -> Bool {
+    static func == (lhs: ConnectionState, rhs: ConnectionState) -> Bool {
         switch (lhs, rhs) {
         case (let .initializing(lhsError as NSError?),
               let .initializing(rhsError as NSError?)),
@@ -48,7 +48,7 @@ extension SubscriptionState: Equatable {
 
 // MARK: - Hashable
 
-extension SubscriptionState: Hashable {
+extension ConnectionState: Hashable {
     
     public func hash(into hasher: inout Hasher) {
         switch self {

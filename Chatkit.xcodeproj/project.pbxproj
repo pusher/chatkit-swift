@@ -48,7 +48,7 @@
 		222EA2AF23424A7D004EE90F /* AvailableRoomsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222EA2AE23424A7D004EE90F /* AvailableRoomsRepository.swift */; };
 		2230952D23E4607F00567DEA /* PusherChatkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 229093D522F1DDB4003DDE2C /* PusherChatkit.framework */; };
 		223990182407D37E00BA3321 /* AuxiliaryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223990172407D37E00BA3321 /* AuxiliaryState.swift */; };
-		2239901A2407D94500BA3321 /* SubscriptionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223990192407D94500BA3321 /* SubscriptionState.swift */; };
+		2239901A2407D94500BA3321 /* ConnectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223990192407D94500BA3321 /* ConnectionState.swift */; };
 		2239901C2407F06900BA3321 /* SubscriptionStateUpdatedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2239901B2407F06900BA3321 /* SubscriptionStateUpdatedAction.swift */; };
 		2239901F2408047900BA3321 /* SubscriptionStateUpdatedReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2239901E2408047900BA3321 /* SubscriptionStateUpdatedReducer.swift */; };
 		22406A8323F4263E00EE24BE /* RemovedFromRoomReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22406A8223F4263E00EE24BE /* RemovedFromRoomReducerTests.swift */; };
@@ -87,6 +87,7 @@
 		227E946D231FBDAB0025B691 /* chat-initial_state.json in Resources */ = {isa = PBXBuildFile; fileRef = 227E946C231FBDAB0025B691 /* chat-initial_state.json */; };
 		227E946F231FC5950025B691 /* XCTest+Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227E946E231FC5950025B691 /* XCTest+Networking.swift */; };
 		227EC51823E44062002D46B9 /* Environment.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22BFE7EA23DF205E0073E6D4 /* Environment.framework */; };
+		2286409F240935880022370E /* ConnectivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2286409E240935880022370E /* ConnectivityMonitor.swift */; };
 		228C2D6A2400131600FC0326 /* ConcreteTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D692400131600FC0326 /* ConcreteTransformerTests.swift */; };
 		228C2D6E240016C300FC0326 /* JoinedRoomsFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D6D240016C300FC0326 /* JoinedRoomsFilterTests.swift */; };
 		228C2D7124001FF200FC0326 /* ReadSummaryStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D7024001FF200FC0326 /* ReadSummaryStateTests.swift */; };
@@ -331,7 +332,7 @@
 		222EA2AC23424A11004EE90F /* JoinedRoomsRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinedRoomsRepository.swift; sourceTree = "<group>"; };
 		222EA2AE23424A7D004EE90F /* AvailableRoomsRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AvailableRoomsRepository.swift; sourceTree = "<group>"; };
 		223990172407D37E00BA3321 /* AuxiliaryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuxiliaryState.swift; sourceTree = "<group>"; };
-		223990192407D94500BA3321 /* SubscriptionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionState.swift; sourceTree = "<group>"; };
+		223990192407D94500BA3321 /* ConnectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionState.swift; sourceTree = "<group>"; };
 		2239901B2407F06900BA3321 /* SubscriptionStateUpdatedAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionStateUpdatedAction.swift; sourceTree = "<group>"; };
 		2239901E2408047900BA3321 /* SubscriptionStateUpdatedReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionStateUpdatedReducer.swift; sourceTree = "<group>"; };
 		22406A8223F4263E00EE24BE /* RemovedFromRoomReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemovedFromRoomReducerTests.swift; sourceTree = "<group>"; };
@@ -371,6 +372,7 @@
 		227C7C1C23FD82A9001DE4E5 /* StateFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateFilter.swift; sourceTree = "<group>"; };
 		227E946C231FBDAB0025B691 /* chat-initial_state.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "chat-initial_state.json"; sourceTree = "<group>"; };
 		227E946E231FC5950025B691 /* XCTest+Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTest+Networking.swift"; sourceTree = "<group>"; };
+		2286409E240935880022370E /* ConnectivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityMonitor.swift; sourceTree = "<group>"; };
 		228C2D692400131600FC0326 /* ConcreteTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteTransformerTests.swift; sourceTree = "<group>"; };
 		228C2D6D240016C300FC0326 /* JoinedRoomsFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsFilterTests.swift; sourceTree = "<group>"; };
 		228C2D7024001FF200FC0326 /* ReadSummaryStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadSummaryStateTests.swift; sourceTree = "<group>"; };
@@ -591,10 +593,10 @@
 				222D717123FC53C200EF051E /* Types */,
 				223990172407D37E00BA3321 /* AuxiliaryState.swift */,
 				2217A7FF23E9BA3F002FE365 /* ChatState.swift */,
+				223990192407D94500BA3321 /* ConnectionState.swift */,
 				22406A8A23F43DDF00EE24BE /* ReadSummaryState.swift */,
 				22406A8623F4284C00EE24BE /* RoomListState.swift */,
 				2217A7FB23E9B886002FE365 /* RoomState.swift */,
-				223990192407D94500BA3321 /* SubscriptionState.swift */,
 				222C963E23F5489400321C94 /* UserListState.swift */,
 				2217A7FD23E9B8C0002FE365 /* UserState.swift */,
 				2217BE7623FC552A001604E1 /* VersionedState.swift */,
@@ -943,6 +945,14 @@
 			path = Chat;
 			sourceTree = "<group>";
 		};
+		2286409D2409356F0022370E /* Connectivity Monitor */ = {
+			isa = PBXGroup;
+			children = (
+				2286409E240935880022370E /* ConnectivityMonitor.swift */,
+			);
+			path = "Connectivity Monitor";
+			sourceTree = "<group>";
+		};
 		228C2D682400130500FC0326 /* Transformers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1021,6 +1031,7 @@
 				ED2919D7239A73150095B344 /* Authentication */,
 				227C7C1823FD5ACA001DE4E5 /* Buffer */,
 				224B805722F2DAD3003CB8DC /* Chatkit */,
+				2286409D2409356F0022370E /* Connectivity Monitor */,
 				73E585D323E08DE60047C6FA /* Dependencies */,
 				22D537D22302D24200A92341 /* Model */,
 				22D2A2CD231960770095757C /* Networking */,
@@ -1914,7 +1925,7 @@
 				22406A8B23F43DDF00EE24BE /* ReadSummaryState.swift in Sources */,
 				22FC112D233E50FB0013A9D7 /* UsersRepository.swift in Sources */,
 				22D2A2E523197AD50095757C /* Service.swift in Sources */,
-				2239901A2407D94500BA3321 /* SubscriptionState.swift in Sources */,
+				2239901A2407D94500BA3321 /* ConnectionState.swift in Sources */,
 				22A7425523ED7B9F00F2F26D /* RemovedFromRoomAction.swift in Sources */,
 				222C964923F55B6D00321C94 /* AddedToRoomAction.swift in Sources */,
 				7335D26A23D60FFC00E51909 /* Wire.Event.MessageDeleted.swift in Sources */,
@@ -1925,6 +1936,7 @@
 				22D537D52302D25B00A92341 /* Room.swift in Sources */,
 				7301BC5C23B0E79F00F162C7 /* Wire.Event.ReadStateUpdated.swift in Sources */,
 				2200BB93231E727000BF9545 /* DateFormatter+Extensions.swift in Sources */,
+				2286409F240935880022370E /* ConnectivityMonitor.swift in Sources */,
 				22BECDFC2366F24D00FAB7DC /* JoinedRoomsViewModel.swift in Sources */,
 				22CEBB5522FC6F37005CB021 /* Types.swift in Sources */,
 				73CF01C623AB9DAC006FB43E /* Date+Extensions.swift in Sources */,

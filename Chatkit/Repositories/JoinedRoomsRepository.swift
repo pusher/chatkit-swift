@@ -29,6 +29,7 @@ public class JoinedRoomsRepository {
     // MARK: - Properties
     
     private let buffer: Buffer
+    private let connectivityMonitor: ConnectivityMonitor
     private let dependencies: Dependencies
     
     private var versionedState: VersionedState?
@@ -47,13 +48,15 @@ public class JoinedRoomsRepository {
     
     // MARK: - Initializers
     
-    init(buffer: Buffer, dependencies: Dependencies) {
+    init(buffer: Buffer, connectivityMonitor: ConnectivityMonitor, dependencies: Dependencies) {
+        self.buffer = buffer
+        self.connectivityMonitor = connectivityMonitor
         self.versionedState = buffer.currentState
         self.state = .initializing(error: nil) // TODO: Determine what kind of error we might receive here from our auxiliary state.
         self.dependencies = dependencies
         
-        self.buffer = buffer
         self.buffer.delegate = self
+        self.connectivityMonitor.delegate = self
     }
     
     // MARK: - Private methods
@@ -87,6 +90,14 @@ extension JoinedRoomsRepository: BufferDelegate {
         self.update(versionedState: state, rooms: Set(rooms), changeReason: changeReason)
     }
     
+}
+
+// MARK: - Connectivity monitor delegate
+
+extension JoinedRoomsRepository: ConnectivityMonitorDelegate {
+    
+    func connectivityMonitor(_ connectivityMonitor: ConnectivityMonitor, didUpdateConnectionState connectionState: ConnectionState) {
+    }
 }
 
 // MARK: - Delegate
