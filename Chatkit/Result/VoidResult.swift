@@ -7,7 +7,7 @@ enum VoidResult {
 
 extension VoidResult: Equatable {
     
-    public static func == (lhs: VoidResult, rhs: VoidResult) -> Bool {
+    internal static func == (lhs: VoidResult, rhs: VoidResult) -> Bool {
         switch lhs {
         case .success:
             if case .success = rhs { return true }

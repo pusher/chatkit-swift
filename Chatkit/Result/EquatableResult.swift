@@ -7,7 +7,7 @@ enum EquatableResult<Success: Equatable> {
 
 extension EquatableResult: Equatable {
     
-    public static func == (lhs: EquatableResult<Success>, rhs: EquatableResult<Success>) -> Bool {
+    internal static func == (lhs: EquatableResult<Success>, rhs: EquatableResult<Success>) -> Bool {
         switch lhs {
         case let .success(lhsSuccess):
             if case let .success(rhsSuccess) = rhs, lhsSuccess == rhsSuccess { return true }
