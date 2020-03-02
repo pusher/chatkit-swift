@@ -1,6 +1,6 @@
 import Foundation
 
-extension ProcessInfo {
+internal extension ProcessInfo {
     
     // MARK: - Properties
     

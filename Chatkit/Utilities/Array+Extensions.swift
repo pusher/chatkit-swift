@@ -1,6 +1,6 @@
 import Foundation
 
-extension Array {
+internal extension Array {
     
     func appending(_ element: Element) -> [Element] {
         return self + [element]
