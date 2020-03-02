@@ -1,7 +1,6 @@
 import Foundation
 import PusherPlatform
 
-
 public enum ChatkitError: String, LocalizedError {
     
     case disconnected = "Chatkit is disconnected, please invoke the `connect` method first."
@@ -96,7 +95,7 @@ public class Chatkit {
             }
         
         case .connected:
-            // TODO is it correct that this is imdepotent?
+            // TODO is it correct that this is idempotent?
             completionHandler?(nil)
             
         case .connecting:
