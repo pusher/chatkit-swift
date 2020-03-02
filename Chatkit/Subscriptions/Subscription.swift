@@ -134,15 +134,18 @@ class ConcreteSubscription: Subscription {
                 return
             }
             
+            // TODO: `PusherPlatform.Instance` to return (JSON) `Data`
+            // This should be removed once we've updated the PusherPlatform to return jsonData rather than a jsonDict.
             guard let jsonData = jsonDataAsAny as? Data else {
-                preconditionFailure("`onEvent` called with non-`Data` typed data")
+                assertionFailure("`onEvent` called with non-`Data` typed data")
+                return
             }
             
             switch self.state {
                 
             case .notSubscribed, .subscribingStageOne:
                 // We shouldn't ever be able to get here
-                preconditionFailure("`onEvent` should never be called whilst in state `\(self.state)`")
+                assertionFailure("UNEXPECTED: `onEvent` should never be called whilst in state `\(self.state)`")
                 
             case let .subscribingStageTwo(instanceWrapper, resumableSubscription, completions):
                 
@@ -174,7 +177,7 @@ class ConcreteSubscription: Subscription {
                 
             case .notSubscribed:
                 // We shouldn't ever be able to get here
-                preconditionFailure("`onError` should never be called whilst in state `\(self.state)`")
+                assertionFailure("`onError` should never be called whilst in state `\(self.state)`")
                 
             case let .subscribingStageOne(_, completions):
                 
