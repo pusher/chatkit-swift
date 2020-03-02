@@ -47,16 +47,4 @@ class ConcreteStore: Store {
         state = self.dependencies.masterReducer(action, state, dependencies)
     }
     
-    private func joinedRoom(withWireRoom wireRoom: Wire.Room) -> RoomState {
-        return RoomState(identifier: wireRoom.identifier,
-                         name: wireRoom.name,
-                         isPrivate: wireRoom.isPrivate,
-                         pushNotificationTitle: wireRoom.pushNotificationTitleOverride,
-                         customData: wireRoom.customData,
-                         lastMessageAt: wireRoom.lastMessageAt,
-                         readSummary: .empty,
-                         createdAt: wireRoom.createdAt,
-                         updatedAt: wireRoom.updatedAt
-        )
-    }
 }
