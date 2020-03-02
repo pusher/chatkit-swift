@@ -17,7 +17,7 @@ class ConcreteInstanceWrapperTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubTokenProvider = StubTokenProvider(fetchToken_authenticationResultToReturn: .failure(error: "Irrelevant"))
+        let stubTokenProvider = StubTokenProvider(fetchToken_authenticationResultToReturn: .failure(error: FakeError()))
         let dependencies = DependenciesDoubles(instanceLocator: self.instanceLocator,
                                                tokenProvider: stubTokenProvider,
                                                sdkInfoProvider: self.sdkInfoProvider)
@@ -48,7 +48,7 @@ class ConcreteInstanceWrapperTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubTokenProvider = StubTokenProvider(fetchToken_authenticationResultToReturn: .failure(error: "Irrelevant"))
+        let stubTokenProvider = StubTokenProvider(fetchToken_authenticationResultToReturn: .failure(error: FakeError()))
         let dependencies = DependenciesDoubles(instanceLocator: self.instanceLocator,
                                                tokenProvider: stubTokenProvider,
                                                sdkInfoProvider: self.sdkInfoProvider)

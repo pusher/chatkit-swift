@@ -14,6 +14,18 @@ protocol Subscription {
     func unsubscribe()
 }
 
+enum SubscriptionError: String, LocalizedError {
+    
+    case unsubscribeCalledWhileSubscribingError = "ERROR: `unsubscribe` called whilst still in the process of subscribing"
+    case onEndReceivedWhileNotSubscribedError = "ERROR: `onEnd` received unexpectedly whilst not subscribed"
+    case onEndReceivedWhileSubscribingError = "ERROR: `onEnd` received unexpectedly whilst still in the process of subscribing"
+    case onEndReceivedWhileSubscribedError  = "ERROR: `onEnd` received unexpectedly whilst subscribed"
+    
+    var errorDescription: String? {
+        return self.rawValue
+    }
+}
+
 class ConcreteSubscription: Subscription {
     
     enum State {
@@ -74,7 +86,7 @@ class ConcreteSubscription: Subscription {
             
             state = .notSubscribed
             
-            let error = Self.unsubscribeCalledWhileSubscribingError
+            let error: SubscriptionError = .unsubscribeCalledWhileSubscribingError
             
             delegate?.subscription(self, didReceiveError: error)
             
@@ -90,7 +102,7 @@ class ConcreteSubscription: Subscription {
             
             state = .notSubscribed
             
-            let error = Self.unsubscribeCalledWhileSubscribingError
+            let error: SubscriptionError = .unsubscribeCalledWhileSubscribingError
             
             delegate?.subscription(self, didReceiveError: error)
             
@@ -207,7 +219,7 @@ class ConcreteSubscription: Subscription {
             switch self.state {
                 
             case .notSubscribed:
-                let error = Self.onEndReceivedWhileNotSubscribedError
+                let error: SubscriptionError = .onEndReceivedWhileNotSubscribedError
                 self.delegate?.subscription(self, didReceiveError: error)
                 return
                 
@@ -219,7 +231,7 @@ class ConcreteSubscription: Subscription {
                 
                 self.state = .notSubscribed
 
-                let error = Self.onEndReceivedWhileSubscribingError
+                let error: SubscriptionError = .onEndReceivedWhileSubscribingError
                 
                 self.delegate?.subscription(self, didReceiveError: error)
                 
@@ -239,7 +251,7 @@ class ConcreteSubscription: Subscription {
                 
                 self.state = .notSubscribed
                 
-                let error = Self.onEndReceivedWhileSubscribingError
+                let error: SubscriptionError = .onEndReceivedWhileSubscribingError
                 
                 self.delegate?.subscription(self, didReceiveError: error)
                 
@@ -251,7 +263,7 @@ class ConcreteSubscription: Subscription {
                 
                 self.state = .notSubscribed
                 
-                let error = Self.onEndReceivedWhileSubscribedError
+                let error: SubscriptionError = .onEndReceivedWhileSubscribedError
                 
                 self.delegate?.subscription(self, didReceiveError: error)
                 
@@ -285,17 +297,5 @@ class ConcreteSubscription: Subscription {
             return "/room/\(roomIdentifier)"
         }
     }
-    
-    private static var unsubscribeCalledWhileSubscribingError: Error
-        = "ERROR: `unsubscribe` called whilst still in the process of subscribing"
-    
-    private static var onEndReceivedWhileNotSubscribedError: Error
-        = "ERROR: `onEnd` received unexpectedly whilst not subscribed"
-    
-    private static var onEndReceivedWhileSubscribingError: Error
-        = "ERROR: `onEnd` received unexpectedly whilst still in the process of subscribing"
-    
-    private static var onEndReceivedWhileSubscribedError: Error
-        = "ERROR: `onEnd` received unexpectedly whilst subscribed"
     
 }

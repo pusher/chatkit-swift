@@ -29,6 +29,10 @@ extension XCTestCase {
      
     */
 
+    enum SetupError: String, Error {
+        case joinedRoomsProviderNotInitialised = "joinedRoomsProvider was not initialised"
+    }
+    
     // TODO: `JoinedRoomsTransformer`
     // Remove this method & returning of `dependencies` once we've properly implemented JoinedRoomProvider & Transformers
     func setUp_ChatKitInitialised_withDependencies(file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, Dependencies) {
@@ -89,7 +93,7 @@ extension XCTestCase {
         }
         
         guard let joinedRoomsProvider = expectation.result?.0 else {
-            throw "joinedRoomsProvider was not initialised"
+            throw SetupError.joinedRoomsProviderNotInitialised
         }
         
         return (stubNetworking, chatkit, joinedRoomsProvider)

@@ -118,7 +118,7 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let error = "Dummy error message"
+        let error = FakeError()
         
         sut.subscription(dummySubscription, didReceiveError: error)
         

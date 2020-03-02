@@ -3,8 +3,10 @@ import XCTest
 
 class EquatableResult_Equatable_Tests: XCTestCase {
     
-    let errorA = "errorA"
-    let errorB = "errorB"
+    enum ErrorType: String, Error {
+        case errorA = "errorA"
+        case errorB = "errorB"
+    }
     
     func test_equality_successVsSuccessWithSameValue_equalBothWays() {
         
@@ -27,7 +29,7 @@ class EquatableResult_Equatable_Tests: XCTestCase {
     func test_equality_successVsFailure_notEqualEitherWay() {
         
         let lhs = EquatableResult<String>.success("result")
-        let rhs = EquatableResult<String>.failure(errorA)
+        let rhs = EquatableResult<String>.failure(ErrorType.errorA)
         
         XCTAssertNotEqual(lhs, rhs)
         XCTAssertNotEqual(rhs, lhs)
@@ -35,8 +37,8 @@ class EquatableResult_Equatable_Tests: XCTestCase {
     
     func test_equality_failureVsFailureWithSameError_equalBothWays() {
         
-        let lhs = EquatableResult<String>.failure(errorA)
-        let rhs = EquatableResult<String>.failure(errorA)
+        let lhs = EquatableResult<String>.failure(ErrorType.errorA)
+        let rhs = EquatableResult<String>.failure(ErrorType.errorA)
         
         XCTAssertEqual(lhs, rhs)
         XCTAssertEqual(rhs, lhs)
@@ -44,8 +46,8 @@ class EquatableResult_Equatable_Tests: XCTestCase {
     
     func test_equality_failureVsFailureWithDifferentError_notEqualEitherWay() {
         
-        let lhs = EquatableResult<String>.failure(errorA)
-        let rhs = EquatableResult<String>.failure(errorB)
+        let lhs = EquatableResult<String>.failure(ErrorType.errorA)
+        let rhs = EquatableResult<String>.failure(ErrorType.errorB)
         
         XCTAssertNotEqual(lhs, rhs)
         XCTAssertNotEqual(rhs, lhs)

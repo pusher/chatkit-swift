@@ -132,6 +132,7 @@
 		7301BC7B23B11F6F00F162C7 /* Wire.Message+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC7A23B11F6F00F162C7 /* Wire.Message+Decodable.Tests.swift */; };
 		7301BC7D23B1261300F162C7 /* Wire.MessagePart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC7C23B1261300F162C7 /* Wire.MessagePart.swift */; };
 		7301BC7F23B1294500F162C7 /* Wire.MessagePart+Decodable.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7301BC7E23B1294500F162C7 /* Wire.MessagePart+Decodable.Tests.swift */; };
+		730D1344240D355100A0B747 /* FakeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730D1343240D355100A0B747 /* FakeError.swift */; };
 		730E44DC23DB47F200A3AF94 /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E44DB23DB47F200A3AF94 /* Dependencies.swift */; };
 		730E44DE23DB482500A3AF94 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E44DD23DB482500A3AF94 /* Store.swift */; };
 		730E44E023DB482C00A3AF94 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E44DF23DB482C00A3AF94 /* State.swift */; };
@@ -433,6 +434,7 @@
 		7301BC7A23B11F6F00F162C7 /* Wire.Message+Decodable.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wire.Message+Decodable.Tests.swift"; sourceTree = "<group>"; };
 		7301BC7C23B1261300F162C7 /* Wire.MessagePart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wire.MessagePart.swift; sourceTree = "<group>"; };
 		7301BC7E23B1294500F162C7 /* Wire.MessagePart+Decodable.Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Wire.MessagePart+Decodable.Tests.swift"; sourceTree = "<group>"; };
+		730D1343240D355100A0B747 /* FakeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeError.swift; sourceTree = "<group>"; };
 		730E44DB23DB47F200A3AF94 /* Dependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
 		730E44DD23DB482500A3AF94 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		730E44DF23DB482C00A3AF94 /* State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
@@ -1575,6 +1577,7 @@
 			children = (
 				737E3F7C23EAC31200B50837 /* DoubleBase.swift */,
 				730E454223DB4DD800A3AF94 /* DummyBase.swift */,
+				730D1343240D355100A0B747 /* FakeError.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -2139,6 +2142,7 @@
 				737E3F6623E845CE00B50837 /* ResumableSubscription.swift in Sources */,
 				7323C6C423FAE461008060B7 /* Dependencies.swift in Sources */,
 				738A3EC323E2E69A00B6A614 /* JoinedRoomsProviderDelegate.swift in Sources */,
+				730D1344240D355100A0B747 /* FakeError.swift in Sources */,
 				738A3EC123E2E69A00B6A614 /* SDKInfoProvider.swift in Sources */,
 				738A3EC523E2E69A00B6A614 /* InstanceWrapperFactory.swift in Sources */,
 				22A7425723ED813600F2F26D /* Action.swift in Sources */,

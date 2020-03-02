@@ -2,8 +2,16 @@ import Foundation
 import PusherPlatform
 
 
-// TODO: Temporary
-extension String: Error { }
+public enum ChatkitError: String, LocalizedError {
+    
+    case disconnected = "Chatkit is disconnected, please invoke the `connect` method first."
+    case connecting = "Chatkit is connecting, please use the handler of the `connect` method to wait until its successfully connected."
+    case alreadyConnecting = "Chatkit is already connecting."
+    
+    public var errorDescription: String? {
+        return self.rawValue
+    }
+}
 
 /// This class is the entry point to the SDK.
 ///
@@ -92,8 +100,7 @@ public class Chatkit {
             completionHandler?(nil)
             
         case .connecting:
-            // TODO curate a better error message (probably typed as well)
-            let error: Error = "Chatkit is already connecting."
+            let error: ChatkitError = .alreadyConnecting
             completionHandler?(error)
         }
     }
@@ -155,13 +162,11 @@ public class Chatkit {
             completionHandler(provider, nil)
         
         case .disconnected:
-            // TODO curate a better error message (probably typed as well)
-            let error: Error = "Chatkit is disconnected, please invoke the `connect` method first."
+            let error: ChatkitError = .disconnected
             completionHandler(nil, error)
             
         case .connecting:
-            // TODO curate a better error message (probably typed as well)
-            let error: Error = "Chatkit is connecting, pleas use the handler of the `connect` method to wait until its successfully connected."
+            let error: ChatkitError = .connecting
             completionHandler(nil, error)
         }
         

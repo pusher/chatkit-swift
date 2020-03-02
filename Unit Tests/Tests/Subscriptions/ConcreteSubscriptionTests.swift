@@ -416,7 +416,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedError = "ERROR: `unsubscribe` called whilst still in the process of subscribing"
+        let expectedError = SubscriptionError.unsubscribeCalledWhileSubscribingError
         
         XCTAssertEqualState(sut.state, .notSubscribed)
         XCTAssertExpectationFulfilledWithResult(expectation, .failure(expectedError))
@@ -466,7 +466,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedError = "ERROR: `unsubscribe` called whilst still in the process of subscribing"
+        let expectedError = SubscriptionError.unsubscribeCalledWhileSubscribingError
         
         XCTAssertEqualState(sut.state, .notSubscribed)
         XCTAssertExpectationFulfilledWithResult(firstExpectation, .failure(expectedError))
@@ -829,7 +829,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         //      invoke the delegates `didReceiveError` method
         //      invoke the waiting `completion` handler with `.failure`
         
-        stubInstanceWrapper.fireOnError(error: "Dummy Error Message")
+        stubInstanceWrapper.fireOnError(error: FakeError())
         
         /******************/
         /*----- THEN -----*/
@@ -838,7 +838,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         wait(for: [expectation], timeout: expectation.timeout)
         
         XCTAssertEqualState(sut.state, .notSubscribed)
-        XCTAssertExpectationFulfilledWithResult(expectation, .failure("Dummy Error Message"))
+        XCTAssertExpectationFulfilledWithResult(expectation, .failure(FakeError()))
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -879,7 +879,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         //      invoke the delegates `didReceiveError` method
         //      invoke BOTH waiting `completion` handlers with `.failure`
         
-        stubInstanceWrapper.fireOnError(error: "Dummy Error Message")
+        stubInstanceWrapper.fireOnError(error: FakeError())
         
         /******************/
         /*----- THEN -----*/
@@ -891,8 +891,8 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         // Both expectations shoudld have been fulfilled with `.failure`
         XCTAssertEqualState(sut.state, .notSubscribed)
-        XCTAssertExpectationFulfilledWithResult(firstExpectation, .failure("Dummy Error Message"))
-        XCTAssertExpectationFulfilledWithResult(secondExpectation, .failure("Dummy Error Message"))
+        XCTAssertExpectationFulfilledWithResult(firstExpectation, .failure(FakeError()))
+        XCTAssertExpectationFulfilledWithResult(secondExpectation, .failure(FakeError()))
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <-- increased by one
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -928,7 +928,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         //      invoke the delegates `didReceiveError` method
         //      leave everything else unchanged
         
-        stubInstanceWrapper.fireOnError(error: "Dummy Error Message")
+        stubInstanceWrapper.fireOnError(error: FakeError())
         
         /******************/
         /*----- THEN -----*/
@@ -982,7 +982,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         wait(for: [expectation], timeout: expectation.timeout)
         
-        let expectedError = "ERROR: `onEnd` received unexpectedly whilst still in the process of subscribing"
+        let expectedError = SubscriptionError.onEndReceivedWhileSubscribingError
         
         XCTAssertEqualState(sut.state, .notSubscribed)
         XCTAssertExpectationFulfilledWithResult(expectation, .failure(expectedError))
@@ -1037,7 +1037,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         wait(for: [firstExpectation, secondExpectation],
              timeout: max(firstExpectation.timeout, secondExpectation.timeout))
         
-        let expectedError = "ERROR: `onEnd` received unexpectedly whilst still in the process of subscribing"
+        let expectedError = SubscriptionError.onEndReceivedWhileSubscribingError
         
         // Both expectations shoudld have been fulfilled with `.failure`
         XCTAssertEqualState(sut.state, .notSubscribed)
@@ -1086,7 +1086,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedError = "ERROR: `onEnd` received unexpectedly whilst subscribed"
+        let expectedError = SubscriptionError.onEndReceivedWhileSubscribedError
         
         XCTAssertEqualState(sut.state, .notSubscribed)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
