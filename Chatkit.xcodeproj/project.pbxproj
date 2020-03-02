@@ -617,7 +617,6 @@
 		222910DC23D8A5D900A3ACDF /* System Tests */ = {
 			isa = PBXGroup;
 			children = (
-				738A3EE123E33C1200B6A614 /* OKP */,
 				226DD52023DB36C30024A27D /* Helpers */,
 				222910E523D8A62C00A3ACDF /* Supporting Files */,
 				222910E623D8A69D00A3ACDF /* Tests */,
@@ -1423,13 +1422,6 @@
 				737E3F7423E9C2FC00B50837 /* Functional.JoinedRoomsProviderInitialised.Tests.swift */,
 			);
 			path = Tests;
-			sourceTree = "<group>";
-		};
-		738A3EE123E33C1200B6A614 /* OKP */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = OKP;
 			sourceTree = "<group>";
 		};
 		7396B2DF23A7F76F009F08FD /* CodableJSONCollections */ = {
