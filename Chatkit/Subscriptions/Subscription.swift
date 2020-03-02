@@ -80,7 +80,7 @@ class ConcreteSubscription: Subscription {
             
         case .notSubscribed:
             // Nothing to do
-            ()
+            break
             
         case let .subscribingStageOne(_, completions):
             
