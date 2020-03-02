@@ -31,7 +31,7 @@ public class TestTokenProvider: TokenProvider {
     ///     be signed for this user identifier without any authentication being applied.
     ///     - logger: An optional logger used by the token provider.
     public init(instanceLocator: String, userIdentifier: String, logger: PPLogger? = nil) throws {
-        guard let locator = PusherPlatform.InstanceLocator(string: instanceLocator) else {
+        guard let locator = InstanceLocator(string: instanceLocator) else {
             throw NetworkingError.invalidInstanceLocator
         }
         

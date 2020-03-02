@@ -3,15 +3,15 @@ import struct PusherPlatform.InstanceLocator
 import protocol PusherPlatform.TokenProvider
 @testable import PusherChatkit
 
-private let defaultInstanceLocator = PusherPlatform.InstanceLocator(string: "dummy_version:dummy_region:dummy_location")!
+private let defaultInstanceLocator = InstanceLocator(string: "dummy_version:dummy_region:dummy_location")!
 
 // Allows us to define test doubles for Unit testing.
 // If a dependency is not explicitly defined a "Dummy" version is used so that if it is interacted
 // with in any way the test should fail.
 public class DependenciesDoubles: DoubleBase, Dependencies {
     
-    public let instanceLocator: PusherPlatform.InstanceLocator
-    public let tokenProvider: PusherPlatform.TokenProvider
+    public let instanceLocator: InstanceLocator
+    public let tokenProvider: TokenProvider
     public let sdkInfoProvider: SDKInfoProvider
     public let storeBroadcaster: StoreBroadcaster
     public let store: Store
@@ -30,8 +30,8 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
     public let userSubscriptionRoomDeletedReducer: Reducer.UserSubscription.RoomDeleted.ExpressionType
     public let userSubscriptionReadStateUpdatedReducer: Reducer.UserSubscription.ReadStateUpdated.ExpressionType
     
-    public init(instanceLocator: PusherPlatform.InstanceLocator? = nil,
-                tokenProvider: PusherPlatform.TokenProvider? = nil,
+    public init(instanceLocator: InstanceLocator? = nil,
+                tokenProvider: TokenProvider? = nil,
                 sdkInfoProvider: SDKInfoProvider? = nil,
                 storeBroadcaster: StoreBroadcaster? = nil,
                 store: Store? = nil,

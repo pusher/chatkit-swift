@@ -44,7 +44,7 @@ class System_UnInitialised_Tests: XCTestCase {
             let instanceLocatorString = Environment.instanceLocator
             let userIdentifier = "pusher-quick-start-bob"
             let tokenProvider = try TestTokenProvider(instanceLocator: instanceLocatorString, userIdentifier: userIdentifier)
-            let instanceLocator = PusherPlatform.InstanceLocator(string: instanceLocatorString)!
+            let instanceLocator = InstanceLocator(string: instanceLocatorString)!
             let dependencies = ConcreteDependencies(instanceLocator: instanceLocator, tokenProvider: tokenProvider)
             
             let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)

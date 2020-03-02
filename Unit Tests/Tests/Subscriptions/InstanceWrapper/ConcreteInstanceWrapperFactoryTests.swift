@@ -7,7 +7,7 @@ import struct PusherPlatform.PPSDKInfo
 
 class ConcreteInstanceWrapperFactoryTests: XCTestCase {
     
-    let instanceLocator = PusherPlatform.InstanceLocator(string: "version:region:identifier")!
+    let instanceLocator = InstanceLocator(string: "version:region:identifier")!
     
     func test_makeInstanceWrapper_forUserSubscription_returnsConcreteInstanceWrapper() {
         

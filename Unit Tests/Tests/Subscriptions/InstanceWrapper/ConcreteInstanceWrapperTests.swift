@@ -7,7 +7,7 @@ import struct PusherPlatform.PPSDKInfo
 
 class ConcreteInstanceWrapperTests: XCTestCase {
     
-    let instanceLocator = PusherPlatform.InstanceLocator(string: "version:region:identifier")!
+    let instanceLocator = InstanceLocator(string: "version:region:identifier")!
     let sdkInfoProvider = ConcreteSDKInfoProvider(serviceName: "Chatkit", serviceVersion: "v7", sdkInfo: PPSDKInfo.current)
     
     // This test is here for coverage only.  The System Test equivalent tests the true functionality.

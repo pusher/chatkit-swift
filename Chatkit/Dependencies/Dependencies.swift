@@ -79,7 +79,7 @@ class ConcreteDependencies: Dependencies {
     
     private let dependencyFactory = DependencyFactory()
     
-    let instanceLocator: PusherPlatform.InstanceLocator
+    let instanceLocator: InstanceLocator
     let tokenProvider: TokenProvider
     
     let masterReducer = Reducer.Master.reduce
@@ -93,7 +93,7 @@ class ConcreteDependencies: Dependencies {
     let userSubscriptionReadStateUpdatedReducer = Reducer.UserSubscription.ReadStateUpdated.reduce
     
     // `override` gives tests an opportunity to override any concrete dependencies with test doubles.
-    init(instanceLocator: PusherPlatform.InstanceLocator,
+    init(instanceLocator: InstanceLocator,
          tokenProvider: TokenProvider,
          override: ((DependencyFactory) -> Void)? = nil) {
         

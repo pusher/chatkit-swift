@@ -5,7 +5,7 @@ import struct PusherPlatform.InstanceLocator
 
 class ConcreteDependenciesTests: XCTestCase {
     
-    let instanceLocator = PusherPlatform.InstanceLocator(string: "version:region:identifier")!
+    let instanceLocator = InstanceLocator(string: "version:region:identifier")!
      
      func test_initWithoutOverride_withInstanceLocatorButNoOverride_returnsConcreteDependencies() {
          

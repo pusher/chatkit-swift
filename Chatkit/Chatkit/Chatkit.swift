@@ -55,7 +55,7 @@ public class Chatkit {
     ///
     /// - Returns: An instance of `Chatkit` or throws an error when the initialization failed.
     public convenience init(instanceLocator: String, tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
-        guard let instanceLocator = PusherPlatform.InstanceLocator(string: instanceLocator) else {
+        guard let instanceLocator = InstanceLocator(string: instanceLocator) else {
             throw NetworkingError.invalidInstanceLocator
         }
         let dependencies = ConcreteDependencies(instanceLocator: instanceLocator, tokenProvider: tokenProvider)
