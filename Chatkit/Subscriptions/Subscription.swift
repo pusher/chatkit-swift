@@ -43,7 +43,7 @@ class ConcreteSubscription: Subscription {
     
     private(set) var state: State = .notSubscribed // Internal `get` aids testing
     
-    init(subscriptionType: SubscriptionType, dependencies: Dependencies, delegate: SubscriptionDelegate?) {
+    init(subscriptionType: SubscriptionType, dependencies: Dependencies, delegate: SubscriptionDelegate) {
         self.subscriptionType = subscriptionType
         self.dependencies = dependencies
         self.delegate = delegate
