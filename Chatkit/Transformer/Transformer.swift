@@ -40,28 +40,40 @@ struct ConcreteTransformer: Transformer {
             break
         }
         
-        guard let roomIdentifier = identifier,
-            let currentRoomState = currentState.chatState.joinedRooms[roomIdentifier] else {
-                return nil
-        }
-        
-        let currentRoom: Room = self.transform(state: currentRoomState)
+        var currentRoom: Room? = nil
         var previousRoom: Room? = nil
         
-        if let previousState = previousState,
-            let previousRoomState = previousState.chatState.joinedRooms[roomIdentifier] {
-            previousRoom = self.transform(state: previousRoomState)
+        if let roomIdentifier = identifier {
+            if let currentRoomState = currentState.chatState.joinedRooms[roomIdentifier] {
+                currentRoom = self.transform(state: currentRoomState)
+            }
+            
+            if let previousState = previousState,
+                let previousRoomState = previousState.chatState.joinedRooms[roomIdentifier] {
+                previousRoom = self.transform(state: previousRoomState)
+            }
         }
         
         switch currentState.signature {
         case .addedToRoom(_):
-            return .addedToRoom(room: currentRoom)
+            if let currentRoom = currentRoom {
+                return .addedToRoom(room: currentRoom)
+            }
+            else {
+                return nil
+            }
             
         case .removedFromRoom(_):
-            return .removedFromRoom(room: currentRoom)
+            if let currentRoom = currentRoom {
+                return .removedFromRoom(room: currentRoom)
+            }
+            else {
+                return nil
+            }
             
         case .roomUpdated(_):
-            if let previousRoom = previousRoom {
+            if let currentRoom = currentRoom,
+                let previousRoom = previousRoom {
                 return .roomUpdated(updatedRoom: currentRoom, previousValue: previousRoom)
             }
             else {
@@ -69,10 +81,16 @@ struct ConcreteTransformer: Transformer {
             }
             
         case .roomDeleted(_):
-            return .roomDeleted(room: currentRoom)
+            if let currentRoom = currentRoom {
+                return .roomDeleted(room: currentRoom)
+            }
+            else {
+                return nil
+            }
             
         case .readStateUpdated(_):
-            if let previousRoom = previousRoom {
+            if let currentRoom = currentRoom,
+                let previousRoom = previousRoom {
                 return .readStateUpdated(updatedRoom: currentRoom, previousValue: previousRoom)
             }
             else {

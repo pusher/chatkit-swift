@@ -210,4 +210,152 @@ class VersionedStateTests: XCTestCase {
         XCTAssertEqual(result, expectedState)
     }
     
+    func test_hashValue_withEqualProperties_shouldReturnEqualValues() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let firstState: VersionedState = .initial
+        
+        let secondState: VersionedState = .initial
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let firstStateHashValue = firstState.hashValue
+        let secondStateHashValue = secondState.hashValue
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertEqual(firstStateHashValue, secondStateHashValue)
+    }
+    
+    func test_hashValue_withDifferentChatStates_shouldReturnDifferentValues() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let firstState = VersionedState(
+            chatState: ChatState(
+                currentUser: .partial(identifier: "user-identifier"),
+                joinedRooms: .empty,
+                users: .empty
+            ),
+            auxiliaryState: .empty,
+            version: 0,
+            signature: .unsigned
+        )
+        
+        let secondState: VersionedState = .initial
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let firstStateHashValue = firstState.hashValue
+        let secondStateHashValue = secondState.hashValue
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertNotEqual(firstStateHashValue, secondStateHashValue)
+    }
+    
+    func test_hashValue_withDifferentAuxiliaryStates_shouldReturnDifferentValues() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let firstState = VersionedState(
+            chatState: .empty,
+            auxiliaryState: AuxiliaryState(
+                subscriptions: [
+                    "user" : .connected
+                ]
+            ),
+            version: 0,
+            signature: .unsigned
+        )
+        
+        let secondState: VersionedState = .initial
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let firstStateHashValue = firstState.hashValue
+        let secondStateHashValue = secondState.hashValue
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertNotEqual(firstStateHashValue, secondStateHashValue)
+    }
+    
+    func test_hashValue_withDifferentVersions_shouldReturnDifferentValues() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let firstState = VersionedState(
+            chatState: .empty,
+            auxiliaryState: .empty,
+            version: 1,
+            signature: .unsigned
+        )
+        
+        let secondState: VersionedState = .initial
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let firstStateHashValue = firstState.hashValue
+        let secondStateHashValue = secondState.hashValue
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertNotEqual(firstStateHashValue, secondStateHashValue)
+    }
+    
+    func test_hashValue_withDifferentSignatures_shouldReturnDifferentValues() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let firstState = VersionedState(
+            chatState: .empty,
+            auxiliaryState: .empty,
+            version: 0,
+            signature: .initialState
+        )
+        
+        let secondState: VersionedState = .initial
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let firstStateHashValue = firstState.hashValue
+        let secondStateHashValue = secondState.hashValue
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertNotEqual(firstStateHashValue, secondStateHashValue)
+    }
+    
 }

@@ -148,4 +148,72 @@ class UserListStateTests: XCTestCase {
         XCTAssertEqual(result, expectedState)
     }
     
+    func test_hashValue_withEqualElements_shouldReturnEqualValues() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let userState: UserState = .partial(identifier: "user-identifier")
+        
+        let firstState = UserListState(
+            elements: [
+                "user-identifier" : userState
+            ]
+        )
+        
+        let secondState = UserListState(
+            elements: [
+                "user-identifier" : userState
+            ]
+        )
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let firstStateHashValue = firstState.hashValue
+        let secondStateHashValue = secondState.hashValue
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertEqual(firstStateHashValue, secondStateHashValue)
+    }
+    
+    func test_hashValue_withDifferentElements_shouldReturnDifferentValues() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let userState: UserState = .partial(identifier: "user-identifier")
+        
+        let firstState = UserListState(
+            elements: [
+                "different-user-identifier" : userState
+            ]
+        )
+        
+        let secondState = UserListState(
+            elements: [
+                "user-identifier" : userState
+            ]
+        )
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let firstStateHashValue = firstState.hashValue
+        let secondStateHashValue = secondState.hashValue
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertNotEqual(firstStateHashValue, secondStateHashValue)
+    }
+    
 }

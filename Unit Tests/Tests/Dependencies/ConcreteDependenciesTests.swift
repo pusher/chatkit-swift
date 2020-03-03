@@ -23,6 +23,7 @@ class ConcreteDependenciesTests: XCTestCase {
         /******************/
         
         XCTAssertNotNil(dependencies.store as? ConcreteStore)
+        XCTAssertNotNil(dependencies.transformer as? ConcreteTransformer)
 
         // TODO work out how to test this, not sure its possible?
 //        XCTAssertFalse(dependencies.reducer_master === Reducer.Master.reduce)
@@ -64,6 +65,7 @@ class ConcreteDependenciesTests: XCTestCase {
         waitForExpectations(timeout: 1)
         
         XCTAssertNotNil(dependencies.store as? StubStore)
+        XCTAssertNotNil(dependencies.transformer as? ConcreteTransformer)
     }
     
 }

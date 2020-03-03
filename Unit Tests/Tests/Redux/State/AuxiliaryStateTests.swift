@@ -1,7 +1,7 @@
 import XCTest
 @testable import PusherChatkit
 
-class ReadSummaryStateTests: XCTestCase {
+class AuxiliaryStateTests: XCTestCase {
     
     // MARK: - Tests
     
@@ -11,8 +11,10 @@ class ReadSummaryStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let state = ReadSummaryState(
-            unreadCount: 10
+        let state = AuxiliaryState(
+            subscriptions: [
+                "user" : .connected
+            ]
         )
         
         /******************/
@@ -34,12 +36,17 @@ class ReadSummaryStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let state = ReadSummaryState(
-            unreadCount: 10
+        let state = AuxiliaryState(
+            subscriptions: [
+                "user" : .initializing(error: nil),
+                "room" : .connected
+            ]
         )
         
-        let supplementalState = ReadSummaryState(
-            unreadCount: 20
+        let supplementalState = AuxiliaryState(
+            subscriptions: [
+                "user" : .initializing(error: NetworkingError.disconnected)
+            ]
         )
         
         /******************/
@@ -55,18 +62,22 @@ class ReadSummaryStateTests: XCTestCase {
         XCTAssertEqual(result, state)
     }
     
-    func test_hashValue_withEqualUnreadCounts_shouldReturnEqualValues() {
+    func test_hashValue_withEqualSubscriptions_shouldReturnEqualValues() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState = ReadSummaryState(
-            unreadCount: 10
+        let firstState = AuxiliaryState(
+            subscriptions: [
+                "user" : .connected
+            ]
         )
         
-        let secondState = ReadSummaryState(
-            unreadCount: 10
+        let secondState = AuxiliaryState(
+            subscriptions: [
+                "user" : .connected
+            ]
         )
         
         /******************/
@@ -83,18 +94,22 @@ class ReadSummaryStateTests: XCTestCase {
         XCTAssertEqual(firstStateHashValue, secondStateHashValue)
     }
     
-    func test_hashValue_withDifferentUnreadCounts_shouldReturnDifferentValues() {
+    func test_hashValue_withDifferentSubscriptions_shouldReturnDifferentValues() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState = ReadSummaryState(
-            unreadCount: 10
+        let firstState = AuxiliaryState(
+            subscriptions: [
+                "user" : .connected
+            ]
         )
         
-        let secondState = ReadSummaryState(
-            unreadCount: 20
+        let secondState = AuxiliaryState(
+            subscriptions: [
+                "room" : .connected
+            ]
         )
         
         /******************/

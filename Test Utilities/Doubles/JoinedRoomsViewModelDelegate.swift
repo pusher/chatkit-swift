@@ -1,21 +1,10 @@
 import XCTest
 @testable import PusherChatkit
 
-public class DummyBufferDelegate: DummyBase, BufferDelegate {
-    
-    public override init(file: StaticString = #file, line: UInt = #line) {
-        super.init(file: file, line: line)
-    }
-    
-    public func buffer(_ buffer: Buffer, didUpdateState state: VersionedState) {
-        DummyFail(sender: self, function: #function)
-    }
-}
-
-public class StubBufferDelegate: StubBase, BufferDelegate {
+public class StubJoinedRoomsViewModelDelegate: StubBase, JoinedRoomsViewModelDelegate {
     
     private var didUpdateState_expectedCallCount: UInt
-    public private(set) var didUpdateState_stateLastReceived: VersionedState?
+    public private(set) var didUpdateState_stateLastReceived: JoinedRoomsViewModel.State?
     public private(set) var didUpdateState_actualCallCount: UInt = 0
     
     public init(didUpdateState_expectedCallCount: UInt = 0,
@@ -25,7 +14,7 @@ public class StubBufferDelegate: StubBase, BufferDelegate {
         super.init(file: file, line: line)
     }
     
-    public func buffer(_ buffer: Buffer, didUpdateState state: VersionedState) {
+    public func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateState state: JoinedRoomsViewModel.State) {
         didUpdateState_stateLastReceived = state
         didUpdateState_actualCallCount += 1
         

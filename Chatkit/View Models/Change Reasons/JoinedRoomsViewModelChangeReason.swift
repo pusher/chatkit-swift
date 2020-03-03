@@ -19,23 +19,26 @@ public extension JoinedRoomsViewModel {
             case let .addedToRoom(room):
                 if let position = currentRooms.index(of: room) {
                     self = .itemInserted(position: position)
+                    return
                 }
                 
             case let .removedFromRoom(room),
                  let .roomDeleted(room):
                 if let position = previousRooms?.index(of: room) {
                     self = .itemRemoved(position: position, previousValue: room)
+                    return
                 }
                 
             case let .roomUpdated(updatedRoom, previousValue),
                  let .readStateUpdated(updatedRoom, previousValue):
                 if let currentPosition = currentRooms.index(of: updatedRoom) {
-                    if let previousPosition = currentRooms.index(of: updatedRoom), currentPosition != previousPosition {
+                    if let previousPosition = previousRooms?.index(of: previousValue), currentPosition != previousPosition {
                         self = .itemMoved(fromPosition: previousPosition, toPosition: currentPosition)
+                        return
                     }
-                    else {
-                        self = .itemChanged(position: currentPosition, previousValue: previousValue)
-                    }
+                    
+                    self = .itemChanged(position: currentPosition, previousValue: previousValue)
+                    return
                 }
             }
             

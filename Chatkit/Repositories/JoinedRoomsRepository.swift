@@ -69,13 +69,7 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
     // MARK: - Private methods
     
     private static func state(forConnectionState connectionState: ConnectionState, currentVersionedState: VersionedState?, previousVersionedState: VersionedState?, usingTransformer transformer: Transformer) -> State {
-        if case let .initializing(error) = connectionState {
-            return .initializing(error: error)
-        }
-        else if case let .closed(error) = connectionState {
-            return .closed(error: error)
-        }
-        else if let currentVersionedState = currentVersionedState {
+        if let currentVersionedState = currentVersionedState {
             let rooms = Set(currentVersionedState.chatState.joinedRooms.map { transformer.transform(state: $0) })
             let changeReason = transformer.transform(currentState: currentVersionedState, previousState: previousVersionedState)
             
@@ -85,6 +79,13 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
             else if case let .degraded(error) = connectionState {
                 return .degraded(rooms: rooms, error: error, changeReason: changeReason)
             }
+        }
+        
+        if case let .initializing(error) = connectionState {
+            return .initializing(error: error)
+        }
+        else if case let .closed(error) = connectionState {
+            return .closed(error: error)
         }
         
         return .initializing(error: nil)

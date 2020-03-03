@@ -36,12 +36,17 @@ public extension JoinedRoomsViewModel {
         
         private static func sortedRooms(_ rooms: Set<Room>) -> [Room] {
             return rooms.sorted { lhs, rhs -> Bool in
-                if let lhsLastMessageAt = lhs.lastMessageAt, let rhsLastMessageAt = rhs.lastMessageAt {
+                if lhs.lastMessageAt == nil && rhs.lastMessageAt != nil {
+                    return true
+                }
+                else if lhs.lastMessageAt != nil && rhs.lastMessageAt == nil {
+                    return false
+                }
+                else if let lhsLastMessageAt = lhs.lastMessageAt, let rhsLastMessageAt = rhs.lastMessageAt {
                     return lhsLastMessageAt > rhsLastMessageAt
                 }
-                else {
-                    return lhs.createdAt > rhs.createdAt
-                }
+                
+                return lhs.createdAt > rhs.createdAt
             }
         }
         
@@ -55,6 +60,12 @@ extension JoinedRoomsViewModel.State: Equatable {
     
     public static func == (lhs: JoinedRoomsViewModel.State, rhs: JoinedRoomsViewModel.State) -> Bool {
         switch (lhs, rhs) {
+        case (let .initializing(lhsError as NSError?),
+              let .initializing(rhsError as NSError?)),
+             (let .closed(lhsError as NSError?),
+              let .closed(rhsError as NSError?)):
+            return lhsError == rhsError
+            
         case (let .connected(lhsRooms, lhsChangeReason),
               let .connected(rhsRooms, rhsChangeReason)):
             return lhsRooms == rhsRooms && lhsChangeReason == rhsChangeReason
@@ -62,10 +73,6 @@ extension JoinedRoomsViewModel.State: Equatable {
         case (let .degraded(lhsRooms, lhsError as NSError?, lhsChangeReason),
               let .degraded(rhsRooms, rhsError as NSError?, rhsChangeReason)):
             return lhsRooms == rhsRooms && lhsError == rhsError && lhsChangeReason == rhsChangeReason
-            
-        case (let .closed(lhsError as NSError?),
-              let .closed(rhsError as NSError?)):
-            return lhsError == rhsError
             
         default:
             return false

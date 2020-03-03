@@ -623,6 +623,66 @@ class MasterReducerTests: XCTestCase {
         XCTAssertEqual(userSubscriptionReadStateUpdatedReducer.reduce_stateLastReceived, inputChatState)
     }
     
+    func test_reduce_withSubscriptionStateUpdatedAction_returnsStateFromDedicatedReducer() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let reducer_stateToReturn = AuxiliaryState(
+            subscriptions:
+            [
+                "user" : .connected
+            ]
+        )
+        
+        let subscriptionStateUpdatedReducer = StubReducer<Reducer.Subscription.StateUpdated>(reduce_stateToReturn: reducer_stateToReturn,
+                                                                                             reduce_expectedCallCount: 1)
+        
+        let dependencies = DependenciesDoubles(subscriptionStateUpdatedReducer: subscriptionStateUpdatedReducer.reduce)
+        
+        let inputAuxiliaryState = AuxiliaryState(
+            subscriptions:
+            [
+                "user" : .initializing(error: nil)
+            ]
+        )
+        
+        let inputState = VersionedState(
+            chatState: .empty,
+            auxiliaryState: inputAuxiliaryState,
+            version: 1,
+            signature: .initialState
+        )
+        
+        let action = SubscriptionStateUpdatedAction(
+            type: "user",
+            state: "connected"
+        )
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let outputState = Reducer.Master.reduce(action: action, state: inputState, dependencies: dependencies)
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        let expectedState = VersionedState(
+            chatState: .empty,
+            auxiliaryState: reducer_stateToReturn,
+            version: 2,
+            signature: .subscriptionStateUpdated
+        )
+        
+        XCTAssertEqual(outputState, expectedState)
+        XCTAssertEqual(subscriptionStateUpdatedReducer.reduce_actualCallCount, 1)
+        XCTAssertEqual(subscriptionStateUpdatedReducer.reduce_actionLastReceived, action)
+        XCTAssertEqual(subscriptionStateUpdatedReducer.reduce_stateLastReceived, inputAuxiliaryState)
+    }
+    
     func test_reduce_withUnsupportedAction_returnsUnmodifiedState() {
         
         /******************/

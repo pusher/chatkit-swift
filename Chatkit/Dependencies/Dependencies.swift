@@ -94,6 +94,10 @@ class ConcreteDependencies: Dependencies {
             ConcreteStore(dependencies: dependencies)
         })
         
+        dependencyFactory.register(Transformer.self, factory: { _ in
+            ConcreteTransformer()
+        })
+        
         override?(dependencyFactory)
     }
     

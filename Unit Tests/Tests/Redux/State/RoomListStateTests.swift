@@ -133,4 +133,92 @@ class RoomListStateTests: XCTestCase {
         XCTAssertEqual(result, state)
     }
     
+    func test_hashValue_withEqualElements_shouldReturnEqualValues() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let roomState = RoomState(
+            identifier: "room-identifier",
+            name: "room-name",
+            isPrivate: false,
+            pushNotificationTitle: nil,
+            customData: nil,
+            lastMessageAt: nil,
+            readSummary: .empty,
+            createdAt: .distantPast,
+            updatedAt: .distantPast
+        )
+        
+        let firstState = RoomListState(
+            elements: [
+                "room-identifier" : roomState
+            ]
+        )
+        
+        let secondState = RoomListState(
+            elements: [
+                "room-identifier" : roomState
+            ]
+        )
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let firstStateHashValue = firstState.hashValue
+        let secondStateHashValue = secondState.hashValue
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertEqual(firstStateHashValue, secondStateHashValue)
+    }
+    
+    func test_hashValue_withDifferentElements_shouldReturnDifferentValues() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let roomState = RoomState(
+            identifier: "room-identifier",
+            name: "room-name",
+            isPrivate: false,
+            pushNotificationTitle: nil,
+            customData: nil,
+            lastMessageAt: nil,
+            readSummary: .empty,
+            createdAt: .distantPast,
+            updatedAt: .distantPast
+        )
+        
+        let firstState = RoomListState(
+            elements: [
+                "different-room-identifier" : roomState
+            ]
+        )
+        
+        let secondState = RoomListState(
+            elements: [
+                "room-identifier" : roomState
+            ]
+        )
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        let firstStateHashValue = firstState.hashValue
+        let secondStateHashValue = secondState.hashValue
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertNotEqual(firstStateHashValue, secondStateHashValue)
+    }
+    
 }
