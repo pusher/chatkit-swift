@@ -84,23 +84,44 @@ public class Chatkit {
         case .disconnected:
             
             dependencies.subscriptionManager.subscribe(toType: .user, sender: self) { result in
+                
                 switch result {
+                    
                 case .success:
                     self.connectionStatus = .connected
-                    completionHandler?(nil)
+
+                    if let completionHandler = completionHandler {
+                        DispatchQueue.main.async {
+                            completionHandler(nil)
+                        }
+                    }
+                    
                 case let .failure(error):
                     self.connectionStatus = .disconnected
-                    completionHandler?(error)
+                    
+                    if let completionHandler = completionHandler {
+                        DispatchQueue.main.async {
+                            completionHandler(error)
+                        }
+                    }
                 }
             }
         
         case .connected:
             // TODO is it correct that this is idempotent?
-            completionHandler?(nil)
+            if let completionHandler = completionHandler {
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
+            }
             
         case .connecting:
-            let error: ChatkitError = .alreadyConnecting
-            completionHandler?(error)
+            if let completionHandler = completionHandler {
+                DispatchQueue.main.async {
+                    let error = ChatkitError.alreadyConnecting
+                    completionHandler(error)
+                }
+            }
         }
     }
     
@@ -143,6 +164,9 @@ public class Chatkit {
     ///     - completionHandler: A completion handler which will be called when the `JoinedRoomsProvider` is ready, or an `Error` occurs creating it.
     public func createJoinedRoomsProvider(completionHandler: @escaping (JoinedRoomsProvider?, Error?) -> Void) {
         
+        let joinedRoomsProvider: JoinedRoomsProvider?
+        let error: Error?
+        
         switch connectionStatus {
 
         case .connected:
@@ -156,19 +180,22 @@ public class Chatkit {
                                    createdAt: Date(),
                                    updatedAt: Date())
             
-            let provider = JoinedRoomsProvider(currentUser: currentUser, dependencies: dependencies)
-            
-            completionHandler(provider, nil)
+            joinedRoomsProvider = JoinedRoomsProvider(currentUser: currentUser, dependencies: dependencies)
+            error = nil
         
         case .disconnected:
-            let error: ChatkitError = .disconnected
-            completionHandler(nil, error)
+            joinedRoomsProvider = nil
+            error = ChatkitError.disconnected
             
         case .connecting:
-            let error: ChatkitError = .connecting
-            completionHandler(nil, error)
+            joinedRoomsProvider = nil
+            error = ChatkitError.connecting
         }
-        
+
+        DispatchQueue.main.async {
+            completionHandler(joinedRoomsProvider, error)
+        }
+
     }
     
     /// Creates an instance of `MessagesProvider`.
