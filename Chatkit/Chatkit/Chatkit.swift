@@ -1,17 +1,6 @@
 import Foundation
 import PusherPlatform
 
-public enum ChatkitError: String, LocalizedError {
-    
-    case disconnected = "Chatkit is disconnected, please invoke the `connect` method first."
-    case connecting = "Chatkit is connecting, please use the handler of the `connect` method to wait until its successfully connected."
-    case alreadyConnecting = "Chatkit is already connecting."
-    
-    public var errorDescription: String? {
-        return self.rawValue
-    }
-}
-
 /// This class is the entry point to the SDK.
 ///
 /// An instance of this class will maintain a real time connection to the
@@ -56,7 +45,7 @@ public class Chatkit {
     /// - Returns: An instance of `Chatkit` or throws an error when the initialization failed.
     public convenience init(instanceLocator: String, tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
         guard let instanceLocator = InstanceLocator(string: instanceLocator) else {
-            throw NetworkingError.invalidInstanceLocator
+            throw ChatkitError.invalidInstanceLocator
         }
         let dependencies = ConcreteDependencies(instanceLocator: instanceLocator, tokenProvider: tokenProvider)
         try self.init(dependencies: dependencies, logger: logger)
@@ -102,7 +91,7 @@ public class Chatkit {
             Self.execute(completionHandler, onMainThreadWith: nil)
             
         case .connecting:
-            let error = ChatkitError.alreadyConnecting
+            let error = ChatkitError.connecting
             Self.execute(completionHandler, onMainThreadWith: error)
         }
     }

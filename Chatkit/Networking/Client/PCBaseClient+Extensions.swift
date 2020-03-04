@@ -12,7 +12,7 @@ internal extension PPBaseClient {
     
     class func host(for instanceLocator: String) throws -> String {
         guard let locator = InstanceLocator(string: instanceLocator) else {
-            throw NetworkingError.invalidInstanceLocator
+            throw ChatkitError.invalidInstanceLocator
         }
         
         return [locator.region, PPBaseClient.hostname].joined(separator: PPBaseClient.separator)

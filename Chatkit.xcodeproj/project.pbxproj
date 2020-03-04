@@ -94,7 +94,6 @@
 		22D2A2D2231961060095757C /* PPSDKInfo+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2D1231961060095757C /* PPSDKInfo+Extensions.swift */; };
 		22D2A2D5231963C70095757C /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2D4231963C70095757C /* Bundle+Extensions.swift */; };
 		22D2A2D823196B9F0095757C /* PCBaseClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2D723196B9F0095757C /* PCBaseClient+Extensions.swift */; };
-		22D2A2DB23196FDE0095757C /* NetworkingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2DA23196FDE0095757C /* NetworkingError.swift */; };
 		22D2A2E1231978010095757C /* ServiceName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2E0231978010095757C /* ServiceName.swift */; };
 		22D2A2E32319780F0095757C /* ServiceVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2E22319780F0095757C /* ServiceVersion.swift */; };
 		22D2A2E523197AD50095757C /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2A2E423197AD50095757C /* Service.swift */; };
@@ -138,6 +137,7 @@
 		730E44E223DB486C00A3AF94 /* StoreBroadcaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E44E123DB486C00A3AF94 /* StoreBroadcaster.swift */; };
 		730E454F23DB4DD800A3AF94 /* ConcreteStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E452F23DB4DD700A3AF94 /* ConcreteStoreTests.swift */; };
 		730E455023DB4DD800A3AF94 /* ConcreteStoreBroadcasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 730E453023DB4DD700A3AF94 /* ConcreteStoreBroadcasterTests.swift */; };
+		731786EE240FED5200DE0A95 /* ChatkitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731786ED240FED5200DE0A95 /* ChatkitError.swift */; };
 		73233AC123CE19DC001909B7 /* SubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233AC023CE19DC001909B7 /* SubscriptionManager.swift */; };
 		73233AC323CE1A0D001909B7 /* SubscriptionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233AC223CE1A0D001909B7 /* SubscriptionFactory.swift */; };
 		73233AC523CE1A9C001909B7 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73233AC423CE1A9C001909B7 /* Subscription.swift */; };
@@ -395,7 +395,6 @@
 		22D2A2D1231961060095757C /* PPSDKInfo+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PPSDKInfo+Extensions.swift"; sourceTree = "<group>"; };
 		22D2A2D4231963C70095757C /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
 		22D2A2D723196B9F0095757C /* PCBaseClient+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PCBaseClient+Extensions.swift"; sourceTree = "<group>"; };
-		22D2A2DA23196FDE0095757C /* NetworkingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingError.swift; sourceTree = "<group>"; };
 		22D2A2E0231978010095757C /* ServiceName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceName.swift; sourceTree = "<group>"; };
 		22D2A2E22319780F0095757C /* ServiceVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceVersion.swift; sourceTree = "<group>"; };
 		22D2A2E423197AD50095757C /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
@@ -445,6 +444,7 @@
 		730E454223DB4DD800A3AF94 /* DummyBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyBase.swift; sourceTree = "<group>"; };
 		730E454323DB4DD800A3AF94 /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		730E454623DB4DD800A3AF94 /* TokenProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenProvider.swift; sourceTree = "<group>"; };
+		731786ED240FED5200DE0A95 /* ChatkitError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatkitError.swift; sourceTree = "<group>"; };
 		73233AC023CE19DC001909B7 /* SubscriptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionManager.swift; sourceTree = "<group>"; };
 		73233AC223CE1A0D001909B7 /* SubscriptionFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionFactory.swift; sourceTree = "<group>"; };
 		73233AC423CE1A9C001909B7 /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
@@ -763,6 +763,7 @@
 			isa = PBXGroup;
 			children = (
 				224B805822F2DADC003CB8DC /* Chatkit.swift */,
+				731786ED240FED5200DE0A95 /* ChatkitError.swift */,
 			);
 			path = Chatkit;
 			sourceTree = "<group>";
@@ -1009,7 +1010,6 @@
 				73A9392C23E1AC5D0025AF90 /* Instance Locator */,
 				22D2A2D623196B940095757C /* Client */,
 				22D2A2E823197E6A0095757C /* Connection Status */,
-				22D2A2D923196FC60095757C /* Error Handling */,
 				73CF01C123AB8EF3006FB43E /* Model */,
 				22D2A2CE231960820095757C /* SDK Info */,
 				22D2A2DE231977DE0095757C /* Services */,
@@ -1046,14 +1046,6 @@
 				22D2A2D723196B9F0095757C /* PCBaseClient+Extensions.swift */,
 			);
 			path = Client;
-			sourceTree = "<group>";
-		};
-		22D2A2D923196FC60095757C /* Error Handling */ = {
-			isa = PBXGroup;
-			children = (
-				22D2A2DA23196FDE0095757C /* NetworkingError.swift */,
-			);
-			path = "Error Handling";
 			sourceTree = "<group>";
 		};
 		22D2A2DE231977DE0095757C /* Services */ = {
@@ -2012,6 +2004,7 @@
 				22A7425323ED7B2F00F2F26D /* InitialStateAction.swift in Sources */,
 				736C7AE723B0B6D400018707 /* Wire.Event.InitialState.swift in Sources */,
 				22D537D52302D25B00A92341 /* Room.swift in Sources */,
+				731786EE240FED5200DE0A95 /* ChatkitError.swift in Sources */,
 				7301BC5C23B0E79F00F162C7 /* Wire.Event.ReadStateUpdated.swift in Sources */,
 				2200BB93231E727000BF9545 /* DateFormatter+Extensions.swift in Sources */,
 				22BECDFC2366F24D00FAB7DC /* JoinedRoomsViewModel.swift in Sources */,
@@ -2087,7 +2080,6 @@
 				732C8BD023F3FF26006E7537 /* SubscriptionType.swift in Sources */,
 				73233AC523CE1A9C001909B7 /* Subscription.swift in Sources */,
 				7389802B23C8AC8C0029E09F /* SDKInfoProvider.swift in Sources */,
-				22D2A2DB23196FDE0095757C /* NetworkingError.swift in Sources */,
 				222C964323F552FB00321C94 /* RoomUpdatedAction.swift in Sources */,
 				73B705B123EE03E800D1E5C8 /* RoomListReducer.swift in Sources */,
 			);

@@ -67,8 +67,6 @@ public func XCTAssertNotNil<T>(_ expression: @autoclosure () throws -> T?, _ mes
 
 public func XCTAssertEqual<T>(_ expression1: @autoclosure () throws -> T, _ expression2: @autoclosure () throws -> T, _ message: String = "", file: StaticString = #file, line: UInt = #line, also validateResult: () -> Void) where T: Equatable {
 
-//    XCTAssertEqual(try executeAndAssignEquatableResult(expression1, to: &result),
-    
     XCTAssertEqual(try expression1(),
                    try expression2(), message, file: file, line: line)
 

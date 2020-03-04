@@ -45,7 +45,7 @@ class TestTokenProviderTests: XCTestCase {
         let userID = Networking.testUserIdentifier
         
         XCTAssertThrowsError(try TestTokenProvider(instanceLocator: instanceLocator, userIdentifier: userID, logger: TestLogger()), "Failed to catch an error for invalid instance locator.") { error in
-            XCTAssertEqual(error as? NetworkingError, NetworkingError.invalidInstanceLocator)
+            XCTAssertEqual(error as? ChatkitError, ChatkitError.invalidInstanceLocator)
         }
     }
     
@@ -54,7 +54,7 @@ class TestTokenProviderTests: XCTestCase {
         let userID = Networking.testUserIdentifier
         
         XCTAssertThrowsError(try TestTokenProvider(instanceLocator: instanceLocator, userIdentifier: userID, logger: TestLogger()), "Failed to catch an error for invalid instance locator.") { error in
-            XCTAssertEqual(error as? NetworkingError, NetworkingError.invalidInstanceLocator)
+            XCTAssertEqual(error as? ChatkitError, ChatkitError.invalidInstanceLocator)
         }
     }
     
