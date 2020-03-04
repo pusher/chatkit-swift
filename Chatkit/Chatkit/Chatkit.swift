@@ -89,39 +89,21 @@ public class Chatkit {
                     
                 case .success:
                     self.connectionStatus = .connected
-
-                    if let completionHandler = completionHandler {
-                        DispatchQueue.main.async {
-                            completionHandler(nil)
-                        }
-                    }
+                    Self.execute(completionHandler, onMainThreadWith: nil)
                     
                 case let .failure(error):
                     self.connectionStatus = .disconnected
-                    
-                    if let completionHandler = completionHandler {
-                        DispatchQueue.main.async {
-                            completionHandler(error)
-                        }
-                    }
+                    Self.execute(completionHandler, onMainThreadWith: error)
                 }
             }
         
         case .connected:
             // TODO is it correct that this is idempotent?
-            if let completionHandler = completionHandler {
-                DispatchQueue.main.async {
-                    completionHandler(nil)
-                }
-            }
+            Self.execute(completionHandler, onMainThreadWith: nil)
             
         case .connecting:
-            if let completionHandler = completionHandler {
-                DispatchQueue.main.async {
-                    let error = ChatkitError.alreadyConnecting
-                    completionHandler(error)
-                }
-            }
+            let error = ChatkitError.alreadyConnecting
+            Self.execute(completionHandler, onMainThreadWith: error)
         }
     }
     
@@ -164,9 +146,6 @@ public class Chatkit {
     ///     - completionHandler: A completion handler which will be called when the `JoinedRoomsProvider` is ready, or an `Error` occurs creating it.
     public func createJoinedRoomsProvider(completionHandler: @escaping (JoinedRoomsProvider?, Error?) -> Void) {
         
-        let joinedRoomsProvider: JoinedRoomsProvider?
-        let error: Error?
-        
         switch connectionStatus {
 
         case .connected:
@@ -180,20 +159,17 @@ public class Chatkit {
                                    createdAt: Date(),
                                    updatedAt: Date())
             
-            joinedRoomsProvider = JoinedRoomsProvider(currentUser: currentUser, dependencies: dependencies)
-            error = nil
+            let joinedRoomsProvider = JoinedRoomsProvider(currentUser: currentUser, dependencies: dependencies)
+            
+            Self.execute(completionHandler, onMainThreadWith: joinedRoomsProvider, nil)
         
         case .disconnected:
-            joinedRoomsProvider = nil
-            error = ChatkitError.disconnected
+            let error = ChatkitError.disconnected
+            Self.execute(completionHandler, onMainThreadWith: nil, error)
             
         case .connecting:
-            joinedRoomsProvider = nil
-            error = ChatkitError.connecting
-        }
-
-        DispatchQueue.main.async {
-            completionHandler(joinedRoomsProvider, error)
+            let error = ChatkitError.connecting
+            Self.execute(completionHandler, onMainThreadWith: nil, error)
         }
 
     }
@@ -283,6 +259,29 @@ public class Chatkit {
         // TODO: Implement
         return []
     }
+    
+    // MARK: - Private
+    
+    private static func execute<T>(_ closure: ((T) -> Void)?, onMainThreadWith argument: T) {
+        guard let closure = closure else {
+            return
+        }
+        
+        DispatchQueue.main.async {
+            closure(argument)
+        }
+    }
+    
+    private static func execute<T1, T2>(_ closure: ((T1, T2) -> Void)?, onMainThreadWith argument1: T1, _ argument2: T2) {
+        guard let closure = closure else {
+            return
+        }
+        
+        DispatchQueue.main.async {
+            closure(argument1, argument2)
+        }
+    }
+    
 }
 
 // MARK: - Delegate
