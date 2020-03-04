@@ -5,6 +5,16 @@ import XCTest
 class ConcreteSubscriptionTests: XCTestCase {
     
     private enum ConcreteSubscriptionAssertableState {
+        
+        /*
+         Note: `subscribingStageOne` and `subscribingStageTwo` are required because when calling `instanceWrapper.subscribeWithResume` its possible that the `onError` closure might fire BEFORE the method itself has returned. In that instance we need to know within the `onError` closure that we were in the process of subscribing so we set the state to `subscribingStageOne` beforehand to indicate this state and it also holds reference to the completion handlers that are in need of invocation.
+         
+         So in summary:
+            subscribingStageOne: `subscribeWithResume` has been invoked but has not returned.
+            subscribingStageTwo: `subscribeWithResume` has been invoked and has returned but `onOpen` has not yet fired.
+            subscribed: `subscribeWithResume` has been invoked and has returned and `onOpen` has fired.
+         */
+        
         case notSubscribed
         case subscribingStageOne
         case subscribingStageTwo
