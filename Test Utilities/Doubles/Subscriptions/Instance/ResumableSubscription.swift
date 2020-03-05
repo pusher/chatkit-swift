@@ -3,6 +3,10 @@ import XCTest
 
 public class DummyResumableSubscription: DummyBase, ResumableSubscription {
     
+    public override init(file: StaticString = #file, line: UInt = #line) {
+        super.init(file: file, line: line)
+    }
+    
     public var onOpen: (() -> Void)? {
         get {
             DummyFail(sender: self, function: #function)

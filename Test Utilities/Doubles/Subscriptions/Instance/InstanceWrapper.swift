@@ -6,6 +6,10 @@ import struct PusherPlatform.PPSDKInfo
 
 public class DummyInstanceWrapper: DummyBase, InstanceWrapper {
     
+    public override init(file: StaticString = #file, line: UInt = #line) {
+        super.init(file: file, line: line)
+    }
+    
     public func request(using requestOptions: PPRequestOptions, onSuccess: ((Data) -> Void)?, onError: ((Error) -> Void)?) -> PPGeneralRequest {
         DummyFail(sender: self, function: #function)
         return PPGeneralRequest()

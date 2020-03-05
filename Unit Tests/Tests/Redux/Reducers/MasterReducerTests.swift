@@ -632,7 +632,7 @@ class MasterReducerTests: XCTestCase {
         let reducer_stateToReturn = AuxiliaryState(
             subscriptions:
             [
-                "user" : .connected
+                .user : .connected
             ]
         )
         
@@ -644,7 +644,7 @@ class MasterReducerTests: XCTestCase {
         let inputAuxiliaryState = AuxiliaryState(
             subscriptions:
             [
-                "user" : .initializing(error: nil)
+                .user : .initializing(error: nil)
             ]
         )
         
@@ -656,8 +656,8 @@ class MasterReducerTests: XCTestCase {
         )
         
         let action = SubscriptionStateUpdatedAction(
-            type: "user",
-            state: "connected"
+            type: .user,
+            state: .notSubscribed
         )
         
         /******************/

@@ -46,7 +46,7 @@ public class StubJoinedRoomsRepository: DoubleBase, JoinedRoomsRepositoryProtoco
         
         let stubFilter = StubStateFilter()
         let stubBuffer = StubBuffer(currentState_toReturn: nil, filter_toReturn: stubFilter, delegate_expectedSetCallCount: 1)
-        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: "",
+        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: .user,
                                                               connectionState_toReturn: .connected,
                                                               delegate_expectedSetCallCount: 1)
         let stubTransformer = StubTransformer(room_toReturn: room, transformCurrentStatePreviousState_expectedSetCallCount: 1)

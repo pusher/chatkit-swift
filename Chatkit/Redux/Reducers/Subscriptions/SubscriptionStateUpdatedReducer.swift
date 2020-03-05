@@ -12,9 +12,20 @@ extension Reducer.Subscription {
         // MARK: - Reducer
         
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
-            // TODO: Map subscription type and state to the dictionary below.
             var subscriptions = state.subscriptions
-            subscriptions[action.type] = .connected
+            
+            // TODO: Handle error scenarios when available.
+            switch action.state {
+            case .notSubscribed:
+                subscriptions[action.type] = .closed(error: nil)
+                
+            case .subscribingStageOne(_, _),
+                 .subscribingStageTwo(_, _, _):
+                subscriptions[action.type] = .initializing(error: nil)
+                
+            case .subscribed(_, _):
+                subscriptions[action.type] = .connected
+            }
             
             return AuxiliaryState(subscriptions: subscriptions)
         }

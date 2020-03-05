@@ -3,7 +3,7 @@ import XCTest
 
 public class StubConnectivityMonitor: DoubleBase, ConnectivityMonitor {
     
-    private let subscriptionType_toReturn: String
+    private let subscriptionType_toReturn: SubscriptionType
     public private(set) var subscriptionType_actualCallCount: UInt = 0
     
     private let connectionState_toReturn: ConnectionState
@@ -22,7 +22,7 @@ public class StubConnectivityMonitor: DoubleBase, ConnectivityMonitor {
         }
     }
     
-    public init(subscriptionType_toReturn: String,
+    public init(subscriptionType_toReturn: SubscriptionType,
                 connectionState_toReturn: ConnectionState,
                 delegate_expectedSetCallCount: UInt = 0,
                 file: StaticString = #file, line: UInt = #line) {
@@ -34,7 +34,7 @@ public class StubConnectivityMonitor: DoubleBase, ConnectivityMonitor {
         super.init(file: file, line: line)
     }
     
-    public var subscriptionType: String {
+    public var subscriptionType: SubscriptionType {
         self.subscriptionType_actualCallCount += 1
         return self.subscriptionType_toReturn
     }

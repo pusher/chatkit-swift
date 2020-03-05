@@ -21,7 +21,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         case subscribed
     }
     
-    private func XCTAssertEqualState(_ actualState: ConcreteSubscription.State,
+    private func XCTAssertEqualState(_ actualState: SubscriptionState,
                                      _ expectedAssertableState: ConcreteSubscriptionAssertableState,
                                      file: StaticString = #file, line: UInt = #line) {
         switch actualState {

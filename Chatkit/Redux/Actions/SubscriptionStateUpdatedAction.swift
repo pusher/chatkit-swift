@@ -3,12 +3,12 @@ class SubscriptionStateUpdatedAction: Action {
     
     // MARK: - Properties
     
-    let type: String // TODO: Replace with SubscriptionType when available.
-    let state: String // TODO: Replace with something that can be mapped to SubscriptionState.
+    let type: SubscriptionType
+    let state: SubscriptionState
     
     // MARK: - Initializers
     
-    init(type: String, state: String) {
+    init(type: SubscriptionType, state: SubscriptionState) {
         self.type = type
         self.state = state
     }

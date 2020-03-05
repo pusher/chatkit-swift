@@ -14,7 +14,7 @@ class AuxiliaryStateTests: XCTestCase {
         
         let state = AuxiliaryState(
             subscriptions: [
-                "user" : .connected
+                .user : .connected
             ]
         )
         
@@ -39,14 +39,14 @@ class AuxiliaryStateTests: XCTestCase {
         
         let state = AuxiliaryState(
             subscriptions: [
-                "user" : .initializing(error: nil),
-                "room" : .connected
+                .user : .initializing(error: nil),
+                .room(roomIdentifier: "room-identifier") : .connected
             ]
         )
         
         let supplementalState = AuxiliaryState(
             subscriptions: [
-                "user" : .initializing(error: FakeError.firstError)
+                .user : .initializing(error: FakeError.firstError)
             ]
         )
         
@@ -71,13 +71,13 @@ class AuxiliaryStateTests: XCTestCase {
         
         let firstState = AuxiliaryState(
             subscriptions: [
-                "user" : .connected
+                .user : .connected
             ]
         )
         
         let secondState = AuxiliaryState(
             subscriptions: [
-                "user" : .connected
+                .user : .connected
             ]
         )
         
@@ -103,13 +103,13 @@ class AuxiliaryStateTests: XCTestCase {
         
         let firstState = AuxiliaryState(
             subscriptions: [
-                "user" : .connected
+                .user : .connected
             ]
         )
         
         let secondState = AuxiliaryState(
             subscriptions: [
-                "room" : .connected
+                .room(roomIdentifier: "room-identifier") : .connected
             ]
         )
         

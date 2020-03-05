@@ -23,7 +23,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionTypeToReturn = "user"
+        let subscriptionTypeToReturn: SubscriptionType = .user
         let connectionStateToReturn: ConnectionState = .initializing(error: nil)
         
         let stateToReturn = VersionedState(
@@ -72,7 +72,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionTypeToReturn = "user"
+        let subscriptionTypeToReturn: SubscriptionType = .user
         let connectionStateToReturn: ConnectionState = .connected
         
         let stateToReturn = VersionedState(
@@ -142,7 +142,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionTypeToReturn = "user"
+        let subscriptionTypeToReturn: SubscriptionType = .user
         let errorToReturn = FakeError.firstError
         let connectionStateToReturn: ConnectionState = .degraded(error: errorToReturn)
         
@@ -192,7 +192,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionTypeToReturn = "user"
+        let subscriptionTypeToReturn: SubscriptionType = .user
         let connectionStateToReturn: ConnectionState = .closed(error: nil)
         
         let stateToReturn = VersionedState(
@@ -241,7 +241,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionTypeToReturn = "user"
+        let subscriptionTypeToReturn: SubscriptionType = .user
         let connectionStateToReturn: ConnectionState = .connected
         
         let stubFilter = StubStateFilter()
@@ -279,7 +279,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let initialSubscriptionTypeToReturn = "user"
+        let initialSubscriptionTypeToReturn: SubscriptionType = .user
         let initialConnectionStateToReturn: ConnectionState = .initializing(error: nil)
         
         let initialStateToReturn = VersionedState(
@@ -339,7 +339,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let initialSubscriptionTypeToReturn = "user"
+        let initialSubscriptionTypeToReturn: SubscriptionType = .user
         let initialConnectionStateToReturn: ConnectionState = .initializing(error: nil)
         
         let initialStateToReturn = VersionedState(
@@ -398,7 +398,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let initialSubscriptionTypeToReturn = "user"
+        let initialSubscriptionTypeToReturn: SubscriptionType = .user
         let initialConnectionStateToReturn: ConnectionState = .connected
         
         let initialStateToReturn = VersionedState(

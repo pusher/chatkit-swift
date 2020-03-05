@@ -168,6 +168,7 @@
 		22DFC4622411412200591A7C /* SubscriptionActionDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DFC44E2411412200591A7C /* SubscriptionActionDispatcher.swift */; };
 		22DFC4632411412200591A7C /* SDKInfoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DFC44F2411412200591A7C /* SDKInfoProvider.swift */; };
 		22DFC4642411412200591A7C /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DFC4512411412200591A7C /* Dependencies.swift */; };
+		22DFC46624114BBF00591A7C /* SubscriptionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DFC46524114BBF00591A7C /* SubscriptionState.swift */; };
 		22F670FA23EC50D5001D3BF2 /* MasterReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F670F923EC50D5001D3BF2 /* MasterReducerTests.swift */; };
 		22F670FE23EC7DAB001D3BF2 /* UserReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F670FD23EC7DAB001D3BF2 /* UserReducerTests.swift */; };
 		22FC112D233E50FB0013A9D7 /* UsersRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FC112C233E50FB0013A9D7 /* UsersRepository.swift */; };
@@ -508,6 +509,7 @@
 		22DFC44E2411412200591A7C /* SubscriptionActionDispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionActionDispatcher.swift; sourceTree = "<group>"; };
 		22DFC44F2411412200591A7C /* SDKInfoProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKInfoProvider.swift; sourceTree = "<group>"; };
 		22DFC4512411412200591A7C /* Dependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
+		22DFC46524114BBF00591A7C /* SubscriptionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionState.swift; sourceTree = "<group>"; };
 		22F670F923EC50D5001D3BF2 /* MasterReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterReducerTests.swift; sourceTree = "<group>"; };
 		22F670FD23EC7DAB001D3BF2 /* UserReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserReducerTests.swift; sourceTree = "<group>"; };
 		22FC112C233E50FB0013A9D7 /* UsersRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersRepository.swift; sourceTree = "<group>"; };
@@ -1666,6 +1668,7 @@
 				73233AC623CE1AD3001909B7 /* SubscriptionActionDispatcher.swift */,
 				73233AC223CE1A0D001909B7 /* SubscriptionFactory.swift */,
 				73233AC023CE19DC001909B7 /* SubscriptionManager.swift */,
+				22DFC46524114BBF00591A7C /* SubscriptionState.swift */,
 				732C8BCF23F3FF26006E7537 /* SubscriptionType.swift */,
 			);
 			path = Subscriptions;
@@ -2354,6 +2357,7 @@
 				734D6A4223AAA77F00105479 /* Wire.CursorType.swift in Sources */,
 				22D2A2D823196B9F0095757C /* PCBaseClient+Extensions.swift in Sources */,
 				22DA90AC23E844FA0023A7DC /* Reducer.swift in Sources */,
+				22DFC46624114BBF00591A7C /* SubscriptionState.swift in Sources */,
 				222EA2AD23424A11004EE90F /* JoinedRoomsRepository.swift in Sources */,
 				22A7425123ED7ADE00F2F26D /* Action.swift in Sources */,
 				7301BC7323B1143D00F162C7 /* Wire.Event.IsTyping.swift in Sources */,

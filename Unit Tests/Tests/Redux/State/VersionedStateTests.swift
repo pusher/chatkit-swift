@@ -277,7 +277,7 @@ class VersionedStateTests: XCTestCase {
             chatState: .empty,
             auxiliaryState: AuxiliaryState(
                 subscriptions: [
-                    "user" : .connected
+                    .user : .connected
                 ]
             ),
             version: 0,

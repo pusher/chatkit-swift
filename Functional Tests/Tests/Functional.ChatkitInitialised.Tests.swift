@@ -69,7 +69,7 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             /*****************/
             
             // Prepare user subscription to return failure when the client attempts to register
-            stubNetworking.stubSubscribe(.user, .fail(error: FakeError()))
+            stubNetworking.stubSubscribe(.user, .fail(error: FakeError.firstError))
             
             let expectation = XCTestExpectation.Chatkit.connect
             chatkit.connect(completionHandler: expectation.handler)
@@ -80,7 +80,7 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             
             wait(for: [expectation], timeout: 1)
             
-            XCTAssertExpectationFulfilledWithResult(expectation, FakeError())
+            XCTAssertExpectationFulfilledWithResult(expectation, FakeError.firstError)
             XCTAssertEqual(chatkit.connectionStatus, .disconnected)
             
         }())

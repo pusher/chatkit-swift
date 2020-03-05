@@ -1,7 +1,7 @@
 
 protocol ConnectivityMonitor: StoreListener {
     
-    var subscriptionType: String { get }    // TODO: Replace with SubscriptionType when available.
+    var subscriptionType: SubscriptionType { get }
     var connectionState: ConnectionState { get }
     var delegate: ConnectivityMonitorDelegate? { get set }
     
@@ -17,7 +17,7 @@ class ConcreteConnectivityMonitor: ConnectivityMonitor {
     
     // MARK: - Properties
     
-    let subscriptionType: String
+    let subscriptionType: SubscriptionType
     private(set) var connectionState: ConnectionState
     
     private let dependencies: Dependencies
@@ -26,7 +26,7 @@ class ConcreteConnectivityMonitor: ConnectivityMonitor {
     
     // MARK: - Initializers
     
-    init(subscriptionType: String, dependencies: Dependencies) {
+    init(subscriptionType: SubscriptionType, dependencies: Dependencies) {
         self.subscriptionType = subscriptionType
         self.connectionState = .closed(error: nil)
         self.dependencies = dependencies

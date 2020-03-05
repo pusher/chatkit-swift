@@ -3,7 +3,7 @@ struct AuxiliaryState: State {
     
     // MARK: - Properties
     
-    let subscriptions: [String : ConnectionState] // TODO: Replace with [SubscriptionType : ConnectionState] when available.
+    let subscriptions: [SubscriptionType : ConnectionState]
     
     static let empty: AuxiliaryState = AuxiliaryState(subscriptions: [:])
     
@@ -14,7 +14,7 @@ struct AuxiliaryState: State {
     // MARK: - Supplementation
     
     func supplement(withState supplementalState: AuxiliaryState) -> AuxiliaryState {
-        let subscriptions = self.subscriptions.reduce(into: [String : ConnectionState]()) {
+        let subscriptions = self.subscriptions.reduce(into: [SubscriptionType : ConnectionState]()) {
             if let supplementalSubscription = supplementalState.subscriptions[$1.key] {
                 $0[$1.key] = $1.value.supplement(withState: supplementalSubscription)
             }

@@ -12,7 +12,7 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionType = "user"
+        let subscriptionType: SubscriptionType = .user
         let connectionState: ConnectionState = .connected
         let state = VersionedState(
             chatState: .empty,
@@ -50,7 +50,7 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionType = "user"
+        let subscriptionType: SubscriptionType = .user
         let state: VersionedState = .initial
         
         let stubStore = StubStore(state_toReturn: state, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
@@ -78,7 +78,7 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionType = "user"
+        let subscriptionType: SubscriptionType = .user
         let state: VersionedState = .initial
         
         let stubStore = StubStore(state_toReturn: state, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
@@ -105,7 +105,7 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionType = "user"
+        let subscriptionType: SubscriptionType = .user
         let state: VersionedState = .initial
         
         let stubStore = StubStore(state_toReturn: state, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
@@ -130,7 +130,7 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionType = "user"
+        let subscriptionType: SubscriptionType = .user
         let connectionState: ConnectionState = .connected
         
         let initialState: VersionedState = .initial
@@ -177,7 +177,7 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionType = "user"
+        let subscriptionType: SubscriptionType = .user
         let connectionState: ConnectionState = .closed(error: nil)
         
         let initialState: VersionedState = .initial
