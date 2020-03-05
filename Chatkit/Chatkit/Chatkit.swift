@@ -181,12 +181,10 @@ public class Chatkit {
     /// Creates an instance of `JoinedRoomsViewModel`.
     ///
     /// This will give access to a real time sorted list of the `Room`s that the current user is a member of.
-    ///
-    /// - Parameters:
-    ///     - completionHandler: A completion handler which will be called when the `JoinedRoomsViewModel` is ready, or an `Error` occurs creating it.
-    public func createJoinedRoomsViewModel(completionHandler: @escaping (JoinedRoomsViewModel?, Error?) -> Void) {
-        // TODO: Implement
-        completionHandler(nil, nil)
+    public func createJoinedRoomsViewModel() -> JoinedRoomsViewModel {
+        let repository = self.createJoinedRoomsRepository()
+        
+        return JoinedRoomsViewModel(repository: repository)
     }
     
     /// Creates an instance of `MessagesViewModel`.
