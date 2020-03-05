@@ -25,7 +25,7 @@ public class DummyStore: DummyBase, Store {
 
 public class StubStore: DoubleBase, Store {
     
-    private let state_toReturn: VersionedState
+    private let state_toReturn: VersionedState?
     public private(set) var state_actualCallCount: UInt = 0
     
     private let dispatch_expectedCallCount: UInt
@@ -39,7 +39,7 @@ public class StubStore: DoubleBase, Store {
     private let unregister_expectedCallCount: UInt
     public private(set) var unregister_actualCallCount: Int = 0
     
-    public init(state_toReturn: VersionedState,
+    public init(state_toReturn: VersionedState? = nil,
                 dispatch_expectedCallCount: UInt = 0,
                 register_expectedCallCount: UInt = 0,
                 unregister_expectedCallCount: UInt = 0,
@@ -55,6 +55,10 @@ public class StubStore: DoubleBase, Store {
     
     public var state: VersionedState {
         self.state_actualCallCount += 1
+        guard let state_toReturn = state_toReturn else {
+            XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: self.file, line: self.line)
+            return .initial
+        }
         return state_toReturn
     }
     
@@ -74,10 +78,14 @@ public class StubStore: DoubleBase, Store {
         
         guard self.register_actualCallCount <= self.register_expectedCallCount else {
             XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: self.file, line: self.line)
-            return self.state_toReturn
+            return .initial
         }
         
-        return self.state_toReturn
+        guard let state_toReturn = state_toReturn else {
+            XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self)) (no `state_toReturn` was defined)", file: self.file, line: self.line)
+            return .initial
+        }
+        return state_toReturn
     }
     
     public func unregister(_ listener: StoreListener) {
