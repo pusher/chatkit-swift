@@ -22,7 +22,7 @@ public class DummyTransformer: DummyBase, Transformer {
     
 }
 
-public class StubTransformer: StubBase, Transformer {
+public class StubTransformer: DoubleBase, Transformer {
     
     private let room_toReturn: Room
     private let transformState_expectedSetCallCount: UInt

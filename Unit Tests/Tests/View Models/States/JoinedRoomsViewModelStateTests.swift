@@ -1,4 +1,5 @@
 import XCTest
+import TestUtilities
 @testable import PusherChatkit
 
 class JoinedRoomsViewModelStateTests: XCTestCase {
@@ -89,8 +90,8 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         self.firstChangeReason = .itemInserted(position: firstPosition)
         self.firstChangeReason = .itemMoved(fromPosition: firstPosition, toPosition: secondPosition)
         
-        self.firstError = NetworkingError.disconnected
-        self.secondError = NetworkingError.invalidEvent
+        self.firstError = FakeError.firstError
+        self.secondError = FakeError.secondError
     }
     
     // MARK: - Tests

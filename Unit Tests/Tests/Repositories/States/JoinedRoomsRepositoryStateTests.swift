@@ -1,4 +1,5 @@
 import XCTest
+import TestUtilities
 @testable import PusherChatkit
 
 class JoinedRoomsRepositoryStateTests: XCTestCase {
@@ -43,8 +44,8 @@ class JoinedRoomsRepositoryStateTests: XCTestCase {
         self.firstChangeReason = .addedToRoom(room: firstRoom)
         self.firstChangeReason = .removedFromRoom(room: secondRoom)
         
-        self.firstError = NetworkingError.disconnected
-        self.secondError = NetworkingError.invalidEvent
+        self.firstError = FakeError.firstError
+        self.secondError = FakeError.secondError
     }
     
     // MARK: - Tests

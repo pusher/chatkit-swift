@@ -1,6 +1,6 @@
 import XCTest
 
-public class StubBase {
+public class DoubleBase {
     
     let file: StaticString
     let line: UInt

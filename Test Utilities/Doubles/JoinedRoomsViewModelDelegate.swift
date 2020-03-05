@@ -1,7 +1,7 @@
 import XCTest
 @testable import PusherChatkit
 
-public class StubJoinedRoomsViewModelDelegate: StubBase, JoinedRoomsViewModelDelegate {
+public class StubJoinedRoomsViewModelDelegate: DoubleBase, JoinedRoomsViewModelDelegate {
     
     private var didUpdateState_expectedCallCount: UInt
     public private(set) var didUpdateState_stateLastReceived: JoinedRoomsViewModel.State?

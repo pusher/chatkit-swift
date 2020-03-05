@@ -143,7 +143,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /******************/
         
         let subscriptionTypeToReturn = "user"
-        let errorToReturn = NetworkingError.invalidEvent
+        let errorToReturn = FakeError.firstError
         let connectionStateToReturn: ConnectionState = .degraded(error: errorToReturn)
         
         let stateToReturn = VersionedState(

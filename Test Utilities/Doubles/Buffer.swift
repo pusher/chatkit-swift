@@ -1,7 +1,7 @@
 import XCTest
 @testable import PusherChatkit
 
-public class StubBuffer: StubBase, Buffer {
+public class StubBuffer: DoubleBase, Buffer {
     
     private let currentState_toReturn: VersionedState?
     public private(set) var currentState_actualCallCount: UInt = 0

@@ -11,8 +11,8 @@ internal extension PPBaseClient {
     // MARK: - Internal methods
     
     class func host(for instanceLocator: String) throws -> String {
-        guard let locator = PusherPlatform.InstanceLocator(string: instanceLocator) else {
-            throw NetworkingError.invalidInstanceLocator
+        guard let locator = InstanceLocator(string: instanceLocator) else {
+            throw ChatkitError.invalidInstanceLocator
         }
         
         return [locator.region, PPBaseClient.hostname].joined(separator: PPBaseClient.separator)

@@ -22,7 +22,7 @@ extension XCTest {
     }
 }
 
-public class StubReducer<T: Reducing>: StubBase {
+public class StubReducer<T: Reducing>: DoubleBase {
     
     private let reduce_expectedCallCount: UInt
     public var reduce_stateToReturn: T.StateType

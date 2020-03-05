@@ -1,7 +1,7 @@
 import XCTest
 @testable import PusherChatkit
 
-public class StubJoinedRoomsRepository: StubBase, JoinedRoomsRepositoryProtocol {
+public class StubJoinedRoomsRepository: DoubleBase, JoinedRoomsRepositoryProtocol {
     
     private let state_toReturn: JoinedRoomsRepository.State
     public private(set) var state_actualCallCount: UInt = 0

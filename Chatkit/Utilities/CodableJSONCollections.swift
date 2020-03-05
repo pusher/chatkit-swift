@@ -114,7 +114,7 @@ internal extension KeyedDecodingContainer {
             // So this code catches that Error and sets the `codingPath` correctly.
             let keyedContainer = try self.nestedContainer(keyedBy: DynamicCodingKeys.self, forKey: key)
             return try decodeDictionaryOfAnyHashable(in: keyedContainer)
-        } catch DecodingError.typeMismatch(let type, let context)  {
+        } catch DecodingError.typeMismatch(let type, let context) {
             let codingPath = context.codingPath.count == 0 ? [key] : context.codingPath
             let context = DecodingError.Context(codingPath: codingPath, debugDescription: context.debugDescription)
             throw DecodingError.typeMismatch(type, context)

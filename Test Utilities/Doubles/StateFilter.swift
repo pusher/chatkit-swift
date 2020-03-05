@@ -1,7 +1,7 @@
 import XCTest
 @testable import PusherChatkit
 
-public class StubStateFilter: StubBase, StateFilter {
+public class StubStateFilter: DoubleBase, StateFilter {
     
     private let hasModifiedSubstate_defaultValueToReturn: Bool
     private let hasCompleteSubstate_defaultValueToReturn: Bool

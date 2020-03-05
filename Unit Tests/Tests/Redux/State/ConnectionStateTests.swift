@@ -1,4 +1,5 @@
 import XCTest
+import TestUtilities
 @testable import PusherChatkit
 
 class ConnectionStateTests: XCTestCase {
@@ -32,9 +33,9 @@ class ConnectionStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let state: ConnectionState = .degraded(error: NetworkingError.disconnected)
+        let state: ConnectionState = .degraded(error: FakeError.firstError)
         
-        let supplementalState: ConnectionState = .degraded(error: NetworkingError.invalidEvent)
+        let supplementalState: ConnectionState = .degraded(error: FakeError.secondError)
         
         /******************/
         /*----- WHEN -----*/
@@ -55,7 +56,7 @@ class ConnectionStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let error: NetworkingError = .disconnected
+        let error: FakeError = .firstError
         
         let initializingConnectionState: ConnectionState = .initializing(error: error)
         let connectedConnectionState: ConnectionState = .connected
@@ -91,8 +92,8 @@ class ConnectionStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstConnectionState: ConnectionState = .initializing(error: NetworkingError.disconnected)
-        let secondConnectionState: ConnectionState = .initializing(error: NetworkingError.disconnected)
+        let firstConnectionState: ConnectionState = .initializing(error: FakeError.firstError)
+        let secondConnectionState: ConnectionState = .initializing(error: FakeError.firstError)
         
         /******************/
         /*----- WHEN -----*/
@@ -114,8 +115,8 @@ class ConnectionStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstConnectionState: ConnectionState = .initializing(error: NetworkingError.disconnected)
-        let secondConnectionState: ConnectionState = .initializing(error: NetworkingError.invalidEvent)
+        let firstConnectionState: ConnectionState = .initializing(error: FakeError.firstError)
+        let secondConnectionState: ConnectionState = .initializing(error: FakeError.secondError)
         
         /******************/
         /*----- WHEN -----*/
@@ -160,8 +161,8 @@ class ConnectionStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstConnectionState: ConnectionState = .degraded(error: NetworkingError.disconnected)
-        let secondConnectionState: ConnectionState = .degraded(error: NetworkingError.disconnected)
+        let firstConnectionState: ConnectionState = .degraded(error: FakeError.firstError)
+        let secondConnectionState: ConnectionState = .degraded(error: FakeError.firstError)
         
         /******************/
         /*----- WHEN -----*/
@@ -183,8 +184,8 @@ class ConnectionStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstConnectionState: ConnectionState = .degraded(error: NetworkingError.disconnected)
-        let secondConnectionState: ConnectionState = .degraded(error: NetworkingError.invalidEvent)
+        let firstConnectionState: ConnectionState = .degraded(error: FakeError.firstError)
+        let secondConnectionState: ConnectionState = .degraded(error: FakeError.secondError)
         
         /******************/
         /*----- WHEN -----*/
@@ -206,8 +207,8 @@ class ConnectionStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstConnectionState: ConnectionState = .closed(error: NetworkingError.disconnected)
-        let secondConnectionState: ConnectionState = .closed(error: NetworkingError.disconnected)
+        let firstConnectionState: ConnectionState = .closed(error: FakeError.firstError)
+        let secondConnectionState: ConnectionState = .closed(error: FakeError.firstError)
         
         /******************/
         /*----- WHEN -----*/
@@ -229,8 +230,8 @@ class ConnectionStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstConnectionState: ConnectionState = .closed(error: NetworkingError.disconnected)
-        let secondConnectionState: ConnectionState = .closed(error: NetworkingError.invalidEvent)
+        let firstConnectionState: ConnectionState = .closed(error: FakeError.firstError)
+        let secondConnectionState: ConnectionState = .closed(error: FakeError.secondError)
         
         /******************/
         /*----- WHEN -----*/

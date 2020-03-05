@@ -106,7 +106,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /******************/
         
         let initialStateToReturn: JoinedRoomsRepository.State = .connected(rooms: [self.room], changeReason: nil)
-        let modifiedStateToReturn: JoinedRoomsRepository.State = .degraded(rooms: [self.room], error: NetworkingError.invalidEvent, changeReason: nil)
+        let modifiedStateToReturn: JoinedRoomsRepository.State = .degraded(rooms: [self.room], error: FakeError.firstError, changeReason: nil)
         
         let stubJoinedRoomsRepository = StubJoinedRoomsRepository(state_toReturn: initialStateToReturn, delegate_expectedSetCallCount: 1)
         let stubDelegate = StubJoinedRoomsViewModelDelegate(didUpdateState_expectedCallCount: 1)
@@ -127,7 +127,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsViewModel.State = .degraded(rooms: [self.room], error: NetworkingError.invalidEvent, changeReason: nil)
+        let expectedState: JoinedRoomsViewModel.State = .degraded(rooms: [self.room], error: FakeError.firstError, changeReason: nil)
         
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didUpdateState_stateLastReceived, expectedState)

@@ -1,7 +1,7 @@
 import XCTest
 @testable import PusherChatkit
 
-public class StubConnectivityMonitor: StubBase, ConnectivityMonitor {
+public class StubConnectivityMonitor: DoubleBase, ConnectivityMonitor {
     
     private let subscriptionType_toReturn: String
     public private(set) var subscriptionType_actualCallCount: UInt = 0

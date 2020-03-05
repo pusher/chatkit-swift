@@ -14,21 +14,13 @@ class PCBaseClientExtensionsTests: XCTestCase {
     
     func testShouldThrowErrorForInstanceLocatorWithTooFewComponents() {
         XCTAssertThrowsError(try PPBaseClient.host(for: "invalid:locator"), "Failed to catch an error for invalid instance locator.") { error in
-            guard let error = error as? NetworkingError else {
-                return
-            }
-            
-            XCTAssertEqual(error, NetworkingError.invalidInstanceLocator)
+            XCTAssertEqual(error as? ChatkitError, ChatkitError.invalidInstanceLocator)
         }
     }
     
     func testShouldThrowErrorForInstanceLocatorWithTooManyComponents() {
         XCTAssertThrowsError(try PPBaseClient.host(for: "invalid:test:instance:locator"), "Failed to catch an error for invalid instance locator.") { error in
-            guard let error = error as? NetworkingError else {
-                return
-            }
-            
-            XCTAssertEqual(error, NetworkingError.invalidInstanceLocator)
+            XCTAssertEqual(error as? ChatkitError, ChatkitError.invalidInstanceLocator)
         }
     }
     

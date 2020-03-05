@@ -37,4 +37,3 @@ class EnvironmentStringExtensionTests: XCTestCase {
         XCTAssertEqual("MORE_THAN_ONE_SEPARATOR".hungarianCased(separator: "_"), "moreThanOneSeparator")
     }
 }
-

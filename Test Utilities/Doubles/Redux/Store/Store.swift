@@ -23,19 +23,8 @@ public class DummyStore: DummyBase, Store {
     
 }
 
-public extension XCTest {
-    // We might like to use a `DummyStore` directly in a test so here we
-    // provide a (faux) initialiser that sets `file` and `line` automatically
-    // making the tests themeselves cleaner and more readable.
-    // Typically we shouldn't do this on Dummy's though which is why we restrict to within XCTest only.
-    func DummyStore(file: StaticString = #file, line: UInt = #line) -> DummyStore {
-        let dummy: DummyStore = .init(file: file, line: line)
-        return dummy
-    }
-}
-
-public class StubStore: StubBase, Store {
-
+public class StubStore: DoubleBase, Store {
+    
     private let state_toReturn: VersionedState
     public private(set) var state_actualCallCount: UInt = 0
     
@@ -51,10 +40,10 @@ public class StubStore: StubBase, Store {
     public private(set) var unregister_actualCallCount: Int = 0
     
     public init(state_toReturn: VersionedState,
-         dispatch_expectedCallCount: UInt = 0,
-         register_expectedCallCount: UInt = 0,
-         unregister_expectedCallCount: UInt = 0,
-         file: StaticString = #file, line: UInt = #line) {
+                dispatch_expectedCallCount: UInt = 0,
+                register_expectedCallCount: UInt = 0,
+                unregister_expectedCallCount: UInt = 0,
+                file: StaticString = #file, line: UInt = #line) {
         
         self.state_toReturn = state_toReturn
         self.dispatch_expectedCallCount = dispatch_expectedCallCount

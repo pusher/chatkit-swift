@@ -1,4 +1,5 @@
 import XCTest
+import TestUtilities
 @testable import PusherChatkit
 
 class AuxiliaryStateTests: XCTestCase {
@@ -45,7 +46,7 @@ class AuxiliaryStateTests: XCTestCase {
         
         let supplementalState = AuxiliaryState(
             subscriptions: [
-                "user" : .initializing(error: NetworkingError.disconnected)
+                "user" : .initializing(error: FakeError.firstError)
             ]
         )
         

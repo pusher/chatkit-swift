@@ -12,7 +12,7 @@ public class DummyBufferDelegate: DummyBase, BufferDelegate {
     }
 }
 
-public class StubBufferDelegate: StubBase, BufferDelegate {
+public class StubBufferDelegate: DoubleBase, BufferDelegate {
     
     private var didUpdateState_expectedCallCount: UInt
     public private(set) var didUpdateState_stateLastReceived: VersionedState?

@@ -12,7 +12,7 @@ public class DummyConnectivityMonitorDelegate: DummyBase, ConnectivityMonitorDel
     }
 }
 
-public class StubConnectivityMonitorDelegate: StubBase, ConnectivityMonitorDelegate {
+public class StubConnectivityMonitorDelegate: DoubleBase, ConnectivityMonitorDelegate {
     
     private var didUpdateState_expectedCallCount: UInt
     public private(set) var didUpdateState_stateLastReceived: ConnectionState?

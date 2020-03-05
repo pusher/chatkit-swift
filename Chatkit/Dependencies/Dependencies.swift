@@ -1,9 +1,18 @@
+import struct PusherPlatform.InstanceLocator
+import protocol PusherPlatform.TokenProvider
 import struct PusherPlatform.PPSDKInfo
 
 protocol Dependencies:
     HasInstanceLocator &
     HasStore &
     HasTransformer &
+    HasTokenProvider &
+    HasSDKInfoProvider &
+    HasStore &
+    HasInstanceWrapperFactory &
+    HasSubscriptionActionDispatcher &
+    HasSubscriptionFactory &
+    HasSubscriptionManager &
     HasMasterReducer &
     HasUserReducer &
     HasRoomListReducer &
@@ -73,6 +82,7 @@ class ConcreteDependencies: Dependencies {
     private let dependencyFactory = DependencyFactory()
     
     let instanceLocator: InstanceLocator
+    let tokenProvider: TokenProvider
     
     let masterReducer = Reducer.Master.reduce
     let userReducer = Reducer.Model.User.reduce
@@ -86,9 +96,18 @@ class ConcreteDependencies: Dependencies {
     let subscriptionStateUpdatedReducer = Reducer.Subscription.StateUpdated.reduce
     
     // `override` gives tests an opportunity to override any concrete dependencies with test doubles.
-    init(instanceLocator: InstanceLocator, override: ((DependencyFactory) -> Void)? = nil) {
+    init(instanceLocator: InstanceLocator,
+         tokenProvider: TokenProvider,
+         override: ((DependencyFactory) -> Void)? = nil) {
         
         self.instanceLocator = instanceLocator
+        self.tokenProvider = tokenProvider
+        
+        dependencyFactory.register(SDKInfoProvider.self, factory: { _ in
+            ConcreteSDKInfoProvider(serviceName: ServiceName.chat.rawValue,
+                                    serviceVersion: ServiceVersion.version7.rawValue,
+                                    sdkInfo: PPSDKInfo.current)
+        })
         
         dependencyFactory.register(Store.self, factory: { dependencies in
             ConcreteStore(dependencies: dependencies)
@@ -98,7 +117,27 @@ class ConcreteDependencies: Dependencies {
             ConcreteTransformer()
         })
         
+        dependencyFactory.register(InstanceWrapperFactory.self, factory: { dependencies in
+            ConcreteInstanceWrapperFactory(dependencies: dependencies)
+        })
+        
+        dependencyFactory.register(SubscriptionActionDispatcher.self, factory: { dependencies in
+            ConcreteSubscriptionActionDispatcher(dependencies: dependencies)
+        })
+        
+        dependencyFactory.register(SubscriptionFactory.self, factory: { dependencies in
+            ConcreteSubscriptionFactory(dependencies: dependencies)
+        })
+        
+        dependencyFactory.register(SubscriptionManager.self, factory: { dependencies in
+            ConcreteSubscriptionManager(dependencies: dependencies)
+        })
+        
         override?(dependencyFactory)
+    }
+    
+    var sdkInfoProvider: SDKInfoProvider {
+        return dependencyFactory.resolve(SDKInfoProvider.self, dependencies: self)
     }
     
     var store: Store {
@@ -107,6 +146,22 @@ class ConcreteDependencies: Dependencies {
     
     var transformer: Transformer {
         return dependencyFactory.resolve(Transformer.self, dependencies: self)
+    }
+    
+    var instanceWrapperFactory: InstanceWrapperFactory {
+        return dependencyFactory.resolve(InstanceWrapperFactory.self, dependencies: self)
+    }
+    
+    var subscriptionActionDispatcher: SubscriptionActionDispatcher {
+        return dependencyFactory.resolve(SubscriptionActionDispatcher.self, dependencies: self)
+    }
+    
+    var subscriptionFactory: SubscriptionFactory {
+        return dependencyFactory.resolve(SubscriptionFactory.self, dependencies: self)
+    }
+    
+    var subscriptionManager: SubscriptionManager {
+        return dependencyFactory.resolve(SubscriptionManager.self, dependencies: self)
     }
     
 }
