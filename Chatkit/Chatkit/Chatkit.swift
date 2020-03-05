@@ -27,6 +27,10 @@ public class Chatkit {
     /// The object that is notified when the status of the connection to Chatkit web service changed.
     public weak var delegate: ChatkitDelegate?
     
+    typealias Dependencies = HasStoreBroadcaster & HasSubscriptionManager
+    
+    private let dependencies: Dependencies
+    
     // MARK: - Initializers
     
     /// Creates and returns an instance of `Chatkit` entry point.
@@ -39,11 +43,16 @@ public class Chatkit {
     ///     - logger: The logger used by the SDK.
     ///
     /// - Returns: An instance of `Chatkit` or throws an error when the initialization failed.
-    public init(instanceLocator: String, tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
-        guard let _ = PusherPlatform.InstanceLocator(string: instanceLocator) else {
-            throw NetworkingError.invalidInstanceLocator
+    public convenience init(instanceLocator: String, tokenProvider: TokenProvider, logger: PPLogger = PPDefaultLogger()) throws {
+        guard let instanceLocator = InstanceLocator(string: instanceLocator) else {
+            throw ChatkitError.invalidInstanceLocator
         }
-
+        let dependencies = ConcreteDependencies(instanceLocator: instanceLocator, tokenProvider: tokenProvider)
+        try self.init(dependencies: dependencies, logger: logger)
+    }
+    
+    internal init(dependencies: Dependencies, logger: PPLogger = PPDefaultLogger()) throws {
+        self.dependencies = dependencies
         self.logger = logger
         self.connectionStatus = .disconnected
     }
@@ -56,16 +65,43 @@ public class Chatkit {
     ///     - completionHandler: An optional completion handler called when a connection has
     ///     been successfuly established or failed due to an error.
     public func connect(completionHandler: CompletionHandler? = nil) {
-        // TODO: Implement
-        self.connectionStatus = .connected
-        if let completionHandler = completionHandler {
-            completionHandler(nil)
+        
+        // TODO: Implement properly
+        
+        switch connectionStatus {
+
+        case .disconnected:
+            
+            dependencies.subscriptionManager.subscribe(toType: .user, sender: self) { result in
+                
+                switch result {
+                    
+                case .success:
+                    self.connectionStatus = .connected
+                    Self.execute(completionHandler, onMainThreadWith: nil)
+                    
+                case let .failure(error):
+                    self.connectionStatus = .disconnected
+                    Self.execute(completionHandler, onMainThreadWith: error)
+                }
+            }
+        
+        case .connected:
+            // TODO is it correct that this is idempotent?
+            Self.execute(completionHandler, onMainThreadWith: nil)
+            
+        case .connecting:
+            let error = ChatkitError.connecting
+            Self.execute(completionHandler, onMainThreadWith: error)
         }
     }
     
     /// Terminates the previously established connection to the Chatkit web service.
     public func disconnect() {
         // TODO: Implement
+
+        dependencies.subscriptionManager.unsubscribeFromAll()
+        
         self.connectionStatus = .disconnected
     }
     
@@ -98,8 +134,33 @@ public class Chatkit {
     /// - Parameters:
     ///     - completionHandler: A completion handler which will be called when the `JoinedRoomsProvider` is ready, or an `Error` occurs creating it.
     public func createJoinedRoomsProvider(completionHandler: @escaping (JoinedRoomsProvider?, Error?) -> Void) {
-        // TODO: Implement
-        completionHandler(nil, nil)
+        
+        switch connectionStatus {
+
+        case .connected:
+            
+            // TODO: Implement
+            let currentUser = User(identifier: "identifier",
+                                   name: "name",
+                                   avatar: nil,
+                                   presenceState: .online,
+                                   customData: nil,
+                                   createdAt: Date(),
+                                   updatedAt: Date())
+            
+            let joinedRoomsProvider = JoinedRoomsProvider(currentUser: currentUser, dependencies: dependencies)
+            
+            Self.execute(completionHandler, onMainThreadWith: joinedRoomsProvider, nil)
+        
+        case .disconnected:
+            let error = ChatkitError.disconnected
+            Self.execute(completionHandler, onMainThreadWith: nil, error)
+            
+        case .connecting:
+            let error = ChatkitError.connecting
+            Self.execute(completionHandler, onMainThreadWith: nil, error)
+        }
+
     }
     
     /// Creates an instance of `MessagesProvider`.
@@ -187,6 +248,29 @@ public class Chatkit {
         // TODO: Implement
         return []
     }
+    
+    // MARK: - Private
+    
+    private static func execute<T>(_ closure: ((T) -> Void)?, onMainThreadWith argument: T) {
+        guard let closure = closure else {
+            return
+        }
+        
+        DispatchQueue.main.async {
+            closure(argument)
+        }
+    }
+    
+    private static func execute<T1, T2>(_ closure: ((T1, T2) -> Void)?, onMainThreadWith argument1: T1, _ argument2: T2) {
+        guard let closure = closure else {
+            return
+        }
+        
+        DispatchQueue.main.async {
+            closure(argument1, argument2)
+        }
+    }
+    
 }
 
 // MARK: - Delegate

@@ -22,6 +22,10 @@ import Foundation
 ///
 public class JoinedRoomsProvider {
     
+    typealias Dependencies = HasStoreBroadcaster
+    
+    private let dependencies: Dependencies
+    
     // MARK: - Properties
     
     /// The current state of the provider.
@@ -31,17 +35,32 @@ public class JoinedRoomsProvider {
     public weak var delegate: JoinedRoomsProviderDelegate?
     
     /// The set of all rooms joined by the user.
-    public var rooms: Set<Room> {
-        return []
-    }
+    public var rooms: Set<Room>
     
     // MARK: - Initializers
     
-    init(currentUser: User) {
+    init(currentUser: User, dependencies: Dependencies) {
         self.state = .connected
+        self.dependencies = dependencies
+        self.rooms = []
+        
+        // TODO needs to move elsewhere once we have a transformer
+        let state = dependencies.storeBroadcaster.register(self)
+        
+        var rooms: Set<Room> = []
+        for roomState in state.joinedRooms.rooms.values {
+            let room = EntityParser.room(fromRoomState: roomState)
+            rooms.insert(room)
+        }
+        self.rooms = rooms
+    }
+    
+    deinit {
+        self.dependencies.storeBroadcaster.unregister(self)
     }
     
 }
+
 
 // MARK: - Delegate
 

@@ -621,7 +621,6 @@ class WireSubscriptionEventDecodableTests: XCTestCase {
                                           "\"read_state\""])
     }
     
-    
     // MARK: - Room Subscription
     
     func test_init_newMessageAllFieldsValid_noProblem() {

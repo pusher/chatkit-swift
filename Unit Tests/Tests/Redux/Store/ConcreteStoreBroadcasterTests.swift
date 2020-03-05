@@ -76,7 +76,7 @@ class ConcreteStoreBroadcasterTests: XCTestCase {
         let sut = ConcreteStoreBroadcaster(dependencies: dependencies)
         
         _ = sut.register(stubStoreListener)
-        // TODO:
+        
         XCTAssertEqual(stubStore.state_actualCallCount, 1)
         XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
         

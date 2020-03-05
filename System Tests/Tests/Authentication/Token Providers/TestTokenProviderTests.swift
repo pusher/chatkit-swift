@@ -33,7 +33,7 @@ class TestTokenProviderTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        waitForExpectations(timeout: 5.0)
+        wait(for: [expectation], timeout: 5.0)
         
         guard case let .authenticated(token: token) = result else {
             XCTFail("Failed to retrieve token from the web service.")

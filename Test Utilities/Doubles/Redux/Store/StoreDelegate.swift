@@ -8,14 +8,14 @@ public class DummyStoreDelegate: DummyBase, StoreDelegate {
     }
 }
 
-public class StubStoreDelegate: StubBase, StoreDelegate {
+public class StubStoreDelegate: DoubleBase, StoreDelegate {
 
     private var didUpdateState_expectedCallCount: UInt
     public private(set) var didUpdateState_stateLastReceived: MasterState?
     public private(set) var didUpdateState_actualCallCount: Int = 0
 
     public init(didUpdateState_expectedCallCount: UInt = 0,
-         file: StaticString = #file, line: UInt = #line) {
+                file: StaticString = #file, line: UInt = #line) {
         
         self.didUpdateState_expectedCallCount = didUpdateState_expectedCallCount
         
@@ -27,10 +27,9 @@ public class StubStoreDelegate: StubBase, StoreDelegate {
     public func store(_ store: Store, didUpdateState state: MasterState) {
         didUpdateState_stateLastReceived = state
         didUpdateState_actualCallCount += 1
-        guard didUpdateState_expectedCallCount > 0 else {
+        guard didUpdateState_actualCallCount <= didUpdateState_expectedCallCount else {
             XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: file, line: line)
             return
         }
-        didUpdateState_expectedCallCount -= 1
     }
 }

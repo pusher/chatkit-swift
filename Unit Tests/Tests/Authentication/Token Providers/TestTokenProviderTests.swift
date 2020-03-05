@@ -45,7 +45,7 @@ class TestTokenProviderTests: XCTestCase {
         let userID = Networking.testUserIdentifier
         
         XCTAssertThrowsError(try TestTokenProvider(instanceLocator: instanceLocator, userIdentifier: userID, logger: TestLogger()), "Failed to catch an error for invalid instance locator.") { error in
-            XCTAssertEqual(error as? NetworkingError, NetworkingError.invalidInstanceLocator)
+            XCTAssertEqual(error as? ChatkitError, ChatkitError.invalidInstanceLocator)
         }
     }
     
@@ -54,7 +54,7 @@ class TestTokenProviderTests: XCTestCase {
         let userID = Networking.testUserIdentifier
         
         XCTAssertThrowsError(try TestTokenProvider(instanceLocator: instanceLocator, userIdentifier: userID, logger: TestLogger()), "Failed to catch an error for invalid instance locator.") { error in
-            XCTAssertEqual(error as? NetworkingError, NetworkingError.invalidInstanceLocator)
+            XCTAssertEqual(error as? ChatkitError, ChatkitError.invalidInstanceLocator)
         }
     }
     
@@ -87,7 +87,7 @@ class TestTokenProviderTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        waitForExpectations(timeout: 1.0)
+        wait(for: [expectation], timeout: 1.0)
         
         guard case let .authenticated(token: token) = result else {
             XCTFail("Failed to retrieve token from the web service.")
@@ -129,7 +129,7 @@ class TestTokenProviderTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        waitForExpectations(timeout: 1.0)
+        wait(for: [expectation], timeout: 1.0)
         
         guard case let .failure(error: error) = result else {
             XCTFail("Unexpectedly retrieved token from the web service.")
@@ -175,7 +175,7 @@ class TestTokenProviderTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        waitForExpectations(timeout: 1.0)
+        wait(for: [expectation], timeout: 1.0)
         
         guard case let .authenticated(token: token) = result else {
             XCTFail("Request has not been stubbed due to missing headers.")
@@ -221,7 +221,7 @@ class TestTokenProviderTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        waitForExpectations(timeout: 1.0)
+        wait(for: [expectation], timeout: 1.0)
         
         guard case let .authenticated(token: token) = result else {
             XCTFail("Request has not been stubbed due to incorrect content of the body.")

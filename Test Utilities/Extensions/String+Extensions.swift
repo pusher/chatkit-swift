@@ -1,6 +1,6 @@
 import XCTest
 
-extension String: Error {
+extension String {
     
     public func toJsonData(validate: Bool = true, file: StaticString = #file, line: UInt = #line) -> Data {
         do {

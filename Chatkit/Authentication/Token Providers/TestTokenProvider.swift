@@ -31,8 +31,8 @@ public class TestTokenProvider: TokenProvider {
     ///     be signed for this user identifier without any authentication being applied.
     ///     - logger: An optional logger used by the token provider.
     public init(instanceLocator: String, userIdentifier: String, logger: PPLogger? = nil) throws {
-        guard let locator = PusherPlatform.InstanceLocator(string: instanceLocator) else {
-            throw NetworkingError.invalidInstanceLocator
+        guard let locator = InstanceLocator(string: instanceLocator) else {
+            throw ChatkitError.invalidInstanceLocator
         }
         
         let url = try Self.url(for: locator)
@@ -62,7 +62,7 @@ public class TestTokenProvider: TokenProvider {
         components.path = "/\(Self.urlService)/\(instanceLocator.version)/\(instanceLocator.identifier)/\(Self.urlResource)"
         
         guard let url = components.url else {
-            throw NetworkingError.invalidInstanceLocator
+            throw ChatkitError.invalidInstanceLocator
         }
         
         return url

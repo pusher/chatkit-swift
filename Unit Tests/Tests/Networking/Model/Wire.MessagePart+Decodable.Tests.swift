@@ -2,7 +2,6 @@ import TestUtilities
 import XCTest
 @testable import PusherChatkit
 
-
 class WireMessagePartDecodableTests: XCTestCase {
     
     func test_init_typeAndContentValid_noProblem() {
@@ -367,6 +366,3 @@ class WireMessagePartDecodableTests: XCTestCase {
     }
     
 }
-
-
-
