@@ -6,20 +6,22 @@ import Foundation
 ///
 /// ## What is provided
 ///
-/// The repository exposes a set, `rooms: Set<Room>` which presents the rooms that the current user is a member of.
+/// The repository exposes a state with a set of `rooms` which presents the rooms that the current user
+/// is a member of.
 ///
 /// ## Receiving live updates
 ///
-/// In order to be notified when the contents of the `rooms` changes, implement the `JoinedRoomsRepositoryDelegate` protocol and assign the `JoinedRoomsRepository.delegate` property.
-///
-/// Note that when the repository is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.
+/// In order to be notified when the contents of the `rooms` or the `state` of the connection changes,
+/// implement the `JoinedRoomsRepositoryDelegate` protocol and assign
+/// the `JoinedRoomsRepository.delegate` property.
 ///
 /// ## Understanding the `state` of the repository
 ///
 /// The `state` property describes the state of the live update connection, either
+///   - `.initializing`: awaiting the initial set of data, or
 ///   - `.connected`: updates are flowing live, or
-///   - `.degraded`: updates may be delayed due to network problems.
-///
+///   - `.degraded`: updates may be delayed due to network problems, or
+///   - `.closed`: the connection is closed, no further updates available.
 public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
     
     // MARK: - Types
@@ -44,7 +46,7 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
         }
     }
     
-    /// The object that is notified when the set `rooms` has changed.
+    /// The object that is notified when the `state` has changed.
     public weak var delegate: JoinedRoomsRepositoryDelegate?
     
     // MARK: - Initializers
@@ -123,8 +125,15 @@ extension JoinedRoomsRepository: ConnectivityMonitorDelegate {
 
 // MARK: - Delegate
 
+/// A delegate protocol for being notified when the `state` property of a `JoinedRoomsRepository`
+/// has changed.
 public protocol JoinedRoomsRepositoryDelegate: AnyObject {
     
+    /// Notifies the receiver that the `state` of the repository has changed.
+    ///
+    /// - Parameters:
+    ///     - joinedRoomsRepository: The `JoinedRoomsRepository` that called the method.
+    ///     - state: The updated value of the `state`.
     func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepository.State)
     
 }

@@ -1,16 +1,45 @@
 
 public extension JoinedRoomsViewModel {
     
+    /// An enumeration representing the state of a `JoinedRoomsViewModel` which serves live data
+    /// retrieved from the Chatkit web service.
     enum State {
         
+        /// The case representing a connection to the Chatkit web service that is currently being
+        /// established.
+        ///
+        /// - Parameters:
+        ///     - error: An optional error describing the problem that occurred when trying
+        ///     to establish a connection to the web service.
         case initializing(error: Error?)
+        
+        /// The case representing an open connection to the Chatkit web service.
+        ///
+        /// - Parameters:
+        ///     - rooms: The array of all rooms joined by the user.
+        ///     - changeReason: An optional change reason, describing the last change introduced
+        ///     to the `state` of the view model.
         case connected(rooms: [Room], changeReason: ChangeReason?)
+        
+        /// The case representing a problem with the connection to the Chatkit web service.
+        ///
+        /// - Parameters:
+        ///     - rooms: The array of all rooms joined by the user.
+        ///     - error: Error describing the problem with the connection to the web service.
+        ///     - changeReason: An optional change reason, describing the last change introduced
+        ///     to the `state` of the view model.
         case degraded(rooms: [Room], error: Error, changeReason: ChangeReason?)
+        
+        /// The case representing a closed connection to the Chatkit web service.
+        ///
+        /// - Parameters:
+        ///     - error: An optional error describing the problem that caused the connection
+        ///     to the web service to close.
         case closed(error: Error?)
         
         // MARK: - Initializers
         
-        init(repositoryState: JoinedRoomsRepository.State, previousRooms: [Room]?) {
+        internal init(repositoryState: JoinedRoomsRepository.State, previousRooms: [Room]?) {
             switch repositoryState {
             case let .initializing(error):
                 self = .initializing(error: error)
@@ -58,6 +87,14 @@ public extension JoinedRoomsViewModel {
 
 extension JoinedRoomsViewModel.State: Equatable {
     
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`, `a == b` implies that
+    /// `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///     - lhs: A value to compare.
+    ///     - rhs: Another value to compare.
     public static func == (lhs: JoinedRoomsViewModel.State, rhs: JoinedRoomsViewModel.State) -> Bool {
         switch (lhs, rhs) {
         case (let .initializing(lhsError as NSError?),

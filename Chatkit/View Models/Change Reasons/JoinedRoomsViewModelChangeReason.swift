@@ -1,16 +1,39 @@
 
 public extension JoinedRoomsViewModel {
     
+    /// Enumeration that describes changes introduced to the state of `JoinedRoomsViewModel`.
     enum ChangeReason {
         
+        /// Notifies the receiver that a new room has been added to the maintened collection of rooms.
+        ///
+        /// - Parameters:
+        ///     - position: The index of the added room in the maintened collection of rooms.
         case itemInserted(position: Int)
+        
+        /// Notifies the receiver that a room from the maintened collection of rooms has been moved.
+        ///
+        /// - Parameters:
+        ///     - fromPosition: The old index of the room before the move.
+        ///     - toPosition: The new index of the room after the move.
         case itemMoved(fromPosition: Int, toPosition: Int)
+        
+        /// Notifies the receiver that a room from the maintened collection of rooms has been changed.
+        ///
+        /// - Parameters:
+        ///     - position: The index of the changed room in the maintened collection of rooms.
+        ///     - previousValue: The value of the room befrore it was updated.
         case itemChanged(position: Int, previousValue: Room)
+        
+        /// Notifies the receiver that a room from the maintened collection of rooms has been removed.
+        ///
+        /// - Parameters:
+        ///     - position: The index of the removed room in the maintened collection of rooms.
+        ///     - previousValue: The value of the room befrore it was removed.
         case itemRemoved(position: Int, previousValue: Room)
         
         // MARK: - Initializers
         
-        init?(repositoryChangeReason: JoinedRoomsRepository.ChangeReason?, currentRooms: [Room], previousRooms: [Room]?) {
+        internal init?(repositoryChangeReason: JoinedRoomsRepository.ChangeReason?, currentRooms: [Room], previousRooms: [Room]?) {
             guard let repositoryChangeReason = repositoryChangeReason else {
                 return nil
             }
@@ -53,6 +76,14 @@ public extension JoinedRoomsViewModel {
 
 extension JoinedRoomsViewModel.ChangeReason: Equatable {
     
+    /// Returns a Boolean value indicating whether two values are equal.
+    ///
+    /// Equality is the inverse of inequality. For any values `a` and `b`, `a == b` implies that
+    /// `a != b` is `false`.
+    ///
+    /// - Parameters:
+    ///     - lhs: A value to compare.
+    ///     - rhs: Another value to compare.
     public static func == (lhs: JoinedRoomsViewModel.ChangeReason, rhs: JoinedRoomsViewModel.ChangeReason) -> Bool {
         switch (lhs, rhs) {
         case (let .itemInserted(lhsPosition),
