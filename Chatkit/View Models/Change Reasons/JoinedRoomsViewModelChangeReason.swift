@@ -40,22 +40,22 @@ public extension JoinedRoomsViewModel {
             
             switch repositoryChangeReason {
             case let .addedToRoom(room):
-                if let position = currentRooms.index(of: room) {
+                if let position = currentRooms.firstIndex(of: room) {
                     self = .itemInserted(position: position)
                     return
                 }
                 
             case let .removedFromRoom(room),
                  let .roomDeleted(room):
-                if let position = previousRooms?.index(of: room) {
+                if let position = previousRooms?.firstIndex(of: room) {
                     self = .itemRemoved(position: position, previousValue: room)
                     return
                 }
                 
             case let .roomUpdated(updatedRoom, previousValue),
                  let .readStateUpdated(updatedRoom, previousValue):
-                if let currentPosition = currentRooms.index(of: updatedRoom) {
-                    if let previousPosition = previousRooms?.index(of: previousValue), currentPosition != previousPosition {
+                if let currentPosition = currentRooms.firstIndex(of: updatedRoom) {
+                    if let previousPosition = previousRooms?.firstIndex(of: previousValue), currentPosition != previousPosition {
                         self = .itemMoved(fromPosition: previousPosition, toPosition: currentPosition)
                         return
                     }

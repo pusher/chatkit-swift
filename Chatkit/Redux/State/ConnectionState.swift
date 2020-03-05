@@ -1,3 +1,4 @@
+import Foundation
 
 enum ConnectionState: State {
     

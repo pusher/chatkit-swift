@@ -1,3 +1,4 @@
+import Foundation
 
 protocol HasSubscriptionManager {
     var subscriptionManager: SubscriptionManager { get }
