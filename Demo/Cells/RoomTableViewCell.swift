@@ -1,10 +1,18 @@
 import UIKit
 
-class RoomTableViewCell: UITableViewCell {
+class RoomTableViewCell: UITableViewCell, Identifiable {
+    
+    // MARK: - Outlets
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var indicatorLabel: IndicatorLabel!
     @IBOutlet var leadingConstraint: NSLayoutConstraint!
+    
+    // MARK: - Identifiable
+    
+    static let identifier: String = "roomCell"
+    
+    // MARK: - Accessors
     
     var numberOfUnreadMessages: UInt64 = 0 {
         didSet {

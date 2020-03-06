@@ -2,17 +2,24 @@ import UIKit
 
 class IndicatorLabel: UILabel {
     
+    // MARK: - View lifecycle
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        self.font = UIFont.systemFont(ofSize: 11.0)
-        self.textColor = UIColor.white
-        self.backgroundColor = UIColor(red: 237.0 / 255.0, green: 91.0 / 255.0, blue: 76.0 / 255.0, alpha: 1.0)
+        self.setup()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         self.update()
+    }
+    
+    // MARK: - Private methods
+    
+    private func setup() {
+        self.font = UIFont.systemFont(ofSize: 11.0)
+        self.textColor = UIColor.white
+        self.backgroundColor = UIColor(red: 237.0 / 255.0, green: 91.0 / 255.0, blue: 76.0 / 255.0, alpha: 1.0)
     }
     
     private func update() {
