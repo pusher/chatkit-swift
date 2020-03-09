@@ -37,10 +37,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
             signature: .initialState
         )
         
-        let stubFilter = StubStateFilter()
-        let stubBuffer = StubBuffer(currentState_toReturn: stateToReturn,
-                                    filter_toReturn: stubFilter,
-                                    delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: stateToReturn, delegate_expectedSetCallCount: 1)
         
         let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionTypeToReturn,
                                                               connectionState_toReturn: connectionStateToReturn,
@@ -106,10 +103,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
             signature: .initialState
         )
         
-        let stubFilter = StubStateFilter()
-        let stubBuffer = StubBuffer(currentState_toReturn: stateToReturn,
-                                    filter_toReturn: stubFilter,
-                                    delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: stateToReturn, delegate_expectedSetCallCount: 1)
         
         let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionTypeToReturn,
                                                               connectionState_toReturn: connectionStateToReturn,
@@ -157,10 +151,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
             signature: .initialState
         )
         
-        let stubFilter = StubStateFilter()
-        let stubBuffer = StubBuffer(currentState_toReturn: stateToReturn,
-                                    filter_toReturn: stubFilter,
-                                    delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: stateToReturn, delegate_expectedSetCallCount: 1)
         
         let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionTypeToReturn,
                                                               connectionState_toReturn: connectionStateToReturn,
@@ -206,10 +197,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
             signature: .initialState
         )
         
-        let stubFilter = StubStateFilter()
-        let stubBuffer = StubBuffer(currentState_toReturn: stateToReturn,
-                                    filter_toReturn: stubFilter,
-                                    delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: stateToReturn, delegate_expectedSetCallCount: 1)
         
         let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionTypeToReturn,
                                                               connectionState_toReturn: connectionStateToReturn,
@@ -244,10 +232,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         let subscriptionTypeToReturn: SubscriptionType = .user
         let connectionStateToReturn: ConnectionState = .connected
         
-        let stubFilter = StubStateFilter()
-        let stubBuffer = StubBuffer(currentState_toReturn: nil,
-                                    filter_toReturn: stubFilter,
-                                    delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: nil, delegate_expectedSetCallCount: 1)
         
         let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionTypeToReturn,
                                                               connectionState_toReturn: connectionStateToReturn,
@@ -295,10 +280,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         
         let modifiedConnectionStateToReturn: ConnectionState = .closed(error: nil)
         
-        let stubFilter = StubStateFilter()
-        let stubBuffer = StubBuffer(currentState_toReturn: initialStateToReturn,
-                                    filter_toReturn: stubFilter,
-                                    delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: initialStateToReturn, delegate_expectedSetCallCount: 1)
         
         let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: initialSubscriptionTypeToReturn,
                                                               connectionState_toReturn: initialConnectionStateToReturn,
@@ -355,10 +337,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         
         let modifiedConnectionStateToReturn: ConnectionState = .closed(error: nil)
         
-        let stubFilter = StubStateFilter()
-        let stubBuffer = StubBuffer(currentState_toReturn: initialStateToReturn,
-                                    filter_toReturn: stubFilter,
-                                    delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: initialStateToReturn, delegate_expectedSetCallCount: 1)
         
         let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: initialSubscriptionTypeToReturn,
                                                               connectionState_toReturn: initialConnectionStateToReturn,
@@ -443,10 +422,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
             signature: .initialState
         )
         
-        let stubFilter = StubStateFilter()
-        let stubBuffer = StubBuffer(currentState_toReturn: initialStateToReturn,
-                                    filter_toReturn: stubFilter,
-                                    delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: initialStateToReturn, delegate_expectedSetCallCount: 1)
         
         let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: initialSubscriptionTypeToReturn,
                                                               connectionState_toReturn: initialConnectionStateToReturn,

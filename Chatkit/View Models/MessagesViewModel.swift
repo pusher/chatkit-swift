@@ -360,7 +360,7 @@ public class MessagesViewModel {
         let succeedingMessage = self.message(at: succeedingIndex)
         
         guard let row = self.row(at: index),
-            case MessageRow.dateHeader(_) = row,
+            case MessageRow.dateHeader = row,
             let precedingHeaderDate = self.headerDate(for: precedingMessage),
             let succeedingHeaderDate = self.headerDate(for: succeedingMessage),
             precedingHeaderDate == succeedingHeaderDate else {

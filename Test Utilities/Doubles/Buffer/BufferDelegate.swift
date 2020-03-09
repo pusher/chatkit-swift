@@ -3,13 +3,10 @@ import XCTest
 
 public class DummyBufferDelegate: DummyBase, BufferDelegate {
     
-    public override init(file: StaticString = #file, line: UInt = #line) {
-        super.init(file: file, line: line)
-    }
-    
     public func buffer(_ buffer: Buffer, didUpdateState state: VersionedState) {
         DummyFail(sender: self, function: #function)
     }
+    
 }
 
 public class StubBufferDelegate: DoubleBase, BufferDelegate {

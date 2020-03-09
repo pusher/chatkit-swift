@@ -3,13 +3,10 @@ import XCTest
 
 public class DummyConnectivityMonitorDelegate: DummyBase, ConnectivityMonitorDelegate {
     
-    public override init(file: StaticString = #file, line: UInt = #line) {
-        super.init(file: file, line: line)
-    }
-    
     public func connectivityMonitor(_ connectivityMonitor: ConnectivityMonitor, didUpdateConnectionState connectionState: ConnectionState) {
         DummyFail(sender: self, function: #function)
     }
+    
 }
 
 public class StubConnectivityMonitorDelegate: DoubleBase, ConnectivityMonitorDelegate {

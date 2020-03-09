@@ -12,10 +12,10 @@ enum UserState: State {
     var isComplete: Bool {
         switch self {
         case .empty,
-             .populated(_, _):
+             .populated:
             return true
             
-        case .partial(_):
+        case .partial:
             return false
         }
     }
@@ -34,7 +34,7 @@ enum UserState: State {
     // MARK: - Supplementation
     
     func supplement(withState supplementalState: UserState) -> UserState {
-        if case .populated(_, _) = self {
+        if case .populated = self {
             return self
         }
         
@@ -45,32 +45,6 @@ enum UserState: State {
         }
         
         return supplementalState
-    }
-    
-}
-
-// MARK: - Equatable
-
-extension UserState: Equatable {}
-
-// MARK: - Hashable
-
-extension UserState: Hashable {
-    
-    public func hash(into hasher: inout Hasher) {
-        switch self {
-        case .empty:
-            hasher.combine(0) // Discriminator
-            
-        case let .partial(identifier):
-            hasher.combine(1) // Discriminator
-            hasher.combine(identifier)
-            
-        case let .populated(identifier, name):
-            hasher.combine(2) // Discriminator
-            hasher.combine(identifier)
-            hasher.combine(name)
-        }
     }
     
 }

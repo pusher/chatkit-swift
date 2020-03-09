@@ -64,8 +64,8 @@ public class JoinedRoomsViewModel {
              let .degraded(rooms, _, _):
             previousRooms = rooms
             
-        case .initializing(_),
-             .closed(_),
+        case .initializing,
+             .closed,
              .none:
             break
         }

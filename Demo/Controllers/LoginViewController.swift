@@ -91,7 +91,7 @@ class LoginViewController: UIViewController {
             // This call to the main queue is here only temporarly. The intented call to connect() method of an Chatkit object should return on the main queue.
             DispatchQueue.main.async {
                 switch result {
-                case .authenticated(_):
+                case .authenticated:
                     self.performSegue(withIdentifier: LoginViewController.loginSegue, sender: self)
                     
                 case let .failure(error: error):

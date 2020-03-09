@@ -63,6 +63,7 @@ extension RoomListState: Equatable {
 
 extension RoomListState: Hashable {
     
+    // A custom implementation is required so that we don't consider the `iteratorIndex` or `iteratorIndexes` values
     public func hash(into hasher: inout Hasher) {
         hasher.combine(self.elements)
     }

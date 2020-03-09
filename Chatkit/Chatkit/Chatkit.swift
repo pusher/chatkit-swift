@@ -113,7 +113,7 @@ public class Chatkit {
     ///
     /// - Parameters:
     ///     - completionHandler: A completion handler which will be called when the `UsersRepository` is ready, or an `Error` occurs creating it.
-    public func createUsersRepository(completionHandler: @escaping (UsersRepository?, Error?) -> Void) {
+    public func makeUsersRepository(completionHandler: @escaping (UsersRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
@@ -122,7 +122,7 @@ public class Chatkit {
     ///
     /// - Parameters:
     ///     - completionHandler: A completion handler which will be called when the `AvailableRoomsRepository` is ready, or an `Error` occurs creating it.
-    public func createAvailableRoomsRepository(completionHandler: @escaping (AvailableRoomsRepository?, Error?) -> Void) {
+    public func makeAvailableRoomsRepository(completionHandler: @escaping (AvailableRoomsRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
@@ -132,7 +132,7 @@ public class Chatkit {
     /// Creates an instance of `JoinedRoomsRepository`.
     ///
     /// This will provide access to a real time set of `Room`s that the current user is a member of.
-    public func createJoinedRoomsRepository() -> JoinedRoomsRepository {
+    public func makeJoinedRoomsRepository() -> JoinedRoomsRepository {
         let filter = JoinedRoomsRepository.Filter()
         let buffer = ConcreteBuffer(filter: filter, dependencies: self.dependencies)
         let connectivityMonitor = ConcreteConnectivityMonitor(subscriptionType: .user, dependencies: self.dependencies)
@@ -147,7 +147,7 @@ public class Chatkit {
     /// - Parameters:
     ///     - room: The `Room` for which the repository will provide messages.
     ///     - completionHandler: A completion handler which will be called when the `MessagesRepository` is ready, or an `Error` occurs creating it.
-    public func createMessagesRepository(for room: Room, completionHandler: @escaping (MessagesRepository?, Error?) -> Void) {
+    public func makeMessagesRepository(for room: Room, completionHandler: @escaping (MessagesRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
@@ -159,7 +159,7 @@ public class Chatkit {
     /// - Parameters:
     ///     - room: The `Room` for which the repository will provide member information.
     ///     - completionHandler: A completion handler which will be called when the `RoomMembersRepository` is ready, or an `Error` occurs creating it.
-    public func createRoomMembersRepository(for room: Room, completionHandler: @escaping (RoomMembersRepository?, Error?) -> Void) {
+    public func makeRoomMembersRepository(for room: Room, completionHandler: @escaping (RoomMembersRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
@@ -171,7 +171,7 @@ public class Chatkit {
     /// - Parameters:
     ///     - room: The `Room` for which this repository will provide information on users who are typing.
     ///     - completionHandler: A completion handler which will be called when the `TypingUsersRepository` is ready, or an `Error` occurs creating it.
-    public func createTypingUsersRepository(for room: Room, completionHandler: @escaping (TypingUsersRepository?, Error?) -> Void) {
+    public func makeTypingUsersRepository(for room: Room, completionHandler: @escaping (TypingUsersRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
@@ -181,8 +181,8 @@ public class Chatkit {
     /// Creates an instance of `JoinedRoomsViewModel`.
     ///
     /// This will give access to a real time sorted list of the `Room`s that the current user is a member of.
-    public func createJoinedRoomsViewModel() -> JoinedRoomsViewModel {
-        let repository = self.createJoinedRoomsRepository()
+    public func makeJoinedRoomsViewModel() -> JoinedRoomsViewModel {
+        let repository = self.makeJoinedRoomsRepository()
         
         return JoinedRoomsViewModel(repository: repository)
     }
@@ -194,7 +194,7 @@ public class Chatkit {
     /// - Parameters:
     ///     - room: The `Room` for which messages should be modelled.
     ///     - completionHandler: A completion handler which will be called when the `MessagesViewModel` is ready, or an `Error` occurs creating it.
-    public func createMessagesViewModel(for room: Room, completionHandler: @escaping (MessagesViewModel?, Error?) -> Void) {
+    public func makeMessagesViewModel(for room: Room, completionHandler: @escaping (MessagesViewModel?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
@@ -207,7 +207,7 @@ public class Chatkit {
     ///     - room: The `Room` for which typing users should be modelled.
     ///     - userNamePlaceholder: The placeholder used when a user does not have a value set for the `User.name` property.
     ///     - completionHandler: A completion handler which will be called when the `TypingUsersViewModel` is ready, or an `Error` occurs creating it.
-    public func createTypingUsersViewModel(for room: Room, userNamePlaceholder: String = "anonymous", completionHandler: @escaping (TypingUsersViewModel?, Error?) -> Void) {
+    public func makeTypingUsersViewModel(for room: Room, userNamePlaceholder: String = "anonymous", completionHandler: @escaping (TypingUsersViewModel?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }

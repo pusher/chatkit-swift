@@ -87,6 +87,158 @@ class ConcreteBufferTests: XCTestCase {
         XCTAssertTrue(stubStore.register_listenerLastReceived === sut)
     }
     
+    func test_init_withInitialStateThatsCompleteWithRelevantSignature_currentStateIsSet() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let initialState = VersionedState(
+            chatState: .empty,
+            auxiliaryState: .empty,
+            version: 1,
+            signature: .initialState
+        )
+        
+        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: true,
+                                         hasCompleteSubstate_defaultValueToReturn: true,
+                                         hasRelevantSignature_defaultValueToReturn: true)
+        let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 0)
+        
+        let dependencies = DependenciesDoubles(store: stubStore)
+        
+        let sut = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
+        sut.delegate = stubDelegate
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        let expectedState = initialState
+        
+        XCTAssertEqual(sut.currentState, expectedState)
+        XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
+        XCTAssertNil(stubDelegate.didUpdateState_stateLastReceived)
+    }
+    
+    func test_init_withInitialStateThatsCompleteWithIrrelevantSignature_currentStateIsSet() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let initialState = VersionedState(
+            chatState: .empty,
+            auxiliaryState: .empty,
+            version: 1,
+            signature: .initialState
+        )
+        
+        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: true,
+                                         hasCompleteSubstate_defaultValueToReturn: true,
+                                         hasRelevantSignature_defaultValueToReturn: false)
+        let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 0)
+        
+        let dependencies = DependenciesDoubles(store: stubStore)
+        
+        let sut = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
+        sut.delegate = stubDelegate
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        let expectedState = initialState
+        
+        XCTAssertEqual(sut.currentState, expectedState)
+        XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
+        XCTAssertNil(stubDelegate.didUpdateState_stateLastReceived)
+    }
+    
+    func test_init_withInitialStateThatsIncompleteWithRelevantSignature_currentStateRemainsNil() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let initialState = VersionedState(
+            chatState: .empty,
+            auxiliaryState: .empty,
+            version: 1,
+            signature: .initialState
+        )
+        
+        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: true,
+                                         hasCompleteSubstate_defaultValueToReturn: false,
+                                         hasRelevantSignature_defaultValueToReturn: true)
+        let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 0)
+        
+        let dependencies = DependenciesDoubles(store: stubStore)
+        
+        let sut = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
+        sut.delegate = stubDelegate
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertNil(sut.currentState)
+        XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
+        XCTAssertNil(stubDelegate.didUpdateState_stateLastReceived)
+    }
+    
+    func test_init_withInitialStateThatsIncompleteWithIrrelevantSignature_currentStateRemainsNil() {
+        
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+        
+        let initialState = VersionedState(
+            chatState: .empty,
+            auxiliaryState: .empty,
+            version: 1,
+            signature: .initialState
+        )
+        
+        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: true,
+                                         hasCompleteSubstate_defaultValueToReturn: false,
+                                         hasRelevantSignature_defaultValueToReturn: false)
+        let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 0)
+        
+        let dependencies = DependenciesDoubles(store: stubStore)
+        
+        let sut = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
+        sut.delegate = stubDelegate
+        
+        /******************/
+        /*----- WHEN -----*/
+        /******************/
+        
+        /******************/
+        /*----- THEN -----*/
+        /******************/
+        
+        XCTAssertNil(sut.currentState)
+        XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
+        XCTAssertNil(stubDelegate.didUpdateState_stateLastReceived)
+    }
+    
     func test_deinit_unregistersAsStoreListener() {
         
         /******************/
@@ -114,6 +266,7 @@ class ConcreteBufferTests: XCTestCase {
     }
     
     func test_didUpdateState_withIncompleteInitialState_shouldReportStateAfterSupplementation() {
+        
         /******************/
         /*---- GIVEN -----*/
         /******************/
@@ -166,7 +319,7 @@ class ConcreteBufferTests: XCTestCase {
                                          hasCompleteSubstate_valuesToReturn: [initialState : false,
                                                                               supplementingState : true,
                                                                               supplementedInitialState : true],
-                                         hasSupportedSignature_defaultValueToReturn: true)
+                                         hasRelevantSignature_defaultValueToReturn: true)
         let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 2)
         
         let dependencies = DependenciesDoubles(store: stubStore)
@@ -195,6 +348,7 @@ class ConcreteBufferTests: XCTestCase {
     }
     
     func test_didUpdateState_withEmptyQueue_shouldReportCompleteSubsequentStateWithoutEnqueueing() {
+        
         /******************/
         /*---- GIVEN -----*/
         /******************/
@@ -231,7 +385,7 @@ class ConcreteBufferTests: XCTestCase {
         let stubFilter = StubStateFilter(hasModifiedSubstate_valuesToReturn: [initialState : false,
                                                                               subsequentState : true],
                                          hasCompleteSubstate_defaultValueToReturn: true,
-                                         hasSupportedSignature_defaultValueToReturn: true)
+                                         hasRelevantSignature_defaultValueToReturn: true)
         let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(store: stubStore)
@@ -260,6 +414,7 @@ class ConcreteBufferTests: XCTestCase {
     }
     
     func test_didUpdateState_withNonEmptyQueue_shouldNotReportCompleteSubsequentStateWhenStateSupplementationIsNotPossible() {
+        
         /******************/
         /*---- GIVEN -----*/
         /******************/
@@ -318,7 +473,7 @@ class ConcreteBufferTests: XCTestCase {
                                                                               subsequentState : true],
                                          hasCompleteSubstate_valuesToReturn: [initialState : false,
                                                                               subsequentState : true],
-                                         hasSupportedSignature_defaultValueToReturn: true)
+                                         hasRelevantSignature_defaultValueToReturn: true)
         let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 0)
         
         let dependencies = DependenciesDoubles(store: stubStore)
@@ -345,6 +500,7 @@ class ConcreteBufferTests: XCTestCase {
     }
     
     func test_didUpdateState_shouldFilterOutUnmodifiedState() {
+        
         /******************/
         /*---- GIVEN -----*/
         /******************/
@@ -380,7 +536,7 @@ class ConcreteBufferTests: XCTestCase {
         let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: false,
                                          hasCompleteSubstate_defaultValueToReturn: true,
-                                         hasSupportedSignature_defaultValueToReturn: true)
+                                         hasRelevantSignature_defaultValueToReturn: true)
         let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 0)
         
         let dependencies = DependenciesDoubles(store: stubStore)
@@ -409,6 +565,7 @@ class ConcreteBufferTests: XCTestCase {
     }
     
     func test_didUpdateState_shouldFilterOutUnsupportedSignatures() {
+        
         /******************/
         /*---- GIVEN -----*/
         /******************/
@@ -430,7 +587,7 @@ class ConcreteBufferTests: XCTestCase {
         let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: true,
                                          hasCompleteSubstate_defaultValueToReturn: true,
-                                         hasSupportedSignature_valuesToReturn: [.initialState : true,
+                                         hasRelevantSignature_valuesToReturn: [.initialState : true,
                                                                                 .subscriptionStateUpdated : false])
         let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 0)
         
@@ -447,47 +604,6 @@ class ConcreteBufferTests: XCTestCase {
         /******************/
         
         stubStore.report(subsequentState)
-        
-        /******************/
-        /*----- THEN -----*/
-        /******************/
-        
-        let expectedState = initialState
-        
-        XCTAssertEqual(sut.currentState, expectedState)
-        XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
-        XCTAssertNil(stubDelegate.didUpdateState_stateLastReceived)
-    }
-    
-    func test_didUpdateState_shouldUseUnsupportedSignaturesAsInitialState() {
-        /******************/
-        /*---- GIVEN -----*/
-        /******************/
-        
-        let initialState = VersionedState(
-            chatState: .empty,
-            auxiliaryState: .empty,
-            version: 1,
-            signature: .initialState
-        )
-        
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
-        let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: true,
-                                         hasCompleteSubstate_defaultValueToReturn: true,
-                                         hasSupportedSignature_defaultValueToReturn: false)
-        let stubDelegate = StubBufferDelegate(didUpdateState_expectedCallCount: 0)
-        
-        let dependencies = DependenciesDoubles(store: stubStore)
-        
-        let sut = ConcreteBuffer(filter: stubFilter, dependencies: dependencies)
-        sut.delegate = stubDelegate
-        
-        XCTAssertEqual(sut.currentState, initialState)
-        XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
-        
-        /******************/
-        /*----- WHEN -----*/
-        /******************/
         
         /******************/
         /*----- THEN -----*/

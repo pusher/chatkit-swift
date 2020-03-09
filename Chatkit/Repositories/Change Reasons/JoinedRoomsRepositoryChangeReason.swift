@@ -42,35 +42,4 @@ public extension JoinedRoomsRepository {
 
 // MARK: - Equatable
 
-extension JoinedRoomsRepository.ChangeReason: Equatable {
-    
-    /// Returns a Boolean value indicating whether two values are equal.
-    ///
-    /// Equality is the inverse of inequality. For any values `a` and `b`, `a == b` implies that
-    /// `a != b` is `false`.
-    ///
-    /// - Parameters:
-    ///     - lhs: A value to compare.
-    ///     - rhs: Another value to compare.
-    public static func == (lhs: JoinedRoomsRepository.ChangeReason, rhs: JoinedRoomsRepository.ChangeReason) -> Bool {
-        switch (lhs, rhs) {
-        case (let .addedToRoom(lhsRoom),
-              let .addedToRoom(rhsRoom)),
-             (let .removedFromRoom(lhsRoom),
-              let .removedFromRoom(rhsRoom)),
-             (let .roomDeleted(lhsRoom),
-              let .roomDeleted(rhsRoom)):
-            return lhsRoom == rhsRoom
-            
-        case (let .roomUpdated(lhsUpdatedRoom, lhsPreviousValue),
-              let .roomUpdated(rhsUpdatedRoom, rhsPreviousValue)),
-             (let .readStateUpdated(lhsUpdatedRoom, lhsPreviousValue),
-              let .readStateUpdated(rhsUpdatedRoom, rhsPreviousValue)):
-            return lhsUpdatedRoom == rhsUpdatedRoom && lhsPreviousValue == rhsPreviousValue
-            
-        default:
-            return false
-        }
-    }
-    
-}
+extension JoinedRoomsRepository.ChangeReason: Equatable {}

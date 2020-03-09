@@ -60,7 +60,7 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
         self.connectionState = connectivityMonitor.connectionState
         
         self.state = JoinedRoomsRepository.state(forConnectionState: connectivityMonitor.connectionState,
-                                                 currentVersionedState: buffer.currentState,
+                                                 versionedState: buffer.currentState,
                                                  previousVersionedState: nil,
                                                  usingTransformer: dependencies.transformer)
         
@@ -70,10 +70,10 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
     
     // MARK: - Private methods
     
-    private static func state(forConnectionState connectionState: ConnectionState, currentVersionedState: VersionedState?, previousVersionedState: VersionedState?, usingTransformer transformer: Transformer) -> State {
-        if let currentVersionedState = currentVersionedState {
-            let rooms = Set(currentVersionedState.chatState.joinedRooms.map { transformer.transform(state: $0) })
-            let changeReason = transformer.transform(currentState: currentVersionedState, previousState: previousVersionedState)
+    private static func state(forConnectionState connectionState: ConnectionState, versionedState: VersionedState?, previousVersionedState: VersionedState?, usingTransformer transformer: Transformer) -> State {
+        if let versionedState = versionedState {
+            let rooms = Set(versionedState.chatState.joinedRooms.map { transformer.transform(state: $0) })
+            let changeReason = transformer.transform(currentState: versionedState, previousState: previousVersionedState)
             
             if connectionState == .connected {
                 return .connected(rooms: rooms, changeReason: changeReason)
@@ -101,7 +101,7 @@ extension JoinedRoomsRepository: BufferDelegate {
     
     func buffer(_ buffer: Buffer, didUpdateState state: VersionedState) {
         self.state = JoinedRoomsRepository.state(forConnectionState: self.connectionState,
-                                                 currentVersionedState: state,
+                                                 versionedState: state,
                                                  previousVersionedState: self.versionedState,
                                                  usingTransformer: self.dependencies.transformer)
         self.versionedState = state
@@ -115,7 +115,7 @@ extension JoinedRoomsRepository: ConnectivityMonitorDelegate {
     
     func connectivityMonitor(_ connectivityMonitor: ConnectivityMonitor, didUpdateConnectionState connectionState: ConnectionState) {
         self.state = JoinedRoomsRepository.state(forConnectionState: connectionState,
-                                                 currentVersionedState: self.versionedState,
+                                                 versionedState: self.versionedState,
                                                  previousVersionedState: self.versionedState,
                                                  usingTransformer: self.dependencies.transformer)
         self.connectionState = connectionState

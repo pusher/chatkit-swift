@@ -221,4 +221,50 @@ class RoomListStateTests: XCTestCase {
         XCTAssertNotEqual(firstStateHashValue, secondStateHashValue)
     }
     
+    func test_equatableAndHashable_doesNotConsiderIteratorValues() {
+
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+            
+        var roomListStateA = RoomListState(
+            elements: [
+                RoomState(
+                    identifier: "test-identifier",
+                    name: "test-name-3",
+                    isPrivate: false,
+                    pushNotificationTitle: nil,
+                    customData: nil,
+                    lastMessageAt: .distantFuture,
+                    readSummary: ReadSummaryState(
+                        unreadCount: 20
+                    ),
+                    createdAt: .distantPast,
+                    updatedAt: .distantFuture
+                ),
+            ]
+        )
+        
+        let roomListStateB = roomListStateA
+        
+        // A call to `next()` progresses the `iteratorIndex` of `roomListStateA`
+        // so the stored values of `roomListStateA` and `roomListStateB` are now *different*
+        _ = roomListStateA.next()
+        
+        /******************/
+        /*---- WHEN -----*/
+        /******************/
+        
+        // The custom Equatable and Hashable implementations should *not* consider `iteratorIndex` so the states should still be considered equal
+        let equatableResult = roomListStateA == roomListStateB
+        let hashableResult = roomListStateA.hashValue == roomListStateB.hashValue
+        
+        /******************/
+        /*---- THEN -----*/
+        /******************/
+        
+        XCTAssertTrue(equatableResult)
+        XCTAssertTrue(hashableResult)
+    }
+    
 }

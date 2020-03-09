@@ -41,7 +41,6 @@ class ConcreteTransformerTests: XCTestCase {
         
         XCTAssertEqual(room.identifier, "test-identifier")
         XCTAssertEqual(room.name, "test-name")
-        XCTAssertEqual(room.identifier, "test-identifier")
         XCTAssertTrue(room.isPrivate)
         XCTAssertEqual(room.unreadCount, 10)
         XCTAssertEqual(room.lastMessageAt, .distantPast)
@@ -514,6 +513,13 @@ class ConcreteTransformerTests: XCTestCase {
         let roomIdentifier = "room-identifier"
         
         let currentState = VersionedState(
+            chatState: .empty,
+            auxiliaryState: .empty,
+            version: 2,
+            signature: .roomDeleted(roomIdentifier: roomIdentifier)
+        )
+        
+        let previousState = VersionedState(
             chatState: ChatState(
                 currentUser: .empty,
                 joinedRooms: RoomListState(
@@ -537,10 +543,8 @@ class ConcreteTransformerTests: XCTestCase {
             ),
             auxiliaryState: .empty,
             version: 1,
-            signature: .roomDeleted(roomIdentifier: roomIdentifier)
+            signature: .initialState
         )
-        
-        let previousState: VersionedState? = nil
         
         let sut = ConcreteTransformer()
         

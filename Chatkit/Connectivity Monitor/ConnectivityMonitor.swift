@@ -43,7 +43,6 @@ class ConcreteConnectivityMonitor: ConnectivityMonitor {
     // MARK: - Private methods
     
     private func registerListener() {
-        // It really feels like this should be done by a different object, but such approach is forced on this class by the DI mechanism.
         let versionedState = self.dependencies.store.register(self)
         self.connectionState = self.connectionState(fromVersionedState: versionedState)
     }
