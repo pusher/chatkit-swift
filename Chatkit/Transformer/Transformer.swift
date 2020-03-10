@@ -81,8 +81,8 @@ struct ConcreteTransformer: Transformer {
             }
             
         case .roomDeleted(_):
-            if let currentRoom = currentRoom {
-                return .roomDeleted(room: currentRoom)
+            if let previousRoom = previousRoom {
+                return .roomDeleted(room: previousRoom)
             }
             else {
                 return nil
