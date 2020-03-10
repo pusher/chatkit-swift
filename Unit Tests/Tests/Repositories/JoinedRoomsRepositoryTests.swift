@@ -296,6 +296,8 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         let sut = JoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
         sut.delegate = stubDelegate
         
+        let expectation = XCTestExpectation(description: "Delegate called")
+        
         XCTAssertEqual(sut.state, .initializing(error: nil))
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
         
@@ -305,9 +307,13 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         
         stubConnectivityMonitor.report(modifiedConnectionStateToReturn)
         
+        expectation.fulfill(after: 0.1)
+        
         /******************/
         /*----- THEN -----*/
         /******************/
+        
+        wait(for: [expectation], timeout: 1.0)
         
         let expectedState: JoinedRoomsRepository.State = .closed(error: nil)
         

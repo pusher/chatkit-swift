@@ -80,6 +80,8 @@ class JoinedRoomsViewModelTests: XCTestCase {
         let sut = JoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
         sut.delegate = stubDelegate
         
+        let expectation = XCTestExpectation(description: "Delegate called")
+        
         XCTAssertEqual(sut.state, .initializing(error: nil))
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
         
@@ -89,9 +91,13 @@ class JoinedRoomsViewModelTests: XCTestCase {
         
         stubJoinedRoomsRepository.report(modifiedStateToReturn)
         
+        expectation.fulfill(after: 0.1)
+        
         /******************/
         /*----- THEN -----*/
         /******************/
+        
+        wait(for: [expectation], timeout: 1.0)
         
         let expectedState: JoinedRoomsViewModel.State = .connected(rooms: [self.room], changeReason: nil)
         
@@ -114,6 +120,8 @@ class JoinedRoomsViewModelTests: XCTestCase {
         let sut = JoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
         sut.delegate = stubDelegate
         
+        let expectation = XCTestExpectation(description: "Delegate called")
+        
         XCTAssertEqual(sut.state, .connected(rooms: [self.room], changeReason: nil))
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
         
@@ -123,9 +131,13 @@ class JoinedRoomsViewModelTests: XCTestCase {
         
         stubJoinedRoomsRepository.report(modifiedStateToReturn)
         
+        expectation.fulfill(after: 0.1)
+        
         /******************/
         /*----- THEN -----*/
         /******************/
+        
+        wait(for: [expectation], timeout: 1.0)
         
         let expectedState: JoinedRoomsViewModel.State = .degraded(rooms: [self.room], error: FakeError.firstError, changeReason: nil)
         

@@ -41,7 +41,6 @@ public class JoinedRoomsViewModel {
                 DispatchQueue.main.async {
                     self.delegate?.joinedRoomsViewModel(self, didUpdateState: self.state)
                 }
-
             }
         }
     }

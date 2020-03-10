@@ -37,11 +37,19 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
     private var versionedState: VersionedState?
     private var connectionState: ConnectionState
     
-    /// The current state of the repository.
     public private(set) var state: State {
         didSet {
             if state != oldValue {
-                self.delegate?.joinedRoomsRepository(self, didUpdateState: state)
+                if let delegate = self.delegate as? JoinedRoomsViewModel {
+                    // We know that the JoinedRoomsViewModel has been coded so that it dispatches to its own
+                    // delegate on the main thread.  So we do not need to dispatch to the main thread here.
+                    delegate.joinedRoomsRepository(self, didUpdateState: state)
+                }
+                else {
+                    DispatchQueue.main.async {
+                        self.delegate?.joinedRoomsRepository(self, didUpdateState: self.state)
+                    }
+                }
             }
         }
     }
