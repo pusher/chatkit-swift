@@ -32,7 +32,7 @@ class ConcreteBufferTests: XCTestCase {
         XCTAssertNil(sut.currentState)
     }
     
-    func test_init_withCompleteState_hasNilCurrentState() {
+    func test_init_withCompleteState_hasCurrentState() {
         
         /******************/
         /*---- GIVEN -----*/
