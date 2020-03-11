@@ -94,9 +94,9 @@ class ConcreteJoinedRoomsRepository: JoinedRoomsRepository {
         self.connectionState = connectivityMonitor.connectionState
         
         self.state = Self.state(forConnectionState: connectivityMonitor.connectionState,
-                                                 versionedState: buffer.currentState,
-                                                 previousVersionedState: nil,
-                                                 usingTransformer: dependencies.transformer)
+                                versionedState: buffer.currentState,
+                                previousVersionedState: nil,
+                                usingTransformer: dependencies.transformer)
         
         self.buffer.delegate = self
         self.connectivityMonitor.delegate = self
@@ -135,9 +135,9 @@ extension ConcreteJoinedRoomsRepository: BufferDelegate {
     
     func buffer(_ buffer: Buffer, didUpdateState state: VersionedState) {
         self.state = Self.state(forConnectionState: self.connectionState,
-                                                 versionedState: state,
-                                                 previousVersionedState: self.versionedState,
-                                                 usingTransformer: self.dependencies.transformer)
+                                versionedState: state,
+                                previousVersionedState: self.versionedState,
+                                usingTransformer: self.dependencies.transformer)
         self.versionedState = state
     }
     
@@ -149,9 +149,9 @@ extension ConcreteJoinedRoomsRepository: ConnectivityMonitorDelegate {
     
     func connectivityMonitor(_ connectivityMonitor: ConnectivityMonitor, didUpdateConnectionState connectionState: ConnectionState) {
         self.state = Self.state(forConnectionState: connectionState,
-                                                 versionedState: self.versionedState,
-                                                 previousVersionedState: self.versionedState,
-                                                 usingTransformer: self.dependencies.transformer)
+                                versionedState: self.versionedState,
+                                previousVersionedState: self.versionedState,
+                                usingTransformer: self.dependencies.transformer)
         self.connectionState = connectionState
     }
     
