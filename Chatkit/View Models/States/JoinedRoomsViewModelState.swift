@@ -40,7 +40,7 @@ public extension JoinedRoomsViewModel {
         
         // MARK: - Initializers
         
-        internal init(repositoryState: JoinedRoomsRepository.State, previousRooms: [Room]?) {
+        internal init(repositoryState: JoinedRoomsRepositoryState, previousRooms: [Room]?) {
             switch repositoryState {
             case let .initializing(error):
                 self = .initializing(error: error)

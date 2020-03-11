@@ -3,7 +3,7 @@ import XCTest
 
 public class StubJoinedRoomsRepository: DoubleBase, JoinedRoomsRepositoryProtocol {
     
-    private let state_toReturn: JoinedRoomsRepository.State
+    private let state_toReturn: JoinedRoomsRepositoryState
     public private(set) var state_actualCallCount: UInt = 0
     
     private let delegate_expectedSetCallCount: UInt
@@ -19,7 +19,7 @@ public class StubJoinedRoomsRepository: DoubleBase, JoinedRoomsRepositoryProtoco
         }
     }
     
-    public init(state_toReturn: JoinedRoomsRepository.State,
+    public init(state_toReturn: JoinedRoomsRepositoryState,
                 delegate_expectedSetCallCount: UInt = 0,
                 file: StaticString = #file, line: UInt = #line) {
         
@@ -29,12 +29,12 @@ public class StubJoinedRoomsRepository: DoubleBase, JoinedRoomsRepositoryProtoco
         super.init(file: file, line: line)
     }
     
-    public var state: JoinedRoomsRepository.State {
+    public var state: JoinedRoomsRepositoryState {
         self.state_actualCallCount += 1
         return self.state_toReturn
     }
     
-    public func report(_ state: JoinedRoomsRepository.State) {
+    public func report(_ state: JoinedRoomsRepositoryState) {
         let room = Room(identifier: "room-identifier",
                         name: "room-name",
                         isPrivate: false,

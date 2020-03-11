@@ -1,10 +1,8 @@
 import Foundation
 
-public extension JoinedRoomsRepository {
-    
     /// An enumeration representing the state of a `JoinedRoomsRepository` which serves live data
     /// retrieved from the Chatkit web service.
-    enum State {
+    public enum JoinedRoomsRepositoryState {
         
         /// The case representing a connection to the Chatkit web service that is currently being
         /// established.
@@ -39,12 +37,10 @@ public extension JoinedRoomsRepository {
         case closed(error: Error?)
         
     }
-    
-}
 
 // MARK: - Equatable
 
-extension JoinedRoomsRepository.State: Equatable {
+extension JoinedRoomsRepositoryState: Equatable {
     
     /// Returns a Boolean value indicating whether two values are equal.
     ///
@@ -54,7 +50,7 @@ extension JoinedRoomsRepository.State: Equatable {
     /// - Parameters:
     ///     - lhs: A value to compare.
     ///     - rhs: Another value to compare.
-    public static func == (lhs: JoinedRoomsRepository.State, rhs: JoinedRoomsRepository.State) -> Bool {
+    public static func == (lhs: JoinedRoomsRepositoryState, rhs: JoinedRoomsRepositoryState) -> Bool {
         switch (lhs, rhs) {
         case (let .initializing(lhsError as NSError?),
               let .initializing(rhsError as NSError?)),

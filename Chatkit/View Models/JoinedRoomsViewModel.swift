@@ -58,7 +58,7 @@ public class JoinedRoomsViewModel {
     
     // MARK: - Private methods
     
-    private static func state(forRepositoryState repositoryState: JoinedRoomsRepository.State, previousState: State? = nil) -> State {
+    private static func state(forRepositoryState repositoryState: JoinedRoomsRepositoryState, previousState: State? = nil) -> State {
         var previousRooms: [Room]? = nil
         
         switch previousState {
@@ -82,7 +82,7 @@ public class JoinedRoomsViewModel {
 /// :nodoc:
 extension JoinedRoomsViewModel: JoinedRoomsRepositoryDelegate {
     
-    public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepository.State) {
+    public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepositoryState) {
         self.state = JoinedRoomsViewModel.state(forRepositoryState: state, previousState: self.state)
     }
     

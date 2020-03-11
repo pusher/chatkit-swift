@@ -56,10 +56,10 @@ class JoinedRoomsRepositoryStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let initializingState: JoinedRoomsRepository.State = .initializing(error: self.firstError)
-        let connectedState: JoinedRoomsRepository.State = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
-        let degradedState: JoinedRoomsRepository.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
-        let closedState: JoinedRoomsRepository.State = .closed(error: self.firstError)
+        let initializingState: JoinedRoomsRepositoryState = .initializing(error: self.firstError)
+        let connectedState: JoinedRoomsRepositoryState = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
+        let degradedState: JoinedRoomsRepositoryState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
+        let closedState: JoinedRoomsRepositoryState = .closed(error: self.firstError)
         
         /******************/
         /*----- WHEN -----*/
@@ -94,8 +94,8 @@ class JoinedRoomsRepositoryStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsRepository.State = .initializing(error: self.firstError)
-        let secondState: JoinedRoomsRepository.State = .initializing(error: self.firstError)
+        let firstState: JoinedRoomsRepositoryState = .initializing(error: self.firstError)
+        let secondState: JoinedRoomsRepositoryState = .initializing(error: self.firstError)
         
         /******************/
         /*----- WHEN -----*/
@@ -116,8 +116,8 @@ class JoinedRoomsRepositoryStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsRepository.State = .initializing(error: self.firstError)
-        let secondState: JoinedRoomsRepository.State = .initializing(error: self.secondError)
+        let firstState: JoinedRoomsRepositoryState = .initializing(error: self.firstError)
+        let secondState: JoinedRoomsRepositoryState = .initializing(error: self.secondError)
         
         /******************/
         /*----- WHEN -----*/
@@ -138,8 +138,8 @@ class JoinedRoomsRepositoryStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsRepository.State = .closed(error: self.firstError)
-        let secondState: JoinedRoomsRepository.State = .closed(error: self.firstError)
+        let firstState: JoinedRoomsRepositoryState = .closed(error: self.firstError)
+        let secondState: JoinedRoomsRepositoryState = .closed(error: self.firstError)
         
         /******************/
         /*----- WHEN -----*/
@@ -160,8 +160,8 @@ class JoinedRoomsRepositoryStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsRepository.State = .closed(error: self.firstError)
-        let secondState: JoinedRoomsRepository.State = .closed(error: self.secondError)
+        let firstState: JoinedRoomsRepositoryState = .closed(error: self.firstError)
+        let secondState: JoinedRoomsRepositoryState = .closed(error: self.secondError)
         
         /******************/
         /*----- WHEN -----*/
@@ -182,8 +182,8 @@ class JoinedRoomsRepositoryStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsRepository.State = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
-        let secondState: JoinedRoomsRepository.State = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
+        let firstState: JoinedRoomsRepositoryState = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
+        let secondState: JoinedRoomsRepositoryState = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
         
         /******************/
         /*----- WHEN -----*/
@@ -204,8 +204,8 @@ class JoinedRoomsRepositoryStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsRepository.State = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
-        let secondState: JoinedRoomsRepository.State = .connected(rooms: self.secondRooms, changeReason: self.firstChangeReason)
+        let firstState: JoinedRoomsRepositoryState = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
+        let secondState: JoinedRoomsRepositoryState = .connected(rooms: self.secondRooms, changeReason: self.firstChangeReason)
         
         /******************/
         /*----- WHEN -----*/
@@ -226,8 +226,8 @@ class JoinedRoomsRepositoryStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsRepository.State = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
-        let secondState: JoinedRoomsRepository.State = .connected(rooms: self.firstRooms, changeReason: self.secondChangeReason)
+        let firstState: JoinedRoomsRepositoryState = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
+        let secondState: JoinedRoomsRepositoryState = .connected(rooms: self.firstRooms, changeReason: self.secondChangeReason)
         
         /******************/
         /*----- WHEN -----*/
@@ -248,8 +248,8 @@ class JoinedRoomsRepositoryStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsRepository.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
-        let secondState: JoinedRoomsRepository.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
+        let firstState: JoinedRoomsRepositoryState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
+        let secondState: JoinedRoomsRepositoryState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
         
         /******************/
         /*----- WHEN -----*/
@@ -270,8 +270,8 @@ class JoinedRoomsRepositoryStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsRepository.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
-        let secondState: JoinedRoomsRepository.State = .degraded(rooms: self.secondRooms, error: self.firstError, changeReason: self.firstChangeReason)
+        let firstState: JoinedRoomsRepositoryState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
+        let secondState: JoinedRoomsRepositoryState = .degraded(rooms: self.secondRooms, error: self.firstError, changeReason: self.firstChangeReason)
         
         /******************/
         /*----- WHEN -----*/
@@ -292,8 +292,8 @@ class JoinedRoomsRepositoryStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsRepository.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
-        let secondState: JoinedRoomsRepository.State = .degraded(rooms: self.firstRooms, error: self.secondError, changeReason: self.firstChangeReason)
+        let firstState: JoinedRoomsRepositoryState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
+        let secondState: JoinedRoomsRepositoryState = .degraded(rooms: self.firstRooms, error: self.secondError, changeReason: self.firstChangeReason)
         
         /******************/
         /*----- WHEN -----*/
@@ -314,8 +314,8 @@ class JoinedRoomsRepositoryStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsRepository.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
-        let secondState: JoinedRoomsRepository.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.secondChangeReason)
+        let firstState: JoinedRoomsRepositoryState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
+        let secondState: JoinedRoomsRepositoryState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.secondChangeReason)
         
         /******************/
         /*----- WHEN -----*/

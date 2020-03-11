@@ -23,7 +23,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stateToReturn: JoinedRoomsRepository.State = .initializing(error: nil)
+        let stateToReturn: JoinedRoomsRepositoryState = .initializing(error: nil)
         
         let stubJoinedRoomsRepository = StubJoinedRoomsRepository(state_toReturn: stateToReturn, delegate_expectedSetCallCount: 1)
         
@@ -46,7 +46,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stateToReturn: JoinedRoomsRepository.State = .initializing(error: nil)
+        let stateToReturn: JoinedRoomsRepositoryState = .initializing(error: nil)
         
         let stubJoinedRoomsRepository = StubJoinedRoomsRepository(state_toReturn: stateToReturn, delegate_expectedSetCallCount: 1)
         
@@ -71,8 +71,8 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let initialStateToReturn: JoinedRoomsRepository.State = .initializing(error: nil)
-        let modifiedStateToReturn: JoinedRoomsRepository.State = .connected(rooms: [self.room], changeReason: nil)
+        let initialStateToReturn: JoinedRoomsRepositoryState = .initializing(error: nil)
+        let modifiedStateToReturn: JoinedRoomsRepositoryState = .connected(rooms: [self.room], changeReason: nil)
         
         let stubJoinedRoomsRepository = StubJoinedRoomsRepository(state_toReturn: initialStateToReturn, delegate_expectedSetCallCount: 1)
         let stubDelegate = StubJoinedRoomsViewModelDelegate(didUpdateState_expectedCallCount: 1)
@@ -111,8 +111,8 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let initialStateToReturn: JoinedRoomsRepository.State = .connected(rooms: [self.room], changeReason: nil)
-        let modifiedStateToReturn: JoinedRoomsRepository.State = .degraded(rooms: [self.room], error: FakeError.firstError, changeReason: nil)
+        let initialStateToReturn: JoinedRoomsRepositoryState = .connected(rooms: [self.room], changeReason: nil)
+        let modifiedStateToReturn: JoinedRoomsRepositoryState = .degraded(rooms: [self.room], error: FakeError.firstError, changeReason: nil)
         
         let stubJoinedRoomsRepository = StubJoinedRoomsRepository(state_toReturn: initialStateToReturn, delegate_expectedSetCallCount: 1)
         let stubDelegate = StubJoinedRoomsViewModelDelegate(didUpdateState_expectedCallCount: 1)

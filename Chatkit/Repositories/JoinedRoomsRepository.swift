@@ -37,7 +37,7 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
     private var versionedState: VersionedState?
     private var connectionState: ConnectionState
     
-    public private(set) var state: State {
+    public private(set) var state: JoinedRoomsRepositoryState {
         didSet {
             if state != oldValue {
                 if let delegate = self.delegate as? JoinedRoomsViewModel {
@@ -78,7 +78,7 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
     
     // MARK: - Private methods
     
-    private static func state(forConnectionState connectionState: ConnectionState, versionedState: VersionedState?, previousVersionedState: VersionedState?, usingTransformer transformer: Transformer) -> State {
+    private static func state(forConnectionState connectionState: ConnectionState, versionedState: VersionedState?, previousVersionedState: VersionedState?, usingTransformer transformer: Transformer) -> JoinedRoomsRepositoryState {
         if let versionedState = versionedState {
             let rooms = Set(versionedState.chatState.joinedRooms.map { transformer.transform(state: $0) })
             let changeReason = transformer.transform(currentState: versionedState, previousState: previousVersionedState)
@@ -142,7 +142,7 @@ public protocol JoinedRoomsRepositoryDelegate: AnyObject {
     /// - Parameters:
     ///     - joinedRoomsRepository: The `JoinedRoomsRepository` that called the method.
     ///     - state: The updated value of the `state`.
-    func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepository.State)
+    func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepositoryState)
     
 }
 
@@ -150,7 +150,7 @@ public protocol JoinedRoomsRepositoryDelegate: AnyObject {
 
 protocol JoinedRoomsRepositoryProtocol: AnyObject {
     
-    var state: JoinedRoomsRepository.State { get }
+    var state: JoinedRoomsRepositoryState { get }
     var delegate: JoinedRoomsRepositoryDelegate? { get set }
     
 }

@@ -102,7 +102,7 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryState: JoinedRoomsRepository.State = .initializing(error: self.firstError)
+        let repositoryState: JoinedRoomsRepositoryState = .initializing(error: self.firstError)
         
         /******************/
         /*----- WHEN -----*/
@@ -125,7 +125,7 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryState: JoinedRoomsRepository.State = .connected(rooms: Set(self.firstRooms), changeReason: nil)
+        let repositoryState: JoinedRoomsRepositoryState = .connected(rooms: Set(self.firstRooms), changeReason: nil)
         
         /******************/
         /*----- WHEN -----*/
@@ -148,7 +148,7 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryState: JoinedRoomsRepository.State = .degraded(rooms: Set(self.firstRooms), error: self.firstError, changeReason: nil)
+        let repositoryState: JoinedRoomsRepositoryState = .degraded(rooms: Set(self.firstRooms), error: self.firstError, changeReason: nil)
         
         /******************/
         /*----- WHEN -----*/
@@ -171,7 +171,7 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryState: JoinedRoomsRepository.State = .closed(error: self.firstError)
+        let repositoryState: JoinedRoomsRepositoryState = .closed(error: self.firstError)
         
         /******************/
         /*----- WHEN -----*/
@@ -199,7 +199,7 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
             self.fourthRoom,
             self.fifthRoom
         ]
-        let repositoryState: JoinedRoomsRepository.State = .connected(rooms: rooms, changeReason: nil)
+        let repositoryState: JoinedRoomsRepositoryState = .connected(rooms: rooms, changeReason: nil)
         
         /******************/
         /*----- WHEN -----*/
@@ -232,7 +232,7 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
             self.firstRoom,
             self.thirdRoom
         ]
-        let repositoryState: JoinedRoomsRepository.State = .connected(rooms: rooms, changeReason: nil)
+        let repositoryState: JoinedRoomsRepositoryState = .connected(rooms: rooms, changeReason: nil)
         
         /******************/
         /*----- WHEN -----*/
@@ -268,7 +268,7 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
             self.firstRoom,
             self.thirdRoom
         ]
-        let repositoryState: JoinedRoomsRepository.State = .connected(rooms: rooms, changeReason: nil)
+        let repositoryState: JoinedRoomsRepositoryState = .connected(rooms: rooms, changeReason: nil)
         
         /******************/
         /*----- WHEN -----*/

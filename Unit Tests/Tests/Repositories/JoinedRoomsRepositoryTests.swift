@@ -58,7 +58,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepository.State = .initializing(error: nil)
+        let expectedState: JoinedRoomsRepositoryState = .initializing(error: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -125,7 +125,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepository.State = .connected(rooms: [self.room], changeReason: nil)
+        let expectedState: JoinedRoomsRepositoryState = .connected(rooms: [self.room], changeReason: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -172,7 +172,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepository.State = .degraded(rooms: [], error: errorToReturn, changeReason: nil)
+        let expectedState: JoinedRoomsRepositoryState = .degraded(rooms: [], error: errorToReturn, changeReason: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -218,7 +218,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepository.State = .closed(error: nil)
+        let expectedState: JoinedRoomsRepositoryState = .closed(error: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -253,7 +253,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepository.State = .initializing(error: nil)
+        let expectedState: JoinedRoomsRepositoryState = .initializing(error: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -315,7 +315,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         
         wait(for: [expectation], timeout: 1.0)
         
-        let expectedState: JoinedRoomsRepository.State = .closed(error: nil)
+        let expectedState: JoinedRoomsRepositoryState = .closed(error: nil)
         
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didUpdateState_stateLastReceived, expectedState)
@@ -372,7 +372,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepository.State = .closed(error: nil)
+        let expectedState: JoinedRoomsRepositoryState = .closed(error: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -459,7 +459,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepository.State = .connected(rooms: [self.room], changeReason: nil)
+        let expectedState: JoinedRoomsRepositoryState = .connected(rooms: [self.room], changeReason: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
