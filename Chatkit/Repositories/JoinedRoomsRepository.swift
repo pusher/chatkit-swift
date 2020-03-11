@@ -1,7 +1,5 @@
 import Foundation
 
-// MARK: - Protocol
-
 /// A repository which exposes a collection of all rooms joined by the user.
 ///
 /// Construct an instance of this class using `Chatkit.createJoinedRoomsRepository(...)`
@@ -69,8 +67,8 @@ class ConcreteJoinedRoomsRepository: JoinedRoomsRepository {
     public private(set) var state: JoinedRoomsRepositoryState {
         didSet {
             if state != oldValue {
-                if let delegate = self.delegate as? JoinedRoomsViewModel {
-                    // We know that the JoinedRoomsViewModel has been coded so that it dispatches to its own
+                if let delegate = self.delegate as? ConcreteJoinedRoomsViewModel {
+                    // We know that the ConcreteJoinedRoomsViewModel has been coded so that it dispatches to its own
                     // delegate on the main thread.  So we do not need to dispatch to the main thread here.
                     delegate.joinedRoomsRepository(self, didUpdateState: state)
                 }

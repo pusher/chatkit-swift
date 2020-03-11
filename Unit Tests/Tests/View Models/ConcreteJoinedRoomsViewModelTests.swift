@@ -2,7 +2,7 @@ import XCTest
 import TestUtilities
 @testable import PusherChatkit
 
-class JoinedRoomsViewModelTests: XCTestCase {
+class ConcreteJoinedRoomsViewModelTests: XCTestCase {
     
     // MARK: - Properties
     
@@ -31,7 +31,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        _ = JoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
+        _ = ConcreteJoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
         
         /******************/
         /*----- THEN -----*/
@@ -54,7 +54,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = JoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
+        let sut = ConcreteJoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
         
         /******************/
         /*----- THEN -----*/
@@ -77,7 +77,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         let stubJoinedRoomsRepository = StubJoinedRoomsRepository(state_toReturn: initialStateToReturn, delegate_expectedSetCallCount: 1)
         let stubDelegate = StubJoinedRoomsViewModelDelegate(didUpdateState_expectedCallCount: 1)
         
-        let sut = JoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
+        let sut = ConcreteJoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
         sut.delegate = stubDelegate
         
         let expectation = XCTestExpectation(description: "Delegate called")
@@ -117,7 +117,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         let stubJoinedRoomsRepository = StubJoinedRoomsRepository(state_toReturn: initialStateToReturn, delegate_expectedSetCallCount: 1)
         let stubDelegate = StubJoinedRoomsViewModelDelegate(didUpdateState_expectedCallCount: 1)
         
-        let sut = JoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
+        let sut = ConcreteJoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
         sut.delegate = stubDelegate
         
         let expectation = XCTestExpectation(description: "Delegate called")

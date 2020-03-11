@@ -28,13 +28,39 @@ import Foundation
 ///   - `.connected`: updates are flowing live, or
 ///   - `.degraded`: updates may be delayed due to network problems, or
 ///   - `.closed`: the connection is closed, no further updates available.
-public class JoinedRoomsViewModel {
+public protocol JoinedRoomsViewModel {
+    
+    /// The current state of the view model.
+    var state: JoinedRoomsViewModelState { get }
+    
+    /// The object that is notified when the `state` has changed.
+    var delegate: JoinedRoomsViewModelDelegate? { get set }
+    
+}
+
+// MARK: - Delegate
+
+/// A delegate protocol for being notified when the `state` property of a `JoinedRoomsViewModel`
+/// has changed.
+public protocol JoinedRoomsViewModelDelegate: AnyObject {
+    
+    /// Notifies the receiver that the `state` of the view model has changed.
+    ///
+    /// - Parameters:
+    ///     - joinedRoomsViewModel: The `JoinedRoomsViewModel` that called the method.
+    ///     - state: The updated value of the `state`.
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateState state: JoinedRoomsViewModelState)
+    
+}
+
+// MARK: - Concrete implementation
+
+class ConcreteJoinedRoomsViewModel: JoinedRoomsViewModel {
     
     // MARK: - Properties
     
     private let repository: JoinedRoomsRepository
     
-    /// The current state of the view model.
     public private(set) var state: JoinedRoomsViewModelState {
         didSet {
             if state != oldValue {
@@ -45,7 +71,6 @@ public class JoinedRoomsViewModel {
         }
     }
     
-    /// The object that is notified when the `state` has changed.
     public weak var delegate: JoinedRoomsViewModelDelegate?
     
     // MARK: - Initializers
@@ -80,25 +105,10 @@ public class JoinedRoomsViewModel {
 // MARK: - JoinedRoomsRepositoryDelegate
 
 /// :nodoc:
-extension JoinedRoomsViewModel: JoinedRoomsRepositoryDelegate {
+extension ConcreteJoinedRoomsViewModel: JoinedRoomsRepositoryDelegate {
     
     public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepositoryState) {
         self.state = Self.state(forRepositoryState: state, previousState: self.state)
     }
-    
-}
-
-// MARK: - Delegate
-
-/// A delegate protocol for being notified when the `state` property of a `JoinedRoomsViewModel`
-/// has changed.
-public protocol JoinedRoomsViewModelDelegate: AnyObject {
-    
-    /// Notifies the receiver that the `state` of the view model has changed.
-    ///
-    /// - Parameters:
-    ///     - joinedRoomsViewModel: The `JoinedRoomsViewModel` that called the method.
-    ///     - state: The updated value of the `state`.
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateState state: JoinedRoomsViewModelState)
     
 }

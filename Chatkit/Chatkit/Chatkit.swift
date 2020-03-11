@@ -184,7 +184,7 @@ public class Chatkit {
     public func makeJoinedRoomsViewModel() -> JoinedRoomsViewModel {
         let repository = self.makeJoinedRoomsRepository()
         
-        return JoinedRoomsViewModel(repository: repository)
+        return ConcreteJoinedRoomsViewModel(repository: repository)
     }
     
     /// Creates an instance of `MessagesViewModel`.

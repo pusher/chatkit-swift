@@ -44,7 +44,7 @@
 		222773A024111B2F00FF2AA1 /* JoinedRoomsRepositoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2227739F24111B2F00FF2AA1 /* JoinedRoomsRepositoryDelegate.swift */; };
 		222773A224111FE500FF2AA1 /* JoinedRoomsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222773A124111FE500FF2AA1 /* JoinedRoomsRepository.swift */; };
 		222773A42411218E00FF2AA1 /* JoinedRoomsViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222773A32411218E00FF2AA1 /* JoinedRoomsViewModelDelegate.swift */; };
-		222773A6241121F100FF2AA1 /* JoinedRoomsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222773A5241121F100FF2AA1 /* JoinedRoomsViewModelTests.swift */; };
+		222773A6241121F100FF2AA1 /* ConcreteJoinedRoomsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222773A5241121F100FF2AA1 /* ConcreteJoinedRoomsViewModelTests.swift */; };
 		222910EA23D8A6C300A3ACDF /* TestTokenProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222910E923D8A6C300A3ACDF /* TestTokenProviderTests.swift */; };
 		222C963F23F5489400321C94 /* UserListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C963E23F5489400321C94 /* UserListState.swift */; };
 		222C964323F552FB00321C94 /* RoomUpdatedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C964223F552FB00321C94 /* RoomUpdatedAction.swift */; };
@@ -381,7 +381,7 @@
 		2227739F24111B2F00FF2AA1 /* JoinedRoomsRepositoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsRepositoryDelegate.swift; sourceTree = "<group>"; };
 		222773A124111FE500FF2AA1 /* JoinedRoomsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsRepository.swift; sourceTree = "<group>"; };
 		222773A32411218E00FF2AA1 /* JoinedRoomsViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsViewModelDelegate.swift; sourceTree = "<group>"; };
-		222773A5241121F100FF2AA1 /* JoinedRoomsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsViewModelTests.swift; sourceTree = "<group>"; };
+		222773A5241121F100FF2AA1 /* ConcreteJoinedRoomsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteJoinedRoomsViewModelTests.swift; sourceTree = "<group>"; };
 		222910DB23D8A5D900A3ACDF /* System Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "System Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		222910DF23D8A5D900A3ACDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		222910E923D8A6C300A3ACDF /* TestTokenProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTokenProviderTests.swift; sourceTree = "<group>"; };
@@ -723,7 +723,7 @@
 			children = (
 				2227738C2410443100FF2AA1 /* Change Reasons */,
 				2227738D2410443600FF2AA1 /* States */,
-				222773A5241121F100FF2AA1 /* JoinedRoomsViewModelTests.swift */,
+				222773A5241121F100FF2AA1 /* ConcreteJoinedRoomsViewModelTests.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -2285,7 +2285,7 @@
 				7335D27323D715E800E51909 /* CodableJSONCollections+DictionaryEncodingTests.swift in Sources */,
 				73EDEE5223D8ABCB00DE566D /* ConcreteInstanceWrapperFactoryTests.swift in Sources */,
 				22406A8323F4263E00EE24BE /* RemovedFromRoomReducerTests.swift in Sources */,
-				222773A6241121F100FF2AA1 /* JoinedRoomsViewModelTests.swift in Sources */,
+				222773A6241121F100FF2AA1 /* ConcreteJoinedRoomsViewModelTests.swift in Sources */,
 				7301BC7023B0FCCE00F162C7 /* Wire.Event.RoomUpdated+Decodable.Tests.swift in Sources */,
 				7301BC6D23B0FCCE00F162C7 /* Wire.Event.ReadStateUpdated+Decodable.Tests.swift in Sources */,
 				7301BC7123B0FCCE00F162C7 /* Wire.Event.AddedToRoom+Decodable.Tests.swift in Sources */,
