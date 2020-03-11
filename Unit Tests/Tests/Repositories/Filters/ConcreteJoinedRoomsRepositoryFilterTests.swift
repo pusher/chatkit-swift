@@ -1,7 +1,7 @@
 import XCTest
 @testable import PusherChatkit
 
-class JoinedRoomsFilterTests: XCTestCase {
+class ConcreteJoinedRoomsRepositoryFilterTests: XCTestCase {
     
     // MARK: - Tests
     
@@ -42,7 +42,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         
         let newState = oldState
         
-        let sut = JoinedRoomsRepository.Filter()
+        let sut = ConcreteJoinedRoomsRepository.Filter()
         
         /******************/
         /*----- WHEN -----*/
@@ -125,7 +125,7 @@ class JoinedRoomsFilterTests: XCTestCase {
             signature: .subscriptionStateUpdated
         )
         
-        let sut = JoinedRoomsRepository.Filter()
+        let sut = ConcreteJoinedRoomsRepository.Filter()
         
         /******************/
         /*----- WHEN -----*/
@@ -186,7 +186,7 @@ class JoinedRoomsFilterTests: XCTestCase {
             signature: .roomDeleted(roomIdentifier: "test-identifier")
         )
         
-        let sut = JoinedRoomsRepository.Filter()
+        let sut = ConcreteJoinedRoomsRepository.Filter()
         
         /******************/
         /*----- WHEN -----*/
@@ -236,7 +236,7 @@ class JoinedRoomsFilterTests: XCTestCase {
             signature: .initialState
         )
         
-        let sut = JoinedRoomsRepository.Filter()
+        let sut = ConcreteJoinedRoomsRepository.Filter()
         
         /******************/
         /*----- WHEN -----*/
@@ -290,7 +290,7 @@ class JoinedRoomsFilterTests: XCTestCase {
             signature: .initialState
         )
         
-        let sut = JoinedRoomsRepository.Filter()
+        let sut = ConcreteJoinedRoomsRepository.Filter()
         
         /******************/
         /*----- WHEN -----*/
@@ -313,7 +313,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         
         let signature:  VersionSignature = .initialState
         
-        let sut = JoinedRoomsRepository.Filter()
+        let sut = ConcreteJoinedRoomsRepository.Filter()
         
         /******************/
         /*----- WHEN -----*/
@@ -336,7 +336,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         
         let signature:  VersionSignature = .addedToRoom(roomIdentifier: "room-identifier")
         
-        let sut = JoinedRoomsRepository.Filter()
+        let sut = ConcreteJoinedRoomsRepository.Filter()
         
         /******************/
         /*----- WHEN -----*/
@@ -359,7 +359,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         
         let signature:  VersionSignature = .removedFromRoom(roomIdentifier: "room-identifier")
         
-        let sut = JoinedRoomsRepository.Filter()
+        let sut = ConcreteJoinedRoomsRepository.Filter()
         
         /******************/
         /*----- WHEN -----*/
@@ -382,7 +382,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         
         let signature:  VersionSignature = .roomUpdated(roomIdentifier: "room-identifier")
         
-        let sut = JoinedRoomsRepository.Filter()
+        let sut = ConcreteJoinedRoomsRepository.Filter()
         
         /******************/
         /*----- WHEN -----*/
@@ -405,7 +405,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         
         let signature:  VersionSignature = .roomDeleted(roomIdentifier: "room-identifier")
         
-        let sut = JoinedRoomsRepository.Filter()
+        let sut = ConcreteJoinedRoomsRepository.Filter()
         
         /******************/
         /*----- WHEN -----*/
@@ -428,7 +428,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         
         let signature:  VersionSignature = .readStateUpdated(roomIdentifier: "room-identifier")
         
-        let sut = JoinedRoomsRepository.Filter()
+        let sut = ConcreteJoinedRoomsRepository.Filter()
         
         /******************/
         /*----- WHEN -----*/
@@ -451,7 +451,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         
         let signature:  VersionSignature = .unsigned
         
-        let sut = JoinedRoomsRepository.Filter()
+        let sut = ConcreteJoinedRoomsRepository.Filter()
         
         /******************/
         /*----- WHEN -----*/

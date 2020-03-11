@@ -32,9 +32,9 @@ public class JoinedRoomsViewModel {
     
     // MARK: - Properties
     
-    private let repository: JoinedRoomsRepositoryProtocol
+    private let repository: JoinedRoomsRepository
     
-    /// The current state of the repository.
+    /// The current state of the view model.
     public private(set) var state: JoinedRoomsViewModelState {
         didSet {
             if state != oldValue {
@@ -50,7 +50,7 @@ public class JoinedRoomsViewModel {
     
     // MARK: - Initializers
     
-    init(repository: JoinedRoomsRepositoryProtocol) {
+    init(repository: JoinedRoomsRepository) {
         self.state = Self.state(forRepositoryState: repository.state)
         self.repository = repository
         self.repository.delegate = self

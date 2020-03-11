@@ -133,11 +133,11 @@ public class Chatkit {
     ///
     /// This will provide access to a real time set of `Room`s that the current user is a member of.
     public func makeJoinedRoomsRepository() -> JoinedRoomsRepository {
-        let filter = JoinedRoomsRepository.Filter()
+        let filter = ConcreteJoinedRoomsRepository.Filter()
         let buffer = ConcreteBuffer(filter: filter, dependencies: self.dependencies)
         let connectivityMonitor = ConcreteConnectivityMonitor(subscriptionType: .user, dependencies: self.dependencies)
         
-        return JoinedRoomsRepository(buffer: buffer, connectivityMonitor: connectivityMonitor, dependencies: self.dependencies)
+        return ConcreteJoinedRoomsRepository(buffer: buffer, connectivityMonitor: connectivityMonitor, dependencies: self.dependencies)
     }
     
     /// Creates an instance of `MessagesRepository`.

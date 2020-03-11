@@ -2,7 +2,7 @@ import XCTest
 import TestUtilities
 @testable import PusherChatkit
 
-class JoinedRoomsRepositoryTests: XCTestCase {
+class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
     
     // MARK: - Properties
     
@@ -52,7 +52,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -119,7 +119,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -166,7 +166,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -212,7 +212,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -247,7 +247,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -293,7 +293,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(transformer: stubTransformer)
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
         sut.delegate = stubDelegate
         
         let expectation = XCTestExpectation(description: "Delegate called")
@@ -356,7 +356,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(transformer: stubTransformer)
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
         sut.delegate = stubDelegate
         
         XCTAssertEqual(sut.state, .initializing(error: nil))
@@ -442,7 +442,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(transformer: stubTransformer)
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
         sut.delegate = stubDelegate
         
         XCTAssertEqual(sut.state,

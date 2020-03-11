@@ -1,7 +1,7 @@
 import XCTest
 @testable import PusherChatkit
 
-public class StubJoinedRoomsRepository: DoubleBase, JoinedRoomsRepositoryProtocol {
+public class StubJoinedRoomsRepository: DoubleBase, JoinedRoomsRepository {
     
     private let state_toReturn: JoinedRoomsRepositoryState
     public private(set) var state_actualCallCount: UInt = 0
@@ -35,26 +35,7 @@ public class StubJoinedRoomsRepository: DoubleBase, JoinedRoomsRepositoryProtoco
     }
     
     public func report(_ state: JoinedRoomsRepositoryState) {
-        let room = Room(identifier: "room-identifier",
-                        name: "room-name",
-                        isPrivate: false,
-                        unreadCount: 10,
-                        lastMessageAt: nil,
-                        customData: nil,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast)
-        
-        let stubBuffer = StubBuffer(currentState_toReturn: nil, delegate_expectedSetCallCount: 1)
-        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: .user,
-                                                              connectionState_toReturn: .connected,
-                                                              delegate_expectedSetCallCount: 1)
-        let stubTransformer = StubTransformer(room_toReturn: room, transformCurrentStatePreviousState_expectedSetCallCount: 1)
-        
-        let dependencies = DependenciesDoubles(transformer: stubTransformer)
-        
-        let joinedRoomsRepository = JoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
-        
-        self.delegate?.joinedRoomsRepository(joinedRoomsRepository, didUpdateState: state)
+        self.delegate?.joinedRoomsRepository(self, didUpdateState: state)
     }
     
 }

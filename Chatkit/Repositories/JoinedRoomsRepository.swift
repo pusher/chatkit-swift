@@ -1,5 +1,7 @@
 import Foundation
 
+// MARK: - Protocol
+
 /// A repository which exposes a collection of all rooms joined by the user.
 ///
 /// Construct an instance of this class using `Chatkit.createJoinedRoomsRepository(...)`
@@ -22,7 +24,34 @@ import Foundation
 ///   - `.connected`: updates are flowing live, or
 ///   - `.degraded`: updates may be delayed due to network problems, or
 ///   - `.closed`: the connection is closed, no further updates available.
-public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
+public protocol JoinedRoomsRepository: AnyObject {
+    
+    /// The current state of the repository.
+    var state: JoinedRoomsRepositoryState { get }
+    
+    /// The object that is notified when the `state` has changed.
+    var delegate: JoinedRoomsRepositoryDelegate? { get set }
+    
+}
+
+// MARK: - Delegate
+
+/// A delegate protocol for being notified when the `state` property of a `JoinedRoomsRepository`
+/// has changed.
+public protocol JoinedRoomsRepositoryDelegate: AnyObject {
+    
+    /// Notifies the receiver that the `state` of the repository has changed.
+    ///
+    /// - Parameters:
+    ///     - joinedRoomsRepository: The `JoinedRoomsRepository` that called the method.
+    ///     - state: The updated value of the `state`.
+    func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepositoryState)
+    
+}
+
+// MARK: - Concrete implementation
+
+class ConcreteJoinedRoomsRepository: JoinedRoomsRepository {
     
     // MARK: - Types
     
@@ -54,7 +83,6 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
         }
     }
     
-    /// The object that is notified when the `state` has changed.
     public weak var delegate: JoinedRoomsRepositoryDelegate?
     
     // MARK: - Initializers
@@ -105,7 +133,7 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
 
 // MARK: - Buffer delegate
 
-extension JoinedRoomsRepository: BufferDelegate {
+extension ConcreteJoinedRoomsRepository: BufferDelegate {
     
     func buffer(_ buffer: Buffer, didUpdateState state: VersionedState) {
         self.state = Self.state(forConnectionState: self.connectionState,
@@ -119,7 +147,7 @@ extension JoinedRoomsRepository: BufferDelegate {
 
 // MARK: - Connectivity monitor delegate
 
-extension JoinedRoomsRepository: ConnectivityMonitorDelegate {
+extension ConcreteJoinedRoomsRepository: ConnectivityMonitorDelegate {
     
     func connectivityMonitor(_ connectivityMonitor: ConnectivityMonitor, didUpdateConnectionState connectionState: ConnectionState) {
         self.state = Self.state(forConnectionState: connectionState,
@@ -128,29 +156,5 @@ extension JoinedRoomsRepository: ConnectivityMonitorDelegate {
                                                  usingTransformer: self.dependencies.transformer)
         self.connectionState = connectionState
     }
-    
-}
-
-// MARK: - Delegate
-
-/// A delegate protocol for being notified when the `state` property of a `JoinedRoomsRepository`
-/// has changed.
-public protocol JoinedRoomsRepositoryDelegate: AnyObject {
-    
-    /// Notifies the receiver that the `state` of the repository has changed.
-    ///
-    /// - Parameters:
-    ///     - joinedRoomsRepository: The `JoinedRoomsRepository` that called the method.
-    ///     - state: The updated value of the `state`.
-    func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepositoryState)
-    
-}
-
-// MARK: - Protocol
-
-protocol JoinedRoomsRepositoryProtocol: AnyObject {
-    
-    var state: JoinedRoomsRepositoryState { get }
-    var delegate: JoinedRoomsRepositoryDelegate? { get set }
     
 }
