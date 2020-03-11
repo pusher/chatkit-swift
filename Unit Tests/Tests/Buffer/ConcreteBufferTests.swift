@@ -14,7 +14,8 @@ class ConcreteBufferTests: XCTestCase {
         
         let initialState: VersionedState = .initial
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasCompleteSubstate_defaultValueToReturn: true)
         
         let dependencies = DependenciesDoubles(store: stubStore)
@@ -47,7 +48,8 @@ class ConcreteBufferTests: XCTestCase {
             signature: .initialState
         )
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: true,
                                          hasCompleteSubstate_defaultValueToReturn: true,
                                          hasRelevantSignature_defaultValueToReturn: true)
@@ -87,7 +89,8 @@ class ConcreteBufferTests: XCTestCase {
             signature: .initialState
         )
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: true,
                                          hasCompleteSubstate_defaultValueToReturn: true,
                                          hasRelevantSignature_defaultValueToReturn: false)
@@ -127,7 +130,8 @@ class ConcreteBufferTests: XCTestCase {
             signature: .initialState
         )
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: true,
                                          hasCompleteSubstate_defaultValueToReturn: false,
                                          hasRelevantSignature_defaultValueToReturn: true)
@@ -165,7 +169,8 @@ class ConcreteBufferTests: XCTestCase {
             signature: .initialState
         )
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: true,
                                          hasCompleteSubstate_defaultValueToReturn: false,
                                          hasRelevantSignature_defaultValueToReturn: false)
@@ -198,7 +203,8 @@ class ConcreteBufferTests: XCTestCase {
         
         let initialState: VersionedState = .initial
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasCompleteSubstate_defaultValueToReturn: true)
         
         let dependencies = DependenciesDoubles(store: stubStore)
@@ -263,7 +269,8 @@ class ConcreteBufferTests: XCTestCase {
             signature: .unsigned
         )
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_valuesToReturn: [initialState : false,
                                                                               supplementingState : true,
                                                                               supplementedInitialState : false],
@@ -332,7 +339,8 @@ class ConcreteBufferTests: XCTestCase {
             signature: .unsigned
         )
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_valuesToReturn: [initialState : false,
                                                                               subsequentState : true],
                                          hasCompleteSubstate_defaultValueToReturn: true,
@@ -419,7 +427,8 @@ class ConcreteBufferTests: XCTestCase {
             signature: .unsigned
         )
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_valuesToReturn: [initialState : false,
                                                                               subsequentState : true],
                                          hasCompleteSubstate_valuesToReturn: [initialState : false,
@@ -484,7 +493,8 @@ class ConcreteBufferTests: XCTestCase {
             signature: .unsigned
         )
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: false,
                                          hasCompleteSubstate_defaultValueToReturn: true,
                                          hasRelevantSignature_defaultValueToReturn: true)
@@ -535,7 +545,8 @@ class ConcreteBufferTests: XCTestCase {
             signature: .subscriptionStateUpdated
         )
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubFilter = StubStateFilter(hasModifiedSubstate_defaultValueToReturn: true,
                                          hasCompleteSubstate_defaultValueToReturn: true,
                                          hasRelevantSignature_valuesToReturn: [.initialState : true,

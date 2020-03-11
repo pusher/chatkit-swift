@@ -25,7 +25,8 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
             signature: .initialState
         )
         
-        let stubStore = StubStore(state_toReturn: state, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: state,
+                                  unregister_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -53,7 +54,8 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         let subscriptionType: SubscriptionType = .user
         let state: VersionedState = .initial
         
-        let stubStore = StubStore(state_toReturn: state, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: state,
+                                  unregister_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -81,7 +83,8 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         let subscriptionType: SubscriptionType = .user
         let state: VersionedState = .initial
         
-        let stubStore = StubStore(state_toReturn: state, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: state,
+                                  unregister_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -108,7 +111,8 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         let subscriptionType: SubscriptionType = .user
         let state: VersionedState = .initial
         
-        let stubStore = StubStore(state_toReturn: state, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: state,
+                                  unregister_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -144,7 +148,8 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
             signature: .subscriptionStateUpdated
         )
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubDelegate = StubConnectivityMonitorDelegate(didUpdateState_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(store: stubStore)
@@ -191,7 +196,8 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
             signature: .subscriptionStateUpdated
         )
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubDelegate = StubConnectivityMonitorDelegate(didUpdateState_expectedCallCount: 0)
         
         let dependencies = DependenciesDoubles(store: stubStore)
