@@ -4,7 +4,7 @@ import XCTest
 public class StubJoinedRoomsViewModelDelegate: DoubleBase, JoinedRoomsViewModelDelegate {
     
     private var didUpdateState_expectedCallCount: UInt
-    public private(set) var didUpdateState_stateLastReceived: JoinedRoomsViewModel.State?
+    public private(set) var didUpdateState_stateLastReceived: JoinedRoomsViewModelState?
     public private(set) var didUpdateState_actualCallCount: UInt = 0
     
     public init(didUpdateState_expectedCallCount: UInt = 0,
@@ -14,7 +14,7 @@ public class StubJoinedRoomsViewModelDelegate: DoubleBase, JoinedRoomsViewModelD
         super.init(file: file, line: line)
     }
     
-    public func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateState state: JoinedRoomsViewModel.State) {
+    public func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateState state: JoinedRoomsViewModelState) {
         didUpdateState_stateLastReceived = state
         didUpdateState_actualCallCount += 1
         

@@ -1,5 +1,5 @@
 
-internal extension JoinedRoomsRepository {
+internal extension ConcreteJoinedRoomsRepository {
     
     struct Filter: StateFilter {
         

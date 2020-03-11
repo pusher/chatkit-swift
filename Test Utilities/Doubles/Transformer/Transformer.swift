@@ -15,7 +15,7 @@ public class DummyTransformer: DummyBase, Transformer {
                     updatedAt: Date())
     }
     
-    public func transform(currentState: VersionedState, previousState: VersionedState?) -> JoinedRoomsRepository.ChangeReason? {
+    public func transform(currentState: VersionedState, previousState: VersionedState?) -> JoinedRoomsRepositoryChangeReason? {
         DummyFail(sender: self, function: #function)
         return nil
     }
@@ -28,14 +28,14 @@ public class StubTransformer: DoubleBase, Transformer {
     private let transformState_expectedSetCallCount: UInt
     public private(set) var transformState_actualSetCallCount: UInt = 0
     
-    private let changeReason_toReturn: JoinedRoomsRepository.ChangeReason?
+    private let changeReason_toReturn: JoinedRoomsRepositoryChangeReason?
     private let transformCurrentStatePreviousState_expectedSetCallCount: UInt
     public private(set) var transformCurrentStatePreviousState_actualSetCallCount: UInt = 0
     
     
     
     public init(room_toReturn: Room,
-                changeReason_toReturn: JoinedRoomsRepository.ChangeReason? = nil,
+                changeReason_toReturn: JoinedRoomsRepositoryChangeReason? = nil,
                 transformState_expectedSetCallCount: UInt = 0,
                 transformCurrentStatePreviousState_expectedSetCallCount: UInt = 0,
                 file: StaticString = #file, line: UInt = #line) {
@@ -59,7 +59,7 @@ public class StubTransformer: DoubleBase, Transformer {
         return self.room_toReturn
     }
     
-    public func transform(currentState: VersionedState, previousState: VersionedState?) -> JoinedRoomsRepository.ChangeReason? {
+    public func transform(currentState: VersionedState, previousState: VersionedState?) -> JoinedRoomsRepositoryChangeReason? {
         self.transformCurrentStatePreviousState_actualSetCallCount += 1
         
         guard self.transformCurrentStatePreviousState_actualSetCallCount <= self.transformCurrentStatePreviousState_expectedSetCallCount else {
