@@ -20,7 +20,7 @@ public extension JoinedRoomsViewModel {
         ///     - rooms: The array of all rooms joined by the user.
         ///     - changeReason: An optional change reason, describing the last change introduced
         ///     to the `state` of the view model.
-        case connected(rooms: [Room], changeReason: ChangeReason?)
+        case connected(rooms: [Room], changeReason: JoinedRoomsViewModelChangeReason?)
         
         /// The case representing a problem with the connection to the Chatkit web service.
         ///
@@ -29,7 +29,7 @@ public extension JoinedRoomsViewModel {
         ///     - error: Error describing the problem with the connection to the web service.
         ///     - changeReason: An optional change reason, describing the last change introduced
         ///     to the `state` of the view model.
-        case degraded(rooms: [Room], error: Error, changeReason: ChangeReason?)
+        case degraded(rooms: [Room], error: Error, changeReason: JoinedRoomsViewModelChangeReason?)
         
         /// The case representing a closed connection to the Chatkit web service.
         ///
@@ -47,13 +47,17 @@ public extension JoinedRoomsViewModel {
                 
             case let .connected(rooms, repositoryChangeReason):
                 let sortedRooms = State.sortedRooms(rooms)
-                let changeReason = ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: sortedRooms, previousRooms: previousRooms)
+                let changeReason = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason,
+                                                                    currentRooms: sortedRooms,
+                                                                    previousRooms: previousRooms)
                 
                 self = .connected(rooms: sortedRooms, changeReason: changeReason)
                 
             case let .degraded(rooms, error, repositoryChangeReason):
                 let sortedRooms = State.sortedRooms(rooms)
-                let changeReason = ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: sortedRooms, previousRooms: previousRooms)
+                let changeReason = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason,
+                                                                    currentRooms: sortedRooms,
+                                                                    previousRooms: previousRooms)
                 
                 self = .degraded(rooms: sortedRooms, error: error, changeReason: changeReason)
                 

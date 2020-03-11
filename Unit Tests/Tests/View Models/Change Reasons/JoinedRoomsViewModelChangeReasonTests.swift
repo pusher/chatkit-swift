@@ -50,7 +50,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/
@@ -76,13 +76,13 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedValue: JoinedRoomsViewModel.ChangeReason = .itemInserted(position: 1)
+        let expectedValue: JoinedRoomsViewModelChangeReason = .itemInserted(position: 1)
         
         XCTAssertEqual(result, expectedValue)
     }
@@ -103,7 +103,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/
@@ -129,13 +129,13 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedValue: JoinedRoomsViewModel.ChangeReason = .itemRemoved(position: 1, previousValue: self.secondRoom)
+        let expectedValue: JoinedRoomsViewModelChangeReason = .itemRemoved(position: 1, previousValue: self.secondRoom)
         
         XCTAssertEqual(result, expectedValue)
     }
@@ -156,7 +156,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/
@@ -179,7 +179,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/
@@ -205,13 +205,13 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedValue: JoinedRoomsViewModel.ChangeReason = .itemRemoved(position: 1, previousValue: self.secondRoom)
+        let expectedValue: JoinedRoomsViewModelChangeReason = .itemRemoved(position: 1, previousValue: self.secondRoom)
         
         XCTAssertEqual(result, expectedValue)
     }
@@ -232,7 +232,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/
@@ -255,7 +255,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/
@@ -284,13 +284,13 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedValue: JoinedRoomsViewModel.ChangeReason = .itemChanged(position: 1, previousValue: self.secondRoom)
+        let expectedValue: JoinedRoomsViewModelChangeReason = .itemChanged(position: 1, previousValue: self.secondRoom)
         
         XCTAssertEqual(result, expectedValue)
     }
@@ -315,13 +315,13 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedValue: JoinedRoomsViewModel.ChangeReason = .itemMoved(fromPosition: 1, toPosition: 0)
+        let expectedValue: JoinedRoomsViewModelChangeReason = .itemMoved(fromPosition: 1, toPosition: 0)
         
         XCTAssertEqual(result, expectedValue)
     }
@@ -345,7 +345,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/
@@ -374,13 +374,13 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedValue: JoinedRoomsViewModel.ChangeReason = .itemChanged(position: 1, previousValue: self.secondRoom)
+        let expectedValue: JoinedRoomsViewModelChangeReason = .itemChanged(position: 1, previousValue: self.secondRoom)
         
         XCTAssertEqual(result, expectedValue)
     }
@@ -405,13 +405,13 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedValue: JoinedRoomsViewModel.ChangeReason = .itemMoved(fromPosition: 1, toPosition: 0)
+        let expectedValue: JoinedRoomsViewModelChangeReason = .itemMoved(fromPosition: 1, toPosition: 0)
         
         XCTAssertEqual(result, expectedValue)
     }
@@ -435,7 +435,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.ChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
+        let result = JoinedRoomsViewModelChangeReason(repositoryChangeReason: repositoryChangeReason, currentRooms: currentRooms, previousRooms: previousRooms)
         
         /******************/
         /*----- THEN -----*/

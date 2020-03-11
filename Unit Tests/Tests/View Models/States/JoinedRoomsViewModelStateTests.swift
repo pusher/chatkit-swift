@@ -16,8 +16,8 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
     var firstRooms: [Room]!
     var secondRooms: [Room]!
     
-    var firstChangeReason: JoinedRoomsViewModel.ChangeReason!
-    var secondChangeReason: JoinedRoomsViewModel.ChangeReason!
+    var firstChangeReason: JoinedRoomsViewModelChangeReason!
+    var secondChangeReason: JoinedRoomsViewModelChangeReason!
     
     var firstError: Error!
     var secondError: Error!
