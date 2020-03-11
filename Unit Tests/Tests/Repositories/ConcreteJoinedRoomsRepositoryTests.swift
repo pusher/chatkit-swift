@@ -2,7 +2,7 @@ import XCTest
 import TestUtilities
 @testable import PusherChatkit
 
-class JoinedRoomsRepositoryTests: XCTestCase {
+class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
     
     // MARK: - Properties
     
@@ -51,16 +51,16 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer,
-                                        connectivityMonitor: stubConnectivityMonitor,
-                                        connectionState: initialConnectionState,
-                                        dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepository.State = .initializing(error: nil)
+        let expectedState: JoinedRoomsRepositoryState = .initializing(error: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -119,17 +119,17 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /******************/
         /*----- WHEN -----*/
         /******************/
-        
-        let sut = JoinedRoomsRepository(buffer: stubBuffer,
-                                        connectivityMonitor: stubConnectivityMonitor,
-                                        connectionState: initialConnectionState,
-                                        dependencies: dependencies)
+
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepository.State = .connected(rooms: [self.room], changeReason: nil)
+        let expectedState: JoinedRoomsRepositoryState = .connected(rooms: [self.room], changeReason: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -169,16 +169,16 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer,
-                                        connectivityMonitor: stubConnectivityMonitor,
-                                        connectionState: initialConnectionState,
-                                        dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepository.State = .degraded(rooms: [], error: error, changeReason: nil)
+        let expectedState: JoinedRoomsRepositoryState = .degraded(rooms: [], error: error, changeReason: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -217,16 +217,16 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer,
-                                        connectivityMonitor: stubConnectivityMonitor,
-                                        connectionState: initialConnectionState,
-                                        dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepository.State = .closed(error: nil)
+        let expectedState: JoinedRoomsRepositoryState = .closed(error: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -254,16 +254,16 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer,
-                                        connectivityMonitor: stubConnectivityMonitor,
-                                        connectionState: initialConnectionState,
-                                        dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepository.State = .initializing(error: nil)
+        let expectedState: JoinedRoomsRepositoryState = .initializing(error: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -302,10 +302,10 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(transformer: stubTransformer)
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer,
-                                        connectivityMonitor: stubConnectivityMonitor,
-                                        connectionState: initialConnectionState,
-                                        dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         sut.delegate = stubDelegate
         
         let expectation = XCTestExpectation(description: "Delegate called")
@@ -327,7 +327,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         
         wait(for: [expectation], timeout: 1.0)
         
-        let expectedState: JoinedRoomsRepository.State = .closed(error: nil)
+        let expectedState: JoinedRoomsRepositoryState = .closed(error: nil)
         
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didUpdateState_stateLastReceived, expectedState)
@@ -367,10 +367,10 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(transformer: stubTransformer)
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer,
-                                        connectivityMonitor: stubConnectivityMonitor,
-                                        connectionState: initialConnectionState,
-                                        dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         sut.delegate = stubDelegate
         
         XCTAssertEqual(sut.state, .initializing(error: nil))
@@ -386,7 +386,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepository.State = .closed(error: nil)
+        let expectedState: JoinedRoomsRepositoryState = .closed(error: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -457,10 +457,10 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(transformer: stubTransformer)
         
-        let sut = JoinedRoomsRepository(buffer: stubBuffer,
-                                        connectivityMonitor: stubConnectivityMonitor,
-                                        connectionState: initialConnectionState,
-                                        dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         sut.delegate = stubDelegate
         
         XCTAssertEqual(sut.state,
@@ -477,7 +477,7 @@ class JoinedRoomsRepositoryTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepository.State = .connected(rooms: [self.room], changeReason: nil)
+        let expectedState: JoinedRoomsRepositoryState = .connected(rooms: [self.room], changeReason: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }

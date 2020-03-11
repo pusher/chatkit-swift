@@ -22,7 +22,34 @@ import Foundation
 ///   - `.connected`: updates are flowing live, or
 ///   - `.degraded`: updates may be delayed due to network problems, or
 ///   - `.closed`: the connection is closed, no further updates available.
-public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
+public protocol JoinedRoomsRepository: AnyObject {
+    
+    /// The current state of the repository.
+    var state: JoinedRoomsRepositoryState { get }
+    
+    /// The object that is notified when the `state` has changed.
+    var delegate: JoinedRoomsRepositoryDelegate? { get set }
+    
+}
+
+// MARK: - Delegate
+
+/// A delegate protocol for being notified when the `state` property of a `JoinedRoomsRepository`
+/// has changed.
+public protocol JoinedRoomsRepositoryDelegate: AnyObject {
+    
+    /// Notifies the receiver that the `state` of the repository has changed.
+    ///
+    /// - Parameters:
+    ///     - joinedRoomsRepository: The `JoinedRoomsRepository` that called the method.
+    ///     - state: The updated value of the `state`.
+    func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepositoryState)
+    
+}
+
+// MARK: - Concrete implementation
+
+class ConcreteJoinedRoomsRepository: JoinedRoomsRepository {
     
     // MARK: - Types
     
@@ -37,11 +64,11 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
     private var versionedState: VersionedState?
     private var connectionState: ConnectionState
     
-    public private(set) var state: State {
+    public private(set) var state: JoinedRoomsRepositoryState {
         didSet {
             if state != oldValue {
-                if let delegate = self.delegate as? JoinedRoomsViewModel {
-                    // We know that the JoinedRoomsViewModel has been coded so that it dispatches to its own
+                if let delegate = self.delegate as? ConcreteJoinedRoomsViewModel {
+                    // We know that the ConcreteJoinedRoomsViewModel has been coded so that it dispatches to its own
                     // delegate on the main thread.  So we do not need to dispatch to the main thread here.
                     delegate.joinedRoomsRepository(self, didUpdateState: state)
                 }
@@ -54,7 +81,6 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
         }
     }
     
-    /// The object that is notified when the `state` has changed.
     public weak var delegate: JoinedRoomsRepositoryDelegate?
     
     // MARK: - Initializers
@@ -67,10 +93,10 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
         self.versionedState = buffer.currentState
         self.connectionState = connectionState
         
-        self.state = JoinedRoomsRepository.state(forConnectionState: connectionState,
-                                                 versionedState: buffer.currentState,
-                                                 previousVersionedState: nil,
-                                                 usingTransformer: dependencies.transformer)
+        self.state = Self.state(forConnectionState: connectionState,
+                                versionedState: buffer.currentState,
+                                previousVersionedState: nil,
+                                usingTransformer: dependencies.transformer)
         
         self.buffer.delegate = self
         self.connectivityMonitor.delegate = self
@@ -78,7 +104,7 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
     
     // MARK: - Private methods
     
-    private static func state(forConnectionState connectionState: ConnectionState, versionedState: VersionedState?, previousVersionedState: VersionedState?, usingTransformer transformer: Transformer) -> State {
+    private static func state(forConnectionState connectionState: ConnectionState, versionedState: VersionedState?, previousVersionedState: VersionedState?, usingTransformer transformer: Transformer) -> JoinedRoomsRepositoryState {
         if let versionedState = versionedState {
             let rooms = Set(versionedState.chatState.joinedRooms.map { transformer.transform(state: $0) })
             let changeReason = transformer.transform(currentState: versionedState, previousState: previousVersionedState)
@@ -105,13 +131,13 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
 
 // MARK: - Buffer delegate
 
-extension JoinedRoomsRepository: BufferDelegate {
+extension ConcreteJoinedRoomsRepository: BufferDelegate {
     
     func buffer(_ buffer: Buffer, didUpdateState state: VersionedState) {
-        self.state = JoinedRoomsRepository.state(forConnectionState: self.connectionState,
-                                                 versionedState: state,
-                                                 previousVersionedState: self.versionedState,
-                                                 usingTransformer: self.dependencies.transformer)
+        self.state = Self.state(forConnectionState: self.connectionState,
+                                versionedState: state,
+                                previousVersionedState: self.versionedState,
+                                usingTransformer: self.dependencies.transformer)
         self.versionedState = state
     }
     
@@ -119,38 +145,14 @@ extension JoinedRoomsRepository: BufferDelegate {
 
 // MARK: - Connectivity monitor delegate
 
-extension JoinedRoomsRepository: ConnectivityMonitorDelegate {
+extension ConcreteJoinedRoomsRepository: ConnectivityMonitorDelegate {
     
     func connectivityMonitor(_ connectivityMonitor: ConnectivityMonitor, didUpdateConnectionState connectionState: ConnectionState) {
-        self.state = JoinedRoomsRepository.state(forConnectionState: connectionState,
-                                                 versionedState: self.versionedState,
-                                                 previousVersionedState: self.versionedState,
-                                                 usingTransformer: self.dependencies.transformer)
+        self.state = Self.state(forConnectionState: connectionState,
+                                versionedState: self.versionedState,
+                                previousVersionedState: self.versionedState,
+                                usingTransformer: self.dependencies.transformer)
         self.connectionState = connectionState
     }
-    
-}
-
-// MARK: - Delegate
-
-/// A delegate protocol for being notified when the `state` property of a `JoinedRoomsRepository`
-/// has changed.
-public protocol JoinedRoomsRepositoryDelegate: AnyObject {
-    
-    /// Notifies the receiver that the `state` of the repository has changed.
-    ///
-    /// - Parameters:
-    ///     - joinedRoomsRepository: The `JoinedRoomsRepository` that called the method.
-    ///     - state: The updated value of the `state`.
-    func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepository.State)
-    
-}
-
-// MARK: - Protocol
-
-protocol JoinedRoomsRepositoryProtocol: AnyObject {
-    
-    var state: JoinedRoomsRepository.State { get }
-    var delegate: JoinedRoomsRepositoryDelegate? { get set }
     
 }

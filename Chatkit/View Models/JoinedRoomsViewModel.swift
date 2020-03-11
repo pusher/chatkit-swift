@@ -28,63 +28,13 @@ import Foundation
 ///   - `.connected`: updates are flowing live, or
 ///   - `.degraded`: updates may be delayed due to network problems, or
 ///   - `.closed`: the connection is closed, no further updates available.
-public class JoinedRoomsViewModel {
+public protocol JoinedRoomsViewModel {
     
-    // MARK: - Properties
-    
-    private let repository: JoinedRoomsRepositoryProtocol
-    
-    /// The current state of the repository.
-    public private(set) var state: State {
-        didSet {
-            if state != oldValue {
-                DispatchQueue.main.async {
-                    self.delegate?.joinedRoomsViewModel(self, didUpdateState: self.state)
-                }
-            }
-        }
-    }
+    /// The current state of the view model.
+    var state: JoinedRoomsViewModelState { get }
     
     /// The object that is notified when the `state` has changed.
-    public weak var delegate: JoinedRoomsViewModelDelegate?
-    
-    // MARK: - Initializers
-    
-    init(repository: JoinedRoomsRepositoryProtocol) {
-        self.state = JoinedRoomsViewModel.state(forRepositoryState: repository.state)
-        self.repository = repository
-        self.repository.delegate = self
-    }
-    
-    // MARK: - Private methods
-    
-    private static func state(forRepositoryState repositoryState: JoinedRoomsRepository.State, previousState: State? = nil) -> State {
-        var previousRooms: [Room]? = nil
-        
-        switch previousState {
-        case let .connected(rooms, _),
-             let .degraded(rooms, _, _):
-            previousRooms = rooms
-            
-        case .initializing,
-             .closed,
-             .none:
-            break
-        }
-        
-        return State(repositoryState: repositoryState, previousRooms: previousRooms)
-    }
-    
-}
-
-// MARK: - JoinedRoomsRepositoryDelegate
-
-/// :nodoc:
-extension JoinedRoomsViewModel: JoinedRoomsRepositoryDelegate {
-    
-    public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepository.State) {
-        self.state = JoinedRoomsViewModel.state(forRepositoryState: state, previousState: self.state)
-    }
+    var delegate: JoinedRoomsViewModelDelegate? { get set }
     
 }
 
@@ -99,6 +49,66 @@ public protocol JoinedRoomsViewModelDelegate: AnyObject {
     /// - Parameters:
     ///     - joinedRoomsViewModel: The `JoinedRoomsViewModel` that called the method.
     ///     - state: The updated value of the `state`.
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateState state: JoinedRoomsViewModel.State)
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateState state: JoinedRoomsViewModelState)
+    
+}
+
+// MARK: - Concrete implementation
+
+class ConcreteJoinedRoomsViewModel: JoinedRoomsViewModel {
+    
+    // MARK: - Properties
+    
+    private let repository: JoinedRoomsRepository
+    
+    public private(set) var state: JoinedRoomsViewModelState {
+        didSet {
+            if state != oldValue {
+                DispatchQueue.main.async {
+                    self.delegate?.joinedRoomsViewModel(self, didUpdateState: self.state)
+                }
+            }
+        }
+    }
+    
+    public weak var delegate: JoinedRoomsViewModelDelegate?
+    
+    // MARK: - Initializers
+    
+    init(repository: JoinedRoomsRepository) {
+        self.state = Self.state(forRepositoryState: repository.state)
+        self.repository = repository
+        self.repository.delegate = self
+    }
+    
+    // MARK: - Private methods
+    
+    private static func state(forRepositoryState repositoryState: JoinedRoomsRepositoryState, previousState: JoinedRoomsViewModelState? = nil) -> JoinedRoomsViewModelState {
+        var previousRooms: [Room]? = nil
+        
+        switch previousState {
+        case let .connected(rooms, _),
+             let .degraded(rooms, _, _):
+            previousRooms = rooms
+            
+        case .initializing,
+             .closed,
+             .none:
+            break
+        }
+        
+        return JoinedRoomsViewModelState(repositoryState: repositoryState, previousRooms: previousRooms)
+    }
+    
+}
+
+// MARK: - JoinedRoomsRepositoryDelegate
+
+/// :nodoc:
+extension ConcreteJoinedRoomsViewModel: JoinedRoomsRepositoryDelegate {
+    
+    public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepositoryState) {
+        self.state = Self.state(forRepositoryState: state, previousState: self.state)
+    }
     
 }

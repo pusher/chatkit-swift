@@ -22,7 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		2200BB93231E727000BF9545 /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2200BB92231E727000BF9545 /* DateFormatter+Extensions.swift */; };
-		22090F0923FEECAC00E82C93 /* JoinedRoomsRepositoryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22090F0823FEECAC00E82C93 /* JoinedRoomsRepositoryFilter.swift */; };
+		22090F0923FEECAC00E82C93 /* ConcreteJoinedRoomsRepositoryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22090F0823FEECAC00E82C93 /* ConcreteJoinedRoomsRepositoryFilter.swift */; };
 		22090F0C23FEF2AF00E82C93 /* Transformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22090F0B23FEF2AF00E82C93 /* Transformer.swift */; };
 		220911D523ED6F97001A2D9A /* InitialStateReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220911D423ED6F97001A2D9A /* InitialStateReducerTests.swift */; };
 		220D99232406BA4600B0FD92 /* ListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220D99222406BA4600B0FD92 /* ListState.swift */; };
@@ -38,13 +38,13 @@
 		2227739124104E8100FF2AA1 /* JoinedRoomsViewModelStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2227739024104E8100FF2AA1 /* JoinedRoomsViewModelStateTests.swift */; };
 		222773942410F69000FF2AA1 /* ConcreteConnectivityMonitorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222773932410F69000FF2AA1 /* ConcreteConnectivityMonitorTests.swift */; };
 		222773962411020500FF2AA1 /* ConnectivityMonitorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222773952411020500FF2AA1 /* ConnectivityMonitorDelegate.swift */; };
-		22277398241107D900FF2AA1 /* JoinedRoomsRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22277397241107D900FF2AA1 /* JoinedRoomsRepositoryTests.swift */; };
+		22277398241107D900FF2AA1 /* ConcreteJoinedRoomsRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22277397241107D900FF2AA1 /* ConcreteJoinedRoomsRepositoryTests.swift */; };
 		2227739C2411083600FF2AA1 /* Buffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2227739B2411083600FF2AA1 /* Buffer.swift */; };
 		2227739E2411084200FF2AA1 /* ConnectivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2227739D2411084200FF2AA1 /* ConnectivityMonitor.swift */; };
 		222773A024111B2F00FF2AA1 /* JoinedRoomsRepositoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2227739F24111B2F00FF2AA1 /* JoinedRoomsRepositoryDelegate.swift */; };
 		222773A224111FE500FF2AA1 /* JoinedRoomsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222773A124111FE500FF2AA1 /* JoinedRoomsRepository.swift */; };
 		222773A42411218E00FF2AA1 /* JoinedRoomsViewModelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222773A32411218E00FF2AA1 /* JoinedRoomsViewModelDelegate.swift */; };
-		222773A6241121F100FF2AA1 /* JoinedRoomsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222773A5241121F100FF2AA1 /* JoinedRoomsViewModelTests.swift */; };
+		222773A6241121F100FF2AA1 /* ConcreteJoinedRoomsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222773A5241121F100FF2AA1 /* ConcreteJoinedRoomsViewModelTests.swift */; };
 		222910EA23D8A6C300A3ACDF /* TestTokenProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222910E923D8A6C300A3ACDF /* TestTokenProviderTests.swift */; };
 		222C963F23F5489400321C94 /* UserListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C963E23F5489400321C94 /* UserListState.swift */; };
 		222C964323F552FB00321C94 /* RoomUpdatedAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 222C964223F552FB00321C94 /* RoomUpdatedAction.swift */; };
@@ -100,7 +100,7 @@
 		2282205024096A8B004B99E7 /* JoinedRoomsViewModelChangeReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2282204F24096A8B004B99E7 /* JoinedRoomsViewModelChangeReason.swift */; };
 		2286409F240935880022370E /* ConnectivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2286409E240935880022370E /* ConnectivityMonitor.swift */; };
 		228C2D6A2400131600FC0326 /* ConcreteTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D692400131600FC0326 /* ConcreteTransformerTests.swift */; };
-		228C2D6E240016C300FC0326 /* JoinedRoomsFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D6D240016C300FC0326 /* JoinedRoomsFilterTests.swift */; };
+		228C2D6E240016C300FC0326 /* ConcreteJoinedRoomsRepositoryFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D6D240016C300FC0326 /* ConcreteJoinedRoomsRepositoryFilterTests.swift */; };
 		228C2D7124001FF200FC0326 /* ReadSummaryStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D7024001FF200FC0326 /* ReadSummaryStateTests.swift */; };
 		228C2D732400268200FC0326 /* RoomStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D722400268200FC0326 /* RoomStateTests.swift */; };
 		228C2D752400279900FC0326 /* RoomListStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 228C2D742400279900FC0326 /* RoomListStateTests.swift */; };
@@ -359,7 +359,7 @@
 /* Begin PBXFileReference section */
 		2200BB92231E727000BF9545 /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
 		2200BB96231EA5C200BF9545 /* TestLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestLogger.swift; sourceTree = "<group>"; };
-		22090F0823FEECAC00E82C93 /* JoinedRoomsRepositoryFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsRepositoryFilter.swift; sourceTree = "<group>"; };
+		22090F0823FEECAC00E82C93 /* ConcreteJoinedRoomsRepositoryFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteJoinedRoomsRepositoryFilter.swift; sourceTree = "<group>"; };
 		22090F0B23FEF2AF00E82C93 /* Transformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transformer.swift; sourceTree = "<group>"; };
 		220911D423ED6F97001A2D9A /* InitialStateReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialStateReducerTests.swift; sourceTree = "<group>"; };
 		220D99222406BA4600B0FD92 /* ListState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListState.swift; sourceTree = "<group>"; };
@@ -375,13 +375,13 @@
 		2227739024104E8100FF2AA1 /* JoinedRoomsViewModelStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsViewModelStateTests.swift; sourceTree = "<group>"; };
 		222773932410F69000FF2AA1 /* ConcreteConnectivityMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteConnectivityMonitorTests.swift; sourceTree = "<group>"; };
 		222773952411020500FF2AA1 /* ConnectivityMonitorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityMonitorDelegate.swift; sourceTree = "<group>"; };
-		22277397241107D900FF2AA1 /* JoinedRoomsRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsRepositoryTests.swift; sourceTree = "<group>"; };
+		22277397241107D900FF2AA1 /* ConcreteJoinedRoomsRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteJoinedRoomsRepositoryTests.swift; sourceTree = "<group>"; };
 		2227739B2411083600FF2AA1 /* Buffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buffer.swift; sourceTree = "<group>"; };
 		2227739D2411084200FF2AA1 /* ConnectivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityMonitor.swift; sourceTree = "<group>"; };
 		2227739F24111B2F00FF2AA1 /* JoinedRoomsRepositoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsRepositoryDelegate.swift; sourceTree = "<group>"; };
 		222773A124111FE500FF2AA1 /* JoinedRoomsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsRepository.swift; sourceTree = "<group>"; };
 		222773A32411218E00FF2AA1 /* JoinedRoomsViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsViewModelDelegate.swift; sourceTree = "<group>"; };
-		222773A5241121F100FF2AA1 /* JoinedRoomsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsViewModelTests.swift; sourceTree = "<group>"; };
+		222773A5241121F100FF2AA1 /* ConcreteJoinedRoomsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteJoinedRoomsViewModelTests.swift; sourceTree = "<group>"; };
 		222910DB23D8A5D900A3ACDF /* System Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "System Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		222910DF23D8A5D900A3ACDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		222910E923D8A6C300A3ACDF /* TestTokenProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTokenProviderTests.swift; sourceTree = "<group>"; };
@@ -443,7 +443,7 @@
 		2282204F24096A8B004B99E7 /* JoinedRoomsViewModelChangeReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsViewModelChangeReason.swift; sourceTree = "<group>"; };
 		2286409E240935880022370E /* ConnectivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectivityMonitor.swift; sourceTree = "<group>"; };
 		228C2D692400131600FC0326 /* ConcreteTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteTransformerTests.swift; sourceTree = "<group>"; };
-		228C2D6D240016C300FC0326 /* JoinedRoomsFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinedRoomsFilterTests.swift; sourceTree = "<group>"; };
+		228C2D6D240016C300FC0326 /* ConcreteJoinedRoomsRepositoryFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcreteJoinedRoomsRepositoryFilterTests.swift; sourceTree = "<group>"; };
 		228C2D7024001FF200FC0326 /* ReadSummaryStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadSummaryStateTests.swift; sourceTree = "<group>"; };
 		228C2D722400268200FC0326 /* RoomStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomStateTests.swift; sourceTree = "<group>"; };
 		228C2D742400279900FC0326 /* RoomListStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListStateTests.swift; sourceTree = "<group>"; };
@@ -723,7 +723,7 @@
 			children = (
 				2227738C2410443100FF2AA1 /* Change Reasons */,
 				2227738D2410443600FF2AA1 /* States */,
-				222773A5241121F100FF2AA1 /* JoinedRoomsViewModelTests.swift */,
+				222773A5241121F100FF2AA1 /* ConcreteJoinedRoomsViewModelTests.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -1139,7 +1139,7 @@
 			isa = PBXGroup;
 			children = (
 				227C7C1C23FD82A9001DE4E5 /* StateFilter.swift */,
-				22090F0823FEECAC00E82C93 /* JoinedRoomsRepositoryFilter.swift */,
+				22090F0823FEECAC00E82C93 /* ConcreteJoinedRoomsRepositoryFilter.swift */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -1198,7 +1198,7 @@
 			children = (
 				228C2D6C240016BA00FC0326 /* Filters */,
 				22AFE0E4240EB77900056A43 /* States */,
-				22277397241107D900FF2AA1 /* JoinedRoomsRepositoryTests.swift */,
+				22277397241107D900FF2AA1 /* ConcreteJoinedRoomsRepositoryTests.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -1206,7 +1206,7 @@
 		228C2D6C240016BA00FC0326 /* Filters */ = {
 			isa = PBXGroup;
 			children = (
-				228C2D6D240016C300FC0326 /* JoinedRoomsFilterTests.swift */,
+				228C2D6D240016C300FC0326 /* ConcreteJoinedRoomsRepositoryFilterTests.swift */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -2268,7 +2268,7 @@
 				222C964D23F55EC400321C94 /* AddedToRoomReducerTests.swift in Sources */,
 				73A9392323E192FC0025AF90 /* String+ExtensionTests.swift in Sources */,
 				73CF01BC23AB823F006FB43E /* Wire.ReadState+Decodable.Tests.swift in Sources */,
-				22277398241107D900FF2AA1 /* JoinedRoomsRepositoryTests.swift in Sources */,
+				22277398241107D900FF2AA1 /* ConcreteJoinedRoomsRepositoryTests.swift in Sources */,
 				7335D27523D7330900E51909 /* CodableJSONCollections+ArrayEncodingTests.swift in Sources */,
 				228C2D7D240034A600FC0326 /* VersionedStateTests.swift in Sources */,
 				73233B2A23CF69A7001909B7 /* ConcreteSubscriptionActionDispatcherTests.swift in Sources */,
@@ -2285,7 +2285,7 @@
 				7335D27323D715E800E51909 /* CodableJSONCollections+DictionaryEncodingTests.swift in Sources */,
 				73EDEE5223D8ABCB00DE566D /* ConcreteInstanceWrapperFactoryTests.swift in Sources */,
 				22406A8323F4263E00EE24BE /* RemovedFromRoomReducerTests.swift in Sources */,
-				222773A6241121F100FF2AA1 /* JoinedRoomsViewModelTests.swift in Sources */,
+				222773A6241121F100FF2AA1 /* ConcreteJoinedRoomsViewModelTests.swift in Sources */,
 				7301BC7023B0FCCE00F162C7 /* Wire.Event.RoomUpdated+Decodable.Tests.swift in Sources */,
 				7301BC6D23B0FCCE00F162C7 /* Wire.Event.ReadStateUpdated+Decodable.Tests.swift in Sources */,
 				7301BC7123B0FCCE00F162C7 /* Wire.Event.AddedToRoom+Decodable.Tests.swift in Sources */,
@@ -2308,7 +2308,7 @@
 				7335D26F23D705F300E51909 /* CodableJSONCollections+DictionaryDecodingTests.swift in Sources */,
 				734D6A4423AAA7D300105479 /* Wire.CursorType+Decodable.Tests.swift in Sources */,
 				734D6A4023AAA3CE00105479 /* Wire.Cursor+Decodable.Tests.swift in Sources */,
-				228C2D6E240016C300FC0326 /* JoinedRoomsFilterTests.swift in Sources */,
+				228C2D6E240016C300FC0326 /* ConcreteJoinedRoomsRepositoryFilterTests.swift in Sources */,
 				7301BC6E23B0FCCE00F162C7 /* Wire.Event.InitialState+Decodable.Tests.swift in Sources */,
 				22AFE0D6240E6EA500056A43 /* SubscriptionStateUpdatedReducerTests.swift in Sources */,
 				7301BC7523B1149D00F162C7 /* Wire.Event.IsTyping+Decodable.Tests.swift in Sources */,
@@ -2372,7 +2372,7 @@
 				2282205024096A8B004B99E7 /* JoinedRoomsViewModelChangeReason.swift in Sources */,
 				22D2A2EA23197E7F0095757C /* ConnectionStatus.swift in Sources */,
 				22090F0C23FEF2AF00E82C93 /* Transformer.swift in Sources */,
-				22090F0923FEECAC00E82C93 /* JoinedRoomsRepositoryFilter.swift in Sources */,
+				22090F0923FEECAC00E82C93 /* ConcreteJoinedRoomsRepositoryFilter.swift in Sources */,
 				222C964B23F55BA500321C94 /* AddedToRoomReducer.swift in Sources */,
 				734D6A3E23AAA2C900105479 /* Wire.Cursor.swift in Sources */,
 				73233AC323CE1A0D001909B7 /* SubscriptionFactory.swift in Sources */,

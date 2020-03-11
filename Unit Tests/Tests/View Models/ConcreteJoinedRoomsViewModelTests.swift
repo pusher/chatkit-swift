@@ -2,7 +2,7 @@ import XCTest
 import TestUtilities
 @testable import PusherChatkit
 
-class JoinedRoomsViewModelTests: XCTestCase {
+class ConcreteJoinedRoomsViewModelTests: XCTestCase {
     
     // MARK: - Properties
     
@@ -23,7 +23,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stateToReturn: JoinedRoomsRepository.State = .initializing(error: nil)
+        let stateToReturn: JoinedRoomsRepositoryState = .initializing(error: nil)
         
         let stubJoinedRoomsRepository = StubJoinedRoomsRepository(state_toReturn: stateToReturn, delegate_expectedSetCallCount: 1)
         
@@ -31,7 +31,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        _ = JoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
+        _ = ConcreteJoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
         
         /******************/
         /*----- THEN -----*/
@@ -46,7 +46,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stateToReturn: JoinedRoomsRepository.State = .initializing(error: nil)
+        let stateToReturn: JoinedRoomsRepositoryState = .initializing(error: nil)
         
         let stubJoinedRoomsRepository = StubJoinedRoomsRepository(state_toReturn: stateToReturn, delegate_expectedSetCallCount: 1)
         
@@ -54,13 +54,13 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = JoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
+        let sut = ConcreteJoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsViewModel.State = .initializing(error: nil)
+        let expectedState: JoinedRoomsViewModelState = .initializing(error: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -71,13 +71,13 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let initialStateToReturn: JoinedRoomsRepository.State = .initializing(error: nil)
-        let modifiedStateToReturn: JoinedRoomsRepository.State = .connected(rooms: [self.room], changeReason: nil)
+        let initialStateToReturn: JoinedRoomsRepositoryState = .initializing(error: nil)
+        let modifiedStateToReturn: JoinedRoomsRepositoryState = .connected(rooms: [self.room], changeReason: nil)
         
         let stubJoinedRoomsRepository = StubJoinedRoomsRepository(state_toReturn: initialStateToReturn, delegate_expectedSetCallCount: 1)
         let stubDelegate = StubJoinedRoomsViewModelDelegate(didUpdateState_expectedCallCount: 1)
         
-        let sut = JoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
+        let sut = ConcreteJoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
         sut.delegate = stubDelegate
         
         let expectation = XCTestExpectation(description: "Delegate called")
@@ -99,7 +99,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         
         wait(for: [expectation], timeout: 1.0)
         
-        let expectedState: JoinedRoomsViewModel.State = .connected(rooms: [self.room], changeReason: nil)
+        let expectedState: JoinedRoomsViewModelState = .connected(rooms: [self.room], changeReason: nil)
         
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didUpdateState_stateLastReceived, expectedState)
@@ -111,13 +111,13 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let initialStateToReturn: JoinedRoomsRepository.State = .connected(rooms: [self.room], changeReason: nil)
-        let modifiedStateToReturn: JoinedRoomsRepository.State = .degraded(rooms: [self.room], error: FakeError.firstError, changeReason: nil)
+        let initialStateToReturn: JoinedRoomsRepositoryState = .connected(rooms: [self.room], changeReason: nil)
+        let modifiedStateToReturn: JoinedRoomsRepositoryState = .degraded(rooms: [self.room], error: FakeError.firstError, changeReason: nil)
         
         let stubJoinedRoomsRepository = StubJoinedRoomsRepository(state_toReturn: initialStateToReturn, delegate_expectedSetCallCount: 1)
         let stubDelegate = StubJoinedRoomsViewModelDelegate(didUpdateState_expectedCallCount: 1)
         
-        let sut = JoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
+        let sut = ConcreteJoinedRoomsViewModel(repository: stubJoinedRoomsRepository)
         sut.delegate = stubDelegate
         
         let expectation = XCTestExpectation(description: "Delegate called")
@@ -139,7 +139,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         
         wait(for: [expectation], timeout: 1.0)
         
-        let expectedState: JoinedRoomsViewModel.State = .degraded(rooms: [self.room], error: FakeError.firstError, changeReason: nil)
+        let expectedState: JoinedRoomsViewModelState = .degraded(rooms: [self.room], error: FakeError.firstError, changeReason: nil)
         
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didUpdateState_stateLastReceived, expectedState)
