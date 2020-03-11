@@ -58,7 +58,7 @@ class RoomListViewController: UITableViewController {
         viewModel.delegate = self
     }
     
-    private func applyChange(_ changeReason: JoinedRoomsViewModel.ChangeReason) {
+    private func applyChange(_ changeReason: JoinedRoomsViewModelChangeReason) {
         switch changeReason {
         case let .itemInserted(position):
             self.insertRow(atIndex: position)
@@ -149,7 +149,7 @@ extension RoomListViewController {
 
 extension RoomListViewController: JoinedRoomsViewModelDelegate {
     
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateState state: JoinedRoomsViewModel.State) {
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateState state: JoinedRoomsViewModelState) {
         switch state {
         case let .initializing(error):
             if let error = error {
