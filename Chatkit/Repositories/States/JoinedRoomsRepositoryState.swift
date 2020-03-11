@@ -20,7 +20,7 @@ public extension JoinedRoomsRepository {
         ///     - rooms: The set of all rooms joined by the user.
         ///     - changeReason: An optional change reason, describing the last change introduced
         ///     to the `state` of the repository.
-        case connected(rooms: Set<Room>, changeReason: ChangeReason?)
+        case connected(rooms: Set<Room>, changeReason: JoinedRoomsRepositoryChangeReason?)
         
         /// The case representing a problem with the connection to the Chatkit web service.
         ///
@@ -29,7 +29,7 @@ public extension JoinedRoomsRepository {
         ///     - error: Error describing the problem with the connection to the web service.
         ///     - changeReason: An optional change reason, describing the last change introduced
         ///     to the `state` of the repository.
-        case degraded(rooms: Set<Room>, error: Error, changeReason: ChangeReason?)
+        case degraded(rooms: Set<Room>, error: Error, changeReason: JoinedRoomsRepositoryChangeReason?)
         
         /// The case representing a closed connection to the Chatkit web service.
         ///

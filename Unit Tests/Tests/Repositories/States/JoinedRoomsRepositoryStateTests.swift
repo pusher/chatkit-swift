@@ -9,8 +9,8 @@ class JoinedRoomsRepositoryStateTests: XCTestCase {
     var firstRooms: Set<Room>!
     var secondRooms: Set<Room>!
     
-    var firstChangeReason: JoinedRoomsRepository.ChangeReason!
-    var secondChangeReason: JoinedRoomsRepository.ChangeReason!
+    var firstChangeReason: JoinedRoomsRepositoryChangeReason!
+    var secondChangeReason: JoinedRoomsRepositoryChangeReason!
     
     var firstError: Error!
     var secondError: Error!

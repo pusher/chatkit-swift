@@ -42,7 +42,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = nil
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = nil
         let currentRooms: [Room] = []
         let previousRooms: [Room]? = nil
         
@@ -65,7 +65,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = .addedToRoom(room: self.secondRoom)
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = .addedToRoom(room: self.secondRoom)
         let currentRooms: [Room] = [
             self.firstRoom,
             self.secondRoom
@@ -93,7 +93,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = .addedToRoom(room: self.secondRoom)
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = .addedToRoom(room: self.secondRoom)
         let currentRooms: [Room] = [
             self.firstRoom
         ]
@@ -118,7 +118,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = .removedFromRoom(room: self.secondRoom)
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = .removedFromRoom(room: self.secondRoom)
         let currentRooms: [Room] = []
         let previousRooms: [Room]? = [
             self.firstRoom,
@@ -146,7 +146,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = .removedFromRoom(room: self.secondRoom)
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = .removedFromRoom(room: self.secondRoom)
         let currentRooms: [Room] = []
         let previousRooms: [Room]? = [
             self.firstRoom
@@ -171,7 +171,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = .removedFromRoom(room: self.secondRoom)
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = .removedFromRoom(room: self.secondRoom)
         let currentRooms: [Room] = []
         let previousRooms: [Room]? = nil
         
@@ -194,7 +194,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = .roomDeleted(room: self.secondRoom)
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = .roomDeleted(room: self.secondRoom)
         let currentRooms: [Room] = []
         let previousRooms: [Room]? = [
             self.firstRoom,
@@ -222,7 +222,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = .roomDeleted(room: self.secondRoom)
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = .roomDeleted(room: self.secondRoom)
         let currentRooms: [Room] = []
         let previousRooms: [Room]? = [
             self.firstRoom
@@ -247,7 +247,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = .roomDeleted(room: self.secondRoom)
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = .roomDeleted(room: self.secondRoom)
         let currentRooms: [Room] = []
         let previousRooms: [Room]? = nil
         
@@ -270,7 +270,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = .roomUpdated(updatedRoom: self.modifiedSecondRoom, previousValue: self.secondRoom)
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = .roomUpdated(updatedRoom: self.modifiedSecondRoom, previousValue: self.secondRoom)
         let currentRooms: [Room] = [
             self.firstRoom,
             self.modifiedSecondRoom
@@ -301,7 +301,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = .roomUpdated(updatedRoom: self.modifiedSecondRoom, previousValue: self.secondRoom)
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = .roomUpdated(updatedRoom: self.modifiedSecondRoom, previousValue: self.secondRoom)
         let currentRooms: [Room] = [
             self.modifiedSecondRoom,
             self.firstRoom
@@ -332,7 +332,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = .roomUpdated(updatedRoom: self.modifiedSecondRoom, previousValue: self.secondRoom)
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = .roomUpdated(updatedRoom: self.modifiedSecondRoom, previousValue: self.secondRoom)
         let currentRooms: [Room] = [
             self.firstRoom
         ]
@@ -360,7 +360,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = .readStateUpdated(updatedRoom: self.modifiedSecondRoom, previousValue: self.secondRoom)
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = .readStateUpdated(updatedRoom: self.modifiedSecondRoom, previousValue: self.secondRoom)
         let currentRooms: [Room] = [
             self.firstRoom,
             self.modifiedSecondRoom
@@ -391,7 +391,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = .readStateUpdated(updatedRoom: self.modifiedSecondRoom, previousValue: self.secondRoom)
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = .readStateUpdated(updatedRoom: self.modifiedSecondRoom, previousValue: self.secondRoom)
         let currentRooms: [Room] = [
             self.modifiedSecondRoom,
             self.firstRoom
@@ -422,7 +422,7 @@ class JoinedRoomsViewModelChangeReasonTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let repositoryChangeReason: JoinedRoomsRepository.ChangeReason? = .readStateUpdated(updatedRoom: self.modifiedSecondRoom, previousValue: self.secondRoom)
+        let repositoryChangeReason: JoinedRoomsRepositoryChangeReason? = .readStateUpdated(updatedRoom: self.modifiedSecondRoom, previousValue: self.secondRoom)
         let currentRooms: [Room] = [
             self.firstRoom
         ]

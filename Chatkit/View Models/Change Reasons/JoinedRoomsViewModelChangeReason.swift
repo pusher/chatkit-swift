@@ -33,7 +33,7 @@ public extension JoinedRoomsViewModel {
         
         // MARK: - Initializers
         
-        internal init?(repositoryChangeReason: JoinedRoomsRepository.ChangeReason?, currentRooms: [Room], previousRooms: [Room]?) {
+        internal init?(repositoryChangeReason: JoinedRoomsRepositoryChangeReason?, currentRooms: [Room], previousRooms: [Room]?) {
             guard let repositoryChangeReason = repositoryChangeReason else {
                 return nil
             }
