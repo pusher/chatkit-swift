@@ -46,13 +46,16 @@ public class StubJoinedRoomsRepository: DoubleBase, JoinedRoomsRepositoryProtoco
         
         let stubBuffer = StubBuffer(currentState_toReturn: nil, delegate_expectedSetCallCount: 1)
         let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: .user,
-                                                              connectionState_toReturn: .connected,
                                                               delegate_expectedSetCallCount: 1)
+        let initialConnectionState: ConnectionState = .connected
         let stubTransformer = StubTransformer(room_toReturn: room, transformCurrentStatePreviousState_expectedSetCallCount: 1)
         
         let dependencies = DependenciesDoubles(transformer: stubTransformer)
         
-        let joinedRoomsRepository = JoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let joinedRoomsRepository = JoinedRoomsRepository(buffer: stubBuffer,
+                                                          connectivityMonitor: stubConnectivityMonitor,
+                                                          connectionState: initialConnectionState,
+                                                          dependencies: dependencies)
         
         self.delegate?.joinedRoomsRepository(joinedRoomsRepository, didUpdateState: state)
     }
