@@ -29,21 +29,3 @@ struct VersionedState: State, Versionable {
     }
     
 }
-
-// MARK: - Equatable
-
-extension VersionedState: Equatable {}
-
-// MARK: - Hashable
-
-extension VersionedState: Hashable {
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(self.chatState)
-        hasher.combine(self.auxiliaryState)
-        hasher.combine(self.version)
-        hasher.combine(self.signature)
-    }
-    
-}
-

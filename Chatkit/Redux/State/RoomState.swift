@@ -35,25 +35,3 @@ struct RoomState: State {
     }
     
 }
-
-// MARK: - Equatable
-
-extension RoomState: Equatable {}
-
-// MARK: - Hashable
-
-extension RoomState: Hashable {
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(self.identifier)
-        hasher.combine(self.name)
-        hasher.combine(self.isPrivate)
-        hasher.combine(self.pushNotificationTitle)
-        hasher.combine(self.customData)
-        hasher.combine(self.lastMessageAt)
-        hasher.combine(self.readSummary)
-        hasher.combine(self.createdAt)
-        hasher.combine(self.updatedAt)
-    }
-    
-}

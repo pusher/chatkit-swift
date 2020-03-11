@@ -29,5 +29,15 @@ extension XCTest {
         let dummy: DummyTokenProvider = .init(file: file, line: line)
         return dummy
     }
+    
+    public func DummyInstanceWrapper(file: StaticString = #file, line: UInt = #line) -> DummyInstanceWrapper {
+        let dummy: DummyInstanceWrapper = .init(file: file, line: line)
+        return dummy
+    }
+    
+    public func DummyResumableSubscription(file: StaticString = #file, line: UInt = #line) -> DummyResumableSubscription {
+        let dummy: DummyResumableSubscription = .init(file: file, line: line)
+        return dummy
+    }
 
 }

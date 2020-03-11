@@ -41,7 +41,7 @@ class RoomListViewController: UITableViewController {
     // MARK: - Private methods
     
     private func createViewModel() {
-        self.viewModel = self.chatkit?.createJoinedRoomsViewModel()
+        self.viewModel = self.chatkit?.makeJoinedRoomsViewModel()
         self.viewModel?.delegate = self
     }
     

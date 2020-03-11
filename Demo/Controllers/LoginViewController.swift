@@ -29,7 +29,7 @@ class LoginViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
-
+        
         if segue.identifier == LoginViewController.loginSegueIdentifier {
             guard let navigationController = segue.destination as? UINavigationController,
                 let roomListViewController = navigationController.visibleViewController as? RoomListViewController else {
@@ -105,6 +105,7 @@ class LoginViewController: UIViewController {
         }
         
         self.toggleActivityIndicator(shouldDisplayActivityIndicator: true)
+        
         
         self.chatkit = chatkit
         self.chatkit?.connect { error in

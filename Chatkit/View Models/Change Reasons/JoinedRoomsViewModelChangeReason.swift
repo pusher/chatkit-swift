@@ -74,35 +74,4 @@ public extension JoinedRoomsViewModel {
 
 // MARK: - Equatable
 
-extension JoinedRoomsViewModel.ChangeReason: Equatable {
-    
-    /// Returns a Boolean value indicating whether two values are equal.
-    ///
-    /// Equality is the inverse of inequality. For any values `a` and `b`, `a == b` implies that
-    /// `a != b` is `false`.
-    ///
-    /// - Parameters:
-    ///     - lhs: A value to compare.
-    ///     - rhs: Another value to compare.
-    public static func == (lhs: JoinedRoomsViewModel.ChangeReason, rhs: JoinedRoomsViewModel.ChangeReason) -> Bool {
-        switch (lhs, rhs) {
-        case (let .itemInserted(lhsPosition),
-              let .itemInserted(rhsPosition)):
-            return lhsPosition == rhsPosition
-            
-        case (let .itemMoved(lhsFromPosition, lhsToPosition),
-              let .itemMoved(rhsFromPosition, rhsToPosition)):
-            return lhsFromPosition == rhsFromPosition && lhsToPosition == rhsToPosition
-            
-        case (let .itemChanged(lhsFromPosition, lhsPreviousValue),
-              let .itemChanged(rhsFromPosition, rhsPreviousValue)),
-             (let .itemRemoved(lhsFromPosition, lhsPreviousValue),
-              let .itemRemoved(rhsFromPosition, rhsPreviousValue)):
-            return lhsFromPosition == rhsFromPosition && lhsPreviousValue == rhsPreviousValue
-            
-        default:
-            return false
-        }
-    }
-    
-}
+extension JoinedRoomsViewModel.ChangeReason: Equatable {}

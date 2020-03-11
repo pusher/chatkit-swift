@@ -13,14 +13,14 @@ internal extension JoinedRoomsRepository {
             return state.chatState.joinedRooms.isComplete
         }
         
-        func hasSupportedSignature(_ signature: VersionSignature) -> Bool {
+        func hasRelevantSignature(_ signature: VersionSignature) -> Bool {
             switch signature {
             case .initialState,
-                 .addedToRoom(_),
-                 .removedFromRoom(_),
-                 .roomUpdated(_),
-                 .roomDeleted(_),
-                 .readStateUpdated(_):
+                 .addedToRoom,
+                 .removedFromRoom,
+                 .roomUpdated,
+                 .roomDeleted,
+                 .readStateUpdated:
                 return true
                 
             case .unsigned,

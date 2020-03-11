@@ -32,7 +32,7 @@ extension XCTestExpectation {
         
     }
     
-    public struct JoinedRoomsProviderDelegate {
+    public struct JoinedRoomsRepositoryDelegate {
         
         public static var didJoinRoom: Expectation<Room> {
             .init(functionName: "didJoinRoom", systemTestTimeout: 15)

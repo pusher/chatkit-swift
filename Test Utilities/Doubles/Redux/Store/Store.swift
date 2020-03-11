@@ -26,7 +26,6 @@ public class DummyStore: DummyBase, Store {
 public class StubStore: DoubleBase, Store {
     
     private let state_toReturn: VersionedState
-    public private(set) var state_actualCallCount: UInt = 0
     
     private let dispatch_expectedCallCount: UInt
     public private(set) var dispatch_lastReceived: Action?
@@ -51,11 +50,6 @@ public class StubStore: DoubleBase, Store {
         self.unregister_expectedCallCount = unregister_expectedCallCount
         
         super.init(file: file, line: line)
-    }
-    
-    public var state: VersionedState {
-        self.state_actualCallCount += 1
-        return state_toReturn
     }
     
     public func dispatch(action: Action) {

@@ -2,8 +2,6 @@ import Foundation
 
 protocol Store {
     
-    var state: VersionedState { get }
-    
     func dispatch(action: Action)
     func register(_ listener: StoreListener) -> VersionedState
     func unregister(_ listener: StoreListener)
