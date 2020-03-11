@@ -1,9 +1,9 @@
 import XCTest
 @testable import PusherChatkit
 
-public class StubJoinedRoomsRepository: DoubleBase, JoinedRoomsRepositoryProtocol {
+public class StubJoinedRoomsRepository: DoubleBase, JoinedRoomsRepository {
     
-    private let state_toReturn: JoinedRoomsRepository.State
+    private let state_toReturn: JoinedRoomsRepositoryState
     public private(set) var state_actualCallCount: UInt = 0
     
     private let delegate_expectedSetCallCount: UInt
@@ -19,7 +19,7 @@ public class StubJoinedRoomsRepository: DoubleBase, JoinedRoomsRepositoryProtoco
         }
     }
     
-    public init(state_toReturn: JoinedRoomsRepository.State,
+    public init(state_toReturn: JoinedRoomsRepositoryState,
                 delegate_expectedSetCallCount: UInt = 0,
                 file: StaticString = #file, line: UInt = #line) {
         
@@ -29,32 +29,13 @@ public class StubJoinedRoomsRepository: DoubleBase, JoinedRoomsRepositoryProtoco
         super.init(file: file, line: line)
     }
     
-    public var state: JoinedRoomsRepository.State {
+    public var state: JoinedRoomsRepositoryState {
         self.state_actualCallCount += 1
         return self.state_toReturn
     }
     
-    public func report(_ state: JoinedRoomsRepository.State) {
-        let room = Room(identifier: "room-identifier",
-                        name: "room-name",
-                        isPrivate: false,
-                        unreadCount: 10,
-                        lastMessageAt: nil,
-                        customData: nil,
-                        createdAt: .distantPast,
-                        updatedAt: .distantPast)
-        
-        let stubBuffer = StubBuffer(currentState_toReturn: nil, delegate_expectedSetCallCount: 1)
-        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: .user,
-                                                              connectionState_toReturn: .connected,
-                                                              delegate_expectedSetCallCount: 1)
-        let stubTransformer = StubTransformer(room_toReturn: room, transformCurrentStatePreviousState_expectedSetCallCount: 1)
-        
-        let dependencies = DependenciesDoubles(transformer: stubTransformer)
-        
-        let joinedRoomsRepository = JoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
-        
-        self.delegate?.joinedRoomsRepository(joinedRoomsRepository, didUpdateState: state)
+    public func report(_ state: JoinedRoomsRepositoryState) {
+        self.delegate?.joinedRoomsRepository(self, didUpdateState: state)
     }
     
 }

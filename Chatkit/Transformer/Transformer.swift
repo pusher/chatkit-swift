@@ -2,7 +2,7 @@
 protocol Transformer {
     
     func transform(state: RoomState) -> Room
-    func transform(currentState: VersionedState, previousState: VersionedState?) -> JoinedRoomsRepository.ChangeReason?
+    func transform(currentState: VersionedState, previousState: VersionedState?) -> JoinedRoomsRepositoryChangeReason?
     
 }
 
@@ -23,7 +23,7 @@ struct ConcreteTransformer: Transformer {
                     updatedAt: state.updatedAt)
     }
     
-    func transform(currentState: VersionedState, previousState: VersionedState?) -> JoinedRoomsRepository.ChangeReason? {
+    func transform(currentState: VersionedState, previousState: VersionedState?) -> JoinedRoomsRepositoryChangeReason? {
         switch currentState.signature {
         case let .addedToRoom(roomIdentifier):
             guard let currentRoom = self.room(fromState: currentState, forIdentifier: roomIdentifier) else {

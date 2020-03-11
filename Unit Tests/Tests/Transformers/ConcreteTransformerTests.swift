@@ -129,7 +129,7 @@ class ConcreteTransformerTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedChangeReason: JoinedRoomsRepository.ChangeReason = .addedToRoom(
+        let expectedChangeReason: JoinedRoomsRepositoryChangeReason = .addedToRoom(
             room: Room(
                 identifier: roomIdentifier,
                 name: "room-name",
@@ -230,7 +230,7 @@ class ConcreteTransformerTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedChangeReason: JoinedRoomsRepository.ChangeReason = .removedFromRoom(
+        let expectedChangeReason: JoinedRoomsRepositoryChangeReason = .removedFromRoom(
             room: Room(
                 identifier: roomIdentifier,
                 name: "room-name",
@@ -356,7 +356,7 @@ class ConcreteTransformerTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedChangeReason: JoinedRoomsRepository.ChangeReason = .roomUpdated(
+        let expectedChangeReason: JoinedRoomsRepositoryChangeReason = .roomUpdated(
             updatedRoom: Room(
                 identifier: roomIdentifier,
                 name: "new-room-name",
@@ -558,7 +558,7 @@ class ConcreteTransformerTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedChangeReason: JoinedRoomsRepository.ChangeReason = .roomDeleted(
+        let expectedChangeReason: JoinedRoomsRepositoryChangeReason = .roomDeleted(
             room: Room(
                 identifier: roomIdentifier,
                 name: "room-name",
@@ -684,7 +684,7 @@ class ConcreteTransformerTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedChangeReason: JoinedRoomsRepository.ChangeReason = .readStateUpdated(
+        let expectedChangeReason: JoinedRoomsRepositoryChangeReason = .readStateUpdated(
             updatedRoom: Room(
                 identifier: roomIdentifier,
                 name: "new-room-name",
