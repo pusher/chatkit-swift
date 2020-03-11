@@ -10,7 +10,7 @@ public class DummyTokenProvider: DummyBase, TokenProvider {
 
     public func fetchToken(completionHandler: @escaping (AuthenticationResult) -> Void) {
         DummyFail(sender: self, function: #function)
-        completionHandler(.failure(error: FakeError()))
+        completionHandler(.failure(error: FakeError.firstError))
     }
 }
 

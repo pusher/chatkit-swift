@@ -10,7 +10,7 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(action_expectedCallCount: 1)
+        let stubStore = StubStore(state_toReturn: .initial, dispatch_expectedCallCount: 1)
         let dummySubscription = DummySubscription()
         
         let dependencies = DependenciesDoubles(
@@ -60,8 +60,8 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
                                            memberships: [])
         )
         
-        XCTAssertEqual(stubStore.action_actualCallCount, 1)
-        XCTAssertEqual(stubStore.action_lastReceived as? InitialStateAction, expectedAction)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
+        XCTAssertEqual(stubStore.dispatch_lastReceived as? InitialStateAction, expectedAction)
     }
     
     func test_didReceiveEvent_withInvalidJson_doesNotNotifyStore() {
@@ -70,7 +70,7 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(action_expectedCallCount: 0)
+        let stubStore = StubStore(state_toReturn: .initial, dispatch_expectedCallCount: 0)
         let dummySubscription = DummySubscription()
         
         let dependencies = DependenciesDoubles(
@@ -95,8 +95,8 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
 
-        XCTAssertEqual(stubStore.action_actualCallCount, 0)
-        XCTAssertNil(stubStore.action_lastReceived)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 0)
+        XCTAssertNil(stubStore.dispatch_lastReceived)
     }
     
     func test_didReceiveError_regardless_doesNotNotifyStore() {
@@ -105,7 +105,7 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(action_expectedCallCount: 0)
+        let stubStore = StubStore(state_toReturn: .initial, dispatch_expectedCallCount: 0)
         let dummySubscription = DummySubscription()
         
         let dependencies = DependenciesDoubles(
@@ -118,7 +118,7 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let error = FakeError()
+        let error = FakeError.firstError
         
         sut.subscription(dummySubscription, didReceiveError: error)
         
@@ -126,7 +126,7 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
 
-        XCTAssertEqual(stubStore.action_actualCallCount, 0)
-        XCTAssertNil(stubStore.action_lastReceived)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 0)
+        XCTAssertNil(stubStore.dispatch_lastReceived)
     }
 }

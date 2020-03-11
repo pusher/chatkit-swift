@@ -69,7 +69,7 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             /*****************/
             
             // Prepare user subscription to return failure when the client attempts to register
-            stubNetworking.stubSubscribe(.user, .fail(error: FakeError()))
+            stubNetworking.stubSubscribe(.user, .fail(error: FakeError.firstError))
             
             let expectation = XCTestExpectation.Chatkit.connect
             chatkit.connect(completionHandler: expectation.handler)
@@ -80,7 +80,7 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             
             wait(for: [expectation], timeout: 1)
             
-            XCTAssertExpectationFulfilledWithResult(expectation, FakeError())
+            XCTAssertExpectationFulfilledWithResult(expectation, FakeError.firstError)
             XCTAssertEqual(chatkit.connectionStatus, .disconnected)
             
         }())
@@ -105,40 +105,6 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             /*****************/
             /*---- THEN -----*/
             /*****************/
-            
-            XCTAssertEqual(chatkit.connectionStatus, .disconnected)
-            
-        }())
-    }
-    
-    func test_chatkitCreateJoinedRoomsProvider_regardless_completesWithErrorBecauseNotConnected() {
-        
-        XCTAssertNoThrow(try {
-        
-            /******************/
-            /*---- GIVEN -----*/
-            /******************/
-            
-            let (_, chatkit) = try setUp_ChatKitInitialised()
-            
-            /*****************/
-            /*---- WHEN -----*/
-            /*****************/
-            
-            let expectation = XCTestExpectation.Chatkit.createJoinedRoomsProvider
-            chatkit.createJoinedRoomsProvider(completionHandler: expectation.handler)
-            
-            /*****************/
-            /*---- THEN -----*/
-            /*****************/
-            
-            wait(for: [expectation], timeout: expectation.timeout)
-            
-            XCTAssertExpectationFulfilled(expectation) { joinedRoomsProvider, error in
-                XCTAssertNil(joinedRoomsProvider)
-                // TODO: improved assertion to better check content of error
-                XCTAssertNotNil(error)
-            }
             
             XCTAssertEqual(chatkit.connectionStatus, .disconnected)
             

@@ -11,9 +11,9 @@ private let defaultInstanceLocator = InstanceLocator(string: "dummy_version:dumm
 public class DependenciesDoubles: DoubleBase, Dependencies {
     
     public let instanceLocator: InstanceLocator
+    public let transformer: Transformer
     public let tokenProvider: TokenProvider
     public let sdkInfoProvider: SDKInfoProvider
-    public let storeBroadcaster: StoreBroadcaster
     public let store: Store
     public let instanceWrapperFactory: InstanceWrapperFactory
     public let subscriptionActionDispatcher: SubscriptionActionDispatcher
@@ -29,11 +29,12 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
     public let userSubscriptionRoomUpdatedReducer: Reducer.UserSubscription.RoomUpdated.ExpressionType
     public let userSubscriptionRoomDeletedReducer: Reducer.UserSubscription.RoomDeleted.ExpressionType
     public let userSubscriptionReadStateUpdatedReducer: Reducer.UserSubscription.ReadStateUpdated.ExpressionType
+    public let subscriptionStateUpdatedReducer: Reducer.Subscription.StateUpdated.ExpressionType
     
     public init(instanceLocator: InstanceLocator? = nil,
+                transformer: Transformer? = nil,
                 tokenProvider: TokenProvider? = nil,
                 sdkInfoProvider: SDKInfoProvider? = nil,
-                storeBroadcaster: StoreBroadcaster? = nil,
                 store: Store? = nil,
                 instanceWrapperFactory: InstanceWrapperFactory? = nil,
                 subscriptionActionDispatcher: SubscriptionActionDispatcher? = nil,
@@ -48,13 +49,14 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
                 userSubscriptionRoomUpdatedReducer: Reducer.UserSubscription.RoomUpdated.ExpressionType? = nil,
                 userSubscriptionRoomDeletedReducer: Reducer.UserSubscription.RoomDeleted.ExpressionType? = nil,
                 userSubscriptionReadStateUpdatedReducer: Reducer.UserSubscription.ReadStateUpdated.ExpressionType? = nil,
+                subscriptionStateUpdatedReducer: Reducer.Subscription.StateUpdated.ExpressionType? = nil,
                 
                 file: StaticString = #file, line: UInt = #line) {
         
         self.instanceLocator = instanceLocator ?? defaultInstanceLocator
+        self.transformer = transformer ?? DummyTransformer(file: file, line: line)
         self.tokenProvider = tokenProvider ?? DummyTokenProvider(file: file, line: line)
         self.sdkInfoProvider = sdkInfoProvider ?? DummySDKInfoProvider(file: file, line: line)
-        self.storeBroadcaster = storeBroadcaster ?? DummyStoreBroadcaster(file: file, line: line)
         self.store = store ?? DummyStore(file: file, line: line)
         self.instanceWrapperFactory = instanceWrapperFactory ?? DummyInstanceWrapperFactory(file: file, line: line)
         self.subscriptionActionDispatcher = subscriptionActionDispatcher ?? DummySubscriptionActionDispatcher(file: file, line: line)
@@ -79,6 +81,8 @@ public class DependenciesDoubles: DoubleBase, Dependencies {
             DummyReducer<Reducer.UserSubscription.RoomDeleted>(file: file, line: line).reduce
         self.userSubscriptionReadStateUpdatedReducer = userSubscriptionReadStateUpdatedReducer ??
             DummyReducer<Reducer.UserSubscription.ReadStateUpdated>(file: file, line: line).reduce
+        self.subscriptionStateUpdatedReducer = subscriptionStateUpdatedReducer ??
+            DummyReducer<Reducer.Subscription.StateUpdated>(file: file, line: line).reduce
         
         super.init(file: file, line: line)
     }

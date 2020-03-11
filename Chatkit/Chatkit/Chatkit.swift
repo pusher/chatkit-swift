@@ -11,7 +11,13 @@ import PusherPlatform
 /// and running.
 public class Chatkit {
     
+    // MARK: - Types
+    
+    typealias Dependencies = HasStore & HasTransformer & HasSubscriptionManager
+    
     // MARK: - Properties
+    
+    private let dependencies: Dependencies
     
     /// Returns the users who is currently logged in to the web service.
     /// - Returns: An instance of `User` when a connection to Chatkit web service has been
@@ -26,10 +32,6 @@ public class Chatkit {
     
     /// The object that is notified when the status of the connection to Chatkit web service changed.
     public weak var delegate: ChatkitDelegate?
-    
-    typealias Dependencies = HasStoreBroadcaster & HasSubscriptionManager
-    
-    private let dependencies: Dependencies
     
     // MARK: - Initializers
     
@@ -69,7 +71,7 @@ public class Chatkit {
         // TODO: Implement properly
         
         switch connectionStatus {
-
+            
         case .disconnected:
             
             dependencies.subscriptionManager.subscribe(toType: .user, sender: self) { result in
@@ -85,7 +87,7 @@ public class Chatkit {
                     Self.execute(completionHandler, onMainThreadWith: error)
                 }
             }
-        
+            
         case .connected:
             // TODO is it correct that this is idempotent?
             Self.execute(completionHandler, onMainThreadWith: nil)
@@ -99,102 +101,77 @@ public class Chatkit {
     /// Terminates the previously established connection to the Chatkit web service.
     public func disconnect() {
         // TODO: Implement
-
+        
         dependencies.subscriptionManager.unsubscribeFromAll()
         
         self.connectionStatus = .disconnected
     }
     
-    // MARK: - Constructing paged data providers
+    // MARK: - Constructing paged data repositories
     
-    /// Creates an instance of `UsersProvider`.
+    /// Creates an instance of `UsersRepository`.
     ///
     /// - Parameters:
-    ///     - completionHandler: A completion handler which will be called when the `UsersProvider` is ready, or an `Error` occurs creating it.
-    public func createUsersProvider(completionHandler: @escaping (UsersProvider?, Error?) -> Void) {
+    ///     - completionHandler: A completion handler which will be called when the `UsersRepository` is ready, or an `Error` occurs creating it.
+    public func makeUsersRepository(completionHandler: @escaping (UsersRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
     
-    /// Creates an instance of `AvailableRoomsProvider`.
+    /// Creates an instance of `AvailableRoomsRepository`.
     ///
     /// - Parameters:
-    ///     - completionHandler: A completion handler which will be called when the `AvailableRoomsProvider` is ready, or an `Error` occurs creating it.
-    public func createAvailableRoomsProvider(completionHandler: @escaping (AvailableRoomsProvider?, Error?) -> Void) {
+    ///     - completionHandler: A completion handler which will be called when the `AvailableRoomsRepository` is ready, or an `Error` occurs creating it.
+    public func makeAvailableRoomsRepository(completionHandler: @escaping (AvailableRoomsRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
     
-    // MARK: - Constructing real time data providers
+    // MARK: - Constructing real time data repositories
     
-    /// Creates an instance of `JoinedRoomsProvider`.
+    /// Creates an instance of `JoinedRoomsRepository`.
     ///
     /// This will provide access to a real time set of `Room`s that the current user is a member of.
-    ///
-    /// - Parameters:
-    ///     - completionHandler: A completion handler which will be called when the `JoinedRoomsProvider` is ready, or an `Error` occurs creating it.
-    public func createJoinedRoomsProvider(completionHandler: @escaping (JoinedRoomsProvider?, Error?) -> Void) {
+    public func makeJoinedRoomsRepository() -> JoinedRoomsRepository {
+        let filter = JoinedRoomsRepository.Filter()
+        let buffer = ConcreteBuffer(filter: filter, dependencies: self.dependencies)
+        let connectivityMonitor = ConcreteConnectivityMonitor(subscriptionType: .user, dependencies: self.dependencies)
         
-        switch connectionStatus {
-
-        case .connected:
-            
-            // TODO: Implement
-            let currentUser = User(identifier: "identifier",
-                                   name: "name",
-                                   avatar: nil,
-                                   presenceState: .online,
-                                   customData: nil,
-                                   createdAt: Date(),
-                                   updatedAt: Date())
-            
-            let joinedRoomsProvider = JoinedRoomsProvider(currentUser: currentUser, dependencies: dependencies)
-            
-            Self.execute(completionHandler, onMainThreadWith: joinedRoomsProvider, nil)
-        
-        case .disconnected:
-            let error = ChatkitError.disconnected
-            Self.execute(completionHandler, onMainThreadWith: nil, error)
-            
-        case .connecting:
-            let error = ChatkitError.connecting
-            Self.execute(completionHandler, onMainThreadWith: nil, error)
-        }
-
+        return JoinedRoomsRepository(buffer: buffer, connectivityMonitor: connectivityMonitor, dependencies: self.dependencies)
     }
     
-    /// Creates an instance of `MessagesProvider`.
+    /// Creates an instance of `MessagesRepository`.
     ///
     /// This will provide access to a real time list of the `Message`s in a given `Room`.
     ///
     /// - Parameters:
-    ///     - room: The `Room` for which the provider will provide messages.
-    ///     - completionHandler: A completion handler which will be called when the `MessagesProvider` is ready, or an `Error` occurs creating it.
-    public func createMessagesProvider(for room: Room, completionHandler: @escaping (MessagesProvider?, Error?) -> Void) {
+    ///     - room: The `Room` for which the repository will provide messages.
+    ///     - completionHandler: A completion handler which will be called when the `MessagesRepository` is ready, or an `Error` occurs creating it.
+    public func makeMessagesRepository(for room: Room, completionHandler: @escaping (MessagesRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
     
-    /// Creates an instance of `RoomMembersProvider`.
+    /// Creates an instance of `RoomMembersRepository`.
     ///
     /// This will give access to a real time set of the `User`s who are members of a given `Room`
     ///
     /// - Parameters:
-    ///     - room: The `Room` for which the provider will provide member information.
-    ///     - completionHandler: A completion handler which will be called when the `RoomMembersProvider` is ready, or an `Error` occurs creating it.
-    public func createRoomMembersProvider(for room: Room, completionHandler: @escaping (RoomMembersProvider?, Error?) -> Void) {
+    ///     - room: The `Room` for which the repository will provide member information.
+    ///     - completionHandler: A completion handler which will be called when the `RoomMembersRepository` is ready, or an `Error` occurs creating it.
+    public func makeRoomMembersRepository(for room: Room, completionHandler: @escaping (RoomMembersRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
     
-    /// Creates an instance of `TypingUsersProvider`.
+    /// Creates an instance of `TypingUsersRepository`.
     ///
     /// This will give access to a real time set of the `User`s who are typing in a given `Room`.
     ///
     /// - Parameters:
-    ///     - room: The `Room` for which this provider will provide information on users who are typing.
-    ///     - completionHandler: A completion handler which will be called when the `TypingUsersProvider` is ready, or an `Error` occurs creating it.
-    public func createTypingUsersProvider(for room: Room, completionHandler: @escaping (TypingUsersProvider?, Error?) -> Void) {
+    ///     - room: The `Room` for which this repository will provide information on users who are typing.
+    ///     - completionHandler: A completion handler which will be called when the `TypingUsersRepository` is ready, or an `Error` occurs creating it.
+    public func makeTypingUsersRepository(for room: Room, completionHandler: @escaping (TypingUsersRepository?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
@@ -204,12 +181,10 @@ public class Chatkit {
     /// Creates an instance of `JoinedRoomsViewModel`.
     ///
     /// This will give access to a real time sorted list of the `Room`s that the current user is a member of.
-    ///
-    /// - Parameters:
-    ///     - completionHandler: A completion handler which will be called when the `JoinedRoomsViewModel` is ready, or an `Error` occurs creating it.
-    public func createJoinedRoomsViewModel(completionHandler: @escaping (JoinedRoomsViewModel?, Error?) -> Void) {
-        // TODO: Implement
-        completionHandler(nil, nil)
+    public func makeJoinedRoomsViewModel() -> JoinedRoomsViewModel {
+        let repository = self.makeJoinedRoomsRepository()
+        
+        return JoinedRoomsViewModel(repository: repository)
     }
     
     /// Creates an instance of `MessagesViewModel`.
@@ -219,7 +194,7 @@ public class Chatkit {
     /// - Parameters:
     ///     - room: The `Room` for which messages should be modelled.
     ///     - completionHandler: A completion handler which will be called when the `MessagesViewModel` is ready, or an `Error` occurs creating it.
-    public func createMessagesViewModel(for room: Room, completionHandler: @escaping (MessagesViewModel?, Error?) -> Void) {
+    public func makeMessagesViewModel(for room: Room, completionHandler: @escaping (MessagesViewModel?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }
@@ -232,7 +207,7 @@ public class Chatkit {
     ///     - room: The `Room` for which typing users should be modelled.
     ///     - userNamePlaceholder: The placeholder used when a user does not have a value set for the `User.name` property.
     ///     - completionHandler: A completion handler which will be called when the `TypingUsersViewModel` is ready, or an `Error` occurs creating it.
-    public func createTypingUsersViewModel(for room: Room, userNamePlaceholder: String = "anonymous", completionHandler: @escaping (TypingUsersViewModel?, Error?) -> Void) {
+    public func makeTypingUsersViewModel(for room: Room, userNamePlaceholder: String = "anonymous", completionHandler: @escaping (TypingUsersViewModel?, Error?) -> Void) {
         // TODO: Implement
         completionHandler(nil, nil)
     }

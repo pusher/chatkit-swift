@@ -65,7 +65,7 @@ class RoomListViewController: UITableViewController {
     
     private func connect() {}
     
-    private func createJoinedRoomsProvider() {
+    private func createJoinedRoomsRepository() {
         self.chatkit?.createJoinedRoomsViewModel { viewModel, error in
             if let error = error {
                 print("Error: \(error.localizedDescription)")

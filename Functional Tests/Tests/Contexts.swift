@@ -23,14 +23,14 @@ extension XCTestCase {
             `chatkit.connect()` HAS been invoked and handler called with `failure`
             (i.e. the user subscription is NOT active)
 
-        JoinedRoomsProviderInitialised
+        JoinedRoomsRepositoryInitialised
             As "ChakitConnected" but also
-            `JoinedRoomsProvider` instance has been initialised (via `chatKit.makeJoinedRoomsProvider()`)
+            `JoinedRoomsRepository` instance has been initialised (via `chatKit.makeJoinedRoomsRepository()`)
      
     */
 
     enum SetupError: String, Error {
-        case joinedRoomsProviderNotInitialised = "joinedRoomsProvider was not initialised"
+        case joinedRoomsRepositoryNotInitialised = "joinedRoomsRepository was not initialised"
     }
     
     // TODO: `JoinedRoomsTransformer`
@@ -49,54 +49,6 @@ extension XCTestCase {
         
         let (stubNetworking, chatkit, _) = try setUp_ChatKitInitialised_withDependencies(file: file, line: line)
         return (stubNetworking, chatkit)
-    }
-    
-    func setUp_ChatKitConnected(initialState initialStateJsonData: Data, file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit) {
-
-        let (stubNetworking, chatkit, _) = try setUp_ChatKitConnected_withStoreBroadcaster(initialState: initialStateJsonData, file: file, line: line)
-        return (stubNetworking, chatkit)
-    }
-    
-    // TODO: `JoinedRoomsTransformer`
-    // Remove this method & returning of `storeBroadcaster` once we've properly implemented JoinedRoomProvider & Transformers
-    func setUp_ChatKitConnected_withStoreBroadcaster(initialState initialStateJsonData: Data, file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, StoreBroadcaster) {
-
-        let (stubNetworking, chatkit, dependencies) = try setUp_ChatKitInitialised_withDependencies(file: file, line: line)
-        
-        // Prepare for the client to register for a user subscription
-        // Fire the "initial_state" User subscription event which will cause `Chatkit` to become successfully `connected`
-        stubNetworking.stubSubscribe(.user, .open(initialStateJsonData: initialStateJsonData))
-        
-        let expectation = XCTestExpectation.Chatkit.connect
-        chatkit.connect(completionHandler: expectation.handler)
-        
-        wait(for: [expectation], timeout: expectation.timeout)
-
-        XCTAssertExpectationFulfilledWithResult(expectation, nil, file: file, line: line)
-        XCTAssertEqual(chatkit.connectionStatus, .connected, file: file, line: line)
-        
-        return (stubNetworking, chatkit, dependencies.storeBroadcaster)
-    }
-    
-    func setUp_JoinedRoomsProviderInitialised(initialState initialStateJsonData: Data, file: StaticString = #file, line: UInt = #line) throws -> (StubNetworking, Chatkit, JoinedRoomsProvider) {
-        
-        let (stubNetworking, chatkit) = try setUp_ChatKitConnected(initialState: initialStateJsonData, file: file, line: line)
-        
-        let expectation = XCTestExpectation.Chatkit.createJoinedRoomsProvider
-        chatkit.createJoinedRoomsProvider(completionHandler: expectation.handler)
-        
-        wait(for: [expectation], timeout: 1)
-
-        XCTAssertExpectationFulfilled(expectation, file: file, line: line) { joinedRoomsProvider, error in
-            XCTAssertNotNil(joinedRoomsProvider, file: file, line: line)
-            XCTAssertNil(error, file: file, line: line)
-        }
-        
-        guard let joinedRoomsProvider = expectation.result?.0 else {
-            throw SetupError.joinedRoomsProviderNotInitialised
-        }
-        
-        return (stubNetworking, chatkit, joinedRoomsProvider)
     }
     
 }

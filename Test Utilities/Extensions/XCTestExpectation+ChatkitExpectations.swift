@@ -14,10 +14,6 @@ extension XCTestExpectation {
             .init(functionName: "connect", systemTestTimeout: 15)
         }
         
-        public static var createJoinedRoomsProvider: TwoArgExpectation<JoinedRoomsProvider?, Error?> {
-            .init(functionName: "createJoinedRoomsProvider", systemTestTimeout: 1)
-        }
-        
     }
     
     public struct SubscriptionManager {
@@ -36,7 +32,7 @@ extension XCTestExpectation {
         
     }
     
-    public struct JoinedRoomsProviderDelegate {
+    public struct JoinedRoomsRepositoryDelegate {
         
         public static var didJoinRoom: Expectation<Room> {
             .init(functionName: "didJoinRoom", systemTestTimeout: 15)

@@ -28,20 +28,13 @@ enum SubscriptionError: String, LocalizedError {
 
 class ConcreteSubscription: Subscription {
     
-    enum State {
-        case notSubscribed
-        case subscribingStageOne(instanceWrapper: InstanceWrapper, completions: [SubscribeHandler])
-        case subscribingStageTwo(instanceWrapper: InstanceWrapper, resumableSubscription: ResumableSubscription, completions: [SubscribeHandler])
-        case subscribed(instanceWrapper: InstanceWrapper, resumableSubscription: ResumableSubscription)
-    }
-    
     typealias Dependencies = HasInstanceWrapperFactory
     
     let subscriptionType: SubscriptionType // Internal `get` aids testing
     private let dependencies: Dependencies
     weak var delegate: SubscriptionDelegate?
     
-    private(set) var state: State = .notSubscribed // Internal `get` aids testing
+    private(set) var state: SubscriptionState = .notSubscribed // Internal `get` aids testing
     
     init(subscriptionType: SubscriptionType, dependencies: Dependencies, delegate: SubscriptionDelegate) {
         self.subscriptionType = subscriptionType

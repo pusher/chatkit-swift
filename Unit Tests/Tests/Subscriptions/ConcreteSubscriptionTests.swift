@@ -21,7 +21,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         case subscribed
     }
     
-    private func XCTAssertEqualState(_ actualState: ConcreteSubscription.State,
+    private func XCTAssertEqualState(_ actualState: SubscriptionState,
                                      _ expectedAssertableState: ConcreteSubscriptionAssertableState,
                                      file: StaticString = #file, line: UInt = #line) {
         switch actualState {
@@ -839,7 +839,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         //      invoke the delegates `didReceiveError` method
         //      invoke the waiting `completion` handler with `.failure`
         
-        stubInstanceWrapper.fireOnError(error: FakeError())
+        stubInstanceWrapper.fireOnError(error: FakeError.firstError)
         
         /******************/
         /*----- THEN -----*/
@@ -848,7 +848,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         wait(for: [expectation], timeout: expectation.timeout)
         
         XCTAssertEqualState(sut.state, .notSubscribed)
-        XCTAssertExpectationFulfilledWithResult(expectation, .failure(FakeError()))
+        XCTAssertExpectationFulfilledWithResult(expectation, .failure(FakeError.firstError))
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -889,7 +889,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         //      invoke the delegates `didReceiveError` method
         //      invoke BOTH waiting `completion` handlers with `.failure`
         
-        stubInstanceWrapper.fireOnError(error: FakeError())
+        stubInstanceWrapper.fireOnError(error: FakeError.firstError)
         
         /******************/
         /*----- THEN -----*/
@@ -901,8 +901,8 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         // Both expectations shoudld have been fulfilled with `.failure`
         XCTAssertEqualState(sut.state, .notSubscribed)
-        XCTAssertExpectationFulfilledWithResult(firstExpectation, .failure(FakeError()))
-        XCTAssertExpectationFulfilledWithResult(secondExpectation, .failure(FakeError()))
+        XCTAssertExpectationFulfilledWithResult(firstExpectation, .failure(FakeError.firstError))
+        XCTAssertExpectationFulfilledWithResult(secondExpectation, .failure(FakeError.firstError))
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <-- increased by one
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -938,7 +938,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         //      invoke the delegates `didReceiveError` method
         //      leave everything else unchanged
         
-        stubInstanceWrapper.fireOnError(error: FakeError())
+        stubInstanceWrapper.fireOnError(error: FakeError.firstError)
         
         /******************/
         /*----- THEN -----*/

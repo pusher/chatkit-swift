@@ -3,53 +3,88 @@ import XCTest
 
 public class DummyStore: DummyBase, Store {
     
-    public var state: MasterState {
+    public var state: VersionedState {
         DummyFail(sender: self, function: #function)
-        return MasterState.empty
+        return .initial
     }
     
     public func dispatch(action: Action) {
         DummyFail(sender: self, function: #function)
     }
+    
+    public func register(_ listener: StoreListener) -> VersionedState {
+        DummyFail(sender: self, function: #function)
+        return .initial
+    }
+    
+    public func unregister(_ listener: StoreListener) {
+        DummyFail(sender: self, function: #function)
+    }
+    
 }
 
 public class StubStore: DoubleBase, Store {
-
-    private var state_toReturn: MasterState?
-    public private(set) var state_actualCallCount: UInt = 0
     
-    private var action_expectedCallCount: UInt
-    public private(set) var action_lastReceived: Action?
-    public private(set) var action_actualCallCount: UInt = 0
+    private let state_toReturn: VersionedState
     
-    public init(state_toReturn: MasterState? = nil,
-                action_expectedCallCount: UInt = 0,
+    private let dispatch_expectedCallCount: UInt
+    public private(set) var dispatch_lastReceived: Action?
+    public private(set) var dispatch_actualCallCount: UInt = 0
+    
+    private let register_expectedCallCount: UInt
+    public private(set) weak var register_listenerLastReceived: StoreListener?
+    public private(set) var register_actualCallCount: Int = 0
+    
+    private let unregister_expectedCallCount: UInt
+    public private(set) var unregister_actualCallCount: Int = 0
+    
+    public init(state_toReturn: VersionedState,
+                dispatch_expectedCallCount: UInt = 0,
+                register_expectedCallCount: UInt = 0,
+                unregister_expectedCallCount: UInt = 0,
                 file: StaticString = #file, line: UInt = #line) {
         
         self.state_toReturn = state_toReturn
-        self.action_expectedCallCount = action_expectedCallCount
+        self.dispatch_expectedCallCount = dispatch_expectedCallCount
+        self.register_expectedCallCount = register_expectedCallCount
+        self.unregister_expectedCallCount = unregister_expectedCallCount
         
         super.init(file: file, line: line)
     }
     
-    // MARK: Store
-    
-    public var state: MasterState {
-        state_actualCallCount += 1
-        guard let state_toReturn = state_toReturn else {
-            XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: file, line: line)
-            return MasterState.empty
-        }
-        return state_toReturn
-    }
-    
     public func dispatch(action: Action) {
-        action_actualCallCount += 1
-        action_lastReceived = action
-        guard action_actualCallCount <= action_expectedCallCount else {
-            XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: file, line: line)
+        self.dispatch_actualCallCount += 1
+        self.dispatch_lastReceived = action
+        
+        guard dispatch_actualCallCount <= dispatch_expectedCallCount else {
+            XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: self.file, line: self.line)
             return
         }
+    }
+    
+    public func register(_ listener: StoreListener) -> VersionedState {
+        self.register_listenerLastReceived = listener
+        self.register_actualCallCount += 1
+        
+        guard self.register_actualCallCount <= self.register_expectedCallCount else {
+            XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: self.file, line: self.line)
+            return self.state_toReturn
+        }
+        
+        return self.state_toReturn
+    }
+    
+    public func unregister(_ listener: StoreListener) {
+        self.unregister_actualCallCount += 1
+        
+        guard self.unregister_actualCallCount <= self.unregister_expectedCallCount else {
+            XCTFail("Unexpected call of `\(#function)` made to \(String(describing: self))", file: self.file, line: self.line)
+            return
+        }
+    }
+    
+    public func report(_ state: VersionedState) {
+        self.register_listenerLastReceived?.store(self, didUpdateState: state)
     }
     
 }

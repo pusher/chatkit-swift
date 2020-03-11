@@ -337,7 +337,7 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         /******************/
         
         let subscriptionType: SubscriptionType = .user
-        let subscriptionResult: VoidResult = .failure(FakeError())
+        let subscriptionResult: VoidResult = .failure(FakeError.firstError)
         
         let stubSubscriptionDelegate = StubSubscriptionDelegate(didReceiveEvent_expectedCallCount: 1)
         
@@ -368,7 +368,7 @@ class ConcreteSubscriptionManagerTests: XCTestCase {
         
         wait(for: [expectation], timeout: expectation.timeout)
         
-        XCTAssertExpectationFulfilledWithResult(expectation, .failure(FakeError()))
+        XCTAssertExpectationFulfilledWithResult(expectation, .failure(FakeError.firstError))
         XCTAssertEqual(stubSubscriptionDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubSubscriptionDelegate.didReceiveError_actualCallCount, 0)
     }

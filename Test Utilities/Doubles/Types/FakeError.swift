@@ -1,4 +1,7 @@
 
-public struct FakeError: Error {
-    public init() {}
+public enum FakeError: Error {
+    
+    case firstError
+    case secondError
+    
 }

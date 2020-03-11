@@ -49,9 +49,9 @@ class System_UnInitialised_Tests: XCTestCase {
             
             let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
             
-            let initialState = dependencies.storeBroadcaster.register(stubStoreListener)
+            let initialState = dependencies.store.register(stubStoreListener)
             
-            XCTAssertEqual(initialState, .empty)
+            XCTAssertEqual(initialState, .initial)
             XCTAssertEqual(stubStoreListener.didUpdateState_stateLastReceived, nil)
             XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 0)
             
@@ -70,7 +70,7 @@ class System_UnInitialised_Tests: XCTestCase {
             
             XCTAssertEqual(expectation.result, .success)
             XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 1)
-            XCTAssertNotNil(stubStoreListener.didUpdateState_stateLastReceived?.currentUser)
+            XCTAssertNotNil(stubStoreListener.didUpdateState_stateLastReceived?.chatState.currentUser)
             
         }())
     }

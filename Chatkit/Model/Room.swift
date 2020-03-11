@@ -22,7 +22,7 @@ public struct Room {
     /// The last message sent in this room.
     ///
     /// The value of this property is only defined if the user is a member of the room and the room has messages.
-    public let lastMessage: Message?
+    public let lastMessageAt: Date?
     
     /// The dictionary of arbitrary data which you may attach to the room.
     public let customData: CustomData?
@@ -35,21 +35,17 @@ public struct Room {
     /// This will *only* apply to changes to the `name`, `isPrivate` and `customData` properties.
     public let updatedAt: Date
     
-    /// The `Date` at which the room was deleted.
-    public let deletedAt: Date?
-    
     // MARK: - Initializers
     
-    init(identifier: String, name: String?, isPrivate: Bool, unreadCount: UInt64, lastMessage: Message?, customData: CustomData?, createdAt: Date, updatedAt: Date, deletedAt: Date?) {
+    init(identifier: String, name: String?, isPrivate: Bool, unreadCount: UInt64, lastMessageAt: Date?, customData: CustomData?, createdAt: Date, updatedAt: Date) {
         self.identifier = identifier
         self.name = name
         self.isPrivate = isPrivate
         self.unreadCount = unreadCount
-        self.lastMessage = lastMessage
+        self.lastMessageAt = lastMessageAt
         self.customData = customData
         self.createdAt = createdAt
         self.updatedAt = updatedAt
-        self.deletedAt = deletedAt
     }
     
 }
@@ -86,15 +82,13 @@ extension Room: Equatable {
             && lhs.name == rhs.name
             && lhs.isPrivate == rhs.isPrivate
             && lhs.unreadCount == rhs.unreadCount
-            && lhs.lastMessage == rhs.lastMessage
+            && lhs.lastMessageAt == rhs.lastMessageAt
             && lhs.createdAt == rhs.createdAt
             && lhs.updatedAt == rhs.updatedAt
-            && lhs.deletedAt == rhs.deletedAt
     }
     
 }
 
 // MARK: - Model
 
-extension Room: Model {
-}
+extension Room: Model {}

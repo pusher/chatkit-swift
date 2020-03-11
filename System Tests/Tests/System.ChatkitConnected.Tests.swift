@@ -57,38 +57,5 @@ class System_ChatkitConnected_Tests: XCTestCase {
             
         }())
     }
-    
-    func test_chatkitCreateJoinedRoomsProvider_completesWithJoinedRoomsProvider() {
-    
-        XCTAssertNoThrow(try {
-        
-            /******************/
-            /*---- GIVEN -----*/
-            /******************/
-            
-            let chatkit = try setUp_ChatKitConnected()
-
-            /*****************/
-            /*---- WHEN -----*/
-            /*****************/
-            
-            let expectation = XCTestExpectation.Chatkit.createJoinedRoomsProvider
-            chatkit.createJoinedRoomsProvider(completionHandler: expectation.handler)
-            
-            /*****************/
-            /*---- THEN -----*/
-            /*****************/
-            
-            wait(for: [expectation], timeout: expectation.timeout)
-            
-            XCTAssertExpectationFulfilled(expectation) { joinedRoomsProvider, error in
-                XCTAssertNotNil(joinedRoomsProvider) { joinedRoomsProvider in
-                    XCTAssertGreaterThan(joinedRoomsProvider.rooms.count, 0)
-                }
-                XCTAssertNil(error)
-            }
-            
-        }())
-    }
 
 }

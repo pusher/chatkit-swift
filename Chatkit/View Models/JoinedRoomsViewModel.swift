@@ -8,195 +8,97 @@ import Foundation
 ///
 /// ## What is provided
 ///
-/// The ViewModel exposes an array, `rooms: [Room]` which presents the rooms that the current user is a member
-/// of in descending order of the time of their last message, or their creation time if they contain no messages.
+/// The ViewModel exposes  a state with an array of `rooms` which presents the rooms that the current
+/// user is a member of in descending order of the time of their last message, or their creation time if they
+/// contain no messages.
 ///
-/// Each item in the `rooms` array can be used to populate a cell in a `UITableView` or `UICollectionView`.
+/// Each item in the `rooms` array can be used to populate a cell in a `UITableView`
+/// or `UICollectionView`.
 ///
 /// ## Receiving live updates
 ///
-/// In order to be notified when the contents of the `rooms` changes, implement the `JoinedRoomsViewModelDelegate` protocol and assign the `JoinedRoomsViewModel.delegate` property.
-///
-/// Note that when the view model is first returned to you, it will already be populated, and the delegate will only be invoked when the contents change.
+/// In order to be notified when the contents of the `rooms` or the `state` of the connection changes,
+/// implement the `JoinedRoomsViewModelDelegate` protocol and assign
+/// the `JoinedRoomsViewModel.delegate` property.
 ///
 /// ## Understanding the `state` of the ViewModel
 ///
 /// The `state` property describes the state of the live update connection, either
+///   - `.initializing`: awaiting the initial set of data, or
 ///   - `.connected`: updates are flowing live, or
-///   - `.degraded`: updates may be delayed due to network problems.
-///
+///   - `.degraded`: updates may be delayed due to network problems, or
+///   - `.closed`: the connection is closed, no further updates available.
 public class JoinedRoomsViewModel {
     
     // MARK: - Properties
     
-    private let provider: JoinedRoomsProvider
+    private let repository: JoinedRoomsRepositoryProtocol
     
-    /// The array of all rooms joined by the user.
-    public private(set) var rooms: [Room]
-    
-    /// The current state of the provider used by the view model as the data source.
-    public var state: RealTimeProviderState {
-        return self.provider.state
+    /// The current state of the repository.
+    public private(set) var state: State {
+        didSet {
+            if state != oldValue {
+                DispatchQueue.main.async {
+                    self.delegate?.joinedRoomsViewModel(self, didUpdateState: self.state)
+                }
+            }
+        }
     }
     
-    /// The object that is notified when the content of the maintained collection of rooms changed.
+    /// The object that is notified when the `state` has changed.
     public weak var delegate: JoinedRoomsViewModelDelegate?
     
     // MARK: - Initializers
     
-    init(provider: JoinedRoomsProvider) {
-        self.rooms = []
-        
-        self.provider = provider
-        self.provider.delegate = self
-        
-        self.reload()
+    init(repository: JoinedRoomsRepositoryProtocol) {
+        self.state = JoinedRoomsViewModel.state(forRepositoryState: repository.state)
+        self.repository = repository
+        self.repository.delegate = self
     }
     
     // MARK: - Private methods
     
-    private func reload() {
-        self.rooms = Array(self.provider.rooms)
-        self.sort()
-    }
-    
-    private func sort() {
-        self.rooms.sort { lhs, rhs -> Bool in
-            if let lhsLastMessage = lhs.lastMessage, let rhsLastMessage = rhs.lastMessage {
-                return lhsLastMessage.createdAt > rhsLastMessage.createdAt
-            }
-            else {
-                return lhs.createdAt > rhs.createdAt
-            }
+    private static func state(forRepositoryState repositoryState: JoinedRoomsRepository.State, previousState: State? = nil) -> State {
+        var previousRooms: [Room]? = nil
+        
+        switch previousState {
+        case let .connected(rooms, _),
+             let .degraded(rooms, _, _):
+            previousRooms = rooms
+            
+        case .initializing,
+             .closed,
+             .none:
+            break
         }
-    }
-    
-    private func index(of room: Room) -> Int? {
-        return self.rooms.firstIndex { storedRoom -> Bool in
-            return storedRoom.identifier == room.identifier
-        }
+        
+        return State(repositoryState: repositoryState, previousRooms: previousRooms)
     }
     
 }
 
-// MARK: - JoinedRoomsProviderDelegate
+// MARK: - JoinedRoomsRepositoryDelegate
 
 /// :nodoc:
-extension JoinedRoomsViewModel: JoinedRoomsProviderDelegate {
+extension JoinedRoomsViewModel: JoinedRoomsRepositoryDelegate {
     
-    public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didJoinRoom room: Room) {
-        // TODO: Optimize if necessary
-        
-        self.rooms.append(room)
-        self.sort()
-        
-        guard let index = self.index(of: room) else {
-            return
-        }
-        
-        self.delegate?.joinedRoomsViewModel(self, didAddRoomAt: index, changeReason: .userJoined)
-    }
-    
-    public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didUpdateRoom room: Room, previousValue: Room) {
-        // TODO: Optimize if necessary
-        
-        guard let previousIndex = self.index(of: previousValue) else {
-            return
-        }
-        
-        self.rooms[previousIndex] = room
-        self.sort()
-        
-        guard let currentIndex = self.index(of: room) else {
-            return
-        }
-        
-        let currentMessage = room.lastMessage
-        let previousMessage = previousValue.lastMessage
-        let changeReason: JoinedRoomsViewModel.ChangeReason = currentMessage != nil && currentMessage?.identifier != previousMessage?.identifier ? .messageReceived : .dataUpdated
-        
-        if currentIndex != previousIndex {
-            self.delegate?.joinedRoomsViewModel(self, didMoveRoomFrom: previousIndex, to: currentIndex, changeReason: changeReason)
-        }
-        else {
-            self.delegate?.joinedRoomsViewModel(self, didUpdateRoomAt: currentIndex, changeReason: changeReason)
-        }
-    }
-    
-    public func joinedRoomsProvider(_ joinedRoomsProvider: JoinedRoomsProvider, didLeaveRoom room: Room) {
-        guard let index = self.index(of: room) else {
-            return
-        }
-        
-        self.rooms.remove(at: index)
-        
-        self.delegate?.joinedRoomsViewModel(self, didRemoveRoomAt: index, changeReason: .userLeft)
+    public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepository.State) {
+        self.state = JoinedRoomsViewModel.state(forRepositoryState: state, previousState: self.state)
     }
     
 }
 
 // MARK: - Delegate
 
-/// A delegate protocol that describes methods that will be called by the associated
-/// `JoinedRoomsViewModel` when the maintainted collection of rooms have changed.
-public protocol JoinedRoomsViewModelDelegate: class {
+/// A delegate protocol for being notified when the `state` property of a `JoinedRoomsViewModel`
+/// has changed.
+public protocol JoinedRoomsViewModelDelegate: AnyObject {
     
-    /// Notifies the receiver that a new room has been added to the maintened collection of rooms.
+    /// Notifies the receiver that the `state` of the view model has changed.
     ///
     /// - Parameters:
     ///     - joinedRoomsViewModel: The `JoinedRoomsViewModel` that called the method.
-    ///     - index: The index of the room added to the maintened collection of rooms.
-    ///     - changeReason: The semantic reson that triggered the change.
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didAddRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason)
-    
-    /// Notifies the receiver that a room from the maintened collection of rooms has been updated.
-    ///
-    /// - Parameters:
-    ///     - joinedRoomsViewModel: The `JoinedRoomsViewModel` that called the method.
-    ///     - index: The index of the room updated in the maintened collection of rooms.
-    ///     - changeReason: The semantic reson that triggered the change.
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason)
-    
-    /// Notifies the receiver that a room from the maintened collection of rooms has been moved.
-    ///
-    /// - Parameters:
-    ///     - joinedRoomsViewModel: The `JoinedRoomsViewModel` that called the method.
-    ///     - oldIndex: The old index of the room before the move.
-    ///     - newIndex: The new index of the room after the move.
-    ///     - changeReason: The semantic reson that triggered the change.
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didMoveRoomFrom oldIndex: Int, to newIndex: Int, changeReason: JoinedRoomsViewModel.ChangeReason)
-    
-    /// Notifies the receiver that a room from the maintened collection of rooms has been removed.
-    ///
-    /// - Parameters:
-    ///     - joinedRoomsViewModel: The `JoinedRoomsViewModel` that called the method.
-    ///     - index: The index of the room removed from the maintened collection of rooms.
-    ///     - changeReason: The semantic reson that triggered the change.
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didRemoveRoomAt index: Int, changeReason: JoinedRoomsViewModel.ChangeReason)
-    
-}
-
-// MARK: - Change Reason
-
-public extension JoinedRoomsViewModel {
-    
-    // TODO: Define change reasons.
-    /// An enumeration representing semantic reasons that might trigger a change
-    /// in the `JoinedRoomsViewModel` class.
-    enum ChangeReason {
-        
-        /// The user joined the room.
-        case userJoined
-        
-        /// The user left the room.
-        case userLeft
-        
-        /// A new message received by the room.
-        case messageReceived
-        
-        /// A new value of `name` or `customData` properties received by the room.
-        case dataUpdated
-        
-    }
+    ///     - state: The updated value of the `state`.
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateState state: JoinedRoomsViewModel.State)
     
 }

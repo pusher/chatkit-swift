@@ -58,35 +58,4 @@ class System_ChatKitInitialised_Tests: XCTestCase {
         }())
     }
     
-    func test_chatkitCreateJoinedRoomsProvider_completesWithErrorBecauseNotConencted() {
-        
-        XCTAssertNoThrow(try {
-            
-            /******************/
-            /*---- GIVEN -----*/
-            /******************/
-            
-            let chatkit = try setUp_ChatKitInitialised()
-
-            /*****************/
-            /*---- WHEN -----*/
-            /*****************/
-
-            let expectation = XCTestExpectation.Chatkit.createJoinedRoomsProvider
-            chatkit.createJoinedRoomsProvider(completionHandler: expectation.handler)
-            
-            /*****************/
-            /*---- THEN -----*/
-            /*****************/
-
-            wait(for: [expectation], timeout: expectation.timeout)
-            
-            XCTAssertExpectationFulfilled(expectation) { joinedRoomsProvider, error in
-                XCTAssertNil(joinedRoomsProvider)
-                XCTAssertNotNil(error)
-            }
-            
-        }())
-    }
-    
 }

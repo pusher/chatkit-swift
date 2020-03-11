@@ -41,21 +41,21 @@ extension Reducer.Model {
                 $0[$1.roomIdentifier] = ReadSummaryState(unreadCount: $1.unreadCount)
             }
             
-            let rooms = action.event.rooms.reduce(into: [String : RoomState]()) {
-                let readSummary = readSummaries[$1.identifier] ?? .empty
+            let rooms: [RoomState] = action.event.rooms.map {
+                let readSummary = readSummaries[$0.identifier] ?? .empty
                 
-                $0[$1.identifier] = RoomState(identifier: $1.identifier,
-                                              name: $1.name,
-                                              isPrivate: $1.isPrivate,
-                                              pushNotificationTitle: $1.pushNotificationTitleOverride,
-                                              customData: $1.customData,
-                                              lastMessageAt: $1.lastMessageAt,
-                                              readSummary: readSummary,
-                                              createdAt: $1.createdAt,
-                                              updatedAt: $1.updatedAt)
+                return RoomState(identifier: $0.identifier,
+                                 name: $0.name,
+                                 isPrivate: $0.isPrivate,
+                                 pushNotificationTitle: $0.pushNotificationTitleOverride,
+                                 customData: $0.customData,
+                                 lastMessageAt: $0.lastMessageAt,
+                                 readSummary: readSummary,
+                                 createdAt: $0.createdAt,
+                                 updatedAt: $0.updatedAt)
             }
             
-            return RoomListState(rooms: rooms)
+            return RoomListState(elements: rooms)
         }
         
         private static func reduce(action: RemovedFromRoomAction, state: StateType, dependencies: DependenciesType) -> StateType {
@@ -73,10 +73,10 @@ extension Reducer.Model {
                                  createdAt: action.event.room.createdAt,
                                  updatedAt: action.event.room.updatedAt)
             
-            var rooms = state.rooms
+            var rooms = state.elements
             rooms[room.identifier] = room
             
-            return RoomListState(rooms: rooms)
+            return RoomListState(elements: rooms)
         }
         
         private static func reduce(action: RoomDeletedAction, state: StateType, dependencies: DependenciesType) -> StateType {
@@ -84,7 +84,7 @@ extension Reducer.Model {
         }
         
         private static func reduce(action: RoomUpdatedAction, state: StateType, dependencies: DependenciesType) -> StateType {
-            guard let currentRoom = state.rooms[action.event.room.identifier] else {
+            guard let currentRoom = state[action.event.room.identifier] else {
                 return state
             }
             
@@ -98,20 +98,20 @@ extension Reducer.Model {
                                         createdAt: action.event.room.createdAt,
                                         updatedAt: action.event.room.updatedAt)
             
-            var updatedRooms = state.rooms
+            var updatedRooms = state.elements
             updatedRooms[updatedRoom.identifier] = updatedRoom
             
-            return RoomListState(rooms: updatedRooms)
+            return RoomListState(elements: updatedRooms)
         }
         
         private static func reduce(action: ReadStateUpdatedAction, state: StateType, dependencies: DependenciesType) -> StateType {
-            guard let room = state.rooms[action.event.readState.roomIdentifier] else {
+            guard let room = state[action.event.readState.roomIdentifier] else {
                 return state
             }
             
             let readSummary = ReadSummaryState(unreadCount: action.event.readState.unreadCount)
             
-            var rooms = state.rooms
+            var rooms = state.elements
             rooms[room.identifier] = RoomState(identifier: room.identifier,
                                                name: room.name,
                                                isPrivate: room.isPrivate,
@@ -122,14 +122,14 @@ extension Reducer.Model {
                                                createdAt: room.createdAt,
                                                updatedAt: room.updatedAt)
             
-            return RoomListState(rooms: rooms)
+            return RoomListState(elements: rooms)
         }
         
         // MARK: - Private methods
         
         private static func deleteRoom(identifier: String, from state: RoomListState) -> RoomListState {
-            let rooms = state.rooms.filter { $0.value.identifier != identifier }
-            return RoomListState(rooms: rooms)
+            let rooms = state.filter { $0.identifier != identifier }
+            return RoomListState(elements: rooms)
         }
         
     }

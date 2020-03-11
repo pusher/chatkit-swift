@@ -6,7 +6,7 @@ extension Reducer {
         // MARK: - Types
         
         typealias ActionType = Action
-        typealias StateType = MasterState
+        typealias StateType = VersionedState
         typealias DependenciesType =
             HasUserReducer
             & HasRoomListReducer
@@ -16,28 +16,58 @@ extension Reducer {
             & HasUserSubscriptionRoomUpdatedReducer
             & HasUserSubscriptionRoomDeletedReducer
             & HasUserSubscriptionReadStateUpdatedReducer
+            & HasSubscriptionStateUpdatedReducer
         
         // MARK: - Reducer
         
         static func reduce(action: ActionType, state: StateType, dependencies: DependenciesType) -> StateType {
+            let reducedChatState: ChatState
+            let reducedAuxiliaryState: AuxiliaryState
+            let signature: VersionSignature
             
             if let action = action as? InitialStateAction {
-                return dependencies.initialStateUserSubscriptionReducer(action, state, dependencies)
+                reducedChatState = dependencies.initialStateUserSubscriptionReducer(action, state.chatState, dependencies)
+                reducedAuxiliaryState = state.auxiliaryState
+                signature = .initialState
             }
             else if let action = action as? AddedToRoomAction {
-                return dependencies.userSubscriptionAddedToRoomReducer(action, state, dependencies)
+                reducedChatState = dependencies.userSubscriptionAddedToRoomReducer(action, state.chatState, dependencies)
+                reducedAuxiliaryState = state.auxiliaryState
+                signature = .addedToRoom(roomIdentifier: action.event.room.identifier)
             }
             else if let action = action as? RemovedFromRoomAction {
-                return dependencies.userSubscriptionRemovedFromRoomReducer(action, state, dependencies)
+                reducedChatState = dependencies.userSubscriptionRemovedFromRoomReducer(action, state.chatState, dependencies)
+                reducedAuxiliaryState = state.auxiliaryState
+                signature = .removedFromRoom(roomIdentifier: action.event.roomIdentifier)
             }
             else if let action = action as? RoomUpdatedAction {
-                return dependencies.userSubscriptionRoomUpdatedReducer(action, state, dependencies)
+                reducedChatState = dependencies.userSubscriptionRoomUpdatedReducer(action, state.chatState, dependencies)
+                reducedAuxiliaryState = state.auxiliaryState
+                signature = .roomUpdated(roomIdentifier: action.event.room.identifier)
             }
             else if let action = action as? RoomDeletedAction {
-                return dependencies.userSubscriptionRoomDeletedReducer(action, state, dependencies)
+                reducedChatState = dependencies.userSubscriptionRoomDeletedReducer(action, state.chatState, dependencies)
+                reducedAuxiliaryState = state.auxiliaryState
+                signature = .roomDeleted(roomIdentifier: action.event.roomIdentifier)
             }
             else if let action = action as? ReadStateUpdatedAction {
-                return dependencies.userSubscriptionReadStateUpdatedReducer(action, state, dependencies)
+                reducedChatState = dependencies.userSubscriptionReadStateUpdatedReducer(action, state.chatState, dependencies)
+                reducedAuxiliaryState = state.auxiliaryState
+                signature = .readStateUpdated(roomIdentifier: action.event.readState.roomIdentifier)
+            }
+            else if let action = action as? SubscriptionStateUpdatedAction {
+                reducedChatState = state.chatState
+                reducedAuxiliaryState = dependencies.subscriptionStateUpdatedReducer(action, state.auxiliaryState, dependencies)
+                signature = .subscriptionStateUpdated
+            }
+            else {
+                return state
+            }
+            
+            if reducedChatState != state.chatState || reducedAuxiliaryState != state.auxiliaryState {
+                let version = state.version + 1
+                
+                return VersionedState(chatState: reducedChatState, auxiliaryState: reducedAuxiliaryState, version: version, signature: signature)
             }
             
             return state

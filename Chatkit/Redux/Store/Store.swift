@@ -1,21 +1,20 @@
-
-protocol StoreDelegate: AnyObject {
-    func store(_ store: Store, didUpdateState state: MasterState)
-}
-
-protocol HasStore {
-    var store: Store { get }
-}
+import Foundation
 
 protocol Store {
-    var state: MasterState { get }
+    
     func dispatch(action: Action)
+    func register(_ listener: StoreListener) -> VersionedState
+    func unregister(_ listener: StoreListener)
+    
 }
+
+// MARK: - Concrete implementation
 
 class ConcreteStore: Store {
     
-    typealias Dependencies =
-        HasMasterReducer
+    // MARK: - Types
+    
+    typealias Dependencies = HasMasterReducer
         & HasUserReducer
         & HasRoomListReducer
         & HasUserSubscriptionInitialStateReducer
@@ -24,27 +23,68 @@ class ConcreteStore: Store {
         & HasUserSubscriptionRoomUpdatedReducer
         & HasUserSubscriptionRoomDeletedReducer
         & HasUserSubscriptionReadStateUpdatedReducer
+        & HasSubscriptionStateUpdatedReducer
+    
+    // MARK: - Properties
     
     private let dependencies: Dependencies
-    private weak var delegate: StoreDelegate?
+    private var listeners: NSHashTable<AnyObject>
     
-    private(set) var state: MasterState {
+    private(set) var state: VersionedState {
         didSet {
             if state != oldValue {
-                self.delegate?.store(self, didUpdateState: state)
+                self.notify(state: state)
             }
         }
     }
     
-    init(dependencies: Dependencies, delegate: StoreDelegate?) {
+    // MARK: - Initializers
+    
+    init(dependencies: Dependencies) {
         self.dependencies = dependencies
-        self.delegate = delegate
-        // Ensure the state is set *AFTER* the delegate so its `didSet` triggers a call to the delegate and its notified of the initial state
-        self.state = .empty
+        self.state = .initial
+        self.listeners = NSHashTable.weakObjects()
     }
     
+    // MARK: - Store
+    
     func dispatch(action: Action) {
-        state = self.dependencies.masterReducer(action, state, dependencies)
+        self.state = self.dependencies.masterReducer(action, self.state, self.dependencies)
     }
+    
+    @discardableResult func register(_ listener: StoreListener) -> VersionedState {
+        self.listeners.add(listener)
+        return self.state
+    }
+    
+    func unregister(_ listener: StoreListener) {
+        self.listeners.remove(listener)
+    }
+    
+    // MARK: - Private methods
+    
+    private func notify(state: VersionedState) {
+        for listener in self.listeners.allObjects {
+            if let listener = listener as? StoreListener {
+                listener.store(self, didUpdateState: state)
+            }
+        }
+    }
+    
+}
+
+// MARK: - Listener
+
+protocol StoreListener: AnyObject { // AnyObject is neccessary to use `===` operator
+    
+    func store(_ store: Store, didUpdateState state: VersionedState)
+    
+}
+
+// MARK: - Dependencies
+
+protocol HasStore {
+    
+    var store: Store { get }
     
 }

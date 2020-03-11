@@ -80,8 +80,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let expectedState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: true,
@@ -94,7 +94,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -184,8 +184,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let expectedState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: true,
@@ -198,7 +198,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -224,8 +224,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let inputState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -238,7 +238,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -295,8 +295,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let expectedState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -309,7 +309,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -322,7 +322,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "third-room" : RoomState(
+                RoomState(
                     identifier: "third-room",
                     name: "Third",
                     isPrivate: false,
@@ -348,8 +348,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let inputState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -362,7 +362,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -419,8 +419,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let expectedState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -433,7 +433,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second Room",
                     isPrivate: true,
@@ -459,8 +459,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let inputState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -473,7 +473,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -508,8 +508,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let expectedState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -535,8 +535,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let inputState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -549,7 +549,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -584,8 +584,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let expectedState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -598,7 +598,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -624,8 +624,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let inputState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -638,7 +638,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -684,8 +684,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let expectedState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -698,7 +698,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second Room",
                     isPrivate: true,
@@ -724,8 +724,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let inputState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -738,7 +738,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -784,8 +784,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let expectedState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -798,7 +798,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -824,8 +824,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let inputState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -838,7 +838,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -873,8 +873,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let expectedState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -900,8 +900,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let inputState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -914,7 +914,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -949,8 +949,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let expectedState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -963,7 +963,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -989,8 +989,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let inputState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -1003,7 +1003,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -1041,8 +1041,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let expectedState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -1055,7 +1055,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -1081,8 +1081,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let inputState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -1095,7 +1095,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -1133,8 +1133,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let expectedState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -1147,7 +1147,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -1173,8 +1173,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let inputState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -1187,7 +1187,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
@@ -1218,8 +1218,8 @@ class RoomsReducerTests: XCTestCase {
         /******************/
         
         let expectedState = RoomListState(
-            rooms: [
-                "first-room" : RoomState(
+            elements: [
+                RoomState(
                     identifier: "first-room",
                     name: "First",
                     isPrivate: false,
@@ -1232,7 +1232,7 @@ class RoomsReducerTests: XCTestCase {
                     createdAt: .distantPast,
                     updatedAt: .distantPast
                 ),
-                "second-room" : RoomState(
+                RoomState(
                     identifier: "second-room",
                     name: "Second",
                     isPrivate: false,
