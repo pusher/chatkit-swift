@@ -31,7 +31,8 @@ class LoginViewController: UIViewController {
         super.prepare(for: segue, sender: sender)
 
         if segue.identifier == LoginViewController.loginSegue {
-            guard let roomListViewController = segue.destination as? RoomListViewController else {
+            guard let navigationController = segue.destination as? UINavigationController,
+                let roomListViewController = navigationController.visibleViewController as? RoomListViewController else {
                 return
             }
             
