@@ -23,14 +23,14 @@ extension XCTestCase {
             `chatkit.connect()` HAS been invoked and handler called with `failure`
             (i.e. the user subscription is NOT active)
 
-        JoinedRoomsProviderInitialised
+        JoinedRoomsRepositoryInitialised
             As "ChakitConnected" but also
-            `JoinedRoomsProvider` instance has been initialised (via `chatKit.makeJoinedRoomsProvider()`)
+            `JoinedRoomsRepository` instance has been initialised (via `chatKit.makeJoinedRoomsRepository()`)
      
     */
 
     enum SetupError: String, Error {
-        case joinedRoomsProviderNotInitialised = "joinedRoomsProvider was not initialised"
+        case joinedRoomsRepositoryNotInitialised = "joinedRoomsRepository was not initialised"
     }
     
     // TODO: `JoinedRoomsTransformer`

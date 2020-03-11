@@ -175,7 +175,7 @@ class MessageViewController: UIViewController {
         
         let lastMessageRow = rows.last {
             switch $0 {
-            case .message(_, _):
+            case .message:
                 return true
             
             default:

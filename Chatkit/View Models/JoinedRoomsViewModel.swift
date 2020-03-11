@@ -38,7 +38,9 @@ public class JoinedRoomsViewModel {
     public private(set) var state: State {
         didSet {
             if state != oldValue {
-                self.delegate?.joinedRoomsViewModel(self, didUpdateState: state)
+                DispatchQueue.main.async {
+                    self.delegate?.joinedRoomsViewModel(self, didUpdateState: self.state)
+                }
             }
         }
     }
@@ -64,8 +66,8 @@ public class JoinedRoomsViewModel {
              let .degraded(rooms, _, _):
             previousRooms = rooms
             
-        case .initializing(_),
-             .closed(_),
+        case .initializing,
+             .closed,
              .none:
             break
         }

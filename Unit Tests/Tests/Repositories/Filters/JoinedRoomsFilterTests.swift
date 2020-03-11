@@ -305,7 +305,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         XCTAssertTrue(result)
     }
     
-    func test_hasSupportedSignatureWithInitialStateSignature_returnsTrue() {
+    func test_hasRelevantSignatureWithInitialStateSignature_returnsTrue() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -319,7 +319,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = sut.hasSupportedSignature(signature)
+        let result = sut.hasRelevantSignature(signature)
         
         /******************/
         /*----- THEN -----*/
@@ -328,7 +328,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         XCTAssertTrue(result)
     }
     
-    func test_hasSupportedSignatureWithAddedToRoomSignature_returnsTrue() {
+    func test_hasRelevantSignatureWithAddedToRoomSignature_returnsTrue() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -342,7 +342,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = sut.hasSupportedSignature(signature)
+        let result = sut.hasRelevantSignature(signature)
         
         /******************/
         /*----- THEN -----*/
@@ -351,7 +351,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         XCTAssertTrue(result)
     }
     
-    func test_hasSupportedSignatureWithRemovedFromRoomSignature_returnsTrue() {
+    func test_hasRelevantSignatureWithRemovedFromRoomSignature_returnsTrue() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -365,7 +365,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = sut.hasSupportedSignature(signature)
+        let result = sut.hasRelevantSignature(signature)
         
         /******************/
         /*----- THEN -----*/
@@ -374,7 +374,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         XCTAssertTrue(result)
     }
     
-    func test_hasSupportedSignatureWithRoomUpdatedSignature_returnsTrue() {
+    func test_hasRelevantSignatureWithRoomUpdatedSignature_returnsTrue() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -388,7 +388,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = sut.hasSupportedSignature(signature)
+        let result = sut.hasRelevantSignature(signature)
         
         /******************/
         /*----- THEN -----*/
@@ -397,7 +397,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         XCTAssertTrue(result)
     }
     
-    func test_hasSupportedSignatureWithRoomDeletedSignature_returnsTrue() {
+    func test_hasRelevantSignatureWithRoomDeletedSignature_returnsTrue() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -411,7 +411,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = sut.hasSupportedSignature(signature)
+        let result = sut.hasRelevantSignature(signature)
         
         /******************/
         /*----- THEN -----*/
@@ -420,7 +420,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         XCTAssertTrue(result)
     }
     
-    func test_hasSupportedSignatureWithReadStateUpdatedSignature_returnsTrue() {
+    func test_hasRelevantSignatureWithReadStateUpdatedSignature_returnsTrue() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -434,7 +434,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = sut.hasSupportedSignature(signature)
+        let result = sut.hasRelevantSignature(signature)
         
         /******************/
         /*----- THEN -----*/
@@ -443,7 +443,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         XCTAssertTrue(result)
     }
     
-    func test_hasSupportedSignatureWithUnsupportewdSignature_returnsTrue() {
+    func test_hasRelevantSignatureWithUnsupportewdSignature_returnsTrue() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -457,7 +457,7 @@ class JoinedRoomsFilterTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = sut.hasSupportedSignature(signature)
+        let result = sut.hasRelevantSignature(signature)
         
         /******************/
         /*----- THEN -----*/

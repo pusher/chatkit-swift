@@ -99,4 +99,10 @@ extension XCTestExpectation {
         return systemTestTimeout ?? defaultNonSystemTestTimeout
     }
     
+    public func fulfill(after timeInterval: TimeInterval, queue: DispatchQueue = .main) {
+        queue.asyncAfter(deadline: .now() + timeInterval) {
+            self.fulfill()
+        }
+    }
+    
 }

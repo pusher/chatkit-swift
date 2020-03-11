@@ -27,18 +27,3 @@ struct AuxiliaryState: State {
     }
     
 }
-
-// MARK: - Equatable
-
-extension AuxiliaryState: Equatable {}
-
-// MARK: - Hashable
-
-extension AuxiliaryState: Hashable {
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(self.subscriptions)
-    }
-    
-}
-

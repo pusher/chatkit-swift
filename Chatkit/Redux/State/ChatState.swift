@@ -34,20 +34,3 @@ struct ChatState: State {
     }
     
 }
-
-// MARK: - Equatable
-
-extension ChatState: Equatable {}
-
-// MARK: - Hashable
-
-extension ChatState: Hashable {
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(self.currentUser)
-        hasher.combine(self.joinedRooms)
-        hasher.combine(self.users)
-    }
-    
-}
-

@@ -24,84 +24,60 @@ struct ConcreteTransformer: Transformer {
     }
     
     func transform(currentState: VersionedState, previousState: VersionedState?) -> JoinedRoomsRepository.ChangeReason? {
-        var identifier: String? = nil
-        
         switch currentState.signature {
-        case let .addedToRoom(roomIdentifier),
-             let .removedFromRoom(roomIdentifier),
-             let .roomUpdated(roomIdentifier),
-             let .roomDeleted(roomIdentifier),
-             let .readStateUpdated(roomIdentifier):
-            identifier = roomIdentifier
-            
-        case .unsigned,
-             .initialState,
-             .subscriptionStateUpdated:
-            break
-        }
-        
-        var currentRoom: Room? = nil
-        var previousRoom: Room? = nil
-        
-        if let roomIdentifier = identifier {
-            if let currentRoomState = currentState.chatState.joinedRooms[roomIdentifier] {
-                currentRoom = self.transform(state: currentRoomState)
-            }
-            
-            if let previousState = previousState,
-                let previousRoomState = previousState.chatState.joinedRooms[roomIdentifier] {
-                previousRoom = self.transform(state: previousRoomState)
-            }
-        }
-        
-        switch currentState.signature {
-        case .addedToRoom(_):
-            if let currentRoom = currentRoom {
-                return .addedToRoom(room: currentRoom)
-            }
-            else {
+        case let .addedToRoom(roomIdentifier):
+            guard let currentRoom = self.room(fromState: currentState, forIdentifier: roomIdentifier) else {
                 return nil
             }
             
-        case .removedFromRoom(_):
-            if let currentRoom = currentRoom {
-                return .removedFromRoom(room: currentRoom)
-            }
-            else {
+            return .addedToRoom(room: currentRoom)
+            
+        case let .removedFromRoom(roomIdentifier):
+            guard let currentRoom = self.room(fromState: currentState, forIdentifier: roomIdentifier) else {
                 return nil
             }
             
-        case .roomUpdated(_):
-            if let currentRoom = currentRoom,
-                let previousRoom = previousRoom {
-                return .roomUpdated(updatedRoom: currentRoom, previousValue: previousRoom)
+            return .removedFromRoom(room: currentRoom)
+            
+        case let .roomUpdated(roomIdentifier):
+            guard let currentRoom = self.room(fromState: currentState, forIdentifier: roomIdentifier),
+                let previousRoom = self.room(fromState: previousState, forIdentifier: roomIdentifier) else {
+                    return nil
             }
-            else {
+            
+            return .roomUpdated(updatedRoom: currentRoom, previousValue: previousRoom)
+            
+        case let .roomDeleted(roomIdentifier):
+            guard let previousRoom = self.room(fromState: previousState, forIdentifier: roomIdentifier) else {
                 return nil
             }
             
-        case .roomDeleted(_):
-            if let currentRoom = currentRoom {
-                return .roomDeleted(room: currentRoom)
-            }
-            else {
-                return nil
+            return .roomDeleted(room: previousRoom)
+            
+        case let .readStateUpdated(roomIdentifier):
+            guard let currentRoom = self.room(fromState: currentState, forIdentifier: roomIdentifier),
+                let previousRoom = self.room(fromState: previousState, forIdentifier: roomIdentifier) else {
+                    return nil
             }
             
-        case .readStateUpdated(_):
-            if let currentRoom = currentRoom,
-                let previousRoom = previousRoom {
-                return .readStateUpdated(updatedRoom: currentRoom, previousValue: previousRoom)
-            }
-            else {
-                return nil
-            }
+            return .readStateUpdated(updatedRoom: currentRoom, previousValue: previousRoom)
             
         case .unsigned,
              .initialState,
              .subscriptionStateUpdated:
             return nil
         }
+    }
+    
+    // MARK: - Private methods
+    
+    private func room(fromState state: VersionedState?, forIdentifier identifier: String) -> Room? {
+        guard let state = state,
+            let roomState = state.chatState.joinedRooms[identifier] else {
+                return nil
+        }
+        
+        return transform(state: roomState)
     }
     
 }

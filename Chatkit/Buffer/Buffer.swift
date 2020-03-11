@@ -2,7 +2,6 @@
 protocol Buffer: StoreListener {
     
     var currentState: VersionedState? { get }
-    var filter: StateFilter { get }
     var delegate: BufferDelegate? { get set }
     
 }
@@ -19,10 +18,8 @@ class ConcreteBuffer: Buffer {
     
     private(set) var currentState: VersionedState?
     private var queue: [VersionedState]
-    
+    private let filter: StateFilter
     private let dependencies: Dependencies
-    
-    let filter: StateFilter
     
     weak var delegate: BufferDelegate?
     
@@ -46,7 +43,6 @@ class ConcreteBuffer: Buffer {
     // MARK: - Private methods
     
     private func registerListener() {
-        // It really feels like this should be done by a different object, but such approach is forced on this class by the DI mechanism.
         let state = self.dependencies.store.register(self)
         
         if self.filter.hasCompleteSubstate(state) {
@@ -67,12 +63,12 @@ class ConcreteBuffer: Buffer {
         if let currentState = self.currentState {
             let lastState = self.queue.last ?? currentState
             
-            if self.filter.hasSupportedSignature(state.signature)
+            if self.filter.hasRelevantSignature(state.signature)
                 && self.filter.hasModifiedSubstate(oldState: lastState, newState: state) {
                 self.enqueue(state: state)
             }
         }
-        else if self.filter.hasSupportedSignature(state.signature) {
+        else if self.filter.hasRelevantSignature(state.signature) {
             self.enqueue(state: state)
         }
     }

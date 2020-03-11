@@ -37,11 +37,19 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
     private var versionedState: VersionedState?
     private var connectionState: ConnectionState
     
-    /// The current state of the repository.
     public private(set) var state: State {
         didSet {
             if state != oldValue {
-                self.delegate?.joinedRoomsRepository(self, didUpdateState: state)
+                if let delegate = self.delegate as? JoinedRoomsViewModel {
+                    // We know that the JoinedRoomsViewModel has been coded so that it dispatches to its own
+                    // delegate on the main thread.  So we do not need to dispatch to the main thread here.
+                    delegate.joinedRoomsRepository(self, didUpdateState: state)
+                }
+                else {
+                    DispatchQueue.main.async {
+                        self.delegate?.joinedRoomsRepository(self, didUpdateState: self.state)
+                    }
+                }
             }
         }
     }
@@ -60,7 +68,7 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
         self.connectionState = connectivityMonitor.connectionState
         
         self.state = JoinedRoomsRepository.state(forConnectionState: connectivityMonitor.connectionState,
-                                                 currentVersionedState: buffer.currentState,
+                                                 versionedState: buffer.currentState,
                                                  previousVersionedState: nil,
                                                  usingTransformer: dependencies.transformer)
         
@@ -70,10 +78,10 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
     
     // MARK: - Private methods
     
-    private static func state(forConnectionState connectionState: ConnectionState, currentVersionedState: VersionedState?, previousVersionedState: VersionedState?, usingTransformer transformer: Transformer) -> State {
-        if let currentVersionedState = currentVersionedState {
-            let rooms = Set(currentVersionedState.chatState.joinedRooms.map { transformer.transform(state: $0) })
-            let changeReason = transformer.transform(currentState: currentVersionedState, previousState: previousVersionedState)
+    private static func state(forConnectionState connectionState: ConnectionState, versionedState: VersionedState?, previousVersionedState: VersionedState?, usingTransformer transformer: Transformer) -> State {
+        if let versionedState = versionedState {
+            let rooms = Set(versionedState.chatState.joinedRooms.map { transformer.transform(state: $0) })
+            let changeReason = transformer.transform(currentState: versionedState, previousState: previousVersionedState)
             
             if connectionState == .connected {
                 return .connected(rooms: rooms, changeReason: changeReason)
@@ -101,7 +109,7 @@ extension JoinedRoomsRepository: BufferDelegate {
     
     func buffer(_ buffer: Buffer, didUpdateState state: VersionedState) {
         self.state = JoinedRoomsRepository.state(forConnectionState: self.connectionState,
-                                                 currentVersionedState: state,
+                                                 versionedState: state,
                                                  previousVersionedState: self.versionedState,
                                                  usingTransformer: self.dependencies.transformer)
         self.versionedState = state
@@ -115,7 +123,7 @@ extension JoinedRoomsRepository: ConnectivityMonitorDelegate {
     
     func connectivityMonitor(_ connectivityMonitor: ConnectivityMonitor, didUpdateConnectionState connectionState: ConnectionState) {
         self.state = JoinedRoomsRepository.state(forConnectionState: connectionState,
-                                                 currentVersionedState: self.versionedState,
+                                                 versionedState: self.versionedState,
                                                  previousVersionedState: self.versionedState,
                                                  usingTransformer: self.dependencies.transformer)
         self.connectionState = connectionState

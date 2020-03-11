@@ -216,4 +216,43 @@ class UserListStateTests: XCTestCase {
         XCTAssertNotEqual(firstStateHashValue, secondStateHashValue)
     }
     
+    func test_equatableAndHashable_doesNotConsiderIteratorValues() {
+
+        /******************/
+        /*---- GIVEN -----*/
+        /******************/
+            
+        var userListStateA = UserListState(
+            elements: [
+                .populated(
+                    identifier: "test-identifier-1",
+                    name: "test-name-1"
+                )
+            ]
+        )
+        
+        let userListStateB = userListStateA
+        
+        XCTAssertEqual(userListStateA, userListStateB)
+        
+        // A call to `next()` progresses the `iteratorIndex` of `userListStateA`
+        // so the stored values of `userListStateA` and `userListStateB` are now *different*
+        _ = userListStateA.next()
+        
+        /******************/
+        /*---- WHEN -----*/
+        /******************/
+        
+        // The custom Equatable and Hashable implementations should *not* consider `iteratorIndex` so the states should still be considered equal
+        let equatableResult = userListStateA == userListStateB
+        let hashableResult = userListStateA.hashValue == userListStateB.hashValue
+        
+        /******************/
+        /*---- THEN -----*/
+        /******************/
+        
+        XCTAssertTrue(equatableResult)
+        XCTAssertTrue(hashableResult)
+    }
+    
 }
