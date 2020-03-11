@@ -60,7 +60,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsViewModel.State = .initializing(error: nil)
+        let expectedState: JoinedRoomsViewModelState = .initializing(error: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -99,7 +99,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         
         wait(for: [expectation], timeout: 1.0)
         
-        let expectedState: JoinedRoomsViewModel.State = .connected(rooms: [self.room], changeReason: nil)
+        let expectedState: JoinedRoomsViewModelState = .connected(rooms: [self.room], changeReason: nil)
         
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didUpdateState_stateLastReceived, expectedState)
@@ -139,7 +139,7 @@ class JoinedRoomsViewModelTests: XCTestCase {
         
         wait(for: [expectation], timeout: 1.0)
         
-        let expectedState: JoinedRoomsViewModel.State = .degraded(rooms: [self.room], error: FakeError.firstError, changeReason: nil)
+        let expectedState: JoinedRoomsViewModelState = .degraded(rooms: [self.room], error: FakeError.firstError, changeReason: nil)
         
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didUpdateState_stateLastReceived, expectedState)

@@ -108,13 +108,13 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.State(repositoryState: repositoryState, previousRooms: nil)
+        let result = JoinedRoomsViewModelState(repositoryState: repositoryState, previousRooms: nil)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedValue: JoinedRoomsViewModel.State = .initializing(error: self.firstError)
+        let expectedValue: JoinedRoomsViewModelState = .initializing(error: self.firstError)
         
         XCTAssertEqual(result, expectedValue)
     }
@@ -131,13 +131,13 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.State(repositoryState: repositoryState, previousRooms: nil)
+        let result = JoinedRoomsViewModelState(repositoryState: repositoryState, previousRooms: nil)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedValue: JoinedRoomsViewModel.State = .connected(rooms: self.firstRooms, changeReason: nil)
+        let expectedValue: JoinedRoomsViewModelState = .connected(rooms: self.firstRooms, changeReason: nil)
         
         XCTAssertEqual(result, expectedValue)
     }
@@ -154,13 +154,13 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.State(repositoryState: repositoryState, previousRooms: nil)
+        let result = JoinedRoomsViewModelState(repositoryState: repositoryState, previousRooms: nil)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedValue: JoinedRoomsViewModel.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: nil)
+        let expectedValue: JoinedRoomsViewModelState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: nil)
         
         XCTAssertEqual(result, expectedValue)
     }
@@ -177,13 +177,13 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.State(repositoryState: repositoryState, previousRooms: nil)
+        let result = JoinedRoomsViewModelState(repositoryState: repositoryState, previousRooms: nil)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedValue: JoinedRoomsViewModel.State = .closed(error: self.firstError)
+        let expectedValue: JoinedRoomsViewModelState = .closed(error: self.firstError)
         
         XCTAssertEqual(result, expectedValue)
     }
@@ -205,7 +205,7 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.State(repositoryState: repositoryState, previousRooms: nil)
+        let result = JoinedRoomsViewModelState(repositoryState: repositoryState, previousRooms: nil)
         
         /******************/
         /*----- THEN -----*/
@@ -216,7 +216,7 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
             self.fifthRoom,
             self.sixthRoom
         ]
-        let expectedValue: JoinedRoomsViewModel.State = .connected(rooms: expectedRooms, changeReason: nil)
+        let expectedValue: JoinedRoomsViewModelState = .connected(rooms: expectedRooms, changeReason: nil)
         
         XCTAssertEqual(result, expectedValue)
     }
@@ -238,7 +238,7 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.State(repositoryState: repositoryState, previousRooms: nil)
+        let result = JoinedRoomsViewModelState(repositoryState: repositoryState, previousRooms: nil)
         
         /******************/
         /*----- THEN -----*/
@@ -249,7 +249,7 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
             self.secondRoom,
             self.thirdRoom
         ]
-        let expectedValue: JoinedRoomsViewModel.State = .connected(rooms: expectedRooms, changeReason: nil)
+        let expectedValue: JoinedRoomsViewModelState = .connected(rooms: expectedRooms, changeReason: nil)
         
         XCTAssertEqual(result, expectedValue)
     }
@@ -274,7 +274,7 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let result = JoinedRoomsViewModel.State(repositoryState: repositoryState, previousRooms: nil)
+        let result = JoinedRoomsViewModelState(repositoryState: repositoryState, previousRooms: nil)
         
         /******************/
         /*----- THEN -----*/
@@ -288,7 +288,7 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
             self.fifthRoom,
             self.sixthRoom
         ]
-        let expectedValue: JoinedRoomsViewModel.State = .connected(rooms: expectedRooms, changeReason: nil)
+        let expectedValue: JoinedRoomsViewModelState = .connected(rooms: expectedRooms, changeReason: nil)
         
         XCTAssertEqual(result, expectedValue)
     }
@@ -299,10 +299,10 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let initializingState: JoinedRoomsViewModel.State = .initializing(error: self.firstError)
-        let connectedState: JoinedRoomsViewModel.State = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
-        let degradedState: JoinedRoomsViewModel.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
-        let closedState: JoinedRoomsViewModel.State = .closed(error: self.firstError)
+        let initializingState: JoinedRoomsViewModelState = .initializing(error: self.firstError)
+        let connectedState: JoinedRoomsViewModelState = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
+        let degradedState: JoinedRoomsViewModelState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
+        let closedState: JoinedRoomsViewModelState = .closed(error: self.firstError)
         
         /******************/
         /*----- WHEN -----*/
@@ -337,8 +337,8 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsViewModel.State = .initializing(error: self.firstError)
-        let secondState: JoinedRoomsViewModel.State = .initializing(error: self.firstError)
+        let firstState: JoinedRoomsViewModelState = .initializing(error: self.firstError)
+        let secondState: JoinedRoomsViewModelState = .initializing(error: self.firstError)
         
         /******************/
         /*----- WHEN -----*/
@@ -359,8 +359,8 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsViewModel.State = .initializing(error: self.firstError)
-        let secondState: JoinedRoomsViewModel.State = .initializing(error: self.secondError)
+        let firstState: JoinedRoomsViewModelState = .initializing(error: self.firstError)
+        let secondState: JoinedRoomsViewModelState = .initializing(error: self.secondError)
         
         /******************/
         /*----- WHEN -----*/
@@ -381,8 +381,8 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsViewModel.State = .closed(error: self.firstError)
-        let secondState: JoinedRoomsViewModel.State = .closed(error: self.firstError)
+        let firstState: JoinedRoomsViewModelState = .closed(error: self.firstError)
+        let secondState: JoinedRoomsViewModelState = .closed(error: self.firstError)
         
         /******************/
         /*----- WHEN -----*/
@@ -403,8 +403,8 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsViewModel.State = .closed(error: self.firstError)
-        let secondState: JoinedRoomsViewModel.State = .closed(error: self.secondError)
+        let firstState: JoinedRoomsViewModelState = .closed(error: self.firstError)
+        let secondState: JoinedRoomsViewModelState = .closed(error: self.secondError)
         
         /******************/
         /*----- WHEN -----*/
@@ -425,8 +425,8 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsViewModel.State = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
-        let secondState: JoinedRoomsViewModel.State = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
+        let firstState: JoinedRoomsViewModelState = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
+        let secondState: JoinedRoomsViewModelState = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
         
         /******************/
         /*----- WHEN -----*/
@@ -447,8 +447,8 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsViewModel.State = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
-        let secondState: JoinedRoomsViewModel.State = .connected(rooms: self.secondRooms, changeReason: self.firstChangeReason)
+        let firstState: JoinedRoomsViewModelState = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
+        let secondState: JoinedRoomsViewModelState = .connected(rooms: self.secondRooms, changeReason: self.firstChangeReason)
         
         /******************/
         /*----- WHEN -----*/
@@ -469,8 +469,8 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsViewModel.State = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
-        let secondState: JoinedRoomsViewModel.State = .connected(rooms: self.firstRooms, changeReason: self.secondChangeReason)
+        let firstState: JoinedRoomsViewModelState = .connected(rooms: self.firstRooms, changeReason: self.firstChangeReason)
+        let secondState: JoinedRoomsViewModelState = .connected(rooms: self.firstRooms, changeReason: self.secondChangeReason)
         
         /******************/
         /*----- WHEN -----*/
@@ -491,8 +491,8 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsViewModel.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
-        let secondState: JoinedRoomsViewModel.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
+        let firstState: JoinedRoomsViewModelState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
+        let secondState: JoinedRoomsViewModelState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
         
         /******************/
         /*----- WHEN -----*/
@@ -513,8 +513,8 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsViewModel.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
-        let secondState: JoinedRoomsViewModel.State = .degraded(rooms: self.secondRooms, error: self.firstError, changeReason: self.firstChangeReason)
+        let firstState: JoinedRoomsViewModelState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
+        let secondState: JoinedRoomsViewModelState = .degraded(rooms: self.secondRooms, error: self.firstError, changeReason: self.firstChangeReason)
         
         /******************/
         /*----- WHEN -----*/
@@ -535,8 +535,8 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsViewModel.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
-        let secondState: JoinedRoomsViewModel.State = .degraded(rooms: self.firstRooms, error: self.secondError, changeReason: self.firstChangeReason)
+        let firstState: JoinedRoomsViewModelState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
+        let secondState: JoinedRoomsViewModelState = .degraded(rooms: self.firstRooms, error: self.secondError, changeReason: self.firstChangeReason)
         
         /******************/
         /*----- WHEN -----*/
@@ -557,8 +557,8 @@ class JoinedRoomsViewModelStateTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let firstState: JoinedRoomsViewModel.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
-        let secondState: JoinedRoomsViewModel.State = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.secondChangeReason)
+        let firstState: JoinedRoomsViewModelState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.firstChangeReason)
+        let secondState: JoinedRoomsViewModelState = .degraded(rooms: self.firstRooms, error: self.firstError, changeReason: self.secondChangeReason)
         
         /******************/
         /*----- WHEN -----*/

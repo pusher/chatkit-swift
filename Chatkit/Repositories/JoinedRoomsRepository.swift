@@ -67,7 +67,7 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
         self.versionedState = buffer.currentState
         self.connectionState = connectivityMonitor.connectionState
         
-        self.state = JoinedRoomsRepository.state(forConnectionState: connectivityMonitor.connectionState,
+        self.state = Self.state(forConnectionState: connectivityMonitor.connectionState,
                                                  versionedState: buffer.currentState,
                                                  previousVersionedState: nil,
                                                  usingTransformer: dependencies.transformer)
@@ -108,7 +108,7 @@ public class JoinedRoomsRepository: JoinedRoomsRepositoryProtocol {
 extension JoinedRoomsRepository: BufferDelegate {
     
     func buffer(_ buffer: Buffer, didUpdateState state: VersionedState) {
-        self.state = JoinedRoomsRepository.state(forConnectionState: self.connectionState,
+        self.state = Self.state(forConnectionState: self.connectionState,
                                                  versionedState: state,
                                                  previousVersionedState: self.versionedState,
                                                  usingTransformer: self.dependencies.transformer)
@@ -122,7 +122,7 @@ extension JoinedRoomsRepository: BufferDelegate {
 extension JoinedRoomsRepository: ConnectivityMonitorDelegate {
     
     func connectivityMonitor(_ connectivityMonitor: ConnectivityMonitor, didUpdateConnectionState connectionState: ConnectionState) {
-        self.state = JoinedRoomsRepository.state(forConnectionState: connectionState,
+        self.state = Self.state(forConnectionState: connectionState,
                                                  versionedState: self.versionedState,
                                                  previousVersionedState: self.versionedState,
                                                  usingTransformer: self.dependencies.transformer)

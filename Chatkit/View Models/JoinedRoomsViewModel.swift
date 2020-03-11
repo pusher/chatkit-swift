@@ -35,7 +35,7 @@ public class JoinedRoomsViewModel {
     private let repository: JoinedRoomsRepositoryProtocol
     
     /// The current state of the repository.
-    public private(set) var state: State {
+    public private(set) var state: JoinedRoomsViewModelState {
         didSet {
             if state != oldValue {
                 DispatchQueue.main.async {
@@ -51,14 +51,14 @@ public class JoinedRoomsViewModel {
     // MARK: - Initializers
     
     init(repository: JoinedRoomsRepositoryProtocol) {
-        self.state = JoinedRoomsViewModel.state(forRepositoryState: repository.state)
+        self.state = Self.state(forRepositoryState: repository.state)
         self.repository = repository
         self.repository.delegate = self
     }
     
     // MARK: - Private methods
     
-    private static func state(forRepositoryState repositoryState: JoinedRoomsRepositoryState, previousState: State? = nil) -> State {
+    private static func state(forRepositoryState repositoryState: JoinedRoomsRepositoryState, previousState: JoinedRoomsViewModelState? = nil) -> JoinedRoomsViewModelState {
         var previousRooms: [Room]? = nil
         
         switch previousState {
@@ -72,7 +72,7 @@ public class JoinedRoomsViewModel {
             break
         }
         
-        return State(repositoryState: repositoryState, previousRooms: previousRooms)
+        return JoinedRoomsViewModelState(repositoryState: repositoryState, previousRooms: previousRooms)
     }
     
 }
@@ -83,7 +83,7 @@ public class JoinedRoomsViewModel {
 extension JoinedRoomsViewModel: JoinedRoomsRepositoryDelegate {
     
     public func joinedRoomsRepository(_ joinedRoomsRepository: JoinedRoomsRepository, didUpdateState state: JoinedRoomsRepositoryState) {
-        self.state = JoinedRoomsViewModel.state(forRepositoryState: state, previousState: self.state)
+        self.state = Self.state(forRepositoryState: state, previousState: self.state)
     }
     
 }
@@ -99,6 +99,6 @@ public protocol JoinedRoomsViewModelDelegate: AnyObject {
     /// - Parameters:
     ///     - joinedRoomsViewModel: The `JoinedRoomsViewModel` that called the method.
     ///     - state: The updated value of the `state`.
-    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateState state: JoinedRoomsViewModel.State)
+    func joinedRoomsViewModel(_ joinedRoomsViewModel: JoinedRoomsViewModel, didUpdateState state: JoinedRoomsViewModelState)
     
 }
