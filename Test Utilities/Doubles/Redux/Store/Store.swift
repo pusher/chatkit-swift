@@ -33,10 +33,6 @@ public class StubStore: DoubleBase, Store {
     public private(set) var dispatch_lastReceived: Action?
     public private(set) var dispatch_actualCallCount: UInt = 0
     
-    private let register_expectedCallCount: UInt
-    public private(set) weak var register_listenerLastReceived: StoreListener?
-    public private(set) var register_actualCallCount: Int = 0
-    
     private let unregister_expectedCallCount: UInt
     public private(set) var unregister_actualCallCount: Int = 0
     
@@ -46,7 +42,6 @@ public class StubStore: DoubleBase, Store {
                 unregister_expectedCallCount: UInt = 0,
                 file: StaticString = #file, line: UInt = #line) {
         
-        self.state_toReturn = state_toReturn
         if let register_stateToReturn = register_stateToReturn {
             self.register_statesToReturn = [register_stateToReturn]
         } else {
