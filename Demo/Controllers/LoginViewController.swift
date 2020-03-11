@@ -6,7 +6,7 @@ class LoginViewController: UIViewController {
     
     // MARK: - Segues
     
-    private static let loginSegue: String = "login"
+    private static let loginSegueIdentifier: String = "login"
     
     // MARK: - Outlets
     
@@ -30,10 +30,10 @@ class LoginViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
 
-        if segue.identifier == LoginViewController.loginSegue {
+        if segue.identifier == LoginViewController.loginSegueIdentifier {
             guard let navigationController = segue.destination as? UINavigationController,
                 let roomListViewController = navigationController.visibleViewController as? RoomListViewController else {
-                return
+                    return
             }
             
             roomListViewController.chatkit = self.chatkit
@@ -114,7 +114,7 @@ class LoginViewController: UIViewController {
                 self.displayError("Failed to login due to the following error: \(error.localizedDescription).")
             }
             else {
-                self.performSegue(withIdentifier: LoginViewController.loginSegue, sender: self)
+                self.performSegue(withIdentifier: LoginViewController.loginSegueIdentifier, sender: self)
             }
         }
     }
