@@ -24,9 +24,9 @@ extension XCTestCase {
             `chatkit.connect()` HAS been invoked and handler called with `failure`
             (i.e. the user subscription is NOT active)
 
-        JoinedRoomsProviderInitialised
+        JoinedRoomsRepositoryInitialised
         As "ChakitConnected" but also
-            `JoinedRoomsProvider` instance has been initialised (via `chatKit.makeJoinedRoomsProvider()`)
+            `JoinedRoomsRepository` instance has been initialised (via `chatKit.makeJoinedRoomsRepository()`)
     */
     
     func setUp_ChatKitInitialised(file: StaticString = #file, line: UInt = #line) throws -> Chatkit {
