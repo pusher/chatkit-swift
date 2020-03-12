@@ -24,11 +24,17 @@ class ConcreteConnectivityMonitor: ConnectivityMonitor, StoreListener {
     
     weak var delegate: ConnectivityMonitorDelegate?
     
+    typealias ConnectivityMonitorAndInitialConnectionState = (
+        connectivityMonitor: ConcreteConnectivityMonitor,
+        initialConnectionState: ConnectionState
+    )
+    
     // MARK: - Initializers
-    static func makeWithInitialValue(subscriptionType: SubscriptionType, dependencies: Dependencies) -> (ConcreteConnectivityMonitor, ConnectionState) {
+    static func makeWithInitialValue(subscriptionType: SubscriptionType, dependencies: Dependencies) -> ConnectivityMonitorAndInitialConnectionState {
         let connectivityMonitor = ConcreteConnectivityMonitor(subscriptionType: subscriptionType, dependencies: dependencies)
         connectivityMonitor.connectionState = connectivityMonitor.register()
-        return (connectivityMonitor, connectivityMonitor.connectionState)
+        return (connectivityMonitor: connectivityMonitor,
+                initialConnectionState: connectivityMonitor.connectionState)
     }
     
     private init(subscriptionType: SubscriptionType, dependencies: Dependencies) {
