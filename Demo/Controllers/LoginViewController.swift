@@ -6,7 +6,7 @@ class LoginViewController: UIViewController {
     
     // MARK: - Segues
     
-    private static let loginSegue: String = "login"
+    private static let loginSegueIdentifier: String = "login"
     
     // MARK: - Outlets
     
@@ -14,11 +14,30 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var usernameTextField: UITextField!
     
+    // MARK: - Properties
+    
+    private var chatkit: Chatkit?
+    
     // MARK: - View lifecycle
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.displayKeyboard()
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
+        if segue.identifier == LoginViewController.loginSegueIdentifier {
+            guard let navigationController = segue.destination as? UINavigationController,
+                let roomListViewController = navigationController.visibleViewController as? RoomListViewController else {
+                    return
+            }
+            
+            roomListViewController.chatkit = self.chatkit
+        }
     }
     
     // MARK: - Actions
@@ -79,26 +98,24 @@ class LoginViewController: UIViewController {
     
     private func connect() {
         guard let username = self.usernameTextField.text,
-            let tokenProvider = try? TestTokenProvider(instanceLocator: Environment.instanceLocator, userIdentifier: username) else {
+            let tokenProvider = try? TestTokenProvider(instanceLocator: Environment.instanceLocator, userIdentifier: username),
+            let chatkit = try? Chatkit(instanceLocator: Environment.instanceLocator, tokenProvider: tokenProvider) else {
                 self.displayError("Failed to login due to incorrect format of instance locator.")
                 return
         }
         
         self.toggleActivityIndicator(shouldDisplayActivityIndicator: true)
         
-        // TODO: In future this should be replaced with a call to connect() method of an Chatkit object.
-        tokenProvider.fetchToken { result in
-            // This call to the main queue is here only temporarly. The intented call to connect() method of an Chatkit object should return on the main queue.
-            DispatchQueue.main.async {
-                switch result {
-                case .authenticated:
-                    self.performSegue(withIdentifier: LoginViewController.loginSegue, sender: self)
-                    
-                case let .failure(error: error):
-                    self.displayError("Failed to login due to the following error: \(error.localizedDescription).")
-                }
-                
-                self.toggleActivityIndicator(shouldDisplayActivityIndicator: false)
+        
+        self.chatkit = chatkit
+        self.chatkit?.connect { error in
+            self.toggleActivityIndicator(shouldDisplayActivityIndicator: false)
+            
+            if let error = error {
+                self.displayError("Failed to login due to the following error: \(error.localizedDescription).")
+            }
+            else {
+                self.performSegue(withIdentifier: LoginViewController.loginSegueIdentifier, sender: self)
             }
         }
     }

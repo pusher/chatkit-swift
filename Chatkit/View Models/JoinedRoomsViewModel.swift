@@ -28,7 +28,7 @@ import Foundation
 ///   - `.connected`: updates are flowing live, or
 ///   - `.degraded`: updates may be delayed due to network problems, or
 ///   - `.closed`: the connection is closed, no further updates available.
-public protocol JoinedRoomsViewModel {
+public protocol JoinedRoomsViewModel: AnyObject {
     
     /// The current state of the view model.
     var state: JoinedRoomsViewModelState { get }

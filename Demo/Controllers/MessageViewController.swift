@@ -30,7 +30,7 @@ class MessageViewController: UIViewController {
         let roomName = room.name ?? "Unknown Plan"
         self.title = otherUserName + " - " + roomName
         
-        chatkit.createMessagesViewModel(for: room) { viewModel, error in
+        chatkit.makeMessagesViewModel(for: room) { viewModel, error in
             if let error = error {
                 print("Error: \(error.localizedDescription)")
             }
@@ -42,7 +42,7 @@ class MessageViewController: UIViewController {
             }
         }
         
-        chatkit.createTypingUsersViewModel(for: room) { viewModel, error in
+        chatkit.makeTypingUsersViewModel(for: room) { viewModel, error in
             if let error = error {
                 print("Error: \(error.localizedDescription)")
             }
