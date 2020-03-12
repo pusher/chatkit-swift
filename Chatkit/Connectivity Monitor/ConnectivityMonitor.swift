@@ -1,15 +1,14 @@
 
-protocol ConnectivityMonitor: StoreListener {
+protocol ConnectivityMonitor: AnyObject { // AnyObject is required so we can mutate the delegate value
     
     var subscriptionType: SubscriptionType { get }
-    var connectionState: ConnectionState { get }
     var delegate: ConnectivityMonitorDelegate? { get set }
     
 }
 
 // MARK: - Concrete implementation
 
-class ConcreteConnectivityMonitor: ConnectivityMonitor {
+class ConcreteConnectivityMonitor: ConnectivityMonitor, StoreListener {
     
     // MARK: - Types
     
@@ -18,20 +17,29 @@ class ConcreteConnectivityMonitor: ConnectivityMonitor {
     // MARK: - Properties
     
     let subscriptionType: SubscriptionType
-    private(set) var connectionState: ConnectionState
+    
+    private var connectionState: ConnectionState!
     
     private let dependencies: Dependencies
     
     weak var delegate: ConnectivityMonitorDelegate?
     
-    // MARK: - Initializers
+    typealias ConnectivityMonitorAndInitialConnectionState = (
+        connectivityMonitor: ConcreteConnectivityMonitor,
+        initialConnectionState: ConnectionState
+    )
     
-    init(subscriptionType: SubscriptionType, dependencies: Dependencies) {
+    // MARK: - Initializers
+    static func makeWithInitialValue(subscriptionType: SubscriptionType, dependencies: Dependencies) -> ConnectivityMonitorAndInitialConnectionState {
+        let connectivityMonitor = ConcreteConnectivityMonitor(subscriptionType: subscriptionType, dependencies: dependencies)
+        connectivityMonitor.connectionState = connectivityMonitor.register()
+        return (connectivityMonitor: connectivityMonitor,
+                initialConnectionState: connectivityMonitor.connectionState)
+    }
+    
+    private init(subscriptionType: SubscriptionType, dependencies: Dependencies) {
         self.subscriptionType = subscriptionType
-        self.connectionState = .closed(error: nil)
         self.dependencies = dependencies
-        
-        self.registerListener()
     }
     
     // MARK: - Store listener
@@ -42,9 +50,10 @@ class ConcreteConnectivityMonitor: ConnectivityMonitor {
     
     // MARK: - Private methods
     
-    private func registerListener() {
+    private func register() -> ConnectionState {
         let versionedState = self.dependencies.store.register(self)
-        self.connectionState = self.connectionState(fromVersionedState: versionedState)
+        let connectionState = self.connectionState(fromVersionedState: versionedState)
+        return connectionState
     }
     
     private func updateStateIfNeeded(fromVersionedState versionedState: VersionedState) {

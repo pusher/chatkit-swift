@@ -23,24 +23,23 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionTypeToReturn: SubscriptionType = .user
-        let connectionStateToReturn: ConnectionState = .initializing(error: nil)
+        let subscriptionType: SubscriptionType = .user
+        let initialConnectionState: ConnectionState = .initializing(error: nil)
         
-        let stateToReturn = VersionedState(
+        let state = VersionedState(
             chatState: .empty,
             auxiliaryState: AuxiliaryState(
                 subscriptions: [
-                    subscriptionTypeToReturn : connectionStateToReturn
+                    subscriptionType: initialConnectionState
                 ]
             ),
             version: 1,
             signature: .initialState
         )
         
-        let stubBuffer = StubBuffer(currentState_toReturn: stateToReturn, delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: state, delegate_expectedSetCallCount: 1)
         
-        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionTypeToReturn,
-                                                              connectionState_toReturn: connectionStateToReturn,
+        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionType,
                                                               delegate_expectedSetCallCount: 1)
         
         let stubTransformer = StubTransformer(room_toReturn: self.room,
@@ -52,7 +51,10 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -69,10 +71,10 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionTypeToReturn: SubscriptionType = .user
-        let connectionStateToReturn: ConnectionState = .connected
+        let subscriptionType: SubscriptionType = .user
+        let initialConnectionState: ConnectionState = .connected
         
-        let stateToReturn = VersionedState(
+        let initialState = VersionedState(
             chatState: ChatState(
                 currentUser: .empty,
                 joinedRooms: RoomListState(
@@ -96,17 +98,16 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
             ),
             auxiliaryState: AuxiliaryState(
                 subscriptions: [
-                    subscriptionTypeToReturn : connectionStateToReturn
+                    subscriptionType : initialConnectionState
                 ]
             ),
             version: 1,
             signature: .initialState
         )
         
-        let stubBuffer = StubBuffer(currentState_toReturn: stateToReturn, delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: initialState, delegate_expectedSetCallCount: 1)
         
-        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionTypeToReturn,
-                                                              connectionState_toReturn: connectionStateToReturn,
+        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionType,
                                                               delegate_expectedSetCallCount: 1)
         
         let stubTransformer = StubTransformer(room_toReturn: self.room,
@@ -118,8 +119,11 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /******************/
         /*----- WHEN -----*/
         /******************/
-        
-        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -136,25 +140,24 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionTypeToReturn: SubscriptionType = .user
-        let errorToReturn = FakeError.firstError
-        let connectionStateToReturn: ConnectionState = .degraded(error: errorToReturn)
+        let subscriptionType: SubscriptionType = .user
+        let error = FakeError.firstError
+        let initialConnectionState: ConnectionState = .degraded(error: error)
         
-        let stateToReturn = VersionedState(
+        let state = VersionedState(
             chatState: .empty,
             auxiliaryState: AuxiliaryState(
                 subscriptions: [
-                    subscriptionTypeToReturn : connectionStateToReturn
+                    subscriptionType : initialConnectionState
                 ]
             ),
             version: 1,
             signature: .initialState
         )
         
-        let stubBuffer = StubBuffer(currentState_toReturn: stateToReturn, delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: state, delegate_expectedSetCallCount: 1)
         
-        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionTypeToReturn,
-                                                              connectionState_toReturn: connectionStateToReturn,
+        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionType,
                                                               delegate_expectedSetCallCount: 1)
         
         let stubTransformer = StubTransformer(room_toReturn: self.room,
@@ -166,13 +169,16 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        let expectedState: JoinedRoomsRepositoryState = .degraded(rooms: [], error: errorToReturn, changeReason: nil)
+        let expectedState: JoinedRoomsRepositoryState = .degraded(rooms: [], error: error, changeReason: nil)
         
         XCTAssertEqual(sut.state, expectedState)
     }
@@ -183,24 +189,23 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionTypeToReturn: SubscriptionType = .user
-        let connectionStateToReturn: ConnectionState = .closed(error: nil)
+        let subscriptionType: SubscriptionType = .user
+        let initialConnectionState: ConnectionState = .closed(error: nil)
         
-        let stateToReturn = VersionedState(
+        let state = VersionedState(
             chatState: .empty,
             auxiliaryState: AuxiliaryState(
                 subscriptions: [
-                    subscriptionTypeToReturn : connectionStateToReturn
+                    subscriptionType : initialConnectionState
                 ]
             ),
             version: 1,
             signature: .initialState
         )
         
-        let stubBuffer = StubBuffer(currentState_toReturn: stateToReturn, delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: state, delegate_expectedSetCallCount: 1)
         
-        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionTypeToReturn,
-                                                              connectionState_toReturn: connectionStateToReturn,
+        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionType,
                                                               delegate_expectedSetCallCount: 1)
         
         let stubTransformer = StubTransformer(room_toReturn: self.room,
@@ -212,7 +217,10 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -229,13 +237,12 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let subscriptionTypeToReturn: SubscriptionType = .user
-        let connectionStateToReturn: ConnectionState = .connected
+        let subscriptionType: SubscriptionType = .user
+        let initialConnectionState: ConnectionState = .connected
         
         let stubBuffer = StubBuffer(currentState_toReturn: nil, delegate_expectedSetCallCount: 1)
         
-        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionTypeToReturn,
-                                                              connectionState_toReturn: connectionStateToReturn,
+        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionType,
                                                               delegate_expectedSetCallCount: 1)
         
         let stubTransformer = StubTransformer(room_toReturn: self.room,
@@ -247,7 +254,10 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -264,26 +274,25 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let initialSubscriptionTypeToReturn: SubscriptionType = .user
-        let initialConnectionStateToReturn: ConnectionState = .initializing(error: nil)
+        let subscriptionType: SubscriptionType = .user
+        let initialConnectionState: ConnectionState = .initializing(error: nil)
         
-        let initialStateToReturn = VersionedState(
+        let state = VersionedState(
             chatState: .empty,
             auxiliaryState: AuxiliaryState(
                 subscriptions: [
-                    initialSubscriptionTypeToReturn : initialConnectionStateToReturn
+                    subscriptionType : initialConnectionState
                 ]
             ),
             version: 1,
             signature: .initialState
         )
         
-        let modifiedConnectionStateToReturn: ConnectionState = .closed(error: nil)
+        let modifiedConnectionState: ConnectionState = .closed(error: nil)
         
-        let stubBuffer = StubBuffer(currentState_toReturn: initialStateToReturn, delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: state, delegate_expectedSetCallCount: 1)
         
-        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: initialSubscriptionTypeToReturn,
-                                                              connectionState_toReturn: initialConnectionStateToReturn,
+        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionType,
                                                               delegate_expectedSetCallCount: 1)
         
         let stubTransformer = StubTransformer(room_toReturn: self.room,
@@ -293,7 +302,10 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(transformer: stubTransformer)
         
-        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         sut.delegate = stubDelegate
         
         let expectation = XCTestExpectation(description: "Delegate called")
@@ -305,7 +317,7 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        stubConnectivityMonitor.report(modifiedConnectionStateToReturn)
+        stubConnectivityMonitor.report(modifiedConnectionState)
         
         expectation.fulfill(after: 0.1)
         
@@ -327,26 +339,25 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let initialSubscriptionTypeToReturn: SubscriptionType = .user
-        let initialConnectionStateToReturn: ConnectionState = .initializing(error: nil)
+        let subscriptionType: SubscriptionType = .user
+        let initialConnectionState: ConnectionState = .initializing(error: nil)
         
-        let initialStateToReturn = VersionedState(
+        let initialState = VersionedState(
             chatState: .empty,
             auxiliaryState: AuxiliaryState(
                 subscriptions: [
-                    initialSubscriptionTypeToReturn : initialConnectionStateToReturn
+                    subscriptionType : initialConnectionState
                 ]
             ),
             version: 1,
             signature: .initialState
         )
         
-        let modifiedConnectionStateToReturn: ConnectionState = .closed(error: nil)
+        let modifiedConnectionState: ConnectionState = .closed(error: nil)
         
-        let stubBuffer = StubBuffer(currentState_toReturn: initialStateToReturn, delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: initialState, delegate_expectedSetCallCount: 1)
         
-        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: initialSubscriptionTypeToReturn,
-                                                              connectionState_toReturn: initialConnectionStateToReturn,
+        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionType,
                                                               delegate_expectedSetCallCount: 1)
         
         let stubTransformer = StubTransformer(room_toReturn: self.room,
@@ -356,7 +367,10 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(transformer: stubTransformer)
         
-        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         sut.delegate = stubDelegate
         
         XCTAssertEqual(sut.state, .initializing(error: nil))
@@ -366,7 +380,7 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        stubConnectivityMonitor.report(modifiedConnectionStateToReturn)
+        stubConnectivityMonitor.report(modifiedConnectionState)
         
         /******************/
         /*----- THEN -----*/
@@ -383,21 +397,23 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let initialSubscriptionTypeToReturn: SubscriptionType = .user
-        let initialConnectionStateToReturn: ConnectionState = .connected
+        let subscriptionType: SubscriptionType = .user
+        let initialConnectionState: ConnectionState = .connected
         
-        let initialStateToReturn = VersionedState(
+        let initialState = VersionedState(
             chatState: .empty,
             auxiliaryState: AuxiliaryState(
                 subscriptions: [
-                    initialSubscriptionTypeToReturn : initialConnectionStateToReturn
+                    subscriptionType : initialConnectionState
                 ]
             ),
             version: 1,
             signature: .initialState
         )
         
-        let modifiedStateToReturn = VersionedState(
+        
+        let modifiedConnectionState: ConnectionState = .connected
+        let modifiedState = VersionedState(
             chatState: ChatState(
                 currentUser: .empty,
                 joinedRooms: RoomListState(
@@ -421,17 +437,16 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
             ),
             auxiliaryState: AuxiliaryState(
                 subscriptions: [
-                    initialSubscriptionTypeToReturn : initialConnectionStateToReturn
+                    subscriptionType : modifiedConnectionState
                 ]
             ),
             version: 1,
             signature: .initialState
         )
         
-        let stubBuffer = StubBuffer(currentState_toReturn: initialStateToReturn, delegate_expectedSetCallCount: 1)
+        let stubBuffer = StubBuffer(currentState_toReturn: initialState, delegate_expectedSetCallCount: 1)
         
-        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: initialSubscriptionTypeToReturn,
-                                                              connectionState_toReturn: initialConnectionStateToReturn,
+        let stubConnectivityMonitor = StubConnectivityMonitor(subscriptionType_toReturn: subscriptionType,
                                                               delegate_expectedSetCallCount: 1)
         
         let stubTransformer = StubTransformer(room_toReturn: self.room,
@@ -442,7 +457,10 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         
         let dependencies = DependenciesDoubles(transformer: stubTransformer)
         
-        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer, connectivityMonitor: stubConnectivityMonitor, dependencies: dependencies)
+        let sut = ConcreteJoinedRoomsRepository(buffer: stubBuffer,
+                                                connectivityMonitor: stubConnectivityMonitor,
+                                                connectionState: initialConnectionState,
+                                                dependencies: dependencies)
         sut.delegate = stubDelegate
         
         XCTAssertEqual(sut.state,
@@ -453,7 +471,7 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        stubBuffer.report(modifiedStateToReturn)
+        stubBuffer.report(modifiedState)
         
         /******************/
         /*----- THEN -----*/

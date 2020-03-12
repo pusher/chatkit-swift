@@ -19,8 +19,7 @@ extension Reducer.Subscription {
             case .notSubscribed:
                 subscriptions[action.type] = .closed(error: nil)
                 
-            case .subscribingStageOne,
-                 .subscribingStageTwo:
+            case .subscribing:
                 subscriptions[action.type] = .initializing(error: nil)
                 
             case .subscribed:

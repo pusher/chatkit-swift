@@ -85,15 +85,15 @@ class ConcreteJoinedRoomsRepository: JoinedRoomsRepository {
     
     // MARK: - Initializers
     
-    init(buffer: Buffer, connectivityMonitor: ConnectivityMonitor, dependencies: Dependencies) {
+    init(buffer: Buffer, connectivityMonitor: ConnectivityMonitor, connectionState: ConnectionState, dependencies: Dependencies) {
         self.buffer = buffer
         self.connectivityMonitor = connectivityMonitor
         self.dependencies = dependencies
         
         self.versionedState = buffer.currentState
-        self.connectionState = connectivityMonitor.connectionState
+        self.connectionState = connectionState
         
-        self.state = Self.state(forConnectionState: connectivityMonitor.connectionState,
+        self.state = Self.state(forConnectionState: connectionState,
                                 versionedState: buffer.currentState,
                                 previousVersionedState: nil,
                                 usingTransformer: dependencies.transformer)
