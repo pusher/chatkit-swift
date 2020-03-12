@@ -25,7 +25,7 @@ class RoomListViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.createViewModel()
+        self.setupViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,7 +40,7 @@ class RoomListViewController: UITableViewController {
     
     // MARK: - Private methods
     
-    private func createViewModel() {
+    private func setupViewModel() {
         self.viewModel = self.chatkit?.makeJoinedRoomsViewModel()
         self.viewModel?.delegate = self
     }
