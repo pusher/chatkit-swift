@@ -1,9 +1,18 @@
 import class PusherPlatform.PPResumableSubscription
 
 protocol ResumableSubscription: AnyObject {
-    var onOpen: (() -> Void)? { get set }
-    var onError: ((Error) -> Void)? { get set }
-    func end()
+    func terminate()
 }
 
-extension PusherPlatform.PPResumableSubscription: ResumableSubscription {}
+extension PusherPlatform.PPResumableSubscription: ResumableSubscription {
+    
+    func terminate() {
+        self.onOpen = nil
+        self.onOpening = nil
+        self.onResuming = nil
+        self.onEvent = nil
+        self.onError = nil
+        self.onEnd = nil
+        self.end()
+    }
+}

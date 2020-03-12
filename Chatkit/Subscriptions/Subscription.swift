@@ -119,9 +119,7 @@ class ConcreteSubscription: Subscription {
             
         case let .subscribingStageTwo(_, resumableSubscription, completions):
             
-            resumableSubscription.onOpen = nil
-            resumableSubscription.onError = nil
-            resumableSubscription.end()
+            resumableSubscription.terminate()
             
             state = .notSubscribed
             
@@ -135,9 +133,7 @@ class ConcreteSubscription: Subscription {
             
         case let .subscribed(_, resumableSubscription):
             
-            resumableSubscription.onOpen = nil
-            resumableSubscription.onError = nil
-            resumableSubscription.end()
+            resumableSubscription.terminate()
             
             state = .notSubscribed
         }
@@ -214,9 +210,7 @@ class ConcreteSubscription: Subscription {
                 
             case let .subscribingStageTwo(_, resumableSubscription, completions):
                 
-                resumableSubscription.onOpen = nil
-                resumableSubscription.onError = nil
-                resumableSubscription.end()
+                resumableSubscription.terminate()
                 
                 // The ORDER of the code here is VITAL:
                 //   We MUST set the state before we call the delegate/completions
@@ -267,9 +261,7 @@ class ConcreteSubscription: Subscription {
                 
             case let .subscribingStageTwo(_, resumableSubscription, completions):
                 
-                resumableSubscription.onOpen = nil
-                resumableSubscription.onError = nil
-                resumableSubscription.end()
+                resumableSubscription.terminate()
                 
                 // The ORDER of the code here is VITAL:
                 //   We MUST set the state before we call the delegate/completions
