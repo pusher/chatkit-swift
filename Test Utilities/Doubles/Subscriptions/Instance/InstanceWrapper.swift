@@ -46,10 +46,10 @@ public class StubInstanceWrapper: DoubleBase, InstanceWrapper {
     private weak var internalStubResumableSubscription: StubResumableSubscription?
 
     public init(subscribeWithResume_outcomes: [SubscribeOutcome] = [],
-                resumableSubscription_end_expected: Bool = false,
+                resumableSubscription_terminate_expected: Bool = false,
                 file: StaticString = #file, line: UInt = #line) {
         self.subscribeWithResume_outcomes = subscribeWithResume_outcomes
-        self.resumableSubscription_end_expected = resumableSubscription_end_expected
+        self.resumableSubscription_terminate_expected = resumableSubscription_terminate_expected
         super.init(file: file, line: line)
     }
     
@@ -61,12 +61,12 @@ public class StubInstanceWrapper: DoubleBase, InstanceWrapper {
         subscribeWithResume_outcomes.append(outcome)
     }
     
-    private var resumableSubscription_end_expected = false
+    private var resumableSubscription_terminate_expected = false
     public func stubResumableSubscriptionEnd() {
         if let internalStubResumableSubscription = internalStubResumableSubscription {
-            internalStubResumableSubscription.increment_end_expectedCallCount()
+            internalStubResumableSubscription.increment_terminate_expectedCallCount()
         } else {
-            resumableSubscription_end_expected = true
+            resumableSubscription_terminate_expected = true
         }
     }
     
@@ -191,14 +191,14 @@ public class StubInstanceWrapper: DoubleBase, InstanceWrapper {
             }
         }
         
-        let end_expectedCallCount: UInt
+        let terminate_expectedCallCount: UInt
         if case .fail = subscribeWithResume_outcome {
-            end_expectedCallCount = 1
+            terminate_expectedCallCount = 1
         } else {
-            end_expectedCallCount = resumableSubscription_end_expected ? 1 : 0
+            terminate_expectedCallCount = resumableSubscription_terminate_expected ? 1 : 0
         }
         
-        let stubResumableSubscription = StubResumableSubscription(end_expectedCallCount: end_expectedCallCount, file: file, line: line)
+        let stubResumableSubscription = StubResumableSubscription(terminate_expectedCallCount: terminate_expectedCallCount, file: file, line: line)
         internalStubResumableSubscription = stubResumableSubscription
         return stubResumableSubscription
     }

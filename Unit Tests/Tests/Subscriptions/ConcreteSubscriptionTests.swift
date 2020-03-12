@@ -42,7 +42,7 @@ class ConcreteSubscriptionTests: XCTestCase {
                                      stubStore_dispatch_expectedCallCount: UInt = 1,
                                      stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
                                      stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
-                                     stubResumableSubscription_end_expected: Bool? = nil,
+                                     stubResumableSubscription_terminate_expected: Bool? = nil,
                                      file: StaticString = #file, line: UInt = #line)
         -> (ConcreteSubscription, StubStore, StubInstanceWrapper, StubInstanceWrapperFactory, StubSubscriptionDelegate) {
             
@@ -55,7 +55,7 @@ class ConcreteSubscriptionTests: XCTestCase {
             
             let stubInstanceWrapper = StubInstanceWrapper(
                 subscribeWithResume_outcomes: [.wait],
-                resumableSubscription_end_expected: stubResumableSubscription_end_expected ?? false,
+                resumableSubscription_terminate_expected: stubResumableSubscription_terminate_expected ?? false,
                 file: file, line: line
             )
             
@@ -92,7 +92,7 @@ class ConcreteSubscriptionTests: XCTestCase {
                                            stubStore_dispatch_expectedCallCount: UInt = 2,
                                            stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
                                            stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
-                                           stubResumableSubscription_end_expected: Bool? = nil,
+                                           stubResumableSubscription_terminate_expected: Bool? = nil,
                                            file: StaticString = #file, line: UInt = #line)
         -> (ConcreteSubscription, StubStore, StubInstanceWrapper, StubInstanceWrapperFactory, StubSubscriptionDelegate, XCTestExpectation.Expectation<VoidResult>) {
             
@@ -101,7 +101,7 @@ class ConcreteSubscriptionTests: XCTestCase {
                                       stubStore_dispatch_expectedCallCount: stubStore_dispatch_expectedCallCount,
                                       stubDelegate_didReceivedEvent_expectedCallCount: stubDelegate_didReceivedEvent_expectedCallCount,
                                       stubDelegate_didReceivedError_expectedCallCount: stubDelegate_didReceivedError_expectedCallCount,
-                                      stubResumableSubscription_end_expected: stubResumableSubscription_end_expected,
+                                      stubResumableSubscription_terminate_expected: stubResumableSubscription_terminate_expected,
                                       file: file, line: line)
 
             let expectation = XCTestExpectation.Subscription.subscribe
@@ -124,7 +124,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         stubStore_dispatch_expectedCallCount: UInt = 2,
         stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
         stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
-        stubResumableSubscription_end_expected: Bool? = nil,
+        stubResumableSubscription_terminate_expected: Bool? = nil,
         file: StaticString = #file, line: UInt = #line
     )
         -> (ConcreteSubscription, StubStore, StubInstanceWrapper, StubInstanceWrapperFactory, StubSubscriptionDelegate, XCTestExpectation.Expectation<VoidResult>, XCTestExpectation.Expectation<VoidResult>) {
@@ -134,7 +134,7 @@ class ConcreteSubscriptionTests: XCTestCase {
                                         stubStore_dispatch_expectedCallCount: stubStore_dispatch_expectedCallCount,
                                         stubDelegate_didReceivedEvent_expectedCallCount: stubDelegate_didReceivedEvent_expectedCallCount,
                                         stubDelegate_didReceivedError_expectedCallCount: stubDelegate_didReceivedError_expectedCallCount,
-                                        stubResumableSubscription_end_expected: stubResumableSubscription_end_expected,
+                                        stubResumableSubscription_terminate_expected: stubResumableSubscription_terminate_expected,
                                         file: file, line: line)
 
         let secondExpectation = XCTestExpectation.Subscription.subscribe
@@ -157,7 +157,7 @@ class ConcreteSubscriptionTests: XCTestCase {
                                   stubStore_dispatch_expectedCallCount: UInt = 3,
                                   stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
                                   stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
-                                  stubResumableSubscription_end_expected: Bool? = nil,
+                                  stubResumableSubscription_terminate_expected: Bool? = nil,
                                   file: StaticString = #file, line: UInt = #line)
         -> (ConcreteSubscription, StubStore, StubInstanceWrapper, StubInstanceWrapperFactory, StubSubscriptionDelegate) {
             
@@ -166,8 +166,8 @@ class ConcreteSubscriptionTests: XCTestCase {
                                             stubStore_dispatch_expectedCallCount: stubStore_dispatch_expectedCallCount,
                                             stubDelegate_didReceivedEvent_expectedCallCount: stubDelegate_didReceivedEvent_expectedCallCount,
                                             stubDelegate_didReceivedError_expectedCallCount: stubDelegate_didReceivedError_expectedCallCount,
-                                            stubResumableSubscription_end_expected:
-                                                stubResumableSubscription_end_expected,
+                                            stubResumableSubscription_terminate_expected:
+                                                stubResumableSubscription_terminate_expected,
                                             file: file, line: line)
             
             let jsonData = "{}".toJsonData()
@@ -431,7 +431,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
             = setUp_subscribingStageTwo(forType: subscriptionType,
                                         stubDelegate_didReceivedError_expectedCallCount: 1,
-                                        stubResumableSubscription_end_expected: true)
+                                        stubResumableSubscription_terminate_expected: true)
         
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(expectation)
@@ -482,7 +482,7 @@ class ConcreteSubscriptionTests: XCTestCase {
             = setUp_subscribingStageTwoWithMultipleWaitingCompletions(
                 forType: subscriptionType,
                 stubDelegate_didReceivedError_expectedCallCount: 1,
-                stubResumableSubscription_end_expected: true
+                stubResumableSubscription_terminate_expected: true
             )
         
         // Confirm setUp
@@ -536,7 +536,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
             = setUp_subscribed(forType: subscriptionType,
                                stubDelegate_didReceivedError_expectedCallCount: 1,
-                               stubResumableSubscription_end_expected: true)
+                               stubResumableSubscription_terminate_expected: true)
         
         // Confirm setUp
         XCTAssertEqualState(sut.state, .subscribed)
@@ -886,7 +886,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
             = setUp_subscribingStageTwo(forType: subscriptionType,
                                         stubDelegate_didReceivedError_expectedCallCount: 1,
-                                        stubResumableSubscription_end_expected: true)
+                                        stubResumableSubscription_terminate_expected: true)
         
         // Confirm setUp
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
@@ -939,7 +939,7 @@ class ConcreteSubscriptionTests: XCTestCase {
             = setUp_subscribingStageTwoWithMultipleWaitingCompletions(
                 forType: subscriptionType,
                 stubDelegate_didReceivedError_expectedCallCount: 1,
-                stubResumableSubscription_end_expected: true
+                stubResumableSubscription_terminate_expected: true
             )
         
         // Confirm setUp
@@ -997,7 +997,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
             = setUp_subscribed(forType: subscriptionType,
                                stubDelegate_didReceivedError_expectedCallCount: 1,
-                               stubResumableSubscription_end_expected: true)
+                               stubResumableSubscription_terminate_expected: true)
         
         // Confirm setUp
         XCTAssertEqualState(sut.state, .subscribed)
@@ -1043,7 +1043,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
             = setUp_subscribingStageTwo(forType: subscriptionType,
                                         stubDelegate_didReceivedError_expectedCallCount: 1,
-                                        stubResumableSubscription_end_expected: true)
+                                        stubResumableSubscription_terminate_expected: true)
         
         // Confirm setUp
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
@@ -1098,7 +1098,7 @@ class ConcreteSubscriptionTests: XCTestCase {
             = setUp_subscribingStageTwoWithMultipleWaitingCompletions(
                 forType: subscriptionType,
                 stubDelegate_didReceivedError_expectedCallCount: 1,
-                stubResumableSubscription_end_expected: true
+                stubResumableSubscription_terminate_expected: true
             )
         
         // Confirm setUp
@@ -1158,7 +1158,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
             = setUp_subscribed(forType: subscriptionType,
                                stubDelegate_didReceivedError_expectedCallCount: 1,
-                               stubResumableSubscription_end_expected: true)
+                               stubResumableSubscription_terminate_expected: true)
         
         // Confirm setUp
         XCTAssertEqualState(sut.state, .subscribed)
