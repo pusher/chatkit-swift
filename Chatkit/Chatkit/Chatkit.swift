@@ -135,9 +135,13 @@ public class Chatkit {
     public func makeJoinedRoomsRepository() -> JoinedRoomsRepository {
         let filter = ConcreteJoinedRoomsRepository.Filter()
         let buffer = ConcreteBuffer(filter: filter, dependencies: self.dependencies)
-        let connectivityMonitor = ConcreteConnectivityMonitor(subscriptionType: .user, dependencies: self.dependencies)
+        let (connectivityMonitor, initialConnectionState) = ConcreteConnectivityMonitor.makeWithInitialValue(subscriptionType: .user,
+                                                                                                             dependencies: self.dependencies)
         
-        return ConcreteJoinedRoomsRepository(buffer: buffer, connectivityMonitor: connectivityMonitor, dependencies: self.dependencies)
+        return ConcreteJoinedRoomsRepository(buffer: buffer,
+                                             connectivityMonitor: connectivityMonitor,
+                                             connectionState: initialConnectionState,
+                                             dependencies: self.dependencies)
     }
     
     /// Creates an instance of `MessagesRepository`.

@@ -26,15 +26,45 @@ enum SubscriptionError: String, LocalizedError {
     }
 }
 
+fileprivate extension SubscriptionState {
+
+    static func from(_ state: ConcreteSubscription.State) -> Self {
+        switch state {
+        case .notSubscribed:
+            return .notSubscribed
+        case .subscribingStageOne, .subscribingStageTwo:
+            return .subscribing
+        case .subscribed:
+            return .subscribed
+        }
+    }
+}
+
 class ConcreteSubscription: Subscription {
+
+    enum State {
+        case notSubscribed
+        case subscribingStageOne(instanceWrapper: InstanceWrapper, completions: [SubscribeHandler])
+        case subscribingStageTwo(instanceWrapper: InstanceWrapper, resumableSubscription: ResumableSubscription, completions: [SubscribeHandler])
+        case subscribed(instanceWrapper: InstanceWrapper, resumableSubscription: ResumableSubscription)
+    }
     
-    typealias Dependencies = HasInstanceWrapperFactory
+    typealias Dependencies = HasInstanceWrapperFactory & HasStore
     
     let subscriptionType: SubscriptionType // Internal `get` aids testing
     private let dependencies: Dependencies
     weak var delegate: SubscriptionDelegate?
     
-    private(set) var state: SubscriptionState = .notSubscribed // Internal `get` aids testing
+    private(set) var state: State = .notSubscribed { // Internal `get` aids testing
+        didSet {
+            let newSimplifiedState = SubscriptionState.from(state)
+            let oldSimplifiedState = SubscriptionState.from(oldValue)
+            if newSimplifiedState != oldSimplifiedState {
+                let action = SubscriptionStateUpdatedAction(type: subscriptionType, state: newSimplifiedState)
+                self.dependencies.store.dispatch(action: action)
+            }
+        }
+    }
     
     init(subscriptionType: SubscriptionType, dependencies: Dependencies, delegate: SubscriptionDelegate) {
         self.subscriptionType = subscriptionType

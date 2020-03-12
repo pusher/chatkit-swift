@@ -47,7 +47,7 @@ class System_UnInitialised_Tests: XCTestCase {
             let instanceLocator = InstanceLocator(string: instanceLocatorString)!
             let dependencies = ConcreteDependencies(instanceLocator: instanceLocator, tokenProvider: tokenProvider)
             
-            let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 1)
+            let stubStoreListener = StubStoreListener(didUpdateState_expectedCallCount: 3)
             
             let initialState = dependencies.store.register(stubStoreListener)
             
@@ -68,8 +68,13 @@ class System_UnInitialised_Tests: XCTestCase {
             
             wait(for: [expectation], timeout: expectation.timeout)
             
+            // There are 3 state changes output from  the store
+            //      1. Subscription's ConnectionState changes to `subscribing`
+            //      2. Subscription's ConnectionState changes to `connected`
+            //      3. initialState populates all the RoomListState and CurrentUserState etc.
+            
             XCTAssertEqual(expectation.result, .success)
-            XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 1)
+            XCTAssertEqual(stubStoreListener.didUpdateState_actualCallCount, 3)
             XCTAssertNotNil(stubStoreListener.didUpdateState_stateLastReceived?.chatState.currentUser)
             
         }())

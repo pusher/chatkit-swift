@@ -6,7 +6,7 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
     
     // MARK: - Tests
     
-    func test_init_withConnectionStatePresentInAuxiliaryState_returnsConnectionStateFromAuxiliaryState() {
+    func test_makeWithInitialValue_withConnectionStatePresentInAuxiliaryState_returnsConnectionStateFromAuxiliaryState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -25,7 +25,8 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
             signature: .initialState
         )
         
-        let stubStore = StubStore(state_toReturn: state, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: state,
+                                  unregister_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -33,7 +34,8 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = ConcreteConnectivityMonitor(subscriptionType: subscriptionType, dependencies: dependencies)
+        let (sut, initialValue) = ConcreteConnectivityMonitor.makeWithInitialValue(subscriptionType: subscriptionType,
+                                                                                   dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -41,10 +43,12 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         
         let expectedConnectionState = connectionState
         
-        XCTAssertEqual(sut.connectionState, expectedConnectionState)
+        XCTAssertEqual(sut.subscriptionType, subscriptionType)
+        XCTAssertNil(sut.delegate)
+        XCTAssertEqual(initialValue, expectedConnectionState)
     }
     
-    func test_init_withConnectionStateNotPresentInAuxiliaryState_returnsClosedConnectionState() {
+    func test_makeWithInitialValue_withConnectionStateNotPresentInAuxiliaryState_returnsClosedConnectionState() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -53,7 +57,8 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         let subscriptionType: SubscriptionType = .user
         let state: VersionedState = .initial
         
-        let stubStore = StubStore(state_toReturn: state, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: state,
+                                  unregister_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -61,7 +66,8 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = ConcreteConnectivityMonitor(subscriptionType: subscriptionType, dependencies: dependencies)
+        let (sut, initialValue) = ConcreteConnectivityMonitor.makeWithInitialValue(subscriptionType: subscriptionType,
+                                                                                   dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -69,10 +75,12 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         
         let expectedConnectionState: ConnectionState = .closed(error: nil)
         
-        XCTAssertEqual(sut.connectionState, expectedConnectionState)
+        XCTAssertEqual(sut.subscriptionType, subscriptionType)
+        XCTAssertNil(sut.delegate)
+        XCTAssertEqual(initialValue, expectedConnectionState)
     }
     
-    func test_init_registersAsStoreListener() {
+    func test_makeWithInitialValue_registersAsStoreListener() {
         
         /******************/
         /*---- GIVEN -----*/
@@ -81,7 +89,8 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         let subscriptionType: SubscriptionType = .user
         let state: VersionedState = .initial
         
-        let stubStore = StubStore(state_toReturn: state, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: state,
+                                  unregister_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -89,7 +98,8 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        let sut = ConcreteConnectivityMonitor(subscriptionType: subscriptionType, dependencies: dependencies)
+        let (sut, _) = ConcreteConnectivityMonitor.makeWithInitialValue(subscriptionType: subscriptionType,
+                                                                        dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -108,7 +118,8 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         let subscriptionType: SubscriptionType = .user
         let state: VersionedState = .initial
         
-        let stubStore = StubStore(state_toReturn: state, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: state,
+                                  unregister_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
@@ -116,7 +127,8 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         /*----- WHEN -----*/
         /******************/
         
-        _ = ConcreteConnectivityMonitor(subscriptionType: subscriptionType, dependencies: dependencies)
+        let (_, _) = ConcreteConnectivityMonitor.makeWithInitialValue(subscriptionType: subscriptionType,
+                                                                      dependencies: dependencies)
         
         /******************/
         /*----- THEN -----*/
@@ -144,15 +156,17 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
             signature: .subscriptionStateUpdated
         )
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubDelegate = StubConnectivityMonitorDelegate(didUpdateState_expectedCallCount: 1)
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
-        let sut = ConcreteConnectivityMonitor(subscriptionType: subscriptionType, dependencies: dependencies)
+        let (sut, initialValue) = ConcreteConnectivityMonitor.makeWithInitialValue(subscriptionType: subscriptionType,
+                                                                                   dependencies: dependencies)
         sut.delegate = stubDelegate
         
-        XCTAssertEqual(sut.connectionState, ConnectionState.closed(error: nil))
+        XCTAssertEqual(initialValue, ConnectionState.closed(error: nil))
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
         
         /******************/
@@ -167,7 +181,6 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         
         let expectedConnectionState = connectionState
         
-        XCTAssertEqual(sut.connectionState, expectedConnectionState)
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didUpdateState_stateLastReceived, expectedConnectionState)
     }
@@ -191,15 +204,17 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
             signature: .subscriptionStateUpdated
         )
         
-        let stubStore = StubStore(state_toReturn: initialState, register_expectedCallCount: 1, unregister_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: initialState,
+                                  unregister_expectedCallCount: 1)
         let stubDelegate = StubConnectivityMonitorDelegate(didUpdateState_expectedCallCount: 0)
         
         let dependencies = DependenciesDoubles(store: stubStore)
         
-        let sut = ConcreteConnectivityMonitor(subscriptionType: subscriptionType, dependencies: dependencies)
+        let (sut, initialValue) = ConcreteConnectivityMonitor.makeWithInitialValue(subscriptionType: subscriptionType,
+                                                                                   dependencies: dependencies)
         sut.delegate = stubDelegate
         
-        XCTAssertEqual(sut.connectionState, ConnectionState.closed(error: nil))
+        XCTAssertEqual(initialValue, ConnectionState.closed(error: nil))
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
         
         /******************/
@@ -212,9 +227,6 @@ class ConcreteConnectivityMonitorTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
-        let expectedConnectionState = connectionState
-        
-        XCTAssertEqual(sut.connectionState, expectedConnectionState)
         XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
         XCTAssertNil(stubDelegate.didUpdateState_stateLastReceived)
     }

@@ -10,7 +10,7 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: .initial, dispatch_expectedCallCount: 1)
+        let stubStore = StubStore(register_stateToReturn: .initial, dispatch_expectedCallCount: 1)
         let dummySubscription = DummySubscription()
         
         let dependencies = DependenciesDoubles(
@@ -70,7 +70,7 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: .initial, dispatch_expectedCallCount: 0)
+        let stubStore = StubStore(register_stateToReturn: .initial, dispatch_expectedCallCount: 0)
         let dummySubscription = DummySubscription()
         
         let dependencies = DependenciesDoubles(
@@ -105,7 +105,7 @@ class ConcreteSubscriptionActionDispatcherTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let stubStore = StubStore(state_toReturn: .initial, dispatch_expectedCallCount: 0)
+        let stubStore = StubStore(register_stateToReturn: .initial, dispatch_expectedCallCount: 0)
         let dummySubscription = DummySubscription()
         
         let dependencies = DependenciesDoubles(

@@ -9,7 +9,7 @@ protocol SubscriptionFactory {
 
 class ConcreteSubscriptionFactory: SubscriptionFactory {
     
-    typealias Dependencies = HasInstanceWrapperFactory & HasSubscriptionActionDispatcher
+    typealias Dependencies = HasInstanceWrapperFactory & HasSubscriptionActionDispatcher & HasStore
     
     private let dependencies: Dependencies
     private let subscriptionActionDispatcher: SubscriptionActionDispatcher

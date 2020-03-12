@@ -21,7 +21,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         case subscribed
     }
     
-    private func XCTAssertEqualState(_ actualState: SubscriptionState,
+    private func XCTAssertEqualState(_ actualState: ConcreteSubscription.State,
                                      _ expectedAssertableState: ConcreteSubscriptionAssertableState,
                                      file: StaticString = #file, line: UInt = #line) {
         switch actualState {
@@ -39,13 +39,19 @@ class ConcreteSubscriptionTests: XCTestCase {
     }
 
     private func setUp_notSubscribed(forType subscriptionType: SubscriptionType,
+                                     stubStore_dispatch_expectedCallCount: UInt = 1,
                                      stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
                                      stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
                                      stubResumableSubscription_end_expected: Bool? = nil,
                                      file: StaticString = #file, line: UInt = #line)
-        -> (ConcreteSubscription, StubInstanceWrapper, StubInstanceWrapperFactory, StubSubscriptionDelegate) {
+        -> (ConcreteSubscription, StubStore, StubInstanceWrapper, StubInstanceWrapperFactory, StubSubscriptionDelegate) {
             
             let instanceType: InstanceType = .subscription(subscriptionType)
+            
+            let stubStore = StubStore(
+                dispatch_expectedCallCount: stubStore_dispatch_expectedCallCount,
+                file: file, line: line
+            )
             
             let stubInstanceWrapper = StubInstanceWrapper(
                 subscribeWithResume_outcomes: [.wait],
@@ -56,7 +62,7 @@ class ConcreteSubscriptionTests: XCTestCase {
             let stubInstanceWrapperFactory = StubInstanceWrapperFactory(makeInstanceWrapper_expectedTypesAndInstanceWrappersToReturn:
                 [(instanceType: instanceType, instanceWrapper: stubInstanceWrapper)], file: file, line: line)
             
-            let dependencies = DependenciesDoubles(instanceWrapperFactory: stubInstanceWrapperFactory, file: file, line: line)
+            let dependencies = DependenciesDoubles(store: stubStore, instanceWrapperFactory: stubInstanceWrapperFactory, file: file, line: line)
             
             let stubDelegate = StubSubscriptionDelegate(
                 didReceiveEvent_expectedCallCount: stubDelegate_didReceivedEvent_expectedCallCount ?? 1,
@@ -69,6 +75,7 @@ class ConcreteSubscriptionTests: XCTestCase {
                                            delegate: stubDelegate)
             
             XCTAssertEqualState(sut.state, .notSubscribed, file: file, line: line)
+            XCTAssertEqual(stubStore.dispatch_actualCallCount, 0, file: file, line: line)
             XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0, file: file, line: line)
             XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0, file: file, line: line)
             XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 0, file: file, line: line)
@@ -78,18 +85,20 @@ class ConcreteSubscriptionTests: XCTestCase {
             // `ConcreteSubscription.state` is `.subscribingStageTwo`
             // `completion` handler has NOT been invoked
             
-            return (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
+            return (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
     }
     
     private func setUp_subscribingStageTwo(forType subscriptionType: SubscriptionType,
+                                           stubStore_dispatch_expectedCallCount: UInt = 2,
                                            stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
                                            stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
                                            stubResumableSubscription_end_expected: Bool? = nil,
                                            file: StaticString = #file, line: UInt = #line)
-        -> (ConcreteSubscription, StubInstanceWrapper, StubInstanceWrapperFactory, StubSubscriptionDelegate, XCTestExpectation.Expectation<VoidResult>) {
+        -> (ConcreteSubscription, StubStore, StubInstanceWrapper, StubInstanceWrapperFactory, StubSubscriptionDelegate, XCTestExpectation.Expectation<VoidResult>) {
             
-            let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
+            let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
                 = setUp_notSubscribed(forType: subscriptionType,
+                                      stubStore_dispatch_expectedCallCount: stubStore_dispatch_expectedCallCount,
                                       stubDelegate_didReceivedEvent_expectedCallCount: stubDelegate_didReceivedEvent_expectedCallCount,
                                       stubDelegate_didReceivedError_expectedCallCount: stubDelegate_didReceivedError_expectedCallCount,
                                       stubResumableSubscription_end_expected: stubResumableSubscription_end_expected,
@@ -101,25 +110,28 @@ class ConcreteSubscriptionTests: XCTestCase {
             
             XCTAssertEqualState(sut.state, .subscribingStageTwo, file: file, line: line)
             XCTAssertExpectationUnfulfilled(expectation, file: file, line: line)
+            XCTAssertEqual(stubStore.dispatch_actualCallCount, 1, file: file, line: line)
             XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0, file: file, line: line)
             XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0, file: file, line: line)
             XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1, file: file, line: line)
             XCTAssertEqual(stubInstanceWrapper.subscribeWithResume_actualCallCount, 1, file: file, line: line)
             
-            return (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
+            return (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
     }
     
     private func setUp_subscribingStageTwoWithMultipleWaitingCompletions(
         forType subscriptionType: SubscriptionType,
+        stubStore_dispatch_expectedCallCount: UInt = 2,
         stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
         stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
         stubResumableSubscription_end_expected: Bool? = nil,
         file: StaticString = #file, line: UInt = #line
     )
-        -> (ConcreteSubscription, StubInstanceWrapper, StubInstanceWrapperFactory, StubSubscriptionDelegate, XCTestExpectation.Expectation<VoidResult>, XCTestExpectation.Expectation<VoidResult>) {
+        -> (ConcreteSubscription, StubStore, StubInstanceWrapper, StubInstanceWrapperFactory, StubSubscriptionDelegate, XCTestExpectation.Expectation<VoidResult>, XCTestExpectation.Expectation<VoidResult>) {
 
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation)
             = setUp_subscribingStageTwo(forType: subscriptionType,
+                                        stubStore_dispatch_expectedCallCount: stubStore_dispatch_expectedCallCount,
                                         stubDelegate_didReceivedEvent_expectedCallCount: stubDelegate_didReceivedEvent_expectedCallCount,
                                         stubDelegate_didReceivedError_expectedCallCount: stubDelegate_didReceivedError_expectedCallCount,
                                         stubResumableSubscription_end_expected: stubResumableSubscription_end_expected,
@@ -132,23 +144,26 @@ class ConcreteSubscriptionTests: XCTestCase {
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(firstExpectation)
         XCTAssertExpectationUnfulfilled(secondExpectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1, file: file, line: line)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
         XCTAssertEqual(stubInstanceWrapper.subscribeWithResume_actualCallCount, 1)
 
-        return (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation, secondExpectation)
+        return (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation, secondExpectation)
     }
             
     private func setUp_subscribed(forType subscriptionType: SubscriptionType,
+                                  stubStore_dispatch_expectedCallCount: UInt = 3,
                                   stubDelegate_didReceivedEvent_expectedCallCount: UInt? = nil,
                                   stubDelegate_didReceivedError_expectedCallCount: UInt? = nil,
                                   stubResumableSubscription_end_expected: Bool? = nil,
                                   file: StaticString = #file, line: UInt = #line)
-        -> (ConcreteSubscription, StubInstanceWrapper, StubInstanceWrapperFactory, StubSubscriptionDelegate) {
+        -> (ConcreteSubscription, StubStore, StubInstanceWrapper, StubInstanceWrapperFactory, StubSubscriptionDelegate) {
             
-            let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
+            let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
                 = setUp_subscribingStageTwo(forType: subscriptionType,
+                                            stubStore_dispatch_expectedCallCount: stubStore_dispatch_expectedCallCount,
                                             stubDelegate_didReceivedEvent_expectedCallCount: stubDelegate_didReceivedEvent_expectedCallCount,
                                             stubDelegate_didReceivedError_expectedCallCount: stubDelegate_didReceivedError_expectedCallCount,
                                             stubResumableSubscription_end_expected:
@@ -162,12 +177,13 @@ class ConcreteSubscriptionTests: XCTestCase {
             
             XCTAssertEqualState(sut.state, .subscribed, file: file, line: line)
             XCTAssertExpectationFulfilledWithResult(expectation, .success, file: file, line: line)
+            XCTAssertEqual(stubStore.dispatch_actualCallCount, 2, file: file, line: line)
             XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1, file: file, line: line)
             XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0, file: file, line: line)
             XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1, file: file, line: line)
             XCTAssertEqual(stubInstanceWrapper.subscribeWithResume_actualCallCount, 1, file: file, line: line)
             
-            return (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
+            return (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
     }
     
     // MARK: subscribe(completion:)
@@ -180,12 +196,13 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
 
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate) = setUp_notSubscribed(forType: subscriptionType)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate) = setUp_notSubscribed(forType: subscriptionType)
         
         let expectation = XCTestExpectation.Subscription.subscribe
         
         XCTAssertEqualState(sut.state, .notSubscribed)
         XCTAssertExpectationUnfulfilled(expectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 0)
@@ -207,8 +224,12 @@ class ConcreteSubscriptionTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
+        let expectedAction = SubscriptionStateUpdatedAction(type: subscriptionType, state: .subscribing)
+        
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(expectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1) // <- Increased by one
+        XCTAssertEqual(stubStore.dispatch_lastReceived as? SubscriptionStateUpdatedAction, expectedAction)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1) // <- Increased by one
@@ -223,7 +244,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation)
             = setUp_subscribingStageTwo(forType: subscriptionType)
         
         let secondExpectation = XCTestExpectation.Subscription.subscribe
@@ -231,6 +252,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(firstExpectation)
         XCTAssertExpectationUnfulfilled(secondExpectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -253,6 +275,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(firstExpectation)
         XCTAssertExpectationUnfulfilled(secondExpectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -268,7 +291,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation, secondExpectation)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation, secondExpectation)
             = setUp_subscribingStageTwoWithMultipleWaitingCompletions(forType: subscriptionType)
         
         let thirdExpectation = XCTestExpectation.Subscription.subscribe
@@ -278,6 +301,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         XCTAssertExpectationUnfulfilled(firstExpectation)
         XCTAssertExpectationUnfulfilled(secondExpectation)
         XCTAssertExpectationUnfulfilled(thirdExpectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -301,6 +325,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         XCTAssertExpectationUnfulfilled(firstExpectation)
         XCTAssertExpectationUnfulfilled(secondExpectation)
         XCTAssertExpectationUnfulfilled(thirdExpectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -316,13 +341,14 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
 
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
             = setUp_subscribed(forType: subscriptionType)
             
         let expectation = XCTestExpectation.Subscription.subscribe
         
         XCTAssertEqualState(sut.state, .subscribed)
         XCTAssertExpectationUnfulfilled(expectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -347,6 +373,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         XCTAssertEqualState(sut.state, .subscribed)
         XCTAssertExpectationFulfilledWithResult(expectation, .success)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -363,9 +390,10 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
 
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate) = setUp_notSubscribed(forType: subscriptionType)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate) = setUp_notSubscribed(forType: subscriptionType)
         
         XCTAssertEqualState(sut.state, .notSubscribed)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 0)
@@ -385,6 +413,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         /******************/
         
         XCTAssertEqualState(sut.state, .notSubscribed)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 0)
@@ -399,13 +428,14 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
             = setUp_subscribingStageTwo(forType: subscriptionType,
                                         stubDelegate_didReceivedError_expectedCallCount: 1,
                                         stubResumableSubscription_end_expected: true)
         
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(expectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -427,9 +457,12 @@ class ConcreteSubscriptionTests: XCTestCase {
         /******************/
         
         let expectedError = SubscriptionError.unsubscribeCalledWhileSubscribingError
+        let expectedAction = SubscriptionStateUpdatedAction(type: subscriptionType, state: .notSubscribed)
         
         XCTAssertEqualState(sut.state, .notSubscribed)
         XCTAssertExpectationFulfilledWithResult(expectation, .failure(expectedError))
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2) // <- Increased by one
+        XCTAssertEqual(stubStore.dispatch_lastReceived as? SubscriptionStateUpdatedAction, expectedAction)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
         XCTAssertEqualError(stubDelegate.didReceiveError_errorLastReceived, expectedError)
@@ -445,7 +478,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation, secondExpectation)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation, secondExpectation)
             = setUp_subscribingStageTwoWithMultipleWaitingCompletions(
                 forType: subscriptionType,
                 stubDelegate_didReceivedError_expectedCallCount: 1,
@@ -456,6 +489,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(firstExpectation)
         XCTAssertExpectationUnfulfilled(secondExpectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -477,10 +511,13 @@ class ConcreteSubscriptionTests: XCTestCase {
         /******************/
         
         let expectedError = SubscriptionError.unsubscribeCalledWhileSubscribingError
+        let expectedAction = SubscriptionStateUpdatedAction(type: subscriptionType, state: .notSubscribed)
         
         XCTAssertEqualState(sut.state, .notSubscribed)
         XCTAssertExpectationFulfilledWithResult(firstExpectation, .failure(expectedError))
         XCTAssertExpectationFulfilledWithResult(secondExpectation, .failure(expectedError))
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2) // <- Increased by one
+        XCTAssertEqual(stubStore.dispatch_lastReceived as? SubscriptionStateUpdatedAction, expectedAction)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
         XCTAssertEqualError(stubDelegate.didReceiveError_errorLastReceived, expectedError)
@@ -496,13 +533,14 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
             = setUp_subscribed(forType: subscriptionType,
                                stubDelegate_didReceivedError_expectedCallCount: 1,
                                stubResumableSubscription_end_expected: true)
         
         // Confirm setUp
         XCTAssertEqualState(sut.state, .subscribed)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -524,7 +562,11 @@ class ConcreteSubscriptionTests: XCTestCase {
         /*----- THEN -----*/
         /******************/
         
+        let expectedAction = SubscriptionStateUpdatedAction(type: subscriptionType, state: .notSubscribed)
+        
         XCTAssertEqualState(sut.state, .notSubscribed)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 3) // <- Increased by one
+        XCTAssertEqual(stubStore.dispatch_lastReceived as? SubscriptionStateUpdatedAction, expectedAction)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -541,11 +583,12 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
             = setUp_subscribingStageTwo(forType: subscriptionType)
         
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(expectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -569,8 +612,12 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         wait(for: [expectation], timeout: expectation.timeout)
         
+        let expectedAction = SubscriptionStateUpdatedAction(type: subscriptionType, state: .subscribed)
+        
         XCTAssertEqualState(sut.state, .subscribed)
         XCTAssertExpectationFulfilledWithResult(expectation, .success)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2) // <- Increased by one
+        XCTAssertEqual(stubStore.dispatch_lastReceived as? SubscriptionStateUpdatedAction, expectedAction)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1) // <- Increased by one
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -586,13 +633,14 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation, secondExpectation)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation, secondExpectation)
             = setUp_subscribingStageTwoWithMultipleWaitingCompletions(forType: subscriptionType)
         
         // Confirm setUp
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(firstExpectation)
         XCTAssertExpectationUnfulfilled(secondExpectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -618,10 +666,14 @@ class ConcreteSubscriptionTests: XCTestCase {
         wait(for: [firstExpectation, secondExpectation],
              timeout: max(firstExpectation.timeout, secondExpectation.timeout))
         
+        let expectedAction = SubscriptionStateUpdatedAction(type: subscriptionType, state: .subscribed)
+        
         // Both expectations shoudld have been fulfilled with `.success`
         XCTAssertEqualState(sut.state, .subscribed)
         XCTAssertExpectationFulfilledWithResult(firstExpectation, .success)
         XCTAssertExpectationFulfilledWithResult(secondExpectation, .success)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2) // <- Increased by one
+        XCTAssertEqual(stubStore.dispatch_lastReceived as? SubscriptionStateUpdatedAction, expectedAction)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1) // <-- increased by one
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -637,11 +689,12 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
             = setUp_subscribed(forType: subscriptionType,
                                stubDelegate_didReceivedEvent_expectedCallCount: 2)
         
         XCTAssertEqualState(sut.state, .subscribed)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -662,6 +715,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         /******************/
         
         XCTAssertEqualState(sut.state, .subscribed)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 2) // <- Increased by one
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -679,11 +733,12 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
             = setUp_subscribingStageTwo(forType: subscriptionType)
         
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(expectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -707,8 +762,12 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         wait(for: [expectation], timeout: expectation.timeout)
         
+        let expectedAction = SubscriptionStateUpdatedAction(type: subscriptionType, state: .subscribed)
+        
         XCTAssertEqualState(sut.state, .subscribed)
         XCTAssertExpectationFulfilledWithResult(expectation, .success)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2) // <- Increased by one
+        XCTAssertEqual(stubStore.dispatch_lastReceived as? SubscriptionStateUpdatedAction, expectedAction)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1) // <- Increased by one
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -724,13 +783,14 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation, secondExpectation)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation, secondExpectation)
             = setUp_subscribingStageTwoWithMultipleWaitingCompletions(forType: subscriptionType)
         
         // Confirm setUp
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(firstExpectation)
         XCTAssertExpectationUnfulfilled(secondExpectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -756,10 +816,14 @@ class ConcreteSubscriptionTests: XCTestCase {
         wait(for: [firstExpectation, secondExpectation],
              timeout: max(firstExpectation.timeout, secondExpectation.timeout))
         
+        let expectedAction = SubscriptionStateUpdatedAction(type: subscriptionType, state: .subscribed)
+        
         // Both expectations shoudld have been fulfilled with `.success`
         XCTAssertEqualState(sut.state, .subscribed)
         XCTAssertExpectationFulfilledWithResult(firstExpectation, .success)
         XCTAssertExpectationFulfilledWithResult(secondExpectation, .success)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2) // <- Increased by one
+        XCTAssertEqual(stubStore.dispatch_lastReceived as? SubscriptionStateUpdatedAction, expectedAction)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1) // <-- increased by one
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -775,11 +839,12 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
             = setUp_subscribed(forType: subscriptionType,
                                stubDelegate_didReceivedEvent_expectedCallCount: 2)
         
         XCTAssertEqualState(sut.state, .subscribed)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -800,6 +865,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         /******************/
         
         XCTAssertEqualState(sut.state, .subscribed)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 2) // <- Increased by one
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -817,7 +883,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
             = setUp_subscribingStageTwo(forType: subscriptionType,
                                         stubDelegate_didReceivedError_expectedCallCount: 1,
                                         stubResumableSubscription_end_expected: true)
@@ -825,6 +891,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         // Confirm setUp
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(expectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -847,8 +914,12 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         wait(for: [expectation], timeout: expectation.timeout)
         
+        let expectedAction = SubscriptionStateUpdatedAction(type: subscriptionType, state: .notSubscribed)
+        
         XCTAssertEqualState(sut.state, .notSubscribed)
         XCTAssertExpectationFulfilledWithResult(expectation, .failure(FakeError.firstError))
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2) // <- Increased by one
+        XCTAssertEqual(stubStore.dispatch_lastReceived as? SubscriptionStateUpdatedAction, expectedAction)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -864,7 +935,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation, secondExpectation)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation, secondExpectation)
             = setUp_subscribingStageTwoWithMultipleWaitingCompletions(
                 forType: subscriptionType,
                 stubDelegate_didReceivedError_expectedCallCount: 1,
@@ -875,6 +946,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(firstExpectation)
         XCTAssertExpectationUnfulfilled(secondExpectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -899,10 +971,14 @@ class ConcreteSubscriptionTests: XCTestCase {
         wait(for: [firstExpectation, secondExpectation],
              timeout: max(firstExpectation.timeout, secondExpectation.timeout))
         
+        let expectedAction = SubscriptionStateUpdatedAction(type: subscriptionType, state: .notSubscribed)
+        
         // Both expectations shoudld have been fulfilled with `.failure`
         XCTAssertEqualState(sut.state, .notSubscribed)
         XCTAssertExpectationFulfilledWithResult(firstExpectation, .failure(FakeError.firstError))
         XCTAssertExpectationFulfilledWithResult(secondExpectation, .failure(FakeError.firstError))
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2) // <- Increased by one
+        XCTAssertEqual(stubStore.dispatch_lastReceived as? SubscriptionStateUpdatedAction, expectedAction)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <-- increased by one
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -918,13 +994,14 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
             = setUp_subscribed(forType: subscriptionType,
                                stubDelegate_didReceivedError_expectedCallCount: 1,
                                stubResumableSubscription_end_expected: true)
         
         // Confirm setUp
         XCTAssertEqualState(sut.state, .subscribed)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -945,6 +1022,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         /******************/
         
         XCTAssertEqualState(sut.state, .subscribed)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -962,7 +1040,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, expectation)
             = setUp_subscribingStageTwo(forType: subscriptionType,
                                         stubDelegate_didReceivedError_expectedCallCount: 1,
                                         stubResumableSubscription_end_expected: true)
@@ -970,6 +1048,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         // Confirm setUp
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(expectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -993,9 +1072,12 @@ class ConcreteSubscriptionTests: XCTestCase {
         wait(for: [expectation], timeout: expectation.timeout)
         
         let expectedError = SubscriptionError.onEndReceivedWhileSubscribingError
+        let expectedAction = SubscriptionStateUpdatedAction(type: subscriptionType, state: .notSubscribed)
         
         XCTAssertEqualState(sut.state, .notSubscribed)
         XCTAssertExpectationFulfilledWithResult(expectation, .failure(expectedError))
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2) // <- Increased by one
+        XCTAssertEqual(stubStore.dispatch_lastReceived as? SubscriptionStateUpdatedAction, expectedAction)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
         XCTAssertEqualError(stubDelegate.didReceiveError_errorLastReceived, expectedError)
@@ -1012,7 +1094,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation, secondExpectation)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate, firstExpectation, secondExpectation)
             = setUp_subscribingStageTwoWithMultipleWaitingCompletions(
                 forType: subscriptionType,
                 stubDelegate_didReceivedError_expectedCallCount: 1,
@@ -1023,6 +1105,7 @@ class ConcreteSubscriptionTests: XCTestCase {
         XCTAssertEqualState(sut.state, .subscribingStageTwo)
         XCTAssertExpectationUnfulfilled(firstExpectation)
         XCTAssertExpectationUnfulfilled(secondExpectation)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -1048,11 +1131,14 @@ class ConcreteSubscriptionTests: XCTestCase {
              timeout: max(firstExpectation.timeout, secondExpectation.timeout))
         
         let expectedError = SubscriptionError.onEndReceivedWhileSubscribingError
+        let expectedAction = SubscriptionStateUpdatedAction(type: subscriptionType, state: .notSubscribed)
         
         // Both expectations shoudld have been fulfilled with `.failure`
         XCTAssertEqualState(sut.state, .notSubscribed)
         XCTAssertExpectationFulfilledWithResult(firstExpectation, .failure(expectedError))
         XCTAssertExpectationFulfilledWithResult(secondExpectation, .failure(expectedError))
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2) // <- Increased by one
+        XCTAssertEqual(stubStore.dispatch_lastReceived as? SubscriptionStateUpdatedAction, expectedAction)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 0)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <-- increased by one
         XCTAssertEqualError(stubDelegate.didReceiveError_errorLastReceived, expectedError)
@@ -1069,13 +1155,14 @@ class ConcreteSubscriptionTests: XCTestCase {
         
         let subscriptionType: SubscriptionType = .user
         
-        let (sut, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
+        let (sut, stubStore, stubInstanceWrapper, stubInstanceWrapperFactory, stubDelegate)
             = setUp_subscribed(forType: subscriptionType,
                                stubDelegate_didReceivedError_expectedCallCount: 1,
                                stubResumableSubscription_end_expected: true)
         
         // Confirm setUp
         XCTAssertEqualState(sut.state, .subscribed)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 2)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 0)
         XCTAssertEqual(stubInstanceWrapperFactory.makeInstanceWrapper_actualCallCount, 1)
@@ -1097,8 +1184,11 @@ class ConcreteSubscriptionTests: XCTestCase {
         /******************/
         
         let expectedError = SubscriptionError.onEndReceivedWhileSubscribedError
+        let expectedAction = SubscriptionStateUpdatedAction(type: subscriptionType, state: .notSubscribed)
         
         XCTAssertEqualState(sut.state, .notSubscribed)
+        XCTAssertEqual(stubStore.dispatch_actualCallCount, 3) // <- Increased by one
+        XCTAssertEqual(stubStore.dispatch_lastReceived as? SubscriptionStateUpdatedAction, expectedAction)
         XCTAssertEqual(stubDelegate.didReceiveEvent_actualCallCount, 1)
         XCTAssertEqual(stubDelegate.didReceiveError_actualCallCount, 1) // <- Increased by one
         XCTAssertEqualError(stubDelegate.didReceiveError_errorLastReceived, expectedError)

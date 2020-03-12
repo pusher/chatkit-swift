@@ -59,7 +59,7 @@ class ConcreteDependenciesTests: XCTestCase {
         let expectation = self.expectation(description: "`override` closure should be called on `ConcreteDependencies`")
         let override: (DependencyFactory) -> Void = { dependencyFactory in
             dependencyFactory.register(Store.self) { _ in
-                StubStore(state_toReturn: .initial)
+                StubStore(register_stateToReturn: .initial)
             }
             expectation.fulfill()
         }

@@ -40,56 +40,17 @@ class SubscriptionStateUpdatedReducerTests: XCTestCase {
         XCTAssertEqual(outputState, expectedState)
     }
     
-    func test_reduce_withSubscribingStageOneSubscriptionState_setsConnectionStateToInitializing() {
+    func test_reduce_withSubscribingSubscriptionState_setsConnectionStateToInitializing() {
         
         /******************/
         /*---- GIVEN -----*/
         /******************/
         
-        let instanceWrapper = DummyInstanceWrapper()
-        
         let inputState: AuxiliaryState = .empty
         
         let action = SubscriptionStateUpdatedAction(
             type: .user,
-            state: .subscribingStageOne(instanceWrapper: instanceWrapper, completions: [])
-        )
-        
-        let dependencies = DependenciesDoubles()
-        
-        /******************/
-        /*----- WHEN -----*/
-        /******************/
-        
-        let outputState = Reducer.Subscription.StateUpdated.reduce(action: action, state: inputState, dependencies: dependencies)
-        
-        /******************/
-        /*----- THEN -----*/
-        /******************/
-        
-        let expectedState = AuxiliaryState(
-            subscriptions: [
-                .user : .initializing(error: nil)
-            ]
-        )
-        
-        XCTAssertEqual(outputState, expectedState)
-    }
-    
-    func test_reduce_withSubscribingStageTwoSubscriptionState_setsConnectionStateToInitializing() {
-        
-        /******************/
-        /*---- GIVEN -----*/
-        /******************/
-        
-        let instanceWrapper = DummyInstanceWrapper()
-        let resumableSubscription = DummyResumableSubscription()
-        
-        let inputState: AuxiliaryState = .empty
-        
-        let action = SubscriptionStateUpdatedAction(
-            type: .user,
-            state: .subscribingStageTwo(instanceWrapper: instanceWrapper, resumableSubscription: resumableSubscription, completions: [])
+            state: .subscribing
         )
         
         let dependencies = DependenciesDoubles()
@@ -119,14 +80,11 @@ class SubscriptionStateUpdatedReducerTests: XCTestCase {
         /*---- GIVEN -----*/
         /******************/
         
-        let instanceWrapper = DummyInstanceWrapper()
-        let resumableSubscription = DummyResumableSubscription()
-        
         let inputState: AuxiliaryState = .empty
         
         let action = SubscriptionStateUpdatedAction(
             type: .user,
-            state: .subscribed(instanceWrapper: instanceWrapper, resumableSubscription: resumableSubscription)
+            state: .subscribed
         )
         
         let dependencies = DependenciesDoubles()
