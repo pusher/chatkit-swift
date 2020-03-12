@@ -4,7 +4,7 @@ import Foundation
 ///
 /// This class provides a real time collection, if you just want a snapshot of the members of a room *now*, see `Chatkit.members(...)`.
 ///
-/// Construct an instance of this class using `Chatkit.createRoomMembersRepository(...)`
+/// Construct an instance of this class using `Chatkit.makeRoomMembersRepository(...)`
 ///
 /// ## What is provided
 ///

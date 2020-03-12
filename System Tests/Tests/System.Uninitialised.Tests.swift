@@ -33,7 +33,7 @@ class System_UnInitialised_Tests: XCTestCase {
         }())
     }
     
-    func test_subscriptionManagerSubscribe_withListenerRegisteredWithStoreBroadcaster_listenerIsNotified() {
+    func test_subscriptionManagerSubscribe_withListenerRegisteredWithStore_listenerIsNotified() {
     
         XCTAssertNoThrow(try {
         

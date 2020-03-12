@@ -34,12 +34,8 @@ extension XCTestExpectation {
     
     public struct JoinedRoomsRepositoryDelegate {
         
-        public static var didJoinRoom: Expectation<Room> {
-            .init(functionName: "didJoinRoom", systemTestTimeout: 15)
-        }
-        
-        public static var didLeaveRoom: Expectation<Room> {
-            .init(functionName: "didLeaveRoom", systemTestTimeout: 15)
+        public static var didUpdateState: Expectation<JoinedRoomsRepositoryState> {
+            .init(functionName: "didUpdateState", systemTestTimeout: 15)
         }
         
     }

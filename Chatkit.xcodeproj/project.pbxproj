@@ -280,6 +280,8 @@
 		73EDEE5823D8C4D900DE566D /* VoidResult+EquatableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EDEE5723D8C4D900DE566D /* VoidResult+EquatableTests.swift */; };
 		73EDEE5C23D8C4FD00DE566D /* VoidResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EDEE5B23D8C4FD00DE566D /* VoidResult.swift */; };
 		73EDEE5E23D8C52E00DE566D /* EquatableResult+EquatableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EDEE5D23D8C52E00DE566D /* EquatableResult+EquatableTests.swift */; };
+		73F0CE3D24164B2900C382F6 /* Functional.ChatkitConnected.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F0CE3B24164B2900C382F6 /* Functional.ChatkitConnected.Tests.swift */; };
+		73F0CE3E24164B2900C382F6 /* Functional.JoinedRoomsProviderInitialised.Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F0CE3C24164B2900C382F6 /* Functional.JoinedRoomsProviderInitialised.Tests.swift */; };
 		73FF749C23E2011D00A6FEA9 /* InstanceLocator in Resources */ = {isa = PBXBuildFile; fileRef = 73FF749B23E2011C00A6FEA9 /* InstanceLocator */; };
 /* End PBXBuildFile section */
 
@@ -617,6 +619,8 @@
 		73EDEE5723D8C4D900DE566D /* VoidResult+EquatableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VoidResult+EquatableTests.swift"; sourceTree = "<group>"; };
 		73EDEE5B23D8C4FD00DE566D /* VoidResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoidResult.swift; sourceTree = "<group>"; };
 		73EDEE5D23D8C52E00DE566D /* EquatableResult+EquatableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EquatableResult+EquatableTests.swift"; sourceTree = "<group>"; };
+		73F0CE3B24164B2900C382F6 /* Functional.ChatkitConnected.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functional.ChatkitConnected.Tests.swift; sourceTree = "<group>"; };
+		73F0CE3C24164B2900C382F6 /* Functional.JoinedRoomsProviderInitialised.Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functional.JoinedRoomsProviderInitialised.Tests.swift; sourceTree = "<group>"; };
 		73F85D0A23D0D8A60008D0D6 /* StubNetworking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubNetworking.swift; sourceTree = "<group>"; };
 		73FF749B23E2011C00A6FEA9 /* InstanceLocator */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = InstanceLocator; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -1763,6 +1767,8 @@
 			children = (
 				738DDA7823C61FD400B5C79A /* Contexts.swift */,
 				737E3F7023E9C07F00B50837 /* Functional.ChatkitInitialised.Tests.swift */,
+				73F0CE3B24164B2900C382F6 /* Functional.ChatkitConnected.Tests.swift */,
+				73F0CE3C24164B2900C382F6 /* Functional.JoinedRoomsProviderInitialised.Tests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -2473,6 +2479,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73F0CE3D24164B2900C382F6 /* Functional.ChatkitConnected.Tests.swift in Sources */,
+				73F0CE3E24164B2900C382F6 /* Functional.JoinedRoomsProviderInitialised.Tests.swift in Sources */,
 				7347D84623ED854D0082B9D6 /* Contexts.swift in Sources */,
 				7347D84723ED854D0082B9D6 /* Functional.ChatkitInitialised.Tests.swift in Sources */,
 			);

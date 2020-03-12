@@ -110,5 +110,30 @@ class Functional_ChatkitInitialised_Tests: XCTestCase {
             
         }())
     }
+    
+    func test_chatkitMakeJoinedRoomsRepository_regardless_returnsInClosedState() {
+        
+        XCTAssertNoThrow(try {
+        
+            /******************/
+            /*---- GIVEN -----*/
+            /******************/
+            
+            let (_, chatkit) = try setUp_ChatKitInitialised()
+            
+            /*****************/
+            /*---- WHEN -----*/
+            /*****************/
+            
+            let joinedRoomsRepository = chatkit.makeJoinedRoomsRepository()
+            
+            /*****************/
+            /*---- THEN -----*/
+            /*****************/
+            
+            XCTAssertEqual(joinedRoomsRepository.state, JoinedRoomsRepositoryState.closed(error: nil))
+            
+        }())
+    }
 
 }

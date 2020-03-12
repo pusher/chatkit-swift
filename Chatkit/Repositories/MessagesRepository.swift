@@ -2,7 +2,7 @@ import Foundation
 
 /// A repository which exposes a collection of messages for a given room.
 ///
-/// Construct an instance of this class using `Chatkit.createMessagesRepository(...)`
+/// Construct an instance of this class using `Chatkit.makeMessagesRepository(...)`
 ///
 /// ## What is provided
 ///

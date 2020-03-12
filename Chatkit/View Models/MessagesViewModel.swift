@@ -2,7 +2,7 @@ import Foundation
 
 /// A view model which provides a list of objects which can be used to render a message feed which includes messages and separators or headers between days.
 ///
-/// Construct an instance of this class using `Chatkit.createMessagesViewModel(...)`
+/// Construct an instance of this class using `Chatkit.makeMessagesViewModel(...)`
 ///
 /// This class is intended to be bound to a `UICollectionView` or `UITableView`.
 ///
