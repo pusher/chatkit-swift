@@ -24,7 +24,7 @@ extension XCTestCase {
             `chatkit.connect()` HAS been invoked and handler called with `failure`
             (i.e. the user subscription is NOT active)
 
-        JoinedRoomsRepositoryInitialised
+        JoinedRoomsRepositoryConnected
         As "ChakitConnected" but also
             `JoinedRoomsRepository` instance has been initialised (via `chatKit.makeJoinedRoomsRepository()`)
     */

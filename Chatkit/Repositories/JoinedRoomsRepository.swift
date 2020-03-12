@@ -2,7 +2,7 @@ import Foundation
 
 /// A repository which exposes a collection of all rooms joined by the user.
 ///
-/// Construct an instance of this class using `Chatkit.createJoinedRoomsRepository(...)`
+/// Construct an instance of this class using `Chatkit.makeJoinedRoomsRepository(...)`
 ///
 /// ## What is provided
 ///

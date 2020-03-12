@@ -2,7 +2,7 @@ import Foundation
 
 /// A view model which provides a collection of all `Room`s joined by the user.
 ///
-/// Construct an instance of this class using `Chatkit.createJoinedRoomsViewModel(...)`
+/// Construct an instance of this class using `Chatkit.makeJoinedRoomsViewModel(...)`
 ///
 /// This class is intended to be bound to a UICollectionView or UITableView.
 ///

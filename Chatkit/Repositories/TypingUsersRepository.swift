@@ -2,7 +2,7 @@ import Foundation
 
 /// A repository which exposes the set of `User`s currently typing on a given `Room`.
 ///
-/// Construct an instance of this class using `Chatkit.createTypingUsersRepository(...)`
+/// Construct an instance of this class using `Chatkit.makeTypingUsersRepository(...)`
 ///
 /// ## What is provided
 ///

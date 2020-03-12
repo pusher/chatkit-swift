@@ -134,28 +134,28 @@ public func XCTAssertExpectationFulfilled<ResultTypeA, ResultTypeB>(_ expectatio
     }
 }
 
-public func XCTAssertExpectationFulfilled<ResultTypeA, ResultTypeB, ResultTypeC>(_ expectation: XCTestExpectation.ThreeArgExpectation<ResultTypeA, ResultTypeB, ResultTypeC>, _ message: String = "", file: StaticString = #file, line: UInt = #line, also validateResult: ((ResultTypeA, ResultTypeB, ResultTypeC)) -> Void) {
+public func XCTAssertExpectationFulfilled<ResultTypeA, ResultTypeB, ResultTypeC>(_ expectation: XCTestExpectation.ThreeArgExpectation<ResultTypeA, ResultTypeB, ResultTypeC>, _ message: String? = nil, file: StaticString = #file, line: UInt = #line, also validateResult: ((ResultTypeA, ResultTypeB, ResultTypeC)) -> Void) {
     
     switch expectation.state {
     case let .fulfilled(result):
         validateResult(result)
     case .unfulfilled:
-        XCTFail(message, file: file, line: line)
+        XCTFail(message ?? expectation.description, file: file, line: line)
     }
 }
 
-public func XCTAssertExpectationFulfilledWithResult<ResultType>(_ expectation: XCTestExpectation.Expectation<ResultType>, _ expectedResult: ResultType, _ message: String = "", file: StaticString = #file, line: UInt = #line) where ResultType: Equatable {
+public func XCTAssertExpectationFulfilledWithResult<ResultType>(_ expectation: XCTestExpectation.Expectation<ResultType>, _ expectedResult: ResultType, _ message: String? = nil, file: StaticString = #file, line: UInt = #line) where ResultType: Equatable {
     
-    XCTAssertExpectationFulfilled(expectation, message, file: file, line: line) { result in
+    XCTAssertExpectationFulfilled(expectation, message ?? expectation.description, file: file, line: line) { result in
         XCTAssertEqual(result, expectedResult, file: file, line: line)
     }
 }
 
 // Custom implementation speficially for a result type of <Error?>
-public func XCTAssertExpectationFulfilledWithResult(_ expectation: XCTestExpectation.Expectation<Error?>, _ expectedResult: Error?, _ message: String = "", file: StaticString = #file, line: UInt = #line) {
+public func XCTAssertExpectationFulfilledWithResult(_ expectation: XCTestExpectation.Expectation<Error?>, _ expectedResult: Error?, _ message: String? = nil, file: StaticString = #file, line: UInt = #line) {
 
-    XCTAssertExpectationFulfilled(expectation, message, file: file, line: line) { result in
-        XCTAssertEqualError(result, expectedResult, message, file: file, line: line)
+    XCTAssertExpectationFulfilled(expectation, message ?? expectation.description, file: file, line: line) { result in
+        XCTAssertEqualError(result, expectedResult, message ?? expectation.description, file: file, line: line)
     }
 }
 

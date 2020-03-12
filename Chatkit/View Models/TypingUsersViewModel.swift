@@ -2,7 +2,7 @@ import Foundation
 
 /// A view model which provides a textual representation of the `User`s currently typing in a `Room`.
 ///
-/// Construct an instance of this class using `Chatkit.createTypingUsersViewModel(...)`
+/// Construct an instance of this class using `Chatkit.makeTypingUsersViewModel(...)`
 ///
 /// This class is intended to be bound to a text UI component.
 ///
