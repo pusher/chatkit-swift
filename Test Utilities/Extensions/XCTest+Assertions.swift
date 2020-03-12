@@ -144,7 +144,7 @@ public func XCTAssertExpectationFulfilled<ResultTypeA, ResultTypeB, ResultTypeC>
     }
 }
 
-public func XCTAssertExpectationFulfilledWithResult<ResultType>(_ expectation: XCTestExpectation.Expectation<ResultType>, _ expectedResult: ResultType, _ message: String?, file: StaticString = #file, line: UInt = #line) where ResultType: Equatable {
+public func XCTAssertExpectationFulfilledWithResult<ResultType>(_ expectation: XCTestExpectation.Expectation<ResultType>, _ expectedResult: ResultType, _ message: String? = nil, file: StaticString = #file, line: UInt = #line) where ResultType: Equatable {
     
     XCTAssertExpectationFulfilled(expectation, message ?? expectation.description, file: file, line: line) { result in
         XCTAssertEqual(result, expectedResult, file: file, line: line)
