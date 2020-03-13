@@ -29,7 +29,6 @@ class InitialStateReducerTests: XCTestCase {
                     Wire.Room(
                         identifier: "first-room",
                         name: "First",
-                        createdById: "user-id",
                         isPrivate: true,
                         pushNotificationTitleOverride: "title",
                         customData: nil,
@@ -40,7 +39,6 @@ class InitialStateReducerTests: XCTestCase {
                     Wire.Room(
                         identifier: "second-room",
                         name: "Second",
-                        createdById: "user-id",
                         isPrivate: false,
                         pushNotificationTitleOverride: nil,
                         customData: [
@@ -156,7 +154,6 @@ class InitialStateReducerTests: XCTestCase {
                     Wire.Room(
                         identifier: "first-room",
                         name: "First",
-                        createdById: "user-id",
                         isPrivate: true,
                         pushNotificationTitleOverride: "title",
                         customData: nil,
@@ -167,7 +164,6 @@ class InitialStateReducerTests: XCTestCase {
                     Wire.Room(
                         identifier: "second-room",
                         name: "Second",
-                        createdById: "user-id",
                         isPrivate: false,
                         pushNotificationTitleOverride: nil,
                         customData: [

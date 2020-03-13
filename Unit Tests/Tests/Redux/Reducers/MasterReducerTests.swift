@@ -166,7 +166,6 @@ class MasterReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "third-room",
                     name: "Third",
-                    createdById: "random-user",
                     isPrivate: false,
                     pushNotificationTitleOverride: nil,
                     customData: nil,
@@ -396,7 +395,6 @@ class MasterReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "second-room",
                     name: "Second Room",
-                    createdById: "alice",
                     isPrivate: true,
                     pushNotificationTitleOverride: nil,
                     customData: nil,
@@ -791,7 +789,6 @@ class MasterReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "second-room",
                     name: "Second",
-                    createdById: "alice",
                     isPrivate: true,
                     pushNotificationTitleOverride: nil,
                     customData: nil,
@@ -903,7 +900,6 @@ class MasterReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "second-room",
                     name: "Second Room",
-                    createdById: "alice",
                     isPrivate: true,
                     pushNotificationTitleOverride: nil,
                     customData: nil,
