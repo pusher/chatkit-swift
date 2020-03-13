@@ -298,7 +298,11 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         let stubTransformer = StubTransformer(room_toReturn: self.room,
                                               transformCurrentStatePreviousState_expectedSetCallCount: 2)
         
-        let stubDelegate = StubJoinedRoomsRepositoryDelegate(didUpdateState_expectedCallCount: 1)
+        let expectation = XCTestExpectation.JoinedRoomsRepositoryDelegate.didUpdateState
+        let stubJoinedRoomsRepositoryDelegate = StubJoinedRoomsRepositoryDelegate(
+            didUpdateState_expectedCallCount: 1,
+            didUpdateState_handler: expectation.handler
+        )
         
         let dependencies = DependenciesDoubles(transformer: stubTransformer)
         
@@ -306,12 +310,10 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
                                                 connectivityMonitor: stubConnectivityMonitor,
                                                 connectionState: initialConnectionState,
                                                 dependencies: dependencies)
-        sut.delegate = stubDelegate
-        
-        let expectation = XCTestExpectation(description: "Delegate called")
+        sut.delegate = stubJoinedRoomsRepositoryDelegate
         
         XCTAssertEqual(sut.state, .initializing(error: nil))
-        XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 0)
+        XCTAssertEqual(stubJoinedRoomsRepositoryDelegate.didUpdateState_actualCallCount, 0)
         
         /******************/
         /*----- WHEN -----*/
@@ -319,18 +321,16 @@ class ConcreteJoinedRoomsRepositoryTests: XCTestCase {
         
         stubConnectivityMonitor.report(modifiedConnectionState)
         
-        expectation.fulfill(after: 0.1)
-        
         /******************/
         /*----- THEN -----*/
         /******************/
         
-        wait(for: [expectation], timeout: 1.0)
+        wait(for: [expectation], timeout: expectation.timeout)
         
         let expectedState: JoinedRoomsRepositoryState = .closed(error: nil)
         
-        XCTAssertEqual(stubDelegate.didUpdateState_actualCallCount, 1)
-        XCTAssertEqual(stubDelegate.didUpdateState_stateLastReceived, expectedState)
+        XCTAssertEqual(stubJoinedRoomsRepositoryDelegate.didUpdateState_actualCallCount, 1)
+        XCTAssertEqual(stubJoinedRoomsRepositoryDelegate.didUpdateState_stateLastReceived, expectedState)
     }
     
     func test_state_shouldChangeWhenNewStateIsReportedByConnectivityMonitor() {
