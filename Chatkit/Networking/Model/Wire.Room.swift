@@ -5,7 +5,6 @@ extension Wire {
     internal struct Room {
         let identifier: String
         let name: String
-        let createdById: String
         let isPrivate: Bool
         let pushNotificationTitleOverride: String?
         let customData: [String: AnyHashable]?
@@ -24,7 +23,6 @@ extension Wire.Room: Decodable {
     private enum CodingKeys: String, CodingKey {
         case identifier = "id"
         case name
-        case createdById = "created_by_id"
         case pushNotificationTitleOverride = "push_notification_title_override"
         case customData = "custom_data"
         case isPrivate = "private"
@@ -44,7 +42,6 @@ extension Wire.Room: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.identifier = try container.decode(String.self, forKey: .identifier)
         self.name = try container.decode(String.self, forKey: .name)
-        self.createdById = try container.decode(String.self, forKey: .createdById)
         self.pushNotificationTitleOverride = try container.decodeIfPresent(String.self, forKey: .pushNotificationTitleOverride)
         self.customData = try container.decodeIfPresent([String: AnyHashable].self, forKey: .customData)
         self.isPrivate = try container.decode(Bool.self, forKey: .isPrivate)

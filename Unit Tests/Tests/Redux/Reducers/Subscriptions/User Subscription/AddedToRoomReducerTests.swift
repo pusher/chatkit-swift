@@ -23,7 +23,6 @@ class AddedToRoomReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "third-room",
                     name: "Third",
-                    createdById: "random-user",
                     isPrivate: false,
                     pushNotificationTitleOverride: nil,
                     customData: nil,

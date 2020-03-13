@@ -2,7 +2,7 @@ import TestUtilities
 import XCTest
 @testable import PusherChatkit
 
-class WireMemebershipDecodableTests: XCTestCase {
+class WireMembershipDecodableTests: XCTestCase {
     
     func test_init_allFieldsValid_entityFullyPopulated() {
         
@@ -10,6 +10,21 @@ class WireMemebershipDecodableTests: XCTestCase {
         {
             "room_id": "ac43dfef",
             "user_ids": ["alice", "carol"],
+        }
+        """.toJsonData()
+        
+        XCTAssertNoThrow(try Wire.Membership(from: jsonData.jsonDecoder())) { membership in
+            XCTAssertEqual(membership.roomIdentifier, "ac43dfef")
+            XCTAssertEqual(membership.userIdentifiers, ["alice", "carol"])
+        }
+    }
+    
+    func test_init_userIdentifierDuplicates_entityFullyPopulatedWithDedupedUserIdentifiers() {
+        
+        let jsonData = """
+        {
+            "room_id": "ac43dfef",
+            "user_ids": ["alice", "carol", "alice"],
         }
         """.toJsonData()
         

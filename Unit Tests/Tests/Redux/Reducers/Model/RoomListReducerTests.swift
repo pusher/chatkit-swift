@@ -29,7 +29,6 @@ class RoomsReducerTests: XCTestCase {
                     Wire.Room(
                         identifier: "first-room",
                         name: "First",
-                        createdById: "user-id",
                         isPrivate: true,
                         pushNotificationTitleOverride: "title",
                         customData: nil,
@@ -40,7 +39,6 @@ class RoomsReducerTests: XCTestCase {
                     Wire.Room(
                         identifier: "second-room",
                         name: "Second",
-                        createdById: "user-id",
                         isPrivate: false,
                         pushNotificationTitleOverride: nil,
                         customData: [
@@ -138,7 +136,6 @@ class RoomsReducerTests: XCTestCase {
                     Wire.Room(
                         identifier: "first-room",
                         name: "First",
-                        createdById: "user-id",
                         isPrivate: true,
                         pushNotificationTitleOverride: "title",
                         customData: nil,
@@ -149,7 +146,6 @@ class RoomsReducerTests: XCTestCase {
                     Wire.Room(
                         identifier: "second-room",
                         name: "Second",
-                        createdById: "user-id",
                         isPrivate: false,
                         pushNotificationTitleOverride: nil,
                         customData: [
@@ -259,7 +255,6 @@ class RoomsReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "third-room",
                     name: "Third",
-                    createdById: "random-user",
                     isPrivate: false,
                     pushNotificationTitleOverride: nil,
                     customData: nil,
@@ -383,7 +378,6 @@ class RoomsReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "second-room",
                     name: "Second Room",
-                    createdById: "random-user",
                     isPrivate: true,
                     pushNotificationTitleOverride: nil,
                     customData: nil,
@@ -659,7 +653,6 @@ class RoomsReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "second-room",
                     name: "Second Room",
-                    createdById: "alice",
                     isPrivate: true,
                     pushNotificationTitleOverride: nil,
                     customData: nil,
@@ -759,7 +752,6 @@ class RoomsReducerTests: XCTestCase {
                 room: Wire.Room(
                     identifier: "third-room",
                     name: "Third",
-                    createdById: "alice",
                     isPrivate: true,
                     pushNotificationTitleOverride: nil,
                     customData: nil,

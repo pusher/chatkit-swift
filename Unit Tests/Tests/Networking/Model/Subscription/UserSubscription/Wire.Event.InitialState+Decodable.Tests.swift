@@ -18,7 +18,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 {
                     "id": "ac43dfef",
                     "name": "Chatkit chat",
-                    "created_by_id": "alice",
                     "private": false,
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
@@ -67,7 +66,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 {
                     "id": "ac43dfef",
                     "name": "Chatkit chat",
-                    "created_by_id": "alice",
                     "private": false,
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
@@ -113,7 +111,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 {
                     "id": "ac43dfef",
                     "name": "Chatkit chat",
-                    "created_by_id": "alice",
                     "private": false,
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
@@ -160,7 +157,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 {
                     "id": "ac43dfef",
                     "name": "Chatkit chat",
-                    "created_by_id": "alice",
                     "private": false,
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
@@ -212,7 +208,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 {
                     "id": "ac43dfef",
                     "name": "Chatkit chat",
-                    "created_by_id": "alice",
                     "private": false,
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
@@ -390,7 +385,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
             "rooms": [
                 {
                     "name": "Chatkit chat",
-                    "created_by_id": "alice",
                     "private": false,
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
@@ -441,7 +435,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 {
                     "id": "ac43dfef",
                     "name": "Chatkit chat",
-                    "created_by_id": "alice",
                     "private": false,
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
@@ -482,7 +475,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 {
                     "id": "ac43dfef",
                     "name": "Chatkit chat",
-                    "created_by_id": "alice",
                     "private": false,
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
@@ -525,7 +517,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 {
                     "id": "ac43dfef",
                     "name": "Chatkit chat",
-                    "created_by_id": "alice",
                     "private": false,
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
@@ -569,7 +560,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 {
                     "id": "ac43dfef",
                     "name": "Chatkit chat",
-                    "created_by_id": "alice",
                     "private": false,
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
@@ -619,7 +609,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 {
                     "id": "ac43dfef",
                     "name": "Chatkit chat",
-                    "created_by_id": "alice",
                     "private": false,
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
@@ -657,7 +646,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 {
                     "id": "ac43dfef",
                     "name": "Chatkit chat",
-                    "created_by_id": "alice",
                     "private": false,
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
@@ -697,7 +685,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 {
                     "id": "ac43dfef",
                     "name": "Chatkit chat",
-                    "created_by_id": "alice",
                     "private": false,
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",
@@ -738,7 +725,6 @@ class WireEventInitialStateDecodableTests: XCTestCase {
                 {
                     "id": "ac43dfef",
                     "name": "Chatkit chat",
-                    "created_by_id": "alice",
                     "private": false,
                     "created_at": "2017-03-23T11:36:42Z",
                     "updated_at": "2017-07-28T22:19:32Z",

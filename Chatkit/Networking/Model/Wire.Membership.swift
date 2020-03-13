@@ -5,7 +5,7 @@ extension Wire {
     internal struct Membership {
         
         let roomIdentifier: String
-        let userIdentifiers: [String]
+        let userIdentifiers: Set<String>
 
     }
 

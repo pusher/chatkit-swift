@@ -10,7 +10,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -26,7 +25,6 @@ class WireRoomDecodableTests: XCTestCase {
         XCTAssertNoThrow(try Wire.Room(from: jsonData.jsonDecoder())) { user in
             XCTAssertEqual(user.identifier, "ac43dfef")
             XCTAssertEqual(user.name, "Chatkit chat")
-            XCTAssertEqual(user.createdById, "alice")
             XCTAssertEqual(user.pushNotificationTitleOverride, "Chatkit")
             XCTAssertEqual(user.customData as? [String: String], ["highlight_color": "blue"])
             XCTAssertEqual(user.isPrivate, false)
@@ -42,7 +40,6 @@ class WireRoomDecodableTests: XCTestCase {
         let jsonData = """
         {
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -66,7 +63,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": null,
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -91,7 +87,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": 123,
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -115,7 +110,6 @@ class WireRoomDecodableTests: XCTestCase {
         let jsonData = """
         {
             "id": "ac43dfef",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -139,7 +133,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": null,
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -164,7 +157,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": 123,
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -183,86 +175,12 @@ class WireRoomDecodableTests: XCTestCase {
                                           "Expected to decode String but found a number instead."])
     }
     
-    func test_init_createdByIdMissing_throws() {
-        
-        let jsonData = """
-        {
-            "id": "ac43dfef",
-            "name": "Chatkit chat",
-            "push_notification_title_override": "Chatkit",
-            "custom_data": {
-                "highlight_color": "blue"
-            },
-            "private": false,
-            "last_message_at": "2020-01-08T14:55:10Z",
-            "created_at": "2017-03-23T11:36:42Z",
-            "updated_at": "2017-04-23T11:36:42Z",
-            "deleted_at": "2017-05-23T11:36:42Z",
-        }
-        """.toJsonData()
-        
-        XCTAssertThrowsError(try Wire.Room(from: jsonData.jsonDecoder()),
-                             containing: ["keyNotFound",
-                                          "\"created_by_id\""])
-    }
-    
-    func test_init_createdByIdNull_throws() {
-        
-        let jsonData = """
-        {
-            "id": "ac43dfef",
-            "name": "Chatkit chat",
-            "created_by_id": null,
-            "push_notification_title_override": "Chatkit",
-            "custom_data": {
-                "highlight_color": "blue"
-            },
-            "private": false,
-            "last_message_at": "2020-01-08T14:55:10Z",
-            "created_at": "2017-03-23T11:36:42Z",
-            "updated_at": "2017-04-23T11:36:42Z",
-            "deleted_at": "2017-05-23T11:36:42Z",
-        }
-        """.toJsonData()
-        
-        XCTAssertThrowsError(try Wire.Room(from: jsonData.jsonDecoder()),
-                             containing: ["valueNotFound",
-                                          "\"created_by_id\"",
-                                          "Expected String value but found null instead."])
-    }
-    
-    func test_init_createdByIdInvalidType_throws() {
-        
-        let jsonData = """
-        {
-            "id": "ac43dfef",
-            "name": "Chatkit chat",
-            "created_by_id": 123,
-            "push_notification_title_override": "Chatkit",
-            "custom_data": {
-                "highlight_color": "blue"
-            },
-            "private": false,
-            "last_message_at": "2020-01-08T14:55:10Z",
-            "created_at": "2017-03-23T11:36:42Z",
-            "updated_at": "2017-04-23T11:36:42Z",
-            "deleted_at": "2017-05-23T11:36:42Z",
-        }
-        """.toJsonData()
-        
-        XCTAssertThrowsError(try Wire.Room(from: jsonData.jsonDecoder()),
-                             containing: ["typeMismatch",
-                                          "\"created_by_id\"",
-                                          "Expected to decode String but found a number instead."])
-    }
-    
     func test_init_pushNotificationTitleOverrideMissing_noProblem() {
         
         let jsonData = """
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "custom_data": {
                 "highlight_color": "blue"
             },
@@ -285,7 +203,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": null,
             "custom_data": {
                 "highlight_color": "blue"
@@ -309,7 +226,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": 123,
             "custom_data": {
                 "highlight_color": "blue"
@@ -334,7 +250,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "private": false,
             "last_message_at": "2020-01-08T14:55:10Z",
@@ -355,7 +270,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": null,
             "private": false,
@@ -377,7 +291,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": 123,
             "private": false,
@@ -403,7 +316,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "missing value"
@@ -418,7 +330,7 @@ class WireRoomDecodableTests: XCTestCase {
         
         XCTAssertThrowsError(try Wire.Room(from: jsonData.jsonDecoder()),
                              containing: ["The given data was not valid JSON.",
-                                          "No value for key in object around character 182."])
+                                          "No value for key in object around character 152."])
     }
     
     func test_init_isPrivateMissing_throws() {
@@ -427,7 +339,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -450,7 +361,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -474,7 +384,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -499,7 +408,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -522,7 +430,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -546,7 +453,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -571,7 +477,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -596,7 +501,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -619,7 +523,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -644,7 +547,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -669,7 +571,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -694,7 +595,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -717,7 +617,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -742,7 +641,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -767,7 +665,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -792,7 +689,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -815,7 +711,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -839,7 +734,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
@@ -864,7 +758,6 @@ class WireRoomDecodableTests: XCTestCase {
         {
             "id": "ac43dfef",
             "name": "Chatkit chat",
-            "created_by_id": "alice",
             "push_notification_title_override": "Chatkit",
             "custom_data": {
                 "highlight_color": "blue"
