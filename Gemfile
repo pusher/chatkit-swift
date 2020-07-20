@@ -1,3 +1,3 @@
 source 'https://rubygems.org'
 
-gem 'danger', '~> 5.0'
+gem 'danger', '~> 6.0', '>= 6.0.0'
